@@ -18,7 +18,10 @@ P = {
     "g": "#009E73",                                                  # lamp: running
     "L": "#F5E3C3",                                                  # LED lamp light
     "k": "#1E2328", "w": "#E8E3D8", "y": "#F0E442", "b": "#56B4E9",  # UI slate panel + Okabe-Ito
-    "p": "#1B2433", "q": "#24324A", "r": "#2F4462", "s": "#4A6488",  # photovoltaic cell ramp
+    "p": "#1C1A21", "q": "#26232C", "r": "#322D38", "s": "#4E4957",  # PV cell ramp (r measured, PIA22876)
+    "v": "#5C4743", "x": "#89614C",                                  # dust veil on cells: 1/3, 2/3 toward D (OKLab)
+    "G": "#5C4320", "H": "#7E5E2C", "I": "#A3823F", "J": "#C9AE6A",  # muted gold plating (PIA24201, PIA24203)
+    "W": "#E7E2D6", "V": "#D3CDBF",                                  # off-white tube (salt-crust ramp 3, 2)
     "D": "#B97C52", "E": "#D09A6E",                                  # bright dust 3, 4
     "i": "#C2CDD5",                                                  # water ice 2 (electrolyte window)
     "R": "#5E3424", "S": "#7A4530", "T": "#9A5B3C", "U": "#B8764F",  # regolith ramp
@@ -117,34 +120,57 @@ models["regolith_oven"] = {
         "north": face("front", orr), "south": face("side", osr), "east": face("side", osr), "west": face("side", osr),
         "up": face("top", otr), "down": face("top", otr)}}]}
 
-# ---------- M-09 Solar panel (clean and dusty): tilted panel on a post ----------
-def pv(name, dusty):
-    t = T(name, "r"); reg = t.region(0, 0, 15, 15)
-    t.box(0, 0, 15, 15, "3"); t.rect(7, 1, 8, 14, "3"); t.rect(1, 7, 14, 8, "3")
-    for (cx, cy) in ((1, 1), (9, 1), (1, 9), (9, 9)):
-        for k in (2, 4): t.rect(cx + k, cy, cx + k, cy + 5, "q"); t.rect(cx, cy + k, cx + 5, cy + k, "q")
-        t.dot(cx, cy, "s"); t.dot(cx + 1, cy, "s"); t.dot(cx, cy + 1, "s")
-    if dusty:
-        random.seed(3)
-        # round 1: E blotches read as holes against the tan sky; round 2: silting the whole grid in E turned the
-        # panel into a tan lattice. Round 3: short 2-3 px streaks of darker, redder dust (D) with a light
-        # top-left pixel (E), on the cells only; the grid stays visible; a drift at the low edge.
-        placed = tries = 0
-        while placed < 11 and tries < 2000:
-            tries += 1
-            x, y = random.randrange(1, 13), random.randrange(1, 12); n = random.choice((2, 3))
-            if all(t.px[y][x + k] in "rq" for k in range(n)):  # on cells only (cell lines q count as cell)
-                for k in range(n): t.px[y][x + k] = "D"
-                t.px[y][x] = "E"; placed += 1
-        t.rect(1, 13, 14, 14, "D"); t.rect(1, 13, 14, 13, "E")                     # dust collects at the low edge
-    return t.save(), reg
-_, pvr = pv("solar_panel_top", False); pv("solar_panel_dusty_top", True)
+# ---------- M-09 Solar panel: five dust stages + partly cleaned (style guide §2.4 weathering) ----------
+# Layout (PIA22876 clean, PIA18080 layout only): a 2 x 2 square of sub-panels on an alloy frame and cross; each
+# sub-panel is rows of small rectangular cells (2 px tall) with thin lighter seams, plus a few dark cut-outs.
+CELL = [[None] * 16 for _ in range(16)]       # role of each pixel: frame, seam, cut, cell
+for y in range(16):
+    for x in range(16):
+        if x in (0, 15) or y in (0, 15) or x in (7, 8) or y in (7, 8): CELL[y][x] = "frame"
+        else:
+            lx, ly = (x - 1) % 8, (y - 1) % 8      # 0..5 inside a sub-panel
+            CELL[y][x] = "seam" if (ly in (2, 5) or lx == 2) else "cell"
+for (x, y) in ((2, 4), (12, 1), (5, 12), (10, 10), (13, 13)): CELL[y][x] = "cut"
+random.seed(2201)
+U = [[random.random() for _ in range(16)] for _ in range(16)]   # one fixed dust map: stage k adds to stage k-1
+DRIFT_ROWS = (13, 14)                                            # low edge of the tilted panel
+# dust level per cell pixel: 0 clean (r), 1 film (v), 2 two-thirds (x), 3 ground dust (D), 4 dust highlight (E)
+def level(stage, x, y):
+    u = U[y][x]; drift = y in DRIFT_ROWS
+    if stage == 0: return 0
+    if stage == 1: return (2 if y == 14 else 1) if drift else (1 if u < 0.10 else 0)
+    if stage == 2: return 3 if drift else (2 if u < 0.10 else 1)
+    if stage == 3: return 3 if (drift or u < 0.75) else 2
+    return 4 if u > 0.90 else 3
+LEVEL_COLOR = "rvxDE"
+def stage_px(stage, cleaned=False):
+    px = [[None] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            role = CELL[y][x]
+            if role == "frame": px[y][x] = "3"
+            elif role == "cut": px[y][x] = "p"
+            elif role == "seam": px[y][x] = "s" if stage <= 1 else "q"   # light seams when clean; dark lines under a veil
+            else: px[y][x] = LEVEL_COLOR[level(stage, x, y)]
+    if cleaned:   # wind cleared streaks out of a heavy veil (Opportunity, 2014): horizontal runs back to clean
+        random.seed(2014)
+        for _ in range(7):
+            y = random.choice([yy for yy in range(1, 13) if yy not in (7, 8)]); x0 = random.randrange(1, 11)
+            for x in range(x0, x0 + random.choice((3, 4, 5))):
+                if CELL[y][x] == "cell": px[y][x] = "r" if random.random() < 0.7 else "v"
+    return px
+STAGES = {f"solar_panel_dust{k}": stage_px(k) for k in range(5)}
+STAGES["solar_panel_partly_cleaned"] = stage_px(3, cleaned=True)
+pvr = None
+for name, px in STAGES.items():
+    t = T(name + "_top"); pvr = t.region(0, 0, 15, 15); t.px = [row[:] for row in px]; t.save()
 sp = T("solar_panel_frame", "2"); fr1 = sp.region(0, 0, 15, 0); spb = sp.region(0, 2, 15, 15)
 sp.rect(0, 0, 15, 0, "1"); sp.rect(0, 2, 15, 15, "2"); sp.rect(0, 8, 15, 8, "1"); sp.rect(7, 2, 8, 15, "3")
 sp.save()
 po = T("solar_panel_post", "3"); por = po.region(7, 0, 8, 15); po.rect(7, 0, 7, 15, "4"); po.rect(8, 0, 8, 15, "2")
 pbr = po.region(4, 0, 11, 1); po.rect(4, 0, 11, 1, "1"); po.save()
-for name, top in (("solar_panel", "solar_panel_top"), ("solar_panel_dusty", "solar_panel_dusty_top")):
+for name in STAGES:
+    top = name + "_top"
     models[name] = {
         "textures": {"particle": "mars:block/" + top, "cells": "mars:block/" + top,
                      "frame": "mars:block/solar_panel_frame", "post": "mars:block/solar_panel_post"},
@@ -176,25 +202,59 @@ models["battery"] = {
         {"from": [5, 12, 6], "to": [7, 14, 8], "faces": small("top", tpo)},
         {"from": [9, 12, 6], "to": [11, 14, 8], "faces": small("top", tmi)}]}
 
-# ---------- M-05 O2 generator (electrolysis): base with panel, twin tanks ----------
-tk = T("o2_generator_tank"); tkr = tk.region(0, 0, 4, 10)
-for x, c in zip(range(5), "23443"): tk.rect(x, 0, x, 10, c)
-tk.rect(0, 2, 4, 2, "o"); tk.rect(2, 4, 2, 9, "i"); tk.dot(2, 5, "2"); tk.dot(2, 8, "2")   # electrolyte window + bubbles
-tkt = tk.region(8, 0, 12, 4); tk.rect(8, 0, 12, 4, "3"); tk.box(8, 0, 12, 4, "1"); tk.dot(10, 2, "4"); tk.save()
-ob = T("o2_generator_base"); obr = ob.region(1, 12, 14, 15)
-ob.rect(1, 12, 14, 15, "2"); ob.bevel(1, 12, 14, 15, hi="3", lo="1"); ob.rect(10, 12, 13, 15, "1"); ob.rect(11, 13, 12, 14, "g"); ob.rect(3, 13, 8, 13, "4")
-obt = ob.region(1, 1, 14, 10); ob.rect(1, 1, 14, 10, "2"); ob.box(1, 1, 14, 10, "1"); ob.save()
-obs = T("o2_generator_base_side"); obsr = obs.region(1, 12, 14, 15); obs.rect(1, 12, 14, 15, "2"); obs.bevel(1, 12, 14, 15, hi="3", lo="1"); obs.save()
+# ---------- M-05 O2 generator, MOXIE-style (PIA24201, PIA24203): gold-plated box, pocket grid, X ribs on one end,
+# off-white tube loops, silver fittings. Process (MOXIE splits CO2; electrolysis splits water) is the Game Designer's.
+def pockets(t, x0, y0, lamp):
+    t.rect(x0, y0, x0 + 11, y0 + 11, "H")
+    ribs = (0, 4, 8, 11)
+    for r in ribs:
+        t.rect(x0 + r, y0, x0 + r, y0 + 11, "J"); t.rect(x0, y0 + r, x0 + 11, y0 + r, "J")
+    for a, b in ((1, 3), (5, 7), (9, 10)):          # each pocket: shadow on its top and left inner edge (recessed)
+        for c, d in ((1, 3), (5, 7), (9, 10)):
+            t.rect(x0 + a, y0 + c, x0 + b, y0 + d, "H"); t.rect(x0 + a, y0 + c, x0 + b, y0 + c, "G"); t.rect(x0 + a, y0 + c, x0 + a, y0 + d, "G")
+            t.rect(x0 + b, y0 + d, x0 + b, y0 + d, "I")
+    if lamp:  # status lamp in a dark ring, in the lower-right pocket
+        t.rect(x0 + 8, y0 + 8, x0 + 11, y0 + 11, "1"); t.rect(x0 + 9, y0 + 9, x0 + 10, y0 + 10, "g")
+fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); fa.save()
+fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); fb.save()
+en = T("o2_generator_end"); enr = en.region(3, 4, 12, 15)
+en.rect(3, 4, 12, 15, "H"); en.box(3, 4, 12, 15, "J")
+for k in range(1, 11):                               # X ribs: two diagonals across the 10 x 12 end face
+    yy = 4 + round(k * 11 / 10)
+    if 4 < yy < 15:
+        en.dot(3 + k, yy, "J"); en.dot(12 - k, yy, "J")
+        if yy + 1 < 15: en.dot(3 + k, yy + 1, "G"); en.dot(12 - k, yy + 1, "G")   # rib shadow below
+en.save()
+sd_ = T("o2_generator_side"); sdr = sd_.region(3, 4, 12, 15)
+sd_.rect(3, 4, 12, 15, "H"); sd_.box(3, 4, 12, 15, "J"); sd_.rect(4, 8, 11, 8, "J"); sd_.rect(4, 12, 11, 12, "J"); sd_.rect(4, 9, 11, 9, "G"); sd_.rect(4, 13, 11, 13, "G"); sd_.save()
+tp_ = T("o2_generator_top"); tpr = tp_.region(2, 3, 13, 12)
+tp_.rect(2, 3, 13, 12, "I"); tp_.box(2, 3, 13, 12, "J")
+for x, y in ((3, 4), (12, 4), (3, 11), (12, 11), (7, 4), (8, 11)): tp_.dot(x, y, "G")
+tp_.save()
+tb = T("o2_generator_tube", "W"); tbr = tb.region(0, 0, 7, 7)
+tb.rect(0, 0, 7, 7, "W"); tb.rect(0, 5, 7, 7, "V"); tb.rect(6, 0, 7, 7, "V")   # off-white, shaded lower and right
+fi = tb.region(8, 0, 15, 7); tb.rect(8, 0, 15, 7, "4"); tb.rect(8, 4, 15, 4, "3"); tb.rect(14, 0, 15, 7, "3")   # silver fitting
+tb.save()
+def tube(a, b): return {"from": a, "to": b, "faces": {k: face("tube", [0, 0, 1, 1]) for k in ("north", "south", "east", "west", "up", "down")}}
+def fitting(a, b): return {"from": a, "to": b, "faces": {k: face("tube", [8, 0, 10, 2]) for k in ("north","south","east","west","up","down")}}
 models["o2_generator"] = {
-    "textures": {"particle": "mars:block/o2_generator_base", "base": "mars:block/o2_generator_base",
-                 "bside": "mars:block/o2_generator_base_side", "tank": "mars:block/o2_generator_tank"},
+    "textures": {"particle": "mars:block/o2_generator_side", "front": "mars:block/o2_generator_face", "back": "mars:block/o2_generator_back",
+                 "end": "mars:block/o2_generator_end", "side": "mars:block/o2_generator_side", "top": "mars:block/o2_generator_top",
+                 "tube": "mars:block/o2_generator_tube"},
     "elements": [
-        {"from": [1, 0, 3], "to": [15, 4, 13], "faces": {"north": face("base", obr), "south": face("bside", obsr),
-            "east": face("bside", [3, 12, 13, 16]), "west": face("bside", [3, 12, 13, 16]),
-            "up": face("base", [1, 1, 15, 11]), "down": face("base", [1, 1, 15, 11])}},
-        {"from": [2, 4, 5], "to": [7, 15, 10], "faces": {k: face("tank", tkr) for k in ("north", "south", "east", "west")} | {"up": face("tank", tkt)}},
-        {"from": [9, 4, 5], "to": [14, 15, 10], "faces": {k: face("tank", tkr) for k in ("north", "south", "east", "west")} | {"up": face("tank", tkt)}},
-        {"from": [7, 12, 7], "to": [9, 13, 8], "faces": {k: face("tank", [8, 0, 10, 1]) for k in ("north", "south", "up", "down")}}]}
+        {"from": [2, 0, 3], "to": [14, 12, 13], "faces": {"north": face("front", far), "south": face("back", fbr),
+            "east": face("end", enr), "west": face("side", sdr), "up": face("top", tpr), "down": face("top", tpr)}},
+        fitting([4, 12, 6], [6, 13, 8]), fitting([10, 12, 6], [12, 13, 8]),          # top fittings
+        tube([4, 13, 6], [5, 15, 7]), tube([4, 15, 6], [12, 16, 7]), tube([11, 13, 6], [12, 15, 7]),   # arch over the top
+        fitting([1, 9, 6], [2, 11, 8]), fitting([1, 2, 6], [2, 4, 8]),               # west-side fittings
+        tube([0, 3, 6], [1, 10, 7])]}                                                 # loop down the west side
+for el in models["o2_generator"]["elements"]:       # tube and fitting faces: uv sized to the face so pixels stay square
+    if el["from"] == [2, 0, 3]: continue
+    a, b = el["from"], el["to"]; dx, dy, dz = b[0] - a[0], b[1] - a[1], b[2] - a[2]
+    base = 8 if any(f["uv"][0] >= 8 for f in el["faces"].values()) else 0
+    size = {"north": (dx, dy), "south": (dx, dy), "east": (dz, dy), "west": (dz, dy), "up": (dx, dz), "down": (dx, dz)}
+    for k, f in el["faces"].items():
+        w, h = size[k]; f["uv"] = [base, 0, base + min(w, 8), min(h, 8)]
 
 # ---------- M-13 Planetary Monitor: console with a tilted screen ----------
 sc = T("planetary_monitor_screen", "k"); scr = sc.region(1, 4, 14, 12)
