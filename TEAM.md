@@ -97,7 +97,6 @@ If a document or report uses one of these terms differently, flag it in the revi
 - **Evidence beats argument:** playtests, prototypes, and sources settle disagreements where possible.
 
 ### Still open (needs the user)
-- How playtests work for a design exercise: the user playing, agent walkthroughs, or friends; and how often.
 - Licenses for our own code, assets, and educator materials.
 
 ## 5. What Teammates Can Count On
@@ -125,6 +124,9 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
 | 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
 | 2026-11-26 | **Design exercise:** no real students will use this. Everything (classroom mode, NGSS, teacher tools, minors' privacy) is designed as if they would, as practice in student-centered design. Real playtests mean the user playing, plus agent walkthroughs. | TEAM.md | User decision |
+| 2026-11-26 | Equilibrium pressure target ~75 kPa so 21% O2 is breathable; Breathable gate uses O2 partial pressure (≥ ~16 kPa) and CO2 partial pressure (≤ 0.5 kPa) | DESIGN.md | User decision on SME recommendation |
+| 2026-11-26 | Multipliers (classroom, multiplayer) scale rates and hold times only, never physical thresholds | DESIGN.md, LEARNING.md | Coordinator, on SME accuracy finding |
+| 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
 | 2026-11-26 | Teacher CSV export uses anonymous IDs only; no username option | LEARNING.md, ARCHITECTURE.md (to update) | User decision on Producer recommendation |
