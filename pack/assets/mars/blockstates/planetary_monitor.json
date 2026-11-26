@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/planetary_monitor"
+  },
+  "facing=east": {
+   "model": "mars:block/planetary_monitor",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/planetary_monitor",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/planetary_monitor",
+   "y": 270
+  }
+ }
+}

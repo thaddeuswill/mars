@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/solar_panel_dusty"
+  },
+  "facing=east": {
+   "model": "mars:block/solar_panel_dusty",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/solar_panel_dusty",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/solar_panel_dusty",
+   "y": 270
+  }
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/regolith_outgasser"
+  },
+  "facing=east": {
+   "model": "mars:block/regolith_outgasser",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/regolith_outgasser",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/regolith_outgasser",
+   "y": 270
+  }
+ }
+}

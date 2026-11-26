@@ -1,0 +1,146 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/planetary_monitor_body",
+  "body": "mars:block/planetary_monitor_body",
+  "screen": "mars:block/planetary_monitor_screen"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    2
+   ],
+   "to": [
+    16,
+    8,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      16,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#body",
+     "uv": [
+      2,
+      8,
+      14,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#body",
+     "uv": [
+      2,
+      8,
+      14,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#body",
+     "uv": [
+      0,
+      0,
+      16,
+      6
+     ]
+    },
+    "down": {
+     "texture": "#body",
+     "uv": [
+      0,
+      0,
+      16,
+      6
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    8,
+    9
+   ],
+   "to": [
+    15,
+    17,
+    11
+   ],
+   "rotation": {
+    "origin": [
+     8,
+     8,
+     10
+    ],
+    "axis": "x",
+    "angle": -22.5
+   },
+   "faces": {
+    "north": {
+     "texture": "#screen",
+     "uv": [
+      1,
+      4,
+      15,
+      13
+     ]
+    },
+    "south": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      14,
+      15
+     ]
+    },
+    "up": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      14,
+      10
+     ]
+    },
+    "east": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      2,
+      15
+     ]
+    },
+    "west": {
+     "texture": "#body",
+     "uv": [
+      0,
+      8,
+      2,
+      15
+     ]
+    }
+   }
+  }
+ ]
+}

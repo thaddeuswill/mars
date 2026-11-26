@@ -1,0 +1,140 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/regolith_outgasser_side",
+  "front": "mars:block/regolith_outgasser_front",
+  "side": "mars:block/regolith_outgasser_side",
+  "top": "mars:block/regolith_outgasser_top",
+  "stack": "mars:block/regolith_outgasser_stack",
+  "back": "mars:block/regolith_outgasser_back"
+ },
+ "elements": [
+  {
+   "from": [
+    1,
+    0,
+    2
+   ],
+   "to": [
+    15,
+    10,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#front",
+     "uv": [
+      1,
+      6,
+      15,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#back",
+     "uv": [
+      1,
+      6,
+      15,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      2,
+      6,
+      14,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      2,
+      6,
+      14,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      1,
+      2,
+      15,
+      14
+     ]
+    },
+    "down": {
+     "texture": "#top",
+     "uv": [
+      1,
+      2,
+      15,
+      14
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    9,
+    10,
+    9
+   ],
+   "to": [
+    13,
+    16,
+    13
+   ],
+   "faces": {
+    "north": {
+     "texture": "#stack",
+     "uv": [
+      6,
+      0,
+      10,
+      6
+     ]
+    },
+    "south": {
+     "texture": "#stack",
+     "uv": [
+      6,
+      0,
+      10,
+      6
+     ]
+    },
+    "east": {
+     "texture": "#stack",
+     "uv": [
+      6,
+      0,
+      10,
+      6
+     ]
+    },
+    "west": {
+     "texture": "#stack",
+     "uv": [
+      6,
+      0,
+      10,
+      6
+     ]
+    },
+    "up": {
+     "texture": "#stack",
+     "uv": [
+      6,
+      8,
+      10,
+      12
+     ]
+    }
+   }
+  }
+ ]
+}

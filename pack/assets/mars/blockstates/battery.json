@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/battery"
+  },
+  "facing=east": {
+   "model": "mars:block/battery",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/battery",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/battery",
+   "y": 270
+  }
+ }
+}

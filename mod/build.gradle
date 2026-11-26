@@ -68,12 +68,16 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.4.1'
+    // Pure tests run without Minecraft on the classpath; the core only needs Gson
+    // (the version Minecraft 1.21.1 ships, from knowledge: check if it ever differs).
+    testImplementation 'com.google.code.gson:gson:2.11.0'
 }
 
 test {
     useJUnitPlatform()
     // Unit tests read the real content files from ../pack (ARCHITECTURE.md 3.2).
-    systemProperty 'mars.packDir', file('../pack').absolutePath
+    // -PmarsPackDir=<dir> points the tests at a deliberately broken copy ("prove a check can fail").
+    systemProperty 'mars.packDir', (project.findProperty('marsPackDir') ?: file('../pack').absolutePath)
     testLogging {
         events 'passed', 'failed', 'skipped'
         showStandardStreams = true

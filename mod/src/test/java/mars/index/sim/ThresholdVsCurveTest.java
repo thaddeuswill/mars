@@ -43,7 +43,6 @@ class ThresholdVsCurveTest {
             v.add(Ids.PRESSURE, -0.02 * Math.max(0, v.get(Ids.PRESSURE) - 0.6) * dt);
           }
         });
-    int[] outgasserSols = {9, 11, 11, 13, 13, 13, 16, 16, 16, 16};
     int built = 0;
     double triplePassedSol = -1;
     double fiveKpaSol = -1;
