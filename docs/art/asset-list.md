@@ -123,6 +123,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | M-08 | **Regolith Outgasser** + vapor plume | Model + particles | **3** | **Placeholder** (SM, batch 1) | Keyframes §3.8; first planet lever. Straw-man for Stage 2; concept `concepts/regolith-outgasser-concept.png`. Straw-man made by `tools/art-preview/gen_phase1_batch1.py`: `models/block/regolith_outgasser.json`; renders in `renders/phase1-batch1/` | SM → C → **F-E** |
 | M-09 | Solar panel, five dust stages: `solar_panel_dust0` (clean) … `solar_panel_dust4` (full veil) | 16×16 ×5 + shared frame and post | 3 | **Placeholder** (SM, batch 2) | Style guide §2.4. Cell colour and layout from PIA22876 (layout also PIA18080); veil from PIA25286. Replaces batch 1's `solar_panel` and `solar_panel_dusty` (retired). Renders and `dust_progression.png` in `renders/phase1-batch2/` | SM → **F-E** |
 | M-09a | Solar panel, partly cleaned (`solar_panel_partly_cleaned`): patchy cleared areas, different per sub-panel | 16×16 | 3 | **Placeholder** (SM, batch 2) | Style guide §2.4; PIA17759 / PIA18079; SME dust review §3 | SM → F-S |
+| M-09b | **Prototype:** round solar array at real scale (`solar_panel_round_dust0`…`4`, `solar_panel_round_partly_cleaned`): 12-segment fan like InSight's, about 2.1 m across (provisional), 23 cuboids | 48×48 texture per stage + shared frame and post | 3 | **Placeholder** (SM, prototype) | BACKLOG #25. Waits for the owner to choose round vs. square and for the SME's real dimensions. Generator `tools/art-preview/gen_round_panel.py`; renders `renders/round-panel-prototype/` | SM → C → **F-E** |
 | M-10 | Battery | Model | 3 | **Placeholder** (SM, batch 1) | Straw-man made by `tools/art-preview/gen_phase1_batch1.py`: `models/block/battery.json`; renders in `renders/phase1-batch1/` | SM → F-S |
 | M-11 | LED lamp | 16×16 | 3 | Spec'd | Lamp color `#F5E3C3` | F-S |
 | M-12 | Shielding block, radiation shelter walls | 16×16 | 3 | Spec'd | Regolith-bag look | SM → F-S |
@@ -249,7 +250,7 @@ Audio is owned by the **Lead Artist** (user decision, 2026-11-26). Every sound, 
 | Environment | 23 | 19 | 4 | 0 | 0 | 0 |
 | Terrain | 19 | 17 | 1 | 0 | 0 | 1 |
 | Flora | 8 | 5 | 3 | 0 | 0 | 0 |
-| Machines | 38 | 16 | 13 | 0 | 2 | 7 |
+| Machines | 39 | 16 | 13 | 0 | 2 | 8 |
 | Items and player | 11 | 5 | 6 | 0 | 0 | 0 |
 | Fauna | 8 | 8 | 0 | 0 | 0 | 0 |
 | Props and structures | 10 | 7 | 3 | 0 | 0 | 0 |

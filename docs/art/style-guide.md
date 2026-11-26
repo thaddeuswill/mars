@@ -104,6 +104,8 @@ Dust builds on solar panels gradually and is cleared suddenly (owner request, BA
 
 **Rules (checked by `tools/art-preview/gen_phase1_batch1.py`):** one fixed dust map, so each stage is a **superset** of the one before (no pixel ever gets less dust going up); each step changes the mean colour of the cell area by **OKLab ΔE ≥ 0.035** in normal vision and at least two of the three simulations (measured: 0.039, 0.149, 0.142, 0.050 in normal vision); the panel stays readable at every stage (structure contrast ≥ 2 : 1 between seams, cut-outs, or frame and the dominant cell colour). Stages don't change during a storm; storm dust lands at clearing (keyframes §3.7a).
 
+**Round prototype (BACKLOG #25):** the same stages on a 12-segment round array (`solar_panel_round_*`, asset M-09b). Differences: dust drifts first along the **rim** (a flat disc has no low edge); at stages 3–4 the seams are **softened to 1 px dark tan-brown `#7A4530`** (2.2 : 1 on the veil) instead of near-black, with cut-outs kept dark (5.0 : 1). Steps measured 0.067, 0.138, 0.127, 0.040. The square panel keeps its near-black veil seams until the owner chooses.
+
 **Panel dust stage bar** (look-at readout; ui-specs / DESIGN.md "a small bar, shape not colour only"): five 3 × 5 GUI px slots in a row on the look-at card's ≥ 90 % strip; filled slots = dust stage (0 = all hollow outlines, 4 = all filled), filled in bright dust `#D09A6E` with a 1 px `#1E2328` outline, hollow slots outlined in `#A9B0B8`. The word ("Dust 3 of 4 · heavy veil") and the output ("Output 70 %") sit beside it. "Partly cleaned" shows a slashed slot (diagonal line through the filled slots) plus the word. Shape (count of filled slots) carries the stage; colour is the third channel.
 
 ---
