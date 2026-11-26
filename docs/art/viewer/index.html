@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>
+<title>Mars Asset Viewer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a large viewport beside a narrow rail of asset buttons, view presets, and an info card.
+   The scene itself (sky, ground, machines) is fixed; only the page chrome follows the theme. */
+:root {
+  --bg: #eceff1;
+  --panel: #ffffff;
+  --panel-2: #e3e7ea;
+  --fg: #1d2429;
+  --muted: #5a6670;
+  --line: #c9d0d5;
+  --accent: #b4481f;
+  --accent-fg: #ffffff;
+  --focus: #1a5fb4;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181b; --panel: #1c2226; --panel-2: #252d32; --fg: #e4e9ec; --muted: #9aa6ae;
+    --line: #36424a; --accent: #e07a4d; --accent-fg: #14181b; --focus: #78aef0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181b; --panel: #1c2226; --panel-2: #252d32; --fg: #e4e9ec; --muted: #9aa6ae;
+  --line: #36424a; --accent: #e07a4d; --accent-fg: #14181b; --focus: #78aef0; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5;
+  padding-block: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #d2ae86; }
+#view { display: block; width: 100%; aspect-ratio: 4 / 3; min-height: 320px; touch-action: none; cursor: grab; }
+#view:active { cursor: grabbing; }
+.hud { position: absolute; left: 10px; bottom: 10px; right: 10px; display: flex; justify-content: space-between; gap: 8px; pointer-events: none; }
+.hud span { background: rgba(20, 24, 27, 0.78); color: #f1f4f6; font-family: var(--font-mono); font-size: 12px; padding: 3px 8px; border-radius: 3px; }
+.fail { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--panel); color: var(--fg); }
+.rail { display: flex; flex-direction: column; gap: 14px; }
+.group { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.group h2 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: inherit; font-size: 13px; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.assets button { flex: 1 1 100%; text-align: left; }
+label.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.info h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.info p { margin: 0; color: var(--muted); font-size: 14px; }
+.info .tag { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.note { color: var(--muted); font-size: 13px; max-width: 80ch; }
+.note code { font-family: var(--font-mono); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Mars Asset Viewer</h1>
+    <p>Phase 1 dome machines, batch 1. These are placeholder models and textures. Drag to turn, scroll or pinch to zoom, and tell me what to change.</p>
+  </header>
+  <div class="layout">
+    <div class="stage">
+      <canvas id="view" aria-label="3D view of the selected machine"></canvas>
+      <div class="hud"><span id="hud-name"></span><span id="hud-view"></span></div>
+      <div class="fail" id="fail"><p>The 3D view could not start in this browser (WebGL or the three.js library did not load). Try another browser, or ask for the still images instead.</p></div>
+    </div>
+    <div class="rail">
+      <div class="group assets"><h2>Machine</h2><div class="buttons" id="assets"></div></div>
+      <div class="group"><h2>View</h2><div class="buttons" id="views"></div></div>
+      <div class="group"><h2>Scene</h2>
+        <label class="toggle"><input type="checkbox" id="t-ground" checked> Mars ground</label>
+        <label class="toggle"><input type="checkbox" id="t-player"> Player for scale (1.8 blocks tall)</label>
+        <label class="toggle"><input type="checkbox" id="t-spin"> Turntable</label>
+      </div>
+      <div class="group info" id="info"></div>
+    </div>
+  </div>
+  <p class="note">This is a preview, not Minecraft. Faces use Minecraft's fixed per-face brightness (top full, north and south 80%, east and west 60%, bottom 50%) with sharp pixels, but there is no world light, shadow, fog, or neighbouring blocks. The magenta corner on each texture marks it as a placeholder. Names to use when you give feedback: the machine name and the view, for example "Regolith Oven, front".</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script>
+const DATA = {"models":{"battery":{"parent":"block/block","textures":{"particle":"mars:block/battery_side","front":"mars:block/battery_front","side":"mars:block/battery_side","top":"mars:block/battery_top"},"elements":[{"from":[3,0,3],"to":[13,12,13],"faces":{"north":{"texture":"#front","uv":[3,4,13,16]},"south":{"texture":"#side","uv":[3,4,13,16]},"east":{"texture":"#side","uv":[3,4,13,16]},"west":{"texture":"#side","uv":[3,4,13,16]},"up":{"texture":"#top","uv":[3,3,13,13]},"down":{"texture":"#top","uv":[3,3,13,13]}}},{"from":[5,12,6],"to":[7,14,8],"faces":{"north":{"texture":"#top","uv":[0,0,2,2]},"south":{"texture":"#top","uv":[0,0,2,2]},"east":{"texture":"#top","uv":[0,0,2,2]},"west":{"texture":"#top","uv":[0,0,2,2]},"up":{"texture":"#top","uv":[0,0,2,2]}}},{"from":[9,12,6],"to":[11,14,8],"faces":{"north":{"texture":"#top","uv":[14,0,16,2]},"south":{"texture":"#top","uv":[14,0,16,2]},"east":{"texture":"#top","uv":[14,0,16,2]},"west":{"texture":"#top","uv":[14,0,16,2]},"up":{"texture":"#top","uv":[14,0,16,2]}}}]},"o2_generator":{"parent":"block/block","textures":{"particle":"mars:block/o2_generator_base","base":"mars:block/o2_generator_base","bside":"mars:block/o2_generator_base_side","tank":"mars:block/o2_generator_tank"},"elements":[{"from":[1,0,3],"to":[15,4,13],"faces":{"north":{"texture":"#base","uv":[1,12,15,16]},"south":{"texture":"#bside","uv":[1,12,15,16]},"east":{"texture":"#bside","uv":[3,12,13,16]},"west":{"texture":"#bside","uv":[3,12,13,16]},"up":{"texture":"#base","uv":[1,1,15,11]},"down":{"texture":"#base","uv":[1,1,15,11]}}},{"from":[2,4,5],"to":[7,15,10],"faces":{"north":{"texture":"#tank","uv":[0,0,5,11]},"south":{"texture":"#tank","uv":[0,0,5,11]},"east":{"texture":"#tank","uv":[0,0,5,11]},"west":{"texture":"#tank","uv":[0,0,5,11]},"up":{"texture":"#tank","uv":[8,0,13,5]}}},{"from":[9,4,5],"to":[14,15,10],"faces":{"north":{"texture":"#tank","uv":[0,0,5,11]},"south":{"texture":"#tank","uv":[0,0,5,11]},"east":{"texture":"#tank","uv":[0,0,5,11]},"west":{"texture":"#tank","uv":[0,0,5,11]},"up":{"texture":"#tank","uv":[8,0,13,5]}}},{"from":[7,12,7],"to":[9,13,8],"faces":{"north":{"texture":"#tank","uv":[8,0,10,1]},"south":{"texture":"#tank","uv":[8,0,10,1]},"up":{"texture":"#tank","uv":[8,0,10,1]},"down":{"texture":"#tank","uv":[8,0,10,1]}}}]},"planetary_monitor":{"parent":"block/block","textures":{"particle":"mars:block/planetary_monitor_body","body":"mars:block/planetary_monitor_body","screen":"mars:block/planetary_monitor_screen"},"elements":[{"from":[0,0,2],"to":[16,8,14],"faces":{"north":{"texture":"#body","uv":[0,8,16,16]},"south":{"texture":"#body","uv":[0,8,16,16]},"east":{"texture":"#body","uv":[2,8,14,16]},"west":{"texture":"#body","uv":[2,8,14,16]},"up":{"texture":"#body","uv":[0,0,16,6]},"down":{"texture":"#body","uv":[0,0,16,6]}}},{"from":[1,7,9],"to":[15,16,11],"rotation":{"origin":[8,8,10],"axis":"x","angle":-22.5},"faces":{"north":{"texture":"#screen","uv":[1,4,15,13]},"south":{"texture":"#body","uv":[0,8,14,15]},"up":{"texture":"#body","uv":[0,8,14,10]},"east":{"texture":"#body","uv":[0,8,2,15]},"west":{"texture":"#body","uv":[0,8,2,15]}}}]},"regolith_outgasser":{"parent":"block/block","textures":{"particle":"mars:block/regolith_outgasser_side","front":"mars:block/regolith_outgasser_front","side":"mars:block/regolith_outgasser_side","top":"mars:block/regolith_outgasser_top","stack":"mars:block/regolith_outgasser_stack","back":"mars:block/regolith_outgasser_back"},"elements":[{"from":[1,0,2],"to":[15,10,14],"faces":{"north":{"texture":"#front","uv":[1,6,15,16]},"south":{"texture":"#back","uv":[1,6,15,16]},"east":{"texture":"#side","uv":[2,6,14,16]},"west":{"texture":"#side","uv":[2,6,14,16]},"up":{"texture":"#top","uv":[1,2,15,14]},"down":{"texture":"#top","uv":[1,2,15,14]}}},{"from":[9,10,9],"to":[13,16,13],"faces":{"north":{"texture":"#stack","uv":[6,0,10,6]},"south":{"texture":"#stack","uv":[6,0,10,6]},"east":{"texture":"#stack","uv":[6,0,10,6]},"west":{"texture":"#stack","uv":[6,0,10,6]},"up":{"texture":"#stack","uv":[6,8,10,12]}}}]},"regolith_oven":{"parent":"block/block","textures":{"particle":"mars:block/regolith_oven_side","front":"mars:block/regolith_oven_front","side":"mars:block/regolith_oven_side","top":"mars:block/regolith_oven_top"},"elements":[{"from":[2,0,2],"to":[14,14,14],"faces":{"north":{"texture":"#front","uv":[2,2,14,16]},"south":{"texture":"#side","uv":[2,2,14,16]},"east":{"texture":"#side","uv":[2,2,14,16]},"west":{"texture":"#side","uv":[2,2,14,16]},"up":{"texture":"#top","uv":[2,2,14,14]},"down":{"texture":"#top","uv":[2,2,14,14]}}}]},"solar_panel":{"parent":"block/block","textures":{"particle":"mars:block/solar_panel_top","cells":"mars:block/solar_panel_top","frame":"mars:block/solar_panel_frame","post":"mars:block/solar_panel_post"},"elements":[{"from":[4,0,4],"to":[12,2,12],"faces":{"north":{"texture":"#post","uv":[4,0,12,2]},"south":{"texture":"#post","uv":[4,0,12,2]},"east":{"texture":"#post","uv":[4,0,12,2]},"west":{"texture":"#post","uv":[4,0,12,2]},"up":{"texture":"#frame","uv":[4,4,12,12]}}},{"from":[7,2,7],"to":[9,9,9],"faces":{"north":{"texture":"#post","uv":[7,0,9,7]},"south":{"texture":"#post","uv":[7,0,9,7]},"east":{"texture":"#post","uv":[7,0,9,7]},"west":{"texture":"#post","uv":[7,0,9,7]}}},{"from":[0,9,0],"to":[16,10,16],"rotation":{"origin":[8,9.5,8],"axis":"x","angle":-22.5},"faces":{"up":{"texture":"#cells","uv":[0,0,16,16]},"down":{"texture":"#frame","uv":[0,0,16,16]},"north":{"texture":"#frame","uv":[0,0,16,1]},"south":{"texture":"#frame","uv":[0,0,16,1]},"east":{"texture":"#frame","uv":[0,0,16,1]},"west":{"texture":"#frame","uv":[0,0,16,1]}}}]},"solar_panel_dusty":{"parent":"block/block","textures":{"particle":"mars:block/solar_panel_dusty_top","cells":"mars:block/solar_panel_dusty_top","frame":"mars:block/solar_panel_frame","post":"mars:block/solar_panel_post"},"elements":[{"from":[4,0,4],"to":[12,2,12],"faces":{"north":{"texture":"#post","uv":[4,0,12,2]},"south":{"texture":"#post","uv":[4,0,12,2]},"east":{"texture":"#post","uv":[4,0,12,2]},"west":{"texture":"#post","uv":[4,0,12,2]},"up":{"texture":"#frame","uv":[4,4,12,12]}}},{"from":[7,2,7],"to":[9,9,9],"faces":{"north":{"texture":"#post","uv":[7,0,9,7]},"south":{"texture":"#post","uv":[7,0,9,7]},"east":{"texture":"#post","uv":[7,0,9,7]},"west":{"texture":"#post","uv":[7,0,9,7]}}},{"from":[0,9,0],"to":[16,10,16],"rotation":{"origin":[8,9.5,8],"axis":"x","angle":-22.5},"faces":{"up":{"texture":"#cells","uv":[0,0,16,16]},"down":{"texture":"#frame","uv":[0,0,16,16]},"north":{"texture":"#frame","uv":[0,0,16,1]},"south":{"texture":"#frame","uv":[0,0,16,1]},"east":{"texture":"#frame","uv":[0,0,16,1]},"west":{"texture":"#frame","uv":[0,0,16,1]}}}]}},"textures":{"battery_front":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR4nGOsa5/wn4ECwESJ5sFhAAsyp7Eyn4GBgYFh5YYdODVMnjiRwdnNA7sBMGD33hOnAXZxDAwzXuAwYOWGHQyTJ05kYFjkgaERGTi7IdhEh8HRWG2Go7HaGOJYDcjNz8fKxgawhsHkiRMx2NaLrxJvALpTrRdfhYf83l2oMYTVAFy2UeQCkgwgxQXUTcr4AHrgwQAAgNgquxfzse4AAAAASUVORK5CYII=","battery_side":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaElEQVR4nGOsa5/wn4ECwESJ5sFhAAsyp7Eyn4GBgYFh5YYdODVMnjiRwdnNA7sBMGD33hOnAXZxDAwzXuAwYOWGHQzXrt9kYHgxAacBe3ftYHB2Q/AHPhBHDRgMBmCkxL27cCdjbAAAL6UXjB3xVMcAAAAASUVORK5CYII=","battery_top":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAbElEQVR4nGN8Np/hPwMDA8OMFxMYSAF7d+1gYGBgYGAiSRcWwFjXPuE/JQawIHMaK/MZGBgYGGwcPfFqcnbzwG4ADMgpKOHU/OjBPdwusHH0xKsZG6A4EEcNoIIBGOkAPZ5JMgA5hRELBj4MAL28FBf3s/sIAAAAAElFTkSuQmCC","o2_generator_base":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAhElEQVR4nGOsa5/wn4ECwMLAwMDQWJnPwMDAwGDj6EmSZmc3D4gBMCCnoES05kcP7iFcYOPoSZJmZMBElq5RA6hrADwdwOKVLAOc3TwodwEhsHfXDgwxlKR8+9YtBn9/X6yaN27czMDAwMBwNFabgYGBgcF68VXsLoApJAWQFIjINsMAAFCMH1SLV/ioAAAAAElFTkSuQmCC","o2_generator_base_side":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAASElEQVR4nGOsa5/wn4ECwESJ5lEDRg0YZAY0VuYzNFbmk6Rx764dDAwMDAwsyIK3b90i2QUsDAwMDPXtE8nSjOKCRw/ukWUAAJLTERDm0w7lAAAAAElFTkSuQmCC","o2_generator_tank":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAsElEQVR4nGP8z/D/PwMDA8PKDTsYGBgYGK5dv8mADPbu2sGADpzdPOBsFgxZLABZA7qBLM/nMzIwMDAw2L2HCNhJMDDMeDEBwxAtTXUM1zEwMDCwFB/KYlBVU2PQ0lTH6gUYwCUO94KUrBzDs8ePsCrCFg4YBkyfMpXB398XQwGy/7EBJhgjMycbr0KCBpAL4AZMnzKVMgMo9gKuGCAEWFTV1BgYGHDHM9EuIBcMAwMALzcv/Y46E7oAAAAASUVORK5CYII=","planetary_monitor_body":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVR4nGO0dvT4z0ABYGFgYGCQU1AiS/OjB/cYmCixnYGBAWGAv78vSTQMMFo7evynxAssMAa5gMXZzYNszQwMDJQHIuN/hv//GRgYGFZu2EGy5skTJ0LCgIGBgeHa9ZsENezdhWkJy8oNO4jSDANHY7UZGBgYGKwXX2VgYKBCGLAgc27fuoVToaqaGorNWA2AKcIF0KN8764dVPICttAlFgAAmUIwCVngDmwAAAAASUVORK5CYII=","planetary_monitor_screen":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAApElEQVR4nGOUU9b4z0ABYKJE8+AwgIWBgYHh4d3rDAwMDAxRidkkaT56aB/EABiY3nyDgYGBgeHH/2lYNZg5BDBYTDzIwMDAwMC8tpGBgYGBgVFOWeO/tZ0Tw9FD+0iyHaYHxQWnDmyA2wRjIwOJ3bMZ5Fq3ooixYKhCci46kMOiDsUAid2z4QoHxgXIAJsLsBkKjwVywNFD+yAGkKUbCgY+LwAAdLAwH7eMKMoAAAAASUVORK5CYII=","regolith":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAu0lEQVR4nKWSsQrCMBRFT0vGbkIpCNKtqx9QR7/CP/FX/Bvp7txNRaEI0qV7HCQ1SU1S452SF959977cRCIlwGG3YbVcAHC9P9HhqgOk6nB+DEaDagoh2W/XUl3KPAtOtCHKPKNpOwBu/UBdFRxPF4PQS/CtaDf6FAmAuiqCk2YrUHZ0Ut8uUudLrIJf7aQw/fem7UYr8M6InhOngpFEaw5BwGdJisC24cuDoWBO8iYEuvcYgv+/MWaqjhfHej7i7hRCfAAAAABJRU5ErkJggg==","regolith_outgasser_back":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAfUlEQVR4nGOsa5/wn4ECwESJ5lEDIICFgYGBobEyn4GBgYFh5YYdRGucPHEig7ObB8QAGLh2/SZ5Lli5YQfDtes3GW7fukWUJlU1NVQDsEkQC6gTiDAwIF6AG7B31w6G1XGQaAxd5MHAwMBAkM/AgBQG5GhGcQG6BCE+DAAAH4IurzhYtFIAAAAASUVORK5CYII=","regolith_outgasser_front":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAvklEQVR4nGOsa5/wn4ECwESJ5lEDIICFgYGBobEyn4GBgYFh5YYdRGucPHEig7ObB8QAGLh2/SZODXt3YTecBWbztes3GbQ01bEq2rhxMwMDAwPD0VhtBgYGBgbrxVdRDUAGdu89MQ1gyMLpMgwDQhd5YCiSU2DAsBmnAavjMP1afCiLwdkN1WBYmGAYUHwIt3OxAbgBe3ftYMiQKGCws0N4A+aa0EUeDI8e3EPhwwA8IaFLEuJjuABdghAfBgAyRj+Y9dL7qQAAAABJRU5ErkJggg==","regolith_outgasser_side":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAiUlEQVR4nGOsa5/wn4ECwESJ5lEDIIAFxmiszGdgYGBgWLlhB0FNkydOZHB280A1AAauXb9JngtWbtjBcO36TYa9u/C7AGYzhgEwkJufj9cAdBdiGDB54sQBdgHZgcjAwMCQIVHAwMDAwBC6COLM1XE7sPL3MiC8gZGQCGmG8bG6AFkSXSE6HwYAdiQygkCllj0AAAAASUVORK5CYII=","regolith_outgasser_stack":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAeUlEQVR4nGOMTMz6z4AFLJs/lYGBgYEhKjEbmzQcMOGVZWBgePTgHsOjB/dwyjPicoGqmhrD7Vu3CJlP2AWEAAsuib27dqDw5RSUSDPA2c2DMi8QoxmvAcQC2hpw9NA+hqOH9tHWBThjgYGBgcHazomgAYM8EOliAAAdpx1u6FolPgAAAABJRU5ErkJggg==","regolith_outgasser_top":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlklEQVR4nGOsa5/wn4ECwESJZgYGBgYWBgYGhsbKfAYGBgYGG0dPkjQ7u3lADEAWQAa3b91iUFVTw9CopanOMHniRIQLbBw9MTTjA9eu34SzKQ4D6gQiAwPEv9gALnEMA7AFFq5AZGBgYHj04B4DA8NgCAPqGaClqU60JmS18ECEpSx0AAssZLB31w5UA0hJheiA4jAAAAwgI1dNH6IZAAAAAElFTkSuQmCC","regolith_oven_front":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAp0lEQVR4nGOsa5/wn4ECwESJZgYGBgYWGKOxMp+BgYGBYeWGHQQ1TZ44kcHZzQPVABi4dv0meS5YuWEHw7XrNxn27sLvApjNGAYgg12LqrFqdotrxRCjXiCig497bFH4/C6HsaqjjQsgfkUNLIZFmP7HagB6KJPlAi1NdQyxyRMnEm8ALsVHY7UZGBgYGKwXX8VvADZv4EpgOKMRG0C2GasBhJIxNgAAi+sqGE4b0OMAAAAASUVORK5CYII=","regolith_oven_side":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAYElEQVR4nGOsa5/wn4ECwESJZgYGBgYWGKOxMp+BgYGBYeWGHQQ1TZ44kcHZzQPVABi4dv0mnH371i0GVTU14lywcsMOFM3EAorDYNSAUQOoYgBKXti7CzMjPXpwD68BAJsqF6jsF/e4AAAAAElFTkSuQmCC","regolith_oven_top":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAaUlEQVR4nGOsa5/wn4ECwESJZgYGBgYWGKOxMp+BgYGBwcbRkyiNzm4eqAagS+ADe3ftwHSBjaMng7ObB4OWpjpezdeu30ThY7hg8sSJeA1AdyFZXsBrwKgXBtoLyCmMZANItRkGKM6NABg/IGpaGPLQAAAAAElFTkSuQmCC","solar_panel_dusty_top":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABLUlEQVR4nKWSMUvDcBTEf5UMgXQocTCTgzh3FCeXbi4FKa5dheyOdjPgZAehq2sRx3wAoeBQ/ADBSgmtJIMhQwPZ4tC+f2MSqq23JHC8/927d7WMLAPoOX12gSY/40mK9/aCYVokUYBhWrRbTcUBlbzWc/qMJynzqbdRaT71eLo6JvRn2G7Bwe3JJ6EVAzq2GwCQRAHQVMoAncF6UHgNoDtcAA1lTb4Cw7R4vKwT+jMAbDdVvAbkSJ2DwzqhrwMxo5xaZ4Ba4eFcnBYcyEOi0G6tHSxXeC85rN0499nG9H7B3n+GYZVB8c6yysg4o4rP90A5kB7I8PVr44eS9ODuNC47kDvnsVUPJNEkCugOFyRRWuqB8JVXuNj/+ENcZTx/HS0dSMO2hrF6QNLeBd+is6iySY1i2wAAAABJRU5ErkJggg==","solar_panel_frame":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAXElEQVR4nGO0dvT4z0ABYJFTUKJEPwPjf4b//xkYGBiiErMxJFXV1BgYGBgYbt+6hdMAJoqsZ2BgYMFmMymAYhcMvAEsjx7cwykJiwV8aohKB/jUDHwYjBrAwAAAopERBMRfgf0AAAAASUVORK5CYII=","solar_panel_post":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAPElEQVR4nGOsa5/wnwEJ7N21gwEfcHbzQOEz4VVNBGDBZ4OWpjrDxo2bGVTV1HAaQLELRg0YNWDUAAgAALx8CYc2YGnzAAAAAElFTkSuQmCC","solar_panel_top":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAlElEQVR4nGP8z/D/PwMDA0N9+0QGcgALjHHm7g+GW+cOMXALSTB8ffeCgVtIgsHfWQ8ux8DAgFWepb59IsOZuz8Ynj64hdcmXPIsMJNh4Ou7F0i0HgMheSYGBgYGbiEJBm4hCQYYG5kmJM+CbCouF+CTp9gFjHXtE/5jDR0iARMlmhkYoGGAL54JycNdMJoOBjAdAADceYYw998PBgAAAABJRU5ErkJggg==","ground_regolith":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAqElEQVR4nJWRPwqDMBTGfw2ObgURhOLmJXKT3qzHEffOblpaEKF0yQE6RF9T+wzpW0LC9+99OVzOFgBO1RG4PZ6s8/sCGH8MsxOQx+1NJlCvFKI32guhLvKun4D7y9mmbK8jUBf5rsPmHkLVHTLANmUkdMzBZxO+uoNJ11YcUrIZvrvv+skHA4bZSemKw8JZ0bFI4ZeFqdTf+DionSgESZ9I+L/WRGGZN46EPyiZZue8AAAAAElFTkSuQmCC"}};
+const INFO = {
+  regolith_outgasser: ["Regolith Outgasser", "Phase 1 pressure source. A low, wide body with a vent stack, hazard stripes, and slots that glow when it runs."],
+  regolith_oven: ["Regolith Oven", "Heater in the starting dome. A tall cabinet with a lit window and heater slots."],
+  solar_panel: ["Solar panel", "Dome power. Dark blue-black cells, tilted on a post, facing the front."],
+  solar_panel_dusty: ["Solar panel, dusty", "The same panel after a dust storm: streaks of redder dust and a drift along the low edge."],
+  battery: ["Battery", "Stores dome power. Charge segments on the front, orange plus terminal, dark minus terminal."],
+  o2_generator: ["O2 generator", "Dome oxygen. Twin tanks on a base."],
+  planetary_monitor: ["Planetary Monitor", "Shows the planet values. A tilted screen on a low body."]
+};
+const ORDER = ["regolith_outgasser","regolith_oven","solar_panel","solar_panel_dusty","battery","o2_generator","planetary_monitor"];
+const SKY = 0xd2ae86;
+const SHADE = {up: 1, down: 0.5, north: 0.8, south: 0.8, east: 0.6, west: 0.6};
+// Corner order per face: bottom-left, bottom-right, top-right, top-left as seen from outside (same as the Blender preview).
+const FACES = {
+  north: (a, b) => [[b[0],a[1],a[2]],[a[0],a[1],a[2]],[a[0],b[1],a[2]],[b[0],b[1],a[2]]],
+  south: (a, b) => [[a[0],a[1],b[2]],[b[0],a[1],b[2]],[b[0],b[1],b[2]],[a[0],b[1],b[2]]],
+  east:  (a, b) => [[b[0],a[1],b[2]],[b[0],a[1],a[2]],[b[0],b[1],a[2]],[b[0],b[1],b[2]]],
+  west:  (a, b) => [[a[0],a[1],a[2]],[a[0],a[1],b[2]],[a[0],b[1],b[2]],[a[0],b[1],a[2]]],
+  up:    (a, b) => [[a[0],b[1],b[2]],[b[0],b[1],b[2]],[b[0],b[1],a[2]],[a[0],b[1],a[2]]],
+  down:  (a, b) => [[a[0],a[1],a[2]],[b[0],a[1],a[2]],[b[0],a[1],b[2]],[a[0],a[1],b[2]]]
+};
+function defaultUv(f, a, b) {
+  return {north:[16-b[0],16-b[1],16-a[0],16-a[1]], south:[a[0],16-b[1],b[0],16-a[1]],
+          east:[16-b[2],16-b[1],16-a[2],16-a[1]], west:[a[2],16-b[1],b[2],16-a[1]],
+          up:[a[0],a[2],b[0],b[2]], down:[a[0],16-b[2],b[0],16-a[2]]}[f];
+}
+function rotate(p, r) {
+  if (!r) return p;
+  const o = new THREE.Vector3(...r.origin), v = new THREE.Vector3(...p).sub(o);
+  const axis = {x: new THREE.Vector3(1,0,0), y: new THREE.Vector3(0,1,0), z: new THREE.Vector3(0,0,1)}[r.axis];
+  v.applyAxisAngle(axis, r.angle * Math.PI / 180);
+  return v.add(o).toArray();
+}
+function start() {
+  const canvas = document.getElementById("view"), failEl = document.getElementById("fail");
+  let renderer;
+  try {
+    if (!window.THREE) throw new Error("three.js not loaded");
+    renderer = new THREE.WebGLRenderer({canvas, antialias: false, preserveDrawingBuffer: true});
+  } catch (e) { failEl.style.display = "flex"; return; }
+  renderer.setClearColor(SKY, 1);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 4 / 3, 0.05, 200);
+
+  // textures
+  const tex = {}, jobs = [];
+  for (const [name, uri] of Object.entries(DATA.textures)) {
+    jobs.push(new Promise(res => {
+      const img = new Image();
+      img.onload = () => {
+        const t = new THREE.Texture(img);
+        t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false;
+        t.wrapS = t.wrapT = THREE.RepeatWrapping; t.needsUpdate = true; tex[name] = t; res();
+      };
+      img.onerror = res; img.src = uri;
+    }));
+  }
+  const mats = {};
+  function material(texName, face) {
+    const key = texName + "|" + face;
+    if (!mats[key]) {
+      const s = SHADE[face];
+      mats[key] = new THREE.MeshBasicMaterial({map: tex[texName], color: new THREE.Color(s, s, s), side: THREE.DoubleSide, transparent: true, alphaTest: 0.01});
+    }
+    return mats[key];
+  }
+  function quad(pts, uvs, mat) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pts.flatMap(p => [p[0]/16, p[1]/16, p[2]/16]), 3));
+    g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs.flat(), 2));
+    g.setIndex([0, 1, 2, 0, 2, 3]);
+    return new THREE.Mesh(g, mat);
+  }
+  function buildModel(name) {
+    const model = DATA.models[name], grp = new THREE.Group();
+    for (const el of model.elements) {
+      const a = el.from, b = el.to;
+      for (const [f, fd] of Object.entries(el.faces)) {
+        const [u1, v1, u2, v2] = fd.uv || defaultUv(f, a, b);
+        let uvs = [[u1, v2], [u2, v2], [u2, v1], [u1, v1]];
+        const r = ((fd.rotation || 0) / 90 | 0) % 4;
+        uvs = uvs.slice(r).concat(uvs.slice(0, r)).map(([u, v]) => [u / 16, 1 - v / 16]);
+        const pts = FACES[f](a, b).map(p => rotate(p, el.rotation));
+        const tn = model.textures[fd.texture.replace(/^#/, "")].split("/").pop();
+        grp.add(quad(pts, uvs, material(tn, f)));
+      }
+    }
+    grp.position.set(-0.5, 0, -0.5);  // centre the block on its own cell, as the Blender preview does
+    const holder = new THREE.Group(); holder.add(grp);
+    return holder;
+  }
+  function box(a, b, color) {
+    const g = new THREE.Group();
+    for (const f of Object.keys(FACES)) {
+      const m = new THREE.MeshBasicMaterial({color: new THREE.Color(color).multiplyScalar(SHADE[f]), side: THREE.DoubleSide});
+      g.add(quad(FACES[f](a, b), [[0,0],[1,0],[1,1],[0,1]], m));
+    }
+    return g;
+  }
+
+  // scene content
+  let current = ORDER[0], view = "Iso", spin = false;
+  const content = new THREE.Group(); scene.add(content);
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = -0.01; scene.add(ground);
+  const player = box([-4.8, 0, -4.8], [4.8, 28.8, 4.8], 0xa9b0b8); scene.add(player);
+
+  const cam = {az: 35, el: 28, r: 3.2, target: new THREE.Vector3(0, 0.5, 0)};
+  const VIEWS = {Iso: [35, 28], Front: [0, 4], Side: [90, 4], Back: [180, 4], Top: [180, 88]};
+  let dirty = true;
+  function frame() {
+    const e = cam.el * Math.PI / 180, a = cam.az * Math.PI / 180;
+    camera.position.set(cam.target.x + cam.r * Math.sin(a) * Math.cos(e), cam.target.y + cam.r * Math.sin(e), cam.target.z - cam.r * Math.cos(a) * Math.cos(e));
+    camera.lookAt(cam.target);
+  }
+  function setScene() {
+    content.clear();
+    const all = current === "all";
+    const names = all ? ORDER : [current];
+    names.forEach((n, i) => { const m = buildModel(n); m.position.x = all ? ((names.length - 1) / 2 - i) * 1.5 : 0; /* first machine on the left when seen from the front */ content.add(m); });
+    const half = all ? (names.length - 1) * 0.75 : 0;
+    player.position.set(half + 1.2, 0, 0);
+    cam.target.set(0, all ? 0.5 : 0.5, 0);
+    cam.r = all ? 16 : 3.2;
+    if (all) { cam.az = 18; cam.el = 20; document.getElementById('hud-view').textContent = 'Overview'; for (const b of document.querySelectorAll('#views button')) b.setAttribute('aria-pressed', 'false'); }
+    const size = all ? 28 : 15;
+    ground.scale.set(size, size, 1); ground.material.map = tex.ground_regolith || tex.regolith; ground.material.map.repeat.set(size, size);
+    ground.material.needsUpdate = true;
+    document.getElementById("hud-name").textContent = all ? "All machines" : INFO[current][0];
+    const info = document.getElementById("info");
+    info.innerHTML = all ? "<h3>All machines</h3><p>The seven batch 1 models side by side on a one-block grid, all facing north.</p><span class='tag'>straw-man placeholders</span>"
+      : `<h3>${INFO[current][0]}</h3><p>${INFO[current][1]}</p><span class="tag">straw-man placeholder · mars:${current}</span>`;
+    dirty = true;
+  }
+  function setView(v) {
+    view = v; [cam.az, cam.el] = VIEWS[v]; spin = false; document.getElementById("t-spin").checked = false;
+    document.getElementById("hud-view").textContent = v;
+    for (const b of document.querySelectorAll("#views button")) b.setAttribute("aria-pressed", b.dataset.v === v);
+    dirty = true;
+  }
+
+  // UI
+  const assetsEl = document.getElementById("assets");
+  for (const n of ["all", ...ORDER]) {
+    const b = document.createElement("button"); b.textContent = n === "all" ? "All machines" : INFO[n][0]; b.dataset.n = n;
+    b.addEventListener("click", () => { current = n; for (const x of assetsEl.children) x.setAttribute("aria-pressed", x.dataset.n === n); setScene(); });
+    assetsEl.appendChild(b);
+  }
+  assetsEl.children[1].setAttribute("aria-pressed", "true");
+  const viewsEl = document.getElementById("views");
+  for (const v of Object.keys(VIEWS)) {
+    const b = document.createElement("button"); b.textContent = v; b.dataset.v = v; b.addEventListener("click", () => setView(v)); viewsEl.appendChild(b);
+  }
+  document.getElementById("t-ground").addEventListener("change", e => { ground.visible = e.target.checked; dirty = true; });
+  document.getElementById("t-player").addEventListener("change", e => { player.visible = e.target.checked; dirty = true; });
+  document.getElementById("t-spin").addEventListener("change", e => { spin = e.target.checked; if (spin) document.getElementById("hud-view").textContent = "Turntable"; });
+  player.visible = false;
+
+  // pointer orbit and zoom
+  const ptrs = new Map(); let pinch = 0;
+  canvas.addEventListener("pointerdown", e => { canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); });
+  canvas.addEventListener("pointerup", e => { ptrs.delete(e.pointerId); pinch = 0; });
+  canvas.addEventListener("pointercancel", e => { ptrs.delete(e.pointerId); pinch = 0; });
+  canvas.addEventListener("pointermove", e => {
+    if (!ptrs.has(e.pointerId)) return;
+    const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    if (ptrs.size === 1) {
+      cam.az -= (e.clientX - prev[0]) * 0.4; cam.el = Math.max(-5, Math.min(89, cam.el + (e.clientY - prev[1]) * 0.4));
+      document.getElementById("hud-view").textContent = "Free"; dirty = true;
+    } else if (ptrs.size === 2) {
+      const [p, q] = [...ptrs.values()], d = Math.hypot(p[0] - q[0], p[1] - q[1]);
+      if (pinch) { cam.r = Math.max(0.8, Math.min(30, cam.r * pinch / d)); dirty = true; }
+      pinch = d;
+    }
+  });
+  canvas.addEventListener("wheel", e => { e.preventDefault(); cam.r = Math.max(0.8, Math.min(30, cam.r * Math.exp(e.deltaY * 0.001))); dirty = true; }, {passive: false});
+
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix(); dirty = true;
+  }
+  new ResizeObserver(resize).observe(canvas);
+  function loop() {
+    if (spin) { cam.az += 0.4; dirty = true; }
+    if (dirty) { frame(); renderer.render(scene, camera); dirty = false; }
+    requestAnimationFrame(loop);
+  }
+  Promise.all(jobs).then(() => { setScene(); setView("Iso"); resize(); window.__ready = true; loop(); });
+  window.__api = {setView, select: n => { current = n; setScene(); }, cam};
+}
+start();
+</script>
+
+</body></html>

@@ -32,6 +32,9 @@ blender -b -P tools/art-preview/render_model.py -- <model.json> <texture_dir> <o
 - **Background:** the 0.6 kPa horizon color `#D2AE86` (keyframes §3.1) by default. The ground plane is a render-only copy of the regolith straw-man with its placeholder marker painted out.
 - Cycles on CPU, no denoiser (this Blender build has none). About 3 s per view.
 
+## Interactive viewer (browser)
+`python3 tools/art-preview/build_viewer.py` builds `docs/art/viewer/index.html` from `viewer_template.html`: a single page (three.js from jsDelivr, pinned 0.158.0; models and textures embedded) with orbit, zoom, view presets, an all-machines lineup, a Mars ground, a player-for-scale box, and a turntable. `--fragment` writes the form the Artifact tool wants. It draws models the same way as the Blender script (same corner order, UVs, per-face brightness). Tested headless in Chromium with software GL; not Minecraft.
+
 ## Known limits
 - Fixed orthographic cameras; no player-eye perspective.
 - Silhouette test uses the front view at a fixed scale (1 block = 32 px). For box-shaped machines the silhouette is just a box; their identity is carried by the front face, not the outline.

@@ -1,0 +1,281 @@
+<title>Mars Asset Viewer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a large viewport beside a narrow rail of asset buttons, view presets, and an info card.
+   The scene itself (sky, ground, machines) is fixed; only the page chrome follows the theme. */
+:root {
+  --bg: #eceff1;
+  --panel: #ffffff;
+  --panel-2: #e3e7ea;
+  --fg: #1d2429;
+  --muted: #5a6670;
+  --line: #c9d0d5;
+  --accent: #b4481f;
+  --accent-fg: #ffffff;
+  --focus: #1a5fb4;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181b; --panel: #1c2226; --panel-2: #252d32; --fg: #e4e9ec; --muted: #9aa6ae;
+    --line: #36424a; --accent: #e07a4d; --accent-fg: #14181b; --focus: #78aef0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181b; --panel: #1c2226; --panel-2: #252d32; --fg: #e4e9ec; --muted: #9aa6ae;
+  --line: #36424a; --accent: #e07a4d; --accent-fg: #14181b; --focus: #78aef0; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5;
+  padding-block: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.stage { position: relative; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #d2ae86; }
+#view { display: block; width: 100%; aspect-ratio: 4 / 3; min-height: 320px; touch-action: none; cursor: grab; }
+#view:active { cursor: grabbing; }
+.hud { position: absolute; left: 10px; bottom: 10px; right: 10px; display: flex; justify-content: space-between; gap: 8px; pointer-events: none; }
+.hud span { background: rgba(20, 24, 27, 0.78); color: #f1f4f6; font-family: var(--font-mono); font-size: 12px; padding: 3px 8px; border-radius: 3px; }
+.fail { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--panel); color: var(--fg); }
+.rail { display: flex; flex-direction: column; gap: 14px; }
+.group { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.group h2 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+button { font: inherit; font-size: 13px; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.assets button { flex: 1 1 100%; text-align: left; }
+label.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.info h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.info p { margin: 0; color: var(--muted); font-size: 14px; }
+.info .tag { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.note { color: var(--muted); font-size: 13px; max-width: 80ch; }
+.note code { font-family: var(--font-mono); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Mars Asset Viewer</h1>
+    <p>Phase 1 dome machines, batch 1. These are placeholder models and textures. Drag to turn, scroll or pinch to zoom, and tell me what to change.</p>
+  </header>
+  <div class="layout">
+    <div class="stage">
+      <canvas id="view" aria-label="3D view of the selected machine"></canvas>
+      <div class="hud"><span id="hud-name"></span><span id="hud-view"></span></div>
+      <div class="fail" id="fail"><p>The 3D view could not start in this browser (WebGL or the three.js library did not load). Try another browser, or ask for the still images instead.</p></div>
+    </div>
+    <div class="rail">
+      <div class="group assets"><h2>Machine</h2><div class="buttons" id="assets"></div></div>
+      <div class="group"><h2>View</h2><div class="buttons" id="views"></div></div>
+      <div class="group"><h2>Scene</h2>
+        <label class="toggle"><input type="checkbox" id="t-ground" checked> Mars ground</label>
+        <label class="toggle"><input type="checkbox" id="t-player"> Player for scale (1.8 blocks tall)</label>
+        <label class="toggle"><input type="checkbox" id="t-spin"> Turntable</label>
+      </div>
+      <div class="group info" id="info"></div>
+    </div>
+  </div>
+  <p class="note">This is a preview, not Minecraft. Faces use Minecraft's fixed per-face brightness (top full, north and south 80%, east and west 60%, bottom 50%) with sharp pixels, but there is no world light, shadow, fog, or neighbouring blocks. The magenta corner on each texture marks it as a placeholder. Names to use when you give feedback: the machine name and the view, for example "Regolith Oven, front".</p>
+</div>
+
+<script src="__THREE_SRC__"></script>
+<script>
+const DATA = /*__DATA__*/;
+const INFO = {
+  regolith_outgasser: ["Regolith Outgasser", "Phase 1 pressure source. A low, wide body with a vent stack, hazard stripes, and slots that glow when it runs."],
+  regolith_oven: ["Regolith Oven", "Heater in the starting dome. A tall cabinet with a lit window and heater slots."],
+  solar_panel: ["Solar panel", "Dome power. Dark blue-black cells, tilted on a post, facing the front."],
+  solar_panel_dusty: ["Solar panel, dusty", "The same panel after a dust storm: streaks of redder dust and a drift along the low edge."],
+  battery: ["Battery", "Stores dome power. Charge segments on the front, orange plus terminal, dark minus terminal."],
+  o2_generator: ["O2 generator", "Dome oxygen. Twin tanks on a base."],
+  planetary_monitor: ["Planetary Monitor", "Shows the planet values. A tilted screen on a low body."]
+};
+const ORDER = ["regolith_outgasser","regolith_oven","solar_panel","solar_panel_dusty","battery","o2_generator","planetary_monitor"];
+const SKY = 0xd2ae86;
+const SHADE = {up: 1, down: 0.5, north: 0.8, south: 0.8, east: 0.6, west: 0.6};
+// Corner order per face: bottom-left, bottom-right, top-right, top-left as seen from outside (same as the Blender preview).
+const FACES = {
+  north: (a, b) => [[b[0],a[1],a[2]],[a[0],a[1],a[2]],[a[0],b[1],a[2]],[b[0],b[1],a[2]]],
+  south: (a, b) => [[a[0],a[1],b[2]],[b[0],a[1],b[2]],[b[0],b[1],b[2]],[a[0],b[1],b[2]]],
+  east:  (a, b) => [[b[0],a[1],b[2]],[b[0],a[1],a[2]],[b[0],b[1],a[2]],[b[0],b[1],b[2]]],
+  west:  (a, b) => [[a[0],a[1],a[2]],[a[0],a[1],b[2]],[a[0],b[1],b[2]],[a[0],b[1],a[2]]],
+  up:    (a, b) => [[a[0],b[1],b[2]],[b[0],b[1],b[2]],[b[0],b[1],a[2]],[a[0],b[1],a[2]]],
+  down:  (a, b) => [[a[0],a[1],a[2]],[b[0],a[1],a[2]],[b[0],a[1],b[2]],[a[0],a[1],b[2]]]
+};
+function defaultUv(f, a, b) {
+  return {north:[16-b[0],16-b[1],16-a[0],16-a[1]], south:[a[0],16-b[1],b[0],16-a[1]],
+          east:[16-b[2],16-b[1],16-a[2],16-a[1]], west:[a[2],16-b[1],b[2],16-a[1]],
+          up:[a[0],a[2],b[0],b[2]], down:[a[0],16-b[2],b[0],16-a[2]]}[f];
+}
+function rotate(p, r) {
+  if (!r) return p;
+  const o = new THREE.Vector3(...r.origin), v = new THREE.Vector3(...p).sub(o);
+  const axis = {x: new THREE.Vector3(1,0,0), y: new THREE.Vector3(0,1,0), z: new THREE.Vector3(0,0,1)}[r.axis];
+  v.applyAxisAngle(axis, r.angle * Math.PI / 180);
+  return v.add(o).toArray();
+}
+function start() {
+  const canvas = document.getElementById("view"), failEl = document.getElementById("fail");
+  let renderer;
+  try {
+    if (!window.THREE) throw new Error("three.js not loaded");
+    renderer = new THREE.WebGLRenderer({canvas, antialias: false, preserveDrawingBuffer: true});
+  } catch (e) { failEl.style.display = "flex"; return; }
+  renderer.setClearColor(SKY, 1);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 4 / 3, 0.05, 200);
+
+  // textures
+  const tex = {}, jobs = [];
+  for (const [name, uri] of Object.entries(DATA.textures)) {
+    jobs.push(new Promise(res => {
+      const img = new Image();
+      img.onload = () => {
+        const t = new THREE.Texture(img);
+        t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false;
+        t.wrapS = t.wrapT = THREE.RepeatWrapping; t.needsUpdate = true; tex[name] = t; res();
+      };
+      img.onerror = res; img.src = uri;
+    }));
+  }
+  const mats = {};
+  function material(texName, face) {
+    const key = texName + "|" + face;
+    if (!mats[key]) {
+      const s = SHADE[face];
+      mats[key] = new THREE.MeshBasicMaterial({map: tex[texName], color: new THREE.Color(s, s, s), side: THREE.DoubleSide, transparent: true, alphaTest: 0.01});
+    }
+    return mats[key];
+  }
+  function quad(pts, uvs, mat) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pts.flatMap(p => [p[0]/16, p[1]/16, p[2]/16]), 3));
+    g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs.flat(), 2));
+    g.setIndex([0, 1, 2, 0, 2, 3]);
+    return new THREE.Mesh(g, mat);
+  }
+  function buildModel(name) {
+    const model = DATA.models[name], grp = new THREE.Group();
+    for (const el of model.elements) {
+      const a = el.from, b = el.to;
+      for (const [f, fd] of Object.entries(el.faces)) {
+        const [u1, v1, u2, v2] = fd.uv || defaultUv(f, a, b);
+        let uvs = [[u1, v2], [u2, v2], [u2, v1], [u1, v1]];
+        const r = ((fd.rotation || 0) / 90 | 0) % 4;
+        uvs = uvs.slice(r).concat(uvs.slice(0, r)).map(([u, v]) => [u / 16, 1 - v / 16]);
+        const pts = FACES[f](a, b).map(p => rotate(p, el.rotation));
+        const tn = model.textures[fd.texture.replace(/^#/, "")].split("/").pop();
+        grp.add(quad(pts, uvs, material(tn, f)));
+      }
+    }
+    grp.position.set(-0.5, 0, -0.5);  // centre the block on its own cell, as the Blender preview does
+    const holder = new THREE.Group(); holder.add(grp);
+    return holder;
+  }
+  function box(a, b, color) {
+    const g = new THREE.Group();
+    for (const f of Object.keys(FACES)) {
+      const m = new THREE.MeshBasicMaterial({color: new THREE.Color(color).multiplyScalar(SHADE[f]), side: THREE.DoubleSide});
+      g.add(quad(FACES[f](a, b), [[0,0],[1,0],[1,1],[0,1]], m));
+    }
+    return g;
+  }
+
+  // scene content
+  let current = ORDER[0], view = "Iso", spin = false;
+  const content = new THREE.Group(); scene.add(content);
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = -0.01; scene.add(ground);
+  const player = box([-4.8, 0, -4.8], [4.8, 28.8, 4.8], 0xa9b0b8); scene.add(player);
+
+  const cam = {az: 35, el: 28, r: 3.2, target: new THREE.Vector3(0, 0.5, 0)};
+  const VIEWS = {Iso: [35, 28], Front: [0, 4], Side: [90, 4], Back: [180, 4], Top: [180, 88]};
+  let dirty = true;
+  function frame() {
+    const e = cam.el * Math.PI / 180, a = cam.az * Math.PI / 180;
+    camera.position.set(cam.target.x + cam.r * Math.sin(a) * Math.cos(e), cam.target.y + cam.r * Math.sin(e), cam.target.z - cam.r * Math.cos(a) * Math.cos(e));
+    camera.lookAt(cam.target);
+  }
+  function setScene() {
+    content.clear();
+    const all = current === "all";
+    const names = all ? ORDER : [current];
+    names.forEach((n, i) => { const m = buildModel(n); m.position.x = all ? ((names.length - 1) / 2 - i) * 1.5 : 0; /* first machine on the left when seen from the front */ content.add(m); });
+    const half = all ? (names.length - 1) * 0.75 : 0;
+    player.position.set(half + 1.2, 0, 0);
+    cam.target.set(0, all ? 0.5 : 0.5, 0);
+    cam.r = all ? 16 : 3.2;
+    if (all) { cam.az = 18; cam.el = 20; document.getElementById('hud-view').textContent = 'Overview'; for (const b of document.querySelectorAll('#views button')) b.setAttribute('aria-pressed', 'false'); }
+    const size = all ? 28 : 15;
+    ground.scale.set(size, size, 1); ground.material.map = tex.ground_regolith || tex.regolith; ground.material.map.repeat.set(size, size);
+    ground.material.needsUpdate = true;
+    document.getElementById("hud-name").textContent = all ? "All machines" : INFO[current][0];
+    const info = document.getElementById("info");
+    info.innerHTML = all ? "<h3>All machines</h3><p>The seven batch 1 models side by side on a one-block grid, all facing north.</p><span class='tag'>straw-man placeholders</span>"
+      : `<h3>${INFO[current][0]}</h3><p>${INFO[current][1]}</p><span class="tag">straw-man placeholder · mars:${current}</span>`;
+    dirty = true;
+  }
+  function setView(v) {
+    view = v; [cam.az, cam.el] = VIEWS[v]; spin = false; document.getElementById("t-spin").checked = false;
+    document.getElementById("hud-view").textContent = v;
+    for (const b of document.querySelectorAll("#views button")) b.setAttribute("aria-pressed", b.dataset.v === v);
+    dirty = true;
+  }
+
+  // UI
+  const assetsEl = document.getElementById("assets");
+  for (const n of ["all", ...ORDER]) {
+    const b = document.createElement("button"); b.textContent = n === "all" ? "All machines" : INFO[n][0]; b.dataset.n = n;
+    b.addEventListener("click", () => { current = n; for (const x of assetsEl.children) x.setAttribute("aria-pressed", x.dataset.n === n); setScene(); });
+    assetsEl.appendChild(b);
+  }
+  assetsEl.children[1].setAttribute("aria-pressed", "true");
+  const viewsEl = document.getElementById("views");
+  for (const v of Object.keys(VIEWS)) {
+    const b = document.createElement("button"); b.textContent = v; b.dataset.v = v; b.addEventListener("click", () => setView(v)); viewsEl.appendChild(b);
+  }
+  document.getElementById("t-ground").addEventListener("change", e => { ground.visible = e.target.checked; dirty = true; });
+  document.getElementById("t-player").addEventListener("change", e => { player.visible = e.target.checked; dirty = true; });
+  document.getElementById("t-spin").addEventListener("change", e => { spin = e.target.checked; if (spin) document.getElementById("hud-view").textContent = "Turntable"; });
+  player.visible = false;
+
+  // pointer orbit and zoom
+  const ptrs = new Map(); let pinch = 0;
+  canvas.addEventListener("pointerdown", e => { canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); });
+  canvas.addEventListener("pointerup", e => { ptrs.delete(e.pointerId); pinch = 0; });
+  canvas.addEventListener("pointercancel", e => { ptrs.delete(e.pointerId); pinch = 0; });
+  canvas.addEventListener("pointermove", e => {
+    if (!ptrs.has(e.pointerId)) return;
+    const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    if (ptrs.size === 1) {
+      cam.az -= (e.clientX - prev[0]) * 0.4; cam.el = Math.max(-5, Math.min(89, cam.el + (e.clientY - prev[1]) * 0.4));
+      document.getElementById("hud-view").textContent = "Free"; dirty = true;
+    } else if (ptrs.size === 2) {
+      const [p, q] = [...ptrs.values()], d = Math.hypot(p[0] - q[0], p[1] - q[1]);
+      if (pinch) { cam.r = Math.max(0.8, Math.min(30, cam.r * pinch / d)); dirty = true; }
+      pinch = d;
+    }
+  });
+  canvas.addEventListener("wheel", e => { e.preventDefault(); cam.r = Math.max(0.8, Math.min(30, cam.r * Math.exp(e.deltaY * 0.001))); dirty = true; }, {passive: false});
+
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix(); dirty = true;
+  }
+  new ResizeObserver(resize).observe(canvas);
+  function loop() {
+    if (spin) { cam.az += 0.4; dirty = true; }
+    if (dirty) { frame(); renderer.render(scene, camera); dirty = false; }
+    requestAnimationFrame(loop);
+  }
+  Promise.all(jobs).then(() => { setScene(); setView("Iso"); resize(); window.__ready = true; loop(); });
+  window.__api = {setView, select: n => { current = n; setScene(); }, cam};
+}
+start();
+</script>
