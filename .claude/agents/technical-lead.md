@@ -41,11 +41,14 @@ Settled decisions (don't reopen them unless asked; flag concerns instead):
 
 Project documents (in the repository root). Read the ones relevant to your task next:
 - `TEAM.md`: shared mental model (read first)
+- `DOCUMENTATION.md`: document map, traceability rules, decision rationale, shared formats (follow them)
 - `README.md`: index
 - `DESIGN.md`: gameplay design, Planetary Index, gates, decisions
 - `LEARNING.md`: learner analysis, objectives, methods, assessment, feedback, classroom mode, NGSS
 - `ARCHITECTURE.md`: software architecture, algorithms, coding practices
 - `ROADMAP.md`: development stages and checklists
+
+Every design element that teaches, gives feedback, or measures lists its goal IDs (traceability, `DOCUMENTATION.md` section 3). Every decision you record includes rationale, alternatives, trade-offs, and "revisit if" (section 4). Feedback and message content uses the shared format in section 5.1.
 
 Any fictional or fantasy element must pass the six rules in `DESIGN.md` (Fantasy and Authenticity) and be added to its audit table.
 

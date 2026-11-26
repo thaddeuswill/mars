@@ -263,6 +263,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Each discipline needs different documented information, and LGD must show the link from design decisions to learners' performance requirements. DOCUMENTATION.md adds a document map, traceability chain, decision rationale rule, and a shared feedback format. | User research |
 | 2026-11-26 | Fidelity, immersive, adaptive, and engagement have no consistent definitions across disciplines (Coleman et al., 2010). Team definitions with required qualifiers are now in TEAM.md section 3. | User research |
 | 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
 | 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |

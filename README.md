@@ -3,6 +3,7 @@
 A total-conversion Minecraft modpack about turning a dead Mars into a living world, one atmospheric kilopascal at a time.
 
 - [TEAM.md](TEAM.md): team shared mental model (start here)
+- [DOCUMENTATION.md](DOCUMENTATION.md): document map, traceability, and shared formats
 - [DESIGN.md](DESIGN.md): gameplay design and systems
 - [LEARNING.md](LEARNING.md): learning goals, methods, and assessment
 - [ARCHITECTURE.md](ARCHITECTURE.md): software architecture, algorithms, and coding practices
