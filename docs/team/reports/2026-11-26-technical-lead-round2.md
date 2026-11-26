@@ -47,3 +47,13 @@
 - **Term: Signal.** A read-only world-state value (storm strength, surface radiation, fauna pressure) published by one system module into the planet snapshot. Visuals and conditions read it like an Index parameter, but it isn't one (ARCHITECTURE.md §2.5.1).
 - **Decisions (Technical Lead):** clouds use a density map; heat shimmer is particles only; thawlings use vanilla animation; art and content live in `pack/assets/` and `pack/data/` built into the mod jar; goal pages fill from player-scope events only; one result per player and forecast pair; test strategy adopted.
 - **Lesson:** when a new requirement seems to break a privacy rule, look for a narrow interface at the boundary before relaxing the rule.
+
+---
+
+## Addendum: SME ice rule (filed by coordinator, after the main report)
+
+- **Done:** `ARCHITECTURE.md` §2.5 now uses the SME's boiling-point rule. Below 0.611 kPa ice sublimates; at or above the boiling point it boils away at once; between 0 °C and the boiling point it makes a short-lived puddle up to 5 kPa and water that stays from 5 kPa; at 0 °C or below it stays ice. The rule lives in data (`data/mars/dimension/ice_rule.json`) and content check CR-F1 runs against the same table.
+- **Heat map replaced:** a single heat value per chunk would lose the difference between ice next to a heater (boils) and ice a few blocks away (puddles). Each chunk now caches its two strongest heat sources (position, heat, range); local heat is their sum, fading linearly with distance. Recomputed for about 9 nearby chunks only when a machine is built, removed, switched, or shrouded. Cost: about 10 arithmetic operations per ice random tick, constant regardless of machine count. An estimate to confirm in the Stage 3 load test.
+- **Boiling point:** computed once per planet per simulation step (Antoine equation, coefficients in data). `mars:boiling_point` is in the client snapshot, driving vapor wisps and the Monitor's boiling-point line. The client computes local temperature with the same shared code as the server.
+- **Handoff:** forecast F4a's trigger and keyed answer, the "sublimating ice" art state (keyframes §3.3), and the balance-sheet time for the short-lived puddle (an invented number). Done when F4a passes CR-F1 against `ice_rule.json`.
+- **Risk:** two cached heat sources per chunk may look wrong where three or more heaters overlap; raising the cap to three costs a few more operations.
