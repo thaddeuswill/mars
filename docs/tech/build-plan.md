@@ -43,13 +43,14 @@ One Gradle project (`:mod`) is enough. The pure simulation core is a package (`m
 
 | Item | Why | Licence (checked?) | Shipped? |
 |---|---|---|---|
-| `net.neoforged.moddev` 2.0.148 | NeoForge dev environment | LGPL-2.1 (NeoForge; plugin licence **unchecked**) | No |
+| `net.neoforged.moddev` 2.0.148 | NeoForge dev environment | LGPL-2.1 (checked round 3) | No |
 | `com.diffplug.spotless` | Google Java Style | Apache-2.0 (checked, mod-licenses.md) | No |
-| JUnit 5 | Unit tests | **Unchecked** (commonly EPL-2.0) | No |
-| ArchUnit | Module-boundary and "no display-name lookup" rules | **Unchecked** (commonly Apache-2.0) | No |
+| JUnit 5 | Unit tests | EPL-2.0 (checked round 3) | No |
+| ArchUnit | Module-boundary and "no display-name lookup" rules | Apache-2.0 (checked round 3) | No |
 | Rhino (parser only, test scope) | KubeJS syntax gate | MPL-2.0 (main branch checked) | No |
-| PIT (`pitest`) | Mutation testing of the pure core, stage exits | **Unchecked** | No |
-| Mekanism, Create, KubeJS | `compileOnly` APIs + `localRuntime` jars for dev and GameTests | MIT / MIT code, ARR assets / LGPL-3.0 (checked) | By reference in `pack/mods/` |
+| PIT (`pitest`) | Mutation testing of the pure core, stage exits | Apache-2.0 (checked round 3) | No |
+| Mekanism, Create (optional, ARCHITECTURE.md 2.15), KubeJS | `compileOnly` APIs + `localRuntime` jars for dev and GameTests | MIT / MIT code, ARR assets / LGPL-3.0 (checked) | By reference in `pack/mods/` |
+| Rhino, Better Advanced Tooltips | Required by KubeJS 2101.7.2 (Modrinth, round 3) | MPL-2.0 / MIT | By reference |
 
 Versions of the test libraries are chosen when the skeleton is built, from their official release pages; none is pinned here.
 
@@ -65,9 +66,10 @@ Versions of the test libraries are chosen when the skeleton is built, from their
 | `runGameTestServer` | NeoForge GameTests (L3) | `check` on CI |
 | `runSelftest` | Headless dedicated server playthrough per variant (L4), with timeout | Manual / CI |
 | `runShots` | Client under `xvfb-run` at 1280×720 (L5) | Manual |
-| `exportPack` | `packwiz modrinth export` → `.mrpack`; licence check of every mod row | Release candidates |
+| `exportPack` | `packwiz modrinth export` → `.mrpack`; licence check of every mod row; fails if Create's jar is in an offline bundle | Release candidates |
+| `exportClassroomBundle` | Offline server bundle for schools: our jar, KubeJS, Rhino, Better Advanced Tooltips; **no Create** (ARR assets), Mekanism optional | Stage 4+ |
 
-**Open item: hot reload.** Copying `pack/data` in `processResources` means a content edit needs `./gradlew processResources` before `/reload` in a dev run. Check in the skeleton whether MDG dev runs read `build/resources/main` (then this is fine) or whether we should instead add a second resource source directory. **Unverified.**
+**Hot reload (checked round 3).** ModDevGradle runs load the mod's source set output (`mods { mars { sourceSet sourceSets.main } }`, [MDG README](https://raw.githubusercontent.com/neoforged/ModDevGradle/main/README.md)), which includes the `processResources` output where `pack/assets` and `pack/data` are copied. So a content edit needs `./gradlew processResources`, then `/reload` (data) or F3+T (assets). **Likely fine; confirm in the skeleton.** MDG also has built-in JUnit support (`neoForge { unitTest { enable() } }`) for tests that need Minecraft classes on the classpath; pure tests don't need it.
 
 ## 5. Run configurations
 
@@ -89,4 +91,4 @@ Versions of the test libraries are chosen when the skeleton is built, from their
 - [ ] The boot guard fails a deliberately broken boot with `FAIL boot_guard last_step=…` instead of hanging
 - [ ] `packwiz` pack in `pack/` with NeoForge 21.1.267, Mekanism, Create, KubeJS; a dedicated server boots from it
 - [ ] One headless client screenshot at 1280×720 under `xvfb-run`, or a recorded reason it doesn't work here (test-strategy §8)
-- [ ] Basic CI (if the owner wants CI; PROCESS.md §3 assumes none at first): the same commands as above
+- [ ] **Basic CI (decided, owner, round 3):** L0–L2 (`spotlessCheck`, `validateContent`, `kubejsSyntax`, `test` with the solver) on every push

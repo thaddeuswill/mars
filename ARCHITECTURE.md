@@ -1017,7 +1017,7 @@ interface AdminControl {
 
 - **Set phase** latches every gate up to that gameplay phase, sets the Index to the phase's start values (from `data/mars/phases/<phase>.json`), and files the skipped essential messages (9.2). Unlocks happen through the normal `GateReachedEvent`, so recipes and journal entries follow without special cases.
 - **No credit for admin changes.** Events carry `Cause.ADMIN` or `Cause.DEBUG`; the Colony Record ignores them (8.5).
-- **Teacher commands** (`mars.teacher`): `pause`, `resume`, `wrapup`, `backup`, `rollback`, `planet assign`, `phase set`, `band set`, `export`, `who`, `forget`. All are also buttons in the teacher overview, so no teacher needs to type commands or edit config files (risk R-18).
+- **Teacher commands** (`mars.teacher`): `overview`, `pause`, `resume`, `wrapup`, `backup`, `rollback`, `planet open`, `planet size`, `planet assign`, `phase set`, `band set`, `guidance`, `export`, `who`, `forget`, `forget-all`. ID slips are a button only (no names, IDs only). All are also buttons in the teacher overview, so no teacher needs to type commands or edit config files (risk R-18).
 - **Debug commands** (`mars.debug`, and only when `debug.enabled = true`): `set`, `latch`, `unlatch`, `step`. Used for the Stage 2 debug requirement (set every Index value).
 
 ---

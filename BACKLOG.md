@@ -45,6 +45,7 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 | 15 | Coordinator mid-task request to the SME: apply PROCESS.md section 1 (no invented real numbers) and list which verdicts need an external expert | A value audit and an external-review list | `docs/science/round2-review.md` §10–11 | ✅ |
 | 16 | "change what it covers and do the reccomendation" | Assumed: treat every pending recommendation as decided, and have round 3 carry them out | Decision Log rows (round 3 decisions); round 3 agents launched | 🟡 (interpretation: owner to correct if meant otherwise) |
 | 17 | Lead Artist round 2 requests relayed by the coordinator: budget three pixel fonts, sound production hours, the Stage 2 face-validity review; proposed defaults: one original ending music piece, Perseverance recording only if licensed | Fold into budget, cut list, and roadmap | budget.md revision 2 (§2.1, §2.3, cut items 3 and 5); ROADMAP Stages 2–4 | 🟡 Producer drafts done |
+| 18 | "ill just wait for the launchable product" | Skip the paper playtest; build toward a launchable pack. Stage 1 first: a mod skeleton that builds, launches, and loads an empty Mars world; Stage 2 is the first playable | A built mod jar, a headless server boot test, launch instructions for the owner | 🟡 (network allowlist extended with the owner's approval) |
 
 ## Open questions for the owner
 

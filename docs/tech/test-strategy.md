@@ -22,6 +22,8 @@
 
 Definition of done for builds (PROCESS.md §2) = L0–L4 pass across the variants (section 4), L5 screenshots looked at by a person, L6 at stage exits.
 
+**CI (decided, owner, round 3):** basic CI from **Stage 1 exit** runs **L0–L2** (parse gate, unit tests, solver) on every push: no Minecraft needed, minutes per run. L3–L4 stay manual regression gates (PROCESS.md §3) until a CI machine can run a headless server; revisit at Stage 3. CI host is the owner's choice (GitHub Actions is the obvious one if the repo is on GitHub; its free-tier limits are **unverified**).
+
 ---
 
 ## 2. Fail fast, never hang
@@ -45,7 +47,7 @@ A dev-only test harness mod (`mod/src/testmod/`, never shipped) adds:
 
 **Play the real game through the real code.** A headless dedicated server with the full pack (Mekanism, Create, KubeJS) and the test harness mod:
 1. Creates a fresh world in its own folder (section 6), sets the variant's preset.
-2. Spawns fake players (NeoForge `FakePlayerFactory` **[unverified API name for 1.21.1; check in Stage 2]**) assigned to planet 1 (and 2 for the group case).
+2. Spawns fake players (NeoForge `net.neoforged.neoforge.common.util.FakePlayerFactory.get(ServerLevel, GameProfile)`, **verified on the 1.21.1 branch** ([source](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/common/util/FakePlayerFactory.java)); fake players have no network connection, so actions call the server handlers directly) assigned to planet 1 (and 2 for the group case).
 3. Performs actions through **the same server handlers the client's packets call**: place blocks, use items, claim on the Shift Board, answer forecasts, submit reports. No admin or debug shortcuts: anything done through `AdminControl` carries `Cause.ADMIN`, and a playthrough that used it would prove nothing.
 4. Runs time with vanilla `/tick sprint` (ticks as fast as the machine can) and a **test pace preset** (`pace.rateMultiplier` high, short holds). Multipliers scale rates and holds only, never thresholds (DESIGN.md), so every gate is reached at its real value.
 5. Script: survive in the dome → seal it → Dome stable → build Regolith Outgassers → Phase 2 (5 kPa) → processors, emitters → Thaw → Hydrosphere → Phase 3 → seed biomes → Breathable (helmet off works, helmet-off condition is live) → Equilibrium → build the beacon → ending cards shown.
@@ -87,7 +89,7 @@ L2 runs every variant on every build. L4 runs standard and classroom-5 on every 
 |---|---|
 | Say where a thing **must** be | A `check(id, expected, actual)` helper that takes a positive expectation. "Gate latched **and** recipe X craftable **and** Monitor page Y visible", not "no error". |
 | Print what the check read | Every check prints `id`, `expected`, and `read` on pass and fail (`read="pressure 5.02 kPa, latched at sol 41.6"`). A check that read nothing (empty list, missing value) fails as `read=<empty>`. |
-| Prove it can fail | Each new check lands with a note of the run where it failed against the old code or a deliberately broken fixture. For the pure core, mutation testing with PIT (`pitest`, Apache-2.0 **[unverified licence]**) at stage exits. |
+| Prove it can fail | Each new check lands with a note of the run where it failed against the old code or a deliberately broken fixture. For the pure core, mutation testing with PIT (`pitest`, Apache-2.0, checked round 3) at stage exits. |
 | Restore global state | L1/L2: no static mutable state (ARCHITECTURE.md §3), JUnit `@TempDir` for every file. L3/L4: each GameTest runs in its own structure; tests that change config, `planets.json`, the paused flag, or the Mars data folder snapshot them first and restore in a `finally`. A final check asserts the paused flag and config equal their starting values. |
 | Identify by ID, never by display name | The NeoForge analogue of the Godot node-name bug: logic must never find a block, item, entity, machine, gate, or message by its **display name or translated text**. Use registry IDs (`mars:atmospheric_processor`), our machine IDs (`m-…`), and data IDs. An ArchUnit rule forbids calls to `Component.getString()` and `getHoverName()` outside `mars.client` and the export's goal-title lookup. Entities found by UUID, never by custom name. |
 
@@ -102,6 +104,39 @@ The Lead Instructional Designer's rule list, [docs/learning/content-rules.md](..
 | A hint only appears for a problem that really exists | Every failure-report hint is keyed on a failure type; the test checks each failure type can occur (some hazard or wear rule produces it) and that no hint is keyed to an unknown type. |
 | A hint never states the answer | Forecasts and failure reports get a banned-token list (CR-H2; written by the Lead Game Designer) (e.g. "vapor", "sublimate" for F4a). The test fails if any hint text, in either band, contains an answer term. Words matched on the English language file. |
 | Thresholds never scale | Already enforced by design (no scaling field); a test loads every preset and checks every gate threshold is identical. |
+
+### 5.2 Feasibility of every content rule (round 3 answer to the Lead Instructional Designer)
+
+| Rule | Feasible? | Layer | How, in one line | Needs from content |
+|---|---|---|---|---|
+| CR-F1 keyed answer matches physics | Yes | L2 | Pure model from trigger state for `horizon_sols`, compare with `outcome_check` | `trigger`, `horizon_sols`, `keyed_choice`, `outcome_check` per forecast |
+| CR-F2 exactly one keyed answer | Yes | L0 + L2 | Schema (one `keyed_choice`) + run every choice's `outcome_check` | Same |
+| CR-F3 minimum lead ≥ ~1 sol, both presets | Yes | L2 | Solver logs issue tick and outcome-visible tick per preset | — |
+| CR-F4 every forecast reachable | Yes | L2 | Solver trigger coverage | — |
+| CR-F5 ≥ 3 forecasts per phase | Yes | L2 | Count per phase per solver run | — |
+| CR-F6 goal IDs, NGSS resolve, both bands' text | Yes | L0 | Cross-reference scan | — |
+| CR-F7 FI never names its source idea | Yes | L0 | Banned-phrase scan on FI text keys | Banned list (ID) |
+| CR-F8 length budgets | Yes | L0 | Word counts | — |
+| **CR-F9 lock before reveal** | **Yes** | L2 + L4 | **Solver:** for each message with `reveals: [F…]`, check it is never delivered to a player whose forecast is still open; the interruption gate (ARCHITECTURE.md 9.6) already holds such messages, so the test proves the hold works. **Playthrough:** runtime assertion on every delivery. Also checks screens: opening the Monitor with an open `monitor_opened`-lock forecast must show the forecast card first | `reveals` on every message that could give a forecast away (Lead Game Designer); `lock` on every forecast |
+| **F4a outcome check** | **Yes** | L2 + L4 | "No liquid water at the block 0.25 sol after the state change", under every ice-rule branch; plus a data test: puddle-drying time < 0.25 sol | Puddle-drying time in the balance data |
+| **Threshold vs. curve** (content-rules §1.1 step 2) | **Yes** | L2 | Solver records the sol each named physical threshold is first passed per variant; fails if a forecast's regime lasts < ~2 sols or is passed before the forecast can be issued; prints threshold, sol, and dependent forecasts | Forecasts and beats declare the threshold they rest on (`rests_on: ["mars:boiling_point", …]`) |
+| Step 3 outcome drift diff | Yes | L2 | Store last passing outcomes as a JSON fixture in the repo; print changes | — |
+| Step 5 story beats vs. physics | Yes | L2 | `asserts` on beats (Lead Game Designer has added them) | — |
+| Step 6 Record triggers don't orphan | Yes | L0 | Every forecast ID referenced by a Record trigger exists | — |
+| CR-H1 report only for a real failure | Yes | L4 | Runtime assertion: the named cause is active in the simulation at send time | — |
+| CR-H2 hint never states the answer | Yes | L0 | Banned-token lists per failure type and forecast, both bands | Banned tokens (Lead Game Designer, written) |
+| CR-H3 named cause = largest cause | Yes | L4 | Compare with the Monitor cause list (from contribution `SourceId`s) | — |
+| CR-H4 hint levels and outcome form | Yes | L1 + L4 | Unit tests of the fade rules; runtime check against per-player fade state | — |
+| CR-H5 briefings name only unlocked things | Partly | L0 + L2 | Briefing lines declare the machine and value IDs they name (`names: [...]`); the solver checks they're unlocked at delivery. Free prose without declared IDs can't be checked reliably | `names` field on briefing and worked-example lines |
+| CR-H6 drift alerts name a real drift | Yes | L4 | Runtime assertion | — |
+| CR-R1 Record never fills from planet, admin, or another's events | Yes | L1 + loader | Loader already rejects planet-scope rules (ARCHITECTURE.md 8.5); unit test on cause and actor | — |
+| CR-R2 no Record page from activity alone | Yes | L0 | Trigger types against an allowed list (answer, held fix, ≥ 8-word answer) | — |
+| CR-R3 scored once per player | Yes | L1 + L4 | Export versus log; `late`, `expired`, `void`, `replay` never scored | — |
+| CR-R4 no identity in exports | Yes | Every build | Privacy test | — |
+| CR-T1–T5 text scans | Yes | L0 | Banned words and phrases, fiction-note keys, word counts | Lists (ID, Lead Game Designer) |
+| CR-T6 reading grade | Yes, as a report | L0 | Flesch–Kincaid over English text; warns, doesn't fail | — |
+| Section 5 (manual items) | No | — | Science correctness, usefulness, tone, rubric calibration stay human reviews | — |
+
 
 ---
 
@@ -132,7 +167,9 @@ The Lead Instructional Designer's rule list, [docs/learning/content-rules.md](..
 **Plan:**
 - `xvfb-run -a -s "-screen 0 1366x800x24" ./gradlew runClient --args="--width 1280 --height 720"` with the test harness mod in "shots" mode: load a fixed test world, step through scripted views (each gate snapshot from planetary keyframes §4, the Monitor at each disclosure stage, the Air window, the Shift Board, a failure report, the journal, the teacher overview), take a screenshot of each, and quit. Also at GUI scale 3 (the 420×236 limit, ARCHITECTURE.md §3.3).
 - **A person looks at every screenshot that matters for the change** (PROCESS.md §2). Agents can look at the PNGs too; the owner reviews them at acceptance.
-- **Readability checks** run on the same screenshots: sample text pixels against their real background and check contrast (style guide §4.4).
+- **Readability checks** run on the same screenshots (Lead Artist round 2 request, accepted):
+  - **Text on its real background:** the shots harness records the screen rectangle and colour of every text line it draws (a test-only hook in our screen code, like the handoff's `last_rect`). The check samples the screenshot's pixels behind each rectangle, takes the worst-case background, and computes the WCAG contrast ratio against the text colour: ≥ 4.5:1 for body text, ≥ 3:1 for icons (style guide §4.4). It prints the line, the ratio, and the background colour it read. Lines over the 3D world must have their backing strip (PROCESS.md §4).
+  - **Glyph existence:** a unit test (no client needed) loads our font providers and the vanilla font definitions, and fails if any character used in `en_us.json` (curly quotes, true minus sign, arrows, °, ×, subscripts like the "2" in O₂ if used) has no glyph in the font that will draw it. It prints the key, the character, and its code point. A runtime twin in the shots run checks the font's "missing glyph" box never appears in the recorded text.
 - Software rendering is slow and doesn't show real GPU bugs. It is for layout and colour, not performance.
 
 **If the headless client doesn't work here:** the owner takes the screenshots **[owner]**: a dev client launched with `--width 1280 --height 720`, the harness's "shots" mode bound to a key so one press runs the whole scripted set, files saved to `run/screenshots/<build>/`, and the owner (or an agent reading the PNGs) reviews them against a checklist per change.
@@ -153,7 +190,7 @@ The early prototype builds just enough infrastructure to learn what's feasible; 
 | Client visuals driven by data | Sky tint from pressure (keyframe file) | Fog, storm overlay, weather mast, ambient sound layers | Clouds, full keyframes |
 | Environment integration | — | Class server option A with 2 planets; a teacher-setup walkthrough draft | Load test; educator guide; LMS plumbing prototype (below) |
 
-**LMS plumbing prototype (proposal, needs a user decision).** Chapter 9 warns that environment integration is often left too late, and recommends a basic plumbing prototype to learn what integration is really needed. The user decided LMS integration comes after release and is opt-in (ARCHITECTURE.md §11). A **throwaway, offline converter** (a small script outside the pack that turns an exported `events.csv` into an xAPI statement file, loaded into a local test LRS on the developer's machine) would teach us the mapping problems early **without** shipping anything or sending any student data anywhere. It still counts as "building something for LMS before release", so it needs the user's OK (report: Decisions needed).
+**LMS plumbing prototype (decided, owner, round 3): Stage 5.** A throwaway, offline converter outside the pack turns an exported `events.csv` into xAPI statements for a local test LRS on the developer's machine. It never ships, sends nothing over a network, and uses only pseudonymous IDs (ARCHITECTURE.md §11).
 
 ---
 
