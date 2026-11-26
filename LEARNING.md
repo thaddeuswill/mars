@@ -1,6 +1,6 @@
 # Learning Design
 
-This file starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions:
+This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions:
 
 1. **Learning goals:** what learners need to know or be able to do.
 2. **Methods and media:** how they get there.
@@ -10,6 +10,61 @@ This file starts with an analysis of the learners and context (section 0), which
 > **Draft.** The audience is not set yet (age, classroom or self-directed, subject area). The goals below assume roughly **ages 12–18, informal or classroom use, earth and space science plus systems thinking**. Change the audience and the goals and measures should be revisited.
 
 The game already models real Mars conditions: the starting values in the Planetary Index (0.6 kPa pressure, −60 °C, 95% CO2) are close to the real planet. The learning design builds on that: **the mechanics are the lesson**, and the game doesn't stop to lecture.
+
+---
+
+## Design Framework: ISD (ADDIE)
+
+This project follows an **Instructional Systems Design (ISD)** model, using ADDIE as its structure. ISD guides the design rather than prescribing it: it keeps learning goals, learner characteristics, methods, and assessment connected, while leaving room for game-design judgment and creativity.
+
+ADDIE runs alongside the game development stages in [ROADMAP.md](ROADMAP.md), so learning design isn't bolted on at the end.
+
+| ADDIE phase | Question it answers | Where it lives | Roadmap stage |
+|---|---|---|---|
+| **Analysis** | Who are the learners, what must they learn, in what context? | Section 0 | Stages 0–1 |
+| **Design** | What are the objectives, methods, and assessments, and how do they line up? | Sections 1–4 | Stage 1 |
+| **Development** | Build the content, feedback tools, and assessments | Game content, journal, Colony Record, pre/post test | Stages 2–4 |
+| **Implementation** | Deliver to learners in their environments | Classroom, club, and home play; educator guide | Stages 5–7 |
+| **Evaluation** | Did it work, and what should change? | Formative: playtests at each stage. Summative: pre/post study | Every stage; study in Stage 6 |
+
+Evaluation is **not** only at the end. Each roadmap stage has a playtest, and its findings feed back into analysis and design. That's why criteria in section 0.6 are labeled drafts.
+
+### How this design meets ISD's strengths
+
+| ISD strength | How we meet it |
+|---|---|
+| Calls attention to key factors and how they relate | Section 0 analyzes learners, content, and environments; the alignment table below connects them |
+| Grounded in the science of learning | Simulation and discovery for cause-and-effect content; productive failure; immediate feedback; prediction (retrieval and self-explanation); spaced reflection at each gate |
+| Clear statement of objectives | Section 0.6: behavior, condition, criterion for each goal |
+| Assessment linked to objectives from the start | Every objective has a measure in 0.6 and in section 3, written before any content is built |
+| Guides but doesn't prescribe | Game design pillars and ISD work together; creative choices are still made by the designers |
+| Deliberate decisions and alternatives | Decisions are recorded with reasons in DESIGN.md; open questions are listed, not assumed |
+| Common language | Goal IDs (A1–D2) are used across design, content, and assessment |
+| Works in any environment | Section 0.4 covers classroom, club, home, and online use |
+
+### Alignment check
+
+Every goal must have content that teaches it, feedback that supports it, and a measure that checks it. A gap in any column is a design gap.
+
+| Goal | Taught by (game content) | Feedback | Measured by |
+|---|---|---|---|
+| A1 Mars vs. Earth | Phase 1 hazards, Monitor | Monitor values, gate journal | Post-test |
+| A2 Liquid water | Thaw, Hydrosphere gates | Ice behavior, journal | Post-test, scenario explanation |
+| A3 Greenhouse effect | Greenhouse emitters | Temperature trend, journal | Post-test |
+| A4 Radiation | Radiation spikes, shielding | Exposure effect, failure report | Post-test |
+| A5 CO2/O2 exchange | Phase 3 balancing | Fires or stability, Monitor | Holding O2 in band; post-test |
+| B1 Cause and effect | Planetary Index responses | Monitor cause breakdown | Variable-link diagram |
+| B2 Feedback loops | Storms vs. pressure; fauna vs. infrastructure | Phase debrief | Identify one of each type |
+| B3 Prediction | Prediction prompts | Prediction result | Accuracy rise Phase 1 → 3 |
+| B4 Trade-offs | Equilibrium band | Monitor, phase debrief | Reaching and holding equilibrium |
+| B5 Unintended consequences | Ecosystem blowback | Fauna appear near emitters | Reflection prompt |
+| C1 Resource planning | Phase 1 O2/water/power | Dome survives or fails | First-storm survival |
+| C2 Design, test, improve | Breaches, wear, storms | Failure reports | No repeat failure from the same cause |
+| C3 Data use | Planetary Monitor | Monitor trends | Monitor checked before big builds |
+| D1 Ethics | Dormant fauna | Reflection prompts | Rubric |
+| D2 Link to Earth | Journal "on Earth" notes | Phase debrief | Transfer task, rubric |
+
+**Gap found:** A4 (radiation) has a hazard but no prediction prompt or Colony Record trigger yet, and D2 (link to Earth) needs journal content written for it. Both are noted for Stage 4.
 
 ---
 
