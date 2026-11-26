@@ -8,7 +8,7 @@ This file covers how the software is built. It addresses five practices:
 4. **Elegant design:** clean responsibilities, no hidden side effects
 5. **Future enhancements:** hooks so new features don't need rewrites
 
-Sections 6–12 cover the classroom and data systems: group planets and hosting, session control, learning data and privacy, the story system, the admin API, LMS integration, and the performance budget.
+Sections 6–12 cover the classroom and data systems: group planets and hosting, session control, learning data and privacy, the story system, the admin API, LMS integration, embedded assessment (11a), and the performance budget.
 
 > **Draft, owned by the Technical Lead.** No code exists yet. This will be revised during the Stage 2 prototype ([ROADMAP.md](ROADMAP.md)). Supporting notes: [docs/tech/](docs/tech/) (mod licenses, school deployment).
 >
@@ -16,7 +16,7 @@ Sections 6–12 cover the classroom and data systems: group planets and hosting,
 >
 > **Still pending Stage 1** (consistency review m-19): whether oxygen and sealing are custom or come from a standalone mod. Everything below assumes a custom sealing system, marked where it matters.
 >
-> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
+> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
 
 ---
 
@@ -590,6 +590,9 @@ The rules that keep components clean and free of hidden side effects:
 | **Config presets** | Standard and classroom modes are bundles of config values (`pace.*`, `group.size`, hazard severity, recipe preset). New presets, e.g. a "hard mode", need no code. |
 | **Schema version in saved data** | Saves migrate forward when the data format changes, so worlds survive updates |
 | **Planet as a parameter** | The Index, gates, story, and fauna are keyed by `PlanetId` (the dimension). The same code runs one planet at home and several group planets on a class server (section 6). A moon could be another planet type later. |
+| **Signals** | New world-state values (e.g. a meteor-shower intensity) for visuals and conditions with one JSON file and one `publish` call (2.5.1) |
+| **Keyframes in the resource pack** | Re-tune or add sky, fog, cloud, ambient-sound, and instrument looks without code (2.5.2) |
+| **Cue channels** | Voiced narration can be added later; the queue already keeps feedback off voice (2.12) |
 | **Export interface** | CSV today; an opt-in xAPI exporter later plugs into the same event stream (section 11) |
 
 ### Design patterns in use
@@ -909,6 +912,59 @@ The **export interface** (section 5) is the only hook needed now.
 
 ---
 
+## 11a. Embedded Assessment: Feasibility and Cost
+
+The game is software, so it can be instrumented. Some tracking is **simple** (one player picks one of a few choices); some is **hard** (a team's coordinated decisions in a changing world over time). Group planets are the hard case. This section says what we can afford to measure and what we log so harder readings stay possible later.
+
+### 11a.1 Simple vs. hard evidence
+
+| Evidence | Difficulty | Feasible now? | Cost | Why |
+|---|---|---|---|---|
+| Forecast answers and results (2.6.1) | Simple | Yes | One event per answer | One player, fixed choices, known correct answer |
+| "What caused it?" answers | Simple | Yes | One event per answer | Same |
+| Monitor checks before own major builds (8.3) | Simple | Yes | One event per view and build; a window comparison at export | Same player, two timestamps |
+| Shift Board claims and fixes, repeats after own fix (2.8) | Simple to moderate | Yes | One event each; one map lookup for repeats | The server knows the actor of every repair |
+| Drift events answered (8.3) | Moderate | Yes | One lookup of the machine's last actor | Attribution is a rule ("own action, right direction, value returned"), not a judgment |
+| Keeper's Report text | Simple to collect, hard to score | Collect: yes. Score: by the teacher with rubrics | Text storage | Machine scoring of free text is out of scope |
+| **How a group divides work, plans, and recovers together** (who noticed, who decided, who acted, in what order) | **Hard** | **Not scored by the game.** Logged so a teacher or a later study can read it | Nothing extra beyond the fields below | Needs judgment of context; the teacher overview and debriefs cover it |
+| Whether a player's mental model improved (B3 trend) | Moderate | Yes, as a simple per-phase accuracy rule (LEARNING.md 0.6) | Export arithmetic | A rule, not a model |
+
+**What every event carries so the hard readings stay possible later:** wall-clock timestamp **and** simulation tick (ordering within and across sessions), session and timeline (rollbacks), planet, actor pseudonym or `scope: planet`, cause (player / simulation / admin / debug), the machine ID or failure ID it concerns (so actions can be chained: report → claim → fix → repeat), and the player's band. Events are written in the order they happen on the server thread, so the order in a file is the true order.
+
+### 11a.2 The four purposes, and where each consumer finds the data
+
+| Purpose | Consumer | Data used | Where it sits | Status |
+|---|---|---|---|---|
+| Inform the instructor | Teacher | Per-planet and per-student summaries | Teacher overview (live, on the server) and CSV export (`players.csv`, `planets.csv`, `events.csv`) | Designed (8.5, 8.6) |
+| Tailor in-game instruction | The game | Per-player fading state (2.10), phase-level fading, grade band | Learning record on the server; read by `FeedbackState` | Designed. Same data as fading; **no learner model** (TEAM.md "adaptive": no automatic personalization at launch) |
+| Feedback to the student | Player | Own Keeper's Record pages, forecast results, failure reports | Synced to the player's own client only | Designed (8.5, 9) |
+| Evaluate against standards | Teacher, learning study | Goal evidence + NGSS codes + rubric scores | `players.csv` goal columns, `goals.csv`, `reflections.csv` rubric columns, pre/post test outside the game | Designed (8.6) |
+
+### 11a.3 Model-based assessment (e.g. dynamic Bayesian networks)
+
+**Not in scope** (Technical Lead recommendation, for the Lead Instructional Designer to confirm). Reasons: it needs calibration data from real players we won't have in a design exercise; a model's output is harder for a teacher to trust or explain than "own forecast accuracy went from 40 % to 70 %"; and it adds a component to validate. The event log above is rich enough (actor, order, timing, context IDs) to fit such a model **offline, later**, from exported `events.csv` files, with no game change. **Revisit if** a study partner wants it after release.
+
+### 11a.4 Integration points and their tests
+
+| Integration point | What can break | Test | When |
+|---|---|---|---|
+| Mekanism and Create machines | Pause doesn't freeze them; their machines bypass our contribution API | GameTest: pause, check their machines stop; GameTest: a KubeJS-wired contribution changes the Index | Stage 2 |
+| KubeJS recipe gating | A gated recipe is craftable before its gate; a preset (`pace.recipePreset`) loads the wrong set | Server boot test per preset that lists recipes before and after latching each gate | Stage 2–3 |
+| packwiz pack and launchers | Missing mod, wrong version, a non-redistributable file in the bundle | CI: export `.mrpack`, check every mod's licence row (docs/tech/mod-licenses.md), boot a server from the export | Stage 1 onward |
+| Class server (option A, several planets) | Planet assignment, per-planet rollback, load | Stage 3 load test (4 planets × 4 simulated players); rollback test on one planet | Stage 3 |
+| Export files ↔ spreadsheets | Encoding, formula injection, broken quoting of free text | Unit test: write a session with tricky text (accents, quotes, line breaks, `=SUM(...)`), open in LibreOffice headless, compare | Stage 3 |
+| Export ↔ privacy | A UUID or username appears in a file | Privacy test (section 3): fails on any UUID pattern or known test username in `exports/` and `actionlog/` | Every build |
+| Educator guide ↔ game | Guide's column names, commands, or screenshots go stale | Doc check at each stage exit: every command and CSV column in the guide exists in the build | Stage 4 onward |
+| LMS file export (after release, opt-in) | Statements a school's LRS rejects | Validate generated xAPI statements against an LRS conformance tool (**tool unverified**) | Post-release |
+
+### 11a.5 Teaching the teacher, and support after release
+
+- **Server and setup guide** (DOCUMENTATION.md lists it as missing; owner: Technical Lead; planned at `docs/tech/server-setup.md`, Stage 4): install, first start, assigning planets, pause/resume, backups and rollback, export and what each file means, deleting the ID mapping at the end of a unit, and troubleshooting (child account can't join, firewall port, out of memory). Target: a teacher who has never run a server is done in under 30 minutes (Scorecard Feasibility row).
+- **Educator guide** (Lead Instructional Designer) links to it and covers reading the export, the rubric columns, and the limits of name scrubbing (8.7).
+- **Support after release** (Producer to plan; estimates **unverified**, no data): a bug channel (ROADMAP Stage 7: GitHub Issues); a NeoForge 21.1.x bump and re-test each time a stack mod ships a fix we need (about a day per bump with the CI tests above); answering setup questions (the largest unknown; the guide's troubleshooting section is the main way to keep it small). A port to a newer Minecraft version is a project, not support (3.1).
+
+---
+
 ## 12. Performance Budget
 
 Classrooms run on weak hardware (risk R-08). Costs per system, on the server:
@@ -950,7 +1006,13 @@ The large costs are vanilla and third-party: loaded chunks, mobs, and Mekanism/C
 | Build tooling: NeoForge ModDevGradle with Gradle; a mono-repo with the pack and the mod | Technical Lead | Assumed; confirm when the Stage 1 skeleton builds |
 | Does `/tick freeze` stop Mekanism and Create machines? | Technical Lead | Stage 2 GameTest; fallback "pause = stop the server" |
 | Rollback restore: NeoForge startup hook or start script? | Technical Lead | Stage 2; start script is the safe default |
-| Hosting option A vs. B for classrooms | Producer to route (ill-structured) | Recommendation A, fallback B (section 6.1) |
+| Hosting option A vs. B for classrooms | User | **Decided:** A, fallback B, no LAN for classes (6.1) |
 | Memory and CPU per open planet; view-distance and fauna caps | Technical Lead | Stage 3 load test |
-| Event list and CSV columns for each goal ID | Lead Instructional Designer | Draft in section 8 |
-| Minecraft version: stay on 1.21.1? | Technical Lead, Stage 1 | Recommended; evidence in [docs/tech/mod-licenses.md](docs/tech/mod-licenses.md) |
+| Event list and CSV columns for each goal ID | Lead Instructional Designer | **Final** columns adopted (8.6); three TL additions (`forecasts_late`, `void`, `names_replaced`) await acceptance |
+| Minecraft version: stay on 1.21.1? | User | **Decided:** yes (3.1) |
+| Does the cloud renderer and shimmer particle work with Sodium for NeoForge? Do we ship a performance mod at all? | Technical Lead | Stage 2 test; licence check of Sodium (PolyForm Shield) in mod-licenses.md |
+| Do storm caps scale gameplay effects or only visuals? | Lead Game Designer | Open (2.5.2) |
+| Shift Board credit: claimer or actor? | Lead Instructional Designer | Default claimer; both logged (2.8) |
+| CO2 on the weather mast before the Monitor shows it | Lead Game Designer, Lead Artist, Lead Instructional Designer | Open (2.11) |
+| Blockbench "Modded Entity" animation export works for 1.21.1 | Technical Lead | Stage 2 test animation (2.13) |
+| Does copying `pack/assets` and `pack/data` into the jar keep `/reload` usable in dev? | Technical Lead | Stage 1 skeleton (build plan §4) |

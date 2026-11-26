@@ -1,0 +1,165 @@
+# UI Specs — Mars Terraforming
+
+**Owner:** Lead Game Designer (screens, flows, wording) · Visual system: Lead Artist ([style guide](../art/style-guide.md) §4, §7, §11) · **Status:** Draft 1 (2026-11-26). Layout and wording are **fluid** (TEAM.md 8.1). Nothing here has been playtested. · **Depends on:** [DESIGN.md](../../DESIGN.md), [LEARNING.md](../../LEARNING.md) §4.6–4.7, [balance sheet](balance-sheet.md), [messages/](messages/README.md)
+
+**Rules every screen follows**
+- Fits 420×236 GUI px (style guide §4.5). Color is never the only signal: every state also has a shape, pattern, or word (style guide §4.1).
+- Words a 12-year-old knows; science words defined on first use. No "lesson", "objective", "quiz", "learner" (TEAM.md 8.4).
+- Every number has an icon or a picture next to it. Every value shows a trend arrow (shape: up, flat, down).
+- Middle school (MS) and high school (HS) bands see the same layout; HS adds numbers and "read more" (LEARNING.md §5 grade-band rules).
+
+---
+
+## 1. The Planetary Monitor: overall layout
+
+A block in the dome (and later in outposts). Opening it is a **natural pause** (TEAM.md 8.6).
+
+| Area | Content | Goals |
+|---|---|---|
+| Top bar | **Next-gate goal** (§3) | C3, B1 |
+| Left column | **Dome** tab: dome O2 reserve, water, power, filter wear, open failures (links to the Shift Board) | C1, C2 |
+| Center | **Planet** tab: the Index values shown in this phase (§2), each a row with icon, value, trend arrow, and a one-line top cause ("Outgassers +0.30/sol") | A1–A5, B1, C3 |
+| Row click | Opens the value page: graph of the last 10 sols with cause lines labeled **on the graph** (DESIGN.md, Multimedia: text next to what it explains) | B1, C3 |
+| Right strip | Milestones and alerts: space weather (§4), storm forecast, fauna page link (from Thaw) | A4, C1, B2 |
+| Bottom | "Read more" (HS default open; MS closed) | — |
+
+**Fading (LEARNING.md fading gap):** cause breakdowns are open by default in Phases 1–2 and **closed by default in Phase 3** (one click opens them). The Lead Instructional Designer owns the fading schedule; this is the UI hook.
+
+---
+
+## 2. Progressive disclosure of parameters by phase
+
+The Monitor shows only the values in play (DESIGN.md, Cognitive load). A new row appears with a BELL log line ("New on the Monitor: Water") and a one-time outline on the row. Values not yet shown still exist in the Index; they simply aren't on screen.
+
+| Shown from | Planet rows added | Derived and extra displays | Why then |
+|---|---|---|---|
+| Start (Landing) | **Pressure** (log-scale gauge with milestones, style guide §11.1), **Temperature** | "Air mix" fact line: CO2 95 %, O2 0.1 % (static text in Phase 1, A1) | Phase 1 is about pressure; temperature is flat but anchors A1 |
+| First ice change (F4a) | **Water** line: "Water boils here at {boil_c} °C" | HS: triple-point notch explained | A2 moment needs the boiling point next to the event |
+| Dome stable | Pressure cause lines get "Outgasser" | — | First lever |
+| Phase 2 begins | Temperature cause lines (emitters, polar frost) | HS: polar frost loss as a named sink (B2) | Second lever |
+| Thaw | **Hydrosphere** (% surface water), **Fauna** page (fauna pressure F, signatures by machine, map with quiet zones) | Ground-ice survey layer | Water and fauna arrive together |
+| Phase 3 begins | **O2**, **CO2** as live rows; **Breathable air** panel (§5); **Biomass** | Carbon flow view, opened from the CO2 row (HS default; MS via read more) | Balance phase |
+| Breathable / Equilibrium holds | **Hold counters** in the top bar (§3) | — | The goal becomes "hold" |
+
+Count of planet rows on screen: 2 (Phase 1) → 4 (late Phase 2) → 6 (Phase 3). Choice load rises with the phase (TEAM.md, Interactivity).
+
+---
+
+## 3. Next-gate goal display (top bar)
+
+**Purpose:** a clear, specific, attainable goal at all times (flow: clear goals; Zeigarnik: a visible unfinished task). Answers the unclear task "raise pressure" with an ending: *how much, and how close am I?*
+
+**Layout:** `Next: Phase 2 · Pressure 5 kPa · [progress bar] 62 % · ~4 sols at this rate`
+
+| Element | Rule |
+|---|---|
+| Gate name | Player language ("Phase 2", "Thaw", "Breathable air") with the gate-diamond icon |
+| Condition(s) | One chip per condition. Multi-condition gates (Phase 3: pressure **and** temperature) show one bar per condition; the gate is the **lowest** bar |
+| Progress | For pressure: progress along the **log scale** from the previous gate's value to the target (so Phase 1's 0.6 → 5 kPa doesn't sit at 0–10 % for hours). For temperature: linear from previous gate value. Hydrosphere: linear from 0 |
+| Estimate | "~N sols at this rate" from the 1-sol net trend. Shown only when the trend is up; otherwise "Not rising: check causes" (link to the value page). Rounded to whole sols; "< 1 sol" below 1 |
+| Dome stable (machine-state gate) | "Life support: {n}/{hold_sols} sols with no failures" with tick boxes; resets visibly on a failure |
+| Holds (Breathable, Equilibrium) | "Holding: 4/7 sols" with a ring; if a value leaves the band: "Paused: O2 out of band · resets in {t} sol if not fixed" (hold rule, balance sheet §4) |
+| After Equilibrium | "Next: build and light the beacon" with component checklist (DESIGN.md content lists) |
+| Never shown | Scores, ranks, XP, or anything about other groups |
+
+Also shown as a small HUD chip (gate icon + bar) that the player can turn off in settings. It never flashes.
+
+**Recommended builds (paradox of choice).** Under the bar, a short **"Useful now"** list (≤ 3 machines) for the current gate, from the gate data (e.g. Phase 1 after Dome stable: Regolith Outgasser, battery, solar panel). The same list is pinned at the top of the crafting/recipe view, marked with a small clipboard icon, so players aren't facing every recipe at once. It recommends, never locks; Lens B players can ignore it. Lists live in datapack JSON next to the gates.
+
+| Gate being worked toward | "Useful now" (draft) |
+|---|---|
+| Dome stable | Seal kit, filter cartridge, battery |
+| Phase 2 begins | Regolith Outgasser, solar panel, battery |
+| Thaw | Atmospheric processor, super-greenhouse emitter, transit tube |
+| Hydrosphere | Ice extractor, meltwater treatment, insulation shroud |
+| Phase 3 begins | Emitter, processor, quiet-zone marker |
+| Breathable | Biome seed kit, soil treatment, algae vat |
+| Equilibrium | Carbon scrubber, biome seed kit, beacon components |
+
+---
+
+## 4. Solar-event warning (~1 sol ahead): F2 and F7
+
+**Goal:** time to predict and to plan (A4, B3, C1), then an unmistakable safety action. The forecast must **lock before** any message reveals the answer.
+
+| Time | What appears | Interrupts? |
+|---|---|---|
+| T−1 sol | Log line `log.solar.warn`; HUD **sun-burst icon** (hexagon outline, style guide status shapes) with countdown "~1 sol"; Monitor "Space weather" row. Forecast F2 (first event) or F7 (first after pressure doubled) is queued for the next natural pause | No |
+| T−0.25 sol | **Forecast locks.** Log line `log.solar.shelter` names the shelter; HUD icon gains a bold border and the countdown switches to minutes; one soft two-tone chime (not the alarm) | No |
+| Onset | HUD radiation meter appears when outside (bar + rising-dose arrow); log `log.solar.onset` | No, except the **first-ever onset while outside**: a blocking warning (rule 3: life-threatening first) |
+| During | Dose builds only while exposed; shielding blocks and depth stop it (DESIGN.md §3) | — |
+| End | Log `log.solar.end`; HUD icon clears; forecast result queued first at the next natural pause | No |
+
+- Real-time length: 1 sol = 20 minutes of simulation time in every preset, so the warning is ~20 minutes of play in both standard and classroom mode. The classroom rate multiplier doesn't shorten a sol.
+- Rule 5 (end of class): if the T−1 sol warning would fall in the last ~5 minutes of a classroom session, the event is scheduled after the next resume instead.
+- HS read more on the Monitor row: "Expected surface dose: {dose_pct} % of the first event", shown only **after** lock (it gives away F7).
+- Accessibility: icon shape + countdown text + chime with subtitle "[Solar event warning chime]" (style guide §4.7).
+
+---
+
+## 5. Breathable-air panel (the "Air window")
+
+Accepts the Lead Artist's **Air window** (style guide §11.2) and the Lead Instructional Designer's recommendation (LEARNING.md §4.7): one gauge for both bands, three zones in words and shapes, the two numbers underneath. Goals: A1, A5, B4, C3.
+
+**Air check row** (both bands): three small gauges, each with a target notch and a check or cross shape.
+| Check | MS label | HS label | Condition |
+|---|---|---|---|
+| Pressure | Thick enough | Pressure ≥ 75 kPa | pressure ≥ 75 kPa |
+| O2 | Oxygen push | O2 partial pressure ≥ 16 kPa | O2 fraction × pressure ≥ 16 kPa |
+| CO2 | Low CO2 | CO2 partial pressure ≤ 0.5 kPa | ≤ 0.5 kPa |
+
+When all three show a check **and** the hold is complete, the helmet icon changes shape from closed to open.
+
+**Zoomed O2 gauge** (15–27 % O2). Zone wording (final, changes the Artist's draft labels):
+| Zone | Range | Label (MS and HS) | Pattern + pictogram (Artist) |
+|---|---|---|---|
+| Too little oxygen | below 16 kPa ÷ pressure | **Too little oxygen** | Sparse dots, closed helmet |
+| Breathable | lower edge to 23 % | **Breathable** | Clear, bold outline, open helmet |
+| Fire risk | above 23 % | **Fire risk** | Diagonal hatch, flame |
+
+*Change from the Artist's draft:* "Too thin to breathe" → "Too little oxygen", because "too thin" is the **pressure** check's job; mixing them would blur the two causes the panel exists to separate. "Breathe here" → "Breathable" to match the journal and LEARNING.md.
+
+**States the panel must handle** (from the balance sheet numbers; no numbers changed):
+| Pressure | Lower edge (16 ÷ p) | Panel shows |
+|---|---|---|
+| ≥ 75 kPa | ≤ 21.3 % | Normal: the Breathable zone is open; the edge slides down as pressure rises (window widens on screen) |
+| 69.6–75 kPa | 21.3–23 % | Breathable zone drawn **outlined but hatched lightly**, with the note "Not thick enough yet" next to the cross on "Thick enough" |
+| < 69.6 kPa | > 23 % | No Breathable zone at all. Text: "No safe oxygen level at this pressure. Raise pressure first." |
+| < 60 kPa | > 26.7 % (off scale) | Same text; edge marker pinned to the top with an arrow |
+
+**Time-to-edge estimate** (LEARNING.md §4.7 item 4): under the gauge, "Fire risk in ~{t} sol at this rate" or "Too little oxygen in ~{t} sol", shown only when an edge is under 2 sols away. MS shows "soon" (< 0.5 sol) or "in about a sol"; HS shows the number.
+
+**Numbers underneath:** MS: O2 % only, partial pressure in "read more". HS: O2 %, O2 partial pressure, CO2 partial pressure, and the Air window chart (style guide §11.2 level 2) one click away.
+
+**Not used:** a single "breathability %" number (hides the two causes).
+
+**World cue:** the **weather mast** (§7) shows the same O2 and CO2 values as gas tubes outside, so the panel has an honest in-world twin.
+
+---
+
+## 6. HUD
+
+Minimal, vanilla-style. Left: suit O2 (bubble icon + bar + number), suit power. Right: active warnings as shaped icons (storm, solar event, radiation dose, perchlorate exposure), each with a short word. Top center: optional next-gate chip (§3). No HUD element flashes more than 3 times per second (style guide §4.6). Messages arrive as one colony-log line at the bottom left; pop-ups follow the interruption rules (TEAM.md 8.6, consensus pending).
+
+---
+
+## 7. Lead Artist proposals: decisions
+
+| Proposal | Decision | Spec |
+|---|---|---|
+| **Weather mast** (windsock, balloon, thermometer, gas tubes) | **Accept** (user adopted). | One stands outside the dome from the start (Landing step 7 passes it). Craftable after Dome stable for outposts (cheap: iron, glass, cloth). Shows the planet's values as world cues; it is not required for any gate. Goals: A1, A5, C3. Added to DESIGN.md fantasy audit as a real instrument, simplified (windsock physics **[SME]**) |
+| **Quiet-zone marker post** | **Accept, with a rule change.** | The quiet zone is defined by the rule (no active machine within 48 blocks; balance sheet §6), not by the marker. Placing a marker **names** the zone, draws its 48-block ring on the Monitor fauna map, and warns ("Machine inside quiet zone") if a machine is switched on inside the ring. A zone works without a marker; the marker makes it visible and plannable (C3, B2, D1) |
+| **Thawling defensive behavior** (rear up, frills flared, short shove, curl and roll away; no lunge; no gore) | **Accept.** | Numbers added to the balance sheet §6 (draft): juveniles shove with knockback only, 0 damage; later-life-stage adults shove for 1 damage (half a heart) plus knockback, once, then flee. They never chase. This keeps "they only fight back if attacked" true and keeps lethal defense a choice with no reward beyond protecting a machine |
+| **Air window** | **Accept**, zone labels changed (§5) | — |
+| **Shift Board** visuals (style guide §11.3) | Accept | Status words "Open / Claimed / Fixed" with the three shapes |
+| **Ending cards** (style guide §11.4) | Accept | Same frame for every card |
+
+The content lists the Artist asked for (crops, biome types, maintenance parts, beacon components) are in DESIGN.md, "Content lists".
+
+---
+
+## 8. Journal
+
+Tabs: **Shift notes** (gate entries, Hana's notes, briefings) · **Messages** (archive, unread marked with a dot and a count) · **Forecasts** (own tally per phase: "Phase 1: 3 of 4 right") · **What caused it?** (self-check page; final name of the old "Explain it") · **Keeper's Record** (header "What the colonists will need to know"; own-evidence pages and the "Cairn team" section).
+
+Every page pairs text with a small picture or Monitor graph (DESIGN.md, Multimedia). Text budgets: story bible §6.1.

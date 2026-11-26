@@ -55,6 +55,13 @@ When scope, schedule, or a design change forces a choice, which learning goals g
 - The SME's verbatim NGSS check.
 - A Stage 4 re-estimate that shows whether any cut reaches a Core feature at all.
 
+### 1.7 Link to iteration: broad first, then drill down (ACEDT)
+
+The user's Chapter 9 pages (ACEDT, via the coordinator) say to analyze learning objectives broadly across the whole domain early, then drill down on a subset each iteration; and if scope forces the game to teach only a subset well, that is a decision made **with the customer and the full team**. For us:
+- The broad analysis is done (LEARNING.md §0–1). The tiers set the **drill-down order**: each iteration (ROADMAP "How We Iterate") works its phase's Primary goals first, then Secondary.
+- The tiers are **not** permission for any one role to drop a goal. Taking any cut that reduces a goal's teaching, feedback, or measure below its tier's minimum goes to the user with a full-team perspective round, using this brief's options and the cut list in [budget.md](budget.md).
+- This strengthens option T-C: the quadrant rule decides feature order, and the subset decision itself stays with the user.
+
 ---
 
 ## 2. Interruption rules (TEAM.md 8.6 vs. LEARNING.md §4.6)

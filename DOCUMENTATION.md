@@ -12,43 +12,58 @@ Owner of this file: Producer.
 
 Standard game and instructional design documents fall into four categories (Fullerton, 2008; Schell, 2008). LGD adds instructional analysis documents and learning objectives, methods, assessment, and feedback.
 
+Status key: ✅ draft exists · 🟡 partial · ⬜ missing · 📅 planned for a later stage. Map last reviewed by the Producer: 2026-11-26 (Round 2).
+
 ### Design documents
 | Standard document | Purpose | Our file | Owner | Status |
 |---|---|---|---|---|
 | Game Design Overview | High-level design and audience, for management | `README.md` (summary) + `DESIGN.md` intro | Producer / Lead Game Designer | 🟡 Thin: needs a one-page overview |
 | Detailed Design Document | All mechanics and interfaces | `DESIGN.md`, `docs/design/` | Lead Game Designer | 🟡 Mechanics yes; UI specs not yet |
-| Story Overview Document | Dialog, narration, settings, characters | `docs/design/story-bible.md` | Lead Game Designer | ✅ Draft |
-| Audience analysis | Who the learners are | `LEARNING.md` section 0.1–0.2 | Lead Instructional Designer | ✅ Draft |
-| Content analysis | What must be learned, by type | `LEARNING.md` section 0.3; `docs/science/` | Lead Instructional Designer, SME | ✅ Draft |
+| Balance sheet | Every Index value, rate, hold, pacing model, and fauna number | `docs/design/balance-sheet.md` | Lead Game Designer | ✅ Draft 1 (untested starting values) |
+| Playtest plan | Solo user playtest sessions, tasks, observation sheet, lenses | `docs/design/playtest-plan.md` | Lead Game Designer | ✅ Draft 1 |
+| Story Overview Document | Dialog, narration, settings, characters | `docs/design/story-bible.md` | Lead Game Designer | ✅ Draft 2 (full-team story review pending) |
+| UI specs | Monitor, journal, Keeper's Record, forecasts, reports, Shift Board, HUD | — (`docs/design/`) | Lead Game Designer, Lead Artist | ⬜ Missing (Stage 1 item) |
+| Audience analysis | Who the learners are | `LEARNING.md` §0.1–0.2 | Lead Instructional Designer | ✅ Draft |
+| Content analysis | What must be learned, by type | `LEARNING.md` §0.3; `docs/science/` | Lead Instructional Designer, SME | ✅ Draft |
 | Task analysis | The steps and decisions players must master | — | Lead Instructional Designer | ⬜ Missing |
-| Media analysis | Why a Minecraft modpack, and which in-game media carry which content | Partly `LEARNING.md` section 2 | Lead Instructional Designer | ⬜ Missing as an analysis |
-| Learning objectives, methods, assessment, feedback | The instructional design | `LEARNING.md` sections 1–4 | Lead Instructional Designer | ✅ Draft |
-| Science reference | Source of truth for the science | `docs/science/` | SME | ✅ Draft |
+| Media analysis | Why a Minecraft modpack, and which in-game media carry which content | Partly `LEARNING.md` §2 | Lead Instructional Designer | ⬜ Missing as an analysis |
+| Learning objectives, methods, assessment, feedback | The instructional design | `LEARNING.md` §1–5 | Lead Instructional Designer | ✅ Draft (goal tiers and interruption rules in consensus) |
+| Prompts and reflections | Forecasts F1–F10, reflection questions, Keeper's Record pages | `docs/learning/prompts-and-reflections.md` | Lead Instructional Designer | ✅ Draft |
+| Rubrics | Scoring for B5, D1, D2 reflections and the transfer task | `docs/learning/rubrics.md` | Lead Instructional Designer | ✅ Draft |
+| Goal → NGSS data map | Example of the `ngss_map.json` format used by the export | `docs/learning/ngss_map.example.json` | Lead Instructional Designer | ✅ Example |
+| Science reference | Source of truth for the science | `docs/science/accuracy-review.md`, `docs/science/ngss-verification.md` | SME | ✅ Draft (verbatim NGSS check pending) |
 
 ### Technical documents
 | Standard document | Purpose | Our file | Owner | Status |
 |---|---|---|---|---|
-| Technical Design Document | Software engineering, networking | `ARCHITECTURE.md`, `docs/tech/` | Technical Lead | 🟡 In progress |
-| Pipeline Overview | How to get art, data, and text into the game | — | Technical Lead with Lead Artist | ⬜ Missing |
-| System Limitations | What the target computers can handle | — (research under way in `docs/tech/`) | Technical Lead | ⬜ Missing |
-| Art Bible | Common look and feel for all artists | `docs/art/style-guide.md` | Lead Artist | 🟡 In progress |
-| Concept Art Overview | What the game will look like before it's built | `docs/art/planetary-keyframes.md` (partly) | Lead Artist | ⬜ Needs visual mockups |
+| Technical Design Document | Software engineering, networking | `ARCHITECTURE.md`, `docs/tech/` | Technical Lead | ✅ Draft (rewritten by the Technical Lead) |
+| Mod licenses and versions | Licenses, 1.21.1 builds, redistribution rules; the release permissions table | `docs/tech/mod-licenses.md` | Technical Lead | ✅ Draft (platform flags not yet checked) |
+| Pipeline Overview | How to get art, audio, data, and text into the game | — | Technical Lead with Lead Artist | ⬜ Missing (Stage 1 item) |
+| System Limitations | What the target computers and schools can handle | `docs/tech/school-deployment.md`; performance budget in `ARCHITECTURE.md` §12 | Technical Lead | 🟡 Deployment facts done; hardware numbers wait for the Stage 3 load test |
+| Art Bible | Common look and feel for all artists | `docs/art/style-guide.md` | Lead Artist | ✅ Draft 1 |
+| Concept Art Overview | What the game will look like before it's built | `docs/art/planetary-keyframes.md`, `docs/art/palettes/` | Lead Artist | 🟡 Keyframes and palette sheet; visual mockups missing |
+| Asset list | Every texture, model, UI element, and sound, with stage and status | `docs/art/asset-list.md` | Lead Artist | ✅ Draft 1 (144 rows) |
+| Audio direction and sound list | Ambience, alarms, chimes, fauna, helmet-off; subtitles | `docs/audio/` (direction currently in asset list §9 and style guide) | Lead Artist | ⬜ Folder not created yet |
 
 ### Management documents
 | Standard document | Purpose | Our file | Owner | Status |
 |---|---|---|---|---|
-| Schedule / roadmap | Allocation of time and work | `ROADMAP.md` | Producer | ✅ |
-| Budget | Allocation of resources | — | Producer | ⬜ Missing. For a design exercise: an **effort budget** in hours per stage and role. |
-| Risk register | Threats and mitigations | `docs/production/risk-register.md` | Producer | ✅ |
+| Schedule / roadmap | Allocation of time and work; iteration model | `ROADMAP.md` | Producer | ✅ |
+| Budget | Allocation of resources: effort hours per stage and role, the user's time, scope check, cut list | `docs/production/budget.md` | Producer | ✅ Draft 1 (±50%; re-estimate after Stage 3) |
+| Risk register | Threats and mitigations | `docs/production/risk-register.md` | Producer | ✅ Round 2 |
+| QA plan | Severity levels, test types, invariants, test passes per stage, exit criteria, release checklist | `docs/production/qa-plan.md` | Producer | ✅ Draft 1 |
+| Consistency review | Cross-document contradictions with owners | `docs/production/consistency-review.md` | Producer | ✅ Round 1 findings closed on paper |
+| Consensus briefs | Positions, common ground, options for ill-structured team decisions | `docs/production/consensus-round2.md` | Producer | ✅ Round 2 (awaiting positions) |
 | Team model and decision log | Shared understanding and decisions | `TEAM.md` | Producer (coordinator merges) | ✅ |
-| QA plan | Testing and bug process | — | Producer | ⬜ Missing |
+| Task reports | What each task did, its handoffs and risks | `docs/team/reports/` | Each role (coordinator files) | ✅ |
 
 ### User / player documents
 | Standard document | Purpose | Our file | Owner | Status |
 |---|---|---|---|---|
-| Player guide / tutorial | How to play | — (planned, Stage 4) | Lead Game Designer | ⬜ |
-| Educator guide and worksheets | How to teach with it | — (planned, Stage 4) | Lead Instructional Designer | ⬜ |
-| Server and setup guide | How a teacher installs and runs a class | — | Technical Lead | ⬜ |
+| Player guide / tutorial | How to play | — (Landing onboarding in game; guide in Stage 4) | Lead Game Designer | 📅 Stage 4 |
+| Educator guide and worksheets | How to teach with it; "Requires Java Edition"; IT sheet; paper reflection fallback | — | Lead Instructional Designer | 📅 Stage 4 |
+| Server and setup guide | How a teacher installs and runs a class | — (input in `docs/tech/school-deployment.md`) | Technical Lead | 📅 Stage 4 |
+| Maintenance plan and user-generated content guide | Support window, version updates, sharing challenge datapacks | — | Producer, Technical Lead | 📅 Stage 7 |
 
 ---
 

@@ -19,7 +19,8 @@ Facts marked **unverified** need the named owner to check a primary source.
 | 3 | R-17 | Only one human playtester, and no players of the target age | 9 | Reframed: the user plays builds (decision); ~75 h of user play needed |
 | 4 | R-31 | Narrow breathable O2 window plus frequent drift events | 6 | New |
 | 5 | R-44 | D2 Earth-link content not written; four NGSS claims depend on it | 6 | New |
-| 6 | R-09 | Schools that only have Minecraft Education can't run the pack | 6 | **Verified**; now an accepted constraint |
+| 6 | R-51 | No external SME (internal SME only) | 6 | New (ACEDT input) |
+| 7 | R-09 | Schools that only have Minecraft Education can't run the pack | 6 | **Verified**; now an accepted constraint |
 
 ## Register
 
@@ -101,6 +102,7 @@ Facts marked **unverified** need the named owner to check a primary source.
 | R-27 | **The user is a single point of approval.** | H | M | 6 | Producer | One decision batch per stage with a recommendation each (7–8 batches total). | Open |
 | R-28 | **Parallel edits cause drift.** | M | M | 4 | Producer | File ownership; consistency review at every stage gate; handoffs instead of cross-edits. | Open |
 | R-29 | **No teacher with classroom experience** reviews the design. | M | M | 4 | Lead Instructional Designer | Design exercise: the user reviews as teacher in the Stage 6 unit walkthrough; teacher-facing text reviewed against LEARNING.md §5. | Open |
+| R-51 | **No external SME.** Our Subject Matter Expert is an internal SME (a team role). There is no external planetary scientist or science teacher to give critical review, which ACEDT expects at key points (Chapter 9, via coordinator). Errors the internal SME shares with its sources, or classroom-practice problems, may go unnoticed. | M | H | 6 | SME (sources), Producer (review plan), user (optional external review) | Every science claim cites a published primary source; unverified items never appear as fact in game (R-40); SME review at every stage gate and every physics or gate change; the user may arrange an optional external review of journal science and the educator guide before release (qa-plan.md §3, §7). | Open |
 | R-38 | **Isolation themes** (solo watch) could land badly with some teens. | L | M | 2 | Lead Game Designer, Lead Instructional Designer | Tone rules in the story bible; crew contact through messages; story review before Stage 3. | Open |
 | R-46 | **Create and Mekanism keep their own look**, breaking the cohesive style. | M | L | 2 | Lead Artist | In-house machines carry the learning and the style; third-party machines are late and optional. | Mitigated on paper |
 
@@ -109,4 +111,4 @@ Facts marked **unverified** need the named owner to check a primary source.
 | Date | Change |
 |---|---|
 | 2026-11-26 | First issue, from the Stage 1 consistency review. |
-| 2026-11-26 | Round 2. R-09 verified and accepted (impact H→M). R-07, R-14, R-24 closed (R-14: learning layer moved into the Stage 3 slice). R-13 mitigated on paper (L). R-23 links mod-licenses.md (L). R-12, R-20, R-21 lowered. R-01, R-02, R-06, R-08, R-11, R-17 updated. New: R-30–R-32, R-35–R-47, R-50 from the Game Designer, Technical Lead, Instructional Designer, and Artist reports. Status column added. IDs R-33, R-34, R-48, R-49 not used: those report risks merged into R-17 (solo adult playtests), R-01 (new content scope), R-47 (audio workload), and R-17 (user hours). |
+| 2026-11-26 | Round 2. R-09 verified and accepted (impact H→M). R-07, R-14, R-24 closed (R-14: learning layer moved into the Stage 3 slice). R-13 mitigated on paper (L). R-23 links mod-licenses.md (L). R-12, R-20, R-21 lowered. R-01, R-02, R-06, R-08, R-11, R-17 updated. New: R-30–R-32, R-35–R-47, R-50 from the Game Designer, Technical Lead, Instructional Designer, and Artist reports. Status column added. R-51 (no external SME) added from the coordinator's Chapter 9 (ACEDT) input. IDs R-33, R-34, R-48, R-49 not used: those report risks merged into R-17 (solo adult playtests), R-01 (new content scope), R-47 (audio workload), and R-17 (user hours). |

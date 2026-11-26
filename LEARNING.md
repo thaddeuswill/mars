@@ -192,6 +192,11 @@ This analysis determines which strategies and assessments fit. Everything marked
 - **Two grade bands.** A 12-year-old and an 18-year-old need different depth. → A **grade band** setting (middle school / high school) picks the journal depth, forecasts, reflection questions, and post-test items, mapped to the matching NGSS band (section 6).
 - **Mixed-ability groups on a shared planet.** In class, 3–5 students share one planet. A strong player can carry the group's gates. → Progress belongs to the group, but **evidence of learning is per student**: own forecasts, own "What caused it?" checks, own repairs, own reflections (section 3.0). Suggested colony posts, rotating each phase, spread the work (DESIGN.md Group Play; section 2).
 - **Accessibility.** Color is never the only signal (sky tint plus Monitor numbers); subtitles for sound cues; no time-pressured reading.
+- **Game experience in general** *(assumed; to be surveyed)*. Most 12–18-year-olds play some games, but not all, and not all play Minecraft survival (vs. creative or minigames). Genres they like vary: sandbox, survival, strategy, story, competitive shooters. → The pack can't assume a love of tech modpacks or of long survival play; the first ~30 minutes must be readable to someone who mostly plays other genres.
+- **Themes that interest them** *(assumed; to be surveyed)*. Space and Mars missions, survival, building, mysteries, animals. Climate topics may interest some and tire others ("climate fatigue"; **unverified**). → The thawling mystery and survival carry early appeal; Earth links stay one line at a time.
+- **Demographics** *(assumed; to be surveyed)*. Mixed gender, mixed home access to gaming PCs, some English learners. → No gendered player references (DESIGN.md); short plain text; play must be possible entirely at school.
+- **Direct survey, not assumption.** The questions we'd ask a few target learners are in [docs/learning/learner-survey.md](docs/learning/learner-survey.md). In this design exercise they're marked for the user's playtests and for any future teacher-reviewer.
+- **Cognitive task analysis.** The core knowledge and skills of the planetary-engineer task, split into procedural and cognitive parts, with typical mistakes per expertise level: [docs/learning/cta.md](docs/learning/cta.md). Real-world scenarios are requested from the SME.
 
 ### 0.2 Prior knowledge and experience
 
@@ -296,11 +301,28 @@ D1 and D2 now have separate rows. They share prompts (the same reflection can sh
 
 Criteria are first drafts. They should be checked against the first playtest, then adjusted.
 
+### 0.7 Requirements: where the game sits in the curriculum
+
+| Question (Chapter 9, requirements analysis) | Answer | Where the educator guide covers it |
+|---|---|---|
+| What comes before the game? | Pre-test, a short Mars intro, groups and posts (period 1). Recommended prior unit: states of matter and basic photosynthesis (0.2 "likely to know") | §1, §4 (period 1) |
+| What comes after? | Transfer task on Earth's climate system, post-test, optional delayed post-test; natural follow-on units: Earth's climate and human impacts, ecosystems, engineering design | §1, §4 (periods 22–23), §9 |
+| What role does it play in the curriculum? | An **anchoring experience** for a unit on Earth and space systems, climate, and engineering design: the phenomena students explain in class come from their own planet. It replaces some lab and lecture time; it doesn't replace instruction on Earth's climate data, which happens in debriefs | §1 |
+| Is LMS integration needed? | **Not at launch** (decided: after release, opt-in, 5.6). Teachers use the CSV exports and paper rubrics | §1, §8 |
+
 ---
 
 ## 1. Learning Goals
 
 Each goal is written as something a learner can **do**, so it can be measured. Goal IDs A1–D2 are **stable** (TEAM.md 8.1).
+
+**When we revisit objectives.** Stable doesn't mean frozen (Chapter 9: objectives get revised as needs change). We reopen a goal or its criterion, through the consensus process, when:
+- **The customer's needs change** (a user decision on scope, audience, or classroom use).
+- **An assumption in section 0 fails** (survey or playtest shows different prior knowledge, reading level, or game experience).
+- **The game teaches a goal poorly**: after a playtest or the Stage 6 study, a goal misses its criterion and no affordable design change fixes it. Then we either redesign the teaching, move the goal to class time (debriefs), or narrow the objective, and say so in the educator guide.
+- **The SME finds a science or NGSS problem** with the objective's wording.
+- **A goal is learned for almost no cost** (it may be demoted in priority, not removed).
+Criteria (the "how well" in 0.6) are **flexible** and change at stage boundaries with evidence; goal IDs and behaviors are **stable**.
 
 ### A. Planetary science (knowledge)
 | # | By the end, learners can… | Where the game teaches it |
@@ -623,6 +645,63 @@ Decided 2026-11-26: the vertical slice includes a thin Phase 1 learning layer so
 **Success criterion (draft, set after the first study):** most students keep at least half of their pre→post gain on items 1–4; median item 9 score ≥ 2 at MS, ≥ 3 at HS.
 
 **Cost and effect on both goals.** Learning: closes the naturalization measure gap and gives the only retention evidence. Appeal: none (outside the game, optional). Teacher cost: one ~25-minute slot and scoring 9 items. **Revisit if** teachers in a pilot can't find the slot (then use items 1–4 and 9 only, ~12 minutes).
+
+
+### 3.7 Four purposes of embedded assessment
+
+Chapter 9 names four purposes. Map of each assessment piece (✅ serves it, 🟡 partly, — no):
+
+| Piece | (a) Inform the teacher | (b) Tailor in-game instruction | (c) Feedback to the student | (d) Evaluate against the objectives' standard |
+|---|---|---|---|---|
+| Action log | ✅ via overview and CSV | 🟡 drives hint escalation and fading (4.8) only | — (players never see it raw) | 🟡 formative counts only (3.0) |
+| Forecasts (incl. FI) | ✅ per-phase accuracy | 🟡 pointers return when accuracy is low (4.8) | ✅ result + explanation | 🟡 B3 criterion is formative; A2–A5 are evaluated by the post-test |
+| "What caused it?" checks | ✅ | — | ✅ | 🟡 formative |
+| Failure reports + Shift Board | ✅ claims, fixes, recurrences | ✅ hint level and fade follow own fixes | ✅ | 🟡 C2 formative |
+| Keeper's Record | ✅ per page, per student | — | ✅ (self-assessment, 4.3) | 🟡 shows *a* piece of evidence, not mastery |
+| Keeper's Reports + rubrics | ✅ (`reflections.csv` or paper) | — | 🟡 Mensah's reply responds to the planet, not the answer | ✅ D1, D2, B5 rubrics (criterion: 3 of 4) |
+| CSV exports / class overview | ✅ | — | — | 🟡 columns map to criteria (0.6) but don't decide mastery |
+| Pre/post, transfer, delayed test | ✅ | — | 🟡 only if the teacher returns them | ✅ the summative measures |
+
+**Gaps:**
+- **(b) Tailoring is deliberately thin.** We adapt hints and fading, not content or path, because we don't build an automatic learner model at launch (TEAM.md §3, "adaptive"). Accepted for launch.
+- **(a) "Who needs help?" isn't flagged.** The overview lists data but doesn't point at students. Proposed rule-based "needs a look" flag in the class overview, never shown to students and never a grade: own forecast accuracy below 1 in 3 after 3 forecasts in a phase; the same failure cause recurring twice after the student's own fix; a report unsent for more than 2 sessions; no own events for a whole session while present. (Handoff to the Technical Lead, who is checking cost.)
+- **(c) Reflections get no feedback on quality in game.** By design (no automatic scoring of free text); the teacher returns rubric scores. The educator guide asks teachers to return them before the next debrief.
+
+### 3.8 Behavioral indicators
+
+For each goal: what a player does that shows understanding (or its lack), the event that captures it, and how we tell an appropriate expression from a poor one. "Formative" indicators never grade (3.0).
+
+| Goal | Shows understanding | Shows a gap | In-game event (logged with actor ID) | How we tell good from poor |
+|---|---|---|---|---|
+| A1 | Predicts slow pressure rise; reads Mars values against Earth milestones | Expects Earth-like behavior (pressure jumps, water pools at once) | `forecast.F3`; `explain.answer` on Phase 1 hazards | First-attempt correct choice; post-test data task (summative) |
+| A2 | Predicts vapor below the triple point, short puddles, then lasting water | Picks "melts into a puddle" in Phase 1; puzzled by vanishing ice | `forecast.F4a`, `F4b`, `FI-2` (+ HS "why") | Correct main answer (B3) and correct "why" (HS); interleaved FI-2 correct shows it transferred |
+| A3 | Predicts warming from emitters; restores a failed emitter when temperature falls | "Blocks sunlight"; "ozone" distractors | `forecast.F5`; `repair` on emitter after `drift.emitter_wear` | Correct choice and "why"; repair before the hold resets |
+| A4 | Gets to shielding or depth after a solar warning | Stays exposed after a warning | `forecast.F2`, `F7`, `FI-3`; `radiation.exposure` per player during a warned event | Exposure after a warning compared with the first, unwarned spike; correct forecasts. Needs per-player exposure logged (Technical Lead) |
+| A5 | Acts on rising O2 before fire (prunes, slows vats) | Acts only after a fire, or adds more flora | `forecast.F8`, `F9`; `drift.flora_bloom` + actor's response, with O2 at the time | Response while O2 is still in band = good; after crossing 23 % = late |
+| B1 | Names the right cause; opens the cause breakdown when a value moves | Guesses; rebuilds an unrelated machine | `explain.answer` (first attempt only); `monitor.cause_opened` | First-attempt accuracy; opening the breakdown within a sol of the change |
+| B2 | Names both loop types and their steps | Calls the fauna loop balancing, or "not a loop" | `forecast.F6` "why" (HS); Report 2 text | F6 "why" correct; rubric on Report 2 and transfer task. Fauna option choice is **not** an indicator (it's a values choice, D1) |
+| B3 | Own accuracy rises across phases | Flat or falling accuracy; many expired forecasts; answers in under ~2 s | All `forecast.*` with `result`, `answer_time`, `scaffold` | Per-phase accuracy (0.6 criterion); very fast answers flagged as possible guesses (formative only) |
+| B4 | Answers drift events without pushing another value out of band | Overcorrects (O2 swings from "not enough oxygen" to fire risk); ignores costs | `drift.*` + actor's actions + Index values over the next sol | Value back in band within ~1 sol **and** no other value leaves its band: good. Complex: see 3.9 |
+| B5 | Names a side effect and its cause chain | Names an intended result as a side effect | Report 2 text | B5 rubric (3 of 4) |
+| C1 | Fuels or places life support and batteries before the first storm | Core failure during the storm | `forecast.F1`, `FI-1`, `FI-4`; `build`/`refuel` before `storm.start` | Life-critical actions in the warning window, in the right order (0.6) |
+| C2 | Own fix holds; picks the right cause | Same cause recurs after own fix | `shiftboard.claim`, `.fixed`; `failure` with cause | No recurrence from that cause in the phase; "What caused it?" correct for own failures |
+| C3 | Opens the Monitor and reads it before major builds | Builds without checking, or opens it for under ~1 s | `monitor.opened` (with dwell time) before `build.major` | Half of own major builds preceded by a check of ≥ ~1 s, **plus** a data reason in a report or teacher check-in |
+| D1 | A position with a game-based reason and a stake for existing life | Yes/no only; generic reason | Report 2, final reflection text | D1 rubric only; no in-game behavior counts |
+| D2 | A game mechanism matched to the same Earth mechanism | Surface link, or a misconception (greenhouse = ozone) | Final reflection, transfer task, report Earth-link answers | D2 rubric only |
+
+### 3.9 Complex behaviors: what we measure, and what we don't attempt
+
+Simple behaviors (a fact, a step) are easy to detect from single events. **Complex behaviors** depend on context: situation awareness, decisions under trade-offs, patterns over time. Chapter 9 points to dynamic Bayesian networks for these. We don't build one at launch: it needs a validated learner model and calibration data we won't have, and it conflicts with our "no automatic personalization" position (TEAM.md §3).
+
+| Goal | Why it's complex | What we do instead | What we don't attempt automatically |
+|---|---|---|---|
+| **B2** Feedback loops | Recognizing a loop is a judgment about a chain of causes over time | F6 "why" (HS); Report 2 and transfer task with the rubric; teacher discussion | Inferring loop understanding from play patterns (e.g. use of shrouds) |
+| **B4** Trade-offs | Good choices depend on the whole planet state and the player's priorities | Simple rule on drift responses (3.8: back in band, nothing else out) as a formative signal; post-test trade-off scenario and Report 3 | Scoring the quality of a decision from Index traces |
+| **C2** Design, test, improve | Diagnosis and redesign across time and teammates | Rule-based: own fix, no recurrence; "What caused it?" on own failures | Judging *design quality* of a fix |
+| **D1** Ethics | Values argument; no right answer | D1 rubric on written or oral answers, scored by the teacher | Any automatic judgment of fauna choices or text |
+| B3, C3 (partly complex) | Patterns across many events | Per-phase ratios (forecast accuracy; checks before builds) | Inferring "situation awareness" from movement or camera direction |
+
+**Principle:** the game logs clean, attributable events and computes simple, explainable counts; judgment of complex skills stays with rubrics and the teacher. **Revisit if** Stage 6 data shows the simple counts disagree badly with rubric scores, or a validated model for one of these skills becomes available.
 
 ---
 
