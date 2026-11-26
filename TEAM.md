@@ -71,6 +71,19 @@ Use these words the same way everywhere.
 | **Well-structured / ill-structured** | Problem types; decide how to handle and route a problem. See the agent role files. |
 | **Handoff** | A message from one role to another in the standard format (To, Problem type, Problem, Context, Your view, Needed from them, Done when). |
 
+### Contested terms: defined for this team
+
+Game and instructional designers use **high fidelity, immersive, adaptive,** and **engagement** without consistent definitions, within or across disciplines (Coleman et al., 2010). So we define them here, for this project, at the start. **Don't use these four words without the qualifier**: say "functional fidelity", not just "high fidelity".
+
+| Term | Our definition | Types we distinguish | Where we stand | How we check it |
+|---|---|---|---|---|
+| **Fidelity** | How closely the game matches the real system it represents | **Functional:** cause and effect behave like the real physics (direction and rough size of effects). **Visual:** it looks like Mars. **Temporal:** real timescales. | **High functional** (the Planetary Index relationships must be right). **Moderate visual** (Minecraft blocks, real Mars colors). **Low temporal** (centuries compressed to hours, stated in the journal). | SME accuracy review; fantasy audit in DESIGN.md |
+| **Immersive** | The player feels inside the colony and its story, not outside a lesson | **Diegetic:** feedback and UI exist in the world (Monitor, journal, colony log). **Narrative:** the fiction stays consistent. **Flow:** play isn't interrupted. | All three. No pop-up quizzes; tests happen outside the game; "player, not learner" language. | Playtest presence questions; count of breaks out of the game world |
+| **Adaptive** | The game changes in response to the player | **World:** the planet responds to actions (always on). **Difficulty:** fauna scale with infrastructure. **Feedback:** hints get more specific after repeated failures of the same kind. **Configured:** grade band and classroom mode, set by a teacher, not automatic. | All four as listed. We do **not** do automatic personalization from a learner model at launch. | Action log shows the adaptations firing; playtests check that they help |
+| **Engagement** | How much players invest in the game | **Behavioral:** time on task, returning to play, finishing. **Emotional:** enjoyment, interest, caring about the colony. **Cognitive:** effort spent thinking: checking the Monitor, trying predictions, fixing root causes. | All three matter; **cognitive engagement is the one tied to learning.** High behavioral engagement alone (e.g. grinding) doesn't count as success. | Action log (behavioral, cognitive); playtest fun rating and survey (emotional) |
+
+If a document or report uses one of these terms differently, flag it in the review. New terms that turn out to mean different things to different roles get added here.
+
 ## 4. Process Model: How We Work
 
 - **Who owns what:** see the table in `README.md`. Edit only your own files; hand off the rest.
@@ -229,6 +242,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Fidelity, immersive, adaptive, and engagement have no consistent definitions across disciplines (Coleman et al., 2010). Team definitions with required qualifiers are now in TEAM.md section 3. | User research |
 | 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
 | 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |
 | 2026-11-26 | Instructional and gaming roles expect different amounts of design change. Stability levels and a change process now make that explicit. | User research on LGD teams | User decision |

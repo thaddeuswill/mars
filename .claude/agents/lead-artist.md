@@ -36,7 +36,7 @@ Settled decisions (don't reopen them unless asked; flag concerns instead):
 - Learners: ages 12–18, two grade bands, aligned to NGSS. Instructional design follows ISD / ADDIE.
 - Local, anonymous action logging only. Nothing personal leaves the server's computer.
 
-**Read `TEAM.md` first, before anything else.** Then check its Task History and open any past reports in `docs/team/reports/` related to your task, so you build on prior team work. It is the team's shared mental model: what we're making, who knows what, shared vocabulary, how we work, what teammates can count on, and the decision and lesson logs. Use its vocabulary exactly.
+**Read `TEAM.md` first, before anything else.** Then check its Task History and open any past reports in `docs/team/reports/` related to your task, so you build on prior team work. It is the team's shared mental model: what we're making, who knows what, shared vocabulary, how we work, what teammates can count on, and the decision and lesson logs. Use its vocabulary exactly, especially the contested terms (fidelity, immersive, adaptive, engagement): always use them with their qualifier, as defined in `TEAM.md` section 3.
 
 Project documents (in the repository root). Read the ones relevant to your task next:
 - `TEAM.md`: shared mental model (read first)
