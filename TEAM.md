@@ -36,14 +36,14 @@ A shared mental model (SMM) is what every team member knows the same way: the ta
 
 Knowing who to ask is part of the shared model.
 
-| Role | Expert in | Ask them about | Needs from others | Tends to argue for |
-|---|---|---|---|---|
-| Producer | Scope, schedule, risk, release | "Can we afford this?" "Who owns this?" | Effort estimates, risks, status | Feasibility, shipping |
-| Technical Lead | Code, tools, data, LMS | "Can we build this, and what does it cost?" | Clear specs from design and learning | Simplicity, performance, privacy |
-| Lead Game Designer | Mechanics, balance, story, UI, playtests | "Is it fun? Does it fit the loop?" | Objectives, science limits, art direction, tech constraints | **Appeal** |
-| Lead Instructional Designer | Learners, objectives, assessment, feedback | "Will they learn it? How will we know?" | Mechanics, science content, data | **Instructional value** |
-| Lead Artist | Visual style, visible progress, readability | "How will players see it?" | Design specs, science imagery | **Appeal**, clarity |
-| Subject Matter Expert | Mars and Earth science, learners as a population | "Is it true? What do students get wrong?" | What the game simplifies | **Accuracy**, instructional value |
+| Role | Expert in | Ask them about | Needs from others | Tends to argue for | Expects design to change |
+|---|---|---|---|---|---|
+| Producer | Scope, schedule, risk, release | "Can we afford this?" "Who owns this?" | Effort estimates, risks, status | Feasibility, shipping | Moderately; wants changes planned |
+| Technical Lead | Code, tools, data, LMS | "Can we build this, and what does it cost?" | Clear specs from design and learning | Simplicity, performance, privacy | Moderately; prefers stable interfaces |
+| Lead Game Designer | Mechanics, balance, story, UI, playtests | "Is it fun? Does it fit the loop?" | Objectives, science limits, art direction, tech constraints | **Appeal** | Often |
+| Lead Instructional Designer | Learners, objectives, assessment, feedback | "Will they learn it? How will we know?" | Mechanics, science content, data | **Instructional value** | Less often (watch this gap) |
+| Lead Artist | Visual style, visible progress, readability | "How will players see it?" | Design specs, science imagery | **Appeal**, clarity | Often |
+| Subject Matter Expert | Mars and Earth science, learners as a population | "Is it true? What do students get wrong?" | What the game simplifies | **Accuracy**, instructional value | Less often |
 
 Healthy disagreement is expected. These leanings are why ill-structured problems go to review by several roles.
 
@@ -109,12 +109,41 @@ The shared model grows through four team skills (the development of an SMM depen
 
 | Skill | What it means here | How we practice it |
 |---|---|---|
-| **1. Recall prior team experiences** | Know what the team has already done, decided, and learned before starting | Read the Task History (section 9), the Decision Log, and the Learning Log first. Open past reports in `docs/team/reports/` related to your task. Build on them; don't redo or contradict them unknowingly. |
+| **1. Recall prior team experiences** | Know what the team has already done, decided, and learned before starting | Read the Task History (section 10), the Decision Log, and the Learning Log first. Open past reports in `docs/team/reports/` related to your task. Build on them; don't redo or contradict them unknowingly. |
 | **2. Interpret team behaviors** | Understand *why* a teammate took a position, not just what it was | When responding to another role's work, state how you read it using the team model (section 2), e.g. "The SME is flagging this because accuracy is their lens; the risk they see is a misconception." Assume good reasons; ask if unclear. |
-| **3. Build consensus** | Reach decisions the team can stand behind on ill-structured problems | Use the consensus process (section 8). Look for options that serve both goals before choosing between them. Record how strong the agreement is. |
+| **3. Build consensus** | Reach decisions the team can stand behind on ill-structured problems | Use the consensus process (section 9). Look for options that serve both goals before choosing between them. Record how strong the agreement is. |
 | **4. Communicate and interact** | Share information and coordinate clearly | Use the shared vocabulary and handoff format. Answer every handoff you receive (accept, question, or push back with reasons). Ask before assuming. Keep messages short and specific. |
 
-## 8. Consensus Process (ill-structured decisions)
+## 8. Expectations About Change
+
+Research on LGD teams found that all disciplines agree design elements (mechanics, UI, look and feel, characters) will change during development, but **instructional disciplines expect far fewer changes than gaming disciplines do**. Left unspoken, that gap causes disputes: designers feel blocked, instructional designers feel the ground keeps moving. We make the expectations explicit instead.
+
+### 8.1 How often each part is expected to change
+
+| Stability | What | Expect | Changed by |
+|---|---|---|---|
+| **Fluid** | Mechanics details, balance numbers, UI layout, art, sky and fog values, fauna design, characters, journal wording | Frequent change, after almost every playtest. This is normal, not a failure. | Owning role, with notice (8.2) |
+| **Flexible** | Gate thresholds, pacing split, story arc, feedback tools, assessment items, classroom unit plan | Changes at stage boundaries or when evidence shows a problem | Owning role, with an alignment check |
+| **Stable** | Learning goals (A1–D2), NGSS mapping, design pillars, two goals, core loop, settled decisions in the Decision Log | Rare. Only with new evidence. | Consensus process (section 9) or the user |
+
+**For instructional roles:** expect fluid items to change often. Judge a design change by whether the **learning goal is still taught, practiced, given feedback, and measured**, not by whether the mechanic stayed the same.
+
+**For gaming roles:** change fluid items freely, but every change that touches how a goal is taught or measured must be visible to the instructional roles. Stable items are the fixed points you design around.
+
+### 8.2 Change process
+
+1. **Fluid change:** make it, then list it in your report under Done, with the goal IDs it touches (if any).
+2. **Touches a goal ID:** also send a handoff to the Lead Instructional Designer, who runs the alignment check (LEARNING.md) and replies accept or concern.
+3. **Flexible change:** propose it with evidence (playtest, prototype, source), and get the alignment check before it lands.
+4. **Stable change:** ill-structured by default. Use the consensus process.
+
+Every design document change that affects a goal ID updates the alignment table in LEARNING.md, so learning value is never lost silently.
+
+### 8.3 Level of agreement, not just agreement
+
+Two roles can both "agree" and still mean very different things. When recording a consensus, note the **level** (agree / can live with it), and note when roles agree on *what* but differ on *how much* or *how often*. Those gaps are where disputes start later.
+
+## 9. Consensus Process (ill-structured decisions)
 
 1. **Frame:** the Producer (or the raising role) states the problem in shared vocabulary and lists which roles must weigh in.
 2. **Positions:** each role gives its view, its lens (from section 2), and its effect on both goals.
@@ -127,18 +156,19 @@ The shared model grows through four team skills (the development of an SMM depen
 6. **Decide:** consensus if no blocks. If a block remains, the user decides, or a playtest or prototype settles it.
 7. **Record:** add to the Decision Log with the consensus level and any concerns to revisit.
 
-## 9. Task History
+## 10. Task History
 
 Every completed task, so teammates can recall prior work. Full reports are saved in `docs/team/reports/`.
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
 
-## 10. Team Learning Log
+## 11. Team Learning Log
 
 What we've learned about working together. Add an entry whenever a task teaches the team something about coordination, communication, or the problem.
 
 | Date | Lesson | Source |
 |---|---|---|
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
-| 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review | User decision |
+| 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Instructional and gaming roles expect different amounts of design change. Stability levels and a change process now make that explicit. | User research on LGD teams | User decision |

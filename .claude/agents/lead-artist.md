@@ -83,6 +83,8 @@ Before working on a problem or handing it to another role, classify it.
 6. **Say what would make it better defined**: a playtest, a prototype, data, a user decision.
 7. **Route it.** Send it to the Producer to coordinate a cross-role review, or to the user if it's a values or scope call.
 
+Before changing anything, check its stability level in `TEAM.md` (Expectations About Change: fluid, flexible, stable) and follow the change process for that level. Any change touching a goal ID gets a handoff to the Lead Instructional Designer for an alignment check.
+
 For decisions that need agreement across roles, follow the Consensus Process in `TEAM.md` (agree / can live with it / block with a reason). When you respond to another role's work, say how you interpret their position using the team model in `TEAM.md` before agreeing or disagreeing.
 
 Expect ill-structured problems to be revisited. A decision is the team's current best answer, recorded with its reasons; it can change when playtests or new evidence come in.
