@@ -6,7 +6,12 @@ The **gameplay** phases (Survival → Geo-Engineering → Equilibrium) are descr
 
 Status key: ✅ done · 🟡 in progress · ⬜ not started. Owner in brackets where it isn't obvious: [P] Producer, [TL] Technical Lead, [GD] Lead Game Designer, [ID] Lead Instructional Designer, [A] Lead Artist (incl. audio), [SME] Subject Matter Expert.
 
-**Production documents:** effort budget, scope check, and cut list in [docs/production/budget.md](docs/production/budget.md); risks in [risk-register.md](docs/production/risk-register.md); testing in [qa-plan.md](docs/production/qa-plan.md). Every stage exit also uses the Success Scorecard (TEAM.md 8.5) and a team debrief (TEAM.md 8.7).
+**Production documents:** effort budget, scope check, and cut list in [docs/production/budget.md](docs/production/budget.md); risks in [risk-register.md](docs/production/risk-register.md); testing in [qa-plan.md](docs/production/qa-plan.md). Every stage exit also uses the Success Scorecard (TEAM.md 8.5) and a team debrief (TEAM.md 8.7). Requests that arrive mid-task go to [BACKLOG.md](BACKLOG.md) first.
+
+**Every stage exit meets the definition of done** in [PROCESS.md](PROCESS.md) §2: the **document version** for Stages 0–1 and for every design change; the **build version** from Stage 2 on. In every stage that means:
+- **Risk gate:** for each change in the stage, a table of what could break and the check that catches it, each with a result.
+- **The owner looks at it:** a walkthrough, mockup, or screenshot (at 1280×720 once builds exist) for everything the player will see.
+- **Accept is conditional while a check runs:** a stage is "accepted, pending <check>" until every SME review, alignment check, consensus, or automated run it depends on has passed. Only then is it marked ✅.
 
 ---
 
@@ -64,6 +69,19 @@ Source: the user's Chapter 9 pages on the ACEDT multidisciplinary learning game 
 ### Staged deployment
 
 Deploy a small amount of content early, collect data on what works, then enlarge. **The Stage 3 vertical slice is our staged deployment:** one gameplay phase with basic interactions and the minimal learning layer. Data we want from it is listed under Stage 3 ("What we want to learn from the slice"). Stage 4 grows the content only after that data is in and the budget is re-estimated.
+
+### Environment integration (staged, early)
+
+Chapter 9 (ACEDT) recommends integrating with the learning environment early and in stages, not at the end. Ours:
+
+| Piece of the learning environment | First integrated | Then |
+|---|---|---|
+| Class server (several planets, start paused, backups, export) | Stage 3: the slice runs on the class server, not only singleplayer | Stage 5 end-to-end server pass |
+| Instructor training (how a teacher runs a session: pause, pacing, overview, export) | Stage 3: a one-page teacher quick-start for the slice, tried by the user playing the teacher | Stage 4 educator guide chapter; Stage 6 unit walkthrough |
+| Documentation (educator guide, IT sheet, worksheets) | Stage 3: IT sheet and data notice drafts checked against the slice | Stage 4 full drafts; integration pass each stage (qa-plan.md) |
+| LMS plumbing | Stage 4: **prototype only**, an xAPI file written to disk with pseudonymous IDs, never sent anywhere; no LMS connection | After release, opt-in (ARCHITECTURE.md §11) |
+
+**Early adopters and champions (for any future pilot).** This is a design exercise, so there is no pilot. If one ever happens, start with one or two teachers who already run Java Edition and want this (early adopters), and give one of them a champion role: they try each build first, help other teachers, and feed back problems. Don't start with a reluctant school.
 
 ### Concept formation
 
@@ -151,7 +169,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ **Full-team story review** (DESIGN.md, Story review): every role reviews the story bible against the six story elements, perspective round first; SME in every pass [P runs, all roles]
 - ⬜ Consensus recorded on goal priority tiers and interruption rules [P]
 
-**Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists ✅; both consensus items recorded; story review held; QA invariant tests exist for every Stage 2 system.
+**Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists ✅; both consensus items recorded; story review held; QA invariant tests exist for every Stage 2 system; definition of done (document version, then build version for the skeleton).
 
 ---
 
@@ -164,6 +182,8 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - **Paper or spreadsheet first (Stage 2a, ~40 h of the 300):** before code, test the Index model and the alternatives below on paper or in a spreadsheet simulation, with the user and agent walkthroughs. Code (Stage 2b) only what the paper version couldn't answer.
 - **Throwaway allowed:** prototype code may be thrown away. Only the simulation core, its unit tests, and the session clock are expected to survive.
 - **No final art, no audio, no story text** beyond placeholders.
+- **Straw-man assets:** quick, deliberately rough assets (script-generated placeholders with the magenta marker, style guide §5.5) stand in for everything. Their job is to test function and readability, not looks.
+- **Face validity:** conceptual designs of the key assets (Monitor screen, Breathable air gauge, Regolith Outgasser, weather mast, thawling silhouette) go to the owner and the SME as sketches or mockups before final art: does it look like what it claims to be, and does it claim anything false?
 
 **Alternatives this prototype tests (concept formation)**
 
@@ -190,7 +210,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Prototype art minimum: E-01, E-02, T-01, M-08, U-01 (placeholders allowed) [A]
 - ⬜ User playtests P1 (standard) and P2 (classroom config) and reports [user, GD]
 
-**Exit criteria:** the user can raise pressure, see the sky change, and feel pressure to maintain it, and can say why each change happened. If it's not fun here, rework the loop before going further.
+**Exit criteria:** the user can raise pressure, see the sky change, and feel pressure to maintain it, and can say why each change happened; face-validity notes from the owner and SME recorded; definition of done (build version). If it's not fun here, rework the loop before going further: that outcome is a success of this stage, not a failure.
 
 ---
 
@@ -241,6 +261,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 **Testing and measurement**
 - ⬜ **Load test: 4 planets × 4 simulated players** on modest hardware; replace placeholder numbers [TL]
 - ⬜ User playtests S1 (standard Phase 1) and S2 (classroom config, `group.size` = 4), and reports [user, GD]
+- ⬜ Teacher quick-start (one page) and IT sheet draft tried against the slice by the user playing the teacher [ID, TL]
 - ⬜ Effort measured per content item (machine, journal entry, texture, sound); Stage 4 re-estimated and cut list applied (budget.md §4) [P]
 
 **What we want to learn from the slice (staged deployment)**
@@ -258,7 +279,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 | Will a classroom server hold up? | Memory, CPU, tick time for 4 planets × 4 players | Load test |
 | Mini pre/post test works as an instrument? | Item clarity (walkthrough; no student data in a design exercise) | ID review |
 
-**Exit criteria:** the user gets from spawn to the Phase 2 gate without help; the time is within ±25% of the balance sheet curve; the learning layer works end to end (own vs. team evidence, CSV by actor ID); QA exit criteria for Stage 3 met.
+**Exit criteria:** the user gets from spawn to the Phase 2 gate without help; the time is within ±25% of the balance sheet curve; the learning layer works end to end (own vs. team evidence, CSV by actor ID); the class server runs the slice for several planets; QA exit criteria for Stage 3 met; definition of done (build version).
 
 ---
 
@@ -319,8 +340,9 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ IT requirements sheet from [docs/tech/school-deployment.md](docs/tech/school-deployment.md) in the educator guide [ID, TL]
 - ⬜ Player guide and in-game help [GD]
 - ⬜ Performance budget: ticking machines in a typical late-game base, measured on the test server [TL]
+- ⬜ LMS plumbing prototype: xAPI file written locally with pseudonymous IDs; nothing sent off the server [TL]
 
-**Exit criteria:** every gate in DESIGN.md is reachable in a normal playthrough; the alignment table has no gaps; the fantasy audit covers every new element.
+**Exit criteria:** every gate in DESIGN.md is reachable in a normal playthrough and by the automatic solver (PROCESS.md §3); the alignment table has no gaps; the fantasy audit covers every new element; definition of done (build version).
 
 ---
 
@@ -337,7 +359,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Privacy pass: export audit and invariants I-5 to I-9 [TL, ID]
 - ⬜ Consent and safety plan for minors written as a design artifact (no minors are recruited in this design exercise) [P, ID]
 
-**Exit criteria:** no known blocker bugs.
+**Exit criteria:** no known blocker bugs; definition of done (build version).
 
 ---
 
@@ -356,7 +378,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ **Optional delayed post-test** (a few weeks after the unit) to check retention: closes RETAIN's naturalization gap [ID]
 - ⬜ Classroom unit walkthrough: the user plays the teacher through the 23-period plan; setup under 30 minutes [user, ID, TL]
 
-**Exit criteria:** the pack can be finished and the pacing feels right to the user; Scorecard passes on every lens the project can measure.
+**Exit criteria:** the pack can be finished and the pacing feels right to the user; Scorecard passes on every lens the project can measure; definition of done (build version).
 
 ---
 
@@ -375,6 +397,8 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ **Maintenance plan:** how long the pack is supported, how Minecraft and NeoForge updates are handled, support window [P, TL]
 - ⬜ **User-generated content guide:** how teachers and players share challenge datapacks and worlds, using the data-driven gates and tuning; what we learn from them [TL, ID, GD]
 - ⬜ Release checklist complete (qa-plan.md §7)
+
+**Exit criteria:** release checklist complete; no open S1 or S2; definition of done (build version), with acceptance recorded only after the final runs pass.
 
 ---
 
@@ -400,4 +424,4 @@ Next actions:
 3. **Build the foundation:** packwiz layout, companion-mod skeleton with an empty Mars dimension, CI, Spotless, unit tests. [TL]
 4. **Decide the in-house machine list** and the oxygen/sealing approach. [GD, TL]
 5. **Write the UI specs** for the Monitor (next-gate display, Breathable air gauge), journal, Keeper's Record, and Shift Board. [GD, A, ID]
-6. **Ask the user** for the decisions in the Producer's Round 2 report (licenses; third-party mods depth; delayed post-test).
+6. **Ask the user** for the open questions in [BACKLOG.md](BACKLOG.md) (licenses; third-party mod depth; full 40-h run; delayed post-test; Stage 2 fail-cheap scope).
