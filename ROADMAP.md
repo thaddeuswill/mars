@@ -27,12 +27,12 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ✅ Core concept and loop written down
 - ✅ Three gameplay phases defined
 - ✅ Design pillars agreed
-- ⬜ Answer the open questions in DESIGN.md:
-  - ⬜ Is progress global, per team, or per player?
-  - ⬜ Target playtime from start to beacon
-  - ⬜ Ad Astra's Mars or a custom dimension?
-  - ⬜ Can the planet regress to an earlier phase?
-- ⬜ Target audience: singleplayer, small-group server, or both?
+- ✅ Progress scope: global
+- ✅ Target playtime: ~40 hours (pacing split in DESIGN.md)
+- ✅ Target audience: singleplayer and small servers
+- ⬜ Ad Astra's Mars or a custom dimension?
+- ⬜ Can the planet regress to an earlier phase?
+- ⬜ Pick a multiplayer scaling approach (options in DESIGN.md)
 
 **Exit criteria:** all open questions answered and recorded in DESIGN.md.
 
@@ -165,6 +165,6 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 We're in **Stage 0**. The next actions are:
 
-1. Answer the four open questions in DESIGN.md.
+1. Answer the two remaining open questions in DESIGN.md and pick a multiplayer scaling approach.
 2. Confirm the Minecraft version and the mod list (Stage 1).
 3. Start the balance sheet. It's the document the rest of the project will lean on most.

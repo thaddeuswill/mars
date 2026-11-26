@@ -95,9 +95,35 @@ KubeJS can prototype most of the loop. A small companion mod will probably be ne
 4. **Phase 3 content:** biome seeding, O2/CO2 balancing, helmet-off check.
 5. **Ending:** colonization beacon and a cinematic or credits moment.
 
+## Decisions
+
+| Decision | Answer | What it means for the design |
+|---|---|---|
+| Progress scope | **Global**: one planet shared by everyone on the server | One Planetary Index per world. All players' machines feed it and all players face the same threats. |
+| Audience | **Singleplayer and small servers** (roughly 1–6 players) | Balance for one player first. On servers, more players means more machines, so rates and threats need a player-count check (see below). |
+| Playtime | **About 40 hours** from spawn to beacon | Pacing targets below. |
+
+### Pacing Targets (40 hours, solo)
+
+| Gameplay phase | Hours | Cumulative | Ends at gate |
+|---|---|---|---|
+| Phase 1: Survival Desperation | ~8 | 8 | Phase 2 begins (pressure ≥ 5 kPa) |
+| Phase 2: Industrial Geo-Engineering | ~18 | 26 | Phase 3 begins (pressure ≥ 30 kPa, temperature ≥ 0 °C) |
+| Phase 3: Biome Seeding & Equilibrium | ~14 | 40 | Equilibrium → beacon |
+
+Phase 2 is the longest because it holds the industry build-out and the fauna escalation. The split is a starting point to test in the prototype, not a fixed target.
+
+### Multiplayer Scaling
+
+With global progress, a group of four could otherwise finish in a quarter of the time with a quarter of the tension. Options to evaluate in the prototype:
+
+- **Scale gate thresholds or upkeep with online player count** (e.g. +25% per extra player, capped).
+- **Scale fauna pressure** with the number of active emitters rather than player count, so it tracks how hard the group pushes.
+- **Accept faster group runs** and only scale threats. This is simplest, and may be fine for casual servers.
+
+Recommendation: scale fauna by infrastructure (already a design pillar), and add a server config multiplier for gate thresholds that defaults to 1.0.
+
 ## Open Questions
 
-- Should terraforming progress be per-player, per-team, or global? Global is assumed above.
-- How long should a full playthrough take (hours from start to beacon)?
 - Fork Ad Astra's Mars, or build a custom dimension for full control over sky and weather?
 - Can terraforming regress all the way back to an earlier phase, or do phase gates lock in once reached?
