@@ -1,6 +1,6 @@
 # Story Bible — Mars Terraforming
 
-**Owner:** Lead Game Designer · **Status:** Draft 2 (2026-11-26): user decisions applied (Keeper, backstory, fauna option B, non-lethal options, later life stage, ending cards, text-first messages, group planets) · **Depends on:** [DESIGN.md](../../DESIGN.md), [LEARNING.md](../../LEARNING.md)
+**Owner:** Lead Game Designer · **Status:** Draft 3 (2026-11-26): Round 2 fixes (classroom periods 6/14/21, "without meaning to", Keeper's Record wording), character-load check (§4.4), Landing checklist, Shift Briefings, worked example, Training Hall lobby (§3.6). Final in-game text lives in [messages/](messages/README.md) · **Depends on:** [DESIGN.md](../../DESIGN.md), [LEARNING.md](../../LEARNING.md)
 
 This is the reference for everything the story says and how the world says it. Writers of journal entries, colony log lines, failure reports, debriefs, and the ending work from this file.
 
@@ -39,7 +39,7 @@ The story has one job: **give players a reason to care about the planet's number
 |---|---|
 | **Setting** | Cairn Dome **[FICTION]**, a small terraforming pilot dome on Mars, in the mid-northern lowlands near buried ground ice. Thin CO2 air (0.6 kPa), −60 °C, toxic perchlorate soil, dust storms, radiation **[verify: matches Index start values]**. The whole planet is the stage; the dome is home base. |
 | **Protagonist** | **The Keeper** (approved): you. A systems technician sent to keep the pilot dome running during the "watch" between crews. No fixed name, gender, or face; characters call you "Keeper," never your username. In a group (3–5 players on one planet, or a small server), every player is a Keeper on the same watch team. |
-| **Characters** | Three crew members who just left (via recorded messages and traces), one scientist on Earth (via messages), the station system BELL (via the colony log), and the dormant fauna (via their behavior). Section 4. |
+| **Characters** | Three crew members who just left (via recorded messages and traces), one scientist on Earth (via messages), the station system BELL (via the colony log), and the dormant fauna (via their behavior). Only BELL and **one crew voice per phase** are essential (Hana, then Basu, then Moreno); Mensah speaks only in replies to Keeper's Reports. Section 4.4. |
 | **Plot** | A storm hits right after the crew leaves. You keep the dome alive, restore contact, then push the planet toward living air. Warming wakes life the crew found but didn't tell you about. You decide how to share the planet with it, reach equilibrium, take off your helmet, and light the beacon that calls the colony ships. |
 | **Conflict** | Three layers, one per phase: **Keeper vs. the planet** (survive), **progress vs. life** (the fauna, and the crew's secret), **holding a balance** (equilibrium is a band, not a finish line). |
 | **Resolution** | The beacon is lit. The signal says: *the air holds, come.* The ending shows the world as you left it, fauna included, and asks what the colonists should know. |
@@ -104,6 +104,22 @@ The fauna are not the only consequence of warming. Two real effects carry B5 wit
 | The atmosphere staying put | "Without a magnetic shield, the Sun's wind slowly strips Mars's air. That takes millions of years or more, so the game ignores it." |
 | The Keeper program, dome, fleet | No note needed beyond the game's opening card: "This story is fiction. The science is as real as we could make it." |
 
+### 3.6 Before the watch: the Training Hall (class lobby)
+On a class server (several group planets, ARCHITECTURE.md §6.2), players who aren't yet assigned to a planet wait in a lobby. **Fiction: the Keeper Program Training Hall on Earth, months before the watch.** It sits *before* the story's timeline, so it can't contradict the backstory (the Keeper arrives during the handover and is already in the dome when play starts).
+
+| Element | Spec |
+|---|---|
+| Place | A small indoor hall on Earth: a window with a blue sky and green hills, benches, a Mars globe, a wall chart "Earth vs. Mars" (pressure 101 kPa vs. 0.6 kPa; −60 °C vs. about 15 °C) **[verify Earth mean temperature wording with SME]** |
+| Signs (all optional to read) | "Watch teams are assigned by your instructor." / "Have a team code? Use the terminal." / "Your watch starts when your team is called." |
+| Join | A terminal block runs `/mars join <code>` (ARCHITECTURE.md §6.2). Assignment by the teacher works the same way |
+| Safety | No damage, no hunger, no hazards, no building, no inventory carried to Mars (cleared on assignment) |
+| On assignment | Screen fades. Opening card: *"This story is fiction. The science is as real as we could make it."* Then: *"Months later. Cairn Dome, Mars. The storm has cleared."* The player wakes in the shielded shelter and Landing (§5.2) begins |
+| Group fiction | Each team's planet is "Cairn Dome" for that team. Signs say "Watch team 3 → Cairn Dome", never that teams share one Mars |
+| Learning job | None required. The wall chart is a light A1/D2 anchor for students who wait; no message, forecast, or log event fires here |
+| Standard play | No lobby (`planets.count = 1`): the opening card plays and the player starts in the shelter |
+
+Why Earth and not an orbital deck: an orbital "transfer room" would put the Keeper in space just before landing, which contradicts the handover backstory (§3.2). A training hall needs no new fiction and gives the only Earth scene in the game, which supports the "keep pointing back at Earth" job (§1).
+
 ---
 
 ## 4. Characters and Relationships
@@ -146,6 +162,22 @@ There are **no NPCs to talk to**. Every character reaches the player through a m
 - Lab Fridge B: locked until the Thaw gate, then opens with Basu's note.
 - Supply caches from cargo landers, labeled by Earth-side packers with small jokes.
 
+### 4.4 Character load check (one crew voice per phase)
+Rule (DESIGN.md, Context and narrative): don't overwhelm players with backstory. **Only BELL and one crew voice are essential per phase**; other characters are optional depth (archive, notes, "read more"). Mensah is the **Earth desk**: she speaks only in replies to Keeper's Reports, so she is tied to the debrief, not to the running story. She carries D2, a Primary goal (LEARNING.md §1), so her replies stay essential.
+
+| Phase | Essential voices | Lead crew voice and why | Optional voices (archive, traces, read more) |
+|---|---|---|---|
+| 1 | BELL, **Hana** | Hana built the machines the player must learn; her notes are the worked example and first-failure tips (C1, C2, B1) | Moreno's and Basu's backlog messages at Dome stable; Basu's Fridge B sticky note is a world trace, not a message |
+| 2 | BELL, **Basu**, Mensah (Report 1 reply) | Basu found the thawlings; his Thaw note and his telling of the secret carry D1, A2, B5 | Moreno's own apology and Mensah's "Earth's part" (archive); the Fridge B argument (beat 11); Hana's meltwater and Armstrong-line notes |
+| 3 | BELL, **Moreno**, Mensah (Report 2 and 3 replies) | Moreno hands the mission over: helmet-off line, "Your call now" (B4, D1) | Basu's "room for both" (beat 16); Hana's last tip (beat 14) |
+| Ending | All, one line each | Resolution: everyone answers the beacon | — |
+
+**Result of the check (design walkthrough, not a playtest):**
+- *Before:* the essential beats used 5 named voices in Phase 1 (BELL, Hana, Moreno, Basu, Mensah) and 4 in Phase 2. A Lens A player (12, new to modpacks) would meet three crew names in one message burst at Dome stable, the same moment the first Outgasser arrives.
+- *After:* 2 essential voices in Phase 1, 3 in Phases 2 and 3 (counting Mensah's debrief replies). Each crew member leads exactly one phase, so the player meets them one at a time.
+- *Changes made:* beat 6 essential content is Hana's message only (§5.2); beat 10's essential message is Basu's (§5.3); Moreno's and Mensah's admissions move to the archive. Nothing is deleted: the optional lines are all still in the archive.
+- *Cost:* Moreno's Phase 2 apology was a strong "adults admit mistakes" moment. Basu's version keeps it ("I said nothing too"), and Moreno's own line is one tap away.
+
 ---
 
 ## 5. Plot Arc and Delivery
@@ -165,27 +197,27 @@ There are **no NPCs to talk to**. Every character reaches the player through a m
 | **Emotion** | Alone → capable | Wonder → unease → responsibility | Care → relief → pride |
 
 ### 5.2 Phase 1: Setup (Survival Desperation)
-**Start.** The storm has cleared. BELL's first log line reports damage. Hana's notes are on every machine. The dish is dead. The only voice is BELL.
+**Start: Landing (controls first).** The storm has cleared. BELL's first log line reports damage and opens the **first-shift checklist**: eight short tasks inside the dome that teach movement, the suit's O2, the Monitor, sealing a block, and the airlock (DESIGN.md, Landing). Hana's notes are on every machine. The dish is dead. The only voice is BELL. Experienced players can skip the checklist with one choice ("I know the drill"); BELL then gives a 3-line summary. No forecast comes before the checklist is done or skipped. Then BELL's **Shift Briefing 1** says what this shift is about. Text: [messages/phase-1.md](messages/phase-1.md).
 
 **Middle.** The first failures teach the dome (failure reports with Hana's tips attached the first time). The first dust storm tests the player's planning (C1). A solar event forecast introduces radiation (proposed A4 prediction prompt). Ice carried near a heater vanishes without leaving a puddle: the air is too thin for liquid water to last (first A2 moment; DESIGN.md ice-to-water rule).
 
-**Dome stable gate → the backlog arrives.** With life support steady, BELL can spare power for the relay link. Seven days of queued messages arrive at once: Moreno ("We saw the storm on your telemetry. We couldn't do anything. You did."), Hana ("Told you the filters whine."), and a short, odd one from Basu ("Keep Fridge B cold. I'll explain later. Sorry."). **The player is no longer alone, and now has a mystery.** Hana's message also hands over the first **Regolith Outgasser** plans: "Life support's steady. Time to start on the sky." The player gets people and their first lever on the planet at the same moment.
+**Dome stable gate → the backlog arrives.** With life support steady, BELL can spare power for the relay link. Seven days of queued messages arrive. **Essential:** Hana's message, which hands over the first **Regolith Outgasser** plans ("Life support's steady. Time to start on the sky.") and her worked-example notes for building it (DESIGN.md, Worked example). **Optional, in the archive:** Moreno ("We saw the storm on your telemetry. We couldn't do anything. You did.") and Basu ("Keep Fridge B cold. I'll explain later. Sorry."). The mystery doesn't depend on the archive: when the relay comes up, BELL logs that Fridge B's lock is set to "Hold until thaw (T. Basu)", and Basu's sticky note on the fridge says "Keep cold. I'll explain. —T.B." **The player is no longer alone, and now has a mystery** and their first lever on the planet at the same moment (character load: §4.4).
 
 **Phase 2 begins (pressure ≥ 5 kPa).** The sky shifts. The player sends their first Keeper's Report (Phase 1 debrief). Mensah replies from Earth: what a thicker atmosphere does on Earth (D2, A1).
 
 ### 5.3 Phase 2: Rising conflict (Industrial Geo-Engineering)
-**Start.** Expansion. Outposts reach Basu's old drill sites. His markers and field notes hint at "something in the cores" without saying what.
+**Start.** BELL's **Shift Briefing 2**: the planet starts to answer back. Expansion. Outposts reach Basu's old drill sites. His markers and field notes hint at "something in the cores" without saying what.
 
 **Thaw gate.** Ice near warm extractors melts into small puddles by day that freeze again at night. Warmth alone isn't enough; the water lasts only where it is warm *and* the air is thick (A2 misconception moment, building on the Phase 1 vapor moment). Fridge B unlocks. Basu's note: "If you're reading this, it's warm enough. They might wake up. Watch them before you decide anything." Within a sol, BELL logs "unidentified motion near Extractor 1." The first thawlings appear.
 
-**The secret.** Delivered about one sol after the first fauna sighting (gives the player time to see them first). Moreno: "We knew. Earth asked us to wait for test results. I agreed. I should have told you." Then Mensah owns Earth's part. In the colony log archive, the player can find the recorded "Fridge B" argument between Moreno and Basu: both sides, fairly.
+**The secret.** Delivered about one sol after the first fauna sighting (gives the player time to see them first). **Essential (Basu):** "We knew they were there. Earth asked us to wait for test results. Dalia agreed. I argued, then I said nothing too. You should have heard it from us." **Optional, in the archive:** Moreno's own message ("I agreed. I should have told you.") and Mensah owning Earth's part of the decision. The recorded "Fridge B" argument between Moreno and Basu, both sides, fairly, is also in the archive (beat 11).
 
 **Hydrosphere gate.** Surface water. The thawlings reach their **later life stage** and start damaging emitters and extractors (failure reports name fauna as the cause). The more machines the player runs, the more fauna come (B2: reinforcing loop). Conflict peaks here: the thing that moves the planet forward is the thing drawing the animals in. Basu's field notes now describe the non-lethal options (5.5). Ground near warm machines starts to sink, and Hana warns about salty meltwater (3.4a).
 
-**Phase 3 begins (pressure ≥ 30 kPa, temperature ≥ 0 °C).** Keeper's Report 2 (Phase 2 debrief) carries the key D1 reflection: *"Was waking them worth it?"* Mensah's reply links to Earth: thawing permafrost releasing stored carbon, and ancient life revived from frozen ground **[verify both]**.
+**Phase 3 begins (pressure ≥ 30 kPa, temperature ≥ 0 °C).** Keeper's Report 2 (Phase 2 debrief) carries the key D1 reflection: *"Was waking them worth it?"* Mensah's reply links to Earth: evidence that Earth has warmed over the past century, mainly because of human activities, as a side effect rather than a goal; and a real reinforcing loop, thawing permafrost releasing stored carbon **[verify]** (spec: prompts-and-reflections.md §3). It does **not** mention organisms revived from frozen ground: pairing a real Earth organism with the thawlings without a clear "this part is real" label breaks the Earth-link rule (fiction stays on the Mars side).
 
 ### 5.4 Phase 3: Resolution (Biome Seeding & Equilibrium)
-**Start.** Storms weaken. The first seeded flora takes root. Hana sends her last tip ("Plants don't have filters. Lucky you."). Mensah on the carbon cycle (A5, D2).
+**Start.** BELL's **Shift Briefing 3**: hold the balance. Storms weaken. The first seeded flora takes root. Moreno, now the lead crew voice, sends a short "it's your planet more than mine now" note. Optional: Hana's last tip ("Plants don't have filters. Lucky you.") and Mensah on the carbon cycle (A5, D2), folded into her Report 2 reply in classroom mode.
 
 **Middle.** The balancing act: too much O2 and fires break out (A5, B4). Failure reports name overshoot as the cause. The thawlings change behavior near stable biomes: they graze and nest there instead of at machines. Basu: "Maybe the planet has room for both of you. I'm asking, not telling."
 
@@ -218,7 +250,10 @@ How the story carries it: Basu's notes describe each option as something he *wou
 | **Journal entry** | Keeper's own notes, BELL data | ≤ 80 words, plus "read more" | Science at the moment it matters; fiction notes |
 | **Recorded message** | Moreno, Basu, Hana, Mensah | ≤ 60 words, plus "read more" for high school band | Relationships, the secret, D1 voices, D2 links. **Text first** (decided). Voice audio is a possible later addition, not planned. |
 | **World trace** | First Shift | One line on a note or sign | Tips, mood, history |
-| **Prediction prompt** | BELL: "Log your forecast" | 1 question, 2–4 choices | B3; framed as Keeper's forecast for the next report |
+| **Prediction prompt** (in game: forecast) | BELL: "Log your forecast" | 1 question (≤ 25 words), 2–4 choices (≤ 10 words each); result ≤ 40 words | B3; framed as Keeper's forecast for the next report |
+| **First-shift checklist** (Landing) | BELL | 8 items, ≤ 12 words each | Controls first, in story; skippable |
+| **Shift Briefing** | BELL | ≤ 45 words: this shift's job, what to watch, what's new | Advance organizer at each phase start |
+| **"What caused it?"** (journal page) | BELL | 1 question, 3 choices, ≤ 25-word result | Self-check on a recent event (A1–A5, B1, C2). Final in-game name (was "Explain it") |
 | **Keeper's Report (phase debrief)** | The Keeper, sent to Earth | Fills from play data + 1 reflection | B, C, D goals. The player's own words go to Earth. |
 | **Keeper's Record (Colony Record)** | The Keeper, for the colonists | Goal list | Learning goals in player language, framed as "what the colonists will need to know" |
 | **Ending** | All voices, briefly | ~3 minutes | Resolution, epilogue, final reflection |
@@ -227,20 +262,25 @@ How the story carries it: Basu's notes describe each option as something he *wou
 
 | # | Beat | Phase / gate | Delivery medium | Learning goal | Classroom |
 |---|---|---|---|---|---|
+| 0 | **Landing:** BELL's first-shift checklist (controls first; skippable) | P1 / spawn | Colony log checklist, HUD highlights | C1 (controls schema; no science) | **Essential** (skippable) |
 | 1 | Storm clears; damage report; Hana's notes everywhere | P1 / spawn | World, colony log, traces | A1, C1 | **Essential** |
+| SB1 | Shift Briefing 1: "Keep the dome alive" | P1 / checklist done or skipped | BELL briefing card | C1, A1 (advance organizer) | **Essential** |
 | 2 | First Shift traces: tally wall, dead tomato, handover note | P1 / early | World traces | Engagement | Optional |
 | 3 | First failure, with Hana's tip | P1 / first failure of each type | Failure report | C2 | **Essential** |
 | 4 | First dust storm warning and forecast | P1 / first storm | Colony log, prediction prompt, world | C1, B3 | **Essential** |
-| 5 | Solar event forecast (proposed) | P1 / first radiation spike | Colony log, prediction prompt, journal | **A4** (closes gap), B3 | **Essential** if adopted |
-| 6 | Relay restored: crew backlog, Basu's Fridge B teaser | P1 / **Dome stable** | Recorded messages | Engagement; seeds D1 | **Essential** |
+| 5 | Solar event warning (~1 sol ahead) and forecast F2 | P1 / first radiation spike | Colony log, HUD warning, forecast, journal | **A4**, B3 | **Essential** (adopted; LEARNING.md tiers: first cut if A4 support shrinks) |
+| 6 | Relay restored: Hana's message (essential); Moreno and Basu backlog (archive); Fridge B lock and sticky note | P1 / **Dome stable** | Recorded message, world trace | Engagement; seeds D1 | **Essential** (Hana only) |
+| 6a | Hana's worked example: first Regolith Outgasser | P1 / first Outgasser placed | Notes taped to the machine (journal page) | B1, C3, A1 | **Essential** (skippable) |
 | 7 | Sky changes; Keeper's Report 1; Mensah's first Earth link | P1→P2 / **Phase 2 begins** | World, debrief, recorded message | A1, B1, **D2** | **Essential** |
+| SB2 | Shift Briefing 2: "The planet starts to answer" | P2 / after Report 1 is sent or deferred | BELL briefing card | A2, A3, B5 (advance organizer) | **Essential** |
 | 7a | The Armstrong line (6.3 kPa): BELL logs it; Hana: "Your blood wouldn't boil now. Keep the suit on anyway." | P2 / Monitor milestone | Colony log, journal | A1 | Optional |
 | 8 | Basu's drill sites and sample caches | P2 / outposts | World traces, journal | A2, D1 | Optional |
 | 9 | Puddles by day, ice by night; Fridge B opens; first thawlings | P2 / **Thaw** | World, journal, colony log, Basu's note | **A2**, B5, **D1** | **Essential** |
-| 10 | The secret: Moreno, then Mensah | P2 / ~1 sol after first fauna | Recorded messages | **D1** | **Essential** (one combined message) |
+| 10 | The secret: Basu (essential); Moreno and Mensah (archive) | P2 / ~1 sol after first fauna | Recorded messages | **D1** | **Essential** (Basu's message) |
 | 11 | The "Fridge B" argument, both sides | P2 / found in log archive | Colony log archive | **D1** | Optional (summary line in beat 10) |
 | 12 | Surface water; thawlings in their later life stage hit machines; ground sinks near warm machines | P2 / **Hydrosphere** | World, failure reports, journal | B2, **B5**, C2 | **Essential** |
-| 13 | Keeper's Report 2 "Was waking them worth it?"; Mensah on permafrost | P2→P3 / **Phase 3 begins** | Debrief, recorded message | **D1, D2**, B5 | **Essential** |
+| 13 | Keeper's Report 2 "Was waking them worth it?"; Mensah on Earth's warming and permafrost carbon | P2→P3 / **Phase 3 begins** | Debrief, recorded message | **D1, D2**, B5, B2, A3 | **Essential** |
+| SB3 | Shift Briefing 3: "Hold the balance" | P3 / after Report 2 is sent or deferred | BELL briefing card | A5, B4 (advance organizer) | **Essential** |
 | 14 | Storms fade; first flora; Mensah on the carbon cycle | P3 / early | World, journal, recorded message | A5, **D2** | Optional (fold into 13's reply) |
 | 15 | O2 overshoot fire | P3 / first overshoot | World, failure report | **A5, B4** | **Essential** |
 | 16 | Thawlings settle in biomes; Basu "room for both" | P3 / fauna near stable biome | World, recorded message | **D1**, B2 | Optional (world behavior stays) |
@@ -249,7 +289,7 @@ How the story carries it: Basu's notes describe each option as something he *wou
 | 19 | Beacon lit; epilogue; final reflection; Keeper's Record handed over | **Ending** | Ending sequence, Keeper's Record | **D1, D2**, all | **Essential** |
 | 20 | World continues; helmet check stays live | Post-ending | Colony log warnings | A5 | Automatic |
 
-**Density (standard mode).** 21 beats over ~40 h: about one major beat every 2 hours, plus traces. By phase: P1 7 beats / 8 h, P2 7 beats / 18 h (including optional 7a), P3 6 beats / 14 h (plus the post-ending beat). Phase 2 is the thinnest per hour; fauna encounters, outposts, and Basu's sites fill it. Watch this in playtests.
+**Density (standard mode).** 26 beats over ~40 h (21 story beats plus Landing, the worked example, and 3 Shift Briefings): about one every 1.5 hours, plus traces. By phase: P1 10 / 8 h, P2 8 / 18 h (including optional 7a), P3 7 / 14 h (plus the post-ending beat). Phase 2 is still the thinnest per hour; fauna encounters, outposts, and Basu's sites fill it. Watch this in playtests.
 
 ### 6.3 Journal
 - Every gate entry follows: **what you just saw → the real science → fiction note if needed → "On Earth" line (D2) → "read more."**
@@ -289,18 +329,18 @@ How the story carries it: Basu's notes describe each option as something he *wou
 ## 7. Classroom Mode (~11–12 hours)
 
 ### 7.1 Why it holds up
-- **Beats are tied to gates, not clock time.** Classroom mode reaches gates sooner because machines work faster and holds are shorter (rate multiplier, not threshold changes: DESIGN.md, Classroom Pacing). Gate numbers stay the same, so story and journal numbers stay true. Beats arrive sooner in the same order. Nothing is skipped.
+- **Beats are tied to gates, not clock time.** Classroom mode reaches gates sooner because machines work faster (rate multiplier 4.0) and holds are shorter (1 / 2 / 3 sols). **No threshold is ever multiplied:** 5 kPa, 30 kPa, 0 °C, and the breathable condition are the same in every mode (DESIGN.md, Classroom Pacing). Gate numbers stay the same, so story and journal numbers stay true. Beats arrive sooner in the same order. Nothing is skipped.
 - **Any time-based delay is in sols and scales.** Beat 10 (one sol after first fauna) and Mensah's replies must land in the same class period as their trigger.
-- **The three debriefs match the unit plan.** Keeper's Reports 1–3 line up with the three debrief periods in the unit plan (LEARNING.md §5.2, being updated to ~17 play periods). Teachers can use Mensah's replies as discussion openers.
+- **The three debriefs match the unit plan.** The unit has 23 class periods with **17 play periods**; the class debriefs are **periods 6, 14, and 21** (LEARNING.md §5.2). Keeper's Reports 1–3 fire at gates, so a group's report may arrive before or after its class debrief; both work. Teachers can use Mensah's replies as discussion openers.
 - **Session recap.** When the teacher resumes a paused world, BELL's colony log opens with *"Since last shift:"* and 2–3 lines. This covers students who missed a class.
 
 ### 7.2 Essential vs. optional
-- **Essential (13 beats, 12 without beat 5):** 1, 3, 4, 5 (if adopted), 6, 7, 9, 10, 12, 13, 15, 17, 19. Across ~17 play periods of ~40 minutes (LEARNING.md §5.1), that is a little under one essential beat per period, so most periods end with something new from the story.
-- **Optional (6 beats):** 2, 7a, 8, 11, 14, 16. In classroom mode they stay in the world as traces and archive items but don't push a notification. Beat 11 shrinks to one line inside beat 10. Beat 14 folds into Mensah's reply in beat 13. Beat 18 merges into 19.
+- **Essential (13 story beats plus Landing, the worked example, and 3 Shift Briefings):** 0, 1, SB1, 3, 4, 5, 6 (Hana only), 6a, 7, SB2, 9, 10 (Basu only), 12, 13, SB3, 15, 17, 19. Landing and the worked example are skippable. Across 17 play periods of ~40 minutes (LEARNING.md §5.2), the 13 story beats are a little under one per period, so most periods end with something new from the story.
+- **Optional (6 beats, plus the archived crew messages from 6 and 10):** 2, 7a, 8, 11, 14, 16. In classroom mode they stay in the world as traces and archive items but don't push a notification. Beat 11 shrinks to one line inside beat 10. Beat 14 folds into Mensah's reply in beat 13. Beat 18 merges into 19.
 - **Teacher "Set phase."** Essential beats from skipped phases are placed in the archive as an "Unread from earlier" bundle, marked so the teacher can assign them.
 
 ### 7.3 Text budget in classroom mode
-About 15 minutes of total reading for essential story across the unit, outside journal science. Sample check: 13 beats × ~60 words ≈ 780 words of story messages, about 4–6 minutes at a typical middle school reading pace **[verify reading-rate assumption with ID]**.
+About 15 minutes of total reading for essential story across the unit, outside journal science. Planning rate: **100 words per minute** (the Lead Instructional Designer's conservative design assumption, prompts-and-reflections.md §5; not a research norm). Count from the final text in [messages/](messages/README.md): see the word totals there. Budget check: essential story messages, Landing, Shift Briefings, and the worked example must stay under 1,500 words (15 minutes at 100 wpm).
 
 ---
 
@@ -340,7 +380,9 @@ About 15 minutes of total reading for essential story across the unit, outside j
 > They were sleeping, Keeper. Not dead. Sleeping. And we turned up the heat. I'm not saying stop. I'm saying look at them first. Then decide.
 
 **Recorded message (Mensah, reply to Keeper's Report 2):**
-> On Earth, we are adding greenhouse gas too. You are doing it with a plan. We did it by accident. Your report asked if waking them was worth it. People here are asking the same thing about our own frozen ground.
+> On Earth, we are adding greenhouse gas too. You are doing it with a plan. We did it without meaning to, as a side effect of burning fuel. Your report asked if waking them was worth it. People here ask a question like it about our own frozen ground.
+
+(Final version of this reply, with grade-band variants: [messages/phase-2.md](messages/phase-2.md), `earth.report2.reply`.)
 
 ---
 
@@ -359,6 +401,6 @@ About 15 minutes of total reading for essential story across the unit, outside j
 **Decided 2026-11-26 (user):** Keeper; planned-solo-watch backstory; fauna option B plus real effects; non-lethal options and quiet zones (5.5); "later life stage" wording (3.4); unranked epilogue cards (6.5); text-first messages (6.1); groups of 3–5 per planet (6.6).
 
 **Still open:**
-- Proposed A4 solar-event beat (6.2, beat 5): with the Lead Instructional Designer.
+- ~~Proposed A4 solar-event beat~~: adopted as beat 5 with forecast F2 (repeat F7). Warning UI: [ui-specs.md](ui-specs.md) §4.
 - All **[verify]** claims to the Subject Matter Expert, including the new ones in 3.4 and 3.4a.
 - Names not yet cleared against existing works (9).

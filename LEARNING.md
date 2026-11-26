@@ -1,6 +1,6 @@
 # Learning Design
 
-**Owner:** Lead Instructional Designer · **Last updated:** 2026-11-26 (classroom group model, 17-play-period unit, per-student measures, SME science and NGSS review applied)
+**Owner:** Lead Instructional Designer · **Last updated:** 2026-11-26, round 2 (fading plan, process vs. outcome feedback map, worked example, interleaving, Shift Briefings, Air window check, reflections decision, delayed post-test, educator guide draft)
 
 This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions, followed by classroom mode (section 5) and NGSS alignment (section 6):
 
@@ -12,6 +12,7 @@ This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts 
 Detailed content specs live in `docs/learning/`:
 - [docs/learning/prompts-and-reflections.md](docs/learning/prompts-and-reflections.md): forecasts (prediction prompts), Keeper's Report reflections, Earth links (D2), Keeper's Record entries, reading level and grade-band rules.
 - [docs/learning/rubrics.md](docs/learning/rubrics.md): scoring rubrics for D1, D2, B5, and the transfer task.
+- [docs/learning/educator-guide.md](docs/learning/educator-guide.md): teacher-facing draft: setup, 23-period unit plan, debrief questions with NGSS codes, paper reflection fallback, reading the CSV exports, delayed post-test.
 
 ### Decisions
 
@@ -25,6 +26,7 @@ Detailed content specs live in `docs/learning/`:
 | Data | **Local action log: pseudonymous on the server, anonymous in every export.** Teacher CSV export uses **pseudonymous IDs only**; there is no username option (section 5.4) | User decision, 2026-11-26 |
 | Learning layer in the vertical slice | A **minimal Phase 1 learning layer** is built in roadmap Stage 3 (section 3.5) | User decision, 2026-11-26 |
 | LMS integration | **After release, opt-in only** (section 5.6) | User decision, 2026-11-26 |
+| Reflections export | **Separate `reflections.csv`: on by default in classroom mode, off in standard mode; names scrubbed to IDs; "don't write your name" note; paper fallback** (section 5.5) | User decision, 2026-11-26, on Technical Lead and Instructional Designer recommendation |
 
 **Rationale for the learning-side decisions in this file** (DOCUMENTATION.md section 4; goal priorities have their own block in section 1):
 
@@ -76,6 +78,20 @@ Evaluation is **not** only at the end. Each roadmap stage has a playtest, and it
 
 My summaries of FIDGE and Fanning come from TEAM.md; I have not re-read the original papers in this session (**unverified** beyond TEAM.md).
 
+### Evaluation loop: who reviews each learning artifact, and when
+
+Iteration with subject-matter and customer review at **every** phase, not only at the end (*Design and Development of Training Games*, Chapter 9, ACEDT; summarized by the coordinator, not re-read by me). Here the customer is the user. The SME checks the science; the user checks fit and plays the builds; I review against goals and criteria. No learning artifact moves from `draft` to `final` (DOCUMENTATION.md 5.1 status) without both reviews.
+
+| Artifact | Subject Matter Expert reviews | User (customer) reviews | When |
+|---|---|---|---|
+| Objectives and criteria (0.6), NGSS map (6.1) | Science in each criterion; NGSS codes word for word | Signs off the goal set (stable, TEAM.md 8.1) | Done once in Stage 1; again only through the consensus process; NGSS verbatim check before the educator guide is published |
+| Forecasts (F1–F10, FI-1–FI-4) and their explanations | Every question, distractor, and explanation before it's built | Plays them in the Stage 3 slice (F1, F4a, F2) and Stage 5 alpha (rest); says which feel like a test | Before build; after each playtest that touches them |
+| Journal entries, Earth links, Shift Briefings, worked example card | Every science line | Reads them in play (Lens A / Lens B walkthrough) | Before build; after each playtest |
+| Keeper's Report questions and rubrics | Answer keys and sample answers | Reads them; rubric check by two raters on playtest answers | Stage 3 (Report 1), Stage 4 (rest), Stage 5 (rubric calibration) |
+| Pre/post test, transfer task, delayed post-test | Answer key and every item | Takes the test as a stand-in learner (design exercise) | Stage 4 draft; Stage 5 revision; Stage 6 study |
+| Educator guide and worksheets | Debrief science, Earth graph sources, NGSS codes | Reads as a teacher; checks the 23-period plan and setup steps | Each draft (first draft: round 2, now); Stage 4; Stage 6 before any pilot |
+| Alignment table and this evaluation | — | Reviews gaps at each stage's team debrief (TEAM.md 8.7) | Every roadmap stage exit |
+
 **Scope note.** The user has confirmed this project is a design exercise and no real students will use it. We still design every learning, assessment, and privacy element as if real students would.
 
 ### How this design meets ISD's strengths
@@ -83,7 +99,7 @@ My summaries of FIDGE and Fanning come from TEAM.md; I have not re-read the orig
 | ISD strength | How we meet it |
 |---|---|
 | Calls attention to key factors and how they relate | Section 0 analyzes learners, content, and environments; the alignment table below connects them |
-| Grounded in the science of learning | Simulation and discovery for cause-and-effect content; productive failure; immediate feedback; prediction (retrieval and self-explanation); spaced retrieval (A4 is forecast twice); fading support (Hana's tips stop once a failure is fixed); spaced reflection at each gate |
+| Grounded in the science of learning | Simulation and discovery for cause-and-effect content; productive failure; immediate feedback; prediction (retrieval and self-explanation); spaced retrieval (A4 is forecast twice) and interleaving (2.3); a worked example that fades into practice (2.2); advance organizers (Shift Briefings, 2.1); process feedback that fades to outcome feedback as skill grows (4.8); spaced reflection at each gate |
 | Clear statement of objectives | Section 0.6: behavior, condition, criterion for every goal, A1–D2 |
 | Assessment linked to objectives from the start | Every objective has an individual measure in 0.6 and section 3, written before any content is built |
 | Guides but doesn't prescribe | Game design pillars and ISD work together; creative choices are still made by the designers |
@@ -97,19 +113,19 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 
 | Goal | Taught by (game content) | Practiced by | Feedback | Measured: individual | Group evidence (formative) | Status |
 |---|---|---|---|---|---|---|
-| A1 Mars vs. Earth | Phase 1 hazards (incl. real perchlorate dust); Monitor values and milestones (Armstrong line 6.3 kPa, Everest pressure ~33.7 kPa); gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
-| A2 Liquid water | Ice-to-water rule (DESIGN.md §2): ice near heaters turns to vapor in early Phase 1, brief puddles that boil away later in Phase 1, water that stays from 5 kPa and above 0 °C; Monitor shows water's boiling point | Forecasts F4a (Phase 1) and F4b (Thaw); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
+| A1 Mars vs. Earth | Phase 1 Shift Briefing (2.1); Phase 1 hazards (incl. real perchlorate dust); Monitor values and milestones (Armstrong line 6.3 kPa, Everest pressure ~33.7 kPa); gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
+| A2 Liquid water | Ice-to-water rule (DESIGN.md §2): ice near heaters turns to vapor in early Phase 1, brief puddles that boil away later in Phase 1, water that stays from 5 kPa and above 0 °C; Monitor shows water's boiling point | Forecasts F4a (Phase 1) and F4b (Thaw); interleaved FI-2 (Phase 3, 2.3); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
 | A3 Greenhouse effect | Greenhouse emitters (factory-made greenhouse gases); temperature curve | Forecast F5 | Temperature trend; journal | Post-test explanation | — | Covered. Depends on the emitter journal naming what it emits (SME; Lead Game Designer) |
-| A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2, spaced) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
+| A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2, spaced), interleaved FI-3 (Phase 3) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
 | A5 CO2/O2 exchange | Phase 3 balancing; flora; CO2 from decay; carbon scrubbers; carbon flow view on the Monitor | Forecasts F8, F9; flora-bloom and decay drift events | Fires or stability; Monitor (O2 fraction **and** O2 partial pressure) | Post-test explanation; F8 result | Breathable condition (O2 partial pressure ≥ 16 kPa, pressure ≥ 75 kPa, CO2 ≤ 0.5 kPa) held for the active preset's hold time | Covered. **Concern:** narrow O2 window at 75 kPa may be hard to read at MS depth (4.7) |
-| B1 Cause and effect | Planetary Index responses; Monitor cause breakdown | "What caused it?"; every forecast | Monitor cause breakdown | Post-test variable-link diagram | — | Covered |
+| B1 Cause and effect | Planetary Index responses; Monitor cause breakdown; worked example on the first Outgasser (2.2) | "What caused it?"; every forecast | Monitor cause breakdown | Post-test variable-link diagram | — | Covered |
 | B2 Feedback loops | Fauna vs. machine signature (reinforcing); ice–albedo (reinforcing, adopted); polar frost sink and storms vs. pressure (balancing); Monitor names each as a cause | Forecast F6; Keeper's Report 2; polar-winter and fauna-grazing drift events | Keeper's Report; Earth reply | Report 2 reflection and transfer task: one loop of each type | — | Covered. Ice–albedo adopted (size pending SME), which makes HS-ESS2-2 a near-exact fit |
 | B3 Prediction | Forecasts and Monitor trends | All forecasts (F1–F10) | Forecast result; per-phase tally | Own forecast accuracy, Phase 1 → Phase 3 | — | Covered |
 | B4 Trade-offs | Equilibrium band; narrow breathable O2 window vs. fire risk; shrouds (−15 % output) and lures (water upkeep) vs. fauna; expansion vs. upkeep | Forecast F10; drift events during holds; Keeper's Report 3 | Monitor; fire failure report; Keeper's Report | Post-test trade-off scenario; Report 3 reflection | Equilibrium hold reached | **Gap closed** (objective added in 0.6) |
 | B5 Unintended consequences | Fauna blowback in Phase 2 (fiction) **and real side effects**: ground collapse from melting ground ice, perchlorate in meltwater; Earth example in D2 content | Forecast F6; Keeper's Report 2 | Fauna appear near emitters; failure reports name fauna | Report 2 reflection, B5 rubric | — | Covered |
-| C1 Resource planning | Phase 1 O2, water, and power | Forecast F1; preparing for the first storm | Dome survives or fails | Post-test planning scenario; F1 result | Dome survives the first dust storm (by the second storm) | Covered |
+| C1 Resource planning | Phase 1 O2, water, and power | Forecast F1; preparing for the first storm; interleaved FI-1, FI-4 (Phases 2–3) | Dome survives or fails | Post-test planning scenario; F1 result | Dome survives the first dust storm (by the second storm) | Covered |
 | C2 Design, test, improve | Breaches, wear, storms, ground collapse, emitter-wear drift events | Own repairs, claimed on the **Shift Board** | Failure reports; Hana's tips fade | Own repairs (claim → fixed credit goes to the claimer's pseudonymous ID): same cause doesn't recur; "What caused it?" on own failures | Repeat failures fall across phases | Covered. Needs Shift Board claims and repair events logged with the actor ID (Technical Lead) |
-| C3 Data use | Planetary Monitor (derived values: O2 and CO2 partial pressure, boiling point) | Checking the Monitor before builds; Data post (DESIGN.md colony posts) | Monitor trends | Own Monitor checks before own major builds, plus a data reason in a Keeper's Report or teacher check-in | — | Covered |
+| C3 Data use | Planetary Monitor (derived values: O2 and CO2 partial pressure, boiling point); worked example step "find your machine's cause line" (2.2); Shift Briefings name what to watch (2.1) | Checking the Monitor before builds; Data post (DESIGN.md colony posts) | Monitor trends | Own Monitor checks before own major builds, plus a data reason in a Keeper's Report or teacher check-in | — | Covered |
 | D1 Ethics | Thawlings; the crew's secret; the Moreno–Basu argument; four fauna options (defend, shrouds, lures, quiet zones), none "right"; unranked ending cards | Keeper's Report 2; final reflection; class discussion | Earth reply; epilogue cards (no ranking) | Written reflection, D1 rubric | — | Covered. Depends on non-lethal fauna options (decided 2026-11-26) |
 | D2 Link to Earth | Journal "On Earth" lines; Mensah's replies; Phase 2 debrief with Earth CO2 and temperature graphs | Keeper's Report reflections; transfer task | Mensah's replies; class debriefs | Transfer task and reflections, D2 rubric | — | **Content specified** in `docs/learning/prompts-and-reflections.md`; text not yet written; Earth facts need SME check |
 
@@ -127,10 +143,10 @@ RETAIN (Gunter, Kenny & Vick, 2008, *Educational Technology Research and Develop
 |---|---|---|---|---|
 | **Relevance** | Content connects to the learner's world and needs, in manageable steps | **Partial** | Phase 1 survival makes A1, C1 immediately useful; story gives a reason to care (Keeper, colonists waiting); gates pace the content in steps; D2 "On Earth" lines and Mensah's replies point to the learner's own planet | D2 Earth content is specified but not written (Lead Game Designer writes, SME checks, ID reviews). Relevance for unmotivated classroom students is **assumed**, untested (playtest; Lead Game Designer) |
 | **Embedding** | Academic content is tied into the game's fantasy and core mechanics (endogenous), not bolted on | **Strong** | The Planetary Index *is* the science (A1–A5); the win condition is equilibrium (B4); fauna stand for unintended consequences (B5, D1); forecasts and reports are colony work in BELL's and the Keeper's voices | Thawlings are fiction and could teach "Mars has life": fiction note in every fauna entry (ID, done in 1; Lead Game Designer to apply in the journal). Super-greenhouse emitters must name their gas or A3 embeds a contradiction (Lead Game Designer) |
-| **Transfer** | Learners apply what they learned to new situations | **Partial** | Transfer task on Earth's carbon cycle (B1, B2, D2); post-test uses *new* scenarios (A2, A4, B4, C1); A4 is forecast in two different situations (F2, F7) | Transfer task and pre/post items not yet written (ID, Stage 4). No near-transfer practice inside the game beyond forecasts; the Phase 2 debrief's Earth data activity is the main bridge (ID, educator guide) |
+| **Transfer** | Learners apply what they learned to new situations | **Partial** | Transfer task on Earth's carbon cycle (B1, B2, D2); post-test uses *new* scenarios (A2, A4, B4, C1); A4 is forecast in three different situations (F2, F7, FI-3); interleaved forecasts apply earlier ideas in new situations (2.3); debrief questions with Earth data (educator guide) | Transfer task and pre/post items not yet written (ID, Stage 4). The Phase 2 debrief's Earth data activity is still the main bridge; its graphs need a named source (SME) |
 | **Adaptation (RETAIN)** | Learners change their behavior because of what they learned | **Partial** | C2 criterion: a fixed failure doesn't recur; B3: forecast accuracy rises; C3: Monitor checked before builds; Hana's tips fade once behavior changes | Behavior change is logged per student only if actor IDs are on every relevant event (Technical Lead). No check that changed behavior survives a new hazard type (consider a late "new failure" in Phase 3; Lead Game Designer) |
 | **Immersion (RETAIN)** | Learners are intellectually invested and actively taking part | **Partial** (strong on paper, unproven) | No pop-up quizzes; all feedback diegetic (4.2); player language; real choices about the fauna (D1); forecasts ask players to commit before seeing the result | Long holds risk idle play and cognitive disengagement (M-16; Lead Game Designer). Text load for weak readers (ID rules in `docs/learning/prompts-and-reflections.md` section 5; playtest check). Group play can leave one student watching (colony posts rotate each phase, section 2; check in playtest) |
-| **Naturalization** | Using the knowledge becomes habitual and spontaneous | **Gap** | Repeated Monitor use across all three phases (C3); forecasts every phase (B3) | ~11–12 h in class is short for habits. **Nothing measures retention after the unit** (ID: add an optional delayed post-test 3–4 weeks later to the study design, Stage 6). Home play (~40 h) gives more practice but has no measure (ID) |
+| **Naturalization** | Using the knowledge becomes habitual and spontaneous | **Partial (on paper)** | Repeated Monitor use across all three phases (C3); forecasts every phase (B3); interleaved forecasts in Phases 2–3 that don't say which idea applies (2.3); faded feedback so players act without prompts by Phase 3 (4.8); **optional delayed post-test ~4 weeks after the unit, with a cue-free "spontaneous use" item** (3.6) | ~11–12 h in class is still short for habits. Home play (~40 h) gives more practice but has no outside-the-game measure (accepted: home players aren't tested). The delayed test needs the Stage 6 study schedule (Producer) |
 
 #### Gagné's nine events (insight check)
 
@@ -138,13 +154,13 @@ RETAIN (Gunter, Kenny & Vick, 2008, *Educational Technology Research and Develop
 |---|---|---|
 | 1. Gain attention | Opening: storm clears, dome damaged, alone (story beat 1) | — |
 | 2. Inform learners of objectives | Keeper's Record pages ("what the colonists will need to know") | Done diegetically, never as a list of objectives (player language, TEAM.md 8.4) |
-| 3. Stimulate recall of prior learning | Pre-test; forecasts ask players to use what they already know | Debrief openers could recall earlier phases explicitly (ID, educator guide) |
+| 3. Stimulate recall of prior learning | Pre-test; forecasts ask players to use what they already know; each Shift Briefing opens with one line recalling the last shift (2.1); debrief openers recall the previous debrief (educator guide) | — |
 | 4. Present the content | World response first, then gate journal entry | — |
 | 5. Provide learning guidance | Failure-report hints; Hana's tips; Monitor cause breakdown | — |
 | 6. Elicit performance | Forecasts; repairs; holding the balance | — |
 | 7. Provide feedback | Natural consequences, forecast results, failure reports (section 4) | — |
 | 8. Assess performance | Pre/post, transfer task, rubrics (section 3) | Outside the game by design |
-| 9. Enhance retention and transfer | Transfer task; D2 Earth links; A4 spaced forecast | Weakest event: see Naturalization |
+| 9. Enhance retention and transfer | Transfer task; D2 Earth links; A4 spaced forecast; interleaved forecasts (2.3); delayed post-test (3.6) | Still the weakest event: see Naturalization |
 
 #### Keller's ARCS (insight check)
 
@@ -394,10 +410,100 @@ Where the game simplifies, the journal says so. This keeps the learning honest. 
 | **Keeper's Reports (reflection)** | At each phase gate the player sends a report to Earth with one reflection question. | Reflection; argument from evidence | B2, B4, B5, C2, D1, D2 |
 | **Writing for the colonists** | The Keeper's Record is framed as "what the colonists will need to know". | Expecting to teach (Nestojko et al., 2014; citation **unverified** in this session) | All |
 | **Collaboration** | In class, 3–5 students share one planet. Suggested **colony posts** (Life Support, Atmosphere, Survey, Biology, Data) rotate each phase (DESIGN.md Group Play); the **Shift Board** shows who claimed each failure. | Cooperative learning: positive interdependence **and** individual accountability (Johnson & Johnson). Posts give each student ownership; per-player evidence keeps accountability individual | B4, C1, C2, C3 |
+| **Worked example, faded** | The first Regolith Outgasser comes with Hana's build card: each step and its reason. Later Outgassers get a shorter card; then none (2.2). Skippable. | Worked-example effect; backward fading; expertise reversal | B1, C3, A1 |
+| **Advance organizers** | A short **Shift Briefing** from BELL at each phase start: what last shift achieved, the big idea of this shift, what to watch, the next gate, one thing to notice (2.1). | Advance organizers (Ausubel, 1960); stimulating recall (Gagné event 3) | All, by phase |
+| **Interleaving** | Phase 2 and 3 forecasts mix in earlier-phase ideas at unpredictable moments, without saying which idea applies (2.3). | Interleaved practice; desirable difficulties (Bjork & Bjork, 2011) | A2, A4, C1, B1, B3 |
 
 **Outside the game (for classrooms):**
 - Educator guide: goals, how each phase maps to them, discussion questions for the three debriefs, the classroom unit plan (section 5.2), the group model and colony posts (with a tip to give every student at least one turn on the Data post or at the Monitor before a build), and an IT requirements sheet.
 - Worksheets: pre/post test, transfer task, and a variable-tracking sheet.
+- Draft guide: [docs/learning/educator-guide.md](docs/learning/educator-guide.md).
+
+**Citations in 2.1–2.3 and 4.8.** Ausubel (1960), Bjork & Bjork (2011), Earley et al. (1990), and Wood (2000) are cited from DESIGN.md "Learning Mechanisms in Play"; I did not re-read them this session. Checked this session by search (abstracts and catalog records only, not full text): Kalyuga, Ayres, Chandler & Sweller (2003), "The expertise reversal effect", *Educational Psychologist* 38(1), 23–31; Renkl & Atkinson (2003), "Structuring the transition from example study to problem solving…", *Educational Psychologist* 38, 15–22 (fading worked-out steps); backward fading (removing the last steps first) comes from a related 2002 *Journal of Experimental Education* study by the same group, and self-explanation prompts on worked steps from Atkinson, Renkl & Merrill (2003). Rohrer & Taylor (2007) on interleaving: **not re-checked** this session.
+
+### 2.1 Shift Briefings (advance organizers)
+
+**Problem.** Each phase brings new ideas at the moment the game is busiest. An advance organizer gives players a frame to hang the new details on *before* they arrive (Ausubel, 1960). Where the content is new, the organizer states the big idea in plain terms; where it builds on what players know, it compares the new idea to the familiar one. (Ausubel's "expository" vs. "comparative" organizers; my summary, **not re-checked**.)
+
+**Format (all briefings).** BELL's voice, in the colony log and saved as a journal page ("Shift Briefing"). Delivered at the first natural pause after the phase gate (interruption rules, 4.6); never blocks; replayable. **≤ 60 words** main text at grade 6–7 reading level; HS "read more" adds one line naming the science idea. Five parts, always in this order:
+
+| Part | Purpose | Principle |
+|---|---|---|
+| 1. **Last shift** (1 line) | Recall what the team achieved | Gagné event 3, recall |
+| 2. **This shift** (1 line) | The big idea, in colony terms | Advance organizer |
+| 3. **Watch** (2 Monitor values) | Points attention to the relationship that matters | Signaling; cuts search load |
+| 4. **Next** (the next gate) | Clear goal | Flow: clear goals |
+| 5. **Notice** (one thing to look for) | Sets up the Keeper's Report question that ends the phase, without giving the answer | Bookends the phase: organizer → reflection |
+
+**Instructional content per briefing.** The Lead Game Designer writes the final wording in BELL's voice; the SME checks every science line. Sample lines below show intent, not final text.
+
+| Briefing | When | Big idea (part 2) | Watch (part 3) | Next (part 4) | Notice (part 5) → report | Goals | Comparative link to the familiar |
+|---|---|---|---|---|---|---|---|
+| **P1: "Keep the dome alive"** | End of Landing onboarding, before F1 | Mars has thin, cold air with almost no oxygen. The dome makes what the planet lacks. | O2 and power | Dome stable (life support steady for the hold) | "Notice what almost fails, and why." → Report 1 | A1, C1, C2 | "Inside the dome is a small piece of Earth's air." |
+| **P1b: "Start on the sky"** (folds into Hana's Dome stable message, story beat 6; no extra pop-up) | Dome stable | More gas in the air means more pressure. One machine moves a whole planet slowly. | Pressure and its cause lines | Phase 2 (pressure 5 kPa) | "Notice what makes pressure go up, and what pulls it down." | A1, B1, C3 | — |
+| **P2: "Warm it and thicken it"** | Phase 2 begins (after Report 1 is offered) | Water needs both warmth and enough pressure to stay liquid. Greenhouse gases keep heat from escaping. | Temperature and pressure together (and water's boiling point) | Thaw, then Hydrosphere, then Phase 3 | "Notice what else changes when the planet warms." → Report 2 (doesn't name the fauna: no spoiler) | A2, A3, B1, B5 | Recall of the Phase 1 ice that vanished; "Earth's air holds in heat" **[SME: wording; avoid the 'blanket' analogy unless the SME clears it]** |
+| **P3: "Make the air breathable, then keep it"** | Phase 3 begins (after Report 2 is offered) | Plants take in CO2 and give off O2. Breathable air needs enough oxygen *and* enough pressure; too much oxygen means fire. Balance is a band you hold, not a number you hit. | Air window (O2 and pressure) and CO2 | Breathable, then Equilibrium | "Notice what you have to give up to hold the balance." → Report 3 | A5, B4, B2 | Recall of F4a/F4b: "Pressure changed what water could do. Now it changes what you can breathe." |
+
+**Fading.** The P1 briefing also says *where* to look ("the O2 bar on your Monitor"); P2 names the values only; P3 names them only. In classroom mode the teacher can project the same text as the period opener for the phase (educator guide), so the in-game organizer and the class match.
+
+**Measure.** Not graded. Logged (`briefing.shown`, `briefing.opened`) so playtests can check whether players who open it can say the shift's goal. Playtest question (Stage 3): after the P1 briefing, can a Lens A player say what to watch?
+
+**Group play.** Fires once per planet; each player gets it at their own next natural pause; absent players find it at the top of "Since last shift".
+
+### 2.2 Worked example: the first Regolith Outgasser (with the Lead Game Designer)
+
+**Why here.** The Outgasser is the player's first lever on the planet (balance sheet §2) and the first machine whose effect is on the **Index**, not on the dome. Novices to tech mods need to see one complete, correct example before they solve the next on their own (worked-example effect). Players who already know modded machines learn less from a step-by-step guide than from doing it (expertise reversal, Kalyuga et al., 2003). So: a worked example that's **easy to skip** and **fades** into practice.
+
+**Delivery (diegetic).** *Hana's build card*: a page taped to the Outgasser plans that arrive with her Dome stable message (story beat 6). It opens in the journal; it is never a tutorial screen (DESIGN.md Story Approach: onboarding stays in story).
+
+**The example (content spec; wording by the Lead Game Designer, science lines checked by the SME).** Each step = action + Hana's reason (≤ 12 words). The reason is the part that teaches; it invites self-explanation.
+
+| Step | Action | Hana's reason (intent) | What it teaches |
+|---|---|---|---|
+| 1 | Place it outside, on bare regolith | "It bakes gas out of the soil it sits on." **[SME: wording; pair with the existing fiction note that real soil holds too little gas]** | Where the gas comes from (A1 honesty note) |
+| 2 | Connect power (solar or battery) | "No power, no heat, no gas. Storms cut solar." | Links to C1 (storms) |
+| 3 | Switch it on and open the Monitor | "Find its line under Pressure: that's your machine." | C3: the Monitor names causes |
+| 4 | Read the cause line, then log the forecast (F3) | "One machine, one planet. Guess how fast." | B1, B3; the example ends with a problem, not with more instructions |
+
+**Fading into practice (backward fading).** Card versions per player, by number of Outgassers *that player* has placed:
+
+| Player's Outgasser | Card shows | What the player does alone |
+|---|---|---|
+| 1st | Steps 1–4 with reasons | Nothing new; follows the example |
+| 2nd | Steps 1–2 only, then "You know the rest" | Steps 3–4: turn on, find the cause line |
+| 3rd and later | No card (still in the journal archive) | Everything |
+| First atmospheric processor and first emitter (Phase 2) | **No worked example.** A one-line spec only (power, input, effect) | Figure it out; the failure report and the Monitor cause line support them |
+
+**Expertise reversal: three ways to skip.**
+1. **"I've got this"** button on the card collapses it to the one-line spec (needs, output). One click, no penalty, reopenable.
+2. **Skip by doing.** If the player places and powers an Outgasser before opening the card, the card files itself to the archive.
+3. **Never automatic from Landing.** Skipping the Landing onboarding (vanilla controls) is *not* evidence of skill with modded machines, so it doesn't skip the card.
+
+**Group play.** Cards are per player. A player who didn't place the first Outgasser gets the full card at their first Outgasser interaction (place, power, or open). Watching a teammate counts as nothing; the log can't see it.
+
+**Measure and check.** Logged: `worked_example.opened`, `.collapsed`, `.skipped_by_doing`, `.steps_viewed`. Not graded. The check for the expertise-reversal call: in playtests, compare F3 results and "Monitor opened before the 2nd Outgasser" for players who used the card vs. skipped it. If skippers do as well or better, keep the skip; if Lens A players skip and then fail F3, make the skip a two-step confirm.
+
+**Goals:** B1, C3 (taught and practiced), A1 (honesty note), B3 (ends with F3).
+
+### 2.3 Interleaving in later forecasts
+
+**Problem.** The forecast set in `docs/learning/prompts-and-reflections.md` is *blocked*: each forecast asks about the idea that just unlocked, so the trigger tells the player which idea to use. Blocked practice feels easier but transfers worse than interleaved practice, where the learner must first decide *which* idea applies (Bjork & Bjork, 2011; Rohrer & Taylor, 2007, **not re-checked**).
+
+**Design.**
+- **Phases 2 and 3 add interleaved forecasts (FI)** that bring back an earlier-phase idea in a new situation. They're attached to events BELL can warn about at least ~1 sol ahead (dust storms, solar events, polar winter), so they follow interruption rule 7 (4.6) and arrive at unpredictable times. Drift events themselves are too fast for a forecast (about 1 sol to push a value out of band in classroom mode), so they stay unprompted application.
+- **No topic label.** The question never says "remember the ice" or names the phase. Choosing the right idea is the skill.
+- **Pool, not a list.** Phase 3 has a pool of three; each player gets the first two whose events fire. Different planets get different mixes.
+- **Count and load.** Interleaved forecasts count toward the B3 tally of the phase they're asked in. Totals become P1 4, P2 5, P3 5. Phase 3 stays at 5, so forecasts don't start to feel like a test (open question: "How visible is the learning?").
+- **Evidence.** Tagged `interleaved: true` with the source goal. A correct FI also fills the source goal's Keeper's Record page (e.g. FI-2 fills A2). New export columns: `forecasts_interleaved_answered`, `forecasts_interleaved_correct` (5.5). The FI items are the in-game retention check that the delayed post-test (3.6) continues outside the game.
+
+**Items.** Specified in `docs/learning/prompts-and-reflections.md` section 1.1 as stems only. **Science pending the SME** (forecast content is under SME review in parallel; nothing in 1.1 rewrites F1–F10).
+
+| ID | Phase / trigger | Brings back | Mixed with | Goals |
+|---|---|---|---|---|
+| FI-1 | P2 / first dust storm warning after the first emitter runs | Storms cut solar power (F1) | Warming rate (A3) | C1, A3, B1, B3 |
+| FI-2 | P3 / first polar winter warning | Pressure sets water's boiling point (F4a, F4b) | Seasonal pressure dip (B2) | A2, B2, B3 |
+| FI-3 | P3 / first solar event in Phase 3 | Air absorbs radiation (F2, F7) | Helmet-off life on the surface | A4, B3 |
+| FI-4 | P3 / dust storm warning during a hold | Storms cut solar power (F1) | Algae vats and CO2 (A5) | C1, A5, B1, B3 |
 
 ---
 
@@ -474,6 +580,50 @@ Decided 2026-11-26: the vertical slice includes a thin Phase 1 learning layer so
 | Action log with actor IDs, and a CSV export | All | Tests per-student evidence end to end |
 | A 6-item Phase 1 mini pre/post test (A1 data task, A4, C1, two misconceptions) | A1, A4, C1 | First evidence of learning gain |
 
+### 3.6 Optional delayed post-test (RETAIN naturalization)
+
+**Problem.** RETAIN's naturalization asks whether using the knowledge becomes habitual and spontaneous. The post-test in period 23 is given the day after play ends, so it can't tell retention from short-term memory, and it always cues the concept ("explain the greenhouse effect"). Nothing measured whether learners use the ideas unprompted later.
+
+**Design.**
+
+| Feature | Choice | Reason |
+|---|---|---|
+| Status | **Optional**, classroom only. Part of the Stage 6 learning study; a teacher can also use it alone | Teachers' calendars vary (risk R-19). Home players aren't tested outside the game (no teacher) |
+| Timing | **About 4 weeks after the post-test** (acceptable window 3–6 weeks). Record the actual interval in days | Long enough that the unit isn't fresh, short enough to stay in the same term. The exact interval is a design judgment, not a research norm (**unverified** as optimal) |
+| Length | **9 items, ~20–25 minutes**, one class period or less | Fits a start-of-period slot |
+| Form | Paper or the school's usual quiz tool; outside the game (TEAM.md 8.5) | Same as the pre/post test |
+| Bands | MS and HS versions, like the pre/post test | Same depth rules (prompts-and-reflections §5) |
+| Identity | Students write their **player ID** (`P-XXXXX`), not their name, on study copies. The teacher hands out ID slips at period 1 and collects them back at period 23, to reuse for the delayed test. Only ID-labeled scores go to the study | Keeps study data anonymous after the teacher runs `forget-all`; the slips stay in the classroom like any class paperwork |
+| No teaching before it | Teachers don't review the unit before the delayed test | Otherwise it measures the review, not retention |
+
+**Item blueprint** (items to be written in Stage 4 with the pre/post test; SME checks the science; tagged with goal ID and NGSS code like the pre/post items).
+
+| # | Type | Goal | Source | Measures | NGSS (MS / HS) |
+|---|---|---|---|---|---|
+| 1 | **Anchor**: same item as the post-test | A2 | Post-test A2 item | Retention, direct comparison | MS-PS1-4 / extends MS-PS1-4 |
+| 2 | **Anchor** | A3 | Post-test A3 item | Retention | MS-ESS3-5 / HS-ESS2-4 |
+| 3 | **Anchor** | A5 | Post-test A5 item | Retention | MS-LS1-6 / HS-LS2-5 |
+| 4 | **Anchor** | B4 | Post-test trade-off scenario | Retention | MS-ETS1-2 / HS-ETS1-3 |
+| 5 | **Parallel** (new scenario, same structure) | B1 | 5-variable link diagram with a new variable set (e.g. an Earth lake or farm) | Retention with new surface features | MS-LS2-4 / HS-ESS2-2 |
+| 6 | **Parallel** | B2 | Identify the loop type in a new short Earth example | Retention | — / HS-ESS2-2 |
+| 7 | **Misconception** (multiple choice) | A5 | Post-test "21% oxygen is always breathable" item | Did the misconception come back? | — (no PE assesses partial pressure; tagged A5 only) |
+| 8 | **Misconception** (multiple choice) | A2 | Post-test "water always boils at 100 °C" item | Same | MS-PS1-4 |
+| 9 | **Cue-free "spontaneous use"** (open response) | B1, B2, B5, D2 | New: an Earth news-style scenario that names no science idea, e.g. "A town wants to drain a wetland to build a factory. What should they think about before they decide?" | Whether the student *chooses on their own* to use systems reasoning (side effects, loops, trade-offs) | — (SEP: Constructing explanations; CCC: Systems and system models) |
+
+**Item 9 rubric (naturalization, 1–4)**, added to `docs/learning/rubrics.md` when the items are written:
+- 4: Unprompted, uses at least two systems ideas (a side effect with its cause chain, a loop, or a trade-off with a cost), correctly applied.
+- 3: Unprompted, uses one systems idea correctly.
+- 2: Mentions effects, but only first-order ("it will pollute"), no chain, loop, or trade-off.
+- 1: No systems reasoning.
+
+**Optional self-report (2 questions, anonymous, not scored):** "Since the unit, have you used an idea from the game outside class? If yes, where?" This is a weak measure of habits (self-report) and is reported only as context.
+
+**Analysis.** Retention = delayed score − post score on items 1–4 (same items), per student by ID; items 5–8 against the matching post items; item 9 as a distribution of rubric scores, compared with the same rubric applied to the post-test transfer task. Expect some drop; the question is how much is kept compared with pre-test. Note: the post-test itself is retrieval practice, so anchor items may overstate retention compared with a group that never took the post-test (accepted; there is no control group in a design exercise).
+
+**Success criterion (draft, set after the first study):** most students keep at least half of their pre→post gain on items 1–4; median item 9 score ≥ 2 at MS, ≥ 3 at HS.
+
+**Cost and effect on both goals.** Learning: closes the naturalization measure gap and gives the only retention evidence. Appeal: none (outside the game, optional). Teacher cost: one ~25-minute slot and scoring 9 items. **Revisit if** teachers in a pilot can't find the slot (then use items 1–4 and 9 only, ~12 minutes).
+
 ---
 
 ## 4. Player Feedback and Self-Assessment
@@ -503,7 +653,7 @@ Natural consequences show **what** happened. They don't always show **why**, whi
 | Tool | When | What it says |
 |---|---|---|
 | **Planetary Monitor** | Any time | Current values, trend arrows, and which machines or events moved each value most in the last day. Turns "something changed" into "this caused it". |
-| **Failure report** (BELL) | After a breach, machine failure, or fauna attack | What failed, the likely cause, one hint. Never the full answer. Hana's tip is attached the first time; it stops once the player has fixed that cause (fading). Hints get more specific after repeat failures of the same kind (adaptive feedback, TEAM.md section 3). |
+| **Failure report** (BELL) | After a breach, machine failure, or fauna attack | What failed, the likely cause, one hint. Never the full answer. Hana's tip is attached the first time; it stops once the player has fixed that cause (fading). Hints get more specific after repeat failures of the same kind (adaptive feedback, TEAM.md section 3). Once the player's own fix holds, later reports of that type shrink to an outcome line (4.8). |
 | **Forecast result** | Right after a forecast resolves | Whether the forecast was right, and a one- or two-sentence science explanation either way. |
 | **Gate journal entry** | When a gate is reached | What the player just saw, the real science, a fiction note if needed, an "On Earth" line, and "read more". |
 
@@ -534,6 +684,18 @@ A player has met the outcomes when, in their own Keeper's Record:
 - **Optional depth.** Journal entries are short, with "read more" for players who want it.
 - **Fail forward.** Because gates lock in, mistakes cost time, not progress, which keeps failure safe enough to learn from.
 - **Motivational and instructional, both.** Every feedback element is reviewed for both values (TEAM.md 8.4).
+- **Fade process to outcome as skill grows; bring it back after errors.** Full map in 4.8.
+- **Feedback for flow** (Chapter 6, coordinator's summary). Every failure report and forecast result must pass five checks:
+
+| Check | Failure report rule | Forecast result rule |
+|---|---|---|
+| Linked to a goal the player cares about | Names the system at risk in colony terms ("the dome's air", "Outgasser 2"), not a game mechanic | Ties the result to the event the player is living through ("The storm hit; your panels…") |
+| Meaningful | One likely cause, one hint (4.2) | One- or two-sentence explanation of *why* (4.8) |
+| Timed appropriately | Immediate world response; report at the next natural pause (4.6) | First in the queue at the next natural pause (4.6) |
+| **In positive terms** | The hint says what to try ("Seal the corners first"), never what the player did wrong ("You forgot…"). No "you failed" | Neutral wording for a miss: "The planet did X. Here's why." Never "Wrong!" or a buzzer. A hit gets plain acknowledgment, not hype |
+| Helps correct performance | The hint points to the next action or the Monitor line to check | A miss names the Monitor line that would have shown it |
+
+These rules go into the wording rules for the Lead Game Designer (story bible §6.1 budgets) and the forecast spec (`docs/learning/prompts-and-reflections.md` §1).
 
 ### 4.6 When feedback may interrupt play (instructional view, for consensus)
 
@@ -584,6 +746,138 @@ The Lead Game Designer flagged that at 75 kPa the breathable O2 window is narrow
 
 Owner of the gauge: Lead Game Designer (UI spec) and Lead Artist (visual). I review the wording.
 
+#### 4.7.1 Air window check (style guide §11.2): **accept, with concerns**
+
+The Lead Artist's design (`docs/art/style-guide.md` §11.2) answers my four recommendations above: one place to read breathable air, words and shapes as well as color, partial pressure kept out of the MS main view, and a zoomed bar. The sliding lower edge, which widens the window as pressure rises, is the best part: it makes the B4 trade-off visible without arithmetic.
+
+**Method: design walkthrough, not a playtest.** I walked the display as a 12-year-old at MS depth (playtest plan Lens A: reads short lines, doesn't connect a number to a cause unless shown), through five planet states.
+
+| # | State | What Lens A sees | Reads it right? |
+|---|---|---|---|
+| 1 | Early Phase 3: 32 kPa, O2 2 % | Three crosses on the check row. O2 dot pinned at the bottom of a 15–27 % bar | Check row: yes ("not yet"). Gauge: **no**, the dot shows nothing below 15 % (concern 3) |
+| 2 | 72 kPa, O2 22 % | "Thick enough" ✗, "Oxygen push" ✗. A thin "Breathe here" band (22.2–23 %) is drawn, and the dot sits just under it | **Mixed.** A breathe zone is drawn though the gate's pressure check fails (concern 2) |
+| 3 | 80 kPa, O2 19 % | "Thick enough" ✓, "Oxygen push" ✗. Dot in the zone labeled **"Too thin to breathe"** | **No.** One readout says the air is thick enough; the next says it's too thin. A 12-year-old will raise pressure, which isn't the main fix here (concern 1) |
+| 4 | 78 kPa, O2 22.5 %, CO2 low | Three checks ✓, helmet-off icon lit, dot in "Breathe here" | Yes, clearly |
+| 5 | Flora bloom pushes O2 to 23.4 % | Dot moves into hatched flame zone | Yes, after the fact. No warning beforehand (concern 4) |
+
+**Alignment.**
+
+| Goal | Supported? | Note |
+|---|---|---|
+| A5 | **Yes, strong** | The three zones *are* the A5 criterion: name a consequence of imbalance (too little O2, fire) |
+| B4 | **Yes, strong** | The sliding edge shows the trade-off: more pressure or tighter O2 |
+| C3 | **Partly** | Shows state, not rate. Holding a band under drift events needs rate: add the trend arrow and time-to-edge estimate (my recommendation 4 above, not yet in §11.2) |
+| A1 | **Weak** | Nothing compares with Earth. Optional fix: on the HS chart, an arrow at the right edge, "Earth, sea level: 101 kPa, 21 %" |
+
+**Concerns** (none blocks; 1–3 should be fixed before the display is built in Stage 4):
+
+| # | Concern | Recommended fix | Owner |
+|---|---|---|---|
+| 1 | **"Too thin to breathe" mixes up the two causes.** "Thin" means pressure everywhere else in the game ("Thick enough"; story bible "thin air"). Below the lower edge the problem is too little oxygen, often at a pressure that's already fine. This could teach the very confusion the display exists to prevent | Rename the zone **"Not enough oxygen"** (closed-helmet pictogram unchanged). Keep "thin" and "thick" for pressure only | Lead Artist, Lead Game Designer (wording); I review |
+| 2 | **The zone and the gate can disagree.** Below 75 kPa a "Breathe here" band can be drawn while the gate's live check fails (state 2). Below about 69.6 kPa (16 ÷ 0.23) the lower edge passes 23 % and there is no breathable mix at all | Draw "Breathe here" from the **same live check the server uses**. Below 75 kPa: draw the band dashed, labeled "Needs more pressure". When the lower edge passes 23 %: "No breathable mix yet: needs more pressure". Never hard-code 21.5 %; compute the edge from 16 kPa ÷ pressure (21.3 % at 75 kPa; the balance sheet's 21.5 % is a tuning round-up) | Lead Artist (visual), Technical Lead (same check), Lead Game Designer |
+| 3 | **Off-scale O2.** For most of the game O2 is far below 15 %, so the dot sits on the floor and says nothing | Below 15 %: an arrow at the bottom with the number ("O2 2 % ↓"). Show the zoomed Air window from Phase 3 (progressive disclosure, DESIGN.md); before that, a plain O2 % line | Lead Artist, Lead Game Designer |
+| 4 | **No rate, so no warning.** In classroom mode a flora bloom adds ~0.6 %/sol; the band is ~1.7 points wide at 75 kPa | Trend arrow plus "fire risk in ~0.4 sol at this rate" (and "not enough oxygen in…") next to the gauge. This turns the hold into a data task (C3) instead of a reflex | Lead Game Designer (spec), Lead Artist |
+| 5 | **MS reading load.** Check row + gauge = four readouts at once | Fine **if** the check row stays words and shapes only at MS (numbers on hover or in "read more") and the gauge has no numbers on its axis at MS except the current value | Lead Artist |
+| 6 | **Fire band in percent at reduced pressure** | Not my call: the SME confirms whether 23 % is the right fire edge at 75 kPa (the OSHA band assumes sea level, accuracy-review.md) | SME |
+
+**Playtest check (unchanged from 4.7, item 5):** can MS-age testers say, unprompted, why the air stopped being breathable? With the user as the only tester, this becomes a Lens A walkthrough until a real group test exists.
+
+### 4.8 Process vs. outcome feedback, and the fading plan
+
+**Principle.** Process feedback says *why* and *what to do differently*; outcome feedback says *how it went* (Earley et al., 1990). Novices need process feedback, but not too much at once (Wood, 2000). As skill grows, process feedback should fade toward outcome feedback, or it becomes redundant and adds load (expertise reversal again, Kalyuga et al., 2003). Our rules:
+1. **New content gets process feedback.** Every new failure type, forecast topic, and gate starts with the cause and one hint or explanation.
+2. **Familiar, mastered content gets outcome feedback.** Mastery is shown by the **player's own** evidence (own fix that held, own correct forecasts), never by the group's progress (3.0).
+3. **Errors bring process feedback back.** A wrong forecast or a failure that recurs after the player's own fix re-opens the full explanation. Fading follows success; re-scaffolding follows failure.
+4. **The phase sets the starting level; the player's evidence moves it.** So a new player joining a Phase 3 planet still gets process feedback for things new to them.
+5. **Process detail never disappears, it moves.** Faded detail is one click away and kept in the journal archive (interruption rule 9).
+
+**Map of every feedback type.** "Fade unit" says what the fading counts: per player unless stated.
+
+| Feedback type | Kind | Goals | Phase 1 | Phase 2 | Phase 3 | Fades when | Comes back when |
+|---|---|---|---|---|---|---|---|
+| Natural consequences (world response) | Outcome | All | Always | Always | Always | Never | — |
+| Colony log event line | Outcome | B1, C2 | Event only | Event only | Event only | Already minimal | — |
+| Monitor values, trend arrows, next-gate progress | Outcome | C3, B3 | Always | Always | Always | Never | — |
+| **Monitor cause breakdown** | **Process** | B1, C3 | Open by default; top 3 causes, plain labels, +/− per sol | Open; top 3 causes with numbers | **Closed by default** (one click); all causes; HS carbon flow | Phase default (DESIGN.md) | Auto-opens for a value that leaves its band or pauses a hold. Every open is logged (C3 data-seeking evidence) |
+| **Failure report** (per failure type) | **Process** | C2, B1 | Level 1: what failed, likely cause, one hint (+ Hana's tip the first time) | Same rules | Same rules | After **the player's own** fix of that cause held for the rest of the phase, the next one shows the **outcome form**: "Seal breach, Module 2. Cause on the Monitor." (≤ 12 words) | Recurs while unfixed: hint gets more specific (hint levels 2–3, adaptive feedback). Recurs after own fix: back to level 1 |
+| Hana's tip | Process | C2, C1 | First time each failure type | Same | Last tip at Phase 3 start (story bible) | Stops once that cause is fixed (existing rule) | Doesn't return (her absence is part of the story) |
+| **Forecast "look here" pointer** (part of the question: "Check: solar power on the Monitor") | Process (feed-forward) | B3, C3 | On every forecast | Only on new-topic forecasts (F5) | None | Phase default | Player's accuracy in the current phase is below 1 in 3 after 3 forecasts: pointers return for that phase. Logged as `scaffold: pointer`, so the B3 analysis can separate scaffolded answers |
+| **Forecast result** | Outcome (right or wrong) **+** process (explanation) | B3 + item goal | Right or wrong: full explanation (≤ 40 words) | Right: one-line "why" (≤ 15 words), full text one click. Wrong: full explanation + the Monitor line to check | Right: tally update, "why" one click. Wrong: full explanation | Correct answers in later phases | Any wrong answer gets the full explanation. **Interleaved forecasts (FI) always get the full explanation**, right or wrong, because the lesson is *which* idea applied |
+| HS "why" follow-up | Process prompt (self-explanation) | Item goal | All | All | All | No fade (it is the HS depth) | — |
+| "What caused it?" result | Process → outcome | B1, C2, A1–A5 | Correct cause + the Monitor line that shows it | Right: "Right." + line one click. Wrong: cause + line | Same as Phase 2 | Phase default | Wrong answer: full |
+| Gate journal entry | Process (explanation) | A1–A5, D2 | Full | Full | Full | Never: each gate is new content | — |
+| Shift Briefing | Feed-forward (organizer) | By phase | Says where to look | Names values only | Names values only | Phase (2.1) | — |
+| Worked example card (Outgasser) | Process (worked example) | B1, C3 | Full card → partial → none | One-line spec for new machines | — | Per player, by Outgassers placed (2.2) | Card stays in the archive |
+| Drift event alert (**per planet**) | Outcome, with a cause name the first time | B4, C2, C3 | — | — | First of each type on the planet: names the event and value ("Flora bloom: O2 climbing"), no fix. Later: value only ("O2 climbing") | Second occurrence of the type | A drift event resets a hold: the next one of that type names its cause again |
+| Air window and air check row | Outcome with a built-in process cue (the failing check names what to fix) | A5, B4, C3 | — | — | Always, with trend and time-to-edge (4.7.1) | Never | — |
+| Keeper's Report summary (built, failed, fixed, own tally) | Outcome | B3, C2 | Report 1 | Report 2 | Report 3, Final | Never | — |
+| MS sentence starters on reflection questions | Process scaffold | C2, D1, B5, B4 | Report 1: shown | Report 2: shown | Report 3 and Final: behind a "Need a start?" button (logged) | By report | The button is always there |
+| Mensah's reply | Process (Earth explanation) | D2 | Each report | Each report | Each report | Never: new content | — |
+| Forecast tally; Keeper's Record pages | Outcome | B3; all | Always | Always | Always | Never | — |
+| Teacher debriefs (classroom) | Process, outside the game | By debrief | Period 6 | Period 14 | Period 21 | — | — |
+
+**What this changes in other documents (handoffs):** the Monitor's default view per phase (Lead Game Designer, Lead Artist); per-player rendering of failure report level and forecast pointer state (Technical Lead: failure reports are planet events, so each player's view must read that player's own fix history. If that's costly, fallback: the planet's history, i.e. "fixed by anyone and held"; I can live with the fallback because the fixer's own evidence still lands in C2); two new fields in the shared feedback format, `feedback_kind` (process / outcome / feed-forward) and `fade_rule` (Producer owns DOCUMENTATION.md 5.1).
+
+**Effect on both goals.** Learning: process feedback where it helps, less load where it doesn't, and wrong answers always explained. Appeal: messages get shorter and rarer as players get better, which supports flow immersion and the interruption rules; experienced players aren't lectured.
+
+**How we'll know (Stage 3 and Stage 5 playtests):** a Lens B player shouldn't call any message "obvious" more than once a session; a Lens A player shouldn't hit an outcome-only message for something they haven't fixed themselves. Action log: count of `scaffold` returns per player per phase (should fall).
+
+
+### 4.9 Motivation, rewards, and player types (Chapter 6 lens)
+
+Research summaries below come from the coordinator's Chapter 6 brief (Deci, 1995; Pink, 2009; Bartle; Koster, *A Theory of Fun*); I have not read the sources this session (**unverified** beyond that brief). The Lead Game Designer maps the gameplay side in DESIGN.md; this is the instructional side.
+
+**Rewards: baseline acknowledgment and information, not control.** If-then rewards used to control behavior can reduce creativity and performance (Deci, 1995). Baseline acknowledgment is expected as fair; extra tangible rewards on top can harm intrinsic motivation (Pink, 2009).
+
+| Element | Works as | Check | Verdict |
+|---|---|---|---|
+| Keeper's Record | Informational: shows what the player has shown, in colony language | No points, no levels, no "unlocked!" fanfare; never gates progress (4.3) | **Pass**, with two page fixes below |
+| Keeper's Reports | Baseline acknowledgment: Mensah replies to the planet's data | Reply never depends on answer length or "good" answers; never blocks progress. In class, the *teacher's* expectation of an answer is outside the game | **Pass** |
+| Ending cards | Informational: describe the planet as left | Unranked, no score, no "good ending" (DESIGN.md) | **Pass** |
+| Forecast tally | Informational: own accuracy over time | No reward for a high tally beyond the Record page (B3) | **Pass** |
+| Achievement system | — | None at launch (current decision) | **Agree**; if one is added later, it must reward skill shown (as below), never counts of activity |
+
+**Reward player skill, not activity.** I checked every Keeper's Record trigger (`docs/learning/prompts-and-reflections.md` §4) for "click yes to every quest" compulsion:
+
+| Page | Trigger | Rewards skill? | Change |
+|---|---|---|---|
+| A1–A5, C1 | Correct forecasts or checks | Yes | — |
+| B1 | 3 correct "What caused it?" checks | Mostly; guessing on 3–4 choices can fill it | **Only the first attempt** per event counts |
+| B3, C2 | Own accuracy rises; own fix holds | Yes | — |
+| **D2** | "...or opens 3 'On Earth' read-more pages" | **No.** Opening pages is activity | **Removed.** D2 fills from a written answer only (final question, or an Earth-link answer in a report) |
+| B2 (MS), B5, D1, B4 | Answers a report question | Partly: writing takes effort, but a one-word answer would count | **Needs at least one sentence (≥ 8 words)**; quality is still the teacher's call (rubrics) |
+| C3 | Monitor opened before half of own major builds | Partly: reflexive opening could game it | Keep (it is a habit we want), but the C3 criterion also needs a data reason (0.6); playtest watches for reflexive opening (open time under ~1 s) |
+
+**Zeigarnik effect: the next-gate display.** Unfinished goals stay on the mind. The Monitor's "Next: pressure 5 kPa, 62 %" display (DESIGN.md, gap owned by the Lead Game Designer) supports **C3** (reading data toward a target), **B1** (which causes move the bar), **A1** and **A2** (the gate values are real Mars and water thresholds), and **B4** in Phase 3 (hold progress). Condition: it must show the **variable and the real threshold**, not only a percent, or it becomes a progress bar that teaches nothing.
+
+**Experiential design and player types: who falls through the cracks?**
+
+| Experience channel | Where we have it | Thin for |
+|---|---|---|
+| Sensory | Sky, fog, ice, pressure-driven sound | Players with low vision or hearing (covered by numbers, patterns, subtitles) |
+| Cognitive | Forecasts, Monitor, "What caused it?" | — |
+| Active | Building, repairs, holds | — |
+| Affective | Thawlings, helmet-off, crew story | Players who skip story (most essential science doesn't depend on story) |
+| Relational | Group planets, colony posts, Shift Board, crew messages | **Solo home players**: crew messages are the only relationship |
+
+| Bartle type | What draws them | Goals they reach naturally | Risk |
+|---|---|---|---|
+| Achievers | Gates, Record, beacon | A1–A5, B3, B4 | Rush gates and skip journal; the faded, short feedback suits them |
+| Explorers | "Read more", Basu's sites, the ice experiment | A2, D2, B1 | Fine |
+| Socializers | Group planets, posts | B4, C2 (group) | **Weak in solo play** |
+| Killers | Fauna defense | C2 | **May stay in lethal defense**, which never lowers fauna pressure. That's the B2 lesson by consequence, but their D1 thinking may stay shallow. Report 2 asks every player the D1 question |
+
+**Is any goal reachable through only one channel?** **D1, B5, and D2 are measured only by writing** (reports, transfer task). Every player type must write, which is fair, but it disadvantages weak writers. Fix: the educator guide allows an **oral answer** to the same question, scored by the teacher with the same rubric (accessibility). No goal depends on one Bartle type.
+
+**Koster's lens on cognitive load.** Fun is the brain enjoying learning patterns; noise is patterns we can't yet read, boredom is patterns with nothing left to teach.
+
+| Risk | Where | Our control |
+|---|---|---|
+| **Noise** (too much at once) | **Phase 3 start**: O2, CO2, biomass, the Air window, and drift events arrive together | Shift Briefing names two values only (2.1); Air window shown from Phase 3; **recommend drift events start only after the first flora has taken root**, not at the Phase 3 gate (Lead Game Designer) |
+| Noise | Third-party machine GUIs | Learning-critical machines are ours and simple (DESIGN.md gap, Lead Game Designer) |
+| **Boredom** (nothing new) | Long holds; Index-limited waits in Phase 2 (~2 h in class, balance sheet §5.3) | Drift events and beacon parts during holds; interleaved forecasts (2.3) give old patterns a new twist; Phase 2 waiting stays a watch item |
+| Boredom | Experts reading guidance they don't need | Skippable worked example (2.2); fading (4.8) |
+
 ---
 
 ## 5. Classroom Mode
@@ -628,6 +922,9 @@ Phase play split 4 / 7 / 6 periods, from the Lead Game Designer's classroom time
 | 21 | Debrief 3: carbon cycle, stability and change, evaluating a claim about stable ecosystems | — | A5, B4, D2 |
 | 22 | Transfer task: Earth's climate system | — | B1, B2, D2 |
 | 23 | Post-test and reflection discussion | — | All |
+| (+~4 weeks) | Optional delayed post-test (3.6) | — | A2, A3, A5, B1, B2, B4, B5, D2 |
+
+Period-by-period teacher detail, debrief questions, and shortened-unit options: [docs/learning/educator-guide.md](docs/learning/educator-guide.md).
 
 **Groups move at different speeds.** Each group is on its own planet, so not every group reaches a gate before its debrief period. Debriefs are built to work anyway: they discuss what groups have seen so far, using the teacher overview to pick examples. A group that's far behind can get a higher rate on its own planet (teacher tool); a group that's ahead keeps playing ("read more" pages and optional story beats are the extension). Keeper's Reports fire at gates in the game, so for some groups the report arrives before the class debrief and for others after. Both are fine.
 
@@ -655,7 +952,7 @@ Phase play split 4 / 7 / 6 periods, from the Lead Game Designer's classroom time
 - **Every export uses pseudonymous IDs only. There is no option to export usernames** (user decision, 2026-11-26). Outside the server's computer, the data can't be linked to a student without the mapping file, so exports are anonymous.
 - At the end of a unit the teacher can delete the mapping (one student or all). After that the logs are anonymous on the server too. The educator guide recommends doing this.
 - No names, emails, ages, or other personal data are collected by the pack.
-- **Free-text answers** (Keeper's Report reflections) can contain anything a student typed, including their own name. They go in a separate `reflections.csv` that the teacher can switch off (ARCHITECTURE.md §8.6). Instructional view and recommended default: see 5.5.
+- **Free-text answers** (Keeper's Report reflections) can contain anything a student typed, including their own name. They go in a separate `reflections.csv`: on by default in classroom mode, off in standard mode, and the teacher can switch it off (user decision, 2026-11-26; details in 5.5).
 - The educator guide carries a plain-language data notice for students and families. Legal classification (COPPA, FERPA, GDPR) is **unverified**: no legal review yet (risk R-20).
 
 ### 5.5 What teachers need from the data (final CSV columns)
@@ -664,7 +961,7 @@ The teacher needs to answer three questions: *Where is each group? What has each
 
 | File | One row per | Columns |
 |---|---|---|
-| `players.csv` | Student (pseudonymous ID) | player_id, planet, band, group_size, sessions_present, sols_played, post_p1, post_p2, post_p3; forecasts_answered_p1..p3, forecasts_correct_p1..p3, forecast_accuracy_p1..p3, forecasts_expired; b3_criterion_met (yes/no/not enough data); explain_correct, explain_attempted; failures_claimed, failures_fixed, repeat_failures_after_own_fix; major_builds, monitor_checks_before_builds; drift_events_answered; report_1, report_2, report_3, report_final (submitted yes/no); for each goal: `<goal>_shown` (yes/no), `<goal>_sol`, `<goal>_evidence` (event type that filled it) |
+| `players.csv` | Student (pseudonymous ID) | player_id, planet, band, group_size, sessions_present, sols_played, post_p1, post_p2, post_p3; forecasts_answered_p1..p3, forecasts_correct_p1..p3, forecast_accuracy_p1..p3, forecasts_expired; b3_criterion_met (yes/no/not enough data); explain_correct, explain_attempted; failures_claimed, failures_fixed, repeat_failures_after_own_fix; major_builds, monitor_checks_before_builds; drift_events_answered; report_1, report_2, report_3, report_final (submitted yes/no); forecasts_interleaved_answered, forecasts_interleaved_correct (2.3); forecasts_scaffolded (pointer returned, 4.8); worked_example (used / collapsed / skipped_by_doing, 2.2); briefings_opened; for each goal: `<goal>_shown` (yes/no), `<goal>_sol`, `<goal>_evidence` (event type that filled it) |
 | `events.csv` | Log event | timestamp, session, planet, timeline, superseded (yes/no), sol, player_id (empty for planet events), scope (player/planet), band, event_type, cause, prompt_id, result (correct/incorrect/expired/late/none), goal_ids, ngss_codes, detail columns flattened from `data` |
 | `planets.csv` | Group planet | planet, preset, group_size, band, current_phase; for each gate: reached (yes/no), sol, session; storms_survived, core_failures_per_storm, repeat_failures_p1..p3, drift_events (count, answered), hold_progress, fauna options in use (shrouds, lures, quiet zones, defenses), thawling population stage, rollbacks |
 | `goals.csv` | Goal ID | goal_id, record_page_title (colony language), ngss_ms, ngss_hs, practice_only (yes/no), priority_tier, scope. Generated from `ngss_map.json`, so teachers see codes without repeating them in every row |
@@ -672,11 +969,20 @@ The teacher needs to answer three questions: *Where is each group? What has each
 
 `goals.csv` is new compared with ARCHITECTURE.md §8.6 (handoff to the Technical Lead). NGSS codes come from `data/mars/learning/ngss_map.json`; an example in that format is in [docs/learning/ngss_map.example.json](docs/learning/ngss_map.example.json).
 
-**Reflections: instructional view on the Technical Lead's proposal.** Agree with a separate `reflections.csv` and a teacher switch. D1, D2, and B5 are measured **only** by written answers (0.6), so without the text a teacher can't score them. Recommended:
-- Default **on** in classroom mode, off in standard mode (home play has no teacher).
-- Next to every reflection question, the game says: "This goes in your report. Don't write your name or personal details."
-- At export, replace any current player name on that planet found in the text with that player's ID (Technical Lead to judge feasibility).
-- If a teacher switches the file off, the educator guide gives the same questions as a paper worksheet, so D1, D2, and B5 can still be scored.
+**Reflections export: decision (user, 2026-11-26).**
+
+| Part | Rule |
+|---|---|
+| File | Reflections go in their own `reflections.csv`, never mixed into the other files |
+| Default | **On** in classroom mode; **off** in standard mode (home play has no teacher). The teacher can switch it off (`export.includeReflections`, ARCHITECTURE.md §8.6) |
+| Names scrubbed | At export, any current player name on that planet found in the text is replaced with that player's ID (Technical Lead implements; exact matching rules are theirs) |
+| Note to students | Next to every reflection question, in the game: "This goes in your report. Don't write your name or personal details." |
+| Paper fallback | If the file is switched off, or the school doesn't allow free text in exports, the educator guide gives the same questions as a paper worksheet with sentence starters (educator guide §6), so D1, D2, and B5 can still be scored |
+
+- **Rationale:** D1, D2, and B5 are measured **only** by written answers (0.6). Without the text a teacher can't score them, and two of the three goals have no other individual measure. Free text is the one place personal details can slip in, so it is separated, switchable, scrubbed, and warned about.
+- **Alternatives considered:** (a) no free text in any export: safest, but loses the only D1/D2/B5 evidence unless every class uses paper; (b) free text inside `players.csv`: simpler, but can't be switched off without losing the other columns; (c) off by default everywhere: protects privacy, but most teachers would never turn it on and the rubric-scored goals would go unmeasured.
+- **Trade-offs:** Learning: keeps the only individual measures of D1, D2, B5. Appeal: none for players; one more file and one setting for teachers. Privacy: residual risk that a student writes another identifying detail (a nickname, a school name) that name-scrubbing can't catch; the in-game note and teacher review reduce it.
+- **Revisit if:** a legal or school data-protection review (risk R-20) says free text can't be exported at all (then paper becomes the default), or playtests show students write names anyway.
 
 **Keeper's Record scope per goal** (the `"scope"` field in ARCHITECTURE.md §8.5): **every goal page A1–D2 is `"player"` scope.** No group achievement ever fills a player's goal page (section 3.0). Planet-scope events (gates, first storm survived, breathable held, equilibrium, beacon) are shown in the record's separate "Cairn team" section and logged with `scope: planet`, but they never set `<goal>_shown`.
 
@@ -753,4 +1059,5 @@ Mapped to NGSS performance expectations (PEs), with the science practices (SEPs)
 - **How visible is the learning?** (ill-structured; TEAM.md lists it.) Current answer: the same forecasts and Keeper's Reports in both modes; classroom mode adds teacher debriefs and an expectation of written reflections (5.1). Test in playtests: do forecasts feel like play or like a test?
 - **Teacher review:** ask one real teacher (or a teacher-reviewer stand-in, since this is a design exercise) to check section 5 and the teacher tools during Stages 1–3 (risk R-29).
 - **Colony posts:** do posts rotating each phase give every student enough Monitor practice (C3)? With 4–5 players and 3 phases, not everyone holds the Data post. Check in the first group playtest.
-- **Reflection text in the export:** see the current report's Decisions needed.
+- **Reflection text in the export:** decided (5.5). Open part: legal review of free text (risk R-20).
+- **Fading by player or by planet?** 4.8 asks for per-player fading of failure reports; the Technical Lead may need the per-planet fallback. Decide after their cost estimate.
