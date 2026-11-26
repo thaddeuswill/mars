@@ -164,6 +164,36 @@ From Coleman et al. (2010), as summarized in *Design and Development of Training
 | A learner having fun is more likely to learn | Game | We treat this as a **hypothesis to test**: playtests record a fun rating alongside learning gain. |
 | Better for someone to see themselves as a "player" than a "learner" | Game | **In the game, they're a player.** Game text never says "learner", "lesson", or "objective"; the Colony Record uses colony language. "Learner" belongs in teacher-facing materials only. |
 
+### 8.5 Harnessing differences about game goals
+
+Everyone wants the best product, but each discipline sees "best" differently. We don't average those views away; we **combine** them, so every aspect of the design is covered. A view only one discipline holds is often the thing the others would have missed.
+
+| Area of difference | Game design view | Instructional design view | Team definition (combines both) |
+|---|---|---|---|
+| **What a successful game is** | Players engage, finish, and recommend it; it gets downloaded and rated well | Learners meet the objectives; measurable learning gain | Success means passing **every** part of the Success Scorecard below. Failing either side is failing. |
+| **Importance of objectives in design decisions** | One input among many; fun and flow come first | The primary driver | Objectives set **what** must be learned; design chooses **how**. A decision that serves no goal ID and no pillar is cut. |
+| **Evaluation criteria** | Usability, engagement, retention | Learning gain, objective mastery | The Scorecard uses both sets, plus accuracy and feasibility. |
+| **Measurable learning outcomes** | Useful, but must not break play | Essential | Measure **inside the play** (action log, prediction prompts, Colony Record), never by stopping the game for a test. Pre/post tests happen outside the game. |
+| **Aligning game goals and learning goals** | Nice when it happens | Required | Required, and done through mechanics: the win condition (equilibrium) *is* the main learning outcome. The alignment table in LEARNING.md checks it. |
+
+#### Success Scorecard
+
+Used at the end of each roadmap stage from the prototype on, and for the final release decision. Each discipline owns its criteria, but the whole team signs off.
+
+| Lens | Criterion | Owner | Draft target |
+|---|---|---|---|
+| Usability | Players can use controls, Monitor, journal, and machines without outside help | Lead Game Designer | Must pass: no blocking usability issue in playtests |
+| Appeal | Players enjoy it and want to keep going | Lead Game Designer, Lead Artist | Average fun rating ≥ 4/5; most students ask to keep playing |
+| Learning | Measurable gain on the pre/post test; Colony Record goals met | Lead Instructional Designer | Targets set after first playtest (LEARNING.md section 3) |
+| Alignment | Every goal ID is taught, practiced, given feedback, and measured | Lead Instructional Designer | No gaps in the alignment table |
+| Accuracy | No content teaches a misconception; simplifications are labeled | Subject Matter Expert | Zero open accuracy issues rated "wrong" |
+| Feasibility | Runs on target classroom hardware; teachers set it up quickly | Technical Lead | Playable frame rate on modest hardware; setup under 30 minutes |
+| Delivery | On schedule and in scope for the stage | Producer | Stage exit criteria met |
+
+#### Perspective round
+
+At the start of any design review, before anyone critiques, each role answers in one or two sentences: **"From my lens, what would make this succeed?"** That puts every discipline's definition of success on the table first, so the critique covers all of them and differences are seen as coverage, not opposition.
+
 ## 9. Consensus Process (ill-structured decisions)
 
 1. **Frame:** the Producer (or the raising role) states the problem in shared vocabulary and lists which roles must weigh in.
@@ -192,5 +222,6 @@ What we've learned about working together. Add an entry whenever a task teaches 
 |---|---|---|
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
 | 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |
 | 2026-11-26 | Instructional and gaming roles expect different amounts of design change. Stability levels and a change process now make that explicit. | User research on LGD teams | User decision |

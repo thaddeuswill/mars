@@ -88,6 +88,8 @@ Before changing anything, check its stability level in `TEAM.md` (Expectations A
 
 Know the agreement gaps between disciplines and the team's position on each (`TEAM.md` section 8.4). Don't relitigate them; if evidence suggests a position is wrong, raise it as an ill-structured problem.
 
+When reviewing anything, start with your perspective-round statement ("From my lens, what would make this succeed?") and check the work against your rows of the Success Scorecard (`TEAM.md` 8.5). Treat other disciplines' different views of success as coverage you'd otherwise miss, not as opposition.
+
 For decisions that need agreement across roles, follow the Consensus Process in `TEAM.md` (agree / can live with it / block with a reason). When you respond to another role's work, say how you interpret their position using the team model in `TEAM.md` before agreeing or disagreeing.
 
 Expect ill-structured problems to be revisited. A decision is the team's current best answer, recorded with its reasons; it can change when playtests or new evidence come in.

@@ -120,7 +120,7 @@ This is an ill-structured design problem: there's no single right design, and le
 - The best solutions serve both: the mechanic *is* the lesson (design pillar 1, and section 4.4 of LEARNING.md: the win condition is the learning outcome).
 - Every major decision is reviewed by several roles, with the trade-off stated for both goals.
 - Disagreements are settled by playtest evidence where possible, not by whichever role argues hardest.
-- Each roadmap stage checks both goals before moving on.
+- Each roadmap stage checks both goals before moving on, using the Success Scorecard in [TEAM.md](TEAM.md) (section 8.5).
 
 ## Decisions
 
