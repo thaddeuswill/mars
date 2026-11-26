@@ -219,14 +219,13 @@ def pockets(t, x0, y0, lamp):
 fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); fa.save()
 fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); fb.save()
 en = T("o2_generator_end"); enr = en.region(3, 4, 12, 15)
-en.rect(3, 4, 12, 15, "I"); en.box(3, 4, 12, 15, "J")
+en.rect(3, 4, 12, 15, "H"); en.box(3, 4, 12, 15, "J")
 # X ribs (round 2: one-pixel diagonals with shadows read as noise in the iso render; now 2 px wide, light on mid gold)
 for k in range(0, 12):
     yy = 4 + k; xa = 3 + round(k * 9 / 11); xb = 12 - round(k * 9 / 11)
     for xx in (xa, xa + 1, xb, xb - 1):
         if 3 <= xx <= 12: en.dot(xx, yy, "J")
-    for xx in (xa - 1, xb + 1):
-        if 4 <= xx <= 11 and en.px[yy][xx] == "I": en.dot(xx, yy, "H")
+    # round 3: light ribs on a darker field (light-on-light read as an hourglass)
 en.save()
 sd_ = T("o2_generator_side"); sdr = sd_.region(3, 4, 12, 15)
 sd_.rect(3, 4, 12, 15, "H"); sd_.box(3, 4, 12, 15, "J"); sd_.rect(4, 8, 11, 8, "J"); sd_.rect(4, 12, 11, 12, "J"); sd_.rect(4, 9, 11, 9, "G"); sd_.rect(4, 13, 11, 13, "G"); sd_.save()
