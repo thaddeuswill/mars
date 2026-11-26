@@ -290,3 +290,34 @@ MARS-SHOTS step: cmd /mars back
 [14:47:56] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] You are back at the world spawn.
 [14:47:56] [Render thread/INFO] [mars-devtools/]: step: wait 80
 MARS-SHOTS step: wait 80
+[14:48:00] [Render thread/INFO] [mars-devtools/]: step: hud off
+MARS-SHOTS step: hud off
+[14:48:00] [Render thread/INFO] [mars-devtools/]: step: shot stage1_overworld
+MARS-SHOTS step: shot stage1_overworld
+[14:48:00] [IO-Worker-6/INFO] [mars-devtools/]: screenshot stage1_overworld: Saved screenshot as stage1_overworld.png
+MARS-SHOTS screenshot stage1_overworld: Saved screenshot as stage1_overworld.png
+[14:48:00] [Render thread/INFO] [mars-devtools/]: step: wait 20
+MARS-SHOTS step: wait 20
+[14:48:01] [Render thread/INFO] [mars-devtools/]: step: quit
+MARS-SHOTS step: quit
+[14:48:01] [Render thread/INFO] [mars-devtools/]: quitting
+MARS-SHOTS quitting
+[14:48:01] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[14:48:01] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: Dev lost connection: Disconnected
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[14:48:01] [Server thread/INFO] [minecraft/ServerCommonPacketListenerImpl]: Stopping singleplayer server as player logged out
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[mars-shots-1795704443610]'/minecraft:overworld
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[mars-shots-1795704443610]'/mars:planet_1
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[mars-shots-1795704443610]'/minecraft:the_nether
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[mars-shots-1795704443610]'/minecraft:the_end
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (mars-shots-1795704443610): All chunks are saved
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (planet_1): All chunks are saved
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[14:48:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+
+BUILD SUCCESSFUL in 1m 3s
+8 actionable tasks: 1 executed, 7 up-to-date
