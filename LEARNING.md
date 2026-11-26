@@ -26,6 +26,15 @@ Detailed content specs live in `docs/learning/`:
 | Learning layer in the vertical slice | A **minimal Phase 1 learning layer** is built in roadmap Stage 3 (section 3.5) | User decision, 2026-11-26 |
 | LMS integration | **After release, opt-in only** (section 5.6) | User decision, 2026-11-26 |
 
+**Rationale for the learning-side decisions in this file** (DOCUMENTATION.md section 4; goal priorities have their own block in section 1):
+
+| Decision | Rationale | Alternatives considered | Trade-offs (learning / appeal) | Revisit if |
+|---|---|---|---|---|
+| Individual vs. group evidence (3.0); only individual summative measures are graded | On a shared planet one student can reach every gate for the group (consistency review M-14) | Grade group outcomes (unfair, invalid); split groups into solo worlds (breaks the group model) | Learning: valid per-student measures. Appeal: group play kept | Playtests show per-student in-game evidence is too sparse to be useful |
+| 23-period unit, 17 play periods, 3/8/6 split (5.2) | User decision on ~17 play periods at ~11–12 h; split follows the standard 8/18/14 h | 20 periods with ~9–10 h play (would change a settled number) | Learning: three full debriefs and a transfer task kept. Appeal: enough play to reach the beacon | A pilot class can't fit 23 periods (risk R-19) |
+| Pacing by rates and hold times, never thresholds (5.1) | Scaled thresholds contradict the journal and can make lethal air "breathable" (SME finding 3) | Threshold multiplier ~0.3 (old text); scale distance from start value | Learning: numbers match the science. Appeal: none lost | Rate scaling can't reach ~11–12 h without breaking balance |
+| Forecasts hidden from other group members until resolved (3.2) | Keeps B3 evidence individual | Shared group forecast (more discussion, no individual evidence) | Learning: valid B3. Appeal: slightly less social; teachers can run a group "discuss, then re-forecast" activity in debriefs | Playtests show students want group forecasts |
+
 The game models real Mars conditions: the starting values in the Planetary Index (about 0.6 kPa pressure, about −60 °C, about 95% CO2, about 0.1% O2) match the real planet (SME, `docs/science/accuracy-review.md` Part A). The learning design builds on that: **the mechanics are the lesson**, and the game doesn't stop to lecture.
 
 ### Player language: design terms vs. in-game names
@@ -307,6 +316,55 @@ Each goal is written as something a learner can **do**, so it can be measured. G
 | D1 | Discuss whether terraforming another planet is a good idea, and what's at stake for life that might already be there (the dormant fauna, which are fiction) |
 | D2 | Connect what they learned to Earth's own climate and ecosystems |
 
+### Goal priorities
+
+When scope, schedule, or a design change forces a choice, goals get resources in this order. Priorities decide **who gets resources first**, not whether a goal exists: every goal stays in the game and on the post-test. Goal IDs stay stable (TEAM.md 8.1).
+
+**Criteria** (one point for each "yes"; ties broken by criterion 4, transfer to Earth, because transfer is the main target, 0.5):
+
+| # | Criterion | "Yes" means |
+|---|---|---|
+| 1 | **Core loop** | The goal is practiced through the core loop (build → Index responds → read Monitor → adjust) in at least two gameplay phases, not only through story or journal |
+| 2 | **Win condition** | Reaching equilibrium (the beacon) depends on understanding it |
+| 3 | **NGSS strength** | At least one PE mapped **Strong** by the SME (`docs/science/ngss-verification.md`) |
+| 4 | **Transfer to Earth** | The goal directly supports reasoning about Earth's climate or ecosystems |
+
+| Goal | 1 Core loop | 2 Win | 3 NGSS Strong | 4 Earth | Score | Tier |
+|---|---|---|---|---|---|---|
+| A2 Liquid water | Yes (Phase 2–3 gates) | Yes (hydrosphere band) | Yes (MS-PS1-4) | Partial | 3+ | **Primary** |
+| A3 Greenhouse effect | Yes (emitters, Phase 2–3) | Yes (temperature band) | Yes (HS-ESS2-4) | Yes | 4 | **Primary** |
+| A5 CO2/O2 exchange | Yes (Phase 3, flora since Phase 2) | Yes (O2, CO2 bands) | Yes (MS-LS1-6, HS-LS2-5) | Yes | 4 | **Primary** |
+| B1 Cause and effect | Yes (all phases) | Yes | Yes (HS-ESS2-2) | Yes | 4 | **Primary** |
+| B2 Feedback loops | Yes (fauna, storms) | Yes (balancing) | Yes (HS-ESS2-2) | Yes | 4 | **Primary** |
+| B4 Trade-offs | Yes (Phase 2–3) | Yes (the band *is* a trade-off) | Yes (HS-ETS1-3) | Yes | 4 | **Primary** |
+| D2 Link to Earth | No (journal, story, debriefs) | No | Yes (MS-ESS3-5 for D2; HS-ESS2-4) | Yes | 2 | **Primary** (override, see rationale) |
+| C2 Design, test, improve | Yes (failures in all phases) | Partial | Yes (MS/HS-ETS1-3, -4) | Partial | 2+ | Secondary |
+| C3 Data use | Yes (Monitor, all phases) | Partial | No (practice only) | Yes | 2+ | Secondary |
+| B3 Prediction | Partial (forecasts are an added layer) | Partial | No (HS-ESS3-6 Moderate) | Partial | 1+ | Secondary |
+| B5 Unintended consequences | Yes (fauna, Phase 2–3) | No | No (Moderate) | Yes | 2 | Secondary |
+| C1 Resource planning | No (mainly Phase 1) | No | Yes (MS/HS-ETS1-1) | Partial | 1+ | Secondary |
+| A1 Mars vs. Earth | Yes (Monitor) | No | No (MS-ESS1-3 Moderate) | Partial | 1+ | Secondary |
+| A4 Radiation | No (Phase 1 hazard, fading) | No | No (HS-PS4-4 Moderate; MS none) | No | 0 | **Can be deemphasized** |
+| D1 Ethics | No (story, reflection) | No | No (no PE) | Partial | 0+ | **Can be deemphasized** |
+
+**What each tier means**
+
+| Tier | Gets | If scope is cut |
+|---|---|---|
+| **Primary** | Resources first: content, feedback, playtest attention, post-test items. Must meet its criterion (0.6) for the release decision | Never cut. A design change that removes its teaching, feedback, or measure is blocked until replaced (DOCUMENTATION.md 3) |
+| **Secondary** | Full alignment, built after Primary needs are met | Dedicated content can shrink (e.g. fewer forecasts), but it keeps one teaching element, one feedback element, and one individual measure |
+| **Can be deemphasized** | Built last | Can drop to "taught by world and journal, measured by post-test only". A4: drop story beat 5 and forecast F7 first. D1: keep the Report 2 question and final reflection; drop optional beats 11 and 16 first |
+
+**Decision rationale** (DOCUMENTATION.md section 4)
+- **Decision:** the tiers above.
+- **Rationale:** criteria 1 and 2 follow TEAM.md 8.4 ("the win condition is the main learning outcome"): goals the core loop and win condition already carry are the cheapest to teach well and the most practiced. Criterion 3 protects the NGSS claims a teacher will rely on. Criterion 4 reflects 0.5 (transfer to Earth is the main target).
+- **Override:** D2 scores 2 but is Primary, because the SME found that four Earth-science mappings (MS-ESS3-5, HS-ESS2-4, HS-ESS3-6, and A3's MS code) only count if D2 content exists. Losing D2 would weaken A3 and B2 at the NGSS level too.
+- **B3 note:** B3 is Secondary as a *goal*, but forecasts are also the main per-student in-game evidence for A2–A5 and C1. Cutting forecasts hurts measurement of Primary goals; treat the forecast system as Primary infrastructure.
+- **Alternatives considered:** (a) all goals equal: rejected, gives no guidance when scope is cut (risk R-01). (b) Rank by NGSS alone: rejected, would push D2 and B2 down at MS and ignore the core loop. (c) Rank by what's cheapest: rejected, makes learning priorities follow production convenience.
+- **Trade-offs:** instructional value: protects the systems goals and the Earth link that carry most of the learning gain. Market appeal: A4 (radiation spikes) and D1 (the thawling story) are some of the most dramatic content, so deemphasizing their *learning* support doesn't mean cutting the *mechanics*; the Lead Game Designer may keep them for appeal.
+- **Revisit if:** the first playtests show a deemphasized goal is learned well for little cost, or a Primary goal can't reach its criterion; the SME's verbatim NGSS check changes a verdict; or the breathability decision turns O2 into a richer B4 trade-off.
+- **Status:** proposed by the Lead Instructional Designer. Flexible (TEAM.md 8.1). Needs a consensus check with the Lead Game Designer and Producer, because it affects scope cuts.
+
 ### Science accuracy notes
 
 Where the game simplifies, the journal says so. This keeps the learning honest. Wording and sources from the SME (`docs/science/accuracy-review.md` Part C and proposed honesty notes). Journal text at middle school depth:
@@ -473,6 +531,33 @@ A player has met the outcomes when, in their own Keeper's Record:
 - **Optional depth.** Journal entries are short, with "read more" for players who want it.
 - **Fail forward.** Because gates lock in, mistakes cost time, not progress, which keeps failure safe enough to learn from.
 - **Motivational and instructional, both.** Every feedback element is reviewed for both values (TEAM.md 8.4).
+
+### 4.6 When feedback may interrupt play (instructional view, for consensus)
+
+TEAM.md 8.6 holds the draft rules, owned jointly with the Lead Game Designer. This is my review and proposed version. It goes to the consensus process; nothing here is final until the Lead Game Designer has weighed in and the Stage 3 playtest has checked it.
+
+**Terms.** A **pop-up** takes over the screen or needs a click to dismiss. A **log line** is one line in the colony log or HUD that doesn't stop play. A **natural pause** is entering the dome, sleeping, opening the Monitor or journal, or reaching a gate.
+
+| Draft rule (TEAM.md 8.6) | My position | Reason (learning view) |
+|---|---|---|
+| 1. Never interrupt during danger, combat, or active building | **Agree** | Interrupting during a task splits attention and adds extraneous cognitive load; the natural consequence is the first feedback anyway |
+| 2. Non-urgent feedback only at natural pauses | **Agree**, with one addition: **forecast results get first place in the queue** at the next natural pause | Feedback works best close to the event it explains. The world's response is immediate; the explanation should come at the first pause, before other messages bury it |
+| 3. Only blocking interruptions: first life-threatening warnings, and deferrable phase debriefs | **Agree on the warnings. Partly disagree on the debrief:** deferral should be limited, not open-ended | A Keeper's Report holds the reflection that D1, D2, B2, B5 are measured by. If it can be deferred forever, those individual measures go missing. Proposal: deferrable; re-offered at each natural pause and at the start of the next session ("Since last shift: report not sent"); teacher overview shows unsent reports. Still never blocks progress |
+| 4. At most one non-urgent pop-up per ~10 min | **Agree for pop-ups; disagree if it covers log lines** | Log lines don't break flow immersion and carry the cause-and-effect information (B1, C2). Limit pop-ups, not log lines. Log lines get their own cap (proposed: no more than about 3 per minute, merged when similar) to avoid overload |
+| 5. No new critical failure in the last ~5 min of a classroom session | **Agree, and extend it**: no new forecast and no Keeper's Report pop-up in that window either; they wait for the next session's "Since last shift" recap | A forecast that resolves after a pause is far from its outcome in real time; students forget their reasoning. A report written while packing up gets a weak answer |
+| 6. Every prompt is deferrable except life-threatening ones | **Agree**, with a rule for forecasts: a deferred forecast **expires** when its outcome becomes visible. It's logged as unanswered, never as wrong | Answering after seeing the outcome isn't a prediction (B3 validity). Expiry with no penalty keeps it fair to players who were busy |
+
+**Additions I propose**
+
+| # | Rule | Reason |
+|---|---|---|
+| 7 | Forecasts are issued at least ~1 sol (of the active preset) before their outcome, so they can wait for a natural pause and still be answered in time | Makes rules 1, 2, and 6 compatible with B3 |
+| 8 | Escalating hints (adaptive feedback) appear only at natural pauses, never mid-task | Consequences first; the player tries their own fix before the next hint |
+| 9 | Nothing important exists only in a pop-up. Every message stays in the journal archive | No time-pressured reading (0.1); absent students can catch up |
+| 10 | The action log records each interruption, deferral, and expiry | Lets us measure breaks in immersion (TEAM.md section 3) and check rules 3–6 in playtests |
+| 11 | In a group, a forecast or report for one player never pauses the others | Shared planet: one student's prompt shouldn't stop the group |
+
+**Where we may disagree with the Lead Game Designer:** rule 3 (limited deferral of reports) and rule 4 (scope: pop-ups only). Both serve measurement; both cost a little flow. I'd accept "can live with it" on a stricter pop-up limit if log lines stay unlimited in content but capped in rate.
 
 ---
 
