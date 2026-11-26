@@ -25,18 +25,19 @@ Every entry here becomes an entry in the shared feedback format (DOCUMENTATION.m
 |---|---|---|---|---|---|---|
 | F1 | P1 / first dust storm warning (story beat 4) | "A dust storm reaches the dome in about 1 sol. What will happen to your solar power?" | It drops · It rises · It stays the same | "Why?" Dust blocks sunlight · Wind turns the panels · Cold makes panels stronger | B3, C1 | Pair with BELL's storm forecast. Avoid any claim about damaging wind (DESIGN.md fantasy audit: Mars storms can't do that) |
 | F2 | P1 / first solar event, ~1 sol ahead (story beat 5) | "A solar event is coming. Where will a Keeper get the smallest radiation dose?" | Inside, under thick shielding · Out on open ground · On top of a hill · Next to a running machine | "Why does Mars's surface get more radiation than Earth's?" Thin air and no global magnetic field · Mars is closer to the Sun · Red soil gives off radiation | A4, B3 | "Closer to the Sun" is a deliberate misconception distractor (Mars is farther) |
-| F3 | P1 / first pressure source running (depends on consistency review C-01) | "Your [pressure source] is adding gas to the air. What will the Monitor show for pressure over the next sol?" | Pressure rises slowly · Pressure jumps to Earth's level · Nothing changes | "Why so slowly?" A planet's air is huge compared to one machine · The machine is broken · Gas leaks to space at once | A1, B1, B3 | Wording waits for the Lead Game Designer's Phase 1 pressure source |
-| F4 | P2 / temperature near an extractor first above 0 °C while pressure is low (story beat 9, Thaw) | "It's above 0 °C near the extractor, but the air is still very thin. What will the ice do?" | Turn to vapor (or melt and quickly boil away), with no puddles · Melt into puddles · Stay frozen | "Why?" Low pressure lowers water's boiling point · Ice on Mars is not water · It's still too cold | A2, B3 | SME wording for the counter: accuracy-review.md Part D |
+| F3 | P1 / first Regolith Outgasser running (unlocks at Dome stable) | "Your Regolith Outgasser is adding gas to the air. What will the Monitor show for pressure over the next sol?" | Pressure rises slowly · Pressure jumps to Earth's level · Nothing changes | "Why so slowly?" A planet's air is huge compared to one machine · The machine is broken · Gas leaks to space at once | A1, B1, B3 | About +0.10 kPa/sol per Outgasser (balance sheet §2). Monitor milestone "Armstrong line" at 6.3 kPa is a good follow-up journal moment |
+| F4a | P1 / first ice block warmed above 0 °C locally (e.g. near a heater) while pressure is below the triple point | "This ice is now above 0 °C, but the air is very thin. What will it do?" | Turn straight to vapor, with no puddle · Melt into a puddle · Stay frozen | "Why?" The air is too thin for liquid water · Ice on Mars is not water · It's still too cold | A2, B3 | Ice-to-water rule (DESIGN.md §2, SME to confirm thresholds). This is the A2 misconception moment |
+| F4b | P2 / Thaw gate: first ground ice near an extractor melts (pressure already ≥ 5 kPa) | "Last time, warmed ice vanished. Now the air is much thicker. What will warmed ice do?" | Melt into water that stays · Turn to vapor again · Stay frozen | "What changed?" Higher pressure raised water's boiling point · The ice is different · The machine is stronger | A2, B3 | Contrast with F4a (example and non-example). The Monitor shows water's boiling point at the current pressure |
 | F5 | P2 / first greenhouse emitter switched on | "You start the greenhouse emitter. What will the surface temperature do over the next few sols?" | Rise slowly · Drop · Stay the same | "Why?" Its gases trap heat that would escape to space · It blocks sunlight · It burns fuel that heats the air directly | A3, B3 | Emitter makes factory-made greenhouse gases, not CO2 (SME B4) |
 | F6 | P2 / player count of active emitters and extractors passes a threshold after first fauna (Hydrosphere period) | "You add three more extractors. What will happen to thawling activity near your machines?" | It goes up · It goes down · No change | "What kind of loop is this?" Reinforcing: more machines bring more fauna, which damage machines, so you build more · Balancing · Not a loop | B2, B5, B3 | Fiction: thawlings. Explanation must say the behavior is invented, the loop type is real |
 | F7 | P2 / first solar event after pressure has at least doubled since F2 | "The air is much thicker than at your first solar event. What will this one do at the surface?" | Less radiation reaches the ground · More · The same | "Why?" More air means more matter to absorb radiation · Thicker air reflects the Sun · Fauna block it | A4, B3 | Spaced retrieval of F2. Depends on DESIGN.md "spikes weaken as the atmosphere thickens" |
 | F8 | P3 / first large flora seeding | "You seed a large field of flora. What will happen to O2 and CO2?" | O2 rises, CO2 falls · Both rise · Both fall | "Why?" Plants take in CO2 and give off O2 · Plants make CO2 at night only · Soil releases O2 | A5, B3 | — |
-| F9 | P3 / O2 rising toward the top of its band | "O2 keeps rising. What risk is coming?" | Fires start more easily · The air gets too thin · Plants stop growing | "Why?" More O2 makes things burn more easily · O2 is poisonous at any level · O2 makes the air heavier | A5, B4, B3 | Fire-safety band 19–23% (SME B2) |
+| F9 | P3 / O2 rising toward the top of its band | "O2 keeps rising. What risk is coming?" | Fires start more easily · The air gets too thin · Plants stop growing | "Why?" More O2 makes things burn more easily · O2 is poisonous at any level · O2 makes the air heavier | A5, B4, B3 | Fire-safety band 19–23%; breathable window at 75 kPa is ~21.5–23% (LEARNING.md 4.7). Consider firing F9 early, when O2 first enters the window |
 | F10 | P3 / player turns emitters down (or upkeep fails) during the equilibrium push | "Your emitters are turned down to save power. What will temperature do over the next sols?" | Fall slowly · Rise · Stay the same | "What's the trade-off?" Less power used, but the planet cools and water may freeze · No trade-off · Less fauna, nothing else | B4, A3, B3 | — |
 
-Count per phase: P1 3, P2 4, P3 3.
+Count per phase: P1 4 (F1, F2, F3, F4a), P2 4 (F4b, F5, F6, F7), P3 3 (F8, F9, F10).
 
-**Stage 3 vertical slice:** F1 (and F2 if the radiation spike is in the slice).
+**Stage 3 vertical slice:** F1 and F4a (and F2 if the radiation spike is in the slice).
 
 ---
 
@@ -65,7 +66,8 @@ Every gate journal entry ends with an "On Earth" line (story bible 6.3). Mensah'
 |---|---|---|---|---|
 | Gate: Dome stable | Keeping air in, life support | Earth's thick air protects us for free; Mars's air pressure is less than 1% of Earth's | A1, D2 | Ratio wording |
 | Report 1 reply (Phase 2 begins) | Pressure rising; water still can't stay liquid | On Earth, thick air keeps puddles and oceans liquid; water's boiling point drops on high mountains | A1, A2, D2 | Mountain boiling example |
-| Gate: Thaw | Ice turns to vapor | Same physics on Earth: freeze-dried food and frost that vanishes without melting (sublimation) | A2, D2 | Examples |
+| Phase 1: first ice turns to vapor (F4a) | Ice turns to vapor | Same physics on Earth: freeze-dried food and frost that vanishes without melting (sublimation) | A2, D2 | Examples |
+| Gate: Thaw (F4b) | Water now stays; ground collapses near warm machines | Thick air keeps water liquid on Earth; thawing permafrost damages buildings and roads today (real side effect) | A2, B5, D2 | Permafrost claim |
 | Gate: first emitter (F5) | Adding greenhouse gas warms the planet | Earth's greenhouse gases (CO2, methane, water vapor) trap heat; the greenhouse effect is **not** the ozone hole | A3, D2; MS-ESS3-5, HS-ESS2-4 | All |
 | **Report 2 reply (Phase 3 begins)** and class debrief period 14 | Warming had side effects; reinforcing loop with fauna | **Evidence of Earth's warming over the past century**: CO2 and temperature records, with human activities as the main cause; a real reinforcing loop (thawing permafrost releasing stored carbon, or ice–albedo); Earth's emissions as a side effect, not a goal | A3, B2, B5, D2; MS-ESS3-5, HS-ESS2-4, HS-ESS2-2 | All. The classroom debrief needs a real CO2 and temperature graph from a named source (MS-ESS3-5 condition) |
 | Gate: first flora | Plants take in CO2 and give off O2 | Earth's oxygen comes from photosynthesis on land and in the ocean | A5, D2 | Ocean share, if a number is used |
@@ -86,7 +88,7 @@ Header: *"What the colonists will need to know."* One page per goal. A page fill
 | Goal | Page title (colony language, draft) | Fills when the player… (any one) |
 |---|---|---|
 | A1 | How Mars is different from home | Gets F3 right, or a "What caused it?" check on a Phase 1 hazard right |
-| A2 | Why water won't stay liquid here, and what would change that | Gets F4 right (HS: and its "why") |
+| A2 | Why water won't stay liquid here, and what would change that | Gets F4a or F4b right (HS: both, with the "why") |
 | A3 | How to warm a planet | Gets F5 right (HS: and its "why") |
 | A4 | Staying safe from the Sun's storms | Gets F2 or F7 right |
 | A5 | Plants, air, and keeping the balance | Gets F8 or F9 right |
@@ -96,7 +98,7 @@ Header: *"What the colonists will need to know."* One page per goal. A page fill
 | B4 | What it costs to hold the balance | Gets F10 right and answers Report 3 |
 | B5 | When a fix causes a new problem | Answers Report 2 |
 | C1 | Getting through a storm | Gets F1 right, and placed or refueled life support before the first storm |
-| C2 | Fixing it so it stays fixed | Own repair of a failure type with no repeat from the same cause that phase |
+| C2 | Fixing it so it stays fixed | Own repair (claimed and marked fixed on the Shift Board) of a failure type, with no repeat from the same cause that phase |
 | C3 | Checking the data first | Opened the Monitor before at least half of own major builds (minimum 3 builds) |
 | D1 | Sharing a planet | Answers Report 2 or the final question |
 | D2 | What Mars teaches about Earth | Answers the final question, or opens 3 "On Earth" read-more pages |
