@@ -1,0 +1,18 @@
+# Gradle and build outputs
+.gradle/
+build/
+out/
+bin/
+# Dev runs (worlds, logs, crash reports, eula.txt)
+run/
+run-*/
+runs/
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
