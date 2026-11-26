@@ -99,6 +99,38 @@ If a document or report uses one of these terms differently, flag it in the revi
 ### Still open (needs the user)
 - Licenses for our own code, assets, and educator materials.
 
+### Design process model: fuzzy ADDIE
+
+No single learning game model dominates, and most teams use some form of ADDIE (Fanning, 2008). We use ADDIE (see LEARNING.md) with three adjustments from the literature:
+
+**1. Nonlinear ("fuzzified") movement between phases** (FIDGE, Akalli & Cagiltay, 2006). Strict, linear ADDIE doesn't fit learning game design. Any role can move back to analysis or design when evidence calls for it: a playtest finding sends us back to design; a new learner insight sends us back to analysis. The roadmap stages are checkpoints, not one-way gates. Moving back is normal, and goes through the change process (section 8.2).
+
+**2. Additions for software-based learning environments** (Fanning, 2008):
+| Addition | How we cover it |
+|---|---|
+| Software production processes | ROADMAP.md stages; ARCHITECTURE.md coding practices and testing |
+| Preparing learners to use the environment | Phase 1 onboarding; classroom period 1 (controls and Mars intro); player guide |
+| How long it will be operational | Maintenance plan: Minecraft and NeoForge version updates, support window after release *(to add to ROADMAP, Producer)* |
+| User-generated content and lessons learned | Data-driven gates and parameters let teachers and players share challenge datapacks and worlds *(to add to ROADMAP, Producer)* |
+| Environment-specific summative evaluation | Success Scorecard (8.5) and the pre/post study |
+
+**3. RETAIN as a design and evaluation lens** (Gunter et al., 2008; built on Gagné's nine events, Keller's ARCS, and Bloom's taxonomy). Six elements: **relevance, embedding, transfer, adaptation, immersion, naturalization**. The Lead Instructional Designer reviews the design against it (LEARNING.md).
+
+### When the team debates key issues
+
+The models above stop short of saying **when** an LGD team should debate key design issues or **how** to get everyone actively involved. This schedule fills that gap. Each debate uses the perspective round (8.5) and the consensus process (section 9).
+
+| Stage | Debates to hold | Why then |
+|---|---|---|
+| 0–1 Concept, pre-production | Definition of success; role of objectives; alignment; measurable outcomes; realism vs. fantasy; contested terms | Cheapest time to settle them. *(Held: see 8.4, 8.5, section 3.)* |
+| 2 Prototype | Fun vs. learning with real evidence; usability; functional fidelity of the Index model | First playable evidence |
+| 3 Vertical slice | Feedback: motivational and instructional; player language; cognitive load of text and fantasy | First complete experience of the learning layer |
+| 4 Production | Fantasy audit for each new element; how often design is changing; scope cuts | Content volume and change are highest |
+| 5–6 Alpha, beta | Evaluation criteria and results; revisit 8.4 positions with playtest data | Evidence to confirm or overturn positions |
+| 7 Release | Operational lifetime; user-generated content; what we learned as a team | Planning beyond launch |
+
+**Active involvement:** every role gives a perspective-round statement in every scheduled debate. A role that has nothing to add says so explicitly, so silence is never mistaken for agreement.
+
 ## 5. What Teammates Can Count On
 
 Implicit expectations, so we don't have to restate them each time.
@@ -263,6 +295,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Process: fuzzy (nonlinear) ADDIE with Fanning's software additions and RETAIN as a lens, plus a schedule for when key debates happen, which the models leave out. | User research |
 | 2026-11-26 | Each discipline needs different documented information, and LGD must show the link from design decisions to learners' performance requirements. DOCUMENTATION.md adds a document map, traceability chain, decision rationale rule, and a shared feedback format. | User research |
 | 2026-11-26 | Fidelity, immersive, adaptive, and engagement have no consistent definitions across disciplines (Coleman et al., 2010). Team definitions with required qualifiers are now in TEAM.md section 3. | User research |
 | 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
