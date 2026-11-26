@@ -56,6 +56,12 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Local dev instance and dedicated test server can be launched from the repo
 - ⬜ Basic CI: the pack builds and the server boots without errors
 
+**Learning design** (see [LEARNING.md](LEARNING.md))
+- ⬜ Learner audience and curriculum alignment decided
+- ⬜ Learning goals finalized and mapped to game content
+- ⬜ Pre/post test drafted
+- ⬜ Action-log format defined (local only, no personal data)
+
 **Design data**
 - ⬜ Balance sheet: every Planetary Index parameter, its rates, machine outputs, and gate thresholds in one table
 - ⬜ Rough pacing curve: when each gate should be reached against the target playtime
@@ -118,7 +124,9 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 **Cross-cutting**
 - ⬜ Art: textures, models, sounds, sky/fog shaders
-- ⬜ Lore journal entries triggered by world-state gates
+- ⬜ Lore journal entries triggered by world-state gates, including science explanations, prediction prompts, and reflection questions
+- ⬜ Local action log for assessment
+- ⬜ Educator guide and worksheets
 - ⬜ Performance budget: how many ticking machines a typical late-game base runs, measured on the test server
 
 **Exit criteria:** every gate in DESIGN.md is reachable in a normal playthrough.
@@ -147,6 +155,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Difficulty of fauna and hazards tuned
 - ⬜ Performance on low-end hardware checked
 - ⬜ Config options for difficulty or pacing, if needed
+- ⬜ Learning study: pre/post test with a playtest group; check against success criteria in LEARNING.md
 
 **Exit criteria:** playtesters finish the pack and the pacing feels right.
 
