@@ -437,7 +437,63 @@ Numbers (gain and low-pass values) are in keyframes §3.1. **Audio has no owner 
 
 ---
 
-## 11. Sources and verification
+## 11. Planetary Monitor and group UI visuals
+
+The Lead Game Designer owns the UI specs (screens, flows, wording). This section gives the **visual system** those specs should use. Proposals, open to the UI spec.
+
+### 11.1 Pressure gauge with milestones (Armstrong line, Everest pressure)
+- A vertical bar on a **log scale from 0.5 to 110 kPa**, so Phase 1's climb from 0.6 to 5 kPa takes real space on the bar (on a linear scale it would be a few pixels).
+- Notches, each with a **pictogram, a short label, and a number**. Unreached notches are hollow outlines; reached ones fill in, with a BELL log line the first time.
+
+| Notch | kPa | Pictogram | Label (wording: LGD) |
+|---|---|---|---|
+| Triple point | 0.61 | Droplet split by a line | "Water can't stay liquid below this" |
+| Phase 2 gate | 5 | Gate diamond | "Phase 2" |
+| **Armstrong line** | 6.3 | Body outline with a drop | "Armstrong line" |
+| Phase 3 gate | 30 | Gate diamond | "Phase 3" |
+| **Everest pressure** | 33.7 | Mountain peak | "Top of Everest" |
+| Target | 75 | Flag | "Breathable target" |
+| Earth sea level | 101.3 | Globe | "Earth" |
+
+- The current value is a horizontal pointer with the number beside it; the trend is an arrow shape (up, flat, down), never only a color.
+
+### 11.2 The O2 partial-pressure display ("Air window")
+**The problem:** at 75 kPa, the breathable and fire-safe range is only **21.5–23 % O2** (balance sheet §1). On a normal 0–100 % gauge that window is about 1.5 % of the bar: invisible on a small screen and meaningless to a 12-year-old. The window's lower edge also **moves with pressure** (16 kPa ÷ pressure), which is the B4 trade-off.
+
+**Visual answer, two levels:**
+
+**Level 1 (default, middle school band): three checks and a zoomed O2 gauge.**
+- **Air check row:** three small gauges side by side, each with a target notch and a check / cross shape: **"Thick enough"** (pressure ≥ 75 kPa) · **"Oxygen push"** (O2 partial pressure ≥ 16 kPa) · **"Low CO2"** (≤ 0.5 kPa). When all three show a check, a helmet-off icon lights (shape changes from closed helmet to open helmet). "Oxygen push" follows the story bible's middle school wording, "how hard the oxygen pushes".
+- **Zoomed O2 gauge:** the O2 bar shows only **15 % to 27 %**, so the window fills about an eighth of the bar instead of a sliver. Zones, each with a pattern **and** a pictogram:
+
+| Zone | Range | Pattern | Pictogram |
+|---|---|---|---|
+| Too thin to breathe | below 16 kPa ÷ pressure (21.5 % at 75 kPa) | Sparse dots | Closed helmet |
+| **Breathe here** | from the lower edge to 23 % | Clear, with a bold outline | Open helmet |
+| Fire risk | above 23 % | Diagonal hatch | Flame |
+
+- **The lower edge slides.** When pressure goes up, the "too thin" zone shrinks and the "breathe here" zone **widens on screen**. A player who pushes pressure higher literally sees the window open up. This is the B4 lesson made visible, and it is the main reason for this design.
+- A ghost notch shows where the edge would be at the next 5 kPa of pressure (optional, high school band).
+
+**Level 2 (high school band, "read more"): the Air window chart.** A small 2D chart: pressure across (60–100 kPa), O2 % up (15–27 %). The breathable, fire-safe region is the bold-outlined shape; the current state is a dot with a short trail of the last few sols. Fire-risk area hatched, too-thin area dotted. Fits 120×80 GUI px.
+
+**Not used:** a single "breathability %" number. It hides the two causes the player has to balance.
+
+**For the Lead Instructional Designer:** this display supports A1, A5, B4, C3; a 12-year-old readability check in the first walkthrough is needed (handoff in the report).
+
+### 11.3 Shift Board
+- **Block:** a cork-and-metal board with pinned paper slips; the number of slips on the texture follows the number of open failure reports (0–6 slip variants), so the board shows "lots to fix" from across the room.
+- **Screen:** one row per open failure: failure icon (octagon), machine name and place, claimer's in-game name (or "Open"), and a **status shape**: hollow circle = open, half-filled = claimed, check = fixed. Text says the status too.
+- Same panel style as BELL's log (§7.1), with a paper-slip look for each row so it reads as "people's notes".
+
+### 11.4 Unranked ending cards
+- Every card uses the **same frame, same palette range, same size** (192×108 illustration plus a text line). No card is darker, sadder, gold-framed, starred, or scored.
+- Illustrations show places and animals calmly: thawlings nesting by a lake; a frosty deep-ice cave with thawling tracks; Fridge B's frosted jars with Basu's notebook; outposts on sunken ground beside a new one on rock; per-Keeper post card with post icons.
+- Numbers (O2 margin, biomes, sols held) are plain text on the card, not bars or medals.
+
+---
+
+## 12. Sources and verification
 
 Network access to NASA and reference sites was blocked in this session, so **no source below was opened**. Citations are from the artist's knowledge and must be checked by the SME before any of it appears as fact in game text. Colors in this guide are not used as facts in game text, so they are safe to prototype with.
 

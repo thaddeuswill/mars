@@ -22,7 +22,7 @@ Detailed content specs live in `docs/learning/`:
 | Classroom group model | **Groups of 3–5 students share one planet; a class runs several planets** | User decision, 2026-11-26 |
 | Classroom unit | **~17 play periods** (~11–12 h of play) inside a ~23-period unit (section 5.2) | User decision, 2026-11-26 |
 | Curriculum standard | **NGSS**, middle and high school bands (section 6) | User decision |
-| Data | **Local, anonymous action log.** Teacher CSV export uses **anonymous IDs only**; there is no username option (section 5.4) | User decision, 2026-11-26 |
+| Data | **Local action log: pseudonymous on the server, anonymous in every export.** Teacher CSV export uses **pseudonymous IDs only**; there is no username option (section 5.4) | User decision, 2026-11-26 |
 | Learning layer in the vertical slice | A **minimal Phase 1 learning layer** is built in roadmap Stage 3 (section 3.5) | User decision, 2026-11-26 |
 | LMS integration | **After release, opt-in only** (section 5.6) | User decision, 2026-11-26 |
 
@@ -108,7 +108,7 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 | B4 Trade-offs | Equilibrium band; narrow breathable O2 window vs. fire risk; shrouds (−15 % output) and lures (water upkeep) vs. fauna; expansion vs. upkeep | Forecast F10; drift events during holds; Keeper's Report 3 | Monitor; fire failure report; Keeper's Report | Post-test trade-off scenario; Report 3 reflection | Equilibrium hold reached | **Gap closed** (objective added in 0.6) |
 | B5 Unintended consequences | Fauna blowback in Phase 2 (fiction) **and real side effects**: ground collapse from melting ground ice, perchlorate in meltwater; Earth example in D2 content | Forecast F6; Keeper's Report 2 | Fauna appear near emitters; failure reports name fauna | Report 2 reflection, B5 rubric | — | Covered |
 | C1 Resource planning | Phase 1 O2, water, and power | Forecast F1; preparing for the first storm | Dome survives or fails | Post-test planning scenario; F1 result | Dome survives the first dust storm (by the second storm) | Covered |
-| C2 Design, test, improve | Breaches, wear, storms, ground collapse, emitter-wear drift events | Own repairs, claimed on the **Shift Board** | Failure reports; Hana's tips fade | Own repairs (claim → fixed credit goes to the claimer's anonymous ID): same cause doesn't recur; "What caused it?" on own failures | Repeat failures fall across phases | Covered. Needs Shift Board claims and repair events logged with the actor ID (Technical Lead) |
+| C2 Design, test, improve | Breaches, wear, storms, ground collapse, emitter-wear drift events | Own repairs, claimed on the **Shift Board** | Failure reports; Hana's tips fade | Own repairs (claim → fixed credit goes to the claimer's pseudonymous ID): same cause doesn't recur; "What caused it?" on own failures | Repeat failures fall across phases | Covered. Needs Shift Board claims and repair events logged with the actor ID (Technical Lead) |
 | C3 Data use | Planetary Monitor (derived values: O2 and CO2 partial pressure, boiling point) | Checking the Monitor before builds; Data post (DESIGN.md colony posts) | Monitor trends | Own Monitor checks before own major builds, plus a data reason in a Keeper's Report or teacher check-in | — | Covered |
 | D1 Ethics | Thawlings; the crew's secret; the Moreno–Basu argument; four fauna options (defend, shrouds, lures, quiet zones), none "right"; unranked ending cards | Keeper's Report 2; final reflection; class discussion | Earth reply; epilogue cards (no ranking) | Written reflection, D1 rubric | — | Covered. Depends on non-lethal fauna options (decided 2026-11-26) |
 | D2 Link to Earth | Journal "On Earth" lines; Mensah's replies; Phase 2 debrief with Earth CO2 and temperature graphs | Keeper's Report reflections; transfer task | Mensah's replies; class debriefs | Transfer task and reflections, D2 rubric | — | **Content specified** in `docs/learning/prompts-and-reflections.md`; text not yet written; Earth facts need SME check |
@@ -226,7 +226,7 @@ Different kinds of content need different teaching and testing approaches.
 
 | Environment | How it's used | Constraints to design for |
 |---|---|---|
-| **Classroom / computer lab** | Teacher runs several **group planets** (one per group of 3–5); students play in sessions, with discussion between | 45–60 min periods *(assumed)*; school hardware may be weak *(assumed)*; school networks may block game servers; teacher must pause, reset, and monitor several planets at once. **Each student needs a Minecraft Java Edition account**; many schools license Minecraft Education instead, which may not run NeoForge mods (**unverified**; Technical Lead to confirm, risk R-09). School IT must approve the launcher and Java |
+| **Classroom / computer lab** | Teacher runs several **group planets** (one per group of 3–5); students play in sessions, with discussion between | 45–60 min periods *(assumed)*; school hardware may be weak *(assumed)*; school networks may block game servers; teacher must pause, reset, and monitor several planets at once. **Requires Minecraft Java Edition; it can't run in Minecraft Education** (Minecraft Education is Bedrock-based and doesn't support community mods; `docs/tech/school-deployment.md`). Each student needs a Java Edition account; Education licenses don't carry over. School IT must approve the launcher and Java. Realistic classroom audiences: schools with Java Edition, clubs, after-school programs |
 | **STEM club / after-school** | Longer sessions, small groups on a shared planet | Fewer constraints; less teacher time for debriefs |
 | **Home, singleplayer** | Self-directed, at the player's own pace | No teacher, so feedback and the Keeper's Record must stand alone |
 | **Online / remote class** | Students join hosted group planets from home | Hosting cost; supervision |
@@ -235,7 +235,7 @@ Different kinds of content need different teaching and testing approaches.
 - 40 hours is long for a class, so the pack has a **classroom mode** (section 5).
 - Teacher tools: one class overview across all group planets, pause, and rollback (section 5.3).
 - Performance budget must target modest school hardware running several planets (Technical Lead; roadmap Stage 4).
-- The educator guide needs a one-page IT requirements sheet (accounts, launcher, Java, ports, hardware), with facts from the Technical Lead.
+- The educator guide must open with: **"Requires Minecraft Java Edition; it can't run in Minecraft Education."** It also needs a one-page IT requirements sheet (accounts, launcher, Java, ports, hardware), with facts from `docs/tech/school-deployment.md`.
 
 ### 0.5 Where learners will use it afterward (transfer)
 
@@ -256,7 +256,7 @@ Each objective states the **behavior** (what the learner does), the **condition*
 Terms used below:
 - **Active preset's hold time:** the hold for that gate in the running preset (standard or classroom, section 5.1). Never a fixed number of sols.
 - **Attempt (C1):** one dust storm event. "By the second storm" means the dome survives the first or the second storm without a life-support failure in the core module.
-- **Own:** done by this player's anonymous ID in the action log (a repair placed, a forecast answered, a build placed).
+- **Own:** done by this player's pseudonymous ID in the action log (a repair placed, a forecast answered, a build placed).
 
 | Goal | Behavior | Condition | Criterion (both bands unless noted) | Group evidence (formative) |
 |---|---|---|---|---|
@@ -417,7 +417,7 @@ This rule also applies to the Keeper's Record (section 4.3): a page fills only f
 
 ### 3.1 In-game evidence (stealth assessment)
 
-The game logs actions to a **local file** on the server's computer. Each player is a random per-world anonymous ID; no names are logged. Every event records the actor's ID, so evidence can be attributed per student.
+The game logs actions to a **local file** on the server's computer. Each player is a random per-world pseudonymous ID (5.4); no names are logged. Every event records the actor's ID, so evidence can be attributed per student.
 
 | Evidence | What it shows | Level | Goals |
 |---|---|---|---|
@@ -468,7 +468,7 @@ Decided 2026-11-26: the vertical slice includes a thin Phase 1 learning layer so
 | Item | Goal | Why it's in the slice |
 |---|---|---|
 | One gate journal entry (Dome stable), with its "On Earth" line | A1, D2 | Tests reading level and length |
-| Forecast F1 (dust storm) and, if the radiation spike is in the slice, F2 | B3, C1, A4 | Tests the forecast flow and hidden answers in a group |
+| Forecasts F1 (dust storm) and F4a (ice turns to vapor), and F2 if the radiation spike is in the slice | B3, C1, A2, A4 | Tests the forecast flow and hidden answers in a group |
 | One failure report (seal breach) with Hana's tip | C2 | Tests "hints, not answers" |
 | Keeper's Record skeleton with 2 pages (C1, C2) and the "Cairn team" section | C1, C2 | Tests own-evidence vs. group-milestone display |
 | Action log with actor IDs, and a CSV export | All | Tests per-student evidence end to end |
@@ -619,7 +619,7 @@ Phase play split 4 / 7 / 6 periods, from the Lead Game Designer's classroom time
 
 | Periods | Activity | Gameplay phase | Main goals |
 |---|---|---|---|
-| 1 | Pre-test; intro to Mars; form groups of 3–5; roles; controls | — | — |
+| 1 | Pre-test; intro to Mars; form groups of 3–5; colony posts and the Shift Board; controls | — | — |
 | 2–5 | Play: survive in the dome, first dust storm, first solar event, Regolith Outgassers, ice that vanishes | Phase 1 | A1, A2, A4, C1, C2, C3 |
 | 6 | Debrief 1: Mars vs. Earth data, pressure and water | — | A1, A2, C1 |
 | 7–13 | Play: processors, emitters, thaw, fauna and fauna options, ground collapse, expansion | Phase 2 | A2, A3, B1, B2, B5 |
@@ -637,43 +637,55 @@ Phase play split 4 / 7 / 6 periods, from the Lead Game Designer's classroom time
 
 | Tool | What it does |
 |---|---|
-| Class overview | Every group planet in one view: each planet's phase and gates; each student's (anonymous ID) Keeper's Record pages, forecast tally, and reports sent. Individual and group evidence shown separately (3.0) |
+| Class overview | Every group planet in one view: each planet's phase and gates; each student's (by name on the server, by ID in exports) Keeper's Record pages, forecast tally, and reports sent. Individual and group evidence shown separately (3.0) |
 | Pause / resume world | Freezes the simulation, hazards, and fauna between classes, per planet or all at once |
 | Pacing per planet | Raise or lower one planet's rate multiplier to keep groups near the unit plan. Never changes thresholds |
 | Rollback | Restore a save from the start of a session (e.g. after griefing or a bad crash). The action log must survive the rollback (Technical Lead, M-06) |
 | Set phase | Start a planet at a later phase if the unit is shortened. The overview marks the goals skipped |
-| Export log | Writes the local action log to CSV files with anonymous IDs only (5.4, 5.5) |
+| Export log | Writes the local action log to CSV files with pseudonymous IDs only (5.4, 5.5) |
 | Grade band | Set middle or high school depth for each planet |
 
 ### 5.4 Data and privacy
 
+**In one line: pseudonymous on the server, anonymous in every export.** (Wording agreed with ARCHITECTURE.md §8.1; "pseudonymous" as defined in TEAM.md section 3.)
+
 - The action log stays **on the server's computer**. Nothing is sent over the internet.
-- Each player gets a **random per-world anonymous ID** before anything is logged. The game never logs Minecraft account IDs or usernames in the action log.
-- A local mapping from IDs to players stays on the server's computer, in a separate file that is **never exported**. The teacher uses it in the in-game class overview to give feedback. Because of this mapping, the data is pseudonymous on the server's computer and anonymous outside it.
-- **The teacher CSV export uses anonymous IDs only. There is no option to export usernames.** To match an ID to a student, the teacher looks it up on the server's computer.
+- Each player gets a **random per-world pseudonymous ID** (`P-XXXXX`, e.g. `P-7K3QX`) the first time they join, before anything is logged. It is never derived from the Minecraft account. The action log never contains Minecraft account IDs, usernames, chat, or IP addresses.
+- The **mapping file** (ID ↔ Minecraft account) stays on the server's computer. It is **never exported**, never backed up with the world, and never sent to a client. The teacher sees ID ↔ name only in the in-game class overview or with a teacher command, on the server.
+- **Every export uses pseudonymous IDs only. There is no option to export usernames** (user decision, 2026-11-26). Outside the server's computer, the data can't be linked to a student without the mapping file, so exports are anonymous.
+- At the end of a unit the teacher can delete the mapping (one student or all). After that the logs are anonymous on the server too. The educator guide recommends doing this.
 - No names, emails, ages, or other personal data are collected by the pack.
-- **Free-text answers** (Keeper's Report reflections) could contain a name a student typed. See Decisions needed in the current report: recommended handling is a separate reflections file, with known player names replaced by IDs and a plain-language warning.
-- The educator guide carries a plain-language data notice for students and families.
+- **Free-text answers** (Keeper's Report reflections) can contain anything a student typed, including their own name. They go in a separate `reflections.csv` that the teacher can switch off (ARCHITECTURE.md §8.6). Instructional view and recommended default: see 5.5.
+- The educator guide carries a plain-language data notice for students and families. Legal classification (COPPA, FERPA, GDPR) is **unverified**: no legal review yet (risk R-20).
 
-### 5.5 What teachers need from the data (input to the Technical Lead)
+### 5.5 What teachers need from the data (final CSV columns)
 
-The teacher needs to answer three questions: *Where is each group? What has each student shown? Who needs help?* The CSV export serves those. Columns are the "done when" for consistency review item M-08.
+The teacher needs to answer three questions: *Where is each group? What has each student shown? Who needs help?* The export serves those. This is the final column list for consistency review M-08, using the file names in ARCHITECTURE.md §8.6. Phase columns use `_p1`, `_p2`, `_p3`. Goal columns repeat for each goal ID A1–D2.
 
 | File | One row per | Columns |
 |---|---|---|
-| `students.csv` | Student (anonymous ID) | planet_id, anon_id, grade_band, sessions_present, posts_held (by phase), shift_board_claims, shift_board_fixed, forecasts_answered_p1/p2/p3, forecasts_correct_p1/p2/p3, explain_checks_correct/attempted, own_repairs, own_repeat_failures, own_major_builds, monitor_checks_before_own_builds, reports_sent (0–4), record_pages_filled (list of goal IDs) |
-| `evidence.csv` | Evidence event | planet_id, anon_id, goal_id, ngss_ms, ngss_hs, evidence_type (forecast, check, repair, report, monitor), result, sim_day, session_number |
-| `planets.csv` | Group planet | planet_id, preset, grade_band, current_phase, each gate with the session it was reached, storms survived, dome failures per storm, current Index values |
-| `reflections.csv` | Reflection answer | planet_id, anon_id, report_number, goal_ids, text (handling pending decision) |
+| `players.csv` | Student (pseudonymous ID) | player_id, planet, band, group_size, sessions_present, sols_played, post_p1, post_p2, post_p3; forecasts_answered_p1..p3, forecasts_correct_p1..p3, forecast_accuracy_p1..p3, forecasts_expired; b3_criterion_met (yes/no/not enough data); explain_correct, explain_attempted; failures_claimed, failures_fixed, repeat_failures_after_own_fix; major_builds, monitor_checks_before_builds; drift_events_answered; report_1, report_2, report_3, report_final (submitted yes/no); for each goal: `<goal>_shown` (yes/no), `<goal>_sol`, `<goal>_evidence` (event type that filled it) |
+| `events.csv` | Log event | timestamp, session, planet, timeline, superseded (yes/no), sol, player_id (empty for planet events), scope (player/planet), band, event_type, cause, prompt_id, result (correct/incorrect/expired/late/none), goal_ids, ngss_codes, detail columns flattened from `data` |
+| `planets.csv` | Group planet | planet, preset, group_size, band, current_phase; for each gate: reached (yes/no), sol, session; storms_survived, core_failures_per_storm, repeat_failures_p1..p3, drift_events (count, answered), hold_progress, fauna options in use (shrouds, lures, quiet zones, defenses), thawling population stage, rollbacks |
+| `goals.csv` | Goal ID | goal_id, record_page_title (colony language), ngss_ms, ngss_hs, practice_only (yes/no), priority_tier, scope. Generated from `ngss_map.json`, so teachers see codes without repeating them in every row |
+| `reflections.csv` | Written answer | player_id, planet, band, report_id, goal_ids, sol, text, d1_score, d2_score, b5_score (rubric columns left blank for the teacher; rubrics in `docs/learning/rubrics.md`) |
 
-NGSS codes come from a goal-ID → NGSS lookup in data (section 6.1), so the export updates when the mapping does.
+`goals.csv` is new compared with ARCHITECTURE.md §8.6 (handoff to the Technical Lead). NGSS codes come from `data/mars/learning/ngss_map.json`; an example in that format is in [docs/learning/ngss_map.example.json](docs/learning/ngss_map.example.json).
+
+**Reflections: instructional view on the Technical Lead's proposal.** Agree with a separate `reflections.csv` and a teacher switch. D1, D2, and B5 are measured **only** by written answers (0.6), so without the text a teacher can't score them. Recommended:
+- Default **on** in classroom mode, off in standard mode (home play has no teacher).
+- Next to every reflection question, the game says: "This goes in your report. Don't write your name or personal details."
+- At export, replace any current player name on that planet found in the text with that player's ID (Technical Lead to judge feasibility).
+- If a teacher switches the file off, the educator guide gives the same questions as a paper worksheet, so D1, D2, and B5 can still be scored.
+
+**Keeper's Record scope per goal** (the `"scope"` field in ARCHITECTURE.md §8.5): **every goal page A1–D2 is `"player"` scope.** No group achievement ever fills a player's goal page (section 3.0). Planet-scope events (gates, first storm survived, breathable held, equilibrium, beacon) are shown in the record's separate "Cairn team" section and logged with `scope: planet`, but they never set `<goal>_shown`.
 
 ### 5.6 LMS integration (after release, opt-in)
 
 Decided 2026-11-26: no LMS integration before release. After release it is **opt-in, off by default**. Learning needs, for the Technical Lead to design against later:
 - Teachers want the same three answers as 5.5, inside their school's LMS, ideally as per-goal status and the rubric-scored reflections.
 - Only goal-level summaries need to travel; raw action logs never do.
-- **Open conflict to solve before building it:** passing results into an LMS gradebook needs to know which student is which. That conflicts with "nothing personal leaves the server's computer" unless the ID-to-student match happens on the school's side (e.g. the teacher imports the anonymous-ID CSV and matches it locally). This is an ill-structured problem for after release; it is not decided here.
+- **Open conflict to solve before building it:** passing results into an LMS gradebook needs to know which student is which. That conflicts with "nothing personal leaves the server's computer" unless the ID-to-student match happens on the school's side (e.g. the teacher imports the pseudonymous-ID file and matches it locally). This is an ill-structured problem for after release; it is not decided here. The Technical Lead's planned path (ARCHITECTURE.md §11: xAPI file export first, pseudonymous IDs only, no free text by default) fits these needs; reflections should stay out of any LMS export unless a school opts in separately.
 
 ---
 

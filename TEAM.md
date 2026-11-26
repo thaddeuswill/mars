@@ -64,7 +64,7 @@ Use these words the same way everywhere.
 | **Goal ID** | Learning goal code A1–D2 in `LEARNING.md`. |
 | **Grade band** | Middle school (6–8) or high school (9–12) depth setting. |
 | **Classroom mode** | Config preset: faster pacing, teacher tools, world pause. |
-| **Colony Record** | In-game page where learners see which goals they've shown. |
+| **Colony Record** | System name for the page where players see which goals they've shown (in-game title: Keeper's Record). |
 | **Planetary Monitor** | In-game block showing Index values, trends, and causes. |
 | **Keeper** | What the story's characters call the player (approved). |
 | **Thawlings** | Fictional animals descended from hypothetical underground microbial life (option B). Their Hydrosphere stage is a "later life stage", never a mutation. Working name; not yet cleared against existing works. |
@@ -76,7 +76,12 @@ Use these words the same way everywhere.
 | **Colony post** | An optional, rotating role for a player on a group planet. |
 | **Drift event** | An event that pushes a value out of band during a hold. |
 | **Regolith Outgasser** | The Phase 1 pressure source, unlocked at Dome stable. |
-| **Action log** | Local, anonymous record of player actions, for assessment. |
+| **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
+| **Forecast** | In-game name for a prediction prompt. |
+| **Keeper's Record** | In-game title of the Colony Record. |
+| **Keeper's Report** | In-game name for a phase debrief. |
+| **Own evidence** | Evidence carrying the player's pseudonymous ID. Only individual summative evidence is graded; group evidence is formative. |
+| **Adaptation (RETAIN) / Immersion (RETAIN)** | RETAIN's meanings (the learner changes behavior; intellectual investment). Different from our "adaptive" and "immersive"; always qualify. |
 | **PE / SEP / CCC** | NGSS performance expectation / science and engineering practice / crosscutting concept. |
 | **Well-structured / ill-structured** | Problem types; decide how to handle and route a problem. See the agent role files. |
 | **Handoff** | A message from one role to another in the standard format (To, Problem type, Problem, Context, Your view, Needed from them, Done when). |
@@ -148,7 +153,7 @@ Implicit expectations, so we don't have to restate them each time.
 - No one changes another role's files.
 - No one reopens a settled decision without new evidence; concerns are flagged, not acted on.
 - Text for students is short and plain (about grade 6–7 at middle school depth).
-- Nothing personal about players ever leaves the server's computer.
+- Nothing personal about players ever leaves the server's computer. The action log is pseudonymous on the server and anonymous in every export.
 - No one commits or pushes except the coordinating session.
 
 ## 6. Decision Log
@@ -159,7 +164,7 @@ Short pointers. Details live in the owning document.
 |---|---|---|---|
 | 2026-11-26 | Global progress; singleplayer and small servers; ~40 hours | DESIGN.md: Decisions | User decision |
 | 2026-11-26 | Custom Mars dimension; gates lock in; fauna scales with infrastructure plus a threshold config | DESIGN.md: Decisions | User decision |
-| 2026-11-26 | Ages 12–18, two grade bands; NGSS; classroom mode; local anonymous logging | LEARNING.md: Decisions | User decision |
+| 2026-11-26 | Ages 12–18, two grade bands; NGSS; classroom mode; local logging (now pseudonymous on the server, anonymous in every export) | LEARNING.md: Decisions | User decision |
 | 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md | From user research |
 | 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
 | 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
@@ -358,6 +363,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Lead Instructional Designer | Apply decisions, per-student measures, RETAIN, priorities, prompts, rubrics | `LEARNING.md`, `docs/learning/` | `docs/team/reports/2026-11-26-lead-instructional-designer-decisions-applied.md` |
 | 2026-11-26 | Technical Lead | Architecture gaps, licenses, school deployment | `ARCHITECTURE.md`, `docs/tech/` | `docs/team/reports/2026-11-26-technical-lead-architecture-gaps.md` |
 | 2026-11-26 | Lead Game Designer | Apply decisions, C-01 fix, balance sheet, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-decisions-applied.md` |
 | 2026-11-26 | Subject Matter Expert | Science accuracy and NGSS verification | `docs/science/` | `docs/team/reports/2026-11-26-subject-matter-expert-science-ngss.md` |
@@ -375,6 +381,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | A physics change (ice-to-water rule) silently broke an assessment item (forecast F4). Any gate or physics change triggers a forecast check, not just an alignment-table check. | Lead Instructional Designer |
 | 2026-11-26 | New root documents can appear mid-task. Check README for new documents at the start of every task. | Technical Lead |
 | 2026-11-26 | A story beat quietly contradicted the physics after gate conditions changed. When gate conditions change, check story beats against them. | Lead Game Designer |
 | 2026-11-26 | Solo adult playtests produce design judgment, not learning evidence. | Lead Game Designer |
