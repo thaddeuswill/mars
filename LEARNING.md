@@ -108,6 +108,44 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 - A4 and D2 are closed in design only. Both need content written and built (Stage 4; A4's first forecast also belongs in the Stage 3 slice if the radiation spike is in it).
 - Several high school NGSS mappings are "Moderate" until specific content exists (section 6.1 notes): the D2 Earth content, carbon reservoirs on the Monitor (HS-ESS2-6), and a claim-evaluation question in the Phase 3 debrief (HS-LS2-6, now in Keeper's Report 3).
 
+### RETAIN review
+
+RETAIN (Gunter, Kenny & Vick, 2008, *Educational Technology Research and Development*) rates how well a game embeds academic content in its fantasy and supports transfer. It draws on Gagné's nine events of instruction, Keller's ARCS model, and Bloom's taxonomy. The six element definitions below are my working summaries from memory; the paper's exact wording and its level-scoring scheme were **not re-checked** in this session (**unverified**). Ratings are of the **current design on paper**, not of played behavior (nothing has been built or playtested).
+
+**Vocabulary warning.** RETAIN's "adaptation" means the *learner* changing behavior, and its "immersion" means the learner being intellectually invested. Our team terms differ: "adaptive" is about the *game* changing (TEAM.md section 3), and immersion has diegetic, narrative, and flow types. Below, "adaptation (RETAIN)" and "immersion (RETAIN)" mean the RETAIN senses.
+
+| Element | Working meaning | Rating | Where it's met | Gaps and owner |
+|---|---|---|---|---|
+| **Relevance** | Content connects to the learner's world and needs, in manageable steps | **Partial** | Phase 1 survival makes A1, C1 immediately useful; story gives a reason to care (Keeper, colonists waiting); gates pace the content in steps; D2 "On Earth" lines and Mensah's replies point to the learner's own planet | D2 Earth content is specified but not written (Lead Game Designer writes, SME checks, ID reviews). Relevance for unmotivated classroom students is **assumed**, untested (playtest; Lead Game Designer) |
+| **Embedding** | Academic content is tied into the game's fantasy and core mechanics (endogenous), not bolted on | **Strong** | The Planetary Index *is* the science (A1–A5); the win condition is equilibrium (B4); fauna stand for unintended consequences (B5, D1); forecasts and reports are colony work in BELL's and the Keeper's voices | Thawlings are fiction and could teach "Mars has life": fiction note in every fauna entry (ID, done in 1; Lead Game Designer to apply in the journal). Super-greenhouse emitters must name their gas or A3 embeds a contradiction (Lead Game Designer) |
+| **Transfer** | Learners apply what they learned to new situations | **Partial** | Transfer task on Earth's carbon cycle (B1, B2, D2); post-test uses *new* scenarios (A2, A4, B4, C1); A4 is forecast in two different situations (F2, F7) | Transfer task and pre/post items not yet written (ID, Stage 4). No near-transfer practice inside the game beyond forecasts; the Phase 2 debrief's Earth data activity is the main bridge (ID, educator guide) |
+| **Adaptation (RETAIN)** | Learners change their behavior because of what they learned | **Partial** | C2 criterion: a fixed failure doesn't recur; B3: forecast accuracy rises; C3: Monitor checked before builds; Hana's tips fade once behavior changes | Behavior change is logged per student only if actor IDs are on every relevant event (Technical Lead). No check that changed behavior survives a new hazard type (consider a late "new failure" in Phase 3; Lead Game Designer) |
+| **Immersion (RETAIN)** | Learners are intellectually invested and actively taking part | **Partial** (strong on paper, unproven) | No pop-up quizzes; all feedback diegetic (4.2); player language; real choices about the fauna (D1); forecasts ask players to commit before seeing the result | Long holds risk idle play and cognitive disengagement (M-16; Lead Game Designer). Text load for weak readers (ID rules in `docs/learning/prompts-and-reflections.md` section 5; playtest check). Group play can leave one student watching (rotating roles, 2; check in playtest) |
+| **Naturalization** | Using the knowledge becomes habitual and spontaneous | **Gap** | Repeated Monitor use across all three phases (C3); forecasts every phase (B3) | ~11–12 h in class is short for habits. **Nothing measures retention after the unit** (ID: add an optional delayed post-test 3–4 weeks later to the study design, Stage 6). Home play (~40 h) gives more practice but has no measure (ID) |
+
+#### Gagné's nine events (insight check)
+
+| Event | Where our design does it | Note |
+|---|---|---|
+| 1. Gain attention | Opening: storm clears, dome damaged, alone (story beat 1) | — |
+| 2. Inform learners of objectives | Keeper's Record pages ("what the colonists will need to know") | Done diegetically, never as a list of objectives (player language, TEAM.md 8.4) |
+| 3. Stimulate recall of prior learning | Pre-test; forecasts ask players to use what they already know | Debrief openers could recall earlier phases explicitly (ID, educator guide) |
+| 4. Present the content | World response first, then gate journal entry | — |
+| 5. Provide learning guidance | Failure-report hints; Hana's tips; Monitor cause breakdown | — |
+| 6. Elicit performance | Forecasts; repairs; holding the balance | — |
+| 7. Provide feedback | Natural consequences, forecast results, failure reports (section 4) | — |
+| 8. Assess performance | Pre/post, transfer task, rubrics (section 3) | Outside the game by design |
+| 9. Enhance retention and transfer | Transfer task; D2 Earth links; A4 spaced forecast | Weakest event: see Naturalization |
+
+#### Keller's ARCS (insight check)
+
+| ARCS | Where our design does it | Gap |
+|---|---|---|
+| Attention | Visible world change; storms; fauna; story mystery (Fridge B) | Phase 2 has the fewest story beats per hour (story bible 6.2) |
+| Relevance | See RETAIN relevance | D2 content not written |
+| Confidence | Fail forward (gates lock in); hints not answers; own forecast tally shows improvement | Phase 1 must not punish players new to tech mods (Lead Game Designer) |
+| Satisfaction | Helmet-off moment; beacon; epilogue cards; Mensah praising the player's data | — |
+
 ---
 
 ## 0. Learner and Context Analysis

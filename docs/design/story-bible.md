@@ -167,20 +167,20 @@ There are **no NPCs to talk to**. Every character reaches the player through a m
 ### 5.2 Phase 1: Setup (Survival Desperation)
 **Start.** The storm has cleared. BELL's first log line reports damage. Hana's notes are on every machine. The dish is dead. The only voice is BELL.
 
-**Middle.** The first failures teach the dome (failure reports with Hana's tips attached the first time). The first dust storm tests the player's planning (C1). A solar event forecast introduces radiation (proposed A4 prediction prompt).
+**Middle.** The first failures teach the dome (failure reports with Hana's tips attached the first time). The first dust storm tests the player's planning (C1). A solar event forecast introduces radiation (proposed A4 prediction prompt). Ice carried near a heater vanishes without leaving a puddle: the air is too thin for liquid water to last (first A2 moment; DESIGN.md ice-to-water rule).
 
-**Dome stable gate → the backlog arrives.** With life support steady, BELL can spare power for the relay link. Seven days of queued messages arrive at once: Moreno ("We saw the storm on your telemetry. We couldn't do anything. You did."), Hana ("Told you the filters whine."), and a short, odd one from Basu ("Keep Fridge B cold. I'll explain later. Sorry."). **The player is no longer alone, and now has a mystery.**
+**Dome stable gate → the backlog arrives.** With life support steady, BELL can spare power for the relay link. Seven days of queued messages arrive at once: Moreno ("We saw the storm on your telemetry. We couldn't do anything. You did."), Hana ("Told you the filters whine."), and a short, odd one from Basu ("Keep Fridge B cold. I'll explain later. Sorry."). **The player is no longer alone, and now has a mystery.** Hana's message also hands over the first **Regolith Outgasser** plans: "Life support's steady. Time to start on the sky." The player gets people and their first lever on the planet at the same moment.
 
 **Phase 2 begins (pressure ≥ 5 kPa).** The sky shifts. The player sends their first Keeper's Report (Phase 1 debrief). Mensah replies from Earth: what a thicker atmosphere does on Earth (D2, A1).
 
 ### 5.3 Phase 2: Rising conflict (Industrial Geo-Engineering)
 **Start.** Expansion. Outposts reach Basu's old drill sites. His markers and field notes hint at "something in the cores" without saying what.
 
-**Thaw gate.** Ice near extractors shrinks but leaves no puddles: at low pressure, ice turns straight to vapor (A2 misconception moment). Fridge B unlocks. Basu's note: "If you're reading this, it's warm enough. They might wake up. Watch them before you decide anything." Within a sol, BELL logs "unidentified motion near Extractor 1." The first thawlings appear.
+**Thaw gate.** Ice near warm extractors melts into small puddles by day that freeze again at night. Warmth alone isn't enough; the water lasts only where it is warm *and* the air is thick (A2 misconception moment, building on the Phase 1 vapor moment). Fridge B unlocks. Basu's note: "If you're reading this, it's warm enough. They might wake up. Watch them before you decide anything." Within a sol, BELL logs "unidentified motion near Extractor 1." The first thawlings appear.
 
 **The secret.** Delivered about one sol after the first fauna sighting (gives the player time to see them first). Moreno: "We knew. Earth asked us to wait for test results. I agreed. I should have told you." Then Mensah owns Earth's part. In the colony log archive, the player can find the recorded "Fridge B" argument between Moreno and Basu: both sides, fairly.
 
-**Hydrosphere gate.** Surface water. The thawlings reach their larger life stage and start damaging emitters and extractors (failure reports name fauna as the cause). The more machines the player runs, the more fauna come (B2: reinforcing loop). Conflict peaks here: the thing that moves the planet forward is the thing drawing the animals in.
+**Hydrosphere gate.** Surface water. The thawlings reach their **later life stage** and start damaging emitters and extractors (failure reports name fauna as the cause). The more machines the player runs, the more fauna come (B2: reinforcing loop). Conflict peaks here: the thing that moves the planet forward is the thing drawing the animals in. Basu's field notes now describe the non-lethal options (5.5). Ground near warm machines starts to sink, and Hana warns about salty meltwater (3.4a).
 
 **Phase 3 begins (pressure ≥ 30 kPa, temperature ≥ 0 °C).** Keeper's Report 2 (Phase 2 debrief) carries the key D1 reflection: *"Was waking them worth it?"* Mensah's reply links to Earth: thawing permafrost releasing stored carbon, and ancient life revived from frozen ground **[verify both]**.
 
@@ -189,14 +189,20 @@ There are **no NPCs to talk to**. Every character reaches the player through a m
 
 **Middle.** The balancing act: too much O2 and fires break out (A5, B4). Failure reports name overshoot as the cause. The thawlings change behavior near stable biomes: they graze and nest there instead of at machines. Basu: "Maybe the planet has room for both of you. I'm asking, not telling."
 
-**Breathable gate.** The emotional peak. The player can take off the helmet. The world's sound changes (wind, not suit hiss). Moreno: "Breathe for all of us." Journal: what makes air breathable, and that it took the whole system, not one machine.
+**Breathable gate.** The emotional peak. The player can take off the helmet. The world's sound changes (wind, not suit hiss). Moreno: "Breathe for all of us." Journal: air is breathable when it is thick enough *and* oxygen-rich enough (O2 partial pressure, at middle school depth "how hard the oxygen pushes"), with little CO2, and it took the whole system, not one machine.
 
 **Equilibrium gate.** BELL logs the 14-sol hold as confirmed. The beacon recipe unlocks. Moreno hands over: "Your call now."
 
 **The beacon (ending).** See 6.5.
 
-### 5.5 What the fauna story asks of design
-D1 only works if the player has a real choice about the thawlings. If the only option is to kill them, the story's question is hollow. The story assumes **non-lethal options** exist alongside defense, for example deterrents that drive them away from machines, and **quiet zones** (areas with no machines nearby) where fauna stay calm. ROADMAP Stage 4 already lists "infrastructure defense options." This is a design proposal, not a settled mechanic: see Decisions needed.
+### 5.5 The fauna choice (decided)
+D1 only works if the player has a real choice about the thawlings. The user approved **non-lethal options** alongside defense (DESIGN.md, "The fauna: decision"):
+- **Defend:** allowed, but it never lowers the pull of the machines, so raids keep coming.
+- **Insulation shrouds:** machines run cooler and quieter (less output, fewer raids).
+- **Lure stations:** draw the thawlings away, at a water cost.
+- **Quiet zones:** land left without machines, where the thawlings calm down and later settle.
+
+How the story carries it: Basu's notes describe each option as something he *would try*, never as the right answer. Moreno's messages make the case for the mission's schedule. No voice tells the player which to pick. The ending cards (6.5) show the result without judging it.
 
 ---
 
@@ -210,7 +216,7 @@ D1 only works if the player has a real choice about the thawlings. If the only o
 | **Colony log** | BELL | ≤ 20 words per line | Events, gates, warnings, "since last shift" recap at session start |
 | **Failure report** | BELL (+ Hana's tip the first time) | ≤ 35 words | What failed, likely cause, one hint. Never the fix. |
 | **Journal entry** | Keeper's own notes, BELL data | ≤ 80 words, plus "read more" | Science at the moment it matters; fiction notes |
-| **Recorded message** | Moreno, Basu, Hana, Mensah | ≤ 60 words, plus "read more" for high school band | Relationships, the secret, D1 voices, D2 links. Text transcript always; audio optional (see Decisions). |
+| **Recorded message** | Moreno, Basu, Hana, Mensah | ≤ 60 words, plus "read more" for high school band | Relationships, the secret, D1 voices, D2 links. **Text first** (decided). Voice audio is a possible later addition, not planned. |
 | **World trace** | First Shift | One line on a note or sign | Tips, mood, history |
 | **Prediction prompt** | BELL: "Log your forecast" | 1 question, 2–4 choices | B3; framed as Keeper's forecast for the next report |
 | **Keeper's Report (phase debrief)** | The Keeper, sent to Earth | Fills from play data + 1 reflection | B, C, D goals. The player's own words go to Earth. |
@@ -228,11 +234,12 @@ D1 only works if the player has a real choice about the thawlings. If the only o
 | 5 | Solar event forecast (proposed) | P1 / first radiation spike | Colony log, prediction prompt, journal | **A4** (closes gap), B3 | **Essential** if adopted |
 | 6 | Relay restored: crew backlog, Basu's Fridge B teaser | P1 / **Dome stable** | Recorded messages | Engagement; seeds D1 | **Essential** |
 | 7 | Sky changes; Keeper's Report 1; Mensah's first Earth link | P1→P2 / **Phase 2 begins** | World, debrief, recorded message | A1, B1, **D2** | **Essential** |
+| 7a | The Armstrong line (6.3 kPa): BELL logs it; Hana: "Your blood wouldn't boil now. Keep the suit on anyway." | P2 / Monitor milestone | Colony log, journal | A1 | Optional |
 | 8 | Basu's drill sites and sample caches | P2 / outposts | World traces, journal | A2, D1 | Optional |
-| 9 | Ice turns to vapor, not water; Fridge B opens; first thawlings | P2 / **Thaw** | World, journal, colony log, Basu's note | **A2**, B5, **D1** | **Essential** |
+| 9 | Puddles by day, ice by night; Fridge B opens; first thawlings | P2 / **Thaw** | World, journal, colony log, Basu's note | **A2**, B5, **D1** | **Essential** |
 | 10 | The secret: Moreno, then Mensah | P2 / ~1 sol after first fauna | Recorded messages | **D1** | **Essential** (one combined message) |
 | 11 | The "Fridge B" argument, both sides | P2 / found in log archive | Colony log archive | **D1** | Optional (summary line in beat 10) |
-| 12 | Surface water; larger thawlings hit machines | P2 / **Hydrosphere** | World, failure reports, journal | B2, **B5**, C2 | **Essential** |
+| 12 | Surface water; thawlings in their later life stage hit machines; ground sinks near warm machines | P2 / **Hydrosphere** | World, failure reports, journal | B2, **B5**, C2 | **Essential** |
 | 13 | Keeper's Report 2 "Was waking them worth it?"; Mensah on permafrost | P2→P3 / **Phase 3 begins** | Debrief, recorded message | **D1, D2**, B5 | **Essential** |
 | 14 | Storms fade; first flora; Mensah on the carbon cycle | P3 / early | World, journal, recorded message | A5, **D2** | Optional (fold into 13's reply) |
 | 15 | O2 overshoot fire | P3 / first overshoot | World, failure report | **A5, B4** | **Essential** |
@@ -258,32 +265,37 @@ D1 only works if the player has a real choice about the thawlings. If the only o
 1. **Build and light the beacon.** The sky over the beacon brightens; BELL: "Signal sent. Delay to Earth: 14 minutes." **[delay value set from game state; verify range]**
 2. **The wait.** A short silence the player can walk around in, helmet off.
 3. **Replies.** Moreno, Basu, Hana, Mensah: one line each. Mensah's line is the final D2 link: what Earth can learn from a planet that had to be built by hand.
-4. **Epilogue cards** describe the planet as left, read from world state. No ranking. Examples:
+4. **Epilogue cards** (decided) describe the planet as left, read from world state. **No ranking, no score, no "good" or "bad" label.** Thresholds are in the balance sheet §6. Examples:
    - Thawlings living in biomes and quiet zones → *"The thawlings nest by the north lake. The colonists will meet them on day one."*
    - Thawlings driven off but surviving → *"The thawlings keep to the deep ice now. Basu wants to visit."*
    - Few or no thawlings left → *"Basu's samples in Fridge B are all that's left of Group S. He is studying them."*
+   - Ground and water → *"Two outposts stand on sunken ground. The colonists will build on rock."* (if collapse events happened)
    - O2 margin, biome count, sols held: shown as numbers.
+   - In a group, the cards describe the shared planet. One extra card per Keeper names their colony post(s) ("Life Support, then Survey"), never a rank among players.
 5. **Final reflection (D1/D2):** *"The ships are coming. What should the colonists know before they land?"* Written answer goes into the Keeper's Record and the teacher export.
 6. **The Keeper's Record** opens, complete, as the handover document.
 7. **The game continues.** The helmet-off check stays live (DESIGN.md §1). BELL keeps logging.
 
-### 6.6 Multiplayer
-- All players are Keepers. Messages address "Keepers" or "the Cairn team."
-- Gate beats fire once per world and reach every online player; offline players find them waiting in the archive.
-- Journal, Keeper's Record, and Keeper's Reports stay per player (LEARNING.md §0.1). Mensah's reply quotes nothing personal; it responds to the world's data.
+### 6.6 Group play (3–5 Keepers on one planet)
+- All players are Keepers on the same watch team. Messages address "Keepers" or "the Cairn team," never usernames.
+- Gate beats fire once per planet and reach every online player; offline or absent players find them waiting in the archive, and BELL's "Since last shift" recap opens their next session.
+- Journal, forecasts, Keeper's Record, and Keeper's Reports stay per player (LEARNING.md §0.1). Mensah's reply quotes nothing personal; it responds to the planet's data.
+- **Colony posts** (DESIGN.md, Group Play): Hana's handover notes are sorted by post (Life Support, Atmosphere, Survey, Biology, Data), so each Keeper finds "their" notes. Posts rotate each phase; the story never treats one post as the lead.
+- The fauna choice is a group choice. Players may disagree, as Moreno and Basu did. The ending cards describe what the group did together.
+- A class runs several planets. Each planet tells the same story; the endings differ because the worlds differ. That gives the class something to compare in the final debrief.
 
 ---
 
 ## 7. Classroom Mode (~11–12 hours)
 
 ### 7.1 Why it holds up
-- **Beats are tied to gates, not clock time.** Classroom mode reaches gates sooner (threshold multiplier ~0.3), so beats arrive sooner in the same order. Nothing is skipped.
+- **Beats are tied to gates, not clock time.** Classroom mode reaches gates sooner because machines work faster and holds are shorter (rate multiplier, not threshold changes: DESIGN.md, Classroom Pacing). Gate numbers stay the same, so story and journal numbers stay true. Beats arrive sooner in the same order. Nothing is skipped.
 - **Any time-based delay is in sols and scales.** Beat 10 (one sol after first fauna) and Mensah's replies must land in the same class period as their trigger.
-- **The three debriefs match the unit plan.** Keeper's Reports 1–3 line up with class periods 5, 12, and 18 (LEARNING.md §5.2). Teachers can use Mensah's replies as discussion openers.
+- **The three debriefs match the unit plan.** Keeper's Reports 1–3 line up with the three debrief periods in the unit plan (LEARNING.md §5.2, being updated to ~17 play periods). Teachers can use Mensah's replies as discussion openers.
 - **Session recap.** When the teacher resumes a paused world, BELL's colony log opens with *"Since last shift:"* and 2–3 lines. This covers students who missed a class.
 
 ### 7.2 Essential vs. optional
-- **Essential (13 beats, 12 without beat 5):** 1, 3, 4, 5 (if adopted), 6, 7, 9, 10, 12, 13, 15, 17, 19. Across ~16 play periods of ~40 minutes (LEARNING.md §5.1), that is a little under one essential beat per period, so most periods end with something new from the story.
+- **Essential (13 beats, 12 without beat 5):** 1, 3, 4, 5 (if adopted), 6, 7, 9, 10, 12, 13, 15, 17, 19. Across ~17 play periods of ~40 minutes (LEARNING.md §5.1), that is a little under one essential beat per period, so most periods end with something new from the story.
 - **Optional (5 beats):** 2, 8, 11, 14, 16. In classroom mode they stay in the world as traces and archive items but don't push a notification. Beat 11 shrinks to one line inside beat 10. Beat 14 folds into Mensah's reply in beat 13. Beat 18 merges into 19.
 - **Teacher "Set phase."** Essential beats from skipped phases are placed in the archive as an "Unread from earlier" bundle, marked so the teacher can assign them.
 
@@ -314,11 +326,11 @@ About 15 minutes of total reading for essential story across the unit, outside j
 ### 8.3 Sample lines
 
 **Journal entry (Thaw gate, middle school band):**
-> The ice by the extractor is shrinking, but there are no puddles. The air here is so thin that ice skips being water. It turns straight into gas. To keep water liquid, we need more warmth *and* more air pressure. One is not enough.
-> *On Earth: our thick air is why puddles last.*
+> The ice by the extractor melted into a puddle today. Tonight it froze again. Back when the air was thinner, ice by the heater just vanished. To keep water liquid, we need warmth *and* thick air. One is not enough.
+> *On Earth: our thick, warm air is why puddles last.*
 
 **Colony log (BELL, Thaw gate):**
-> Sol 41. Temperature −20 °C. Ice loss near Extractor 1. Unidentified motion near Extractor 1. Logging.
+> Sol 41. Temperature −20 °C. Meltwater near Extractor 1, refroze overnight. Unidentified motion near Extractor 1. Logging.
 
 **Failure report (BELL, with Hana's tip):**
 > FAILURE: Air loss in Hab B. Likely cause: a seal cracked during the cold night. Hint: which blocks touch the outside?
@@ -343,10 +355,10 @@ About 15 minutes of total reading for essential story across the unit, outside j
 
 ---
 
-## 10. Open Items (tracked in the report)
-- Non-lethal fauna options and quiet zones (5.5).
-- "Mutated variants" → "later life stage" wording (3.4).
-- Epilogue variants read from world state (6.5).
-- Audio for recorded messages, or text only.
-- Proposed A4 solar-event beat (6.2, beat 5).
-- All **[verify]** claims to the Subject Matter Expert.
+## 10. Open Items
+**Decided 2026-11-26 (user):** Keeper; planned-solo-watch backstory; fauna option B plus real effects; non-lethal options and quiet zones (5.5); "later life stage" wording (3.4); unranked epilogue cards (6.5); text-first messages (6.1); groups of 3–5 per planet (6.6).
+
+**Still open:**
+- Proposed A4 solar-event beat (6.2, beat 5): with the Lead Instructional Designer.
+- All **[verify]** claims to the Subject Matter Expert, including the new ones in 3.4 and 3.4a.
+- Names not yet cleared against existing works (9).
