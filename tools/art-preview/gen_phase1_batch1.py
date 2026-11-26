@@ -154,10 +154,12 @@ def stage_px(stage, cleaned=False):
             else: px[y][x] = LEVEL_COLOR[level(stage, x, y)]
     if cleaned:   # wind cleared streaks out of a heavy veil (Opportunity, 2014): horizontal runs back to clean
         random.seed(2014)
-        for _ in range(11):
-            y = random.choice([yy for yy in range(1, 13) if yy not in (7, 8)]); x0 = random.randrange(1, 10)
-            for x in range(x0, x0 + random.choice((4, 5, 6))):
-                if CELL[y][x] == "cell": px[y][x] = "r"
+        # round 2: horizontal streaks blended with the horizontal seams; diagonal streaks (the wind's path) read as cleaning
+        for _ in range(9):
+            x0, y0 = random.randrange(1, 11), random.randrange(1, 10)
+            for k in range(random.choice((4, 5, 6))):
+                for (x, y) in ((x0 + k, y0 + k), (x0 + k + 1, y0 + k)):
+                    if 0 <= x < 16 and 0 <= y < 16 and CELL[y][x] == "cell": px[y][x] = "r"
     return px
 STAGES = {f"solar_panel_dust{k}": stage_px(k) for k in range(5)}
 STAGES["solar_panel_partly_cleaned"] = stage_px(3, cleaned=True)

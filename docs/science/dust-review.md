@@ -196,3 +196,81 @@ Searched, not opened (do not quote in game text before opening):
 - Planetary Society, "Will Phoenix' thrust raise too much dust?"; a 2021 plume white paper (arXiv 2102.12312).
 - NREL (rain and fine particles); QEERI soiling test (0.49 % per day).
 - HiRISE and JPL dust-devil-track pages.
+
+---
+
+## 9. Addendum (owner follow-up, same day): questions 8 to 12
+
+Checked the same way. New hosts tried: nasa.gov, jpl.nasa.gov, ntrs.nasa.gov (all not opened; facts below are from search summaries unless tagged otherwise).
+
+### 8. Real dust-mitigation hardware, and are a brush and a wiper plausible?
+
+| Idea | Status | Tag |
+|---|---|---|
+| **Electrodynamic Dust Shield (NASA, Kennedy)** | **Flown (Moon, not Mars).** Ran on Firefly's Blue Ghost 1 after the 2 March 2025 landing, to 16 March; it removed dust from glass and a thermal-radiator test surface. Earlier tested in vacuum chambers on Apollo dust. A Mars flight: none that I found | searched, not opened (NASA, Space.com, AIAA) |
+| **Wind and dust devils** | Real, natural (section 2) | opened |
+| **Sand trickled over panels in wind (InSight)** | **Flown, on Mars.** Gained about 25 to 30 Wh/sol; too little to matter | searched, not opened (JPL) |
+| **Tilting arrays or parking on slopes** | Mission operations did choose sun-facing slopes; Wikipedia notes rover tilt may help cleaning, as speculation. A designed "tilt to shed dust" array on Mars: **real value missing** | opened (speculation only) |
+| **Vibrating or shaking arrays** | Concept studies; I found no flown example | real value missing |
+| **Brush or wiper on a Mars array** | I found **no** Mars mission that carried an array brush or wiper. A brush is a real tool on Mars only for rocks (Rock Abrasion Tool, rover wire brush; from memory, **unverified**). Moving parts and dust are a known reliability worry (reason unverified) | real value missing |
+| **Electrostatic removal** | The most studied concept for Mars (searched, not opened) | concept |
+
+**Verdict.** A hand brush for a crewed base is **plausible as game fiction**: a human with a brush is exactly what no robot mission had. An automatic wiper is plausible but **not flown on Mars**; the nearest real things are the electrodynamic shield (flown on the Moon) and the sand trick. Label the wiper "a game machine, inspired by dust-shield research". Suggest the Phase 2 automatic cleaner be described as the electrodynamic shield rather than a wiper if the Artist wants a real analogue (grid electrodes, no moving parts).
+
+### 9. The dome oxygen unit, "MOXIE-style"
+
+| Fact | Value | Tag |
+|---|---|---|
+| What MOXIE does | Makes O2 from Mars CO2 by solid-oxide electrolysis (from memory) | unverified (mechanism); the claim "from CO2" is stated in all NASA summaries I saw |
+| Total oxygen | **About 122 g over 16 runs** (Apr 2021 to Aug 2023) | searched, not opened (JPL/NASA "MOXIE completes Mars mission", Register, ScienceAlert) |
+| Best rate | **About 12 g per hour**, at 98 % purity or better, about twice the original goal | searched, not opened |
+| Last run | 9.8 g (7 Aug 2023) | searched, not opened |
+| Run pattern | Several hours warming, about 1 hour making O2, then power-down | searched, not opened |
+| Power draw | About 300 W (from memory) | **unverified; real value missing** |
+| Dust or filter limits | A filter cleans the intake air. I found **no** statement that dust or the filter limited output | real value missing |
+
+**Check of the claim "feeds the dome only, no effect on the Planetary Index."** Consistent with MOXIE: it is a lander-scale experiment, and it was a technology demonstration for a future crew, not a way to change the atmosphere. **Scale.** At 12 g/h, continuous, MOXIE would give about 288 g per day [calculated: 12 x 24]. A person uses on the order of 0.8 kg of O2 per day (from memory, **unverified**), so a crew-scale unit is roughly 3 to 10 times MOXIE [calculated, rough]. Call the game unit **"a scaled-up MOXIE"**; do not claim MOXIE itself could keep a dome alive. Honest note: "MOXIE made about 122 g in total, enough for about 10 minutes of breathing for one person (from memory)". The "10 minutes" is unverified; check before using.
+
+### 10. Are panels near a human base dustier?
+
+- **Landing plumes.** Real and studied: thin air focuses the plume and causes heavy erosion; Phoenix-era engineers worried that lifted dust would settle on the lander and cut power (searched, not opened: Planetary Society article; 2021 plume paper).
+- **Vehicle traffic and digging.** **No measurement found** (real value missing). Rovers' own arrays were not reported to dust from wheels.
+- **Verdict.** "Near a base is dustier" is **plausible for landing, unproven for daily activity.** For a dome, a plume-driven coat at the start would be more realistic than steady extra dust from work. Suggest the journal say "no one has measured this on Mars" and let the x2 stay an invented game rule (section 6).
+
+### 11. Misconceptions the mechanic could teach, with honest notes
+
+| Risk | Why it is a risk | Honest journal note |
+|---|---|---|
+| **"A storm coats panels instantly."** | The game adds dust at storm end in one jump; real fallout builds as the storm fades over days to weeks (section 4) | "In real storms the dust keeps settling for days after the sky clears. The game adds it at the end to keep it simple." |
+| **"Dust only hurts power."** | The game shows only power. Real dust also coats lenses, joints, and radiators (heat); dust grains are sharp and sticky (static) and perchlorate is toxic (Mars soil holds perchlorate, already in DESIGN.md) | "Dust also gets into joints and lungs. Power is just the easiest thing to measure." Radiator and joint effects: unverified in detail |
+| **"Dust only builds; nothing cleans it."** or the reverse, "wind always cleans" | Real cleaning is luck of place: Spirit and Opportunity yes, InSight no (section 2) | "Wind cleaned some real panels. It never cleaned InSight's." |
+| **"Mars dust is like Earth sand."** | It is far finer, about a few micrometres, and stays suspended (from memory, **unverified**; Lorenz mentions static retention, searched). Sand grains move by hopping in wind, dust by suspension | "Mars dust is more like flour or talc than beach sand." Size: unverified, cite before using |
+| **"Rain washes everything clean."** (Phase 3) | Rain removes coarse dust, not fine (NREL, searched) | "On Earth, rain helps but fine dust stays." |
+| **"A 60 % floor: dust can never kill power."** | Real arrays fell to about 10 % of launch output (InSight, with season mixed) | "Without cleaning, a real array keeps losing power. The game stops at 60 % so you have time to react." |
+| **"Dust makes the sky red because it is on the panels."** | Different effect | Not in the mechanic; skip |
+
+### 12. Real numbers for the F1 forecast journal line and the 2018 storm
+
+| Item | Figure | Tag |
+|---|---|---|
+| **2018 global storm (Opportunity)** | Peak opacity (tau) **10.8** (JPL; the highest MER or any Mars mission had measured, per the Planetary Society). Typical tau at Opportunity's site about 0.5; the rover needed tau below about 2 to make enough power | searched, not opened (JPL, Planetary Society) |
+| Last message | **10 June 2018**, output **21 Wh, down 97 %** since the storm began | searched, not opened |
+| What followed | More than 1,000 recovery commands, no reply; mission declared over **13 February 2019** | searched, not opened (JPL, Spaceflight Now) |
+| What ended it | Not clearly the dust coat. The dust blocked sunlight so power and heat failed; whether the final cause was cold, a computer fault, or dust on the arrays: **real value missing** (I will not claim it) | real value missing |
+| 2007 global storm | Output down as much as 80 % (section 4); Opportunity survived | searched, not opened |
+| InSight regional storm, Oct 2022 | 425 to 275 Wh/sol, about **35 % down**; tau 1.45 against 0.6 to 0.7 normal | searched, not opened (NASA blog) |
+
+**Suggested F1 line (real vs game):** "In 2018, a storm that covered all of Mars cut Opportunity's power by 97 percent in about three weeks, and the rover went silent. Your Phase 1 storm cuts 60 percent at most. Real storms are bigger." Check the "three weeks" before use: it is **my reading**, not a sourced figure (storm began about late May 2018; last contact 10 June; dates unverified).
+
+**What I would change first, and to what (my recommendation, for the Game Designer):**
+
+| Order | Invented number | Change to | Basis |
+|---|---|---|---|
+| 1 | Dust devil **5 % per sol** | **About 1 % per sol** per group (or 0.5 %) | Spirit about 0.15 % per sol [calculated]; keep above real so a game sees one |
+| 2 | Journal scale label for **3 sols per stage** | Keep the number; add "about 15 times real (0.2 % per sol)" | Lorenz 2021, searched |
+| 3 | **Phase 3 rain resets to stage 0** | Stage 1 or "partly cleaned" | Rain leaves fine dust (NREL, searched) |
+| 4 | **Outgasser intake** dusts panels | Outgasser exhaust / heavy machinery; keep x2 as invented | Section 6 |
+| 5 | **85 %** partly cleaned | Optional: recover about half the loss | Section 7 |
+
+### Could not open (this addendum)
+MOXIE and NASA news pages (nasa.gov, mars.nasa.gov, jpl.nasa.gov: 403 or blocked), NTRS (EDS papers, blocked), all 2018 storm pages (JPL, Planetary Society, Spaceflight Now), the Lorenz 2021 paper. MOXIE power draw: not found in any summary.
