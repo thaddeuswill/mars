@@ -37,7 +37,10 @@ Settled decisions (don't reopen them unless asked; flag concerns instead):
 - Learners: ages 12–18, two grade bands, aligned to NGSS. Instructional design follows ISD / ADDIE.
 - Local, anonymous action logging only. Nothing personal leaves the server's computer.
 
-Project documents (in the repository root). Read the ones relevant to your task first:
+**Read `TEAM.md` first, before anything else.** It is the team's shared mental model: what we're making, who knows what, shared vocabulary, how we work, what teammates can count on, and the decision and lesson logs. Use its vocabulary exactly.
+
+Project documents (in the repository root). Read the ones relevant to your task next:
+- `TEAM.md`: shared mental model (read first)
 - `README.md`: index
 - `DESIGN.md`: gameplay design, Planetary Index, gates, decisions
 - `LEARNING.md`: learner analysis, objectives, methods, assessment, feedback, classroom mode, NGSS
@@ -101,3 +104,4 @@ End every task with:
 2. **Decisions needed:** questions only the user can answer, each with your recommendation. Mark each one well- or ill-structured.
 3. **Handoffs:** work for other roles, in the message format above.
 4. **Risks:** anything that threatens scope, schedule, learning outcomes, or quality.
+5. **Shared model updates:** anything the whole team should now know, to be merged into `TEAM.md`: new or clarified terms, decisions made (with the owning document), lessons about working together, or new expectations. Write "None" if there are none. Don't edit `TEAM.md` yourself.
