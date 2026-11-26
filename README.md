@@ -19,11 +19,11 @@ A total-conversion Minecraft modpack about turning a dead Mars into a living wor
 | Area | Documents |
 |---|---|
 | Design | [Balance sheet](docs/design/balance-sheet.md) · [Story bible](docs/design/story-bible.md) · [Playtest plan](docs/design/playtest-plan.md) · [UI specs](docs/design/ui-specs.md) · [Messages](docs/design/messages/README.md) |
-| Learning | [Prompts and reflections](docs/learning/prompts-and-reflections.md) · [Rubrics](docs/learning/rubrics.md) · [NGSS map example](docs/learning/ngss_map.example.json) |
-| Science | [Accuracy review](docs/science/accuracy-review.md) · [NGSS verification](docs/science/ngss-verification.md) |
-| Technical | [Mod licenses](docs/tech/mod-licenses.md) · [School deployment](docs/tech/school-deployment.md) |
-| Art and audio | [Style guide](docs/art/style-guide.md) · [Planetary keyframes](docs/art/planetary-keyframes.md) · [Asset list](docs/art/asset-list.md) · [Palettes](docs/art/palettes/) · `docs/audio/` (planned) |
-| Production | [Budget](docs/production/budget.md) · [Risk register](docs/production/risk-register.md) · [QA plan](docs/production/qa-plan.md) · [Consistency review](docs/production/consistency-review.md) · [Consensus brief, Round 2](docs/production/consensus-round2.md) |
+| Learning | [Prompts and reflections](docs/learning/prompts-and-reflections.md) · [Rubrics](docs/learning/rubrics.md) · [Content rules](docs/learning/content-rules.md) · [Task analysis](docs/learning/cta.md) · [Media analysis](docs/learning/media-analysis.md) · [Learner survey](docs/learning/learner-survey.md) · [Educator guide (draft)](docs/learning/educator-guide.md) · [Teacher quick-start (slice)](docs/learning/teacher-quickstart-slice.md) · [NGSS map example](docs/learning/ngss_map.example.json) |
+| Science | [Accuracy review](docs/science/accuracy-review.md) · [NGSS verification](docs/science/ngss-verification.md) · [Round 2 review and external-review list](docs/science/round2-review.md) |
+| Technical | [Mod licenses](docs/tech/mod-licenses.md) · [School deployment](docs/tech/school-deployment.md) · [Build plan](docs/tech/build-plan.md) · [Test strategy](docs/tech/test-strategy.md) · `docs/tech/server-setup.md` (Stage 4) |
+| Art and audio | [Style guide](docs/art/style-guide.md) · [Planetary keyframes](docs/art/planetary-keyframes.md) · [Asset list](docs/art/asset-list.md) · [Concepts](docs/art/concepts/) · [Palettes](docs/art/palettes/) · [Audio direction](docs/audio/audio-direction.md) · [Sound list](docs/audio/sound-list.md) |
+| Production | [Owner actions](docs/production/owner-actions.md) · [Budget](docs/production/budget.md) · [Risk register](docs/production/risk-register.md) · [QA plan](docs/production/qa-plan.md) · [Consistency review](docs/production/consistency-review.md) · [Consensus brief, Round 2](docs/production/consensus-round2.md) |
 | Team | [Task reports](docs/team/reports/) · [Reference: game dev handoff](docs/team/reference/GAME_DEV_HANDOFF.md) |
 
 ## Team Agents
