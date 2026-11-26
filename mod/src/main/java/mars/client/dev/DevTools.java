@@ -13,7 +13,6 @@ import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
@@ -100,10 +99,14 @@ public final class DevTools {
                                                         .executes(
                                                             ctx -> {
                                                               view(
-                                                                  FloatArgumentType.getFloat(ctx, "x"),
-                                                                  FloatArgumentType.getFloat(ctx, "y"),
-                                                                  FloatArgumentType.getFloat(ctx, "z"),
-                                                                  FloatArgumentType.getFloat(ctx, "yaw"),
+                                                                  FloatArgumentType.getFloat(
+                                                                      ctx, "x"),
+                                                                  FloatArgumentType.getFloat(
+                                                                      ctx, "y"),
+                                                                  FloatArgumentType.getFloat(
+                                                                      ctx, "z"),
+                                                                  FloatArgumentType.getFloat(
+                                                                      ctx, "yaw"),
                                                                   FloatArgumentType.getFloat(
                                                                       ctx, "pitch"));
                                                               return 1;
@@ -155,7 +158,8 @@ public final class DevTools {
     log("step: " + line);
     String[] p = line.split(" ", 2);
     switch (p[0]) {
-      case "cmd" -> mc.player.connection.sendCommand(p[1].startsWith("/") ? p[1].substring(1) : p[1]);
+      case "cmd" ->
+          mc.player.connection.sendCommand(p[1].startsWith("/") ? p[1].substring(1) : p[1]);
       case "wait" -> waitTicks = Integer.parseInt(p[1]);
       case "view" -> {
         String[] v = p[1].split(" ");
@@ -167,7 +171,8 @@ public final class DevTools {
             Float.parseFloat(v[4]));
       }
       case "hud" -> mc.options.hideGui = !"on".equals(p[1]);
-      case "fps" -> log("fps=" + mc.getFps() + " (frames in the last second, as Minecraft counts them)");
+      case "fps" ->
+          log("fps=" + mc.getFps() + " (frames in the last second, as Minecraft counts them)");
       case "shot" -> shot(p[1]);
       case "quit" -> {
         log("quitting");
@@ -183,7 +188,8 @@ public final class DevTools {
       return;
     }
     mc.player.connection.sendCommand(
-        String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", x, y, z, yaw, pitch));
+        String.format(
+            java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", x, y, z, yaw, pitch));
     mc.options.hideGui = true;
   }
 
