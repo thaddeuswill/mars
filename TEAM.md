@@ -76,13 +76,14 @@ Use these words the same way everywhere.
 
 ### Contested terms: defined for this team
 
-Game and instructional designers use **high fidelity, immersive, adaptive,** and **engagement** without consistent definitions, within or across disciplines (Coleman et al., 2010). So we define them here, for this project, at the start. **Don't use these four words without the qualifier**: say "functional fidelity", not just "high fidelity".
+Game and instructional designers use **high fidelity, immersive, adaptive, interactivity,** and **engagement** without consistent definitions, within or across disciplines (Coleman et al., 2010). So we define them here, for this project, at the start. **Don't use these words without the qualifier**: say "functional fidelity", not just "high fidelity".
 
 | Term | Our definition | Types we distinguish | Where we stand | How we check it |
 |---|---|---|---|---|
 | **Fidelity** | How closely the game matches the real system it represents | **Functional:** cause and effect behave like the real physics (direction and rough size of effects). **Visual:** it looks like Mars. **Temporal:** real timescales. | **High functional** (the Planetary Index relationships must be right). **Moderate visual** (Minecraft blocks, real Mars colors). **Low temporal** (centuries compressed to hours, stated in the journal). | SME accuracy review; fantasy audit in DESIGN.md |
 | **Immersive** | The player feels inside the colony and its story, not outside a lesson | **Diegetic:** feedback and UI exist in the world (Monitor, journal, colony log). **Narrative:** the fiction stays consistent. **Flow:** play isn't interrupted. | All three. No pop-up quizzes; tests happen outside the game; "player, not learner" language. | Playtest presence questions; count of breaks out of the game world |
 | **Adaptive** | The game changes in response to the player | **World:** the planet responds to actions (always on). **Difficulty:** fauna scale with infrastructure. **Feedback:** hints get more specific after repeated failures of the same kind. **Configured:** grade band and classroom mode, set by a teacher, not automatic. | All four as listed. We do **not** do automatic personalization from a learner model at launch. | Action log shows the adaptations firing; playtests check that they help |
+| **Interactivity** | How the player's actions change what happens | **Agency:** the player decides and acts (vs. watching). **Responsiveness:** how quickly and visibly the game reacts. **Choice load:** how many options are open at once. | High agency (players run the planet; no cutscenes doing the work for them); responsiveness through the Monitor and world changes; choice load kept low early and raised by phase, to manage cognitive load. | Walkthroughs count choices per screen; playtests note confusion |
 | **Engagement** | How much players invest in the game | **Behavioral:** time on task, returning to play, finishing. **Emotional:** enjoyment, interest, caring about the colony. **Cognitive:** effort spent thinking: checking the Monitor, trying predictions, fixing root causes. | All three matter; **cognitive engagement is the one tied to learning.** High behavioral engagement alone (e.g. grinding) doesn't count as success. | Action log (behavioral, cognitive); playtest fun rating and survey (emotional) |
 
 If a document or report uses one of these terms differently, flag it in the review. New terms that turn out to mean different things to different roles get added here.
@@ -206,6 +207,22 @@ Research on LGD teams found that all disciplines agree design elements (mechanic
 
 Every design document change that affects a goal ID updates the alignment table in LEARNING.md, so learning value is never lost silently.
 
+**Change impact check.** Changes ripple in ways one discipline may not see. An artist may not realize that narrowing the player's field of view hides a learning cue; a designer may not see that adding choices raises cognitive load. For any flexible or stable change, and any fluid change that touches more than one area, answer:
+
+| Does the change affect… | If yes, tell |
+|---|---|
+| Mechanics or balance | Lead Game Designer |
+| A goal ID, a measure, or feedback | Lead Instructional Designer |
+| What the player can see or hear (field of view, color, cues) | Lead Artist and Lead Instructional Designer |
+| Story beats or characters | Lead Game Designer |
+| A science claim or simplification | Subject Matter Expert |
+| Performance, data, or code | Technical Lead |
+| The fun strategy (DESIGN.md: Fun) or a fantasy element | Lead Game Designer |
+| Number of choices or text on screen (cognitive load) | Lead Instructional Designer and Lead Game Designer |
+| Scope or schedule | Producer |
+
+Each affected role replies with its view before a flexible or stable change lands.
+
 ### 8.3 Level of agreement, not just agreement
 
 Two roles can both "agree" and still mean very different things. When recording a consensus, note the **level** (agree / can live with it), and note when roles agree on *what* but differ on *how much* or *how often*. Those gaps are where disputes start later.
@@ -261,6 +278,57 @@ Used at the end of each roadmap stage from the prototype on, and for the final r
 
 At the start of any design review, before anyone critiques, each role answers in one or two sentences: **"From my lens, what would make this succeed?"** That puts every discipline's definition of success on the table first, so the critique covers all of them and differences are seen as coverage, not opposition.
 
+### 8.6 Rules for interrupting play with feedback (draft, needs consensus)
+
+Feedback must balance keeping players motivated with what's best for learning. Interrupting at the wrong moment (e.g. a critical failure message near the end of a level or session) is frustrating. Draft criteria:
+
+1. **Never interrupt** during danger, combat, or active building. Messages wait in the colony log.
+2. **Natural pauses only** for non-urgent feedback: entering the dome, sleeping, opening the Monitor or journal, reaching a gate.
+3. **The only blocking interruptions** are (a) life-threatening first-time warnings (first O2 critical, first breach) and (b) phase debriefs at a gate, and the player can defer a debrief.
+4. **At most one** non-urgent pop-up message per ~10 minutes of play; the rest are queued.
+5. **No new critical failure in the last ~5 minutes** of a classroom session (teacher end-of-session signal).
+6. **Every prompt is deferrable** except the life-threatening ones in rule 3.
+
+Owner: Lead Instructional Designer with the Lead Game Designer. To be confirmed through the consensus process and checked in the Stage 3 playtest.
+
+### 8.7 Team debriefs
+
+After each stage's evaluation, especially the prototype, the whole team debriefs together:
+- Each role critically examines what was built against its Scorecard rows (perspective round first).
+- The team looks at the design **as a system**: how the parts fit together to meet the goals.
+- Outputs: improvement list with owners, Scorecard results, lessons for the Team Learning Log.
+- The Producer runs it; the coordinator saves it in `docs/team/reports/`.
+
+### 8.8 Recommended team communications: our status
+
+Checklist from *Design and Development of Training Games*, Chapter 2, section 6.
+
+**At the outset**
+| Area | Recommendation | Status | Where |
+|---|---|---|---|
+| Documentation | Get every discipline's input on what documents contain and how | 🟡 Document map drafted by the coordinator; each role still to review its needs (DOCUMENTATION.md section 2) | DOCUMENTATION.md |
+| Documentation | Version control, used consistently | ✅ Git, every change committed | — |
+| Documentation | Agree on definitions of key terms | ✅ | TEAM.md section 3 |
+| Game goals | Agree on the customer's requirements and success criteria, including learner performance outcomes | ✅ Customer is the user (design exercise) | DESIGN.md Two Goals; Scorecard 8.5 |
+| Game goals | Agree on criteria for prioritizing learning objectives | 🟡 Requested from the Lead Instructional Designer | LEARNING.md |
+| General design | Discuss authenticity choices and their effect on thinking skills; document decision criteria | ✅ | DESIGN.md Fantasy and Authenticity |
+| General design | Decide the role of every instructional and gaming element in the goals | ✅ | Traceability (DOCUMENTATION.md 3); fun–learning matrix |
+| General design | Decide the strategy for making it fun for the target players | ✅ | DESIGN.md Fun |
+| Feedback | Discuss how feedback supports objectives and motivates; evaluate against those criteria | ✅ Shared format has both purposes | DOCUMENTATION.md 5.1 |
+| Feedback | Agree on criteria for interrupting the game for feedback | 🟡 Drafted | 8.6 |
+| Evaluation | Get every discipline's input on prototype evaluation criteria | 🟡 Scorecard drafted; each role still to review its rows | 8.5 |
+
+**Throughout the project**
+| Area | Recommendation | Status | Where |
+|---|---|---|---|
+| Documentation | Document research behind team decisions | ✅ Sources required; science in docs/science | 5, DOCUMENTATION.md 4 |
+| Documentation | Document reasons for changes to key elements | ✅ | DOCUMENTATION.md 4 |
+| Game goals | Continually check adherence to goals and objective priorities | ✅ Stage exits use the Scorecard; priorities added once set | 8.5 |
+| General design | Discuss changes by their effect on multiple elements, with input from each discipline | ✅ | Change impact check, 8.2 |
+| General design | Discuss instructional effects of mechanic changes and the reverse | ✅ | 8.2 |
+| Evaluation | Debrief together after evaluation | ✅ | 8.7 |
+| Fun | Reconcile design changes with the fun strategy | ✅ | Change impact check, 8.2 |
+
 ## 9. Consensus Process (ill-structured decisions)
 
 1. **Frame:** the Producer (or the raising role) states the problem in shared vocabulary and lists which roles must weigh in.
@@ -295,6 +363,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Checked against the chapter's recommended team communications (8.8). Added: change impact check across all disciplines, interruption rules (draft), team debriefs, "interactivity" definition; objective priorities requested. | User research |
 | 2026-11-26 | Process: fuzzy (nonlinear) ADDIE with Fanning's software additions and RETAIN as a lens, plus a schedule for when key debates happen, which the models leave out. | User research |
 | 2026-11-26 | Each discipline needs different documented information, and LGD must show the link from design decisions to learners' performance requirements. DOCUMENTATION.md adds a document map, traceability chain, decision rationale rule, and a shared feedback format. | User research |
 | 2026-11-26 | Fidelity, immersive, adaptive, and engagement have no consistent definitions across disciplines (Coleman et al., 2010). Team definitions with required qualifiers are now in TEAM.md section 3. | User research |
