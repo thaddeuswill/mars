@@ -49,6 +49,8 @@ button:hover { border-color: var(--muted); }
 button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .assets button { flex: 1 1 100%; text-align: left; }
+.group[hidden] { display: none; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
 label.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .info h3 { margin: 0; font-size: 16px; font-weight: 600; }
 .info p { margin: 0; color: var(--muted); font-size: 14px; }
@@ -61,7 +63,7 @@ label.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 <div class="wrap">
   <header>
     <h1>Mars Asset Viewer</h1>
-    <p>Phase 1 dome machines, batch 1. These are placeholder models and textures. Drag to turn, scroll or pinch to zoom, and tell me what to change.</p>
+    <p>Phase 1 dome machines, batches 1 and 2. These are placeholder models and textures. Pick the solar panel to scrub through its dust levels. Drag to turn, scroll or pinch to zoom, and tell me what to change.</p>
   </header>
   <div class="layout">
     <div class="stage">
@@ -71,6 +73,11 @@ label.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; }
     </div>
     <div class="rail">
       <div class="group assets"><h2>Machine</h2><div class="buttons" id="assets"></div></div>
+      <div class="group" id="dustgroup" hidden><h2>Dust level</h2>
+        <input type="range" id="dust" min="0" max="4" step="1" value="0" aria-label="Dust level, 0 clean to 4 full veil">
+        <div class="info"><p id="dust-label">0 · clean</p></div>
+        <div class="buttons"><button id="partly" aria-pressed="false">Partly cleaned</button></div>
+      </div>
       <div class="group"><h2>View</h2><div class="buttons" id="views"></div></div>
       <div class="group"><h2>Scene</h2>
         <label class="toggle"><input type="checkbox" id="t-ground" checked> Mars ground</label>
@@ -89,13 +96,19 @@ const DATA = /*__DATA__*/;
 const INFO = {
   regolith_outgasser: ["Regolith Outgasser", "Phase 1 pressure source. A low, wide body with a vent stack, hazard stripes, and slots that glow when it runs."],
   regolith_oven: ["Regolith Oven", "Heater in the starting dome. A tall cabinet with a lit window and heater slots."],
-  solar_panel: ["Solar panel", "Dome power. Dark blue-black cells, tilted on a post, facing the front."],
-  solar_panel_dusty: ["Solar panel, dusty", "The same panel after a dust storm: streaks of redder dust and a drift along the low edge."],
+  solar_panel_dust0: ["Solar panel", "Dome power. Near-black, faintly purple-grey cells in rows with thin lighter seams and a few dark cut-outs (colour measured from InSight, PIA22876), tilted on a post. Use Dust level to see it weather."],
+  solar_panel_dust1: ["Solar panel, dust 1: first film", "A few specks of dust and a thin drift along the low edge. Output about 92% (draft game number)."],
+  solar_panel_dust2: ["Solar panel, dust 2: light veil", "Cell colour lifted about a third toward the ground dust; some cells further. Output about 82% (draft)."],
+  solar_panel_dust3: ["Solar panel, dust 3: heavy veil", "Cells mostly the colour of the ground; seams show as dark lines. Output about 70% (draft)."],
+  solar_panel_dust4: ["Solar panel, dust 4: full veil", "An even veil of dust, like InSight's array in 2022 (PIA25286); seams and cut-outs stay dark. Output about 60% (draft)."],
+  solar_panel_partly_cleaned: ["Solar panel, partly cleaned", "A heavy veil with diagonal streaks wiped clean, as a passing dust devil leaves it (real wind cleaning: Opportunity, 2014). Output about 85% (draft)."],
   battery: ["Battery", "Stores dome power. Charge segments on the front, orange plus terminal, dark minus terminal."],
-  o2_generator: ["O2 generator", "Dome oxygen. Twin tanks on a base."],
+  o2_generator: ["Oxygen maker (CO2)", "Dome oxygen, made from Mars's carbon dioxide, styled on NASA's MOXIE (PIA24201): a gold-plated box with a grid of recessed panels, an X rib pattern on one end, off-white tube loops, and silver fittings. Feeds the dome only. (Asset id o2_generator; rename planned.)"],
   planetary_monitor: ["Planetary Monitor", "Shows the planet values. A tilted screen on a low body."]
 };
-const ORDER = ["regolith_outgasser","regolith_oven","solar_panel","solar_panel_dusty","battery","o2_generator","planetary_monitor"];
+const ORDER = ["regolith_outgasser","regolith_oven","solar_panel_dust0","battery","o2_generator","planetary_monitor"];
+const DUST = ["solar_panel_dust0","solar_panel_dust1","solar_panel_dust2","solar_panel_dust3","solar_panel_dust4"];
+const DUST_LABEL = ["0 · clean", "1 · first film", "2 · light veil", "3 · heavy veil", "4 · full veil"];
 const SKY = 0xd2ae86;
 const SHADE = {up: 1, down: 0.5, north: 0.8, south: 0.8, east: 0.6, west: 0.6};
 // Corner order per face: bottom-left, bottom-right, top-right, top-left as seen from outside (same as the Blender preview).
@@ -216,7 +229,7 @@ function start() {
     ground.material.needsUpdate = true;
     document.getElementById("hud-name").textContent = all ? "All machines" : INFO[current][0];
     const info = document.getElementById("info");
-    info.innerHTML = all ? "<h3>All machines</h3><p>The seven batch 1 models side by side on a one-block grid, all facing north.</p><span class='tag'>straw-man placeholders</span>"
+    info.innerHTML = all ? `<h3>All machines</h3><p>The ${ORDER.length} Phase 1 dome machines side by side on a one-block grid, all facing north (the solar panel clean).</p><span class='tag'>straw-man placeholders</span>`
       : `<h3>${INFO[current][0]}</h3><p>${INFO[current][1]}</p><span class="tag">straw-man placeholder · mars:${current}</span>`;
     dirty = true;
   }
@@ -229,12 +242,28 @@ function start() {
 
   // UI
   const assetsEl = document.getElementById("assets");
+  const dustEl = document.getElementById("dust"), partlyEl = document.getElementById("partly"), dustLabel = document.getElementById("dust-label");
   for (const n of ["all", ...ORDER]) {
     const b = document.createElement("button"); b.textContent = n === "all" ? "All machines" : INFO[n][0]; b.dataset.n = n;
-    b.addEventListener("click", () => { current = n; for (const x of assetsEl.children) x.setAttribute("aria-pressed", x.dataset.n === n); setScene(); });
+    b.addEventListener("click", () => {
+      current = n; for (const x of assetsEl.children) x.setAttribute("aria-pressed", x.dataset.n === n);
+      const panel = n === "solar_panel_dust0";
+      document.getElementById("dustgroup").hidden = !panel;
+      if (panel) { dustEl.value = 0; partlyEl.setAttribute("aria-pressed", "false"); dustLabel.textContent = DUST_LABEL[0]; }
+      setScene();
+    });
     assetsEl.appendChild(b);
   }
   assetsEl.children[1].setAttribute("aria-pressed", "true");
+  // dust level: swaps the solar panel model live (the overview always uses dust 0)
+  function setDust() {
+    const partly = partlyEl.getAttribute("aria-pressed") === "true";
+    current = partly ? "solar_panel_partly_cleaned" : DUST[+dustEl.value];
+    dustLabel.textContent = partly ? "Partly cleaned (from a heavy veil)" : DUST_LABEL[+dustEl.value];
+    setScene();
+  }
+  dustEl.addEventListener("input", () => { partlyEl.setAttribute("aria-pressed", "false"); setDust(); });
+  partlyEl.addEventListener("click", () => { partlyEl.setAttribute("aria-pressed", partlyEl.getAttribute("aria-pressed") === "true" ? "false" : "true"); setDust(); });
   const viewsEl = document.getElementById("views");
   for (const v of Object.keys(VIEWS)) {
     const b = document.createElement("button"); b.textContent = v; b.dataset.v = v; b.addEventListener("click", () => setView(v)); viewsEl.appendChild(b);

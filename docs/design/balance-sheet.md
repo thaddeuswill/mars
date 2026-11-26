@@ -65,23 +65,26 @@ Phase 2 begins at about 8.3 h, on target (~8 h). The curve is flat before Dome s
 
 ---
 
-## 2a. Solar panel dust (draft; DESIGN.md, Solar panel dust)
+## 2a. Solar panel dust (approved draft; SME refinements from docs/science/dust-review.md)
 
-All numbers *invented* (game balance). Real accumulation and cleaning rates: requested from the SME; nothing here is a real figure.
+Tags: **sourced** (opened), **searched** (search summary, not opened), **calc** (arithmetic), **invented** (game balance). No dust number appears in player text except in the journal notes the SME wrote (DESIGN.md, Solar panel dust).
 
-| Item | Value | Reasoning |
+| Item | Value | Tag and reasoning |
 |---|---|---|
-| Stage interval (time on the surface) | 3 sols per stage ÷ storm cap; ÷ `pace.rateMultiplier` | Visible change over a few sols; stage 4 after ~12 sols if never cleaned. Phase 1 cap 1.0 → 3 sols; Phase 3 cap 0.5 → 6; Equilibrium 0.25 → 12 |
-| Classroom (×4) | 0.75 sol per stage (~15 minutes) | Same proportion as standard; at most one cleaning trip per class period |
-| Storm adds | +1 stage at storm end; +2 if storm cap ≥ 0.8 | Dust settles out as the storm clears; nothing added before onset (F1 lock point) |
-| Local activity | ×2 dust rate within 8 blocks of the player's digging or a running Outgasser intake | B5: your own work dusts your panels |
-| Phase 3 rain | Resets panels under open sky to stage 0 | A visible benefit of the wetter world (B2) |
-| Output by stage | 0: 100 % · 1: 92 % · 2: 82 % · 3: 70 % · 4: 60 % (floor) · partly cleaned: 85 % | Drift, not a cliff; floor keeps an uncleaned dome alive but short of power |
-| With a storm | Output = stage factor × (1 − 0.6 × storm cap) | Phase 1 worst case: stage 4 in a storm → 24 %. A strong C1 lesson; batteries must cover it |
-| Panel brush | Back to stage 0; ~2 s per panel; 64 uses | Cheap, quick, but needs a trip outside (suit O2) |
-| Panel wiper (from Phase 2) | Keeps a row at ≤ stage 1; costs 1 power unit per sol per panel and one bearing every 10 sols | Route choice: time vs. power and parts |
-| Dust devil | 5 % chance per sol per panel group (Phases 1–2); panels at stage ≥ 2 become "partly cleaned" | Rare, lucky, visible; fiction based on real wind cleaning (SME to source) |
-| Phase 1 curve assumption | Panels cleaned about every 6 sols (average output ≈ 90 %) | §2 curve stands only if power stays above Outgasser demand; measure in the prototype |
+| Real accumulation (reference only) | About 0.2 % of output per sol; range 0.05–2 % | **Searched** (Lorenz et al. 2021 abstract). InSight 5,000 → 500 Wh/sol over ~1,230 sols ≈ 0.19 %/sol compounding: **sourced** (PIA25284) + **calc** |
+| Stage interval, Phase 1 | 3 sols per stage | **Invented.** Game rate ≈ 3.3 % per sol (**calc**), **about 15 times faster than real**; the journal says so. At the real rate an uncleaned panel would lose only ~24 % over a 120-sol game (**calc**, SME), invisible in play |
+| Later phases (slower) | Interval ÷ storm cap: Phase 2 3.75 sols, Phase 3 6, Equilibrium 12 | **Invented**; ≈ 1.7 %/sol in Phase 3, 0.8 %/sol at Equilibrium (**calc**), easing toward real as storms weaken |
+| Classroom (×4) | Interval ÷ 4 (0.75 sol in Phase 1) | **Invented**; same proportions, about 65 times real (**calc**); at most one cleaning trip per class period |
+| Storm adds | +1 stage at storm end; +2 if storm cap ≥ 0.8 | **Invented.** Timing is a design choice for the F1 lock point; real fallout continues as storms fade (SME) |
+| Heavy machinery and exhaust | ×2 dust rate within 8 blocks of the player's digging, heavy machinery, or machine exhaust | **Invented**; plausible (landing plumes are the only real support, **searched**) |
+| Output by stage | 0: 100 % · 1: 92 % · 2: 82 % · 3: 70 % · 4: 60 % (floor) | **Invented.** Spirit stood near 60 % before its sol 420 event (**searched**); the floor is **optimistic** against InSight's fall to about 10 % (journal note) |
+| Partly cleaned (dust devil) | Recovers **half the lost output**: from stage 4 (60 %) to 80 %; from stage 3 (70 %) to 85 %; from stage 2 (82 %) to 91 % | **Invented** formula; inside real event sizes (+5–10 points Opportunity, ~+33 points Spirit sol 420: **sourced**/**searched**) |
+| Dust devil chance | **1 % per sol per panel group** (Phases 1–2); only panels at stage ≥ 2 change | **Invented**; real Spirit ≈ 0.15 %/sol (**calc** from 3 events in ~2,000 sols); about one event per standard game (**calc**) |
+| Phase 3 rain | Panels under open sky go to stage 1 or partly cleaned, whichever is cleaner (never stage 0) | **Invented**; direction from Earth (rain leaves fine dust, **searched**); no Mars analogue |
+| With a storm | Output = stage factor × (1 − 0.6 × storm cap) | **Invented.** Phase 1 worst case 24 %. Real storms: Opportunity −80 % (2007), −97 % (2018); InSight regional storm about −35 % (**searched**) |
+| Panel brush | Back to stage 0; ~2 s per panel; 64 uses | **Invented**; fiction (no Mars mission flew a brush) |
+| Panel wiper (from Phase 2) | Keeps a row at ≤ stage 1; 1 power unit per sol per panel; one bearing every 10 sols | **Invented**; fiction |
+| Phase 1 curve assumption | Panels cleaned about every 6 sols (average output ≈ 91 %) | **Calc** from the stage table; §2 curve holds only if power stays above Outgasser demand; measure in the prototype |
 
 ## 3. Required net rates per phase (standard, solo)
 

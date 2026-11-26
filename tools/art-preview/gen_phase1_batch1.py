@@ -154,12 +154,17 @@ def stage_px(stage, cleaned=False):
             else: px[y][x] = LEVEL_COLOR[level(stage, x, y)]
     if cleaned:   # wind cleared streaks out of a heavy veil (Opportunity, 2014): horizontal runs back to clean
         random.seed(2014)
-        # round 2: horizontal streaks blended with the horizontal seams; diagonal streaks (the wind's path) read as cleaning
-        for _ in range(9):
-            x0, y0 = random.randrange(1, 11), random.randrange(1, 10)
-            for k in range(random.choice((4, 5, 6))):
-                for (x, y) in ((x0 + k, y0 + k), (x0 + k + 1, y0 + k)):
-                    if 0 <= x < 16 and 0 <= y < 16 and CELL[y][x] == "cell": px[y][x] = "r"
+        # SME dust review §3: real wind cleaning (Opportunity 2014, PIA17759 -> PIA18079) was patchy and uneven between
+        # panels. So each of the four sub-panels gets its own amount of cleaning: irregular cleared patches (random walks)
+        # in the heavy veil, from almost clean to barely touched.
+        for q, (qx, qy) in enumerate(((1, 1), (9, 1), (1, 9), (9, 9))):
+            rnd = random.Random(1759 + q)
+            steps = (26, 4, 14, 0)[q]              # mostly cleaned / a little / about half / untouched
+            x, y = qx + rnd.randrange(6), qy + rnd.randrange(6)
+            for _ in range(steps):
+                for (cx, cy) in ((x, y), (x + 1, y), (x, y + 1)):
+                    if qx <= cx < qx + 6 and qy <= cy < qy + 6 and CELL[cy][cx] == "cell": px[cy][cx] = "r"
+                x = min(qx + 5, max(qx, x + rnd.choice((-1, 0, 1, 1)))); y = min(qy + 5, max(qy, y + rnd.choice((-1, 0, 1))))
     return px
 STAGES = {f"solar_panel_dust{k}": stage_px(k) for k in range(5)}
 STAGES["solar_panel_partly_cleaned"] = stage_px(3, cleaned=True)

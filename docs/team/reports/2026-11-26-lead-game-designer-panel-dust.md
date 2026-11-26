@@ -51,3 +51,19 @@ None new. The owner's earlier choice (even veil plus a "partly cleaned" state) m
 ## Shared model updates
 - **Terms:** panel dust stage (0–4, plus partly cleaned); dust devil (a rare event that leaves the partly cleaned state); oxygen maker (CO2) vs. water electrolysis plant (names proposed).
 - **Decision:** storm dust is added at the storm's end, never before, which keeps the F1 lock point clean (DESIGN.md, balance sheet §2a).
+
+---
+
+## Addendum: SME refinements applied (filed by coordinator)
+
+All six refinements from `docs/science/dust-review.md` applied to `DESIGN.md` ("Solar panel dust") and balance sheet §2a; every row tagged sourced, searched, calculated, or invented. Document work only; not playtested; no other role's files edited.
+- Dust devil chance 5% → **about 1% per sol** (a standard game gets about one lucky cleaning instead of about six, calculated).
+- Three sols per stage kept and labeled **"about 15 times faster than real (0.2% per sol)"**; later phases are slower because the interval is divided by the storm cap (about 1.7% per sol in Phase 3, 0.8% at Equilibrium); the Phase 2 interval is explicit at 3.75 sols.
+- Phase 3 rain takes a panel to **stage 1 or partly cleaned, whichever is cleaner**, never stage 0 (about −8% on Phase 3 solar).
+- "Outgasser intake" renamed **heavy machinery and machine exhaust**; the ×2 dust rate stays, marked invented.
+- Partly cleaned panels **recover half the lost output** (60 → 80%, 70 → 85%, 82 → 91%), replacing the flat 85%.
+- A journal note that the 60% storm floor is optimistic (InSight fell to about 10%).
+- "Partly cleaned" is described as patchy and different from panel to panel; "dust is added at the storm's end" is labeled a design choice, not science; the brush and wiper are marked fiction (no Mars mission has flown either).
+- **Re-run checks:** F1, FI-1, and FI-4 unaffected; a new "Panel dust stages" row in the threshold-vs-curve table passes, with the Phase 1 cleaning assumption still to be measured in the prototype.
+- **Handoffs:** Instructional Designer (place the SME's journal notes and the D2 Earth link; confirm "cleaned before a forecast storm" as C1 evidence); Lead Artist (patchy partly cleaned; rain shows as stage 1); Technical Lead (keep dust devil chance, stage interval, rain target, half recovery, and the ×2 radius as datapack values).
+- **Risks:** the Lorenz 2021 paper must be opened before any number reaches player text beyond the SME's journal notes; the 15× speed-up could teach "dust kills a panel in days" (the journal note is the mitigation); Phase 1 power with dust is unmeasured.
