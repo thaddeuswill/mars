@@ -606,7 +606,7 @@ Prototype the Index simulation before building content: first as a **paper or sp
 | Forecast flow | Index cards: issue → defer → lock → resolve, with a timer standing in for sols | Lock rules never reveal the answer early; expiry feels fair | B3 |
 | Air window | Paper slider for pressure and O2 | Lens A can say why the window widens | A5, B4 |
 | Landing checklist | Paper walkthrough with a new-to-modpacks tester (or Lens A role-play) | Steps are clear; time under 25 minutes | C1 |
-| First dust storm | Storyboard of the experience below | Warning → forecast → storm → recovery reads as one experience | C1, B3 |
+| First dust storm | Paper sheets: [docs/design/prototypes/first-dust-storm.md](docs/design/prototypes/first-dust-storm.md) (with the Artist's storyboard, keyframes §3.7a) | Warning → forecast → storm → recovery reads as one experience; no cue reveals F1 before it locks | C1, B3 |
 
 ### First experience to design in detail: the first dust storm
 Experience design works on one experience at a time so game, instruction, and art can agree on it. **First pick: the first dust storm in Phase 1** (story beat 4, F1, C1, B3). It touches every layer (world cue, warning, forecast, power loss, recovery, Hana's tip) at small scale, sits in the Stage 3 vertical slice, and is the first real test of "pressure, not grind". Detail spec to write next (handoff to the Lead Artist and Lead Instructional Designer for a joint pass).

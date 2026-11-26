@@ -36,9 +36,11 @@ Issue IDs: `QA-<stage>-<number>` (e.g. `QA-3-012`) until GitHub Issues take over
 
 ## 3. Test types
 
+**Relation to the test strategy.** The Technical Lead's [docs/tech/test-strategy.md](../tech/test-strategy.md) defines the automated layers: L0 parse gate, L1 unit tests, L2 solver, L3 GameTests, L4 headless playthrough, L5 screenshots at 1280×720, L6 at stage exits. **That file is the source of truth for how automated tests are built and run.** This plan says what must be tested when, the severity scale, and the exit criteria. Where they overlap, the test strategy wins on mechanics and this plan wins on exit criteria. Basic CI runs L0–L2 from Stage 1 exit (owner decision).
+
 | Type | What it checks | Who | Method label |
 |---|---|---|---|
-| **Unit tests** | Pure-Java simulation core: Index step, couplings, gates, holds, derived values, group rate scale | Technical Lead | automated |
+| **Unit tests** (L1) | Pure-Java simulation core: Index step, couplings, gates, holds, derived values, group rate scale | Technical Lead | automated |
 | **Architecture tests** | Modules depend only on `core` (ArchUnit) | Technical Lead | automated |
 | **GameTests** (NeoForge) | In-world behavior: sealing, pause, ice-to-water, gate unlocks, machine contributions | Technical Lead | automated |
 | **Invariant tests** | Rules that must never break (section 4) | Technical Lead | automated |
@@ -111,7 +113,10 @@ These are S1 if they ever fail. Each becomes a test as soon as its system exists
 | | Session pass | Pause stops our systems and third-party machines (GameTests); sols use simulation time; I-1 to I-3 | automated |
 | | Classroom-config pass | Rates ×4 and short holds work; thresholds identical | user (P2) |
 | | Usability pass | Can the player tell what changed and why? (usability first, DESIGN.md open risk) | user + walkthrough |
-| **3 Vertical slice** | Phase 1 pass | Spawn to 5 kPa at standard pace; times against the balance sheet curve | user (S1) |
+| | Face-validity review | Concept sketches (Monitor, sky strip, mast, thawlings, Outgasser) checked by the owner and SME in Stage 2a | review |
+| | `guidance` pass | Every level: failure reports still name the cause, forecast results still explain, safety warnings fire; level logged | automated + user |
+| **3 Vertical slice** | Targeted external reviews | Replies from the three reviewers (ice rule; ice–albedo and polar frost; transfer key and distractors) folded in before Phase 1 content is final | review |
+| | Phase 1 pass | Spawn to 5 kPa at standard pace; times against the balance sheet curve | user (S1) |
 | | Group-rates pass | Classroom config with `group.size` = 4 | user (S2) |
 | | Learning-layer pass | Minimal layer (LEARNING.md §3.5) works end to end: forecasts hidden in a group, failure report gives a hint not the answer, Keeper's Record shows own vs. team, CSV export by actor ID, mini pre/post test ready | automated + user + review |
 | | Onboarding pass | Landing teaches controls before the first forecast; Lens A has a next step within ~2 minutes at all times | user + walkthrough |
@@ -131,7 +136,8 @@ These are S1 if they ever fail. Each becomes a test as soon as its system exists
 | | Save and update pass | Restarts, rollback, pack update | automated |
 | | Privacy pass | All invariants I-5 to I-9; export audit | automated + review |
 | | Integration pass | Class server end to end (setup, pause, backup, rollback, export); educator guide steps match | automated + user + review |
-| | **External expert review** (owner decision) | Journal science, forecasts, educator guide reviewed by one outside expert the owner finds | review |
+| | **External expert review** (owner decision) | Journal science, forecasts, educator guide, pre/post test reviewed by one outside expert the owner finds | review |
+| | Offline LMS converter check | `events.csv` → xAPI statements in a local test store; nothing leaves the machine; the converter is not in the shipped pack | automated + review |
 | **6 Beta** | Tuning pass | Pacing, fauna, hazards against targets | user |
 | | Unit walkthrough | 23-period unit with the user playing the teacher; setup under 30 minutes | user + review |
 | | Scorecard pass | All seven lenses | review |
@@ -150,11 +156,13 @@ From the user's Chapter 9 pages (ACEDT), via the coordinator. Testing runs throu
 
 ## 6. Stage exit criteria (QA view)
 
+Every stage exit also needs the **owner platform checklist** ([owner-actions.md](owner-actions.md) §5): which platforms were checked (Windows, macOS, weak hardware, class server) and which weren't. A platform not covered is recorded as a gap, not assumed to pass.
+
 A stage exits when its ROADMAP exit criterion is met **and**:
 
 | Stage | Open S1 | Open S2 | Also required |
 |---|---|---|---|
-| 1 | 0 | Allowed with an owner and a plan | Invariant tests exist for every system planned in Stage 2 |
+| 1 | 0 | Allowed with an owner and a plan | Invariant tests exist for every system planned in Stage 2; basic CI green for L0–L2; owner platform checklist |
 | 2 | 0 | ≤ 5, none tagged `learning` or `accuracy` | P1 and P2 reports filed; Scorecard: Usability and Feasibility rows reviewed |
 | 3 | 0 | ≤ 5, none tagged `learning`, `accuracy`, `privacy`, `accessibility` | S1 and S2 reports filed; Phase 1 time within ±25% of the curve; load-test numbers replace placeholders; Scorecard all rows reviewed |
 | 4 | 0 | ≤ 10, none tagged `accuracy` or `privacy` | Every gate reachable; alignment table has no gaps; fantasy audit complete |
@@ -187,3 +195,4 @@ A stage exits when its ROADMAP exit criterion is met **and**:
 | Date | Change |
 |---|---|
 | 2026-11-26 | Draft 1. Added ACEDT test versions, integration tests, and the external SME line (coordinator input from Chapter 9). Added Chapter 9 testing tasks (3.1), the regression gate (4a), the Stage 5 external expert review and the licensing plan (owner decisions). |
+| 2026-11-26 | Round 3: linked docs/tech/test-strategy.md (layers L0–L6); CI L0–L2 at Stage 1 exit; owner platform checklist at every exit; face-validity, guidance, targeted external review, and LMS converter passes. |

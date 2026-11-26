@@ -122,7 +122,7 @@ Each scenario checks that its goal can be completed in play: taught, practiced, 
 | B4 | Hold the band under drift | Phase 3 hold; two drift events | Hold pauses then resumes; Air window shows edges and time-to-edge; F10 fires on emitter wear | "What did you give up to hold the band?" Target: names a real cost (power, land, output) |
 | B5 | A fix makes a new problem | Build a warm machine on a scanned ice lens | Cracked ground warning, then collapse; failure report names melting ground ice | "What went wrong, and why was it hard to see coming?" Target: the warming that helped also melted the ground |
 | C1 | Through the first storm | Phase 1; first storm forecast | F1 issued 1 sol ahead; solar drops 60 %; battery reserve carries the dome | "What did you do before the storm, and why?" Target: stored power or cut use for life-critical needs first |
-| C2 | Fix it so it stays fixed | Cause a seal breach twice | First report has Hana's tip; second is more specific; after a holding fix, BELL's positive closing line; no repeat from the same cause | "What did you change the second time?" Target: fixed the cause (outside edge), not the symptom |
+| C2 | Fix it so it stays fixed | Cause a seal breach twice; in a group test, have one account claim it and another repair it | First report has Hana's tip; second is more specific; after a holding fix, BELL's positive closing line; no repeat from the same cause; **C2 credit goes to the repairing account (`actor`), not the claimer**; no hint contains a banned token (CR-H2) | "What did you change the second time?" Target: fixed the cause (outside edge), not the symptom |
 | C3 | Data before building | Before placing a third Outgasser | Action log records Monitor opened before the build | "What did the Monitor tell you before you built?" Target: reads the trend or estimate |
 | D1 | The thawling choice | Reach Phase 3 with any fauna strategy | Report 2 question offered (deferrable, re-offered once per session); answer saved to reflections.csv | "Was waking them worth it? One reason from what you saw." Target: a claim plus evidence (D1 rubric) |
 | D2 | Mars teaches about Earth | Reach the beacon; read Mensah's replies | Every gate entry has an "On Earth" line; final question offered; HS read more opens | "What does your planet teach about Earth?" Target: one matched mechanism (greenhouse, loop, carbon cycle) |
@@ -143,6 +143,9 @@ Each scenario checks that its goal can be completed in play: taught, practiced, 
 | Baseline acknowledgment | At every gate and hold end | A visible "just finished" note, world change, and BELL line each time |
 | Zeigarnik without compulsion | Note any urge to "complete" something unrelated to a goal | None found, or each one tied to a goal ID |
 | Player types | One run as explorer (archive, sites), one as achiever (fastest gates) | Both find enough to do; neither needs PvP |
+| Guidance levels | Same Phase 1 stretch on gentle, standard, expert (expert in standard mode only) | At every level failure reports name the cause, forecast results explain, safety warnings fire; the level appears in planets.csv and players.csv; expert isn't offered in classroom mode |
+| Look before you leap | With F3 unanswered, open the Monitor | The forecast card shows first; Skip logs "unanswered"; the forecast is never silently closed |
+| Lock points | For every forecast, note the first cue that hinted the answer | Every lock comes before that cue (CR-F9) |
 
 ## Observation prompts (Chapter 9)
 
