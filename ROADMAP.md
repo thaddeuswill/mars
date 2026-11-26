@@ -126,6 +126,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Art: textures, models, sounds, sky/fog shaders
 - ⬜ Lore journal entries triggered by world-state gates, including science explanations, prediction prompts, and reflection questions
 - ⬜ Local action log for assessment
+- ⬜ Learner feedback tools: Monitor cause breakdown, failure reports, Colony Record, phase debriefs
 - ⬜ Educator guide and worksheets
 - ⬜ Performance budget: how many ticking machines a typical late-game base runs, measured on the test server
 

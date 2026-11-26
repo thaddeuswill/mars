@@ -1,10 +1,11 @@
 # Learning Design
 
-This file answers three questions:
+This file answers four questions:
 
 1. **Learning goals:** what learners need to know or be able to do.
 2. **Methods and media:** how they get there.
 3. **Assessment:** how we know they got there.
+4. **Learner feedback:** how learners know they got there, and how they track their own progress.
 
 > **Draft.** The audience is not set yet (age, classroom or self-directed, subject area). The goals below assume roughly **ages 12–18, informal or classroom use, earth and space science plus systems thinking**. Change the audience and the goals and measures should be revisited.
 
@@ -103,6 +104,57 @@ The game logs actions to a **local file** (no network, no personal data) that an
 - At least 70% of learners reach the Phase 3 gate.
 - Prediction-prompt accuracy rises from Phase 1 to Phase 3.
 - Learners can name at least two feedback loops and one unintended consequence in reflection.
+
+---
+
+## 4. Learner Feedback and Self-Assessment
+
+Section 3 is how *we* (designers, educators) know. This section is how *learners* know, while they play.
+
+**Answer: a combination.** Natural consequences come first, and specific feedback explains them. Every piece of feedback lives inside the game world (monitor, journal, colony log), so it never breaks immersion or turns into a pop-up quiz.
+
+### 4.1 Natural consequences: "did it work?"
+The world itself responds to what the learner does. This is the fastest and most frequent feedback.
+
+| Learner action | Consequence they see | Tells them |
+|---|---|---|
+| Builds an atmospheric processor | Sky slowly shifts from tan toward pink, fog thickens | Pressure is rising (A1, B1) |
+| Lets maintenance slip | Machine sputters, values on the monitor drop | Systems need upkeep (C2) |
+| Pushes warming hard | Ice melts, then fauna appear near the emitters | Interventions have side effects (B5) |
+| Over-seeds flora | O2 overshoots, fires break out | Balancing loops matter (A5, B4) |
+| Gets the balance right | Storms fade, water stays liquid, plants spread | The system is stable (B2) |
+
+Natural consequences show **what** happened. They don't always show **why**, which is where the next layer comes in.
+
+### 4.2 Specific feedback: "why did it happen?"
+| Tool | When | What it says |
+|---|---|---|
+| **Planetary Monitor** | Any time | Current values, trend arrows, and which machines or events moved each value most in the last day. Turns "something changed" into "this caused it". |
+| **Failure report** | After a breach, machine failure, or fauna attack | A short colony log entry: what failed, the likely cause, one hint. Never the full answer. |
+| **Prediction result** | Right after a prediction prompt resolves | Whether the prediction was right, and a one- or two-sentence science explanation either way. |
+| **Gate journal entry** | When a gate is reached | What the learner just achieved and the real science behind it. |
+
+### 4.3 Self-assessment: "how am I doing?"
+| Tool | How it works | Goals |
+|---|---|---|
+| **Colony Record** (in the journal) | Lists each learning goal written in player language (e.g. "Understand why water won't stay liquid"). Each one fills in as the player shows it in play: gate reached, prediction right, failure recovered from. The player can see what's filled in and what's still blank. | All |
+| **Prediction accuracy** | Shown in the journal as a running tally per phase, so learners see their own mental model improving. | B3 |
+| **Phase debrief** | At each phase gate, a short summary: what you built, what went wrong and how you fixed it, your prediction accuracy, plus one reflection question. | B, C, D |
+| **"Explain it" check** | Optional journal page: pick the cause of a recent event from a short list. Instant feedback. Lets learners test themselves without consequences. | A1–A5, B1 |
+
+### 4.4 How learners know they've achieved the outcomes
+A learner has met the outcomes when, in their own Colony Record:
+- every goal is filled in,
+- prediction accuracy in Phase 3 is clearly higher than in Phase 1, and
+- they've reached equilibrium and held it, which is only possible if they understand the balancing loops.
+
+**Reaching the beacon is the final proof.** The ending needs every variable in band at the same time for 14 in-game days. A learner can't get there by luck or grinding, only by understanding the system. The game's win condition and the learning outcome are the same thing.
+
+### 4.5 Feedback principles
+- **Consequences first, explanation second.** Let the world respond, then offer the why.
+- **Hints, not answers.** Failure reports point in a direction and leave the fix to the learner.
+- **Optional depth.** Journal entries are short, with "read more" for learners who want it.
+- **Fail forward.** Because gates lock in, mistakes cost time, not progress, which keeps failure safe enough to learn from.
 
 ---
 
