@@ -149,3 +149,12 @@ spotless {
 tasks.matching { it.name in ['runGameTestServer', 'runSelftestServer', 'runShotsClient'] }.configureEach {
     timeout = java.time.Duration.ofMinutes(15)
 }
+
+// The dev-only screenshot helper never goes into the shipped jar (BACKLOG #19). Dev runs load
+// classes from the source set output, so runShotsClient still has it. Build with -PwithDevtools
+// to include it on purpose.
+tasks.named('jar', Jar) {
+    if (!project.hasProperty('withDevtools')) {
+        exclude 'mars/client/dev/**'
+    }
+}

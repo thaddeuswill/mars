@@ -172,6 +172,8 @@ The Lead Instructional Designer's rule list, [docs/learning/content-rules.md](..
   - **Glyph existence:** a unit test (no client needed) loads our font providers and the vanilla font definitions, and fails if any character used in `en_us.json` (curly quotes, true minus sign, arrows, °, ×, subscripts like the "2" in O₂ if used) has no glyph in the font that will draw it. It prints the key, the character, and its code point. A runtime twin in the shots run checks the font's "missing glyph" box never appears in the recorded text.
 - Software rendering is slow and doesn't show real GPU bugs. It is for layout and colour, not performance.
 
+**Result (Stage 1, 2026-11-26): it works here.** `tools/screenshots/run-shots.sh` started the real 1.21.1 client under Xvfb with Mesa llvmpipe at 1280×720, created a test world, ran the script, and saved 4 PNGs in about 64 s (second run, downloads cached). Minecraft's own FPS counter read 6–20 frames per second, which is enough for screenshots, not for performance judgments. Sound was off (no audio device). The first run stopped at the first-launch welcome screen; the second showed a real bug that the boot checks had missed (`/mars go` dropped the player into the void). Both are kept in `tools/screenshots/out/` as evidence.
+
 **If the headless client doesn't work here:** the owner takes the screenshots **[owner]**: a dev client launched with `--width 1280 --height 720`, the harness's "shots" mode bound to a key so one press runs the whole scripted set, files saved to `run/screenshots/<build>/`, and the owner (or an agent reading the PNGs) reviews them against a checklist per change.
 
 ---

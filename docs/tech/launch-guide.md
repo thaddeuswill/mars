@@ -4,7 +4,9 @@
 
 > **What this build is.** An empty Mars dimension you can walk on, plus two commands. No machines, no Planetary Index in the world yet, no sky or fog changes beyond a tan sky and fog colour. The pure simulation core (Index step, boiling point, ice rule) exists and is unit-tested, but isn't connected to the world yet. See the Stage 1 report for exactly what was tested.
 >
-> **What was NOT tested by us:** the steps below on Windows or macOS, or with the official Minecraft launcher. We built and tested on Linux only (test-strategy §10, checklist P1–P2). Please note anything that differs.
+> **What was NOT tested by us:** loading the built jar from a `mods` folder in a normal NeoForge install (our dev runs load the compiled classes directly, not the jar).
+>
+> **Also not tested:** the steps below on Windows or macOS, or with the official Minecraft launcher. We built and tested on Linux only (test-strategy §10, checklist P1–P2). Please note anything that differs.
 
 ## 1. Play it on your own computer
 
