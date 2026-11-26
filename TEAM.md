@@ -79,6 +79,8 @@ Use these words the same way everywhere.
 | **Air window** | Monitor display of the breathable, fire-safe O2 range. |
 | **Keyframe** | A visual data point the client interpolates between, keyed on a named Index input. |
 | **Explicit / implicit / player-driven tasks** | Task types (Chapter 6): explicit tasks are dictated by the game (gates, forecasts); implicit tasks are expected but not dictated (stay alive, keep the dome sealed); player-driven tasks are self-set (what to build, which interventions). |
+| **Baseline reward** | The fair acknowledgment players expect for completed work (for us: gate moments, Keeper's Reports, ending cards). Missing it feels like cheating; adding more tangible rewards on top can harm intrinsic motivation. |
+| **Player skill vs. avatar skill** | Player skill is what the real person learns; avatar skill is a number on the character (XP, levels). We reward player skill: the Keeper has no levels, and progress is planet state. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -395,6 +397,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
 | 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
+| 2026-11-26 | Chapter 6 (motivation): intrinsic over extrinsic; rewards used as control backfire; baseline rewards are expected as fair acknowledgment, extra tangible rewards harm motivation; Zeigarnik effect backs the next-gate display; reward player skill, not avatar skill; difficulty adaptation must preserve the player's sense of control; Bartle types and the five experience dimensions guide content coverage. Sent to Lead Game Designer and Lead Instructional Designer. | User research |
 | 2026-11-26 | Chapter 6: flow needs clear tasks, immediate feedback, focus, and balanced goals. Games use three task types (explicit, implicit, player-driven); Minecraft's strength is player-driven, emergent tasks. Sent to the Lead Game Designer for DESIGN.md. | User research |
 | 2026-11-26 | Chapter 5: authenticity means the right **cognitive** fidelity for the learner's expertise, without extra load from excessive physical or functional fidelity. Added cognitive fidelity to the glossary and testing rules to DESIGN.md. | User research |
 | 2026-11-26 | Applied Chapter 3 feedback research and Chapter 4 story research (DESIGN.md: Story Approach). | User research |
