@@ -81,6 +81,8 @@ Use these words the same way everywhere.
 | **Explicit / implicit / player-driven tasks** | Task types (Chapter 6): explicit tasks are dictated by the game (gates, forecasts); implicit tasks are expected but not dictated (stay alive, keep the dome sealed); player-driven tasks are self-set (what to build, which interventions). |
 | **Baseline reward** | The fair acknowledgment players expect for completed work (for us: gate moments, Keeper's Reports, ending cards). Missing it feels like cheating; adding more tangible rewards on top can harm intrinsic motivation. |
 | **Player skill vs. avatar skill** | Player skill is what the real person learns; avatar skill is a number on the character (XP, levels). We reward player skill: the Keeper has no levels, and progress is planet state. |
+| **Product / task / customer-SME iteration** | The three levels of iteration (Chapter 9, TEAM.md section 4): repeated improved versions of the game; non-linear progress on tasks within a phase; and reviews with the customer and SMEs at key points. |
+| **Internal / external SME** | An internal SME is on the team and gives frequent feedback on small details. An external SME comes from outside (e.g., a planetary scientist or science teacher) and gives critical review. We have only an internal SME. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -133,6 +135,18 @@ No single learning game model dominates, and most teams use some form of ADDIE (
 | Environment-specific summative evaluation | Success Scorecard (8.5) and the pre/post study |
 
 **3. RETAIN as a design and evaluation lens** (Gunter et al., 2008; built on Gagné's nine events, Keller's ARCS, and Bloom's taxonomy). Six elements: **relevance, embedding, transfer, adaptation, immersion, naturalization**. The Lead Instructional Designer reviews the design against it (LEARNING.md).
+
+### Three levels of iteration (ACEDT, Chapter 9)
+
+The multidisciplinary development method in Chapter 9 runs on three kinds of iteration. We use all three, on top of the fuzzy ADDIE above.
+
+| Level | What it is | How we do it |
+|---|---|---|
+| **Product iteration** | Repeated passes through analysis, core design, experience design, development, and testing, each producing an improved version of the game. Start with paper or rapid prototypes, end with a feature-complete game. | Stage 2 is a fast, cheap prototype; Stage 3 is the vertical slice; later stages add content. When a playtest finds a problem (usability, wrong assumption about what players know, only some objectives taught), we revisit the requirements, prioritize, and work on the highest-priority element first. Shorter iterations are better. |
+| **Task iteration** | Within each phase the core tasks have no fixed order, and progress on one reveals issues for the others. | Roles work in parallel in their own files. The change impact check (8.2) and the handoff format keep every discipline aware of key decisions and able to weigh in, which keeps instructional and gaming elements balanced. |
+| **Customer/SME iteration** | At every key point, check decisions with the customer and subject matter experts for appropriateness, accuracy, authenticity, and completeness. | The user is the customer. The Subject Matter Expert is an **internal** SME (frequent, small-detail feedback). We have **no external SME** (a planetary scientist or a science teacher) for critical review. That is a known gap: published sources and an optional review by the user stand in until then. |
+
+Rule: no phase is "closed". A customer or SME finding at any point can send the team back to any earlier phase.
 
 ### When the team debates key issues
 
@@ -397,10 +411,12 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
 | 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
+| 2026-11-26 | Chapter 9 (ACEDT): three levels of iteration (product, task, customer/SME). Added to TEAM.md section 4; sent to the Producer for the roadmap cadence. No external SME exists (known gap). Chapter 6 also adds Koster's fun-as-pattern-mastery, the paradox of choice (recommended builds), and Schell's art-and-science check; sent to the Lead Game Designer. | User research |
 | 2026-11-26 | Chapter 6 (motivation): intrinsic over extrinsic; rewards used as control backfire; baseline rewards are expected as fair acknowledgment, extra tangible rewards harm motivation; Zeigarnik effect backs the next-gate display; reward player skill, not avatar skill; difficulty adaptation must preserve the player's sense of control; Bartle types and the five experience dimensions guide content coverage. Sent to Lead Game Designer and Lead Instructional Designer. | User research |
 | 2026-11-26 | Chapter 6: flow needs clear tasks, immediate feedback, focus, and balanced goals. Games use three task types (explicit, implicit, player-driven); Minecraft's strength is player-driven, emergent tasks. Sent to the Lead Game Designer for DESIGN.md. | User research |
 | 2026-11-26 | Chapter 5: authenticity means the right **cognitive** fidelity for the learner's expertise, without extra load from excessive physical or functional fidelity. Added cognitive fidelity to the glossary and testing rules to DESIGN.md. | User research |
 | 2026-11-26 | Applied Chapter 3 feedback research and Chapter 4 story research (DESIGN.md: Story Approach). | User research |
+| 2026-11-26 | The coordinator sent a message to the wrong agent because it mixed up agent order after parallel launches. Check the role of the recipient against the agent list before sending, and keep the role-to-agent mapping in the task summary. | Coordinator |
 | 2026-11-26 | A physics change (ice-to-water rule) silently broke an assessment item (forecast F4). Any gate or physics change triggers a forecast check, not just an alignment-table check. | Lead Instructional Designer |
 | 2026-11-26 | New root documents can appear mid-task. Check README for new documents at the start of every task. | Technical Lead |
 | 2026-11-26 | A story beat quietly contradicted the physics after gate conditions changed. When gate conditions change, check story beats against them. | Lead Game Designer |
