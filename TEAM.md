@@ -25,6 +25,8 @@ A shared mental model (SMM) is what every team member knows the same way: the ta
 
 ## 1. Task Model: What We're Making
 
+- **This is a design exercise.** No real students will use it. We design everything as if they would, as practice in student-centered learning game design. Treat learner needs, NGSS, classroom use, and minors' privacy as real requirements.
+
 - **The game:** an educational Minecraft modpack. Players terraform a hostile Mars in three phases, Survival Desperation → Industrial Geo-Engineering → Biome Seeding & Equilibrium, ending when they can remove the helmet and build the colonization beacon.
 - **Learners:** ages 12–18, in two grade bands, aligned to NGSS. Played in classrooms (classroom mode, ~11–12 hours) and at home (~40 hours).
 - **Two goals:** instructional value **and** market appeal. Neither wins by default. See "Two Goals" in `DESIGN.md`.
@@ -95,7 +97,7 @@ If a document or report uses one of these terms differently, flag it in the revi
 - **Evidence beats argument:** playtests, prototypes, and sources settle disagreements where possible.
 
 ### Still open (needs the user)
-- Who runs real playtests with people, and how often (blocks every stage exit from Stage 2 on).
+- How playtests work for a design exercise: the user playing, agent walkthroughs, or friends; and how often.
 - Licenses for our own code, assets, and educator materials.
 
 ## 5. What Teammates Can Count On
@@ -122,6 +124,7 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md | From user research |
 | 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
 | 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
+| 2026-11-26 | **Design exercise:** no real students will use this. Everything (classroom mode, NGSS, teacher tools, minors' privacy) is designed as if they would, as practice in student-centered design. Real playtests mean the user playing, plus agent walkthroughs. | TEAM.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
 | 2026-11-26 | Teacher CSV export uses anonymous IDs only; no username option | LEARNING.md, ARCHITECTURE.md (to update) | User decision on Producer recommendation |
@@ -243,6 +246,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Subject Matter Expert | Science accuracy and NGSS verification | `docs/science/` | `docs/team/reports/2026-11-26-subject-matter-expert-science-ngss.md` |
 | 2026-11-26 | Producer | Consistency review, risk register | `docs/production/` | `docs/team/reports/2026-11-26-producer-consistency-review.md` |
 | 2026-11-26 | Lead Game Designer | Story bible | `docs/design/story-bible.md` | `docs/team/reports/2026-11-26-lead-game-designer-story-bible.md` |
 
