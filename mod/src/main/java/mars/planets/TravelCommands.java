@@ -30,15 +30,23 @@ public final class TravelCommands {
   private static int go(CommandSourceStack src)
       throws com.mojang.brigadier.exceptions.CommandSyntaxException {
     ServerPlayer player = src.getPlayerOrException();
-    ServerLevel mars = src.getServer().getLevel(MarsDimensions.PLANET_1);
-    if (mars == null) {
+    if (!sendToMars(player)) {
       src.sendFailure(Component.translatable("commands.mars.go.missing"));
       return 0;
     }
-    int y = mars.getHeight(Heightmap.Types.MOTION_BLOCKING, 0, 0);
-    player.teleportTo(mars, 0.5, y, 0.5, player.getYRot(), player.getXRot());
     src.sendSuccess(() -> Component.translatable("commands.mars.go.success"), false);
     return 1;
+  }
+
+  /** Moves a player to the surface of planet 1 at x=0, z=0. False if the dimension isn't loaded. */
+  public static boolean sendToMars(ServerPlayer player) {
+    ServerLevel mars = player.server.getLevel(MarsDimensions.PLANET_1);
+    if (mars == null) {
+      return false;
+    }
+    int y = mars.getHeight(Heightmap.Types.MOTION_BLOCKING, 0, 0);
+    player.teleportTo(mars, 0.5, y, 0.5, player.getYRot(), player.getXRot());
+    return true;
   }
 
   private static int back(CommandSourceStack src)

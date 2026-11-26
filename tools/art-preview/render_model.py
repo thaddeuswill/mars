@@ -7,7 +7,7 @@ Usage:
   options  --shading mc|lit   mc (default): flat, unlit faces with Minecraft's fixed per-face
                               brightness (up 1.0, north/south 0.8, east/west 0.6, down 0.5);
                               lit: Blender sun light (soft shadows, not like the game)
-           --ground <tex>     regolith-style ground plane (3x3 blocks) using <texture_dir>/<tex>.png
+           --ground <tex>     ground plane (3x3 blocks) using <texture_dir>/<tex>.png, or a full .png path
            --sky <hex>        background color (default #D2AE86, the 0.6 kPa horizon, keyframes §3.1)
            --ref              add a 0.6 x 1.8 block grey box (player size) for scale
            --transparent      transparent background, no ground (for silhouette checks)
@@ -52,7 +52,7 @@ def material(texname, face):
     nt = m.node_tree; nt.nodes.clear()
     outn = nt.nodes.new("ShaderNodeOutputMaterial")
     t = nt.nodes.new("ShaderNodeTexImage")
-    path = os.path.join(texdir, texname + ".png")
+    path = texname if texname.endswith(".png") else os.path.join(texdir, texname + ".png")
     t.image = bpy.data.images.load(path, check_existing=True); t.interpolation = "Closest"
     if opts["shading"] == "mc":
         em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = SHADE[face]

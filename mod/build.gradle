@@ -47,10 +47,22 @@ neoForge {
             gameDirectory = project.file('run-gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'mars.selftest', 'true'
-            systemProperty 'mars.selftest.bootTimeoutSec', '240'
+            systemProperty 'mars.selftest.bootTimeoutSec', (project.findProperty('marsBootTimeout') ?: '240')
+            systemProperty 'mars.selftest.stallTimeoutSec', '120'
+        }
+        // Dedicated-server self-test (test-strategy L4 seed): a real headless server with the mod
+        // starts, runs the boot checks against the real Mars level, then stops cleanly.
+        selftestServer {
+            server()
+            gameDirectory = project.file('run-selftest')
+            programArgument '--nogui'
+            systemProperty 'mars.selftest', 'true'
+            systemProperty 'mars.selftest.autostop', 'true'
+            systemProperty 'mars.selftest.bootTimeoutSec', (project.findProperty('marsBootTimeout') ?: '240')
             systemProperty 'mars.selftest.stallTimeoutSec', '120'
         }
         configureEach {
+            systemProperty 'stdout.encoding', 'UTF-8'
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.INFO
         }
@@ -126,6 +138,6 @@ spotless {
 }
 
 // A hard limit so a hung server can never hang the build (test-strategy 2.2, third line of defence).
-tasks.matching { it.name == 'runGameTestServer' }.configureEach {
+tasks.matching { it.name in ['runGameTestServer', 'runSelftestServer'] }.configureEach {
     timeout = java.time.Duration.ofMinutes(15)
 }

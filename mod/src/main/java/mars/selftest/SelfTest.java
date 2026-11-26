@@ -65,6 +65,13 @@ public final class SelfTest {
     return ok;
   }
 
+  /** Print an informational line that is not a pass/fail check. */
+  public static void info(String id, String text) {
+    if (ENABLED) {
+      out("INFO " + id + " " + text);
+    }
+  }
+
   public static void installIfEnabled(IEventBus modBus) {
     if (!ENABLED) {
       return;
@@ -82,6 +89,12 @@ public final class SelfTest {
         (ServerStartedEvent e) -> {
           serverStarted = true;
           step("server_started");
+          if (Boolean.getBoolean("mars.selftest.autostop")) {
+            // Dedicated-server self-test: run the boot checks, then stop the server cleanly.
+            BootChecks.run(e.getServer(), true);
+            step("autostop_requested");
+            e.getServer().halt(false);
+          }
         });
     NeoForge.EVENT_BUS.addListener(
         (LevelEvent.Load e) -> {

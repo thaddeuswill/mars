@@ -43,9 +43,9 @@ class T:
     def region(s, x0, y0, x1, y1):  # a used uv region (inclusive px)
         s.regions.append((x0, y0, x1, y1)); return [x0, y0, x1 + 1, y1 + 1]
     def save(s):
-        for (x0, y0, x1, y1) in s.regions:
-            if x1 - x0 >= 3 and y1 - y0 >= 3:
-                s.rect(x0, y0, x0 + 1, y0 + 1, "m")
+        # one 2x2 marker per texture file, in the top-left of its largest region (style guide §5.5)
+        x0, y0, x1, y1 = max(s.regions, key=lambda r: (r[2] - r[0] + 1) * (r[3] - r[1] + 1))
+        if x1 - x0 >= 3 and y1 - y0 >= 3: s.rect(x0, y0, x0 + 1, y0 + 1, "m")
         im = Image.new("RGBA", (16, 16))
         im.putdata([rgb(P[c]) + (255,) for row in s.px for c in row]); im.save(os.path.join(TEX, s.name + ".png"))
         return s
@@ -143,7 +143,7 @@ for name, top in (("solar_panel", "solar_panel_top"), ("solar_panel_dusty", "sol
         "elements": [
             {"from": [4, 0, 4], "to": [12, 2, 12], "faces": {k: face("post", [4, 0, 12, 2]) for k in ("north", "south", "east", "west")} | {"up": face("frame", [4, 4, 12, 12])}},
             {"from": [7, 2, 7], "to": [9, 9, 9], "faces": {k: face("post", [7, 0, 9, 7]) for k in ("north", "south", "east", "west")}},
-            {"from": [0, 9, 0], "to": [16, 10, 16], "rotation": {"origin": [8, 9.5, 8], "axis": "x", "angle": 22.5},
+            {"from": [0, 9, 0], "to": [16, 10, 16], "rotation": {"origin": [8, 9.5, 8], "axis": "x", "angle": -22.5},  # cells tilt toward the front (north)
              "faces": {"up": face("cells", pvr), "down": face("frame", [0, 0, 16, 16]),
                        "north": face("frame", [0, 0, 16, 1]), "south": face("frame", [0, 0, 16, 1]),
                        "east": face("frame", [0, 0, 16, 1]), "west": face("frame", [0, 0, 16, 1])}}]}
@@ -154,7 +154,7 @@ bf.rect(3, 4, 12, 15, "3"); bf.bevel(3, 4, 12, 15); bf.rect(3, 5, 12, 5, "o")
 bf.rect(4, 6, 9, 15 - 1, "1")                               # dark well behind the charge gauge
 for n, y in enumerate((12, 10, 8)):                          # bottom-up: 2 charged (filled), 1 empty (hollow)
     if n < 2: bf.rect(5, y, 8, y, "g")
-    else: bf.box(5, y, 8, y, "4")
+    else: bf.dot(5, y, "4"); bf.dot(8, y, "4")             # empty segment: only its two end marks (hollow)
 bf.rect(9, 6, 12, 9, "1"); bf.rect(10, 7, 11, 8, "g"); bf.save()
 bs = T("battery_side"); bsr = bs.region(3, 4, 12, 15); bs.rect(3, 4, 12, 15, "3"); bs.bevel(3, 4, 12, 15); bs.rect(3, 5, 12, 5, "o"); bs.save()
 bt = T("battery_top"); btr = bt.region(3, 3, 12, 12); bt.rect(3, 3, 12, 12, "2"); bt.box(3, 3, 12, 12, "1")
@@ -209,7 +209,7 @@ models["planetary_monitor"] = {
         {"from": [0, 0, 2], "to": [16, 8, 14], "faces": {"north": face("body", mbr), "south": face("body", mbr),
             "east": face("body", [2, 8, 14, 16]), "west": face("body", [2, 8, 14, 16]),
             "up": face("body", [0, 0, 16, 6]), "down": face("body", [0, 0, 16, 6])}},
-        {"from": [1, 8, 9], "to": [15, 17, 11], "rotation": {"origin": [8, 8, 10], "axis": "x", "angle": -22.5},
+        {"from": [1, 7, 9], "to": [15, 16, 11], "rotation": {"origin": [8, 8, 10], "axis": "x", "angle": -22.5},
          "faces": {"north": face("screen", scr), "south": face("body", [0, 8, 14, 15]), "up": face("body", [0, 8, 14, 10]),
                    "east": face("body", [0, 8, 2, 15]), "west": face("body", [0, 8, 2, 15])}}]}
 
