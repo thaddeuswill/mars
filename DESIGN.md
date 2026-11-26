@@ -10,6 +10,8 @@ Each change to the planet should be visible and felt: sky color, weather, which 
 
 **Time unit.** A **sol** is one in-game day: 20 real minutes of simulation time. Simulation time stops when the world is paused (the Technical Lead defines it in ARCHITECTURE.md). All hold times and delays are in sols.
 
+**Sleep and the sky (confirmed, answers the Technical Lead).** On Mars, **sleeping never skips time**, and `/time set` has no effect there. The **sky follows simulation time**: sunrise and sunset line up with the sol, and a paused world freezes the sun. A bed sets the respawn point, and lying down is a **natural pause** (TEAM.md 8.6), so queued messages are shown then. Why: skipping a night would let one player fast-forward holds and storms for a whole group, and it would turn waiting into a button instead of play (pillar: pressure, not grind). Revisit if playtests show nights feel idle; the fix would be night work (repairs, frost, stars), not a skip.
+
 **Numbers.** Rates, curves, and tuning values live in the balance sheet: [docs/design/balance-sheet.md](docs/design/balance-sheet.md). Story: [docs/design/story-bible.md](docs/design/story-bible.md).
 
 ---
@@ -108,7 +110,8 @@ Target **NeoForge, Minecraft 1.21.1** unless a key mod forces otherwise. Confirm
 |---|---|---|
 | Mars dimension | **Custom** (companion mod) | Full control of sky, fog, weather, and terrain response to the Planetary Index |
 | O2, sealing, suits | Custom, or a standalone oxygen/suit mod if one fits | Must hook into the Planetary Index so ambient O2 and pressure come from world state |
-| Industry / gas processing | Mekanism, Create | Gas chemistry maps well onto atmospheric processing |
+| Learning-critical machines | **Custom, simple, in-house** (companion mod) | Every machine a player needs to learn the science or pass a gate is ours, with one interface pattern. See "In-house machines" below |
+| Industry / logistics (optional) | Mekanism, Create | **Optional and late:** unlocked at Hydrosphere, never required for a gate, never used to teach. Hidden in recipe viewers until then; classroom preset hides them by default |
 | KubeJS (+ ProbeJS for dev) | Recipes, recipe gating, third-party integration | Not the Index or gates. Gates and tuning values live in datapack JSON. |
 | Worldgen | Datapack + TerraBlender, or custom | Regolith, ice caps, ground-ice lenses, buried fauna lairs |
 | Journal | **Custom** (companion mod, learning module) | Gate entries, prediction prompts, message archive, Colony Record. FTB Quests rejected (user decision): a quest checklist works against "the planet is the quest log". |
@@ -179,6 +182,8 @@ Fantasy can pull players in, keep them playing, and help learning (better retent
 | **Dormant subterranean fauna (thawlings)** | **Fantasy**, grounded in real speculation (option B, decided) | Ecosystem response and unintended consequences (B5, D1, B2) | **Yes:** their numbers follow the player's machine signature; non-lethal answers (shrouds, lures, quiet zones) are systems choices; fighting treats the symptom only | Medium, reduced by labeling: "there are animals on Mars". No life has been found on Mars. | **Keep, decided.** Journal labels them every time; Hydrosphere stage is a **later life stage**, never a "mutation" |
 | Engineered flora and biome seeding | Plausible future technology | Photosynthesis and the carbon cycle (A5) | Balancing O2 and CO2 (B4) | Low-medium | Keep; based on real plant and algae biology |
 | Colonization beacon and ships | Fiction (story frame) | Motivation: a clear end goal | — (motivational) | Low | Keep |
+| Weather mast (windsock, balloon, thermometer, gas tubes) | Real instruments, simplified (windsock rises with air density **[SME]**; gas tubes stand in for a gas analyzer) | Honest in-world cue for invisible gases (A1, A5) | Reading an instrument (C3) | Low: shows O2/CO2 as readings, never as sky color | Keep (user adopted) |
+| Training Hall lobby (class servers) | Fiction, set on Earth before the story | Waiting area; no learning job | — | None | Keep (story bible §3.6) |
 | Player on a planned solo watch (backstory) | Fiction | Motivation and urgency | — (motivational) | Low | Keep (backstory approved); story bible passes the rules above |
 | Fauna ending cards | Fiction (outcome of the fauna fiction) | Consequences of the player's choices (D1) | Reflecting on what they did (D1) | Low: no ranking, no moral grade | Keep |
 
@@ -296,7 +301,7 @@ Design judgment only; nothing here is playtested yet. Re-place after each playte
 | Rate-based classroom pacing | Neutral to player | Keeps real thresholds: A1, A2 | — (infrastructure) | Adopt |
 
 ### Player, not learner
-In game text and UI the person is a **player** and a colonist: no "lesson", "objective", "quiz", or "learner". Learning is framed as colony work: predictions are "forecasts", the Colony Record tracks "colony expertise", reflection questions come from the colony log. Teacher-facing materials use instructional language.
+In game text and UI the person is a **player** and a colonist: no "lesson", "objective", "quiz", or "learner". Learning is framed as colony work: predictions are "forecasts", the Colony Record is the **Keeper's Record** of "what the colonists will need to know", self-checks are "What caused it?" pages, and reflection questions are part of the Keeper's Reports. Teacher-facing materials use instructional language.
 
 ## Learning Mechanisms in Play
 
@@ -307,10 +312,10 @@ Working memory is limited. **Intrinsic** load comes from the content itself (par
 
 | Principle | How we apply it | Status | Owner |
 |---|---|---|---|
-| Use a schema players already have | Minecraft's controls, inventory, crafting, and building stay vanilla. New machines use one consistent interface pattern. | 🟡 | Lead Game Designer |
-| Controls first, content second, for players without the schema | **Landing** onboarding: the first ~20–30 min teaches movement, oxygen, and building inside the dome. The first forecast (F1) comes only after it. Experienced Minecraft players can skip it. | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
-| Cut extraneous load from third-party mods | Mekanism and Create interfaces are complex. Every machine needed to learn the science is ours and simple. Third-party machines are optional support, and arrive late. | ⬜ Gap | Lead Game Designer, Technical Lead |
-| Manage intrinsic load by introducing one idea at a time | **Progressive disclosure:** the Monitor shows only the parameters in play. Phase 1: pressure, O2, power, temperature. Hydrosphere at the Thaw. O2/CO2 balance and biomass in Phase 3. Partial pressure is in "read more" at middle school depth. | 🟡 | Lead Game Designer, Lead Artist |
+| Use a schema players already have | Minecraft's controls, inventory, crafting, and building stay vanilla. New machines use one consistent interface pattern (see In-house machines). | ✅ Spec'd | Lead Game Designer |
+| Controls first, content second, for players without the schema | **Landing** onboarding, in story as BELL's first-shift checklist (8 steps, ~15–25 min). No forecast before it's done or skipped. Experienced players skip with "I know the drill". See Closing the gaps. | ✅ Spec'd | Lead Game Designer, Lead Instructional Designer |
+| Cut extraneous load from third-party mods | Every machine needed to learn the science is ours and simple. Mekanism and Create are optional, unlock at Hydrosphere, and are never required for a gate. | ✅ Spec'd (Technical Lead: hiding) | Lead Game Designer, Technical Lead |
+| Manage intrinsic load by introducing one idea at a time | **Progressive disclosure:** the Monitor shows only the values in play: 2 planet rows in Phase 1 (pressure, temperature; dome O2, water, power on the Dome tab), hydrosphere and fauna at the Thaw, O2, CO2, biomass, and the Air window in Phase 3. Partial pressure is in "read more" at middle school depth. Table: [ui-specs.md](docs/design/ui-specs.md) §2. | ✅ Spec'd | Lead Game Designer, Lead Artist |
 | Gameplay and content tightly linked | The mechanic is the lesson: raising pressure *is* the play. | ✅ | — |
 | Difficulty matched to skill | Grade bands; fauna scale with infrastructure; hints escalate on repeated failure. | ✅ | — |
 
@@ -331,9 +336,9 @@ Verbal and visual information use separate channels (Baddeley & Hitch, 1974; May
 |---|---|---|---|
 | Scaffolding in the zone of proximal development (Vygotsky, 1978) | Phases build on each other; hints escalate; grade bands set depth. | ✅ | — |
 | **Fading** support as skill grows | Forecast hints shrink from Phase 1 to Phase 3. Failure reports give less detail on repeats. The Monitor's cause breakdown stays available but closed by default in Phase 3. | ⬜ Gap | Lead Instructional Designer |
-| **Worked examples** for novices, practice for experts (expertise reversal) | The first Outgasser is set up with Kowalczyk's notes as a worked example. Later machines are figured out by the player. Experienced players can skip the notes. | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
+| **Worked examples** for novices, practice for experts (expertise reversal) | Hana's notes on the first Outgasser are a full worked example; the first processor gets a completion version; later machines get none. Experienced players can hide the notes. | ✅ Spec'd | Lead Game Designer, Lead Instructional Designer |
 | Flow: challenge rises with skill (Csikszentmihalyi, 1975) | Pressure builds phase by phase; drift events and fauna scale with progress. | ✅ | — |
-| Flow: clear goals | The Monitor shows the **next gate and progress toward it** ("Next: pressure 5 kPa, 62%"). | ⬜ Gap | Lead Game Designer, Lead Artist |
+| Flow: clear goals | The Monitor's top bar shows the **next gate and progress toward it** ("Next: Phase 2 · Pressure 5 kPa · 62 % · ~4 sols"), log-scaled for pressure, one bar per condition. [ui-specs.md](docs/design/ui-specs.md) §3. | ✅ Spec'd (Artist: visual) | Lead Game Designer, Lead Artist |
 | Flow: unambiguous feedback | World responses, Monitor trends, failure reports. | ✅ | — |
 | Desirable difficulty: **spacing** (Bjork & Bjork, 2011) | Key ideas return across phases (radiation forecast F2, repeated as F7). | ✅ | — |
 | Desirable difficulty: **interleaving** | Drift events during holds mix parameters at random. Later forecasts mix topics from earlier phases. | 🟡 | Lead Instructional Designer |
@@ -345,8 +350,8 @@ Verbal and visual information use separate channels (Baddeley & Hitch, 1974; May
 | Endogenous, situated learning (Reiber, 1996; Van Eck, 2006) | Content is the game: colonists terraforming Mars, where every task applies the science. | ✅ | — |
 | Narrative **hooks**: player choices tied to the story (Rollings & Adams, 2003) | Choice of interventions, the four fauna options, colony posts, unranked ending cards. | ✅ | — |
 | Dickey's (2005) engaged-learning elements: focused roles, goals and challenge, rules, social play, a novel story, choices | Keeper role and colony posts; gates; Index rules; group planets; the story bible; fauna and intervention choices. | ✅ | — |
-| **Don't overwhelm with backstory**; avoid seductive details | Backstory is optional (archive, notes). Only BELL and one crew voice are essential per phase; other characters are optional depth. Fantasy rules cut seductive details. | 🟡 Check story bible character load | Lead Game Designer |
-| **Advance organizers** (Ausubel, 1960) | At each phase start, a short **Shift Briefing** from BELL says what's ahead in plain colony terms ("This shift: the ice. Watch temperature and pressure together."). | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
+| **Don't overwhelm with backstory**; avoid seductive details | Backstory is optional (archive, notes). Only BELL and one crew voice are essential per phase (Hana, then Basu, then Moreno); Mensah speaks only in Keeper's Report replies. Check done: story bible §4.4. | ✅ | Lead Game Designer |
+| **Advance organizers** (Ausubel, 1960) | At each phase start, a **Shift Briefing** from BELL (≤ 45 words): this shift's job, what to watch, what's new. Text: [messages/](docs/design/messages/README.md). | ✅ Spec'd | Lead Game Designer, Lead Instructional Designer |
 | Constructivism: purposeful, authentic, player-directed, challenging, collaborative, reflective | Open-ended play; real Mars values; no single path; group planets; Keeper's Reports. | ✅ | — |
 
 ### Feedback types and timing (Chapter 3)
@@ -423,7 +428,7 @@ Before Stage 3, a full-team story review: each role reviews the story bible agai
 
 ### How a group shares a planet
 - **One Index, one dome, one story.** All machines feed the same Index; all players face the same storms and fauna. Story beats fire once per planet and reach everyone; offline players find them in the journal archive.
-- **Personal pieces stay personal.** Journal, forecasts, Colony Record, Keeper's Reports (debriefs), and Explain-it answers are per player. That gives individual evidence on a shared planet (handoff to the Lead Instructional Designer, M-14).
+- **Personal pieces stay personal.** Journal, forecasts, Colony Record, Keeper's Reports (debriefs), and "What caused it?" answers are per player. That gives individual evidence on a shared planet (handoff to the Lead Instructional Designer, M-14).
 - **The dome fits five.** Five bunks and life support sized for up to five. O2, water, and food use scale with real player count, so a bigger group feels more Phase 1 pressure (C1). Compact before wide survives because the dome doesn't grow with the group.
 
 ### Colony posts (roles)

@@ -122,7 +122,7 @@ If a document or report uses one of these terms differently, flag it in the revi
 - **Evidence beats argument:** playtests, prototypes, and sources settle disagreements where possible.
 
 ### Still open (needs the user)
-- Licenses for our own code, assets, and educator materials.
+- None at the moment. Open decisions are tracked in BACKLOG.md.
 
 ### Design process model: fuzzy ADDIE
 
@@ -211,6 +211,11 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Rose/mauve Phase 2 sky kept, labeled stylized, pending SME check | docs/art | User decision on Lead Artist recommendation |
 | 2026-11-26 | Weather mast prop adopted (honest O2/CO2 world cue) | docs/art, DESIGN.md (to add) | User decision on Lead Artist recommendation |
 | 2026-11-26 | Lead Artist owns audio | README.md, agent files | User decision |
+| 2026-11-26 | Goal priority tiers: option T-C. Adopt LEARNING.md §1 tiers (Primary A2, A3, A5, B1, B2, B4, D2; Secondary A1, B3, B5, C1, C2, C3; can be deemphasized A4, D1) **plus the quadrant rule**: learning resources follow the goal tier; feature cut order follows the fun–learning quadrant, so Core-quadrant features (fauna options, ending cards, radiation spikes) are cut only after Redesign and Moderation items. Revisit D1's tier after the Stage 3 story test. Any cut that drops a goal below its tier's minimum goes to the user. Fallback if the Game Designer blocks on D1: T-B (D1 to Secondary). | LEARNING.md §1, docs/production/budget.md | User decision on Producer recommendation; Game Designer position pending |
+| 2026-11-26 | Interruption rules: option I-C (see TEAM.md 8.6) | TEAM.md 8.6, LEARNING.md §4.6 | User decision on Producer recommendation; Game Designer position pending |
+| 2026-11-26 | Licensing plan (not legal advice; unverified): our code MIT; our art, audio, story and journal text CC BY 4.0; educator materials CC BY 4.0. Never retexture or redistribute All Rights Reserved assets (Create, FTB Library) and never ship ProbeJS. No LICENSE file is added until release, because this is a design exercise. | docs/tech/mod-licenses.md | User decision on coordinator recommendation |
+| 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
+| 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
@@ -330,7 +335,7 @@ Used at the end of each roadmap stage from the prototype on, and for the final r
 
 At the start of any design review, before anyone critiques, each role answers in one or two sentences: **"From my lens, what would make this succeed?"** That puts every discipline's definition of success on the table first, so the critique covers all of them and differences are seen as coverage, not opposition.
 
-### 8.6 Rules for interrupting play with feedback (draft, needs consensus)
+### 8.6 Rules for interrupting play with feedback (decided: option I-C)
 
 Feedback must balance keeping players motivated with what's best for learning. Interrupting at the wrong moment (e.g. a critical failure message near the end of a level or session) is frustrating. Draft criteria:
 
@@ -341,7 +346,13 @@ Feedback must balance keeping players motivated with what's best for learning. I
 5. **No new critical failure in the last ~5 minutes** of a classroom session (teacher end-of-session signal).
 6. **Every prompt is deferrable** except the life-threatening ones in rule 3.
 
-Owner: Lead Instructional Designer with the Lead Game Designer. To be confirmed through the consensus process and checked in the Stage 3 playtest.
+**Decided (user, on the Producer's brief `docs/production/consensus-round2.md`): option I-C.** Adopt the fuller rule set in LEARNING.md §4.6 (rules 1–11) as the **Stage 3 test configuration**, with two flow guards:
+1. An unsent Keeper's Report is re-offered **at most once per session**, plus the "Since last shift" recap line, not at every pause.
+2. The caps are config values: pop-ups about 1 per 10 minutes, log lines about 3 per minute (merged when similar). Final numbers are set from Stage 3 action-log counts.
+
+The six rules above stay as the baseline. LEARNING.md §4.6 adds: forecast results first in the queue, limited debrief deferral, no new forecast or report pop-up in the last ~5 minutes of a class, deferred forecasts expire and log as unanswered (never wrong), forecasts issued about 1 sol before the outcome, escalating hints only at natural pauses, nothing important only in a pop-up, every interruption/deferral/expiry logged, one player's prompt never pauses the group.
+
+Owner: Lead Instructional Designer with the Lead Game Designer. The Lead Game Designer's own position was still pending when this was decided; if it blocks on a specific rule, that goes to the user, or the Stage 3 playtest settles it.
 
 ### 8.7 Team debriefs
 
@@ -362,12 +373,12 @@ Checklist from *Design and Development of Training Games*, Chapter 2, section 6.
 | Documentation | Version control, used consistently | ✅ Git, every change committed | — |
 | Documentation | Agree on definitions of key terms | ✅ | TEAM.md section 3 |
 | Game goals | Agree on the customer's requirements and success criteria, including learner performance outcomes | ✅ Customer is the user (design exercise) | DESIGN.md Two Goals; Scorecard 8.5 |
-| Game goals | Agree on criteria for prioritizing learning objectives | 🟡 Requested from the Lead Instructional Designer | LEARNING.md |
+| Game goals | Agree on criteria for prioritizing learning objectives | ✅ Decided (option T-C) | LEARNING.md §1 |
 | General design | Discuss authenticity choices and their effect on thinking skills; document decision criteria | ✅ | DESIGN.md Fantasy and Authenticity |
 | General design | Decide the role of every instructional and gaming element in the goals | ✅ | Traceability (DOCUMENTATION.md 3); fun–learning matrix |
 | General design | Decide the strategy for making it fun for the target players | ✅ | DESIGN.md Fun |
 | Feedback | Discuss how feedback supports objectives and motivates; evaluate against those criteria | ✅ Shared format has both purposes | DOCUMENTATION.md 5.1 |
-| Feedback | Agree on criteria for interrupting the game for feedback | 🟡 Drafted | 8.6 |
+| Feedback | Agree on criteria for interrupting the game for feedback | ✅ Decided (option I-C) | 8.6 |
 | Evaluation | Get every discipline's input on prototype evaluation criteria | 🟡 Scorecard drafted; each role still to review its rows | 8.5 |
 
 **Throughout the project**
