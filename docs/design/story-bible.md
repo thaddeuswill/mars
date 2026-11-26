@@ -249,7 +249,7 @@ How the story carries it: Basu's notes describe each option as something he *wou
 | 19 | Beacon lit; epilogue; final reflection; Keeper's Record handed over | **Ending** | Ending sequence, Keeper's Record | **D1, D2**, all | **Essential** |
 | 20 | World continues; helmet check stays live | Post-ending | Colony log warnings | A5 | Automatic |
 
-**Density (standard mode).** 20 beats over ~40 h: about one major beat every 2 hours, plus traces. By phase: P1 7 beats / 8 h, P2 6 beats / 18 h, P3 6 beats / 14 h (plus the post-ending beat). Phase 2 is the thinnest per hour; fauna encounters, outposts, and Basu's sites fill it. Watch this in playtests.
+**Density (standard mode).** 21 beats over ~40 h: about one major beat every 2 hours, plus traces. By phase: P1 7 beats / 8 h, P2 7 beats / 18 h (including optional 7a), P3 6 beats / 14 h (plus the post-ending beat). Phase 2 is the thinnest per hour; fauna encounters, outposts, and Basu's sites fill it. Watch this in playtests.
 
 ### 6.3 Journal
 - Every gate entry follows: **what you just saw → the real science → fiction note if needed → "On Earth" line (D2) → "read more."**
@@ -296,7 +296,7 @@ How the story carries it: Basu's notes describe each option as something he *wou
 
 ### 7.2 Essential vs. optional
 - **Essential (13 beats, 12 without beat 5):** 1, 3, 4, 5 (if adopted), 6, 7, 9, 10, 12, 13, 15, 17, 19. Across ~17 play periods of ~40 minutes (LEARNING.md §5.1), that is a little under one essential beat per period, so most periods end with something new from the story.
-- **Optional (5 beats):** 2, 8, 11, 14, 16. In classroom mode they stay in the world as traces and archive items but don't push a notification. Beat 11 shrinks to one line inside beat 10. Beat 14 folds into Mensah's reply in beat 13. Beat 18 merges into 19.
+- **Optional (6 beats):** 2, 7a, 8, 11, 14, 16. In classroom mode they stay in the world as traces and archive items but don't push a notification. Beat 11 shrinks to one line inside beat 10. Beat 14 folds into Mensah's reply in beat 13. Beat 18 merges into 19.
 - **Teacher "Set phase."** Essential beats from skipped phases are placed in the archive as an "Unread from earlier" bundle, marked so the teacher can assign them.
 
 ### 7.3 Text budget in classroom mode
