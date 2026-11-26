@@ -68,8 +68,10 @@ Use these words the same way everywhere.
 | **Planetary Monitor** | In-game block showing Index values, trends, and causes. |
 | **Keeper** | What the story's characters call the player (approved). |
 | **Thawlings** | Fictional animals descended from hypothetical underground microbial life (option B). Their Hydrosphere stage is a "later life stage", never a mutation. Working name; not yet cleared against existing works. |
-| **Group planet** | In classroom mode, one world shared by a group of 3–5 students. A class runs several. |
-| **Sol** | One in-game day: 20 real minutes of simulation time. All holds and delays are counted in sols. |
+| **Planet** | One Mars dimension with its own Planetary Index, gates, story, and fauna. Standard play has one; a class server hosts several. |
+| **Group planet** | One planet (not one world) shared by 3–5 students. |
+| **Pseudonymous** | Students have random per-world IDs (`P-XXXXX`); the mapping file never leaves the server; every export uses IDs only. Use this word, not "anonymous", for the action log. |
+| **Sol** | One in-game day: 20 minutes of simulation time. Stops while paused or when the server is off; sleeping and the daylight cycle never advance it. All holds and delays are counted in sols. |
 | **Machine signature** | How much a machine adds to fauna pressure. |
 | **Colony post** | An optional, rotating role for a player on a group planet. |
 | **Drift event** | An event that pushes a value out of band during a hold. |
@@ -165,6 +167,8 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Equilibrium pressure target ~75 kPa so 21% O2 is breathable; Breathable gate uses O2 partial pressure (≥ ~16 kPa) and CO2 partial pressure (≤ 0.5 kPa) | DESIGN.md | User decision on SME recommendation |
 | 2026-11-26 | Multipliers (classroom, multiplayer) scale rates and hold times only, never physical thresholds | DESIGN.md, LEARNING.md | Coordinator, on SME accuracy finding |
 | 2026-11-26 | Multiplayer scaling uses a static group-size rate scale (set in config, not from who's online); thresholds never scale | DESIGN.md: Multiplayer Scaling | Lead Game Designer; follows the user-approved accuracy rule. User may override. |
+| 2026-11-26 | Game state and learning evidence are stored separately; rollback never deletes evidence | ARCHITECTURE.md §7 | Technical Lead |
+| 2026-11-26 | The pack requires Minecraft Java Edition; it can't run in Minecraft Education | docs/tech/school-deployment.md | Fact (Technical Lead research) |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
@@ -354,6 +358,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Technical Lead | Architecture gaps, licenses, school deployment | `ARCHITECTURE.md`, `docs/tech/` | `docs/team/reports/2026-11-26-technical-lead-architecture-gaps.md` |
 | 2026-11-26 | Lead Game Designer | Apply decisions, C-01 fix, balance sheet, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-decisions-applied.md` |
 | 2026-11-26 | Subject Matter Expert | Science accuracy and NGSS verification | `docs/science/` | `docs/team/reports/2026-11-26-subject-matter-expert-science-ngss.md` |
 | 2026-11-26 | Producer | Consistency review, risk register | `docs/production/` | `docs/team/reports/2026-11-26-producer-consistency-review.md` |
@@ -370,6 +375,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | New root documents can appear mid-task. Check README for new documents at the start of every task. | Technical Lead |
 | 2026-11-26 | A story beat quietly contradicted the physics after gate conditions changed. When gate conditions change, check story beats against them. | Lead Game Designer |
 | 2026-11-26 | Solo adult playtests produce design judgment, not learning evidence. | Lead Game Designer |
 | 2026-11-26 | Checked against the chapter's recommended team communications (8.8). Added: change impact check across all disciplines, interruption rules (draft), team debriefs, "interactivity" definition; objective priorities requested. | User research |

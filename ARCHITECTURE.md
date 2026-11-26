@@ -180,9 +180,23 @@ Details: section 7 (backups, rollback), section 8 (IDs, log, CSV, grade band, Co
   2. Apply coupling: temperature gets a greenhouse term (from pressure, CO2, and super-greenhouse gas); ice melts into hydrosphere only when temperature and pressure allow liquid water; biomass converts CO2 to O2; decay returns CO2.
   3. Apply sinks and decay (e.g. polar frost loss, pressure leak without upkeep).
   4. Clamp to physical limits.
-  5. Recompute **derived values** (O2 partial pressure = pressure × O2 fraction; CO2 partial pressure; boiling point of water at the current pressure). Derived values are defined in data and are read-only.
+  5. Recompute **derived values** (O2 partial pressure = pressure × O2 fraction; CO2 partial pressure; boiling point of water at the current pressure). Derived values are defined in data and are read-only. They are part of the synced snapshot, so the Planetary Monitor shows them like any other value (DESIGN.md §1).
   6. Post `IndexUpdatedEvent` if anything changed by more than a small amount.
 - Simple step-by-step (Euler) integration is enough at this step size. Coefficients live in data so balance can be tuned without code.
+
+**Pacing and group config keys** (balance sheet §5.1; one key per job, per consistency review M-02):
+
+| Key | Scope | Standard | Classroom | Used in |
+|---|---|---|---|---|
+| `pace.rateMultiplier` | Server | 1.0 | 4.0 | Every contribution and sink (2.1) |
+| `pace.holdSols.<gate>` | Server | 3 / 7 / 14 | 1 / 2 / 3 | Hold gates (2.2) |
+| `pace.holdResetSols` | Server | 1.0 | 0.5 | Hold reset grace (2.2) |
+| `pace.solTicks` | Server | 24,000 (20 min) | 24,000 | Simulation clock (7.1) |
+| `pace.recipePreset` | Server | `standard` | `cheaper` | Read by KubeJS scripts at load to pick the recipe set |
+| `group.size` | **Per planet**, static | 1 | Teacher sets 3–5 | `groupRateScale(n) = 1 / (1 + 0.35 × (n − 1))`; fauna planet cap (2.4). Never read from who is online. |
+| `story.delayScale` | Server | 1.0 | 0.5 | Story delays (9.2) |
+
+None of these keys is applied to a threshold. Thresholds have no scaling field at all (2.2).
 
 ### 2.2 Gates, live conditions, holds, and milestones
 Four kinds of condition, all defined in data with the same condition language (consistency review M-03):
@@ -208,13 +222,25 @@ Four kinds of condition, all defined in data with the same condition language (c
 
 ### 2.4 Fauna pressure
 - Machines are stored in a **per-chunk index** per planet (map from chunk position to machines and their signatures).
+- **Fauna pressure F** per planet = Σ machine signatures (tier 1/2/3) − shroud reductions (balance sheet §6). Kept as a running sum: updated only when a machine is built, removed, switched on or off, or shrouded. Reading it costs nothing; it is synced to the Monitor's fauna page.
+- Raids per sol = 0.15 × F (× 1.5 after Hydrosphere), scheduled in simulation time. A raid targets the highest-signature machine, found from the per-chunk index.
 - Spawn weight near a position = base weight × f(nearby machine signatures) × g(temperature, hydrosphere). Looking up nearby chunks is fast because of the index.
+- **Group S population** (0–100) and per-planet fauna stats are kept in the planet's saved data for the ending cards (9.5).
 - **Caps:** per-planet cap from the balance sheet (§6: 12 + 4 per configured player, hard cap 30), plus a **server-wide cap** across all planets (`fauna.serverCap`, default 80, *to measure in Stage 3*). When the server cap is hit, planets share it in proportion to their own caps.
 - This implements "fauna scales with infrastructure" from the multiplayer scaling decision, and keeps it inside each group's planet.
 
 ### 2.5 World response
 - **Sky and fog:** the client interpolates between keyframes defined in data. **Any Index parameter or derived value can be an input** (consistency review M-17); the Lead Artist chooses which parameter drives which visual. Smooth transitions, no per-frame lookups.
-- **Terrain changes** (ice → vapor or water, regolith → soil): driven by random block ticks with a probability scaled by the Index, so the whole world isn't rewritten at once. The ice rule (DESIGN.md §2) needs a **local temperature** per block: global mean + day/night offset + heat from machines within range. Machine heat is read from the per-chunk index (2.4), so the lookup is a small constant cost per random tick.
+- **Terrain changes** (ice → vapor or water, regolith → soil): driven by random block ticks with a probability scaled by the Index, so the whole world isn't rewritten at once.
+- **Local temperature for the ice rule** (DESIGN.md §2): global mean + day/night offset + heat from nearby machines.
+
+  | Approach | Cost per ice random tick | Notes |
+  |---|---|---|
+  | **Per-block, exact** (sum heat from every machine within range, with distance falloff) | Look up ~9 chunks in the per-chunk index and loop over their machines: tens to hundreds of operations | Estimate: with simulation distance 4 (81 chunks per player) and vanilla's default 3 random ticks per chunk section per tick, a player's area gets a few thousand random ticks per tick. If ~10 % land on ice, that is several hundred lookups per tick per player. Likely well under a millisecond, but it grows with players × machines. *Estimate, not measured.* |
+  | **Cached per-chunk heat map (recommended)** | One map read: O(1) | Each chunk stores the heat it receives from machines. Recomputed for the ~9 chunks around a machine only when that machine is built, removed, or switched. Heat is uniform within a chunk (16 × 16 blocks), which is fine for "ice near a heater melts". |
+  | Global only | O(1) | Loses "ice near machines melts first", which the Thaw beat needs. Not recommended. |
+
+  **Recommendation:** the cached per-chunk heat map. Same player-visible behavior at constant cost. If playtests show chunk edges look wrong, add a cheap distance falloff from the nearest machine only.
 
 ### 2.6 Learning
 - Prediction prompts: answer stored on the server, then resolved when the predicted condition is reached or a timeout passes (timeouts in simulation time).
@@ -223,6 +249,12 @@ Four kinds of condition, all defined in data with the same condition language (c
 
 ### 2.7 Story delivery
 - A per-planet queue of scheduled messages, checked each simulation step. Details in section 9.
+
+### 2.8 Shift Board (group coordination block)
+- A block in the `machines` module. It lists the planet's **open failure reports** (from `failure.reported` events) and who has claimed each.
+- **State:** a per-planet list of `(failureId, claimedBy, status)` in the planet's saved data. Any Shift Board on the planet shows the same list.
+- **Names:** the screen shows **in-game names** of claimers (already visible in game). Nothing is stored by name: the claim holds a `PlayerRef` in memory and saved data, and the action log records `shiftboard.claimed` and `failure.fixed` with the pseudonym only. Credit for a fix goes to the claimer's log (C2 evidence, DESIGN.md Group Play).
+- **Cost:** updated on claim, fix, or new failure only. No ticking.
 
 ---
 
@@ -461,24 +493,35 @@ Implements the Lead Game Designer's story-bible handoff: gate-triggered message 
 
 ### 9.1 Message data
 
-One JSON file per message in `data/mars/story/messages/`:
+One JSON file per message in `data/mars/story/messages/` (story beats) or `data/mars/learning/feedback/` (failure reports, prediction results, journal entries, debriefs). Both use the **shared feedback format** in DOCUMENTATION.md §5.1, so the content document maps field for field onto the file:
 
 ```json
 {
   "id": "mars:beat_10_secret",
+  "type": "recorded_message",
   "speaker": "moreno",
-  "medium": "recorded_message",
   "trigger": { "after": "mars:beat_9_first_thawlings", "delay_sols": 1.0 },
   "classroom": "essential",
   "band": "all",
-  "text": "story.mars.beat_10_secret",
-  "read_more": "story.mars.beat_10_secret.more"
+  "text": { "ms": "story.mars.beat_10_secret.ms", "hs": "story.mars.beat_10_secret.hs" },
+  "read_more": "story.mars.beat_10_secret.more",
+  "goal_ids": ["D1"],
+  "hint_level": null,
+  "status": "draft"
 }
 ```
 
-- **Triggers:** `gate` (gate reached), `condition` (live condition turns on or off), `milestone`, `first_event` (first failure of a type, first storm), `after` (another message plus a delay), `session_start`, `ending`.
+| Shared-format field | Used by the game at runtime? |
+|---|---|
+| `id`, `type`, `trigger`, `text.ms` / `text.hs`, `hint_level` | Yes |
+| `goal_ids` | Yes: copied into the action log event (`goals`) and the export |
+| `delivery` | Yes, as `type` + `speaker` |
+| `status` | Load check only: a `release` build refuses entries that aren't `final` |
+| `instructional_purpose`, `motivational_purpose`, `science_claims`, `fiction_note` | No. Kept in the content documents; allowed in the JSON and ignored by the loader, so one file can carry everything |
+
+- **Triggers:** `gate` (gate reached), `condition` (live condition turns on or off), `milestone`, `first_event` (first failure of a type, first storm), `repeat_event` (same failure again, for escalating `hint_level`), `after` (another message plus a delay), `session_start`, `ending`.
 - **`classroom`:** `essential` (delivered with a notification), `optional` (filed in the archive silently), or `merge_into: <id>` (not delivered; its short line is shown inside the named message).
-- **Text** is only language keys; the server sends keys and arguments, the client renders them. That keeps translation and grade-band variants in language files.
+- **Text** is only language keys; the server sends keys and arguments, the client renders them. That keeps translation and grade-band variants in language files. A single key string instead of `{ms, hs}` means the same text for both bands.
 
 ### 9.2 Queue and delivery
 
@@ -501,6 +544,7 @@ One JSON file per message in `data/mars/story/messages/`:
 ### 9.5 Epilogue cards
 
 - Data in `data/mars/story/epilogue/`: each card has a condition (same condition language as gates, plus named stats like `group_s_population`, `biome_count`, `sols_held`, O2 margin) and a priority. At the beacon, the highest-priority card in each category is shown, with numbers filled in from the planet's snapshot.
+- **State the cards read** (per planet, in the planet's saved data, so it rolls back with the planet): Group S population (2.4), count of settled thawling colonies, biome count (self-sustaining biomes), sols held in equilibrium, O2 and CO2 margins from the snapshot, thawlings killed, raids that reached a quiet zone. Each is a running counter updated by events, not a world scan at the end, so the ending costs nothing extra.
 - **No ranking or score** anywhere in the data format (story bible §6.5, DESIGN.md).
 - The final reflection answer goes to the learning record and the `reflections.csv` export.
 
@@ -563,7 +607,8 @@ Classrooms run on weak hardware (risk R-08). Costs per system, on the server:
 | Pause check | Top of each step | One flag read |
 | Sealing flood fill | On block change near a sealed volume | Up to the volume cap, spread over several ticks |
 | Fauna spawn weight | Vanilla spawn cycle | A few chunk lookups in the per-chunk index |
-| Terrain random ticks (ice, soil) | Vanilla random ticks | One local-temperature lookup per tick on our blocks |
+| Terrain random ticks (ice, soil) | Vanilla random ticks | One read of the cached per-chunk heat map per tick on our blocks (2.5) |
+| Chunk heat map, fauna pressure F, ending-card counters | When a machine changes state, or on the counted event | Recompute ~9 chunks or one running sum; no ticking |
 | Action log | Per event (buffer) + every 5 s (disk) | Small allocation; batched writes on a background thread |
 | Backups, rollback, export | Session start / on command | Background thread or server stopped; never during play |
 | Client sky and fog | Per frame (client) | Interpolation between cached keyframes; no lookups |

@@ -31,8 +31,8 @@ Detailed content specs live in `docs/learning/`:
 | Decision | Rationale | Alternatives considered | Trade-offs (learning / appeal) | Revisit if |
 |---|---|---|---|---|
 | Individual vs. group evidence (3.0); only individual summative measures are graded | On a shared planet one student can reach every gate for the group (consistency review M-14) | Grade group outcomes (unfair, invalid); split groups into solo worlds (breaks the group model) | Learning: valid per-student measures. Appeal: group play kept | Playtests show per-student in-game evidence is too sparse to be useful |
-| 23-period unit, 17 play periods, 3/8/6 split (5.2) | User decision on ~17 play periods at ~11–12 h; split follows the standard 8/18/14 h | 20 periods with ~9–10 h play (would change a settled number) | Learning: three full debriefs and a transfer task kept. Appeal: enough play to reach the beacon | A pilot class can't fit 23 periods (risk R-19) |
-| Pacing by rates and hold times, never thresholds (5.1) | Scaled thresholds contradict the journal and can make lethal air "breathable" (SME finding 3) | Threshold multiplier ~0.3 (old text); scale distance from start value | Learning: numbers match the science. Appeal: none lost | Rate scaling can't reach ~11–12 h without breaking balance |
+| 23-period unit, 17 play periods, 4/7/6 split (5.2) | User decision on ~17 play periods at ~11–12 h; split follows the Lead Game Designer's classroom time model (balance sheet §5.3: ~3.6 / 7.7 / 5.6 periods; Phase 1 check ~2.7 h) | 20 periods with ~9–10 h play (would change a settled number) | Learning: three full debriefs and a transfer task kept. Appeal: enough play to reach the beacon | A pilot class can't fit 23 periods (risk R-19) |
+| Pacing by rates and hold times, never thresholds (5.1) | Scaled thresholds contradict the journal and can make lethal air "breathable" (SME finding 3). Now also in DESIGN.md (rate multiplier 4.0; holds 1/2/3 sols) | Threshold multiplier ~0.3 (old text); scale distance from start value | Learning: numbers match the science. Appeal: none lost | Rate scaling can't reach ~11–12 h without breaking balance |
 | Forecasts hidden from other group members until resolved (3.2) | Keeps B3 evidence individual | Shared group forecast (more discussion, no individual evidence) | Learning: valid B3. Appeal: slightly less social; teachers can run a group "discuss, then re-forecast" activity in debriefs | Playtests show students want group forecasts |
 
 The game models real Mars conditions: the starting values in the Planetary Index (about 0.6 kPa pressure, about −60 °C, about 95% CO2, about 0.1% O2) match the real planet (SME, `docs/science/accuracy-review.md` Part A). The learning design builds on that: **the mechanics are the lesson**, and the game doesn't stop to lecture.
@@ -97,20 +97,20 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 
 | Goal | Taught by (game content) | Practiced by | Feedback | Measured: individual | Group evidence (formative) | Status |
 |---|---|---|---|---|---|---|
-| A1 Mars vs. Earth | Phase 1 hazards; Monitor values; gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
-| A2 Liquid water | Thaw, Hydrosphere, and Phase 3 gates (pressure *and* temperature) | Forecast F4; "What caused it?" | Ice turns to vapor, then water pools; journal | Post-test scenario; F4 result | Hydrosphere gate reached | Covered |
+| A1 Mars vs. Earth | Phase 1 hazards (incl. real perchlorate dust); Monitor values and milestones (Armstrong line 6.3 kPa, Everest pressure ~33.7 kPa); gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
+| A2 Liquid water | Ice-to-water rule (DESIGN.md §2): ice near heaters turns to vapor in early Phase 1, brief puddles that boil away later in Phase 1, water that stays from 5 kPa and above 0 °C; Monitor shows water's boiling point | Forecasts F4a (Phase 1) and F4b (Thaw); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
 | A3 Greenhouse effect | Greenhouse emitters (factory-made greenhouse gases); temperature curve | Forecast F5 | Temperature trend; journal | Post-test explanation | — | Covered. Depends on the emitter journal naming what it emits (SME; Lead Game Designer) |
 | A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2, spaced) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
-| A5 CO2/O2 exchange | Phase 3 balancing; flora; carbon scrubbers | Forecasts F8, F9 | Fires or stability; Monitor | Post-test explanation; F8 result | O2 held in band for the Breathable hold time of the active preset | Covered |
+| A5 CO2/O2 exchange | Phase 3 balancing; flora; CO2 from decay; carbon scrubbers; carbon flow view on the Monitor | Forecasts F8, F9; flora-bloom and decay drift events | Fires or stability; Monitor (O2 fraction **and** O2 partial pressure) | Post-test explanation; F8 result | Breathable condition (O2 partial pressure ≥ 16 kPa, pressure ≥ 75 kPa, CO2 ≤ 0.5 kPa) held for the active preset's hold time | Covered. **Concern:** narrow O2 window at 75 kPa may be hard to read at MS depth (4.7) |
 | B1 Cause and effect | Planetary Index responses; Monitor cause breakdown | "What caused it?"; every forecast | Monitor cause breakdown | Post-test variable-link diagram | — | Covered |
-| B2 Feedback loops | Fauna vs. infrastructure (reinforcing); storms vs. pressure (balancing); optional ice–albedo loop | Forecast F6; Keeper's Report 2 | Keeper's Report; Earth reply | Report 2 reflection and transfer task: one loop of each type | — | Covered. Ice–albedo would make HS-ESS2-2 a near-exact fit (SME; Lead Game Designer's call) |
+| B2 Feedback loops | Fauna vs. machine signature (reinforcing); ice–albedo (reinforcing, adopted); polar frost sink and storms vs. pressure (balancing); Monitor names each as a cause | Forecast F6; Keeper's Report 2; polar-winter and fauna-grazing drift events | Keeper's Report; Earth reply | Report 2 reflection and transfer task: one loop of each type | — | Covered. Ice–albedo adopted (size pending SME), which makes HS-ESS2-2 a near-exact fit |
 | B3 Prediction | Forecasts and Monitor trends | All forecasts (F1–F10) | Forecast result; per-phase tally | Own forecast accuracy, Phase 1 → Phase 3 | — | Covered |
-| B4 Trade-offs | Equilibrium band; O2 fire risk vs. warming; expansion vs. upkeep | Forecast F10; Keeper's Report 3 | Monitor; fire failure report; Keeper's Report | Post-test trade-off scenario; Report 3 reflection | Equilibrium hold reached | **Gap closed** (objective added in 0.6) |
-| B5 Unintended consequences | Fauna blowback in Phase 2; Earth example of a real side effect | Forecast F6; Keeper's Report 2 | Fauna appear near emitters; failure reports name fauna | Report 2 reflection, B5 rubric | — | Covered |
+| B4 Trade-offs | Equilibrium band; narrow breathable O2 window vs. fire risk; shrouds (−15 % output) and lures (water upkeep) vs. fauna; expansion vs. upkeep | Forecast F10; drift events during holds; Keeper's Report 3 | Monitor; fire failure report; Keeper's Report | Post-test trade-off scenario; Report 3 reflection | Equilibrium hold reached | **Gap closed** (objective added in 0.6) |
+| B5 Unintended consequences | Fauna blowback in Phase 2 (fiction) **and real side effects**: ground collapse from melting ground ice, perchlorate in meltwater; Earth example in D2 content | Forecast F6; Keeper's Report 2 | Fauna appear near emitters; failure reports name fauna | Report 2 reflection, B5 rubric | — | Covered |
 | C1 Resource planning | Phase 1 O2, water, and power | Forecast F1; preparing for the first storm | Dome survives or fails | Post-test planning scenario; F1 result | Dome survives the first dust storm (by the second storm) | Covered |
-| C2 Design, test, improve | Breaches, wear, storms | Own repairs | Failure reports; Hana's tips fade | Own repairs: same cause doesn't recur; "What caused it?" on own failures | Repeat failures fall across phases | Covered. Needs the actor ID on repair events (Technical Lead) |
-| C3 Data use | Planetary Monitor | Checking the Monitor before builds; rotating "Monitor officer" role in class | Monitor trends | Own Monitor checks before own major builds, plus a data reason in a Keeper's Report or teacher check-in | — | Covered |
-| D1 Ethics | Thawlings; the crew's secret; the Moreno–Basu argument; non-lethal options | Keeper's Report 2; final reflection; class discussion | Earth reply; epilogue cards (no ranking) | Written reflection, D1 rubric | — | Covered. Depends on non-lethal fauna options (decided 2026-11-26) |
+| C2 Design, test, improve | Breaches, wear, storms, ground collapse, emitter-wear drift events | Own repairs, claimed on the **Shift Board** | Failure reports; Hana's tips fade | Own repairs (claim → fixed credit goes to the claimer's anonymous ID): same cause doesn't recur; "What caused it?" on own failures | Repeat failures fall across phases | Covered. Needs Shift Board claims and repair events logged with the actor ID (Technical Lead) |
+| C3 Data use | Planetary Monitor (derived values: O2 and CO2 partial pressure, boiling point) | Checking the Monitor before builds; Data post (DESIGN.md colony posts) | Monitor trends | Own Monitor checks before own major builds, plus a data reason in a Keeper's Report or teacher check-in | — | Covered |
+| D1 Ethics | Thawlings; the crew's secret; the Moreno–Basu argument; four fauna options (defend, shrouds, lures, quiet zones), none "right"; unranked ending cards | Keeper's Report 2; final reflection; class discussion | Earth reply; epilogue cards (no ranking) | Written reflection, D1 rubric | — | Covered. Depends on non-lethal fauna options (decided 2026-11-26) |
 | D2 Link to Earth | Journal "On Earth" lines; Mensah's replies; Phase 2 debrief with Earth CO2 and temperature graphs | Keeper's Report reflections; transfer task | Mensah's replies; class debriefs | Transfer task and reflections, D2 rubric | — | **Content specified** in `docs/learning/prompts-and-reflections.md`; text not yet written; Earth facts need SME check |
 
 **Remaining gaps:**
@@ -129,7 +129,7 @@ RETAIN (Gunter, Kenny & Vick, 2008, *Educational Technology Research and Develop
 | **Embedding** | Academic content is tied into the game's fantasy and core mechanics (endogenous), not bolted on | **Strong** | The Planetary Index *is* the science (A1–A5); the win condition is equilibrium (B4); fauna stand for unintended consequences (B5, D1); forecasts and reports are colony work in BELL's and the Keeper's voices | Thawlings are fiction and could teach "Mars has life": fiction note in every fauna entry (ID, done in 1; Lead Game Designer to apply in the journal). Super-greenhouse emitters must name their gas or A3 embeds a contradiction (Lead Game Designer) |
 | **Transfer** | Learners apply what they learned to new situations | **Partial** | Transfer task on Earth's carbon cycle (B1, B2, D2); post-test uses *new* scenarios (A2, A4, B4, C1); A4 is forecast in two different situations (F2, F7) | Transfer task and pre/post items not yet written (ID, Stage 4). No near-transfer practice inside the game beyond forecasts; the Phase 2 debrief's Earth data activity is the main bridge (ID, educator guide) |
 | **Adaptation (RETAIN)** | Learners change their behavior because of what they learned | **Partial** | C2 criterion: a fixed failure doesn't recur; B3: forecast accuracy rises; C3: Monitor checked before builds; Hana's tips fade once behavior changes | Behavior change is logged per student only if actor IDs are on every relevant event (Technical Lead). No check that changed behavior survives a new hazard type (consider a late "new failure" in Phase 3; Lead Game Designer) |
-| **Immersion (RETAIN)** | Learners are intellectually invested and actively taking part | **Partial** (strong on paper, unproven) | No pop-up quizzes; all feedback diegetic (4.2); player language; real choices about the fauna (D1); forecasts ask players to commit before seeing the result | Long holds risk idle play and cognitive disengagement (M-16; Lead Game Designer). Text load for weak readers (ID rules in `docs/learning/prompts-and-reflections.md` section 5; playtest check). Group play can leave one student watching (rotating roles, 2; check in playtest) |
+| **Immersion (RETAIN)** | Learners are intellectually invested and actively taking part | **Partial** (strong on paper, unproven) | No pop-up quizzes; all feedback diegetic (4.2); player language; real choices about the fauna (D1); forecasts ask players to commit before seeing the result | Long holds risk idle play and cognitive disengagement (M-16; Lead Game Designer). Text load for weak readers (ID rules in `docs/learning/prompts-and-reflections.md` section 5; playtest check). Group play can leave one student watching (colony posts rotate each phase, section 2; check in playtest) |
 | **Naturalization** | Using the knowledge becomes habitual and spontaneous | **Gap** | Repeated Monitor use across all three phases (C3); forecasts every phase (B3) | ~11–12 h in class is short for habits. **Nothing measures retention after the unit** (ID: add an optional delayed post-test 3–4 weeks later to the study design, Stage 6). Home play (~40 h) gives more practice but has no measure (ID) |
 
 #### Gagné's nine events (insight check)
@@ -174,7 +174,7 @@ This analysis determines which strategies and assessments fit. Everything marked
 - **Reading levels vary widely** *(assumed)*. → Main text at roughly a grade 6–7 reading level, with a "read more" layer for depth. Key information is also shown visually. Rules in `docs/learning/prompts-and-reflections.md` section 5.
 - **Attention in short sessions.** Classroom periods are 45–60 minutes *(assumed)*, with about 40 minutes of actual play *(assumed)*. → Each session should end at a natural save point with something achieved.
 - **Two grade bands.** A 12-year-old and an 18-year-old need different depth. → A **grade band** setting (middle school / high school) picks the journal depth, forecasts, reflection questions, and post-test items, mapped to the matching NGSS band (section 6).
-- **Mixed-ability groups on a shared planet.** In class, 3–5 students share one planet. A strong player can carry the group's gates. → Progress belongs to the group, but **evidence of learning is per student**: own forecasts, own "What caused it?" checks, own repairs, own reflections (section 3.0). Optional rotating roles give every student a turn at the Monitor (section 2).
+- **Mixed-ability groups on a shared planet.** In class, 3–5 students share one planet. A strong player can carry the group's gates. → Progress belongs to the group, but **evidence of learning is per student**: own forecasts, own "What caused it?" checks, own repairs, own reflections (section 3.0). Suggested colony posts, rotating each phase, spread the work (DESIGN.md Group Play; section 2).
 - **Accessibility.** Color is never the only signal (sky tint plus Monitor numbers); subtitles for sound cues; no time-pressured reading.
 
 ### 0.2 Prior knowledge and experience
@@ -197,11 +197,12 @@ Science wording checked by the SME (`docs/science/accuracy-review.md` Part D).
 | Misconception | Evidence it's common | How the game confronts it |
 |---|---|---|
 | "Mars has no atmosphere at all" | Plausible; prevalence **unverified** | Monitor starts at about 0.6 kPa, not zero (less than 1% of Earth's air pressure) |
-| "Water always melts at 0 °C and boils at 100 °C" | Prevalence **unverified** | At Mars's low pressure, warmed ice turns straight to vapor, or melts and quickly boils away. Water only pools once the pressure is high enough to keep its boiling point well above its freezing point (Thaw gate, forecast F4) |
+| "Water always melts at 0 °C and boils at 100 °C" | Prevalence **unverified** | At Mars's low pressure, warmed ice turns straight to vapor, or melts and quickly boils away. Water only pools once the pressure is high enough to keep its boiling point well above its freezing point (ice-to-water rule: vapor, then brief puddles in Phase 1, pooling water from 5 kPa; forecasts F4a and F4b) |
 | "The greenhouse effect is the ozone hole" | **Documented** (Boyes & Stanisstreet, cited in accuracy-review.md [28]) | Journal entry contrasts them when emitters unlock |
 | "CO2 is the only greenhouse gas" | **Documented**: students often don't count CO2 or water vapor as greenhouse gases, and confuse which gases count (same research, [28]) | The emitters make factory-made greenhouse gases that trap heat far better than CO2; the emitter journal entry names them (no potency number until verified) |
+| "Air with 21% oxygen is always breathable" | Risk the old design could have *created* (SME finding 1) | Breathable depends on O2 partial pressure. The Monitor shows both the O2 percentage and the O2 partial pressure; the journal says "your lungs care how much oxygen pushes into them, not just the percent" |
 | "More oxygen is always better" | Plausible; prevalence **unverified** | Oxygen overshoot causes fires in Phase 3 |
-| "Fixing one problem fixes the system" | A systems-thinking target, not a science fact | Blowback: warming wakes the fauna. **The fauna are fiction**, so the journal pairs this with a real Earth side effect (D2 content) and says no life has been found on Mars |
+| "Fixing one problem fixes the system" | A systems-thinking target, not a science fact | Real side effects carry the lesson: ground collapse from melting ground ice and perchlorate in meltwater. Warming also wakes the fauna; **the fauna are fiction**, so the journal says no life has been found on Mars and pairs it with a real Earth side effect (D2 content) |
 | "Mars has life underground" (risk the game could *create*) | Risk flagged by SME and story bible | Every fauna journal entry carries the fiction note (section 1, Science accuracy notes) |
 
 **Pre-test** (section 3.3) confirms prior knowledge and catches these misconceptions before play.
@@ -253,17 +254,17 @@ Transfer to Earth is the main target. The transfer task in section 3.3 checks it
 Each objective states the **behavior** (what the learner does), the **condition** (in what situation, with what resources), and the **criterion** (how well). Every row has an **individual** measure, so it can separate students on a shared group planet (section 3.0). Where a group outcome is also tracked, it is listed separately and is formative only.
 
 Terms used below:
-- **Active preset's hold time:** the hold for that gate in the running preset (standard or classroom, section 5.1). Never a fixed number of days.
+- **Active preset's hold time:** the hold for that gate in the running preset (standard or classroom, section 5.1). Never a fixed number of sols.
 - **Attempt (C1):** one dust storm event. "By the second storm" means the dome survives the first or the second storm without a life-support failure in the core module.
 - **Own:** done by this player's anonymous ID in the action log (a repair placed, a forecast answered, a build placed).
 
 | Goal | Behavior | Condition | Criterion (both bands unless noted) | Group evidence (formative) |
 |---|---|---|---|---|
 | A1 | Compare Mars and Earth on pressure, temperature, atmosphere makeup, and radiation, using data | Post-test **data task**: a Mars/Earth data table for the four variables, no other notes | States the difference and one consequence for life or water for at least 3 of 4 variables. HS: also expresses at least one difference as a ratio or scale (e.g. "less than 1% of Earth's pressure") | — |
-| A2 | Explain why water can't stay liquid on Mars's surface and what must change | Written or verbal, given a new scenario (post-test); in-game forecast F4 | Names both pressure and temperature. HS: also explains that low pressure lowers the boiling point, so warmed ice turns to vapor or boils away | Hydrosphere gate reached |
+| A2 | Explain why water can't stay liquid on Mars's surface and what must change | Written or verbal, given a new scenario (post-test); in-game forecasts F4a, F4b | Names both pressure and temperature. HS: also explains that low pressure lowers the boiling point, so warmed ice turns to vapor or boils away | Hydrosphere gate reached |
 | A3 | Explain how greenhouse gases warm a planet | Written post-test | Correct mechanism: sunlight gets in, gases trap outgoing heat. HS: names infrared (heat) radiation and links it to the planet's energy balance | — |
 | A4 | Explain why Mars's surface gets more radiation than Earth's, and choose a protection | Post-test scenario (a solar event is coming; where should a Keeper be?); in-game forecasts F2 and F7 | MS: names at least one cause (thin air or no global magnetic field) and one valid protection (shielding, depth, staying inside). HS: names both causes, and explains why thicker air lowers surface exposure (matter absorbs radiation) | — |
-| A5 | Describe the CO2/O2 exchange and why balance matters | Post-test; in-game forecast F8 | Correct written explanation that names one consequence of imbalance (fire from too much O2, or cooling or toxicity from the wrong CO2 level) | O2 held in band for the active preset's Breathable hold time |
+| A5 | Describe the CO2/O2 exchange and why balance matters | Post-test; in-game forecast F8 | Correct written explanation that names one consequence of imbalance (fire from too much O2, or toxic or unbreathable air from too much CO2). HS: also explains that breathing depends on O2 partial pressure, not percentage alone | Breathable condition held for the active preset's hold time |
 | B1 | Draw links between planetary variables | Post-test: blank diagram of 5 variables | At least 4 correct links with the right direction | — |
 | B2 | Identify a reinforcing and a balancing feedback loop | Keeper's Report 2 (in the game) or the transfer task (a new Earth example) | One correct example of each, with each step of the loop named | — |
 | B3 | Predict the effect of a change before making it | In-game forecasts, answered by each player on their own screen | Own Phase 3 forecast accuracy at least 20 percentage points above own Phase 1 accuracy, with at least 3 forecasts answered in each phase | — |
@@ -375,8 +376,8 @@ Where the game simplifies, the journal says so. This keeps the learning honest. 
 | Keeping the air without a magnetic field | Accurate: solar wind strips Mars's air (MAVEN, about 100 g/s today [25]); at that rate, losing the whole atmosphere takes billions of years (SME calculation). Venus has no global field and keeps a thick atmosphere [26] | "Without a magnetic shield, the Sun's wind slowly strips Mars's air. At today's rate this takes millions to billions of years, so it wouldn't undo terraforming in human times. It is a big reason ancient Mars dried out." Do **not** say "a magnetic field is required to keep an atmosphere". |
 | Speed of terraforming | Accurate, and the oxygen part is longer than we first said: warming ~100 years; oxygen by plants up to ~100,000 years (McKay, **partly verified** [27]) | "Warming Mars might take about a century. Filling its air with oxygen made by plants could take up to about 100,000 years. The game squeezes this into hours." |
 | The dormant fauna (thawlings) | **Fiction.** No life has ever been found on Mars | "The creatures are made up for this game. No life has been found on Mars. But real changes to a planet do have side effects." (Paired with a real Earth example, D2 content.) |
-
-More honesty notes (breathable air, filler gas) depend on the Lead Game Designer's breathability decision (SME finding B2). They will be added here once that decision lands.
+| Breathable air | Breathing depends on O2 partial pressure. The game's breathable condition (O2 partial pressure ≥ 16 kPa, about an airliner cabin) follows the SME review (B2, [5]) | "Your lungs care how much oxygen pushes into them, not just the percent. Thin air with 21% oxygen is like a high mountain." |
+| Filler gas | The game doesn't track the filler gas that would make up most of the air at equilibrium (~77% at 75 kPa); Mars has very little nitrogen ([12], [13]) | "Earth's air is mostly nitrogen. Mars has very little, so real terraformers would need to find or bring a filler gas." |
 
 ---
 
@@ -392,10 +393,10 @@ More honesty notes (breathable air, filler gas) depend on the Lead Game Designer
 | **Forecasts (prediction prompts)** | BELL asks "Log your forecast" at key moments. The player picks an answer, then sees the result. | Prediction and self-explanation; retrieval practice; **spaced retrieval** (A4 is forecast in Phase 1 and again in Phase 2) | B3, A2–A5, C1 |
 | **Keeper's Reports (reflection)** | At each phase gate the player sends a report to Earth with one reflection question. | Reflection; argument from evidence | B2, B4, B5, C2, D1, D2 |
 | **Writing for the colonists** | The Keeper's Record is framed as "what the colonists will need to know". | Expecting to teach (Nestojko et al., 2014; citation **unverified** in this session) | All |
-| **Collaboration** | In class, 3–5 students share one planet. Optional rotating roles each play period: life-support engineer, Monitor officer, field scout, log keeper. | Cooperative learning: positive interdependence **and** individual accountability (Johnson & Johnson). Roles make sure every student practices reading the Monitor | B4, C1, C3 |
+| **Collaboration** | In class, 3–5 students share one planet. Suggested **colony posts** (Life Support, Atmosphere, Survey, Biology, Data) rotate each phase (DESIGN.md Group Play); the **Shift Board** shows who claimed each failure. | Cooperative learning: positive interdependence **and** individual accountability (Johnson & Johnson). Posts give each student ownership; per-player evidence keeps accountability individual | B4, C1, C2, C3 |
 
 **Outside the game (for classrooms):**
-- Educator guide: goals, how each phase maps to them, discussion questions for the three debriefs, the classroom unit plan (section 5.2), the group model and roles, and an IT requirements sheet.
+- Educator guide: goals, how each phase maps to them, discussion questions for the three debriefs, the classroom unit plan (section 5.2), the group model and colony posts (with a tip to give every student at least one turn on the Data post or at the Monitor before a build), and an IT requirements sheet.
 - Worksheets: pre/post test, transfer task, and a variable-tracking sheet.
 
 ---
@@ -404,13 +405,13 @@ More honesty notes (breathable air, filler gas) depend on the Lead Game Designer
 
 ### 3.0 Individual vs. group evidence
 
-On a shared group planet, gates, the dome, and the O2 band belong to the whole group. One strong player can reach them for everyone. So:
+On a shared group planet, gates, the dome, and the breathable air belong to the whole group. One strong player can reach them for everyone. So:
 
 | Evidence level | What counts | Used for |
 |---|---|---|
 | **Individual, summative** | Pre/post test, transfer task, written reflections (rubric-scored) | Grades and the learning study. These are the only measures a teacher should grade with |
 | **Individual, formative** | Own forecasts, own "What caused it?" answers, own repairs, own Monitor checks before own builds | Keeper's Record, teacher overview, feedback to the student. **Not for grades**: in a group, chances to act differ (who held the keyboard, who was absent) |
-| **Group (per planet)** | Gates reached, dome survival, O2 band held, equilibrium, beacon | Group progress, pacing decisions, class discussion. Never copied into one student's evidence |
+| **Group (per planet)** | Gates reached, dome survival, breathable condition held, equilibrium, beacon, drift events answered | Group progress, pacing decisions, class discussion. Never copied into one student's evidence |
 
 This rule also applies to the Keeper's Record (section 4.3): a page fills only from the player's **own** evidence. Group milestones show in a separate "Cairn team" section.
 
@@ -423,7 +424,8 @@ The game logs actions to a **local file** on the server's computer. Each player 
 | Time and order of gates reached | Progress and pacing | Group | Overall |
 | How players respond when values fall (repair, rebalance, or ignore), and who did it | Diagnosis and system management | Individual (actor) | B2, C2 |
 | Whether O2/CO2 is stabilized or swings wildly | Understanding of balancing loops | Group | A5, B4 |
-| Repeat failures from the same cause, after a player's own repair | Learning from failure | Individual | C2 |
+| Shift Board claims and fixes; repeat failures from the same cause after a player's own repair | Learning from failure | Individual (claimer's ID) | C2 |
+| Drift events answered during holds, and by whom | Active system management | Individual (actor) and group | B4, C2, C3 |
 | Monitor opened before own major builds | Data-driven decisions | Individual | B3, C3 |
 
 ### 3.2 Embedded checks
@@ -490,6 +492,7 @@ The world itself responds to what the player does. This is the fastest and most 
 | Lets maintenance slip | Machine sputters, values on the Monitor drop | Systems need upkeep (C2) |
 | Pushes warming hard | Ice shrinks, then fauna appear near the emitters | Interventions have side effects (B5) |
 | Over-seeds flora | O2 overshoots, fires break out | Balancing loops matter (A5, B4) |
+| Builds warm machines on ground ice | Ground sinks and collapses under the machine | Real side effect of melting ground ice (B5, C2; Earth link: thawing permafrost, D2) |
 | Stays out during a solar event | Radiation effect builds; shielding and depth protect | Thin air and no magnetic field let radiation through (A4) |
 | Gets the balance right | Storms fade, water stays liquid, plants spread | The system is stable (B2) |
 
@@ -559,6 +562,28 @@ TEAM.md 8.6 holds the draft rules, owned jointly with the Lead Game Designer. Th
 
 **Where we may disagree with the Lead Game Designer:** rule 3 (limited deferral of reports) and rule 4 (scope: pop-ups only). Both serve measurement; both cost a little flow. I'd accept "can live with it" on a stricter pop-up limit if log lines stay unlimited in content but capped in rate.
 
+### 4.7 Is the breathable O2 window readable at middle school depth?
+
+The Lead Game Designer flagged that at 75 kPa the breathable O2 window is narrow: about 21.5–23% (16 kPa of O2 needs ~21.3% at 75 kPa; 23% is the top of the fire-safety band).
+
+**Assessment (design walkthrough, not a playtest):**
+
+| Question | Finding |
+|---|---|
+| Is the science right and worth teaching? | Yes. It replaces a misconception risk ("21% = breathable") with the real rule, and it's a genuine B4 trade-off (too little: can't breathe; too much: fire). Accept |
+| Can a 12-year-old *compute* it? | Partly. Percent of a quantity is middle school math, but "partial pressure" as a concept is high school chemistry. Asking MS players to multiply two Monitor numbers to judge the air adds cognitive load at exactly the moment the game is busiest (holds, drift events) |
+| Can they *see* it? | Not on a 0–100% bar: a 1.5-point window is a sliver. Two separate numbers (O2 % and O2 partial pressure) that must both be right is hard to read under time pressure |
+| Will it frustrate? | Risk. In classroom mode drift events come every 0.5–0.75 sol and a flora bloom adds ~0.6 %/sol (balance sheet §4, ×4 rate). The window could be crossed in well under a sol of real time; a group could lose its hold repeatedly without understanding why |
+
+**Recommendation (concern, not a block):**
+1. **One "Breathable air" gauge** on the Monitor for both bands: a zoomed bar that shows only the region around the window, with three zones in words and shapes, not only color: "not enough oxygen to breathe", "breathable", "fire risk". The two numbers sit underneath.
+2. **MS band:** gauge plus the words; the partial-pressure number is in "read more". MS criterion for A5 stays "names one consequence of imbalance" and doesn't require partial pressure.
+3. **HS band:** gauge plus both numbers and the derived value; the HS A5 criterion includes partial pressure (0.6).
+4. **Trend arrow and a time-to-edge estimate** ("fire risk in ~0.4 sol at this rate") so the hold is managed by reading data (C3), not by reflex.
+5. **Playtest check (Stage 2–3):** can MS-age testers say, unprompted, why the air stopped being breathable? If fewer than most can, widen the window in classroom mode by changing the *pressure* target, never by relaxing the 16 kPa rule (thresholds never scale), or add a forecast (F9) earlier.
+
+Owner of the gauge: Lead Game Designer (UI spec) and Lead Artist (visual). I review the wording.
+
 ---
 
 ## 5. Classroom Mode
@@ -567,37 +592,37 @@ A config preset a teacher turns on for each group planet. It keeps the same game
 
 ### 5.1 What changes
 
-**Rule: classroom and multiplayer settings never change physical thresholds.** Gate thresholds, the triple point of water, and breathability stay at their real values in every mode. Pacing is compressed only through **rates** (machine output and natural rates) and **hold times**. Scaling a threshold would show students numbers that contradict the science in the journal, and could make lethal air count as breathable (SME finding 3; consistency review M-02). The rate values are set by the Lead Game Designer and Technical Lead and tuned in playtests.
+**Rule: classroom and multiplayer settings never change physical thresholds.** Gate thresholds, the triple point of water, and breathability stay at their real values in every mode. Pacing is compressed only through **rates** (machine output and natural rates) and **hold times**. Scaling a threshold would show students numbers that contradict the science in the journal, and could make lethal air count as breathable (SME finding 3; consistency review M-02). Values below come from DESIGN.md "Classroom Pacing" and the balance sheet §4–5; they are untested starting values.
 
 | Setting | Standard | Classroom mode |
 |---|---|---|
 | Target playtime | ~40 hours | **~11–12 hours**: 17 play periods of ~40 min ≈ 11.3 h |
 | Players per planet | 1–6 | **3–5 students per group planet**; a class runs several planets |
+| Group size setting | 1 (solo) | **Static**, set by the teacher per planet (3–5). Not read from who is online, so an absent student doesn't change the planet's rates |
 | Physical thresholds (gates, water, breathability) | Real values | **Same real values** (never scaled) |
-| Pacing | Rate multiplier 1.0 | Higher rate multiplier on machine output and natural rates (value TBD by Lead Game Designer) |
-| Dome stable hold time | 3 in-game days | 1 in-game day (proposed; Lead Game Designer to confirm) |
-| Breathable hold time | 7 in-game days | 2 in-game days |
-| Equilibrium hold time | 14 in-game days | 3 in-game days |
+| Rate multiplier (all Index contributions) | 1.0 | **4.0** (balance sheet §5; tune in prototype) |
+| Dome stable / Breathable / Equilibrium hold | 3 / 7 / 14 sols | **1 / 2 / 3 sols**. Breathable and Equilibrium run at the same time. A hold pauses when a value leaves the band and resets only after 1 sol out (classroom 0.5 sol) |
+| Drift events during holds and Phase 3 | Every 1–1.5 sols | Every 0.5–0.75 sol (a 3-sol hold has 4–6) |
 | Hazard severity | Full | Reduced: failures still happen, but recover faster |
-| Recipe cost | Standard recipes | Cheaper intermediate recipes (KubeJS preset) |
+| Recipe cost | Standard recipes | Cheaper recipes (KubeJS preset) |
 | Grade band | Chosen by each player | Set by the teacher for each group planet |
 | Forecasts and Keeper's Reports | On; reflection can be skipped | On, same set; teacher expects a written reflection (it still never blocks progress) |
 | Teacher-led debriefs | — | Three class periods (5.2) |
-| Session save points | — | Teacher ends the session; the world pauses (simulation and hazards stop) until the next class. "In-game day" for holds must survive a pause (Technical Lead, M-05) |
+| Session save points | — | Teacher ends the session; the world pauses (simulation and hazards stop) until the next class. Sols for holds must count simulation time so they survive a pause (Technical Lead, M-05) |
 | Teacher tools | Operator commands only | Enabled (5.3) |
 
 Every gate, hazard, and learning moment is still there. Classroom mode makes them come sooner, not disappear.
 
 ### 5.2 Suggested unit plan (23 class periods, 17 play periods)
 
-Phase play split 3 / 8 / 6 periods, close to the standard 8 / 18 / 14 h split (DESIGN.md).
+Phase play split 4 / 7 / 6 periods, from the Lead Game Designer's classroom time model (~3.6 / 7.7 / 5.6 periods for a group of 4; balance sheet §5.3). Phase labels are expected, not fixed: Phase 2 will often spill into the start of Phase 3's periods, and the debriefs work either way.
 
 | Periods | Activity | Gameplay phase | Main goals |
 |---|---|---|---|
 | 1 | Pre-test; intro to Mars; form groups of 3–5; roles; controls | — | — |
-| 2–4 | Play: survive in the dome, first dust storm, first solar event | Phase 1 | A1, A4, C1, C2, C3 |
-| 5 | Debrief 1: Mars vs. Earth data, pressure and water | — | A1, A2, C1 |
-| 6–13 | Play: pressure, thaw, fauna, expansion | Phase 2 | A2, A3, B1, B2, B5 |
+| 2–5 | Play: survive in the dome, first dust storm, first solar event, Regolith Outgassers, ice that vanishes | Phase 1 | A1, A2, A4, C1, C2, C3 |
+| 6 | Debrief 1: Mars vs. Earth data, pressure and water | — | A1, A2, C1 |
+| 7–13 | Play: processors, emitters, thaw, fauna and fauna options, ground collapse, expansion | Phase 2 | A2, A3, B1, B2, B5 |
 | 14 | Debrief 2: greenhouse effect with Earth's CO2 and temperature graphs; feedback loops; unintended consequences; "Was waking them worth it?" | — | A3, B2, B5, D1, D2 |
 | 15–20 | Play: biome seeding, O2/CO2 balance, equilibrium, beacon | Phase 3 | A5, B4, B3 |
 | 21 | Debrief 3: carbon cycle, stability and change, evaluating a claim about stable ecosystems | — | A5, B4, D2 |
@@ -636,7 +661,7 @@ The teacher needs to answer three questions: *Where is each group? What has each
 
 | File | One row per | Columns |
 |---|---|---|
-| `students.csv` | Student (anonymous ID) | planet_id, anon_id, grade_band, sessions_present, forecasts_answered_p1/p2/p3, forecasts_correct_p1/p2/p3, explain_checks_correct/attempted, own_repairs, own_repeat_failures, own_major_builds, monitor_checks_before_own_builds, reports_sent (0–4), record_pages_filled (list of goal IDs) |
+| `students.csv` | Student (anonymous ID) | planet_id, anon_id, grade_band, sessions_present, posts_held (by phase), shift_board_claims, shift_board_fixed, forecasts_answered_p1/p2/p3, forecasts_correct_p1/p2/p3, explain_checks_correct/attempted, own_repairs, own_repeat_failures, own_major_builds, monitor_checks_before_own_builds, reports_sent (0–4), record_pages_filled (list of goal IDs) |
 | `evidence.csv` | Evidence event | planet_id, anon_id, goal_id, ngss_ms, ngss_hs, evidence_type (forecast, check, repair, report, monitor), result, sim_day, session_number |
 | `planets.csv` | Group planet | planet_id, preset, grade_band, current_phase, each gate with the session it was reached, storms survived, dome failures per storm, current Index values |
 | `reflections.csv` | Reflection answer | planet_id, anon_id, report_number, goal_ids, text (handling pending decision) |
@@ -715,5 +740,5 @@ Mapped to NGSS performance expectations (PEs), with the science practices (SEPs)
 
 - **How visible is the learning?** (ill-structured; TEAM.md lists it.) Current answer: the same forecasts and Keeper's Reports in both modes; classroom mode adds teacher debriefs and an expectation of written reflections (5.1). Test in playtests: do forecasts feel like play or like a test?
 - **Teacher review:** ask one real teacher (or a teacher-reviewer stand-in, since this is a design exercise) to check section 5 and the teacher tools during Stages 1–3 (risk R-29).
-- **Roles in groups:** are rotating roles a good fit for 12-year-olds and 17-year-olds alike? Check in the first classroom-style playtest.
+- **Colony posts:** do posts rotating each phase give every student enough Monitor practice (C3)? With 4–5 players and 3 phases, not everyone holds the Data post. Check in the first group playtest.
 - **Reflection text in the export:** see the current report's Decisions needed.
