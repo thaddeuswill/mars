@@ -5,7 +5,7 @@ Scope: Planetary Index values and gates in `DESIGN.md`. The "Science accuracy no
 
 **How this was checked.** Values were checked against NASA, NIST, OSHA/NIOSH, FAA and peer-reviewed sources through web search. This session could not open the NASA fact sheet (nssdc.gsfc.nasa.gov) or nextgenscience.org directly, because the network blocked them. Numbers from those pages come from search-indexed copies of the same pages. Anything I could not confirm against a source is marked **unverified**. Boiling points and altitude equivalents are my own calculations. The method is given with each one.
 
-**Round 2 (2026-11-26):** follow-up verdicts, a value audit, and the list of verdicts needing external review are in [round2-review.md](round2-review.md). The CO2 target is now a partial pressure (≤ 0.5 kPa) and the pressure target 75 kPa (Decision Log).
+**Round 2 (2026-11-26):** follow-up verdicts, a value audit, and the list of verdicts needing external review are in [round2-review.md](round2-review.md). **Round 3:** [round3-review.md](round3-review.md) (CO2 budget, sourcing, NGSS check) and [external-review-pack.md](external-review-pack.md). The "Earth mean about 15 °C (unverified)" value below is now sourced (NASA Earth fact sheet: 288 K). The CO2 target is now a partial pressure (≤ 0.5 kPa) and the pressure target 75 kPa (Decision Log).
 
 Verdict key: **Accurate**, **Acceptable simplification** (fine for the game, but the journal should say it is simplified), **Wrong** (would teach something false, so fix it).
 

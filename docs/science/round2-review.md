@@ -523,6 +523,8 @@ Rule applied: real-world values live only in sourced documents; a missing real v
 
 AR (round 1) already marks its own unverified values; no changes needed there beyond a pointer to this file.
 
+**Round 3 update ([round3-review.md](round3-review.md) §3, §7):** now sourced: Earth–Mars light delay (calc from the opened NASA fact sheet), Earth warming about 1.1 °C (IPCC AR6), permafrost carbon (about 1,460–1,600 billion tonnes), Earth mean 15 °C (NASA fact sheet). Still unverified: CO2 Rayleigh factor, mercury freezing point, the CO2 frost-point formula.
+
 ### 10.2 Values elsewhere that read as real but aren't sourced (flag only; other roles' files)
 
 | File | Value | Problem | Ask |
