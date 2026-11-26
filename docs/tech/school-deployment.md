@@ -24,6 +24,19 @@
 | 8 | Java Edition hardware needs | Mojang raised the Java Edition requirements: a 64-bit system, 8 GB RAM with a discrete GPU or 12 GB with integrated graphics, a 4-core CPU, and a Vulkan 1.3 GPU with 2 GB VRAM for 1080p at 30 FPS. | minecraft.net, "Java Edition system requirements" ([article](https://www.minecraft.net/article/minecraft-java-edition-system-requirements)); numbers from a localized copy via search | **Partly verified.** These are for current Java releases. Whether they apply to 1.21.1 (which predates the Vulkan change) is **unverified**. If they don't, staying on 1.21.1 may help weak lab PCs. |
 | 9 | Java runtime | The game launcher bundles its own Java for players. Developers and server hosts need Java 21 for 1.21.1. | NeoForge docs (1.21.1), via search | Verified (server side) |
 
+## Round 3 recheck (2026-11-26)
+
+The help-centre pages block plain page requests (a browser check), but the help centre's public article API answered. Read directly:
+
+| # | Finding | Source (read 2026-11-26) | Status now |
+|---|---|---|---|
+| 1 | "Mods are modifications to Minecraft: Java Edition … **Community created mods are not currently supported in Minecraft Education.**" | "FAQ: Game Features", article 360047117692, updated 2026-11-26 ([API](https://edusupport.minecraft.net/api/v2/help_center/en-us/articles/360047117692.json)) | **Verified** |
+| 1b | Same FAQ: "Minecraft Education is not compatible with other versions of Minecraft such as Java or Bedrock" | Same | **Verified** |
+| 3 | "Can I use my Minecraft Education licenses to access a Minecraft Bedrock or Java server? Since each of these Minecraft editions use distinct licensing systems, it's not possible to login to a different edition with Minecraft Education licenses." | "FAQ: Availability, Pricing, and Licensing", article 360047119092, updated 2026-11-26 (found through the help centre's search API) | **Verified** (the quote now lives in this article, not 360061371532) |
+| 7 | Dedicated servers | "How To Set Up A Multiplayer Game" (360047555531, updated 2026-11-14) still says Minecraft Education "is not currently compatible with server software", while another article links a "Dedicated Server FAQ" | **Conflicting official pages**; doesn't affect us (we can't run in Minecraft Education either way) |
+
+Conclusion unchanged and now verified: **this pack can't run in Minecraft Education.**
+
 ## What a school would need (draft IT requirements sheet)
 
 For the educator guide (Lead Instructional Designer owns that document; this is the technical input).

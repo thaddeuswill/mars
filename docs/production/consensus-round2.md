@@ -1,7 +1,7 @@
 # Consensus Brief, Round 2: Goal Priority Tiers and Interruption Rules
 
 **Facilitator:** Producer · **Date:** 2026-11-26 · **Process:** TEAM.md §9 (frame → positions → common ground → options → agreement check → decide → record)
-**Status: DECIDED (2026-11-26) by the owner** ("go with your recommendations"): goal priority tiers **option T-C**, interruption rules **option I-C**. Recorded in the TEAM.md Decision Log (TEAM.md 8.6 now carries I-C) and BACKLOG.md. The decision is the **owner's**, made before the Lead Game Designer's position arrived; that position is still pending and is added to sections 1.2, 2.2, and 3 when it comes. If it raises a concern, it is recorded as "revisit if" (TEAM.md §9 step 7), not as a reopening.
+**Status: DECIDED (2026-11-26) by the owner** ("go with your recommendations"): goal priority tiers **option T-C**, interruption rules **option I-C**. Recorded in the TEAM.md Decision Log (TEAM.md 8.6 now carries I-C) and BACKLOG.md. The decision is the **owner's**, made before the Lead Game Designer's position arrived; that position arrived in Round 2 and is recorded in section 3 (agree; can live with rule 3). If it raises a concern, it is recorded as "revisit if" (TEAM.md §9 step 7), not as a reopening.
 
 Both items are **ill-structured**: the definition is agreed, but several answers are valid and they trade instructional value against appeal and cost. Both are **flexible** items (TEAM.md 8.1): they change at stage boundaries or with evidence, with an alignment check.
 
@@ -125,14 +125,14 @@ Levels: **Agree** · **Can live with it** (note the concern) · **Block** (reaso
 
 | Role | Tiers: leading option T-C | Interruptions: leading option I-C | Concern to revisit |
 |---|---|---|---|
-| Lead Instructional Designer | Position on record (LEARNING.md §1): T-C keeps its tiers unchanged; formal level not yet given | Position on record (LEARNING.md §4.6): I-C is its version plus two flow guards; it stated it could live with a stricter pop-up limit; formal level not yet given | — |
-| Lead Game Designer | **Pending** | **Pending** | Its UI specs (docs/design/ui-specs.md) already point pop-ups to TEAM.md 8.6 |
+| Lead Instructional Designer | **Agree** (would block only a cut that removes a Primary goal's only teaching, feedback, or measure, or drops forecasts below 3 per phase; can live with T-B) | **Agree** (would block only if reports could vanish with no re-offer and no teacher visibility, or forecast results could be dropped) | Forecast floor of 3 per phase now in budget.md §4.3 |
+| Lead Game Designer | **Agree** (the quadrant rule protects Core fauna features; D1 stays deemphasized for learning resources) | **Agree** with rules 1, 2, 4–11; **can live with** rule 3 (in our UI the report is never modal). Additions accepted by the ID: the gate sequence report → reply → briefing counts as one pop-up; a forecast locks before any message that reveals its answer (CR-F9) | — |
 | Producer | **Agree** | **Agree** | Revisit D1 tier after the Stage 3 story test |
 | Technical Lead (perspective) | Pending | Pending | Cost of the caps, wrap-up signal, and logging |
 | Lead Artist (perspective) | Pending | Pending | Salience of log lines; no sound over voice |
 | SME (perspective) | Pending | Pending | Expected: nothing to add |
 
-**Decision:** T-C and I-C. **Decided by:** the owner, on the Producer's recommendation, before all positions arrived (TEAM.md §9 step 6 allows the owner to decide). **Consensus level:** not measured; record each role's level as it arrives.
+**Decision:** T-C and I-C. **Decided by:** the owner, on the Producer's recommendation, before all positions arrived (TEAM.md §9 step 6 allows the owner to decide). **Consensus level (Round 2 reports):** T-C: agree (Instructional Designer, Game Designer, Producer). I-C: agree (Instructional Designer, Producer); Game Designer agrees except rule 3, where it can live with it. No blocks. Technical Lead, Lead Artist, SME: no level given; their reports implement I-C (Technical Lead config keys and wrap-up command) without objection.
 
 **Revisit if:** the Lead Game Designer's position raises a block-level concern; the Stage 3 story test shows the D1 thread is or isn't engaging (tier of D1); Stage 3 action-log counts show the caps or reminder rule hurt flow or measurement (I-C numbers).
 

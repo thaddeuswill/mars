@@ -226,7 +226,7 @@ Checked against the Round 1 reports in `docs/team/reports/`. All findings below 
 ## Checked and consistent
 
 - Pacing split 8 / 18 / 14 h = 40 h: DESIGN, ROADMAP, Game Designer role file agree.
-- Classroom ~11–12 h and the ~20-period unit plan: DESIGN, LEARNING, ROADMAP, all role files agree (apart from M-01).
+- Classroom ~11–12 h and the ~20-period unit plan: DESIGN, LEARNING, ROADMAP, all role files agree (apart from M-01). *(Round 1 text. Superseded: the unit is now 23 periods with 17 play periods.)*
 - Classroom phase split (3 / 6 / 5 play periods) has the same proportions as the standard split.
 - Settled decisions (global progress, gates lock in, custom dimension, ages 12–18, NGSS, ISD/ADDIE, local logging) are the same in every role file.
 - Goal IDs A1–D2 are used the same way everywhere except the gaps in M-15 and m-04.

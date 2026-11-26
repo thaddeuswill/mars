@@ -16,7 +16,9 @@ Sections 6–12 cover the classroom and data systems: group planets and hosting,
 >
 > **Still pending Stage 1** (consistency review m-19): whether oxygen and sealing are custom or come from a standalone mod. Everything below assumes a custom sealing system, marked where it matters.
 >
-> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a), interruption control (9.6). Test strategy: [docs/tech/test-strategy.md](docs/tech/test-strategy.md). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
+> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a), interruption control (9.6).
+>
+> **Round 3 additions (2026-11-26):** owner decisions applied (repairer gets Shift Board credit, `guidance` setting, orbital mirror, Mekanism and Create optional and late, CI at Stage 1 exit, offline LMS converter in Stage 5); `mars:solar_spike` (2.5.1); forecast tags, lock points, and `reveals` (2.6.2); time on Mars (2.14); third-party mods (2.15); machine framework and cost (2.16); Training Hall (6.2); export and teacher-overview additions (8.5, 8.6); rechecks with the network open (mod-licenses.md, school-deployment.md). Server and teacher setup: [docs/tech/server-setup.md](docs/tech/server-setup.md). Test strategy: [docs/tech/test-strategy.md](docs/tech/test-strategy.md). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
 
 ---
 
@@ -296,7 +298,7 @@ Some visuals and conditions need values that the Index doesn't accumulate: storm
 - have exactly one owner and are **set**, not summed. Coupling rules may read them (e.g. solar output reads storm strength); nothing else writes them;
 - are defined in `data/mars/signals/*.json` (ID, unit, range, owner module), so a typo in a keyframe file fails at load with the file and field named.
 
-This keeps one source of truth: the number that hurts the player is the number the sky shows. Example: the hazards module computes `mars:surface_radiation` once, applies the dose from it, and publishes it; the client draws the radiation glow from the same value.
+This keeps one source of truth: the number that hurts the player is the number the sky shows. When a visual must show something *different* from the harm (the aurora shows the solar event itself, which doesn't weaken with pressure), the owner module publishes a second signal from the same event (`mars:solar_spike`) rather than the client re-deriving it. Example: the hazards module computes `mars:surface_radiation` once, applies the dose from it, and publishes it; the client draws the radiation glow from the same value.
 
 #### 2.5.2 Keyframe inputs: art names → data keys
 
@@ -315,6 +317,7 @@ Answers the Lead Artist's handoff (planetary keyframes §1.2a). Units live in ea
 | Boiling point of water | `mars:boiling_point` | Derived, **synced to the client in the snapshot** | °C | `index` | Drives the server ice rule (2.5) **and** the client vapor wisps: heavy wisps where local temperature ≥ boiling point, light wisps between 0 °C and it (SME round 2, item 16). Monitor boiling-point line |
 | **Storm strength** | `mars:storm_strength` | **Signal** | 0–1 | `hazards` | See below. Client smoothing **off** (the server envelope already ramps) |
 | Radiation spike × pressure scale | `mars:surface_radiation` | Signal | 0–1 (relative to a full spike at 0.6 kPa) | `hazards` | Already includes the pressure attenuation; art doesn't multiply again |
+| Solar event strength at the top of the atmosphere (aurora glow) | `mars:solar_spike` | Signal | 0–1 (envelope of the current solar event, **no** pressure attenuation) | `hazards` | Added round 3 for the Lead Artist: the aurora must **not** fade as the air thickens, so it can't use `mars:surface_radiation`. The hazards module publishes both from the same event, so they can't disagree about timing |
 | Fauna pressure | `mars:fauna_pressure` | Signal | F (balance sheet §6) | `fauna` | Thawling frills, settling |
 | Breathable condition | `mars:breathable_air` | Live condition (boolean) | on/off | `gates` | Helmet, visor, Air window dot. The three parts are `mars:pressure`, `mars:o2_partial`, `mars:co2_partial` |
 | Local temperature | `local_temperature` (client-computed, not a key) | Derived on the client | °C | `client` | `mars:temperature` + day/night offset (from data, by time of sol) + falloff heat from the chunk's cached sources (`mars:chunk_heat`). Same formula as the server, shared code in `core` |
@@ -391,6 +394,23 @@ Every **(player, forecast) pair ends with exactly one** `prediction.resolved` ev
 
 The result text itself is delivered at the next natural pause (TEAM.md 8.6), first in the queue, independent of when it was resolved.
 
+#### 2.6.2 Forecast tags, lock points, and `reveals` (round 3)
+
+Answers the Lead Instructional Designer's round 2 handoffs (LEARNING.md 2.3, 3.10, 4.8; content rule CR-F9).
+
+| Field or rule | Where | Effect |
+|---|---|---|
+| `interleaved: true`, `source_goal` | Forecast JSON (FI-1 … FI-4) | Copied into `prediction.*` events; feeds `forecasts_interleaved_*`; a correct FI also fills the source goal's Record page |
+| `scaffold` | Event field, set by the server | `none` or `pointer` when the "Check: …" pointer was shown (pointer returns below 1 in 3 accuracy after 3 forecasts in the phase). Feeds `forecasts_scaffolded`; B3 analysis can separate scaffolded answers |
+| `replay` | `prediction.resolved` result | A forecast issued again **after a rollback** to a player who had it issued before in the superseded stretch. Shown and explained; **not scored**, not counted as expired. The check is one lookup in the player's learning record (which rollback never touches) |
+| `answer_time_ms` | `prediction.answered` | Time from the card opening to the answer; answers under ~2 s are flagged as possible guesses (formative only) |
+| **Lock point** | Forecast JSON `lock` (a condition, e.g. `sim_before_outcome: 0.25` sol, or `monitor_opened`) | The forecast closes for that player when the lock fires; afterwards it resolves as in 2.6.1 (`expired` if unanswered) |
+| **`reveals`** | Message JSON: list of forecast IDs the message would give away | The interruption gate (9.6) **holds** a message for a player while any forecast it `reveals` is still open for that player; the message is delivered right after the player answers or the forecast locks. Nothing is dropped. CR-F9 checks it in the solver |
+| **Forecast card first on Monitor open** | Client + server | If a player with an open forecast whose lock is `monitor_opened` (F3, F5, F8) opens the Monitor, the forecast card shows first ("Log your forecast before you look"). Answering or pressing "Skip" opens the Monitor. Skipping closes the forecast as `expired`. So checking data (C3) never silently costs the prediction (B3) |
+
+**F4a outcome check** (Lead Instructional Designer and Lead Game Designer, round 2): F4a is keyed "the ice leaves no water". Its `outcome_check` is: **no liquid water block at the ice block's position 0.25 sol after the ice block changes state.** That is true for sublimation, boiling away, and fast evaporation, so it holds under the ice rule (2.5). It depends on one invented balance number: the puddle-drying time below 5 kPa must be under 0.25 sol (now 0.1 sol, DESIGN.md threshold-vs-curve table). A content test fails the build if that number ever reaches 0.25.
+- **Implementation:** when the ice rule changes an ice block that a player's open F4a is attached to, the server schedules one check at +0.25 sol of simulation time (a queue entry, like story delays). Cost: one block read.
+
 ### 2.7 Story delivery
 - A per-planet queue of scheduled messages, checked each simulation step. Details in section 9.
 
@@ -409,8 +429,8 @@ The result text itself is delivered at the next natural pause (TEAM.md 8.6), fir
 | `failure.fixed` | **the player who did the repair** | failure_id, machine_id, cause, `claimed_by` (pseudonym or empty), `fixed_by_claimer` (yes/no), `credit` (pseudonym) |
 | `failure.repeat` | none (planet event) | failure_id, machine_id, cause, phase, `prior_credit` (pseudonym credited for the earlier fix of the same cause on the same machine in this phase) |
 
-- **Credit rule** (`shiftboard.creditRule`, data): default `claimer_if_claimed_else_actor`, which is what DESIGN.md Group Play says ("credit goes to the claimer"). The alternative `actor` credits whoever did the repair. Both actor and claimer are always logged, so the rule can change after playtests without losing evidence. (Question to the Lead Instructional Designer in the report.)
-- `repeat_failures_after_own_fix` in the export counts `failure.repeat` events whose `prior_credit` is that player.
+- **Credit rule (decided, owner, round 3): the player who did the repair (`actor`).** `shiftboard.creditRule = actor`. A claimer who didn't do the repair gets no C2 credit; diagnosing the cause still shows C2 through "What caused it?". Claimer and actor are both still logged, so the evidence stays readable whatever the rule.
+- `repeat_failures_after_own_fix` in the export counts `failure.repeat` events whose `prior_credit` is that player (with the actor rule: the player who did the earlier repair).
 - Repairs with no player (automation, admin) log `failure.fixed` with no actor and `cause: simulation` or `admin`; they never give credit.
 - **Cost:** updated on claim, fix, or new failure only. No ticking. Repeat detection is one map lookup `(machineId, cause, phase) → last credit` per failure.
 
@@ -422,6 +442,7 @@ Feasibility check of DESIGN.md "Learning Mechanisms in Play". Both are **cheap a
 - **Display only.** The Index still simulates every value from the start; hiding a readout never changes the planet. The world cues for hidden values (frost, the weather mast) still show.
 - **Never hides a live danger.** A readout whose value is driving a current failure or warning is shown regardless, with a "new reading" tag. Rule in code, not data, so content can't break it.
 - **Teachers and debug** see every readout in the teacher overview.
+- **Monitor views count only if they last** `learning.monitorMinViewSec` (default **1 s**, Lead Instructional Designer). The client sends "opened" and "closed"; the server logs `monitor.viewed` with the duration and page, and only views at or above the minimum count toward `monitor_checks_before_builds` (gaming guard, LEARNING.md 3.10).
 - **Cost:** one condition check per readout when gates change. Zero per tick.
 
 **Next-gate display** ("Next: pressure 5 kPa, 62 %"). The server picks the next gate from a data order list per planet and, each simulation step, adds a small block to the snapshot: for each condition of that gate, `{parameter, current, start, target, axis}`, plus hold progress for hold gates.
@@ -438,7 +459,8 @@ Feasibility check of DESIGN.md "Learning Mechanisms in Play". Both are **cheap a
 Feasibility of DESIGN.md "Fading" and LEARNING.md 4.2 (Hana's tips stop once the player has fixed that cause; hints get more specific on repeats). **Feasible**, with one design consequence to note: on a shared planet, two players can see **different** versions of the same failure report.
 
 - **State per player** (in the learning record, Mars data, not rolled back): for each feedback key (e.g. `failure.seal_breach`), `times_seen`, `times_fixed_by_player`, `current_hint_level` (1–3), `tip_retired` (yes/no), `worked_example_skipped` (yes/no).
-- **Rules in data** (`fade` block in the feedback JSON, shared format DOCUMENTATION.md 5.1): e.g. `{"retire_tip_after_own_fixes": 1, "escalate_hint_after_repeats": [2, 4]}`. The Lead Instructional Designer tunes the numbers without code.
+- **Rules in data** (`fade` block in the feedback JSON, shared format DOCUMENTATION.md 5.1): e.g. `{"retire_tip_after_own_fixes": 1, "escalate_hint_after_repeats": [2, 4]}`. The Lead Instructional Designer tunes the numbers without code. **Starting numbers (Lead Instructional Designer, LEARNING.md 5.5):** tip retires after 1 own fix; hint level 2 at the 2nd and level 3 at the 4th occurrence; outcome form after 1 own fix that held; back to level 1 on any repeat after the player's own fix; forecast pointers return below 1 in 3 after 3 forecasts in a phase.
+- **`guidance` (decided, owner, round 3)** sits on top of fading: gentle (classroom default), standard, expert (not offered in classroom mode). It only removes *extra* help; at every level failure reports still name the cause, forecast results still explain, and safety warnings fire. Fading runs inside every level. Stored per planet (teacher) and per player (standard play), logged on change (`guidance.changed`) and exported (8.6). Implementation: one more input to the same per-recipient text selection; no new system.
 - **Rendering:** the story module delivers a message to each recipient. Before it sends, it asks `FeedbackState` (1.3) for that player's hint level and tip state and picks the text keys. Per recipient, not per planet.
 - **Phase-level fading** (forecast hints shrink by gameplay phase; Monitor cause breakdown closed by default in Phase 3) needs no per-player state: it is keyed on latched gates.
 - **Evidence:** each delivery logs `feedback.shown` with `hint_level` and `tip` (yes/no), so the action log shows the adaptive feedback (TEAM.md section 3) firing.
@@ -455,7 +477,7 @@ The weather mast (decision log 2026-11-26) shows windsock angle and sounding-bal
 
 - **Honest by construction:** the mast and the Monitor read the same snapshot values, so they can't disagree.
 - **Global values:** the thermometer shows the global mean (keyframes §3.2), not local heat. If the artist wants local temperature, the renderer can add `mars:chunk_heat` at no extra cost.
-- **Conflict to resolve** (handoff): Monitor disclosure (2.9) hides CO2 until Phase 3, but the mast's CO2 tube shows it from the start. Either the CO2 tube is fitted at a gate (a model swap, no cost) or the team accepts the mast showing more than the Monitor.
+- **Gas gauges fitted at the Phase 3 gate (decided, owner, round 3).** The mast's O2 and CO2 tubes appear when Phase 3 begins (a model part the renderer draws only when that gate is latched; no cost). Before that the mast shows windsock, balloon, and thermometer. A1's "atmosphere makeup" needs another Phase 1 source (Lead Game Designer).
 
 ### 2.12 Sound system hooks
 
@@ -467,7 +489,9 @@ Audio is owned by the Lead Artist; these are the engine hooks the audio design p
 - **Vanilla and third-party world sounds** (footsteps, block breaking, mobs) outside the dome: a `PlaySoundEvent` handler ([1.21.1 source](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/client/event/sound/PlaySoundEvent.java)) wraps the sound with the exterior gain from the keyframe table when the listener is outside a sealed volume. Gain only, no filter.
 - **Real low-pass filter (optional, Stage 5):** OpenAL's EFX low-pass filter can muffle every exterior sound. Minecraft's sound channels don't expose their OpenAL source, so this needs an access transformer or mixin and is fragile across updates. Only if playtests show gain alone breaks the effect. (Sound Physics Remastered does this kind of thing but is GPL-3.0 and does much more than we need: [LICENSE, 1.21.1](https://raw.githubusercontent.com/henkelmax/sound-physics-remastered/1.21.1/LICENSE); not adopted.)
 - **Inside vs. outside:** the client knows from the synced "in sealed volume" flag (already needed for the O2 HUD). Inside the dome, interior sounds play normally and exterior beds drop further.
-- **Helmet-off** (style guide §9.2): the exterior beds open to full when `mars:breathable_air` is on **and** the helmet is off; the suit fan and breathing layers fade. Same mechanism, one more input.
+- **Helmet-off** (style guide §9.2): the exterior beds open to full when `mars:breathable_air` is on **and** the helmet is off; the suit fan and breathing layers fade. Same mechanism, one more input. **Accepted (round 3):** one extra bed, `wind_full_helmet` (6 kHz low-pass), used at high pressure while the helmet is still on, so the 75 kPa helmet-off moment is audible as the filter opening. Input: the synced helmet state.
+- **Sound categories (audio direction §9.4), accepted with one change.** Minecraft 1.21.1's categories (`SoundSource`) are master, music, records, weather, blocks, hostile, neutral, players, ambient, voice (**from knowledge; check against the skeleton's sources in Stage 1**); there is no separate interface category in 1.21.1. So: ambience and wind beds → ambient; rain and storm → weather; machines, airlock, terrain → blocks; thawlings → **neutral**; suit, footsteps, dosimeter → players; **alarms and feedback cues → master**, so a player who turns down "players" or "ambient" can't mute a life-threatening alarm or lose feedback cues (subtitles still apply); music → music; voice (if ever added) → voice.
+- **Audible range scaling** (audio direction §9.3, "Stage 5 optional"): agreed as optional Stage 5 polish; gain already carries the cue.
 - **Cost:** 3–5 looping sources; one volume update per loop per tick. Negligible.
 
 **2. Cue queue: feedback never plays over voice**
@@ -478,7 +502,7 @@ A client `CueQueue` sorts every non-ambient sound we trigger into channels:
 |---|---|---|
 | **Alarm** | First O2 critical, breach, visor returns | Plays at once (TEAM.md 8.6 rule 3, life-threatening). Ducks voice and ambient by about 10 dB while it plays |
 | **Voice** | Voiced BELL lines, if the Stage 3 narration revisit adds them (DESIGN.md: narration "revisit") | One at a time, queued in order. Ambient ducks about 6 dB under it |
-| **Feedback** | Message chime, log entry, gate reached, forecast result | **Never starts while voice is playing or within 0.5 s after it ends.** Never during danger (TEAM.md 8.6 rule 1): waits for the same natural-pause signal the message queue uses. Identical cues within 3 s merge into one. |
+| **Feedback** | Message chime, log entry, gate reached, forecast result | **Never starts while voice is playing or within 0.5 s after it ends.** Never during danger (TEAM.md 8.6 rule 1), **except storm and solar-event warnings**, which are safety information and play at once (accepted from audio direction §9.3). Otherwise waits for the natural-pause signal the message queue uses. **Log chimes merge within 10 s** (`audio.chimeMergeSec`, accepted from audio direction §9.3; was 3 s); info-only bursts play at most once per 60 s. |
 | **World** | Machines, fauna, weather events | Normal vanilla behavior, with exterior gain |
 
 - "Is voice playing" uses the vanilla sound manager's active check on the voice instance we hold. No engine changes.
@@ -501,6 +525,61 @@ Answers style guide §5.4 and asset A-03 (11 animations, 2–3 life stages).
 | B. GeckoLib | Animation library with Blockbench plugin, blending, and more | Extra mod required on client **and** server. MIT ([LICENSE](https://raw.githubusercontent.com/bernie-g/geckolib/main/LICENSE), main branch); NeoForge 1.21.1 builds listed on Modrinth (search, not fetched) | Easiest pipeline; smooth blends | One more dependency to track per version (risk R-06) |
 
 **Decision (Technical Lead, fluid):** **A**. The thawlings are box-model animals with simple, slow motions (style guide §6.4); vanilla's system handles that, and it keeps every player's install one mod lighter. **Revisit if** the artist finds that missing blends make the "rear up, shove, curl, roll away" sequence look broken in the Stage 4 prototype; GeckoLib is then the drop-in alternative, and the Blockbench sources carry over. The Blockbench "Modded Entity" animation export is described in the MCreator wiki ([link](https://mcreator.net/wiki/entity-model-animations), via search, not opened): **unverified** for 1.21.1 output; check in Stage 2 with one test animation.
+
+**Verified round 3 (network open):** NeoForge 1.21.1 ships a **JSON loader for vanilla keyframe entity animations**: `AnimationLoader`, reading `assets/<namespace>/neoforge/animations/entity/*.json` as a resource reload listener ([source, 1.21.1 branch](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/client/entity/animation/json/AnimationLoader.java)). The official Blockbench plugin list has **"Animation to JSON Converter"** ("Converts Blockbench animations to the JSON format for the NeoForge mod loader", v1.0.1) and marks the older Java-code converter **deprecated** ([plugins.json](https://raw.githubusercontent.com/JannisX11/blockbench-plugins/master/plugins.json)). So the pipeline is: Blockbench → JSON in `pack/assets/mars/neoforge/animations/entity/` → reloadable with F3+T, no Java per animation. Animations become content, like keyframes. The box model itself comes from Blockbench's built-in Modded Entity export (Java); whether its template matches 1.21.1 names is checked with one test model in Stage 2 (**still unverified**).
+
+### 2.14 Time on Mars: sleep, `/time set`, and the sky
+
+Implements DESIGN.md "Sleep and the sky" (Lead Game Designer, round 2).
+- **The sky follows simulation time.** Each server tick, every planet's level has its day time set from its `SimClock` (`dayTime = simTicks mod pace.solTicks`). The client's sky renderer reads that, so sunrise and sunset line up with the sol and a paused world freezes the sun. Cost: one assignment per planet per tick.
+- **Sleeping never skips time on Mars.** A `SleepFinishedTimeEvent` handler ([1.21.1 source](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/event/level/SleepFinishedTimeEvent.java)) sets the new time to the current time for Mars levels. A bed still sets the respawn point, and lying down sends the "natural pause" signal (9.6).
+- **`/time set` has no effect in Mars dimensions**: whatever it sets is overwritten on the next tick by the sync above. The overworld (Training Hall) keeps vanilla time.
+- **Mob spawning and light** follow the level's day time, so they follow the sol too, which is what the design wants.
+
+### 2.15 Mekanism and Create: optional and late
+
+Decided (owner, round 3): unlocked at Hydrosphere, never required for a gate, never used to teach; hidden until then; off by default in the classroom preset (DESIGN.md "In-house machines").
+
+| Layer | How |
+|---|---|
+| **Install** | In `pack/mods/` both are marked **optional** (`[option] optional = true` in their packwiz `.pw.toml`; field confirmed in [packwiz source](https://raw.githubusercontent.com/packwiz/packwiz/main/core/mod.go)). The **classroom server bundle leaves them out**: no RAM, no ticking machines, nothing to hide. That is also the cheapest answer for weak hardware. |
+| **Our mod** | No hard dependency: Mekanism and Create are `compileOnly`; integration code runs only if the mod is loaded. KubeJS scripts check the same before touching their recipes |
+| **Gate (when installed)** | Per planet, until `mars:hydrosphere` is latched: placing or using any block from the `mekanism` or `create` namespace is cancelled with one quiet line ("Unlocks at Hydrosphere", only on `guidance = gentle`). Their items can be crafted but do nothing yet. Recipes can't be locked per planet because recipes are server-wide; blocking placement and use is per planet and costs one gate lookup per placement |
+| **Hidden** | No recipe viewer is in our stack yet. If one is added (JEI or EMI), its runtime API hides those namespaces per client until the gate syncs. Until then, "hidden" means the journal and our screens never mention them before Hydrosphere |
+| **Pause** | The Stage 2 GameTest on `/tick freeze` (7.2) is only needed for standard play now; the classroom bundle has neither mod |
+
+**Licence consequence (round 3 recheck):** Create's jar contains its All Rights Reserved assets, so **our offline classroom bundle may not include Create** without permission (mod-licenses.md). Leaving it out of the classroom bundle solves that too.
+
+### 2.16 In-house machines: one framework, ~21 machines, and the orbital mirror
+
+Costing for the Lead Game Designer's list (DESIGN.md "In-house machines"). **All numbers are estimates in developer-days for one experienced NeoForge developer, code and data only, excluding art, audio, and text; unverified, no velocity data yet.** Re-estimate after the Stage 2 prototype.
+
+**The framework (built once, ~12–18 days).** One `MarsMachine` block entity type and one screen template give every machine the DESIGN.md interface pattern: input slot, output slot, power bar, shape-coded status lamp, and the two fixed lines **"Effect on planet"** (read from its live `ContributionHandle`) and **"Costs"** (from data). It also covers: power draw from the dome grid, wear and maintenance parts, fauna signature registration (2.4), heat source registration (2.5), machine ID and last actor (2.8), failure reporting, the shroud modifier, and the `major` flag. Each machine is then mostly a **data file** (`data/mars/machines/<id>.json`: contribution per sol, power, upkeep, signature, heat, unlock gate) plus a small class only where it does something special.
+
+| Machine | Phase | Beyond the framework | Estimate (days) |
+|---|---|---|---|
+| Regolith Oven, solar panel, battery, O2 generator, water reclaimer | 1 | Data only; solar reads `mars:storm_strength` | 0.5 each → 2.5 |
+| Dust-off station | 1 | Clears the perchlorate-dust effect from a player in the airlock | 1 |
+| Regolith Outgasser | 1 | Data + puff rate state for art | 1 |
+| Weather mast | 1 | Renderer (2.11) | 2–3 |
+| Atmospheric processor, super-greenhouse emitter | 2 | Data | 0.5 each → 1 |
+| **Orbital mirror uplink** | 2 | See below | 4–6 |
+| Ice extractor | 2 | Reads ground-ice lenses; collapse risk | 2–3 |
+| Meltwater treatment | 2 | Perchlorate filter state | 1 |
+| Transit tubes | 2 | **Player transport is not a simple machine.** Recommend the simplest form: paired tube stations that move a player between two points after a short ride screen (no moving entity), ~4 days. A rideable tube system would be 8–12 days | 4 (simple) |
+| Insulation shroud | 2 | Modifier on another machine: −15 % output, no signature, no heat | 1–2 |
+| Lure station | 2 | Attracts thawlings (fauna AI goal) | 2 |
+| Quiet-zone marker | 2 | Area registration + ring renderer + fauna rule | 2 |
+| Algae vat, carbon scrubber | 3 | Data; scrubber deposits are block placement over time | 0.5 + 2 → 2.5 |
+| Soil treatment | 3 | Converts treated blocks | 1–2 |
+| Biome seed kits (×4, a succession chain) | 3 | **The biggest item:** spreading flora by random ticks, ground conversion chain, biomass contribution from living blocks, self-sustaining check | 8–12 |
+| Beacon components (5 types) and beacon sequence | 3 | Assembly check, ending sequence, ending cards (9.5) | 6–8 |
+
+**Total:** about **12–18 (framework) + 40–53 (machines) ≈ 52–71 developer-days** (sum of the low and high ends of the rows), before art and audio. The framework is what makes each later machine cheap; it should be built in Stage 2–3 with the Phase 1 machines, so its cost is proven early.
+
+**Cheaper options if scope is cut (Producer):** simple transit stations (already assumed); biome kits share one spreading engine with four data files (assumed); defer lure stations (DESIGN.md cut order); beacon sequence reuses the helmet-off camera-free style (no cutscene).
+
+**Orbital mirror uplink (decided route, owner, round 3).** A ground uplink block, expensive and slow to build: after placing it, the player delivers parts over several sols (a build-progress state in the block entity, shown on its "Costs" line). When complete it adds a temperature contribution with **no fauna signature and no ground heat source** (so no frost-free ring, no shimmer, no thawlings: the point of the route). It draws dome power like every machine. In the sky, a small bright point moves across the night sky per completed mirror (drawn by our sky renderer from a synced count; a few quads). F5 also fires on the first completed uplink (DESIGN.md). Science framing and numbers: SME and balance sheet. Cost: **4–6 days** (multi-sol build state 2, contribution and Monitor cause line 0.5, sky point 1–2, F5 trigger 0.5, tests 1).
 
 ---
 
@@ -556,7 +635,7 @@ docs/
 - **Confirmed:** the style guide's paths stand. Art goes in `pack/assets/mars/textures/<block|item|entity|models/armor|particle|environment|gui|misc>/`, exactly as in style guide §5.3. The folders now exist.
 - **Why the jar:** the mod's own blocks need their textures and language files wherever the mod runs, including singleplayer with no resource pack. The Gradle build copies `pack/assets/` and `pack/data/` into the jar (build plan §4). Artists and writers never touch `mod/`.
 - **Other paths the art and audio need** (vanilla 1.21.1 conventions; **from knowledge, check in the Stage 1 skeleton**): particle definitions `assets/mars/particles/<name>.json` next to `textures/particle/`; sounds `assets/mars/sounds.json` plus `assets/mars/sounds/<category>/<name>.ogg`; language `assets/mars/lang/en_us.json`; block and item models `assets/mars/models/block|item/`; blockstates `assets/mars/blockstates/`; animated textures use `<name>.png.mcmeta`; armour layers `textures/models/armor/<name>_layer_1.png` and `_layer_2.png` (1.21.1 layout).
-- **GUI sprites (recommendation to the Lead Artist):** since 1.20.2 vanilla supports single GUI sprites in `textures/gui/sprites/` with nine-slice scaling declared in `.png.mcmeta` (**from knowledge, unverified**). That may suit the style guide's 9-slice panels better than hand-cut 256×256 sheets. Either works for code.
+- **GUI sprites (verified round 3):** 1.21.1 supports GUI sprites under `textures/gui/sprites/`, drawn with `blitSprite`, with `"scaling": {"type": "nine_slice", "width", "height", "border"}` (also `stretch`, `tile`) declared in the sprite's `.png.mcmeta` ([NeoForge docs 1.21.1: textures](https://docs.neoforged.net/docs/1.21.1/resources/client/textures), [screens](https://docs.neoforged.net/docs/1.21.1/gui/screens)). Recommended over hand-cut sheets. **Mono for positional sounds verified** ([NeoForge docs 1.21.1: sounds](https://docs.neoforged.net/docs/1.21.1/resources/client/sounds): stereo files are not attenuated and always play at the listener).
 - **Keyframes:** `pack/assets/mars/keyframes/` (sky, fog, clouds, ambient, mast). Owned by the Lead Artist as content.
 
 ### 3.3 Screen-size assumption (style guide §4.5)
@@ -662,7 +741,13 @@ A gives the teacher one thing to start, pause, back up, and export, which is the
 - **Dimension slots.** The mod's built-in datapack declares 8 planet dimensions. Minecraft creates dimensions from data when the world loads, so the count is fixed per world. `planets.count` in config (1–8, default 1) says how many are open. Unopened planets get no players and load no chunks; their cost is small but *to measure* (an empty level still exists in memory).
 - **Same seed, same terrain.** All planets use the world seed, so every group starts on the same map. Debriefs can compare "why did group 2's pressure climb faster?"
 - **Assignment.** The teacher assigns players to planets in the teacher overview or with `/mars planet assign <player> <n>`. Optional join codes (`/mars join <code>`) let students pick their group themselves. Assignments live in `planets.json` (Mars data), so a rollback never moves a student to another group.
-- **Lobby.** Unassigned players wait in a small, safe lobby in the overworld. The fiction for it (e.g. an orbital transfer room) is a Lead Game Designer call.
+- **Lobby: the Training Hall** (story bible §3.6, Lead Game Designer). Fits the plan at low cost:
+  - **Where:** the vanilla overworld, which must exist anyway and already has an Earth sky. A small hall structure is placed at the world spawn when a class world is created (a structure file from data). Standard play (`planets.count = 1`) never shows it.
+  - **Rules:** while a player is in the overworld and unassigned, damage, hunger, block breaking and placing, and item pickup are cancelled by event handlers; the inventory is cleared on assignment. **No learning events** fire there (story bible: "no message, forecast, or log event"); the only log line is the administrative `planet.assigned` (pseudonym, planet), needed so the teacher's export shows group membership.
+  - **Terminal block:** opens a code field and runs the same join logic as `/mars join <code>`.
+  - **On assignment:** the client shows the two opening cards (text from language files), then the player is moved to the planet's shelter spawn and Landing begins.
+  - **Server cost:** the overworld keeps only the hall loaded; set the `spawnChunkRadius` game rule to a small value for class worlds (**rule name from knowledge; check in Stage 1**). No ticking machines, no mobs (mob spawning off in the hall area).
+  - **Build cost (estimate, unverified):** ~3–4 developer days plus the hall structure (Lead Game Designer and Lead Artist).
 - **Travel between planets:** none for players. Teachers can visit any planet in spectator mode.
 - **Group size:** `group.size` is set **per planet** (3–5) by the teacher, never read from who is online (balance sheet §5).
 - **Grade band:** a per-planet override is allowed, so one server can mix a middle school and a high school group (section 8.4).
@@ -775,6 +860,8 @@ Closes consistency review M-07, M-08, M-09, M-11, and implements the decision "t
 - Events with `cause: admin` or `debug` never fill a goal.
 - **Client:** the journal screen shows the Keeper's Record; the server sends only the player's own record.
 - **Teacher overview:** per planet, each student's goals shown, forecast accuracy by phase, current gameplay phase. Students appear by in-game name for online players (names are already visible in game) and by ID otherwise. Nothing from it is written to disk on the teacher's client.
+- **"Needs a look" flags** (LEARNING.md 3.7; teacher-only, never shown to students, never a grade, never exported as a grade). Rule-based, computed **per session and per phase** from data already in the learning records: own forecast accuracy below 1 in 3 after 3 forecasts in a phase; the same failure cause recurring twice after the student's own fix; a Keeper's Report unsent for more than 2 sessions or past `interrupt.debriefMaxDefers`; no own events for a whole session while present. Rules and numbers live in `data/mars/learning/flags.json`. **Cost:** a few counters per player, re-evaluated when one of the counted events arrives; no scan. Shown as a small marker with the reason in words.
+- **Printable player ID slips** (educator guide §4): a teacher-overview button writes `exports/<timestamp>/id-slips.html`, one cut-out slip per student with the pseudonymous ID in large type and a line "Write this ID, never your name, on tests". **The file contains IDs only, no names**; the teacher hands slips out in the room. (Names would need the mapping, which nothing written to disk may contain.) Plain HTML so any browser prints it; no extra library.
 
 ### 8.6 CSV export
 
@@ -783,9 +870,9 @@ Closes consistency review M-07, M-08, M-09, M-11, and implements the decision "t
 
 | File | One row per | Columns | Where each value comes from |
 |---|---|---|---|
-| `players.csv` | Student (pseudonymous ID) | player_id, planet, band, group_size, sessions_present, sols_played, post_p1, post_p2, post_p3; forecasts_answered_p1..p3, forecasts_correct_p1..p3, forecast_accuracy_p1..p3, forecasts_expired, forecasts_late *(TL addition)*; b3_criterion_met (yes/no/not enough data); explain_correct, explain_attempted; failures_claimed, failures_fixed, repeat_failures_after_own_fix; major_builds, monitor_checks_before_builds; drift_events_answered; report_1, report_2, report_3, report_final (submitted yes/no); per goal: `<goal>_shown`, `<goal>_sol`, `<goal>_evidence` | Action log (2.6.1, 2.8, 8.3) and the learning record. `post_pN` from `post.chosen`. `<goal>_shown` only from `scope: player` events (8.5). B3 threshold and "enough data" minimum come from data (`learning.b3`), not code |
-| `events.csv` | Log event | timestamp, session, planet, timeline, superseded (yes/no), sol, player_id (empty for planet events), scope (player/planet), band, event_type, cause, prompt_id, result (correct/incorrect/expired/late/void/none), goal_ids, ngss_codes, detail columns flattened from `data` | Action log. `void` is a TL addition (2.6.1) |
-| `planets.csv` | Group planet | planet, preset, group_size, band, current_phase; per gate: `<gate>_reached`, `<gate>_sol`, `<gate>_session`; storms_survived, core_failures_per_storm, repeat_failures_p1..p3, drift_events, drift_events_answered, hold_progress, shrouds, lures, quiet_zones, defenses, thawling_population_stage, rollbacks | A snapshot of planet state taken on the server thread at export time (gates, counters, fauna options) plus the action log |
+| `players.csv` | Student (pseudonymous ID) | player_id, planet, band, group_size, sessions_present, sols_played, post_p1, post_p2, post_p3; forecasts_answered_p1..p3, forecasts_correct_p1..p3, forecast_accuracy_p1..p3, forecasts_expired, forecasts_late *(TL addition)*; b3_criterion_met (yes/no/not enough data); explain_correct, explain_attempted; failures_claimed, failures_fixed, repeat_failures_after_own_fix; major_builds, monitor_checks_before_builds; drift_events_answered; forecasts_interleaved_answered, forecasts_interleaved_correct, forecasts_scaffolded, forecasts_replay *(TL addition)*, worked_example (used / collapsed / skipped_by_doing / hidden), briefings_opened, guidance (the player's level; for a planet-set level, the planet's); report_1, report_2, report_3, report_final (submitted yes/no); per goal: `<goal>_shown`, `<goal>_sol`, `<goal>_evidence` | Action log (2.6.1, 2.6.2, 2.8, 8.3) and the learning record. `worked_example` from `worked_example.*` events; `briefings_opened` from `briefing.opened`; `guidance` from the planet config and the player's choice. `post_pN` from `post.chosen`. `<goal>_shown` only from `scope: player` events (8.5). B3 threshold and "enough data" minimum come from data (`learning.b3`), not code |
+| `events.csv` | Log event | timestamp, session, planet, timeline, superseded (yes/no), sol, player_id (empty for planet events), scope (player/planet), band, event_type, cause, prompt_id, result (correct/incorrect/expired/late/void/replay/none), interleaved, scaffold, guidance, goal_ids, ngss_codes, detail columns flattened from `data` | Action log. `void` is a TL addition (2.6.1) |
+| `planets.csv` | Group planet | planet, preset, group_size, band, guidance, guidance_changes (count; the level can change mid-unit), third_party_mods (on/off), current_phase; per gate: `<gate>_reached`, `<gate>_sol`, `<gate>_session`; storms_survived, core_failures_per_storm, repeat_failures_p1..p3, drift_events, drift_events_answered, hold_progress, shrouds, lures, quiet_zones, defenses, thawling_population_stage, rollbacks | A snapshot of planet state taken on the server thread at export time (gates, counters, fauna options) plus the action log |
 | `goals.csv` *(new)* | Goal ID | goal_id, record_page_title (colony language), ngss_ms, ngss_hs, practice_only (yes/no), priority_tier, scope | `ngss_map.json` (codes, practice_only) plus three fields it doesn't have yet: `tier`, `scope`, `record_title_key` (handoff to the Lead Instructional Designer). The title is read from the English language file inside the mod jar, so it matches what players see |
 | `reflections.csv` | Written answer | player_id, planet, band, report_id, goal_ids, sol, text, d1_score, d2_score, b5_score, names_replaced *(TL addition)* | Learning record. Rubric columns are written **empty** for the teacher to fill (rubrics: `docs/learning/rubrics.md`). `names_replaced` = how many names were swapped for IDs (8.7), so a teacher knows to read that answer with care |
 
@@ -893,7 +980,7 @@ Implements TEAM.md 8.6 and LEARNING.md §4.6 (user decision, option I-C, as the 
 | `interrupt.logLinesPerMin` | 3 | 3 | Colony-log lines per player per minute; extra lines wait |
 | `interrupt.logMergeWindowSec` | 60 | 60 | Similar lines (same message type and cause) inside the window merge into one ("Seal breach ×3") |
 | `interrupt.reportReofferPerSession` | 1 | 1 | An unsent Keeper's Report is re-offered at most once per session, plus the "Since last shift" recap line |
-| `interrupt.debriefMaxDefers` | 2 | 2 | Limited debrief deferral (LEARNING.md §4.6; Lead Instructional Designer sets the number) |
+| `interrupt.debriefMaxDefers` | 2 | 2 | After 2 deferrals the Keeper's Report **stops being offered as a pop-up**: it stays in the side panel, the "Since last shift" line still names it, the teacher overview flags it ("Needs a look"), and it **never blocks**. Logged as `interrupt.deferred` with `reason: max_defers` |
 | `session.wrapUpMinutes` | — | 5 | After the teacher's **wrap-up signal** (`/mars wrapup` or the overview button, or automatically this many minutes before a scheduled end if the teacher sets one), no new forecast and no report pop-up, no new critical failure from drift or fauna scheduling (rule 5). Life-threatening warnings still fire |
 | `interrupt.dangerWindowSec` | 10 | 10 | "In danger" = took damage, an active hazard at the player's position, or O2 low within this many seconds. Non-urgent items wait (rule 1) |
 | `interrupt.buildingWindowSec` | 5 | 5 | "Actively building" = placed or broke a block within this many seconds |
@@ -945,6 +1032,8 @@ interface AdminControl {
 |---|---|---|---|
 | **xAPI 2.0** | Learning event statements ("actor, verb, object") sent to a Learning Record Store (LRS). Published as **IEEE 9274.1.1-2023**. | **Good.** Our action log is already event statements. An exporter maps each event to an xAPI statement with the pseudonym as an account name, e.g. `{"account": {"homePage": "urn:mars:<worldId>", "name": "P-7K3QX"}}`. | ADL news, 2023-11-22 ([link](https://adlnet.gov/news/2023/11/22/xAPI-Officially-Becomes-a-Published-IEEE-Standard)); IEEE record ([link](https://standards.ieee.org/ieee/9274.1.1/7321)) |
 | **LTI 1.3 (1EdTech)** | Lets an LMS launch a web tool and receive grades | **Poor.** It assumes a web app launched from the LMS. A Minecraft client isn't one. Would need a companion web service, which we don't want. | 1EdTech LTI Core v1.3.1, named in an xAPI resource list; **details unverified** |
+
+**Decided (owner, round 3): an offline LMS converter as a Stage 5 prototype.** A small script **outside the pack** turns an exported `events.csv` into xAPI statements and loads them into a **local test LRS** on the developer's machine, so we learn the mapping problems before release. It never ships, has no network sending, and uses only the pseudonymous IDs already in the export; no student data leaves the machine (in a design exercise there is none, but it's built as if there were). Done when: every event type in 8.3 maps to a statement or is listed as "not sent", and the statements validate in the test store (tool to choose in Stage 5).
 
 **Planned path (post-release):**
 1. **File export first:** an xAPI JSON file the teacher downloads and imports into the school's LRS by hand. The teacher decides what leaves.
@@ -1004,7 +1093,8 @@ The game is software, so it can be instrumented. Some tracking is **simple** (on
 
 - **Server and setup guide** (DOCUMENTATION.md lists it as missing; owner: Technical Lead; planned at `docs/tech/server-setup.md`, Stage 4): install, first start, assigning planets, pause/resume, backups and rollback, export and what each file means, deleting the ID mapping at the end of a unit, and troubleshooting (child account can't join, firewall port, out of memory). Target: a teacher who has never run a server is done in under 30 minutes (Scorecard Feasibility row).
 - **Educator guide** (Lead Instructional Designer) links to it and covers reading the export, the rubric columns, and the limits of name scrubbing (8.7).
-- **Support after release** (Producer to plan; estimates **unverified**, no data): a bug channel (ROADMAP Stage 7: GitHub Issues); a NeoForge 21.1.x bump and re-test each time a stack mod ships a fix we need (about a day per bump with the CI tests above); answering setup questions (the largest unknown; the guide's troubleshooting section is the main way to keep it small). A port to a newer Minecraft version is a project, not support (3.1).
+- **Support after release:** estimate in [docs/tech/server-setup.md](docs/tech/server-setup.md) §8 (all numbers **unverified**, for the Producer's budget).
+- **Server and setup guide:** drafted as [docs/tech/server-setup.md](docs/tech/server-setup.md) (Stage 4 deliverable; draft now so the Stage 3 slice can be set up from it).
 
 ---
 
@@ -1046,7 +1136,7 @@ The large costs are vanilla and third-party: loaded chunks, mobs, and Mekanism/C
 |---|---|---|
 | Fixed simulation step size: is 5 seconds right, or should it be configurable? | Technical Lead | Keep 5 s; make it a config value hidden from teachers. Revisit after the Stage 2 prototype. |
 | Do we need a public API for other mods at launch? | Technical Lead | No. Internal API only at launch; the contribution API is designed to be opened later. |
-| Build tooling: NeoForge ModDevGradle with Gradle; a mono-repo with the pack and the mod | Technical Lead | Assumed; confirm when the Stage 1 skeleton builds |
+| Build tooling: NeoForge ModDevGradle with Gradle; a mono-repo with the pack and the mod | Technical Lead | Assumed; confirm when the Stage 1 skeleton builds. **CI decided (owner, round 3):** basic CI at Stage 1 exit for layers L0–L2 |
 | Does `/tick freeze` stop Mekanism and Create machines? | Technical Lead | Stage 2 GameTest; fallback "pause = stop the server" |
 | Rollback restore: NeoForge startup hook or start script? | Technical Lead | Stage 2; start script is the safe default |
 | Hosting option A vs. B for classrooms | User | **Decided:** A, fallback B, no LAN for classes (6.1) |
@@ -1054,8 +1144,8 @@ The large costs are vanilla and third-party: loaded chunks, mobs, and Mekanism/C
 | Event list and CSV columns for each goal ID | Lead Instructional Designer | **Final** columns adopted (8.6); three TL additions (`forecasts_late`, `void`, `names_replaced`) await acceptance |
 | Minecraft version: stay on 1.21.1? | User | **Decided:** yes (3.1) |
 | Does the cloud renderer and shimmer particle work with Sodium for NeoForge? Do we ship a performance mod at all? | Technical Lead | Stage 2 test; licence check of Sodium (PolyForm Shield) in mod-licenses.md |
-| Do storm caps scale gameplay effects or only visuals? | Lead Game Designer | Open (2.5.2) |
-| Shift Board credit: claimer or actor? | Lead Instructional Designer | Default claimer; both logged (2.8) |
-| CO2 on the weather mast before the Monitor shows it | Lead Game Designer, Lead Artist, Lead Instructional Designer | Open (2.11) |
-| Blockbench "Modded Entity" animation export works for 1.21.1 | Technical Lead | Stage 2 test animation (2.13) |
-| Does copying `pack/assets` and `pack/data` into the jar keep `/reload` usable in dev? | Technical Lead | Stage 1 skeleton (build plan §4) |
+| Do storm caps scale gameplay effects or only visuals? | Lead Game Designer | **Decided:** both (2.5.2) |
+| Shift Board credit: claimer or actor? | Owner | **Decided:** actor, the player who did the repair (2.8) |
+| CO2 on the weather mast before the Monitor shows it | Owner | **Decided:** gas gauges fitted at the Phase 3 gate (2.11) |
+| Blockbench animation export for 1.21.1 | Technical Lead | **Resolved:** NeoForge JSON animations + Blockbench "Animation to JSON Converter" (2.13). Model export template still to test in Stage 2 |
+| Does copying `pack/assets` and `pack/data` into the jar keep `/reload` usable in dev? | Technical Lead | **Likely yes:** ModDevGradle runs load the mod's source set output, which includes `processResources` output; rerun `processResources`, then `/reload` (build plan §4). Confirm in the skeleton |
