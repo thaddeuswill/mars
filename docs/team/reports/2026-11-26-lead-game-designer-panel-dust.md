@@ -67,3 +67,16 @@ All six refinements from `docs/science/dust-review.md` applied to `DESIGN.md` ("
 - **Re-run checks:** F1, FI-1, and FI-4 unaffected; a new "Panel dust stages" row in the threshold-vs-curve table passes, with the Phase 1 cleaning assumption still to be measured in the prototype.
 - **Handoffs:** Instructional Designer (place the SME's journal notes and the D2 Earth link; confirm "cleaned before a forecast storm" as C1 evidence); Lead Artist (patchy partly cleaned; rain shows as stage 1); Technical Lead (keep dust devil chance, stage interval, rain target, half recovery, and the ×2 radius as datapack values).
 - **Risks:** the Lorenz 2021 paper must be opened before any number reaches player text beyond the SME's journal notes; the 15× speed-up could teach "dust kills a panel in days" (the journal note is the mitigation); Phase 1 power with dust is unmeasured.
+
+---
+
+## Addendum 2: dust journal and CR-F10 follow-up (filed by coordinator)
+
+Document work in the Game Designer's files only; the forecast and dust interaction was checked on paper against the content rules; nothing playtested.
+- **Journal entries copied** from `docs/learning/journal-dust.md` §1–6 into `docs/design/messages/phase-1.md` (new §14) and `phase-2.md` (new §7, the wiper note); facts and claim tags unchanged, voice is the Keeper's journal. **Fallback (no-number) texts ship** for `journal.dust.panels`, `earth.dust.solar_farms`, and `journal.f1.real_vs_game`, because the SME hasn't opened their sources; the high school read-more for `journal.dust.panels` is held until the SME opens Lorenz et al. 2021 (HS players see the middle school text meanwhile).
+- **F1 fixes:** its `reveals` list now names "Storm: less sunlight" (the panel-dust line is not held back, since it has its own cause and must show the first time dust appears); its `science_claims` now reads "left Opportunity without enough power" and notes that what finally ended the mission is a missing real value.
+- **`resolve_source`** added to the forecast index in `messages/README.md` for F1, FI-1, and FI-4 (the storm's own solar cut and what that cut takes from each); F2–F10 resolve on the net value, each row saying why that is safe. CR-F10 confirmed in DESIGN.md: without it a player cleaning dusty panels during a Phase 3 storm could make net CO2 fall and FI-4's correct answer would read as wrong.
+- **Goal IDs touched:** A1, B1, B4, B5, C1, D2. **Decisions needed:** none.
+- **Handoffs:** Subject Matter Expert (can "days" ship with no number in `journal.dust.storm_timing`? is "air filters" acceptable for "lungs"? open Lorenz et al. 2021, the soiling study, the 2018 storm pages, and the Blue Ghost 1 source); Technical Lead (add `resolve_source` to the forecast JSON for F1 and FI-1 (`storm.solar_cut`) and FI-4 (storm-cut vat uptake) and the CR-F10 test; done when a solver run where the player cleans panels mid-storm in Phase 3 passes FI-4).
+- **Risks:** fallback texts are less concrete than the numbered versions; F10 resolves on net temperature, so an orbital mirror started inside F10's window could read as wrong (low risk, the mirror is slow to build; watch it in Stage 3).
+- **Expectation:** shipped game text uses the fallback version of any entry whose numbers come only from unopened search results; the numbered version swaps in when the SME opens the source.
