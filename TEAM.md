@@ -385,6 +385,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | New root documents can appear mid-task. Check README for new documents at the start of every task. | Technical Lead |
 | 2026-11-26 | A story beat quietly contradicted the physics after gate conditions changed. When gate conditions change, check story beats against them. | Lead Game Designer |
 | 2026-11-26 | Solo adult playtests produce design judgment, not learning evidence. | Lead Game Designer |
+| 2026-11-26 | Applied Chapter 3 serious-game research (cognitive load, multimedia, level design, narrative). Gaps: controls-first onboarding, simple in-house machines for learning-critical work, pressure-driven sound, fading and worked examples, next-gate goal display, Shift Briefings (advance organizers). | User research |
 | 2026-11-26 | Checked against the chapter's recommended team communications (8.8). Added: change impact check across all disciplines, interruption rules (draft), team debriefs, "interactivity" definition; objective priorities requested. | User research |
 | 2026-11-26 | Process: fuzzy (nonlinear) ADDIE with Fanning's software additions and RETAIN as a lens, plus a schedule for when key debates happen, which the models leave out. | User research |
 | 2026-11-26 | Each discipline needs different documented information, and LGD must show the link from design decisions to learners' performance requirements. DOCUMENTATION.md adds a document map, traceability chain, decision rationale rule, and a shared feedback format. | User research |

@@ -280,6 +280,60 @@ Design judgment only; nothing here is playtested yet. Re-place after each playte
 ### Player, not learner
 In game text and UI the person is a **player** and a colonist: no "lesson", "objective", "quiz", or "learner". Learning is framed as colony work: predictions are "forecasts", the Colony Record tracks "colony expertise", reflection questions come from the colony log. Teacher-facing materials use instructional language.
 
+## Learning Mechanisms in Play
+
+How the game applies research on serious-game elements (*Design and Development of Training Games*, Chapter 3). Each row: the principle, how we apply it, and what's still missing (✅ covered, 🟡 partly, ⬜ gap). Owners close the gaps.
+
+### Cognitive load and schemas
+Working memory is limited. **Intrinsic** load comes from the content itself (partial pressure is hard). **Extraneous** load is anything that doesn't help learning (confusing controls, clutter). **Germane** load builds understanding (Chandler & Sweller, 1991; Sweller et al., 1998). If playing is too demanding, players can't learn: in deHaan et al. (2010), students who watched a game learned more than those who played it.
+
+| Principle | How we apply it | Status | Owner |
+|---|---|---|---|
+| Use a schema players already have | Minecraft's controls, inventory, crafting, and building stay vanilla. New machines use one consistent interface pattern. | 🟡 | Lead Game Designer |
+| Controls first, content second, for players without the schema | **Landing** onboarding: the first ~20–30 min teaches movement, oxygen, and building inside the dome. The first forecast (F1) comes only after it. Experienced Minecraft players can skip it. | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
+| Cut extraneous load from third-party mods | Mekanism and Create interfaces are complex. Every machine needed to learn the science is ours and simple. Third-party machines are optional support, and arrive late. | ⬜ Gap | Lead Game Designer, Technical Lead |
+| Manage intrinsic load by introducing one idea at a time | **Progressive disclosure:** the Monitor shows only the parameters in play. Phase 1: pressure, O2, power, temperature. Hydrosphere at the Thaw. O2/CO2 balance and biomass in Phase 3. Partial pressure is in "read more" at middle school depth. | 🟡 | Lead Game Designer, Lead Artist |
+| Gameplay and content tightly linked | The mechanic is the lesson: raising pressure *is* the play. | ✅ | — |
+| Difficulty matched to skill | Grade bands; fauna scale with infrastructure; hints escalate on repeated failure. | ✅ | — |
+
+### Multimedia and sensory elements
+Verbal and visual information use separate channels (Baddeley & Hitch, 1974; Mayer, 2002). Text works best next to the visual it describes (Moreno & Mayer, 1999). Spoken narration beats on-screen text for explanations; adding text to narration neither helps nor hurts (Moreno & Mayer, 1999, 2002).
+
+| Principle | How we apply it | Status | Owner |
+|---|---|---|---|
+| Pair words with visuals | Journal "what happened" pages pair a small diagram or Monitor graph with ≤ 60 words. No text-only science pages. | 🟡 | Lead Instructional Designer, Lead Artist |
+| Put text next to what it explains | Monitor labels and cause lines sit on the graph itself, not in a separate journal page. | 🟡 | Lead Artist |
+| Narration for explanations | Recorded messages are text-first (decided). Research favors narration, so **revisit after the Stage 3 playtest**: voice BELL's key explanations, with transcripts kept for accessibility. | 🟡 Revisit | Producer (scope), Lead Game Designer |
+| Sound builds context; use it sparingly | **Pressure-driven ambient sound:** at 0.6 kPa outside sounds are faint and thin; as the atmosphere thickens they become fuller. That's real physics (sound carries better in denser air) and an audio cue for pressure. Alarms only for life-threatening events. | ⬜ Gap | Lead Artist (audio), SME (check) |
+| A cohesive style beats high-end graphics | Minecraft's low-resolution style is an asset (the book cites it). Our blocks, machines, and UI share one palette and style. Create's art is All Rights Reserved, so any visual matching uses our own original textures. | 🟡 | Lead Artist |
+| Self-referential, first-person point of view | First-person play; every message addresses the player directly as "you, Keeper" (Moreno & Mayer, 2004). | ✅ | — |
+
+### Level design: scaffolding, flow, desirable difficulties
+| Principle | How we apply it | Status | Owner |
+|---|---|---|---|
+| Scaffolding in the zone of proximal development (Vygotsky, 1978) | Phases build on each other; hints escalate; grade bands set depth. | ✅ | — |
+| **Fading** support as skill grows | Forecast hints shrink from Phase 1 to Phase 3. Failure reports give less detail on repeats. The Monitor's cause breakdown stays available but closed by default in Phase 3. | ⬜ Gap | Lead Instructional Designer |
+| **Worked examples** for novices, practice for experts (expertise reversal) | The first Outgasser is set up with Kowalczyk's notes as a worked example. Later machines are figured out by the player. Experienced players can skip the notes. | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
+| Flow: challenge rises with skill (Csikszentmihalyi, 1975) | Pressure builds phase by phase; drift events and fauna scale with progress. | ✅ | — |
+| Flow: clear goals | The Monitor shows the **next gate and progress toward it** ("Next: pressure 5 kPa, 62%"). | ⬜ Gap | Lead Game Designer, Lead Artist |
+| Flow: unambiguous feedback | World responses, Monitor trends, failure reports. | ✅ | — |
+| Desirable difficulty: **spacing** (Bjork & Bjork, 2011) | Key ideas return across phases (radiation forecast F2, repeated as F7). | ✅ | — |
+| Desirable difficulty: **interleaving** | Drift events during holds mix parameters at random. Later forecasts mix topics from earlier phases. | 🟡 | Lead Instructional Designer |
+| Desirable difficulty: **application at unpredictable times** | Storms, radiation spikes, and drift events require recall without warning. | ✅ | — |
+
+### Context and narrative
+| Principle | How we apply it | Status | Owner |
+|---|---|---|---|
+| Endogenous, situated learning (Reiber, 1996; Van Eck, 2006) | Content is the game: colonists terraforming Mars, where every task applies the science. | ✅ | — |
+| Narrative **hooks**: player choices tied to the story (Rollings & Adams, 2003) | Choice of interventions, the four fauna options, colony posts, unranked ending cards. | ✅ | — |
+| Dickey's (2005) engaged-learning elements: focused roles, goals and challenge, rules, social play, a novel story, choices | Keeper role and colony posts; gates; Index rules; group planets; the story bible; fauna and intervention choices. | ✅ | — |
+| **Don't overwhelm with backstory**; avoid seductive details | Backstory is optional (archive, notes). Only BELL and one crew voice are essential per phase; other characters are optional depth. Fantasy rules cut seductive details. | 🟡 Check story bible character load | Lead Game Designer |
+| **Advance organizers** (Ausubel, 1960) | At each phase start, a short **Shift Briefing** from BELL says what's ahead in plain colony terms ("This shift: the ice. Watch temperature and pressure together."). | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
+| Constructivism: purposeful, authentic, player-directed, challenging, collaborative, reflective | Open-ended play; real Mars values; no single path; group planets; Keeper's Reports. | ✅ | — |
+
+### Open risk
+Narrative and play can both overload players: in Adams et al. (2012), a slideshow beat both a narrative game and the same game without narrative. That makes usability and low extraneous load **the** priority for the Stage 2 prototype, not polish.
+
 ## Group Play: One Planet, 3–5 Players
 
 **Decided (user, 2026-11-26):** in classroom mode, groups of 3–5 students share one planet; a class runs several planets (see Decisions). The same model fits small home servers. Multiplayer scaling still applies within a group.
