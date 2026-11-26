@@ -96,7 +96,7 @@ record LearningEvent(UUID player, String type, Map<String, Object> data) {}
 | Server systems | Everything | Index (through contributions), gates, world |
 | Clients (players' game) | Synced snapshot: index values, unlocked gates, own Colony Record | Nothing directly; send actions (e.g. answering a prediction) to the server |
 | Players | Monitor, own journal and Colony Record | The world, through normal play |
-| Teachers (operator permission) | All players' Colony Records | Pause simulation, set values, roll back, change pacing config |
+| Teachers (operator permission) | All players' Colony Records, action log | Pause world, roll back, set phase, set grade band, export log, change pacing config |
 | KubeJS scripts | Index, gates | Recipes; add contributions through the same API as machines |
 
 The **server is authoritative**. Clients only render what they're sent, which avoids desync in multiplayer and cheating in classrooms.
@@ -197,6 +197,7 @@ The rules that keep components clean and free of hidden side effects:
 | **Event bus** | Add-ons react to index changes, gates, and hazards without touching core code |
 | **Hazard strategy interface** | New hazard types (meteor showers, quakes) plug in as one class each |
 | **Learning triggers in data** | New learning goals, prompts, and Colony Record entries without code |
+| **Config presets** | Standard and classroom modes are bundles of config values (thresholds, hold times, hazard severity, recipe preset). New presets, e.g. a "hard mode", need no code. |
 | **Schema version in saved data** | Saves migrate forward when the data format changes, so worlds survive updates |
 | **Planet as a parameter** | The Index is keyed by dimension, so a second world (e.g. a moon) could have its own Index later |
 

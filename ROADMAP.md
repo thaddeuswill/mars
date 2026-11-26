@@ -60,11 +60,14 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 **Learning design** (see [LEARNING.md](LEARNING.md))
 - 🟡 Learner and context analysis drafted (LEARNING.md section 0)
-- ⬜ Learner audience and curriculum alignment decided
-- ⬜ Classroom pacing approach decided
+- ✅ Learner audience: ages 12–18, two grade bands
+- ✅ Curriculum: NGSS (draft mapping in LEARNING.md section 6)
+- ✅ Classroom pacing: classroom mode preset
+- ⬜ NGSS codes verified against the official standards
 - ⬜ Learning goals finalized and mapped to game content
 - ⬜ Pre/post test drafted
-- ⬜ Action-log format defined (local only, no personal data)
+- ✅ Local, anonymous action log approved
+- ⬜ Action-log format defined, plus CSV export for teachers
 
 **Design data**
 - ⬜ Balance sheet: every Planetary Index parameter, its rates, machine outputs, and gate thresholds in one table
@@ -131,7 +134,10 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Lore journal entries triggered by world-state gates, including science explanations, prediction prompts, and reflection questions
 - ⬜ Local action log for assessment
 - ⬜ Learner feedback tools: Monitor cause breakdown, failure reports, Colony Record, phase debriefs
-- ⬜ Educator guide and worksheets
+- ⬜ Educator guide and worksheets, including the 20-period unit plan
+- ⬜ Classroom mode preset (pacing, KubeJS recipe preset, world pause)
+- ⬜ Teacher tools: class overview, pause, rollback, set phase, log export, grade band
+- ⬜ Journal and quiz content written for both grade bands
 - ⬜ Close alignment gaps found in LEARNING.md: radiation prediction prompt (A4), Earth-link journal content (D2)
 - ⬜ Performance budget: how many ticking machines a typical late-game base runs, measured on the test server
 
@@ -162,6 +168,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Performance on low-end hardware checked
 - ⬜ Config options for difficulty or pacing, if needed
 - ⬜ Learning study: pre/post test with a playtest group; check against success criteria in LEARNING.md
+- ⬜ Classroom pilot: run the unit plan with at least one real class
 
 **Exit criteria:** playtesters finish the pack and the pacing feels right.
 

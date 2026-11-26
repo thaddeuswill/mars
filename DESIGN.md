@@ -106,6 +106,8 @@ With a custom Mars world, the companion mod is no longer small: it owns the dime
 | Playtime | **About 40 hours** from spawn to beacon | Pacing targets below. |
 | Mars world | **Custom dimension** | Built in the companion mod. Ad Astra is out; oxygen and suits need a replacement (see mod stack). |
 | Regression | **Gates lock in** | Values can fall, unlocked phases and recipes cannot. See Planetary Index. |
+| Learners | **Ages 12–18**, NGSS-aligned | See [LEARNING.md](LEARNING.md). |
+| Classroom mode | **Yes**: ~11–12 hour preset | Same content and gates, faster pacing, teacher tools. See LEARNING.md section 5. |
 | Multiplayer scaling | **Fauna by infrastructure, plus a gate-threshold config** | See below. |
 
 ### Pacing Targets (40 hours, solo)

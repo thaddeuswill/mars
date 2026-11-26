@@ -1,13 +1,20 @@
 # Learning Design
 
-This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions:
+This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions, followed by classroom mode (section 5) and NGSS alignment (section 6):
 
 1. **Learning goals:** what learners need to know or be able to do.
 2. **Methods and media:** how they get there.
 3. **Assessment:** how we know they got there.
 4. **Learner feedback:** how learners know they got there, and how they track their own progress.
 
-> **Draft.** The audience is not set yet (age, classroom or self-directed, subject area). The goals below assume roughly **ages 12–18, informal or classroom use, earth and space science plus systems thinking**. Change the audience and the goals and measures should be revisited.
+### Decisions
+
+| Decision | Answer |
+|---|---|
+| Learners | **Ages 12–18** (middle and high school) |
+| Classroom use | **Classroom mode**: a pacing preset for class periods (section 5) |
+| Curriculum standard | **NGSS** (Next Generation Science Standards), middle and high school bands (section 6) |
+| Data | **Local, anonymous action log** is approved |
 
 The game already models real Mars conditions: the starting values in the Planetary Index (0.6 kPa pressure, −60 °C, 95% CO2) are close to the real planet. The learning design builds on that: **the mechanics are the lesson**, and the game doesn't stop to lecture.
 
@@ -76,7 +83,7 @@ This analysis determines which strategies and assessments fit. Everything marked
 
 | | Primary | Secondary |
 |---|---|---|
-| **Who** | Students aged ~12–18 (middle and high school) *(assumed)* | Adult and teen hobbyist players who pick up the pack for fun |
+| **Who** | Students aged 12–18 (middle and high school) | Adult and teen hobbyist players who pick up the pack for fun |
 | **Setting** | Science class, STEM club, or after-school program | Home, singleplayer or a small friends' server |
 | **Motivation** | Mixed: some love Minecraft, some are there because the teacher said so | High and self-chosen |
 
@@ -84,6 +91,7 @@ This analysis determines which strategies and assessments fit. Everything marked
 - **Minecraft familiarity is high but uneven.** Most know the basics; few have played tech modpacks. → Phase 1 has to teach modded machines from scratch, and survival must not punish newcomers before they learn the controls.
 - **Reading levels vary widely.** → Journal text kept short and plain (aim for roughly a grade 6–7 reading level), with a "read more" layer for depth. Key information is also shown visually.
 - **Attention in short sessions.** Classroom periods are 45–60 minutes. → Each session should end at a natural save point with something achieved.
+- **Two grade bands.** A 12-year-old and an 18-year-old need different depth. → A **grade band** setting (middle school / high school) picks the journal depth, prediction prompts, and quiz questions, mapped to the matching NGSS band (section 6).
 - **Mixed ability groups on servers.** → Global progress lets stronger players carry some load, so the Colony Record tracks each player's own contributions and predictions.
 - **Accessibility.** → Color is never the only signal (sky tint plus monitor numbers); subtitles for sound cues; no time-pressured reading.
 
@@ -136,7 +144,7 @@ Different kinds of content need different teaching and testing approaches.
 | **Online / remote class** | Students join a hosted server from home | Hosting cost; supervision |
 
 **Implications**
-- 40 hours is long for a class. A classroom unit would cover about 15–25 sessions. Options: a **classroom mode** with faster pacing (using the gate-threshold config), or teachers running selected phases. *(decision needed)*
+- 40 hours is long for a class, so the pack has a **classroom mode** (section 5).
 - Teacher tools: a way to see each student's Colony Record, pause the world, and roll back a save.
 - Performance budget must target modest school hardware (Stage 4 of the roadmap).
 
@@ -320,11 +328,107 @@ A learner has met the outcomes when, in their own Colony Record:
 
 ---
 
+## 5. Classroom Mode
+
+A config preset a teacher turns on for the server. It keeps the same game and the same learning goals, compressed to fit a school unit.
+
+### 5.1 What changes
+
+| Setting | Standard | Classroom mode |
+|---|---|---|
+| Target playtime | ~40 hours | **~11–12 hours** (about 16 class periods of ~40 min play) |
+| Gate threshold multiplier | 1.0 | ~0.3 (tuned in playtests) |
+| Equilibrium hold time | 14 in-game days | 3 in-game days |
+| Breathable hold time | 7 in-game days | 2 in-game days |
+| Hazard severity | Full | Reduced: failures still happen, but recover faster |
+| Resource grind | Full recipes | Cheaper intermediate recipes (KubeJS preset) |
+| Grade band | Chosen by the player | Set by the teacher for the whole server |
+| Session save points | n/a | Teacher can end the session; the world pauses (simulation and hazards stop) until the next class |
+| Teacher tools | Operator commands only | Enabled (see 5.3) |
+
+Every gate, hazard, and learning moment is still there. Classroom mode makes them come sooner, not disappear.
+
+### 5.2 Suggested unit plan (~20 class periods)
+
+| Periods | Activity | Gameplay phase |
+|---|---|---|
+| 1 | Pre-test; intro to Mars and the controls | — |
+| 2–4 | Play: survive in the dome, first dust storm | Phase 1 |
+| 5 | Phase 1 debrief: Mars vs. Earth, pressure and water | — |
+| 6–11 | Play: atmospheric processors, thaw, fauna | Phase 2 |
+| 12 | Phase 2 debrief: greenhouse effect, feedback loops, unintended consequences | — |
+| 13–17 | Play: biome seeding, O2/CO2 balance, equilibrium, beacon | Phase 3 |
+| 18 | Phase 3 debrief: carbon cycle, stability and change | — |
+| 19 | Transfer task: Earth's climate system | — |
+| 20 | Post-test and reflection discussion | — |
+
+The educator guide will include each debrief's discussion questions and how they map to NGSS.
+
+### 5.3 Teacher tools
+
+| Tool | What it does |
+|---|---|
+| Class overview | Each student's Colony Record progress, prediction accuracy, and current phase |
+| Pause / resume world | Freezes the simulation, hazards, and fauna between classes |
+| Rollback | Restore a save from the start of a session (e.g. after griefing or a bad crash) |
+| Set phase | Start a class at a later phase if the unit is shortened |
+| Export log | Writes the local action log to a CSV the teacher can open in a spreadsheet |
+| Grade band | Set middle or high school depth for the server |
+
+### 5.4 Data and privacy
+- The action log stays **on the server's computer**. Nothing is sent over the internet.
+- Players are identified by an anonymous ID. The teacher can see a local mapping of IDs to usernames to give feedback; the exported CSV uses IDs only unless the teacher chooses otherwise.
+- No names, emails, ages, or other personal data are collected by the pack.
+
+---
+
+## 6. NGSS Alignment
+
+Mapped to NGSS performance expectations (PEs), with the science practices (SEPs) and crosscutting concepts (CCCs) the game exercises. *Verify each code against the official NGSS text when writing the educator guide.*
+
+### 6.1 Performance expectations
+
+| Goal | Middle school (grade band 6–8) | High school (grade band 9–12) |
+|---|---|---|
+| A1 Mars vs. Earth | MS-ESS1-3: analyze data on scale properties of solar system objects | — (background knowledge) |
+| A2 Liquid water | MS-PS1-4: model changes in particle motion, temperature, and state when thermal energy changes | HS-ESS2-5: properties of water and its effects on Earth materials and surface processes |
+| A3 Greenhouse effect | MS-ESS3-5: factors that caused the rise in global temperatures | HS-ESS2-4: energy flow into and out of Earth's systems causes climate changes |
+| A4 Radiation | — (introduce as a concept) | HS-PS4-4: effects of different frequencies of electromagnetic radiation absorbed by matter |
+| A5 CO2/O2 exchange | MS-LS1-6: photosynthesis in the cycling of matter and flow of energy | HS-LS2-5: photosynthesis and respiration in the carbon cycle; HS-ESS2-6: carbon cycling among Earth's spheres |
+| B1 / B2 Systems and feedback | MS-LS2-4: changes to an ecosystem's physical or biological parts affect populations | HS-ESS2-2: geoscience data show feedback effects between Earth systems |
+| B3 Prediction from models | — (practice, see SEPs) | HS-ESS3-6: computational representation of relationships among Earth systems and human modification |
+| B4 / B5 Trade-offs and consequences | MS-LS2-5: evaluate design solutions for maintaining ecosystems | HS-LS2-6: stable ecosystems and how changing conditions create new ones; HS-LS2-7: design a solution to reduce human impact |
+| C1 / C2 Engineering design | MS-ETS1-1 to MS-ETS1-4: define problems, evaluate, test, and improve solutions | HS-ETS1-1 to HS-ETS1-4: constraints, trade-offs, and modeling of complex solutions |
+| D2 Link to Earth | MS-ESS3-5 | HS-ESS2-4, HS-ESS3-6 |
+
+### 6.2 Science and engineering practices (SEPs)
+
+| Practice | Where in the game |
+|---|---|
+| Developing and using models | The Planetary Index is a model; prediction prompts ask learners to use it |
+| Analyzing and interpreting data | Planetary Monitor values and trend graphs |
+| Constructing explanations and designing solutions | Failure reports, dome and machine design |
+| Engaging in argument from evidence | Reflection prompts, terraforming ethics discussion |
+| Using mathematics and computational thinking | Rates, thresholds, balancing O2/CO2 (high school depth) |
+| Planning and carrying out investigations | Testing machines and observing results |
+
+### 6.3 Crosscutting concepts (CCCs)
+
+| Concept | Where in the game |
+|---|---|
+| Cause and effect | Every Planetary Index response |
+| Systems and system models | The whole planet as one system |
+| Stability and change | Equilibrium as the win condition |
+| Energy and matter | Greenhouse warming, carbon and oxygen cycling |
+| Scale, proportion, and quantity | Mars vs. Earth values; rates per day |
+
+### 6.4 Assessment alignment
+- Pre/post test items are written per grade band and tagged with the PE they assess.
+- The Colony Record shows learners their goals in plain language; the teacher export shows the matching NGSS codes.
+
+---
+
 ## Open Questions
 
-- **Classroom pacing:** add a classroom mode with faster pacing, or have teachers run selected phases?
-- **Teacher tools:** how much does the teacher need to see and control (Colony Records, pause, rollback)?
-- **Who is the learner?** Age range, and is this for classrooms, clubs, or self-directed players?
-- **Curriculum alignment:** should goals map to a standard (e.g. NGSS earth and space science, or a national curriculum)?
-- **How visible is the learning?** Fully hidden, light journal prompts, or an explicit "education mode"?
-- **Data:** is a local action log acceptable for the intended users? For minors, it must stay local and anonymous.
+- **How visible is the learning?** Assumed: light journal prompts in standard mode, fuller prompts and debriefs in classroom mode.
+- **Teacher tools scope:** confirm the list in section 5.3 is what teachers need (best checked with a teacher during Stage 6 playtests).
