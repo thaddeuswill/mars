@@ -218,6 +218,24 @@ Thawlings go after machines, not players, and only fight back if attacked. Numbe
 
 **Review needed.** The Lead Instructional Designer checks the alignment (B2, B4, B5, D1). The SME checks the journal labeling and the real-science hooks.
 
+### Fidelity levels (Chapter 5)
+The right authenticity is the right **cognitive fidelity** for the player's expertise, not the most realistic look or simulation. Excess physical and functional detail adds cognitive load. (Definitions: TEAM.md section 3.)
+
+| Kind of fidelity | Target | Why |
+|---|---|---|
+| Cognitive | High | Players must make the decisions real planetary engineers would: which lever to pull, predicting effects, balancing trade-offs. |
+| Functional | High where it teaches, simplified elsewhere | Direction and rough size of every Index relationship are right. No simulation of wind fields, chemistry kinetics, or orbital mechanics. |
+| Physical | Moderate | Minecraft style with real Mars colors. Detail beyond what a cue needs is cut. |
+| Temporal | Low | Compressed and labeled. |
+
+Fidelity adapts to expertise: middle school depth shows fewer variables and simpler readouts; high school "read more" adds partial pressures and carbon flows.
+
+**Testing rules for authenticity**
+- Playtest throughout development, not just at the end.
+- Write **test scenarios** that check each learning objective can be completed (one per goal ID, in the playtest plan).
+- Run **separate test passes** for functionality (does it work?) and instructional effectiveness (does it teach?).
+- Balance SME input: SMEs judge accuracy and cues, but aren't experts in instructional or game design; weigh their reactions against the learning requirements and game design.
+
 ## Fun
 
 Both disciplines agree fun is important and desirable, but **not necessary for instructional effectiveness**. They differ on priority: instructional designers put learning first, game designers put fun first, and game designers believe more strongly that fun helps learning (Coleman et al., 2010). The team's positions are in TEAM.md 8.4. This section turns them into design practice.
