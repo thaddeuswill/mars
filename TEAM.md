@@ -44,7 +44,7 @@ Knowing who to ask is part of the shared model.
 | Technical Lead | Code, tools, data, LMS | "Can we build this, and what does it cost?" | Clear specs from design and learning | Simplicity, performance, privacy | Moderately; prefers stable interfaces |
 | Lead Game Designer | Mechanics, balance, story, UI, playtests | "Is it fun? Does it fit the loop?" | Objectives, science limits, art direction, tech constraints | **Appeal** | Often |
 | Lead Instructional Designer | Learners, objectives, assessment, feedback | "Will they learn it? How will we know?" | Mechanics, science content, data | **Instructional value** | Less often (watch this gap) |
-| Lead Artist | Visual style, visible progress, readability | "How will players see it?" | Design specs, science imagery | **Appeal**, clarity | Often |
+| Lead Artist | Visual style, visible progress, readability, audio | "How will players see it?" | Design specs, science imagery | **Appeal**, clarity | Often |
 | Subject Matter Expert | Mars and Earth science, learners as a population | "Is it true? What do students get wrong?" | What the game simplifies | **Accuracy**, instructional value | Less often |
 
 Healthy disagreement is expected. These leanings are why ill-structured problems go to review by several roles.
@@ -179,6 +179,12 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | We don't paint invisible gases: O2 and CO2 never drive sky or fog color; they show through effects and instruments | docs/art/planetary-keyframes.md | Lead Artist |
 | 2026-11-26 | Visuals follow live Index values, not gates | docs/art/planetary-keyframes.md | Lead Artist |
 | 2026-11-26 | Story is player-driven inside a designer frame; story verbs match player actions; onboarding stays in story | DESIGN.md: Story Approach | Coordinator, from user research |
+| 2026-11-26 | Class hosting: one server with one Mars dimension per group (option A); one server per group as fallback; student-hosted LAN not supported | ARCHITECTURE.md §6 | User decision on Technical Lead recommendation |
+| 2026-11-26 | Stay on Minecraft 1.21.1 | ARCHITECTURE.md | User decision on Technical Lead recommendation |
+| 2026-11-26 | Reflections exported in a separate reflections.csv: on by default in classroom mode, off in standard; names scrubbed to IDs; "don't write your name" note; paper fallback | LEARNING.md §5, ARCHITECTURE.md §8.6 | User decision on Technical Lead and Instructional Designer recommendation |
+| 2026-11-26 | Rose/mauve Phase 2 sky kept, labeled stylized, pending SME check | docs/art | User decision on Lead Artist recommendation |
+| 2026-11-26 | Weather mast prop adopted (honest O2/CO2 world cue) | docs/art, DESIGN.md (to add) | User decision on Lead Artist recommendation |
+| 2026-11-26 | Lead Artist owns audio | README.md, agent files | User decision |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |

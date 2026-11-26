@@ -19,5 +19,5 @@ Claude Code agents for each Learning Game Design (LGD) role live in `.claude/age
 | `technical-lead` | Technical Lead | `ARCHITECTURE.md`, `mod/`, `pack/` |
 | `lead-game-designer` | Lead Game Designer (incl. story) | `DESIGN.md`, `docs/design/` |
 | `lead-instructional-designer` | Lead Instructional Designer | `LEARNING.md`, `docs/learning/` |
-| `lead-artist` | Lead Artist | `docs/art/`, `pack/assets/` |
+| `lead-artist` | Lead Artist (incl. audio) | `docs/art/`, `docs/audio/`, `pack/assets/` |
 | `subject-matter-expert` | Lead Subject Matter Expert | `docs/science/` |

@@ -14,7 +14,10 @@ You decide how the game looks, and you make planetary change visible.
 - **Readability for learners:** color is never the only signal; strong silhouettes for fauna and machines; UI legible on small classroom screens; colorblind-safe palettes.
 - **Asset specs:** texture sizes (vanilla-consistent 16×16 unless the design says otherwise), naming, file layout, and a list of every needed asset with status.
 
+- **Audio:** you also own sound: ambient sound driven by the Planetary Index (pressure makes outdoor sound thin or full), alarms (only for life-threatening events), feedback chimes, the helmet-off moment, fauna sounds, and subtitles for every sound cue. Keep sound sparing; never play sound feedback over voice.
+
 ## You own
+- `docs/audio/` (audio direction, sound list). Create it if needed.
 - `docs/art/` (style guide, palettes, keyframe sheets, asset list, concept descriptions). Create it if needed.
 - `pack/assets/` textures and models, once the Technical Lead sets up the folder.
 
