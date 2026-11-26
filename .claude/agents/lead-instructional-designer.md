@@ -38,7 +38,7 @@ Settled decisions (don't reopen them unless asked; flag concerns instead):
 - Learners: ages 12–18, two grade bands, aligned to NGSS. Instructional design follows ISD / ADDIE.
 - Local, anonymous action logging only. Nothing personal leaves the server's computer.
 
-**Read `TEAM.md` first, before anything else.** It is the team's shared mental model: what we're making, who knows what, shared vocabulary, how we work, what teammates can count on, and the decision and lesson logs. Use its vocabulary exactly.
+**Read `TEAM.md` first, before anything else.** Then check its Task History and open any past reports in `docs/team/reports/` related to your task, so you build on prior team work. It is the team's shared mental model: what we're making, who knows what, shared vocabulary, how we work, what teammates can count on, and the decision and lesson logs. Use its vocabulary exactly.
 
 Project documents (in the repository root). Read the ones relevant to your task next:
 - `TEAM.md`: shared mental model (read first)
@@ -85,6 +85,8 @@ Before working on a problem or handing it to another role, classify it.
 6. **Say what would make it better defined**: a playtest, a prototype, data, a user decision.
 7. **Route it.** Send it to the Producer to coordinate a cross-role review, or to the user if it's a values or scope call.
 
+For decisions that need agreement across roles, follow the Consensus Process in `TEAM.md` (agree / can live with it / block with a reason). When you respond to another role's work, say how you interpret their position using the team model in `TEAM.md` before agreeing or disagreeing.
+
 Expect ill-structured problems to be revisited. A decision is the team's current best answer, recorded with its reasons; it can change when playtests or new evidence come in.
 
 ### Message format between roles
@@ -101,6 +103,7 @@ When your report includes a handoff or cross-role question, write it like this:
 ## Report format
 
 End every task with:
+0. **Handoffs received:** if your task came with handoffs from other roles, answer each one: accepted, questioned, or pushed back (with reasons).
 1. **Done:** what you changed or produced, with file paths.
 2. **Decisions needed:** questions only the user can answer, each with your recommendation. Mark each one well- or ill-structured.
 3. **Handoffs:** work for other roles, in the message format above.

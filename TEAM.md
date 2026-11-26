@@ -94,20 +94,51 @@ Implicit expectations, so we don't have to restate them each time.
 
 Short pointers. Details live in the owning document.
 
-| Date | Decision | Where |
-|---|---|---|
-| 2026-11-26 | Global progress; singleplayer and small servers; ~40 hours | DESIGN.md: Decisions |
-| 2026-11-26 | Custom Mars dimension; gates lock in; fauna scales with infrastructure plus a threshold config | DESIGN.md: Decisions |
-| 2026-11-26 | Ages 12–18, two grade bands; NGSS; classroom mode; local anonymous logging | LEARNING.md: Decisions |
-| 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md |
-| 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md |
-| 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals |
+| Date | Decision | Where | Consensus |
+|---|---|---|---|
+| 2026-11-26 | Global progress; singleplayer and small servers; ~40 hours | DESIGN.md: Decisions | User decision |
+| 2026-11-26 | Custom Mars dimension; gates lock in; fauna scales with infrastructure plus a threshold config | DESIGN.md: Decisions | User decision |
+| 2026-11-26 | Ages 12–18, two grade bands; NGSS; classroom mode; local anonymous logging | LEARNING.md: Decisions | User decision |
+| 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md | From user research |
+| 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
+| 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
 
-## 7. Team Learning Log
+## 7. Building the Shared Model: Four Skills
+
+The shared model grows through four team skills (the development of an SMM depends on them). For an agent team each one needs a concrete practice.
+
+| Skill | What it means here | How we practice it |
+|---|---|---|
+| **1. Recall prior team experiences** | Know what the team has already done, decided, and learned before starting | Read the Task History (section 9), the Decision Log, and the Learning Log first. Open past reports in `docs/team/reports/` related to your task. Build on them; don't redo or contradict them unknowingly. |
+| **2. Interpret team behaviors** | Understand *why* a teammate took a position, not just what it was | When responding to another role's work, state how you read it using the team model (section 2), e.g. "The SME is flagging this because accuracy is their lens; the risk they see is a misconception." Assume good reasons; ask if unclear. |
+| **3. Build consensus** | Reach decisions the team can stand behind on ill-structured problems | Use the consensus process (section 8). Look for options that serve both goals before choosing between them. Record how strong the agreement is. |
+| **4. Communicate and interact** | Share information and coordinate clearly | Use the shared vocabulary and handoff format. Answer every handoff you receive (accept, question, or push back with reasons). Ask before assuming. Keep messages short and specific. |
+
+## 8. Consensus Process (ill-structured decisions)
+
+1. **Frame:** the Producer (or the raising role) states the problem in shared vocabulary and lists which roles must weigh in.
+2. **Positions:** each role gives its view, its lens (from section 2), and its effect on both goals.
+3. **Common ground:** identify what everyone already agrees on, and any option that serves both instructional value and appeal.
+4. **Options:** narrow to two or three, with trade-offs.
+5. **Check agreement:** each role marks the leading option as:
+   - **Agree**
+   - **Can live with it** (note the concern)
+   - **Block** (only with a reason tied to a learning goal, pillar, science accuracy, safety, or feasibility)
+6. **Decide:** consensus if no blocks. If a block remains, the user decides, or a playtest or prototype settles it.
+7. **Record:** add to the Decision Log with the consensus level and any concerns to revisit.
+
+## 9. Task History
+
+Every completed task, so teammates can recall prior work. Full reports are saved in `docs/team/reports/`.
+
+| Date | Role | Task | Output | Report |
+|---|---|---|---|---|
+
+## 10. Team Learning Log
 
 What we've learned about working together. Add an entry whenever a task teaches the team something about coordination, communication, or the problem.
 
 | Date | Lesson | Source |
 |---|---|---|
-| 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup |
-| 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
+| 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review | User decision |
