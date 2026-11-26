@@ -1,0 +1,56 @@
+# Batch 2 machines (BACKLOG #26): every machine in daylight, panels at dust stages 0, 2, 4 and partly cleaned.
+# Fronts face north (toward the camera at negative z).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock -6 64 4 mars:regolith_outgasser[facing=north]
+cmd /setblock -3 64 4 mars:regolith_oven[facing=north]
+cmd /setblock 0 64 4 mars:battery[facing=north]
+cmd /setblock 3 64 4 mars:oxygen_maker[facing=north]
+cmd /setblock 6 64 4 mars:planetary_monitor[facing=north]
+cmd /setblock -4 64 8 mars:solar_panel[facing=north,dust_stage=0]
+cmd /setblock -1 64 8 mars:solar_panel[facing=north,dust_stage=2]
+cmd /setblock 2 64 8 mars:solar_panel[facing=north,dust_stage=4]
+cmd /setblock 5 64 8 mars:solar_panel[facing=north,dust_stage=4,partly_cleaned=true]
+cmd /give @s mars:regolith_outgasser
+cmd /give @s mars:regolith_oven
+cmd /give @s mars:solar_panel
+cmd /give @s mars:battery
+cmd /give @s mars:oxygen_maker
+cmd /give @s mars:planetary_monitor
+wait 60
+view 0.5 66.5 -3 0 18
+wait 80
+fps
+shot batch2_machines_front
+wait 20
+view -6 65.5 1.5 0 15
+wait 60
+shot batch2_outgasser_oven_close
+wait 20
+view 3 65.5 1.5 0 15
+wait 60
+shot batch2_oxygen_maker_monitor_close
+wait 20
+view 0.5 69 4 0 60
+wait 60
+shot batch2_panels_from_above
+wait 20
+view 0.5 66 5.5 0 30
+wait 60
+shot batch2_panels_low_angle
+wait 20
+view 10 68 -2 45 25
+wait 60
+shot batch2_all_side_view
+wait 20
+view 0.5 66.5 -3 0 18
+hud on
+wait 40
+shot batch2_hud_hotbar_items
+wait 20
+quit

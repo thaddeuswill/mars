@@ -102,12 +102,23 @@ const INFO = {
   solar_panel_dust3: ["Solar panel, dust 3: heavy veil", "Cells mostly the colour of the ground; seams show as dark lines. Output about 70% (draft)."],
   solar_panel_dust4: ["Solar panel, dust 4: full veil", "An even veil of dust, like InSight's array in 2022 (PIA25286); seams and cut-outs stay dark. Output about 60% (draft)."],
   solar_panel_partly_cleaned: ["Solar panel, partly cleaned", "A heavy veil with diagonal streaks wiped clean, as a passing dust devil leaves it (real wind cleaning: Opportunity, 2014). Output about 85% (draft)."],
+  solar_panel_round_dust0: ["Solar panel, round (prototype)", "PROTOTYPE at real scale: a 12-segment fan like NASA InSight's arrays (PIA22876), about 2.1 m across (provisional size), on a post, next to a 1.8 m player. Built from 23 plain cuboids, so it works in vanilla block models. Use Dust level to weather it."],
+  solar_panel_round_dust1: ["Solar panel, round, dust 1", "First film: specks and dust gathering along the rim."],
+  solar_panel_round_dust2: ["Solar panel, round, dust 2", "Light veil."],
+  solar_panel_round_dust3: ["Solar panel, round, dust 3", "Heavy veil; seams show as thin dark tan-brown lines."],
+  solar_panel_round_dust4: ["Solar panel, round, dust 4", "Full, fairly even veil, as on InSight in 2022 (PIA25286); cut-outs stay dark."],
+  solar_panel_round_partly_cleaned: ["Solar panel, round, partly cleaned", "A heavy veil cleared unevenly: each segment cleaned by a different amount."],
   battery: ["Battery", "Stores dome power. Charge segments on the front, orange plus terminal, dark minus terminal."],
   o2_generator: ["Oxygen maker (CO2)", "Dome oxygen, made from Mars's carbon dioxide, styled on NASA's MOXIE (PIA24201): a gold-plated box with a grid of recessed panels, an X rib pattern on one end, off-white tube loops, and silver fittings. Feeds the dome only. (Asset id o2_generator; rename planned.)"],
   planetary_monitor: ["Planetary Monitor", "Shows the planet values. A tilted screen on a low body."]
 };
 const ORDER = ["regolith_outgasser","regolith_oven","solar_panel_dust0","battery","o2_generator","planetary_monitor"];
-const DUST = ["solar_panel_dust0","solar_panel_dust1","solar_panel_dust2","solar_panel_dust3","solar_panel_dust4"];
+const EXTRA = ["solar_panel_round_dust0"];   // shown as buttons, not in the all-machines overview
+const FAMILIES = {
+  solar_panel_dust0: {stages: ["solar_panel_dust0","solar_panel_dust1","solar_panel_dust2","solar_panel_dust3","solar_panel_dust4"], partly: "solar_panel_partly_cleaned"},
+  solar_panel_round_dust0: {stages: ["solar_panel_round_dust0","solar_panel_round_dust1","solar_panel_round_dust2","solar_panel_round_dust3","solar_panel_round_dust4"], partly: "solar_panel_round_partly_cleaned"}
+};
+let family = null;
 const DUST_LABEL = ["0 · clean", "1 · first film", "2 · light veil", "3 · heavy veil", "4 · full veil"];
 const SKY = 0xd2ae86;
 const SHADE = {up: 1, down: 0.5, north: 0.8, south: 0.8, east: 0.6, west: 0.6};
@@ -190,6 +201,9 @@ function start() {
     }
     grp.position.set(-0.5, 0, -0.5);  // centre the block on its own cell, as the Blender preview does
     const holder = new THREE.Group(); holder.add(grp);
+    // extents in metres relative to the block centre (large models reach outside their own block)
+    holder.userData.maxX = Math.max(...model.elements.map(e => Math.max(e.from[0], e.to[0]))) / 16 - 0.5;
+    holder.userData.span = Math.max(...model.elements.map(e => Math.max(e.from[0], e.to[0]))) / 16 - Math.min(...model.elements.map(e => Math.min(e.from[0], e.to[0]))) / 16;
     return holder;
   }
   function box(a, b, color) {
@@ -220,13 +234,17 @@ function start() {
     content.clear();
     const all = current === "all";
     const names = all ? ORDER : [current];
-    names.forEach((n, i) => { const m = buildModel(n); m.position.x = all ? ((names.length - 1) / 2 - i) * 1.5 : 0; /* first machine on the left when seen from the front */ content.add(m); });
+    let built = null;
+    names.forEach((n, i) => { const m = buildModel(n); built = m; m.position.x = all ? ((names.length - 1) / 2 - i) * 1.5 : 0; /* first machine on the left when seen from the front */ content.add(m); });
     const half = all ? (names.length - 1) * 0.75 : 0;
-    player.position.set(half + 1.2, 0, 0);
-    cam.target.set(0, all ? 0.5 : 0.5, 0);
-    cam.r = all ? 16 : 3.2;
+    const large = !all && built.userData.span > 1.01;
+    // the player box stands 0.3 m beyond the model's far edge (the -x side of the scene is "east" of the block)
+    player.position.set(all ? half + 1.2 : -(Math.max(0.5, built.userData.maxX) + 0.6), 0, 0);
+    if (large) { player.visible = true; document.getElementById("t-player").checked = true; }
+    cam.target.set(large ? -0.4 : 0, large ? 0.8 : 0.5, 0);
+    cam.r = all ? 16 : (large ? 6.5 : 3.2);
     if (all) { cam.az = 18; cam.el = 20; document.getElementById('hud-view').textContent = 'Overview'; for (const b of document.querySelectorAll('#views button')) b.setAttribute('aria-pressed', 'false'); }
-    const size = all ? 28 : 15;
+    const size = all ? 28 : (large ? 24 : 15);
     ground.scale.set(size, size, 1); ground.material.map = tex.ground_regolith || tex.regolith; ground.material.map.repeat.set(size, size);
     ground.material.needsUpdate = true;
     document.getElementById("hud-name").textContent = all ? "All machines" : INFO[current][0];
@@ -245,13 +263,13 @@ function start() {
   // UI
   const assetsEl = document.getElementById("assets");
   const dustEl = document.getElementById("dust"), partlyEl = document.getElementById("partly"), dustLabel = document.getElementById("dust-label");
-  for (const n of ["all", ...ORDER]) {
+  for (const n of ["all", ...ORDER, ...EXTRA]) {
     const b = document.createElement("button"); b.textContent = n === "all" ? "All machines" : INFO[n][0]; b.dataset.n = n;
     b.addEventListener("click", () => {
       current = n; for (const x of assetsEl.children) x.setAttribute("aria-pressed", x.dataset.n === n);
-      const panel = n === "solar_panel_dust0";
-      document.getElementById("dustgroup").hidden = !panel;
-      if (panel) { dustEl.value = 0; partlyEl.setAttribute("aria-pressed", "false"); dustLabel.textContent = DUST_LABEL[0]; }
+      family = FAMILIES[n] || null;
+      document.getElementById("dustgroup").hidden = !family;
+      if (family) { dustEl.value = 0; partlyEl.setAttribute("aria-pressed", "false"); dustLabel.textContent = DUST_LABEL[0]; }
       setScene();
     });
     assetsEl.appendChild(b);
@@ -260,7 +278,8 @@ function start() {
   // dust level: swaps the solar panel model live (the overview always uses dust 0)
   function setDust() {
     const partly = partlyEl.getAttribute("aria-pressed") === "true";
-    current = partly ? "solar_panel_partly_cleaned" : DUST[+dustEl.value];
+    if (!family) return;
+    current = partly ? family.partly : family.stages[+dustEl.value];
     dustLabel.textContent = partly ? "Partly cleaned (from a heavy veil)" : DUST_LABEL[+dustEl.value];
     setScene();
   }
