@@ -67,9 +67,9 @@ t.region(0, 0, 15, 15); t.save()
 # ---------- M-08 Regolith Outgasser: squat heater, stack, hazard stripes ----------
 f = T("regolith_outgasser_front"); fr = f.region(1, 6, 14, 15)
 f.rect(1, 6, 14, 15, "3"); f.bevel(1, 6, 14, 15)
-f.rect(3, 8, 9, 12, "2"); f.box(3, 8, 9, 12, "1")            # heater door
+f.rect(3, 8, 9, 12, "1"); f.bevel(3, 8, 9, 12, hi="4", lo="2")  # heater door: dark, with a light top-left lip
 for y in (9, 11): f.rect(4, y, 8, y, "o")                       # hot slots
-f.rect(11, 8, 13, 10, "1"); f.rect(12, 8, 13, 9, "g")           # status lamp: running = solid square
+f.rect(10, 7, 13, 10, "1"); f.rect(11, 8, 12, 9, "g")           # status lamp: running = solid square
 stripes(f, 2, 13, 13, 14); f.save()
 sd = T("regolith_outgasser_side"); sr = sd.region(2, 6, 13, 15)
 sd.rect(2, 6, 13, 15, "3"); sd.bevel(2, 6, 13, 15)
@@ -103,7 +103,7 @@ o = T("regolith_oven_front"); orr = o.region(2, 2, 13, 15)
 o.rect(2, 2, 13, 15, "3"); o.bevel(2, 2, 13, 15)
 o.rect(4, 4, 11, 9, "1"); o.rect(5, 5, 10, 8, "L"); o.rect(6, 7, 9, 8, "o")   # window: warm light, hot tray
 o.rect(5, 11, 10, 11, "4"); o.rect(5, 12, 10, 12, "1")                          # tray handle
-o.rect(11, 12, 12, 13, "g"); o.save()                                           # status lamp
+o.rect(10, 11, 13, 14, "1"); o.rect(11, 12, 12, 13, "g"); o.save()                                           # status lamp
 os_ = T("regolith_oven_side"); osr = os_.region(2, 2, 13, 15)
 os_.rect(2, 2, 13, 15, "3"); os_.bevel(2, 2, 13, 15); os_.rect(7, 3, 7, 14, "2"); os_.save()
 ot = T("regolith_oven_top"); otr = ot.region(2, 2, 13, 13)
@@ -120,15 +120,15 @@ models["regolith_oven"] = {
 # ---------- M-09 Solar panel (clean and dusty): tilted panel on a post ----------
 def pv(name, dusty):
     t = T(name, "r"); reg = t.region(0, 0, 15, 15)
-    t.box(0, 0, 15, 15, "2"); t.rect(7, 1, 8, 14, "2"); t.rect(1, 7, 14, 8, "2")
+    t.box(0, 0, 15, 15, "3"); t.rect(7, 1, 8, 14, "3"); t.rect(1, 7, 14, 8, "3")
     for (cx, cy) in ((1, 1), (9, 1), (1, 9), (9, 9)):
         for k in (2, 4): t.rect(cx + k, cy, cx + k, cy + 5, "q"); t.rect(cx, cy + k, cx + 5, cy + k, "q")
         t.dot(cx, cy, "s"); t.dot(cx + 1, cy, "s"); t.dot(cx, cy + 1, "s")
     if dusty:
         random.seed(3)
         for _ in range(26):
-            x, y = random.randrange(1, 15), random.randrange(1, 15); t.dot(x, y, random.choice("DDE"))
-        t.rect(1, 13, 14, 14, "D")                     # dust collects at the low edge
+            x, y = random.randrange(1, 15), random.randrange(1, 15); t.rect(x, y, min(14, x + 1), y, "E")
+        t.rect(1, 13, 14, 14, "E"); t.rect(1, 14, 14, 14, "D")                     # dust collects at the low edge
     return t.save(), reg
 _, pvr = pv("solar_panel_top", False); pv("solar_panel_dusty_top", True)
 sp = T("solar_panel_frame", "2"); fr1 = sp.region(0, 0, 15, 0); spb = sp.region(0, 2, 15, 15)
@@ -151,10 +151,11 @@ for name, top in (("solar_panel", "solar_panel_top"), ("solar_panel_dusty", "sol
 # ---------- M-10 Battery: casing, shape-coded charge segments, + and - terminals ----------
 bf = T("battery_front"); bfr = bf.region(3, 4, 12, 15)
 bf.rect(3, 4, 12, 15, "3"); bf.bevel(3, 4, 12, 15); bf.rect(3, 5, 12, 5, "o")
-for n, y in enumerate((13, 11, 9, 7)):                       # bottom-up: 3 charged (filled), 1 empty (hollow)
-    if n < 3: bf.rect(5, y, 8, y + 1, "g")
-    else: bf.box(5, y, 8, y + 1, "1")
-bf.rect(10, 7, 11, 8, "g"); bf.save()
+bf.rect(4, 6, 9, 15 - 1, "1")                               # dark well behind the charge gauge
+for n, y in enumerate((12, 10, 8)):                          # bottom-up: 2 charged (filled), 1 empty (hollow)
+    if n < 2: bf.rect(5, y, 8, y, "g")
+    else: bf.box(5, y, 8, y, "4")
+bf.rect(9, 6, 12, 9, "1"); bf.rect(10, 7, 11, 8, "g"); bf.save()
 bs = T("battery_side"); bsr = bs.region(3, 4, 12, 15); bs.rect(3, 4, 12, 15, "3"); bs.bevel(3, 4, 12, 15); bs.rect(3, 5, 12, 5, "o"); bs.save()
 bt = T("battery_top"); btr = bt.region(3, 3, 12, 12); bt.rect(3, 3, 12, 12, "2"); bt.box(3, 3, 12, 12, "1")
 tpo = bt.region(0, 0, 1, 1); bt.rect(0, 0, 1, 1, "o"); tmi = bt.region(14, 0, 15, 1); bt.rect(14, 0, 15, 1, "1"); bt.save()
@@ -173,7 +174,7 @@ for x, c in zip(range(5), "23443"): tk.rect(x, 0, x, 10, c)
 tk.rect(0, 2, 4, 2, "o"); tk.rect(2, 4, 2, 9, "i"); tk.dot(2, 5, "2"); tk.dot(2, 8, "2")   # electrolyte window + bubbles
 tkt = tk.region(8, 0, 12, 4); tk.rect(8, 0, 12, 4, "3"); tk.box(8, 0, 12, 4, "1"); tk.dot(10, 2, "4"); tk.save()
 ob = T("o2_generator_base"); obr = ob.region(1, 12, 14, 15)
-ob.rect(1, 12, 14, 15, "2"); ob.bevel(1, 12, 14, 15, hi="3", lo="1"); ob.rect(11, 13, 12, 14, "g"); ob.rect(3, 13, 8, 13, "4")
+ob.rect(1, 12, 14, 15, "2"); ob.bevel(1, 12, 14, 15, hi="3", lo="1"); ob.rect(10, 12, 13, 15, "1"); ob.rect(11, 13, 12, 14, "g"); ob.rect(3, 13, 8, 13, "4")
 obt = ob.region(1, 1, 14, 10); ob.rect(1, 1, 14, 10, "2"); ob.box(1, 1, 14, 10, "1"); ob.save()
 obs = T("o2_generator_base_side"); obsr = obs.region(1, 12, 14, 15); obs.rect(1, 12, 14, 15, "2"); obs.bevel(1, 12, 14, 15, hi="3", lo="1"); obs.save()
 models["o2_generator"] = {
@@ -197,7 +198,7 @@ sc.dot(11, 7, "g"); sc.dot(11, 9, "g")                                       # t
 sc.rect(12, 5, 13, 5, "b")                                                   # unread-log indicator (U-22)
 sc.save()
 mb = T("planetary_monitor_body"); mbr = mb.region(0, 8, 15, 15)
-mb.rect(0, 8, 15, 15, "3"); mb.bevel(0, 8, 15, 15); mb.rect(12, 10, 13, 11, "g"); mb.rect(3, 12, 9, 12, "2")
+mb.rect(0, 8, 15, 15, "3"); mb.bevel(0, 8, 15, 15); mb.rect(11, 9, 14, 12, "1"); mb.rect(12, 10, 13, 11, "g"); mb.rect(3, 12, 9, 12, "2")
 mbt = mb.region(0, 0, 15, 5); mb.rect(0, 0, 15, 5, "2"); mb.box(0, 0, 15, 5, "1")
 for x in range(2, 14, 2): mb.dot(x, 3, "4")
 mb.save()
@@ -228,7 +229,7 @@ def cr(a, b): la, lb = sorted((lum(a), lum(b)), reverse=True); return (la + 0.05
 fails = []
 for fn in sorted(os.listdir(TEX)):
     if not fn.endswith(".png"): continue
-    im = Image.open(os.path.join(TEX, fn)).convert("RGB"); cols = set(im.getdata())
+    im = Image.open(os.path.join(TEX, fn)).convert("RGB"); cols = set(im.get_flattened_data())
     bad = [c for c in cols if c not in PAL]
     if bad: fails.append(f"{fn}: non-palette colors {bad}")
     if (0, 0, 0) in cols or (255, 255, 255) in cols: fails.append(f"{fn}: pure black or white")
@@ -239,18 +240,32 @@ for name, m in models.items():  # per used face region: <= 6 colors besides the 
             im = Image.open(os.path.join(TEX, tex + ".png")).convert("RGB")
             u1, v1, u2, v2 = fd["uv"]; x0, x1 = sorted((u1, u2)); y0, y1 = sorted((v1, v2))
             region = im.crop((int(x0), int(y0), int(x1), int(y1)))
-            n = len({c for c in region.getdata() if c != rgb(P["m"])})
+            n = len({c for c in region.get_flattened_data() if c != rgb(P["m"])})
             if n > 6: fails.append(f"{name}.{fname}: {n} colors (> 6)")
             if not os.path.exists(os.path.join(TEX, tex + ".png")): fails.append(f"missing texture {tex}")
-pairs = [("lamp g on alloy dark 1", "g", "1"), ("lamp g on alloy mid 3", "g", "3"), ("heater slot o on 2", "o", "2"),
-         ("door 1 on body 3", "1", "3"), ("oven light L on frame 1", "L", "1"), ("PV cell r vs frame 2", "r", "2"),
-         ("dust D on cell r", "D", "r"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
-         ("screen gauge g on k", "g", "k"), ("unread b on k", "b", "k"), ("charge g vs empty 1", "g", "1"),
-         ("tank window i on 4", "i", "4")]
-print("Contrast (WCAG ratio; icons and graphic parts need >= 3:1):")
-for label, a, b2 in pairs:
-    r = cr(P[a], P[b2]); flag = "ok" if r >= 3 else "LOW"
-    print(f"  {label:28s} {r:5.1f}  {flag}")
-    if r < 3 and label not in ("tank window i on 4",): fails.append(f"contrast {label} {r:.1f}")
+# meaning-bearing pairs must reach 3:1 (WCAG 1.4.11); shape-only pairs should reach 2:1 (target, reported)
+meaning = [("lamp g on its ring 1", "g", "1"), ("heater slot o on door 1", "o", "1"), ("oven light L on frame 1", "L", "1"),
+           ("dust E on cell r (dusty state)", "E", "r"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
+           ("screen gauge g on k", "g", "k"), ("unread b on k", "b", "k"), ("empty segment 4 on well 1", "4", "1")]
+shape = [("PV frame 3 vs cell r", "3", "r"), ("door 1 vs body 3", "1", "3"), ("stripes o vs 1", "o", "1"),
+         ("tank window i vs tank 3", "i", "3"), ("stack 2 vs sky", "2", None)]
+print("Meaning-bearing contrast (need >= 3:1):")
+for label, a, b2 in meaning:
+    r = cr(P[a], P[b2]); print(f"  {label:32s} {r:5.1f}  {'ok' if r >= 3 else 'LOW'}")
+    if r < 3: fails.append(f"contrast {label} {r:.1f}")
+print("Shape contrast (target >= 2:1, reported only):")
+for label, a, b2 in shape:
+    other = P[b2] if b2 else "#D2AE86"
+    r = cr(P[a], other); print(f"  {label:32s} {r:5.1f}  {'ok' if r >= 2 else 'weak'}")
+# every running-lamp pixel must sit inside a dark ring (no green pixel touching mid alloy)
+for fn in sorted(os.listdir(TEX)):
+    if not fn.endswith(".png") or "screen" in fn or "solar" in fn: continue
+    im = Image.open(os.path.join(TEX, fn)).convert("RGB"); g = rgb(P["g"]); ok = {g, rgb(P["1"]), rgb(P["k"])}
+    for y in range(16):
+        for x in range(16):
+            if im.getpixel((x, y)) == g:
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    if 0 <= x + dx < 16 and 0 <= y + dy < 16 and im.getpixel((x + dx, y + dy)) not in ok:
+                        fails.append(f"{fn}: lamp pixel at {x},{y} touches a non-ring color"); break
 print("FAILS:" if fails else "All checks passed.", *fails, sep="\n  ")
 sys.exit(1 if fails else 0)
