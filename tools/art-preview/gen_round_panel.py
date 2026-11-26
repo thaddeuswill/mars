@@ -52,7 +52,7 @@ for k in range(SEGMENTS):
         i = round(x0 + (x1 - x0) * t / steps); j = round(y0 + (y1 - y0) * t / steps)
         if ROLE[j][i] in ("cell", "seam"): ROLE[j][i] = "seam"
 # small dark cut-outs: one in every other segment at mid radius (PIA22876 shows a few per array)
-for k in range(0, SEGMENTS, 2):
+for k in range(SEGMENTS):   # one per segment, as in PIA25286
     ang = math.radians((k + 0.5) * 360 / SEGMENTS); i = int(C + 12.8 * math.cos(ang)); j = int(C + 12.8 * math.sin(ang))
     if ROLE[j][i] == "cell": ROLE[j][i] = "cut"
 

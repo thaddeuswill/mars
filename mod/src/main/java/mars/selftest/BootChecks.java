@@ -195,7 +195,7 @@ public final class BootChecks {
             .defaultBlockState()
             .setValue(SolarPanelBlock.DUST_STAGE, 4)
             .setValue(SolarPanelBlock.PARTLY_CLEANED, true);
-    String props = panel.getValues().toString();
+    String props = panel.toString();
     ok &=
         SelfTest.check(
             "machines.panel_state",

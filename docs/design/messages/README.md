@@ -46,19 +46,22 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 These fields go in every entry's datapack JSON (ARCHITECTURE.md §2.6.2). They are listed here once so they can be checked together (content rules CR-F9, CR-H5; threshold-vs-curve check).
 
 **Forecasts**
-| Forecast | `lock` (closes at the first of) | `reveals` (held until the lock) | `rests_on` (thresholds the correct answer depends on) |
-|---|---|---|---|
-| F1 | Storm onset | `log.storm.onset`; solar output drop; Monitor solar cause line "Dust on panels" | Storm solar cut > 0 (balance §2) |
-| F2 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; HUD dose meter; Monitor dose read-more | Shelter factor < open-ground factor (balance §6a) |
-| F3 | 1 sol after Start (Monitor open shows the card first) | Monitor pressure cause line "Outgasser"; `example.outgasser` step 5 result | Outgasser rate > 0 and ≪ Earth pressure |
-| F4a | Ice block changes state | Ice change itself; F4a journal page; `earth.f4a.sublimation` | Pressure < 5 kPa; boiling point at pressure; puddle drying < 0.25 sol |
-| F4b | Ice block changes state | Ice change; `beat.09.thaw` journal entry; `journal.gate.thaw` | Pressure ≥ 5 kPa at the Thaw (~22 kPa); boiling point > local temperature |
-| F5 | 1 sol after Start (card first on Monitor open) | Monitor temperature cause line "Emitter"; `earth.f5.greenhouse` | Emitter contribution > 0 |
-| F6 | New machine has run 0.25 sol | Fauna page F before/after; raid log lines | Raids ∝ signature (balance §6) |
-| F7 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; expected dose read-more | Pressure ≥ 5 kPa; atmosphere factor < 1 (balance §6a) |
-| F8 | 1 sol after the kit (card first on Monitor open) | Monitor O2 and CO2 cause lines; carbon flow view | Rule A swap (DESIGN.md Phase 3 composition rule) |
-| F9 | O2 reaches 23 % or 0.5 sol | `beat.15.o2_fire`; Air window "Fire risk in…" line | Fire band 23 % |
-| F10 | Temperature trend turns down or 0.5 sol | Monitor temperature trend; `failure.emitter_wear` | Emitter contribution needed to hold temperature |
+| Forecast | `lock` (closes at the first of) | `reveals` (held until the lock) | `rests_on` (thresholds the correct answer depends on) | `resolve_source` (CR-F10) |
+|---|---|---|---|---|
+| F1 | Storm onset | `log.storm.onset`; solar output drop; Monitor cause line "Storm: less sunlight" (the panel-dust line is **not** held: it has its own cause and must show at its first appearance) | Storm solar cut > 0 (balance §2) | `storm.solar_cut` (the storm's own cause line, not net power) |
+| F2 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; HUD dose meter; Monitor dose read-more | Shelter factor < open-ground factor (balance §6a) | — (net value: the player can't move it another way within the horizon) |
+| F3 | 1 sol after Start (Monitor open shows the card first) | Monitor pressure cause line "Outgasser"; `example.outgasser` step 5 result | Outgasser rate > 0 and ≪ Earth pressure | — (net value: the player can't move it another way within the horizon) |
+| F4a | Ice block changes state | Ice change itself; F4a journal page; `earth.f4a.sublimation` | Pressure < 5 kPa; boiling point at pressure; puddle drying < 0.25 sol | — (net value: the player can't move it another way within the horizon) |
+| F4b | Ice block changes state | Ice change; `beat.09.thaw` journal entry; `journal.gate.thaw` | Pressure ≥ 5 kPa at the Thaw (~22 kPa); boiling point > local temperature | — (net value: the player can't move it another way within the horizon) |
+| F5 | 1 sol after Start (card first on Monitor open) | Monitor temperature cause line "Emitter"; `earth.f5.greenhouse` | Emitter contribution > 0 | — (net value: the player can't move it another way within the horizon) |
+| F6 | New machine has run 0.25 sol | Fauna page F before/after; raid log lines | Raids ∝ signature (balance §6) | — (net value: the player can't move it another way within the horizon) |
+| F7 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; expected dose read-more | Pressure ≥ 5 kPa; atmosphere factor < 1 (balance §6a) | — (net value: the player can't move it another way within the horizon) |
+| F8 | 1 sol after the kit (card first on Monitor open) | Monitor O2 and CO2 cause lines; carbon flow view | Rule A swap (DESIGN.md Phase 3 composition rule) | — (net value: the player can't move it another way within the horizon) |
+| F9 | O2 reaches 23 % or 0.5 sol | `beat.15.o2_fire`; Air window "Fire risk in…" line | Fire band 23 % | — (net value: the player can't move it another way within the horizon) |
+| F10 | Temperature trend turns down or 0.5 sol | Monitor temperature trend; `failure.emitter_wear` | Emitter contribution needed to hold temperature | — (net value: the player can't move it another way within the horizon) |
+
+| FI-1 (spec: prompts-and-reflections.md) | Storm onset | as F1 | Emitters on the shared solar grid (DESIGN.md) | `storm.solar_cut` → warming contribution of grid-powered emitters during the storm |
+| FI-4 (spec: prompts-and-reflections.md) | Storm onset | as F1 | Vats on solar; decay continues (rule A) | `storm.solar_cut` → vat CO2 uptake lost to the storm; **not net CO2** (cleaning panels mid-storm can move net CO2) |
 
 **Beats and messages that could give a forecast away:** `beat.04.storm_warning` (written so it doesn't: no mention of solar), `log.solar.*` (only `shelter` reveals F2/F7, and it is the lock), `example.outgasser` (never states the result), Shift Briefings (no forecast answers: checked).
 

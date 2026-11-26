@@ -160,7 +160,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `instructional_purpose` | First prediction; links the storm to power and to planning ahead. HS counters the film misconception of damaging Mars wind |
 | `motivational_purpose` | A chance to be right about the planet before the first big threat; a nudge to prepare |
 | `hint_level` | 1 (question-form hint about storage) |
-| `science_claims` | Dust storms reduce sunlight at the surface and cut solar power (2018 storm ended Opportunity's mission) **[SME: verify]**; Mars winds exert little force because the air is thin **[SME: verify wording]** |
+| `science_claims` | Dust storms reduce sunlight at the surface and cut solar power (the 2018 storm left Opportunity without enough power: searched, not opened; what finally ended the mission is a missing real value, so never claim it); Mars winds exert little force because the air is thin **[SME: verify wording]** |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -350,3 +350,61 @@ Mensah's first message. Voice: kind teacher, curious about the data, never quizz
 | `hint_level` | — |
 | `science_claims` | None |
 | `status` | draft (fits the story: BELL already writes shift logs) |
+
+---
+
+## 14. Solar panel dust: journal notes (from the ID's `docs/learning/journal-dust.md` §1–6)
+
+Facts and claim tags are unchanged from the ID's spec (SME wording, `docs/science/dust-review.md`). Voice: the Keeper's journal. **Shipping rule:** a *searched* number never appears in game text until its source is opened, so the **fallback (no-number) texts ship** for `journal.dust.panels`, `earth.dust.solar_farms`, and `journal.f1.real_vs_game`. The numbered versions stay in the ID's file, ready to swap in when the SME opens the sources. The wiper note is in phase-2.md §7.
+
+### `journal.dust.panels` (main note)
+| Field | Value |
+|---|---|
+| `id` | `journal.dust.panels` |
+| `type` | journal entry ("what happened" page, diagram 9 variant: dust in the air vs. dust on the panel) |
+| `trigger` | First panel on the planet reaches dust stage 1 (same moment as BELL's "New on the Monitor: panel dust") |
+| `delivery` | Journal page at the next natural pause; colony log points to it |
+| `text.ms` (ships) | **Dust on the panels.** Fine Martian dust lands on solar panels. On real Mars, power fell a little each day. Some days wind blew dust off and power jumped back. One lander, InSight, was never cleaned. Its power fell from about 5,000 to about 500 watt-hours a sol in under four years. **In the game, dust builds much faster than on real Mars, so you can see it.** |
+| `text.hs` (read more) | Held until the SME opens Lorenz et al. 2021 (it carries searched numbers). Until then HS sees the MS text |
+| `goal_ids` | C1, B1, A1 |
+| `instructional_purpose` | Explains the power drift; separates panel dust from storm dimming; the required honesty note that the game rate is compressed |
+| `motivational_purpose` | A real-mission story that makes upkeep feel like the real job |
+| `science_claims` | InSight 5,000 → 500 Wh/sol (**sourced**, PIA25284); "under four years" (**calc**); "a little each day" and wind cleaning (**searched**, qualitative, no number) |
+| `fiction_note` | Not fiction; the speed is a stated simplification |
+| `status` | draft; ID-reviewed; fallback text |
+
+### Short honesty notes (both bands; never band-gated)
+| `id` | Trigger | Text | Claim tags |
+|---|---|---|---|
+| `journal.dust.floor` | First panel reaches stage 4 | The game never lets a dusty panel fall below 60 percent. A real panel that's never cleaned keeps losing power. InSight's fell to about a tenth. The game stops at 60 percent so you have time to react. | InSight ~a tenth (**sourced** + **calc**); 60 % (**invented**). Can ship |
+| `journal.dust.storm_timing` | End of the first storm that adds panel dust (after F1 resolves) | In real storms, dust keeps settling on panels for days after the sky clears. The game adds it all when the storm ends, to keep it simple. | Fallout continues (**searched**, qualitative). Pending SME: can "days" ship without a number? |
+| `journal.dust.wind` | First dust-devil cleaning on the planet | Wind cleaned some real panels, like Spirit's. It never cleaned InSight's. | **sourced**/**searched**, no number |
+| `journal.dust.not_only_power` | Dust page, after the first panel cleaning | Dust also gets into joints and air filters. Power is just the easiest thing to measure. | General (**unverified** in detail); "air filters" pending SME |
+| `journal.dust.rain` | First Phase 3 rain that cleans panels | On Earth, rain helps, but the fine dust stays. Your panels won't come fully clean either. | **searched** (NREL), qualitative |
+| `journal.dust.base` (HS read more) | Dust page, read more | In the game, panels near your digging and machines get dustier. On real Mars, rocket landings throw dust, but no one has measured dust from a base's daily work. | Plumes **searched**; daily-work: real value missing; ×2 **invented** |
+| `journal.dust.brush` | First panel brush crafted | No Mars robot ever carried a panel brush. A person with a brush is something only a crewed base would have. | **searched**; fiction note |
+
+Goals: C1, B1, A1, B5 (base note). Misconceptions prevented: "dust can never kill power", "storms coat panels instantly", "wind always cleans", "rain washes everything clean", "dust only hurts power", "rovers were brushed".
+
+### `earth.dust.solar_farms` (D2 Earth link, last line of the dust page)
+| Field | Value |
+|---|---|
+| `id` | `earth.dust.solar_farms` |
+| `type` | Earth link |
+| `trigger` | Shown with `journal.dust.panels` |
+| `text.ms` (ships) | **On Earth:** desert solar farms lose power to dust too, and they're cleaned with water, brushes, or robots. Rain helps, but it leaves the fine dust. |
+| `text.hs` (read more) | Same idea as on Mars: losses build slowly, and someone has to plan the cleaning. Real farms weigh cleaning costs (water, labor) against lost power. |
+| `goal_ids` | D2, C1, B4 |
+| `science_claims` | Cleaning methods, rain and fine dust (**searched**, qualitative); cost trade-off (general, **unverified**, no number) |
+| `status` | draft; fallback text |
+
+### `journal.f1.real_vs_game` (read-more line on the F1 journal page, after F1 resolves)
+| Field | Value |
+|---|---|
+| `id` | `journal.f1.real_vs_game` |
+| `trigger` | F1 resolved (never before the lock, CR-F9) |
+| `text.ms` (ships) | Real dust storms on Mars can cover the whole planet and cut solar power far more than in the game. One in 2018 left the rover Opportunity without enough power. |
+| `text.hs` | Same as MS |
+| `goal_ids` | C1, A1 |
+| `science_claims` | 2018 storm (**searched**); never claim what finally ended Opportunity's mission (real value missing) |
+| `status` | draft; fallback text |

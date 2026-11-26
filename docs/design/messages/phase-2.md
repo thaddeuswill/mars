@@ -179,3 +179,20 @@ The key D2 message. Supports the class debrief in period 14 (the classroom graph
 | `science_claims` | Human activity is the main cause of recent warming (IPCC AR6 WG1 SPM, not opened); NOAA Mauna Loa and NASA GISTEMP records (not opened); permafrost carbon (Schuur et al. 2015, not opened); Arctic ~3.8× global rate (round 2 [S5]). **The "about 1.1 °C" figure is left out until sourced** (SME 10.1) |
 | `fiction_note` | None (no thawlings or Earth organisms paired in this message) |
 | `status` | draft |
+
+---
+
+## 7. `journal.dust.wiper` (panel wiper unlocks, Phase 2; from `docs/learning/journal-dust.md` §4)
+
+| Field | Value |
+|---|---|
+| `id` | `journal.dust.wiper` |
+| `type` | journal honesty note (fiction) |
+| `trigger` | Panel wiper recipe unlocks |
+| `text.ms` (ships, fallback) | This wiper is a game machine, inspired by real dust-shield research. |
+| `text.ms` (if the SME opens the Blue Ghost 1 source) | This wiper is a game machine. Real engineers are testing dust shields with no moving parts; one worked on the Moon in 2025. |
+| `text.hs` | Same as MS |
+| `goal_ids` | C1 (fiction label) |
+| `science_claims` | Electrodynamic dust shield on Blue Ghost 1, 2025 (**searched**) |
+| `fiction_note` | The wiper is fiction |
+| `status` | draft; fallback text |
