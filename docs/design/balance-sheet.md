@@ -116,7 +116,7 @@ CO2 is left out of the Phase 3 table until the CO2 budget (§8) is settled. The 
 
 **Hold rule.** The hold counter **pauses** when a value leaves the band. It **resets to zero** only if the value stays out for more than 1 continuous sol (classroom: 0.5 sol). A quick fix keeps your progress; neglect loses it.
 
-**Drift events (during any hold and all of Phase 3).** One event every 1–1.5 sols (classroom: every 0.5–0.75 sol, so a 3-sol hold has 4–6). Each one pushes a value out of band in about 1 sol if nobody answers, and takes about 1–5 minutes of play to answer once diagnosed.
+**Drift events (during any hold, and in Phase 3 from the first established flora patch).** One event every 1–1.5 sols (classroom: every 0.5–0.75 sol, so a 3-sol hold has 4–6). Storm events are announced at least 1 sol ahead. Each one pushes a value out of band in about 1 sol if nobody answers, and takes about 1–5 minutes of play to answer once diagnosed.
 
 | Event | What happens | Effect if ignored | Answer | Goals |
 |---|---|---|---|---|
@@ -236,7 +236,7 @@ Lesson the numbers build: planting more raises O2 quickly at first, then only a 
 |---|---|
 | ~~Polar frost direction~~ | Done (SME round 2): reversible reservoir above |
 | Ice–albedo: total capped at **2 °C** (*invented*, generous upper bound on the SME's ~0.4–1 °C estimate) | Decided; spread over melting from the Thaw on |
-| Puddle evaporation time in the 0.611–5 kPa band | Invented; set in the Stage 2 prototype (start: 0.05 sol) |
+| Puddle drying time below 5 kPa (0 °C up to the boiling point) | **0.1 sol (2 minutes)**, *invented*. **Hard limit: must stay under 0.25 sol**, because forecast F4a is scored by "no liquid water at that spot 0.25 sol after the ice changes state". Asked the SME for a plausible real range (depends on wind, humidity, temperature; real value missing). The threshold-vs-curve check treats this as a forecast-critical number |
 | **Phase 3 CO2 budget:** what processors and Outgassers add (CO2 vs. untracked filler gas), so CO2 can fall from its Phase 2 level to ≤ 0.5 kPa | **Open, important.** If most added gas is CO2, Phase 3 must remove tens of kPa. Needs a composition rule (Lead Game Designer) checked by the SME before the Phase 3 curve is final |
 | Ice-to-water rule thresholds (DESIGN.md §2) | SME confirmation of the draft rule |
 | The 35 % group throughput assumption; the build/wait split | Prototype action log |
