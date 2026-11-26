@@ -43,7 +43,7 @@ Data keys are the Technical Lead's mapping (ARCHITECTURE.md §2.5.2). A **signal
 |---|---|---|---|---|---|
 | Sky zenith, horizon, night sky, sunset halo and band, fog color, fog start/end, sun aureole, star density, cloud height (§3.1) | **Pressure** (kPa) | `mars:pressure` | log10 | Index parameter | 30 s |
 | Storm overlay on sky, fog, sun; dust particles (§3.7) | **Storm strength** (0–1; capped by gameplay phase) | `mars:storm_strength` | linear | Signal (`hazards`) | 0 (server ramps) |
-| Aurora glow (§3.7) | **Solar spike strength** at the top of the air (not pressure; SME round 2 §2.8) | **New signal needed**, proposed `mars:solar_spike` (handoff: TL). Not `mars:surface_radiation`, which already includes pressure | linear | Signal | 0 |
+| Aurora glow (§3.7) | **Solar spike strength** at the top of the air (not pressure; SME round 2 §2.8) | `mars:solar_spike` (signal, added by the TL in round 3). Not `mars:surface_radiation`, which already includes pressure | linear | Signal | 0 |
 | Dosimeter click rate (§3.7, audio direction §6.2) | Radiation reaching the surface × local shielding | `mars:surface_radiation` × local shielding | linear | Signal + local | 0 |
 | Windsock angle, lift balloon height, barometer needle (§3.1, §3.9) | **Pressure** | `mars:pressure` | log10 | Index parameter | 30 s |
 | Exterior ambient beds (thin, mid, full) and exterior gain (§3.1; [audio direction](../audio/audio-direction.md) §3, §9) | **Pressure** | `mars:pressure` (`keyframes/ambient.json`) | log10 | Index parameter | 30 s |
@@ -285,7 +285,7 @@ Keyframes at 0, 50 (first patch), 150 (first self-sustaining biome, balance shee
 
 ### 3.7 Dust storms and radiation spikes (events)
 
-**Inputs:** `mars:storm_strength` (signal, 0–1); solar spike strength (proposed signal `mars:solar_spike`) for the aurora; `mars:surface_radiation` (already pressure-attenuated) for the dosimeter.
+**Inputs:** `mars:storm_strength` (signal, 0–1); solar spike strength (`mars:solar_spike`, TL round 3) for the aurora; `mars:surface_radiation` (already pressure-attenuated) for the dosimeter.
 
 Dust storms are not an Index value, but they drive the sky in Phase 1 and get weaker as pressure and biomass rise (DESIGN.md §3).
 
@@ -319,7 +319,7 @@ DESIGN.md picks the first dust storm (story beat 4, F1; goals **C1, B3**) as the
 | 7. Clearing | Ramp out over 90 s | Fog pulls back, sun returns, panels stay dusty until cleaned (a clear, satisfying chore with a reason) | Patter fades; hum returns to pitch | C1 |
 | 8. Result | Next natural pause | Forecast result first in the queue (LEARNING.md §4.6); Monitor graph shows the dip with the cause callout on it (style guide §13.3) | Forecast cue (neutral, right or wrong) | **B3**, B1 |
 
-**Art and audio rules for this experience:** no flashes, no camera shake, no howling wind (thin air); the visor keeps the center clear; every step has a visual and a sound twin; the storm's look and gameplay effects both follow `mars:storm_strength` (Game Designer: caps scale both). **Open for the joint pass:** whether step 1's pre-storm haze is wanted (it gives an observant player a head start, rewarding Monitor-and-sky reading, but may hint at F1's answer before the forecast locks; LGD and ID to decide).
+**Art and audio rules for this experience:** no flashes, no camera shake, no howling wind (thin air); the visor keeps the center clear; every step has a visual and a sound twin; the storm's look and gameplay effects both follow `mars:storm_strength` (Game Designer: caps scale both). **Pre-storm haze (step 1):** the Lead Instructional Designer accepts it (round 3) **on one condition: the solar output number must not drop before the storm starts**, so the haze is look only and doesn't reveal F1's answer. So the haze changes fog and aureole only; `mars:storm_strength` stays 0 and solar output is untouched until arrival. Lead Game Designer to confirm in the joint pass.
 
 ### 3.8 Machine and hazard cues (local, from the LGD handoff)
 
@@ -355,7 +355,7 @@ DESIGN.md picks the first dust storm (story beat 4, F1; goals **C1, B3**) as the
 - **Numeric check (2026-11-26):** spirit column `#B8322A` on tube `#D9DEE2` 4.4 : 1, OKLab ΔE ≥ 0.375 in all three colorblind simulations; gauge pointer `#E8E3D8` on plate `#2A3036` 10.4 : 1, ΔE ≥ 0.60. Both pass the icon targets (style guide §4.2, §4.4).
 - The breathable O2 window (16–17.25 kPa at 75 kPa) is under one pixel here. **That's fine:** the mast shows direction and rough size; the Monitor's Air window shows the window.
 
-**When is the gas analyzer fitted? Decided: at the Phase 3 gate** (Technical Lead raised it; the Lead Game Designer decided in ui-specs §7; **I agree**; the Lead Instructional Designer's agreement is still pending). The Monitor hides planet O2 and CO2 until Phase 3, so the mast does too: the world and the Monitor reveal the same values at the same time, and the player gets a visible "new instrument" moment (BELL: "Gas gauges fitted to the weather mast") when O2 and CO2 start to matter. Cost: Phase 1–2 lose a world cue for CO2 rising from Outgassers (the Monitor's "read more" still has it).
+**When is the gas analyzer fitted? Decided: at the Phase 3 gate** (Technical Lead raised it; the Lead Game Designer decided in ui-specs §7; I agree; the Lead Instructional Designer agreed in round 3, because the Phase 1 "Air mix" line already gives A1 its gas-mix source). **Decided.** The gauges are drawn **only after the Phase 3 gate**. The Monitor hides planet O2 and CO2 until Phase 3, so the mast does too: the world and the Monitor reveal the same values at the same time, and the player gets a visible "new instrument" moment (BELL: "Gas gauges fitted to the weather mast") when O2 and CO2 start to matter. Cost: Phase 1–2 lose a world cue for CO2 rising from Outgassers (the Monitor's "read more" still has it).
 - **Before Phase 3:** the gas analyzer box is **empty brackets** (two bare mounting rails on the mast face, alloy, no gauge face, no lock symbol, no grey-out). I accept the Game Designer's brackets over my "plain plate": they are a physical object with a visible purpose, not a disabled control, so they fit PROCESS.md §4.
 - **At Phase 3:** the gauges appear with a 1 s fade-in and a one-time `#F0E442` outline on the box until the player first looks at the mast.
 
@@ -433,8 +433,9 @@ Gates stay unlocked (lock-in), but the look always tells the truth about the pla
 | Replace estimated start colors with pixel samples from calibrated rover images | SME + Lead Artist | Well-structured |
 | ~~Flame bands~~ Done (SME round 2): corrected (§3.4); 20 kPa guard is invented, needs a sourced value if one exists | SME | Open for a source only |
 | ~~Outgasser puff, wisps, carbonate, windsock, aurora~~ Done (SME round 2): accurate or corrected here | SME | Closed |
-| ~~Data keys~~ Done (ARCHITECTURE.md §2.5.2). **New:** publish a solar-spike signal for the aurora (not pressure-attenuated) | Technical Lead | Well-structured |
+| ~~Data keys; solar-spike signal~~ Done (ARCHITECTURE.md §2.5.2; `mars:solar_spike` added in TL round 3) | Technical Lead | Closed |
 | Weather mast: **adopted** (user, 2026-11-26). Add it to DESIGN.md (Index section or hazards) and the fantasy audit as "real instrument, simplified"; place one in the Cairn Dome structure | Lead Game Designer | Well-structured |
 | Pressure-driven sound claim and values (§3.1 sound rows, audio direction §3) | SME | Well-structured (check) |
 | ~~Clouds~~ Decided (TL, option A): one 256×256 greyscale density map, delivered as a generated concept (asset E-10) | — | Closed |
-| Weather mast gas analyzer: fitted from the start, or at the Phase 3 gate (§3.9) | Lead Game Designer, Lead Instructional Designer (Lead Artist view given) | Ill-structured (small) |
+| ~~Mast gas analyzer timing~~ Decided: Phase 3 gate (§3.9) | — | Closed |
+| Pixel-sample calibrated rover images (approximate-true-color Pancam, Mastcam natural color; avoid white-balanced) at several dust opacities now that pds-imaging.jpl.nasa.gov is reachable; replace the estimated start colors if they differ by more than ΔE 0.02, then re-run the step checks | SME + Lead Artist (optional) | Well-structured |

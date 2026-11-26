@@ -48,8 +48,8 @@ One server-wide state object drives all progression (settled: one Index per worl
 | Pressure (kPa) | 0.6 | ≥ 75 | Regolith Outgassers (Phase 1), atmospheric processors (Phase 2+) | Fewer suit leaks, thicker sky fog, liquid water possible (with warmth) |
 | Temperature (°C, global mean) | −60 | ≥ 5 | Super-greenhouse gas emitters, orbital mirrors, ice–albedo feedback (small, capped ~2 °C) | Ice can melt (with pressure), fewer cold-damage zones |
 | Hydrosphere (% of surface covered by liquid water) | 0 | ≥ 30 | Ice extractors, ice-comet impacts, melting ground ice | Surface water, rain, wakes fauna |
-| O2 fraction (%) | 0.1 | 19–23 (fire-safety band) | Algae vats, seeded biomes | Fire possible; above 23 %, fire hazard |
-| CO2 (partial pressure, kPa) | 0.57 | ≤ 0.5 | Raised by outgassers and decay; lowered by biomes and carbon scrubbers | Must fall while temperature holds (balancing act) |
+| O2 fraction (%) | 0.1 | 19–23 (fire-safety band) | Seeded biomes and algae vats (turning CO2 into O2, one for one); O2 generator (splits water; fallback) | Fire possible; above 23 %, fire hazard |
+| CO2 (partial pressure, kPa) | 0.57 | ≤ 0.5 | Raised by Outgassers (Phase 1), Phase 2 processors (part), polar release, decay and fire; lowered by biomes and algae vats (into O2) and carbon scrubbers (into rock, no O2) | Must fall while temperature holds (balancing act). About 18 kPa at the Phase 3 gate: it is the raw material for the O2 |
 | Biomass (biomass units) | 0 | ≥ 1,500 (draft) | Seeded flora spreading naturally | Unlocks self-sustaining biomes |
 
 - **Derived values on the Monitor:** O2 partial pressure (pressure × O2 fraction), CO2 partial pressure, and the boiling point of water at the current pressure.
@@ -102,13 +102,15 @@ Boiling points (SME calc): 0.7 kPa → 2 °C, 1 → 7, 2 → 18, 3 → 24, 4 →
 | Boiling point vs. heater | 2–33 °C below 5 kPa | Whole Phase 1 | ~24 sols | F4a, Phase 1 journal | OK |
 | Phase 2 gate | 5 kPa | ~sol 25 | — | F7 now fires at ≥ 5 kPa | OK |
 | Armstrong line | 6.3 kPa | ~3 sols into Phase 2 | — | Beat 7a (optional) | OK |
-| Polar frost bands | −40 / −20 °C | ~18 and ~36 sols into Phase 2 | ~18 sols each | Polar winter drift event; Monitor cause line | OK |
+| Polar frost bands | −40 / −20 °C | ~18 and ~36 sols into Phase 2 | ~18 sols each | Monitor cause line (the hold-time "polar winter" event is now a weather low) | OK |
 | Thaw | −20 °C | ~36 sols into Phase 2 (pressure ~22 kPa) | — | F4b, beat 9 | OK: F4b's "water stays" is true at 22 kPa |
 | Hydrosphere | 10 % | after Thaw | — | F6, beat 12 | OK |
 | Phase 3 gate | 30 kPa and 0 °C | ~sol 54 of Phase 2 | — | Report 2, SB3 | OK |
 | Everest pressure | 33.7 kPa | ~2 sols into Phase 3 | — | Monitor milestone | OK |
 | Breathable window opens | 69.6 kPa (16 ÷ 0.23) | ~22 sols into Phase 3 | ~3 sols before 75 kPa | Air window states (ui-specs §5) | OK, short: the "not thick enough yet" state is brief |
 | Breathable pressure | 75 kPa | ~25 sols into Phase 3 | rest of Phase 3 | F9, beat 17 | OK |
+| CO2 ≤ 0.5 kPa (rule A) | 0.5 kPa | ~28 sols into Phase 3 | rest of Phase 3 | Breathable and Equilibrium holds start here, not at 75 kPa | OK: O2 reaches 16 kPa at ~sol 25 while CO2 is still 1.6; the Air check row shows "Low CO2" as the last cross |
+| Weather low (hold drift event) | −1.5 kPa | During holds | 2 sols | FI-2 (boiling point dips a little) | OK: replaces "polar winter", which can't happen at equilibrium |
 | Fire band | 23 % O2 | Phase 3, player-driven | — | F9 (fires on entering the window, before 23 %) | OK |
 | Ice–albedo cap | 2 °C total | Spread over Phase 2 melting | — | Monitor cause line | OK (small by design) |
 | Puddle drying time below 5 kPa | 0.1 sol (invented) | Phase 1, whenever ice is barely warmed | — | F4a outcome check at 0.25 sol | OK: 0.1 < 0.25 (hard limit) |
@@ -117,7 +119,17 @@ Boiling points (SME calc): 0.7 kPa → 2 °C, 1 → 7, 2 → 18, 3 → 24, 4 →
 | Storm warning lead | ≥ 1 sol, every phase | All phases | — | F1, FI-1, FI-4 | OK |
 The check also found an arithmetic error in the balance sheet §3 (Phase 3 needs +1.8 kPa/sol for 25 sols, not +1.1); fixed there. Re-run this table whenever a gate, physics rule, or curve changes.
 
-Progress is shown in the world itself: sky tint, fog density, the storm table, and block ticks (ice → vapor or water, regolith → soil near seeded flora). A diegetic **Planetary Monitor** block shows the numbers, trends, causes, and milestones.
+**Phase 3 composition rule: "CO2 is the oxygen source" (rule A; decided 2026-11-26, Lead Game Designer leading, on the SME's round 3 recommendation; owner's standing delegation).**
+- Outgassers add CO2 (and water). Phase 2 atmospheric processors add mostly filler gas plus some CO2, sized so CO2 is about **18 kPa at the Phase 3 gate** (invented, inside the SME's 17–19 kPa range around a calculated 18.5 kPa). Phase 3 processors add filler gas only.
+- **Flora and algae vats turn CO2 into O2, one for one.** **Decay and fire turn O2 back into CO2, one for one.** **Carbon scrubbers lock CO2 into carbonate rock and make no O2.** The **O2 generator** (splits water; real electrolysis) is the costly fallback if a player over-scrubs.
+- Total pressure is held constant while converting (simplification; HS read more names the small real drop).
+- Monitor carbon flow view: "in the air", "in plants", "in soil and buried", "in carbonate rock".
+- Journal (MS): "Plants take in CO2 and give out O2, one for one. The carbon stays in the plants and the soil. If plants rot or burn, the carbon takes the oxygen back." HS read more: "To make Mars's air breathable this way, about 300 times the carbon in Earth's whole atmosphere would have to be locked in soil and rock. On Earth, oxygen built up over hundreds of millions of years as carbon got buried. The game squeezes that into hours."
+- **Rationale:** it is the only option where the main Phase 3 loop (plants turn CO2 into O2) is physically true (mass balance), and it makes the scrubber a real B4 choice ("scrub it and you lose your O2 source") at no extra content cost. **Alternatives:** B, processors make only filler (plants would make O2 from nothing, or become decoration: wrong or weak A5); C, all added gas is CO2 (a long removal grind). **Trade-offs:** learning: A5, B2 (decay and fire as balancing swaps), B4, HS-ESS2-6 strengthened; appeal: the CO2 and O2 lines mirror each other on the Monitor, a satisfying, readable pair; risk: over-scrubbing stalls O2 (fallback: O2 generator). **Fun position: adopt, no block on appeal grounds.** The "Low CO2" check is now the last to turn green, which gives Phase 3 a clear final push. **Revisit if** the Stage 2 paper run can't reach the O2 window by about sol 25 of Phase 3 without a grind, or the external reviewer objects.
+- Assumptions (SME): higher plants growing at low O2 and plants tolerating ~18 kPa CO2 are **unverified**. The biome chain starts with biocrust (cyanobacteria), which is the honest pioneer.
+- Curves: balance sheet §3a. Goals: A5, B2, B4 (alignment check requested).
+
+Progress is shown in the world itself:
 
 ### 3. Hazard Systems
 
@@ -416,8 +428,11 @@ Specs for the gaps above that the Lead Game Designer owns. Final text is in [doc
 | Warm the planet (Phase 2) | Super-greenhouse emitters: cheap, high fauna signature | Orbital mirror uplink: expensive and slow to build, **no ground signature** |
 | Water for the dome (Phase 2) | Surface meltwater plus treatment: cheap, needs perchlorate filters | Ice extractor drilling deep, clean ice: costly power, cleaner water, high signature |
 | Fauna (Phase 2–3) | Shrouds: −15 % output | Quiet zones: land left unbuilt |
-| O2 (Phase 3) | Algae vats: fast, controllable, need power | Seeded biomes: slow, free once established, can overshoot |
-The orbital mirror route is new: its numbers go to the balance sheet as a draft after the Stage 2 prototype; science framing to the SME (mirrors are a real proposal, SME review B4).
+| O2 (Phase 3) | Algae vats: fast, controllable, need power | Seeded biomes: slow, free once established, can overshoot. (Fallback: O2 generator splitting water, costly power) |
+| CO2 down (Phase 3) | Let plants convert it: makes O2, slow | Carbon scrubbers: fast, but the CO2 becomes rock, not O2 (rule A trade-off) |
+The orbital mirror route (adopted, user, round 3; costed by the Technical Lead): numbers go to the balance sheet after the Stage 2 prototype. Journal (MS, SME round 3): "Scientists have proposed giant mirrors in space, about 200 km across, to send extra sunlight to Mars. Nothing that big has ever been built."
+
+**Transit tubes (confirmed, answers the Technical Lead):** simple **paired stations** joined by a pressurized tube the player walks through (counts as a sealed volume, no suit O2 drain). No rideable vehicle at launch (TL: ~4 days vs. 8–12). Revisit if outposts feel too far apart in playtests.
 
 **Worked example: the first Outgasser.** Hana's notes taped to the first Outgasser walk through six steps, each with a short reason: placement, feed, power for the night, switch on (and guess before looking: F3), then *where to look* (the Outgasser line in the Monitor's pressure causes). The notes never state the result, so F3 stays a real prediction. Fading: the first atmospheric processor gets a **completion** version (two steps left for the player), later machines get "You know the drill by now. —H." "Hide Hana's notes" turns them off for experienced players. Goals: B1, C3, C1. *Rationale:* worked examples help novices and hurt experts (expertise reversal), so they fade and can be skipped. *Revisit if* Lens A still can't find the cause line after the example.
 
@@ -618,7 +633,7 @@ Lists the Lead Artist asked for. Names follow the domain (real crop and instrume
 | List | Items | Goals | Notes |
 |---|---|---|---|
 | **Dome greenhouse crops** (Phase 1 food; asset F-08, 3 growth stages each) | Potato, lettuce, dwarf wheat, tomato | C1 | Tomato answers the dead-tomato trace ("Next shift: you try"). All four are crops studied for space farming **[SME: verify]** |
-| **Biome seed kits** (Phase 3; asset F-07) | 1 **Biocrust** (pioneer: cyanobacteria and lichen crust; grows on treated regolith) · 2 **Tundra meadow** (mosses, sedges, cold grasses; needs biocrust soil) · 3 **Wetland margin** (algae mats, reeds; needs adjacent water) · 4 **Cold forest** (dwarf conifers and shrubs; needs meadow soil and temperature ≥ 5 °C) | A5, B2, B4 | A succession chain: each kit needs the soil the one before makes. Teaches that ecosystems build on each other. Real-biology basis **[SME: verify]** |
+| **Biome seed kits** (Phase 3; asset F-07) | 1 **Biocrust** (pioneer: cyanobacteria and lichen crust; grows on treated regolith) · 2 **Tundra meadow** (mosses, sedges, cold grasses; needs biocrust soil) · 3 **Wetland margin** (algae mats, reeds; needs adjacent water) · 4 **Cold forest** (dwarf conifers and shrubs; needs meadow soil and temperature ≥ 5 °C, an **invented** game line, not the real tree limit) | A5, B2, B4 | A succession chain: each kit needs the soil the one before makes (SME round 3: accurate in order). Journal label: "On Earth this takes hundreds of years. The game speeds it up." Crops (above): SME round 3 accurate; journal: "All four have been grown for space farming, on the space station or in NASA test chambers." |
 | **Maintenance parts** (asset I-01) | Filter cartridge (air and perchlorate dust), seal kit (seals and gaskets merged), bearing (fans, pumps, rotors), heater coil (ovens, Outgassers, emitters) | C1, C2 | Four parts serve all machines. The Artist's "gasket" merges into the seal kit (one fewer item, same job) |
 | **Beacon components** (asset I-07; recipes unlock at Breathable, assembly at Equilibrium) | Mast segment (×7), transmitter core, dish array (uses the repaired main dish design), landing-guide lamp (×8, the style guide's lamp ring), **air record** | B4 (holding the band) | The air record is crafted at the Monitor only at Equilibrium: it stores the hold data, the "proof that the air holds" the fleet is waiting for. Five icon types |
 

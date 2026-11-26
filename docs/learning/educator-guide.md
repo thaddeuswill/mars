@@ -13,7 +13,7 @@
 
 Students run a colony on a hostile Mars and change the planet, in three phases, until the air is breathable and the colony can call the ships. The game doesn't stop to lecture: the planet itself responds to what students build, and the science is in that response.
 
-**Learning objectives** (codes are draft; see §12):
+**Learning objectives** (codes checked word for word on nextgenscience.org, 2026-11-26):
 
 | ID | By the end, learners can… | NGSS (MS) | NGSS (HS) | Priority |
 |---|---|---|---|---|
@@ -26,7 +26,7 @@ Students run a colony on a hostile Mars and change the planet, in three phases, 
 | B2 | Recognize reinforcing and balancing feedback loops | — | HS-ESS2-2 | **Primary** |
 | B3 | Predict the effect of a change before making it | (practice) | HS-ESS3-6 | Secondary |
 | B4 | Manage trade-offs between competing goals and justify the choice | MS-ETS1-2 | HS-ETS1-3, HS-LS2-6 | **Primary** |
-| B5 | Recognize unintended consequences | MS-ETS1-2 | HS-ETS1-3 | Secondary |
+| B5 | Recognize unintended consequences | MS-ETS1-2 (related: MS-ESS3-3, with an Earth example) | HS-ETS1-3 | Secondary |
 | C1 | Plan for limited resources, life-critical needs first | MS-ETS1-1, -2 | HS-ETS1-1, -2 | Secondary |
 | C2 | Diagnose and fix a failing system so it stays fixed | MS-ETS1-4 (-3) | HS-ETS1-2, -4 | Secondary |
 | C3 | Use data to make decisions | (practice: analyzing and interpreting data) | (same) | Secondary |
@@ -80,7 +80,7 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 2. Open one planet per group; set each planet's **group size** (3–5) and **grade band** (middle or high school). Leave **guidance** on **gentle** (the classroom default: the game points at problems and explains what's locked). You may choose **standard** for a confident group; it gives fewer hints but still names every cause. Guidance never changes the science or the numbers.
    **Subtitles are on by default** in the classroom pack (useful in noisy rooms and for students who can't use sound). Every important sound also has a visual cue.
 3. Assign students to planets (or give out join codes).
-4. Print the **player ID slips** (one per student) from the class overview. Students write their ID, never their name, on pre/post tests.
+4. Print the **player ID slips** (one per student) from the class overview. The slips carry **IDs only**; the game never prints names (it doesn't store them anywhere it could print from). Hand them out yourself, writing a name on a slip by hand if that helps you, and keep them in the classroom. Students write their ID, never their name, on pre/post tests.
 5. Print the pre-test, the paper reflection worksheet (§6) as a backup, and the Mars/Earth data table for debrief 1.
 6. Test one student PC joining the server.
 
@@ -146,7 +146,11 @@ Each debrief: **recall** (2 min: "Last time we talked about…"), **compare plan
 
 ### 5.2 Debrief 2 (period 14): greenhouse effect, loops, side effects
 
-Bring a graph of atmospheric CO2 (e.g. the NOAA Mauna Loa record) and of global temperature over the past century (e.g. NASA GISTEMP). **The SME must confirm and cite the exact graphs before use**; this condition is what makes MS-ESS3-5 count.
+Bring a graph of atmospheric CO2 (NOAA Global Monitoring Laboratory, Mauna Loa record, gml.noaa.gov/ccgg/trends) and of global surface temperature (NASA GISTEMP v4, data.giss.nasa.gov/gistemp). Named and cited by the SME; **dated copies still need to be opened and saved** before the guide ships. Using Earth's data here is what makes MS-ESS3-5 count.
+
+**Teacher note on the graphs:**
+- **Baselines differ.** GISTEMP shows temperature relative to the 1951–1980 average; the commonly quoted "about 1.1 °C of warming" is relative to 1850–1900. So the graph's latest value won't match 1.1 °C. A student who notices this is doing exactly what MS-ESS3-5 asks: praise it.
+- **The CO2 record starts in 1958.** For the full past century, pair it with an ice-core record (a source is still to be named by the SME).
 
 | # | Question | Objective | NGSS |
 |---|---|---|---|
@@ -281,8 +285,8 @@ Use **Set phase** to start a planet at a later phase. The overview marks the obj
 
 ## 12. Open items before publishing
 
-- NGSS codes: word-for-word check on nextgenscience.org (SME; host blocked so far).
-- Earth graphs for debrief 2: named, opened, and cited by the SME.
+- NGSS codes: word-for-word check **done** (SME, round 3).
+- Earth graphs for debrief 2: named and cited (SME round 3); dated copies still to be opened and saved; an ice-core CO2 source still to be named.
 - The transfer-task answer key, forecast distractors, rubrics, and this guide: review by outside science teachers (owner decision; [teacher-review-pack.md](teacher-review-pack.md)).
 - Server setup guide and IT one-pager (Technical Lead).
 - Player ID slips printable from the class overview (Technical Lead).

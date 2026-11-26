@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:hydrosphere",
+  "kind": "stored",
+  "unit": "%",
+  "start": 0,
+  "min": 0,
+  "max": 100,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

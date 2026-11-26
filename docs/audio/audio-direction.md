@@ -58,7 +58,7 @@ Every sound belongs to one **path**. The path decides which filters apply. This 
 | Path | Examples | Pressure filter (§3) | Helmet filter (§3.5) | Notes |
 |---|---|---|---|---|
 | **Exterior airborne** | Wind, rain, water, thawlings, exterior machines, fire outside, windsock | **Yes** | Yes, while helmet on | The path that teaches pressure |
-| **Contact (through the suit and ground)** | Own footsteps, tools on blocks the player touches, dust grains hitting the visor, ground creaks under the player | No | No | Sound you feel through your body and suit, so it stays audible in thin air. Stylized **[SME]** |
+| **Contact (through the suit and ground)** | Own footsteps, tools on blocks the player touches, dust grains hitting the visor, ground creaks under the player | No | No | Sound you feel through your body and suit, so it stays audible in thin air. **SME ✓ plausible** (round 3: suits are pressurized to about 29.6 kPa, so sound carries inside them) |
 | **Suit** | Suit fan, breathing, helmet seal, dosimeter clicks, suit alarms | No | n/a (inside the helmet) | Always audible while worn |
 | **Interior (sealed volume)** | Dome hum, interior machines, airlock, Monitor, Shift Board | No (dome air is at habitable pressure) | Only if the player wears the helmet indoors | Uses the sealing system to know the player is inside |
 | **Exterior heard from inside** | Storm, outside machines, thawlings, heard through dome walls | Yes, then × 0.30 gain (the thin bed is used whatever the pressure, so it stays muffled) | No | Thin outside air plus walls: you barely hear the outside from in the dome |
@@ -193,7 +193,7 @@ Only these events may sound an alarm. Adding one needs the Lead Instructional De
 |---|---|
 | Dose rate r (0–1) | `mars:surface_radiation` (signal; already includes the pressure attenuation, ARCHITECTURE.md §2.5.2) × local shielding factor (shielding numbers: Lead Game Designer) |
 | Click rate | **0.2 + 7.8 × r clicks per second**, random (Poisson) intervals, capped at 8/s |
-| Background ticks (no spike) | **0.1 per second** outside when pressure < 5 kPa, fading to 0 at 30 kPa (log axis). Inside a sealed volume: none **[SME]** |
+| Background ticks (no spike) | Background radiation never reaches zero, even on Earth (about 2.4–3.0 mSv per year; SME round 3). So ticks fade to a **floor, never to silence**: outside, **0.1 per second** below 5 kPa, fading on the log axis to the floor at 30 kPa; the **floor is 0.02 per second** (about one tick a minute) outside above 30 kPa **and** inside sealed volumes. Both rates are **invented** game numbers (chosen to be heard rarely, so the sound stays sparing); flagged for the balance pass. SME ✓ on the direction |
 | Click sound | Short dry tick, 3 random variants, main energy 2–4 kHz |
 | Subtitle | Two events: "Dosimeter clicking" (r < 0.4), "Dosimeter clicking fast" (r ≥ 0.4) |
 | Visual twin | HUD trefoil with slow pulse (1 per 2 s, style guide §4.6) and dose-rate number |
@@ -285,7 +285,7 @@ Every terraforming and life-support machine has a sound set: **start, running lo
 | Dust-off station | Short air-jet bursts | — | — |
 | Atmospheric processor | Compressor thump-cycle + gas rush | Worn: knock | Pressure filter |
 | Super-greenhouse emitter | Steady vent hiss and heat tick; **no smoke or puff sound** (gas is invisible, keyframes §3.5) | — | — |
-| Deep-crust water extractor | Slow drill thump (≈ 1 per 1.5 s) + pump | Scraped by thawlings: metal rasp overlay | — |
+| Ice extractor | Slow drill thump (≈ 1 per 1.5 s) + pump | Scraped by thawlings: metal rasp overlay | — |
 | Algae vat | Bubbling whose rate follows output | — | Vat output (same as bubble particles, A5) |
 | Carbon scrubber | Fan + occasional crumble as carbonate drops | — | Scrubber output |
 | Meltwater treatment, soil treatment | Filter pump; soil churn | — | — |
@@ -381,8 +381,8 @@ The TL's design is adopted. This records what the audio content must supply, and
 | Rain, storm | weather |
 | Machines, airlock, terrain | blocks |
 | Thawlings | **neutral** (never hostile) |
-| Suit, footsteps, dosimeter, alarms | players (alarms must not sit in a category players usually mute; TL to confirm what 1.21.1 offers) |
-| Feedback cues, interface | the closest interface-type category in 1.21.1 (**unverified** which exist; TL to confirm) |
+| Suit, footsteps, dosimeter | players |
+| **Alarms and feedback cues** | **master** (TL round 3: 1.21.1 has no interface category, from knowledge, check in the skeleton). In master they can only be silenced by turning all game sound down, so they can't be muted by accident through another slider |
 | Music (if adopted, §12) | music |
 | Voice (if adopted later) | voice |
 
@@ -394,7 +394,7 @@ The TL's design is adopted. This records what the audio content must supply, and
 |---|---|---|---|
 | Outdoor loudness at 0.6 kPa | About 20 dB weaker than Earth (model prediction, SME [S22]) | Gain 0.25 (≈ −12 dB) | Keeps the outside usable as a cue; SME: acceptable simplification |
 | Gas mix | Sound depends on gas type as well as pressure | Pressure only | One input per channel (keyframes §1.1) |
-| Contact sounds | Some sound reaches you through the suit and ground | Footsteps, tools, grain patter stay audible | Playability; plausible **[SME]** (not yet checked) |
+| Contact sounds | Some sound reaches you through the suit and ground | Footsteps, tools, grain patter stay audible | Playability; SME ✓ plausible (round 3) |
 | Helmet filter | Helmets muffle sound | −3 dB, plus a pre-filtered helmet bed (6 kHz) | Makes helmet-off audible |
 | Sublimation | Silent and slow | **No sound** | Honest; a hiss would teach a false idea |
 | Aurora | Silent | **No sound** | Honest |
@@ -473,8 +473,8 @@ Follows story bible §6.5 and style guide §10. Driving input: ending sequence s
 
 | Item | Who | Type |
 |---|---|---|
-| ~~§3.1 claim~~ Accurate (SME round 2 §4). Still open: background ticks (§6.2), contact path (§2) | SME | Well-structured |
-| ~~Hooks~~ Done (ARCHITECTURE.md §2.12). Still open: categories (§9.4), the safety-warning exception during danger (§7.3), the helmet bed input, Stage 5 range scaling | Technical Lead | Well-structured |
+| ~~§3.1 claim, background ticks, contact path~~ Done (SME rounds 2–3). Optional: pixel-sample rover images together now that pds-imaging.jpl.nasa.gov is reachable (keyframes §2.1) | SME + Lead Artist | Well-structured |
+| ~~Hooks, merge window, safety-warning exception, helmet bed, categories~~ Accepted (TL round 3). Still open: 1.21.1 category list to confirm in the skeleton; Stage 5 range scaling | Technical Lead | Well-structured |
 | Thresholds: suit O2 alarm, harmful dose, shielding factors | Lead Game Designer | Well-structured |
 | Neutral forecast-result cue; subtitles on by default in classroom | Lead Instructional Designer | Well-structured |
 | Music scope; real Mars recording in the journal | User (via Producer) | Ill-structured (scope, appeal) / well-structured (license) |

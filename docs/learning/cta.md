@@ -45,15 +45,38 @@ Top-level task: **Keep the colony alive while moving the planet to a stable, bre
 
 The post-test measures the cognitive elements only. Procedural skill with Minecraft is a means, not a goal.
 
-## 4. Real-world scenarios requested from the SME
+## 4. Real-world scenarios (from the SME, round 3)
 
-A CTA alone misses the settings and cases where these skills are used. **Requested from the Subject Matter Expert** (handoff); nothing below is a claim yet:
+Written by the SME in `docs/science/round3-review.md` §4.6 and pasted here unchanged. Source codes (R…, AR […], S…) refer to that file and `accuracy-review.md`. Use: journal "read more", debrief 2, transfer and delayed-test item ideas, and rubric anchors for B4, B5, and D1.
 
-| Scenario type | What we need | Used in |
+**Terraforming proposals**
+
+| Proposal | MS summary (grade 6–7) | HS extension | Options and consequences | Source |
+|---|---|---|---|---|
+| Release Mars's own CO2 (mirrors, dark dust on the poles) | "Warm the poles so frozen CO2 turns to gas and thickens the air." | Zubrin & McKay: mirrors of order 100 km radius, about 200,000 t; about 4 K of polar warming might trigger a warmer state | Works only if enough CO2 exists. Jakosky & Edwards found it would only about double today's pressure. Consequence: the plan alone can't make Mars warm | R17; AR [22] |
+| Factory-made super-greenhouse gases | "Build factories that make gases thousands of times better at trapping heat than CO2." | 1 Pa of C3F8 gives about 33.5 K warming in a model (Marinova et al. 2005); gases break down in sunlight and need topping up (Gerstell et al. 2001) | Fast warming; needs mining fluorine and running factories for a long time; the gases are also potent greenhouse gases on Earth | AR [20]; R2 [S24] |
+| Local warming with silica aerogel sheets | "Cover small areas with a thin, clear foam-like sheet that traps heat, like a greenhouse roof." | A 2–3 cm layer could raise the ground underneath above melting and block UV, in lab tests and models | Works locally, not planet-wide; lab-tested only; cheaper first step | R6 |
+| Nanoparticles (optional) | "Release tiny engineered particles that trap heat." | More than 30 K warming in a 2024 model | Modeled only; long-term effects unknown | AR [21] |
+
+**Earth cases with side effects through a loop**
+
+| Case | MS summary | Loop and side effect | Options people had | Source |
+|---|---|---|---|---|
+| Thawing permafrost | "Warming thaws frozen Arctic ground. It releases stored carbon, which warms the planet more." | Reinforcing loop; infrastructure damage | Cut emissions; build on piles; monitor | R3; R2 [S6] |
+| CFCs and the ozone layer | "Chemicals used in fridges and sprays seemed safe. They thinned the ozone layer. A world treaty banned them, and the ozone layer is healing." | Side effect of a useful technology; the ban also avoided about 0.5 °C of warming | Ban (Montreal Protocol), replace, wait | R18: recovery to 1980 levels by about 2066 (Antarctic), 2045 (Arctic), 2040 (rest of world) |
+| Cane toads in Australia | "In 1935, 2,400 toads were released to eat beetles that hurt sugarcane. They didn't eat the beetles. They spread and poisoned native animals." | Untested intervention; invasive spread | Test first; release fewer; control later (no broad method exists) | R7 (northern quoll decline of 75 % reported in one source; don't use the "200 million toads" figure, unconfirmed) |
+| Arctic sea ice and albedo | "Warming melts bright ice. Dark ocean absorbs more sunlight, so the Arctic warms faster." | Reinforcing loop; Arctic warmed about 3.8× the global rate, 1979–2021 | Cut emissions (the only lever) | R2 [S5] |
+
+Each case connects to D1/B5 rubric anchors: name the side effect, its cause, and one middle step.
+
+**How each is used**
+
+| Scenario | Goals | Where |
 |---|---|---|
-| Real terraforming proposals | Two or three published proposals and their main trade-offs (e.g. the analysis already cited as Jakosky & Edwards, 2018, and McKay's timescales in accuracy-review.md), with what each would and wouldn't achieve | Journal "read more"; HS debrief 2; delayed post-test item ideas |
-| Earth climate cases with side effects | Real cases where an intervention or human activity had an unintended consequence through a loop (the permafrost case already in the Earth links, and others the SME can source) | Debrief 2; transfer task; B5 rubric anchors |
-| Real engineered life-support systems | Real closed-habitat or spacecraft life-support cases and what failed | Debrief 1 (C1, C2); Report 1 anchors |
-| Range of actions and consequences | For each scenario: the options people had, and the positive and negative consequences of each | Rubric anchors for B4, B5, D1; Report 3 |
-
-Each scenario needs a source, a plain-language summary at grade 6–7, and an HS extension.
+| Release Mars's own CO2 | A3, B4, D2 | Journal honesty note (already), HS debrief 2 |
+| Super-greenhouse gases | A3, B5 | Emitter journal "read more"; debrief 2 question 2 |
+| Silica aerogel | B4, C2 | HS "read more" (a local alternative; trade-off of scale) |
+| Thawing permafrost | B2, B5, D2 | Thaw Earth link, Report 2 reply, transfer key |
+| CFCs and ozone | B5, D2 | Debrief 2 question 4 (side effect of a useful technology; also separates ozone from greenhouse) |
+| Cane toads | B5, D1 | Rubric anchor for "untested intervention"; debrief 2 question 4 |
+| Arctic sea ice and albedo | B2, D2 | Delayed post-test item 6; transfer key (counts for B2, not carbon links) |

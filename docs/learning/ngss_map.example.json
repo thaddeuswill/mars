@@ -1,13 +1,14 @@
 {
-  "_about": "Example content for data/mars/learning/ngss_map.json (ARCHITECTURE.md 8.6). Goal ID + band -> NGSS codes. Owners: Lead Instructional Designer and SME. Source: LEARNING.md 6.1, from docs/science/ngss-verification.md (SME, 2026-11-26). Codes checked via state mirrors and search copies; a word-for-word check on nextgenscience.org is still outstanding. C1/C2 split confirmed by the SME in round 2 (docs/science/round2-review.md 3.4), with HS C2 changed to HS-ETS1-2 and HS-ETS1-4. Round 2: each goal also carries tier (LEARNING.md §1, decided option T-C), scope (always 'player': goal pages fill only from the player's own events, LEARNING.md 3.0), and record_title_key (language-file key of the Keeper's Record page title, for goals.csv).",
-  "version": 3,
-  "verification": "sme-reviewed-2026-11-26-round2; verbatim-check-pending",
+  "_about": "Example content for data/mars/learning/ngss_map.json (ARCHITECTURE.md 8.6). Goal ID + band -> NGSS codes. Owners: Lead Instructional Designer and SME. Source: LEARNING.md 6.1, from docs/science/ngss-verification.md (SME, 2026-11-26). Codes checked via state mirrors and search copies; a word-for-word check on nextgenscience.org is still outstanding. C1/C2 split confirmed by the SME in round 2 (docs/science/round2-review.md 3.4), with HS C2 changed to HS-ETS1-2 and HS-ETS1-4. Round 2: each goal also carries tier (LEARNING.md §1, decided option T-C), scope (always 'player': goal pages fill only from the player's own events, LEARNING.md 3.0), and record_title_key (language-file key of the Keeper's Record page title, for goals.csv). Round 3: all codes checked word for word on nextgenscience.org by the SME (docs/science/ngss-verification.md, Round 3). 'ms_related' added to every goal (same meaning as 'hs_related': a real but partial fit, shown to teachers, never counted as alignment); B5 gets MS-ESS3-3 as related.",
+  "version": 4,
+  "verification": "verbatim-checked-2026-11-26",
   "goals": {
     "A1": {
       "ms": [
         "MS-ESS1-3"
       ],
       "hs": [],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "Assessed with data, not recall. HS: background knowledge.",
@@ -20,6 +21,7 @@
         "MS-PS1-4"
       ],
       "hs": [],
+      "ms_related": [],
       "hs_related": [
         "HS-ESS2-5"
       ],
@@ -36,6 +38,7 @@
       "hs": [
         "HS-ESS2-4"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "MS-ESS3-5 counts via the Earth debrief (period 14).",
@@ -48,6 +51,7 @@
       "hs": [
         "HS-PS4-4"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "MS: concept only. HS-PS4-4 covers EM radiation only; magnetic shielding is beyond it.",
@@ -63,6 +67,7 @@
         "HS-LS2-5",
         "HS-ESS2-6"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "HS-ESS2-6 needs the carbon flow view on the Monitor.",
@@ -77,6 +82,7 @@
       "hs": [
         "HS-ESS2-2"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "",
@@ -89,6 +95,7 @@
       "hs": [
         "HS-ESS2-2"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "MS-LS2-4 does not cover feedback loops.",
@@ -101,9 +108,10 @@
       "hs": [
         "HS-ESS3-6"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
-      "note": "MS: practice only (Developing and using models).",
+      "note": "MS: practice only (Developing and using models). HS-ESS3-6's assessment boundary limits it to using published model results: the debrief's published Earth data carries it, not the game.",
       "tier": "secondary",
       "scope": "player",
       "record_title_key": "record.page.b3"
@@ -116,6 +124,7 @@
         "HS-ETS1-3",
         "HS-LS2-6"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "HS-LS2-6 needs the claim-evaluation question in Keeper's Report 3 (HS).",
@@ -130,9 +139,12 @@
       "hs": [
         "HS-ETS1-3"
       ],
+      "ms_related": [
+        "MS-ESS3-3"
+      ],
       "hs_related": [],
       "practice_only": false,
-      "note": "MS-ESS3-3 suggested by SME, wording unverified, not used.",
+      "note": "MS-ESS3-3 (verified round 3) is related, not aligned: it fits only with an Earth example of an intervention's side effect (e.g. CFCs, cane toads; cta.md §4).",
       "tier": "secondary",
       "scope": "player",
       "record_title_key": "record.page.b5"
@@ -146,6 +158,7 @@
         "HS-ETS1-1",
         "HS-ETS1-2"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "SME round 2: keep. HS-ETS1-1 counts only where the transfer task or a debrief pairs C1 with an Earth challenge.",
@@ -162,6 +175,7 @@
         "HS-ETS1-2",
         "HS-ETS1-4"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "SME round 2: HS-ETS1-3 dropped (it belongs to B4/B5). HS-ETS1-4 is a moderate fit. MS-ETS1-3 fits only if failure reports let the player compare fixes; otherwise treat it as related.",
@@ -172,6 +186,7 @@
     "C3": {
       "ms": [],
       "hs": [],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": true,
       "note": "SEP: Analyzing and interpreting data.",
@@ -182,6 +197,7 @@
     "D1": {
       "ms": [],
       "hs": [],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": true,
       "note": "No PE; NGSS PEs don't assess values. SEP: Engaging in argument from evidence.",
@@ -197,6 +213,7 @@
         "HS-ESS2-4",
         "HS-ESS3-6"
       ],
+      "ms_related": [],
       "hs_related": [],
       "practice_only": false,
       "note": "Counts only with the D2 Earth content and debrief.",

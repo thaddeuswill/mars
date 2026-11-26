@@ -130,7 +130,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | M-15 | Shift Board block (0–6 slips) | 16×16 ×7 | 4 | Spec'd | Style guide §11.3 | SM → F-S |
 | M-16 | Atmospheric processor | Model | 4 | Needed | | SM → F-S |
 | M-17 | Super-greenhouse emitter | Model | 4 | Spec'd (look) | Shimmer and vent glow; no colored plume | SM → **F-E** |
-| M-18 | Deep-crust water extractor | Model | 4 | Needed | | SM → F-S |
+| M-18 | Ice extractor | Model | 4 | Needed | | SM → F-S |
 | M-19 | Transit tubes (straight, corner, junction) | Models | 4 | Needed | | SM → F-S |
 | M-20 | Outpost shell blocks | 16×16 | 4 | Needed | | F-S |
 | M-21 | Meltwater treatment unit | Model | 4 | Needed | Perchlorate Phase 2 | SM → F-S |
@@ -175,7 +175,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | A-05 | Tracks decal | 16×16 | 4 | Spec'd | | F-S |
 | A-06 | Death puff (salt crust) | Particle 8×8 | 4 | Spec'd | No gore | F-S |
 | A-07 | Concept sheet (turnaround, stage line-up, scale vs. player) | Image | **2** | Spec'd | First silhouettes generated: `concepts/thawling-silhouettes-concept.png`. Turnaround still needed before modeling | **C** (the concept itself) |
-| A-08 | Defensive sequence clips: rear_up, shove, curl_roll (no blending in vanilla animation) | Animation | 4 | Spec'd | Style guide §6.4, §5.4 | C → **F-E** |
+| A-08 | Defensive sequence clips: rear_up, shove, curl_roll (no blending in vanilla animation) | Animation JSON in `pack/assets/mars/neoforge/animations/entity/` | 4 | Spec'd | Style guide §6.4, §5.4 | C → **F-E** |
 
 ## 7. Story props and structures
 
@@ -190,6 +190,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | S-07 | Cairn Dome starting structure | Structure (NBT) | 3 | Needed | Layout is LGD's; art dresses it | SM → F-S |
 | S-08 | Outpost structures | Structure | 4 | Needed | | SM → F-S |
 | S-09 | Cargo lander remains | Structure | 4 | Needed | Optional trace | F-S |
+| S-10 | **Training Hall** (class lobby on Earth, story bible §3.6): hall, window, benches, Mars globe, wall chart, join terminal | Structure (NBT) + 2 models + 1 painting-style texture | 3 | Spec'd | Style guide §8.1; built with the Lead Game Designer. Mostly vanilla blocks (it is in the vanilla overworld) | SM → F-S |
 
 ## 8. UI and story presentation
 
@@ -219,7 +220,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | U-22 | New-log highlight: Monitor log badge, 1 Hz flash, block indicator lamp | GUI + block overlay 2×2 px | 3 | Spec'd | Style guide §13.1 | SM → **F-E** |
 | U-23 | Next-gate bar, condition chips, sol ring, HUD chip | GUI | 3 | Spec'd | Style guide §13.2; ui-specs §3 | SM → C → **F-E** |
 | U-24 | Monitor rows, reveal outline, "NEW" tag, disclosure triangles, graph callouts | GUI | 3 | Spec'd | Style guide §13.3 | SM → C → **F-E** |
-| U-25 | Journal "what happened" diagram panels (one per gate entry and forecast explanation) | 120×72 GUI px each | 3–4 | Needed | Style guide §13.5; count from the Lead Instructional Designer | SM → C → F-S |
+| U-25 | Journal "what happened" diagram panels: **11 diagrams** (7 essential, 4 simple; list in `docs/learning/prompts-and-reflections.md` §4a) | 120×72 GUI px each | 3–4 | Spec'd (count) | Style guide §13.5. **SME check of each diagram's content before drawing** | SM → C → **F-E** ×7, SM → F-S ×4 |
 | U-26 | Shift Briefing card + Monitor "watch" ring | GUI | 3 | Spec'd | Style guide §13.6 | SM → F-S |
 | U-27 | Landing checklist card + key-cap boxes | GUI | 3 | Spec'd | Style guide §13.7 | SM → F-S |
 | U-28 | Hana's worked-example note (first Outgasser) | GUI paper slip | 3 | Spec'd | Style guide §13.8 | SM → F-S |
@@ -228,7 +229,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | U-31 | `_paper` / `_hud` variants of every icon family | 9×9 + 16×16 sets | 3 | Spec'd | Style guide §4.4a; families listed there | **F-E** |
 | U-32 | "Useful now" clipboard icon | 9×9 + 16×16, two variants | 3 | Spec'd | Style guide §13.2 | F-S |
 | U-33 | Fonts: Cairn Display, Cairn Text, Cairn Mono (bitmap sheets + font JSON) | PNG glyph sheets | **2** | Spec'd | Style guide §4.8 glyph checklist; Stage 2 needs at least Cairn Mono for the numbers test | SM → **F-E** |
-| U-34 | Nine-slice GUI sprites: slate panel, paper card, HUD backing strip | 9×9 sprites + `.png.mcmeta` | **2** | Spec'd | Style guide §5.1; nine-slice support **unverified**, test one panel in Stage 2 | SM → **F-E** |
+| U-34 | Nine-slice GUI sprites: slate panel, paper card, HUD backing strip | 9×9 sprites + `.png.mcmeta` | **2** | Spec'd | Style guide §5.1; nine-slice sprites verified for 1.21.1 (TL round 3) | SM → **F-E** |
 | U-35 | Quiet-zone map hatch, ring, warning; ring ground dots | GUI + particle | 4 | Spec'd | Style guide §11.3a | SM → F-S |
 | U-36 | Air window states (normal, light hatch, no zone, off-scale) | GUI | 4 | Spec'd | Style guide §11.2; ui-specs §5 | SM → C → **F-E** |
 
@@ -246,8 +247,8 @@ Audio is owned by the **Lead Artist** (user decision, 2026-11-26). Every sound, 
 | Machines | 34 | 17 | 15 | 0 | 2 | 0 |
 | Items and player | 11 | 5 | 6 | 0 | 0 | 0 |
 | Fauna | 8 | 8 | 0 | 0 | 0 | 0 |
-| Props and structures | 9 | 6 | 3 | 0 | 0 | 0 |
-| UI | 36 | 28 | 7 | 0 | 0 | 1 |
+| Props and structures | 10 | 7 | 3 | 0 | 0 | 0 |
+| UI | 36 | 29 | 6 | 0 | 0 | 1 |
 | Audio | see [sound list](../audio/sound-list.md) (99 rows) | | | | | |
 
 (No art row is Blocked now: E-10 and E-15 were unblocked by the TL, F-07 and I-07 by DESIGN.md Content Lists. Counts are by row; several rows are sets.)

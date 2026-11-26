@@ -1,0 +1,127 @@
+// Based on the official NeoForge 1.21.1 ModDevGradle MDK (NeoForgeMDKs/MDK-1.21.1-ModDevGradle, read 2026-11-26).
+// Changes: no Parchment (maven.parchmentmc.org is not reachable from the build environment),
+// Spotless, JUnit 5 + ArchUnit, content copied from ../pack, a self-test GameTest run.
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+    id 'com.diffplug.spotless' version '8.1.0'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets.main.resources {
+    srcDir('src/generated/resources')
+    exclude('**/*.bbmodel')
+    exclude('src/generated/**/.cache')
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        client {
+            client()
+            programArguments.addAll '--width', '1280', '--height', '720'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        // Boot test (test-strategy L3): starts a headless GameTest server with the mod,
+        // runs the mars GameTests, then exits. The boot guard and watchdog are switched on.
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = project.file('run-gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'mars.selftest', 'true'
+            systemProperty 'mars.selftest.bootTimeoutSec', '240'
+            systemProperty 'mars.selftest.stallTimeoutSec', '120'
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.4.1'
+}
+
+test {
+    useJUnitPlatform()
+    // Unit tests read the real content files from ../pack (ARCHITECTURE.md 3.2).
+    systemProperty 'mars.packDir', file('../pack').absolutePath
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
+
+// Copy our content (art, text, datapack) from ../pack into the jar (ARCHITECTURE.md 3.2, build plan 4).
+processResources {
+    from('../pack') {
+        include 'assets/**'
+        include 'data/**'
+        exclude '**/.gitkeep'
+    }
+}
+
+// Metadata templates, as in the MDK.
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat()
+    }
+}
+
+// A hard limit so a hung server can never hang the build (test-strategy 2.2, third line of defence).
+tasks.matching { it.name == 'runGameTestServer' }.configureEach {
+    timeout = java.time.Duration.ofMinutes(15)
+}

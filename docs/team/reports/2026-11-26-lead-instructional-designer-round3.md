@@ -36,3 +36,21 @@ None.
 - **Term:** teacher review pack (the classroom-judgment half of the external review; the SME's science pack is the other half).
 - **Decisions:** one neutral forecast-result sound; subtitles on by default in classroom mode; guidance gentle by default in class; journal diagrams counted per mechanism, not per entry (11 for U-25).
 - **Lesson:** re-check forecasts when a tuning number changes, not just a threshold. The new storm cap quietly weakened FI-4. Add tuning multipliers (caps, scales) to the threshold-vs-curve check.
+
+---
+
+## Addendum: follow-up on the SME's and Technical Lead's round 3 (filed by coordinator)
+
+All items accepted and applied; no pushback. On paper every goal is still taught, practiced, given feedback, and measured. Document walkthrough only.
+
+- **FI-1:** new stem ("Your emitters run on solar power. What happens to the warming they add…"); the old one was ambiguous because real dust storms heat the air while cooling the ground.
+- **FI-2:** the premise was physically impossible at equilibrium (nitrogen and O2 can't freeze out at the poles). It is rebuilt on a passing low-pressure weather system, warned at least 1 sol ahead. The key is unchanged ("drops a little", about 0.5 °C, SME calculation). B2 was dropped from this item because a weather system isn't a feedback loop. **FI-2 is unusable until the Game Designer replaces the Phase 3 "polar winter" drift event with a weather low** (fallback: fire FI-2 early in Phase 3, while CO2 is still high).
+- **FI-3:** the explanation may say "thick air now blocks most of it", never "as safe as Earth". **FI-4:** "Less light, less CO2 taken in. The algae still breathe out CO2."
+- **F4a:** passes under the SME's conditions: puddle drying range 0.02–0.25 sol (invented), frozen water counts as "no liquid", thin puddles below 5 kPa, no game text states a drying time. The current 0.1 sol passes. Added to content rule CR-F1, which now also checks that every event a forecast rests on can physically happen in that phase.
+- **CTA scenarios** pasted into `cta.md` §4 (4 terraforming proposals, 4 Earth cases) with a use table. **Delayed post-test keys** in LEARNING.md §3.6 (items 6 and 9 use the two examples HS-ESS2-2's clarification statement names: ice–albedo and wetland loss).
+- **NGSS map (version 4):** `verification` = "verbatim-checked-2026-11-26"; new `ms_related` field on every goal (B5 gets MS-ESS3-3 as related, not aligned); B3 records HS-ESS3-6's boundary (published model results only). LEARNING.md §6 "verify each code" caveat dropped; the two assessment boundaries that matter are MS-ESS1-3 (excludes recall) and HS-ESS3-6.
+- **Educator guide:** debrief 2 teacher note (GISTEMP uses a 1951–1980 baseline while "about 1.1 °C" uses 1850–1900; the CO2 record starts in 1958); ID slips carry IDs only; objectives table marked "checked word for word". **Still open:** dated copies of both graphs must be saved and an ice-core CO2 source named.
+- **Technical Lead items:** `forecasts_replay`, `guidance_changes`, `third_party_mods` accepted; "Needs a look" numbers set for `flags.json` (accuracy below 0.33 after 3 forecasts; 2 repeats after own fix; report unsent for 2 sessions or past `debriefMaxDefers`; 1 session present with no own events); CR-H5 partly automatable (lines declare what they name in a `names` field).
+- **Handoffs:** Game Designer (replace the Phase 3 "polar winter" event with a weather low, warned at least 1 sol ahead; Shift Briefing 2 says "stay water"; adopt the SME's worked-example reasons); Technical Lead (accept `ms_related` in the `ngss_map.json` schema); Producer (the debrief 2 graphs still block MS-ESS3-5; owner action, now done: gml.noaa.gov and data.giss.nasa.gov were allowed this session, so the SME can save dated copies).
+- **Risks:** FI-2 unusable until the weather-low event exists; MS-ESS3-5 rests on graphs not yet opened; FI-4 is conditional on the Phase 3 storm cap and on the SME's proposed CO2 rule A (which could also change F8 and the A5 alignment).
+- **Shared model updates:** `ms_related` / `hs_related` mean a real but partial fit, shown to teachers and never counted as alignment; NGSS codes are verified, so documents no longer need the "verify before publishing" caveat; run threshold-vs-curve on events, not only thresholds.

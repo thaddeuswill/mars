@@ -87,6 +87,8 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 | Sol of Phase 2 | 0 | 6 | 12 | 18 | 24 | 30 | 36 | 42 | 48 | 54 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Pressure (kPa) | 5.0 | 6.4 | 8.5 | 11.2 | 14.3 | 17.8 | 21.6 | 24.9 | 27.3 | **30.0** |
+| CO2 partial pressure (kPa) | 4.9 | 5.6 | 6.7 | 8.1 | 9.7 | 11.6 | 13.5 | 15.2 | 16.5 | **18.0** |
+| Filler gas (kPa, untracked in play; shown here for the budget) | 0.1 | 0.8 | 1.8 | 3.1 | 4.6 | 6.2 | 8.1 | 9.7 | 10.8 | 12.0 |
 | Temperature (°C) | −60 | −56 | −50 | −42 | −35 | −27 | **−20** | −13 | −6 | **0** |
 | Hydrosphere (%) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 12 | 16 |
 | Events | Phase 2; F5 | Armstrong line (6.3) | | Frost slows (−40 °C) | | | **Thaw**; F4b; polar release starts (+0.5 kPa/sol bump) | **Hydrosphere** (~sol 46); F6 | Ground collapse risk peaks | **Phase 3** |
@@ -97,12 +99,15 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 |---|---|---|---|---|---|---|---|---|---|
 | Pressure (kPa) | 30 | 39 | 48 | 57 | 66 | **75** | 75 | 76 | 76 |
 | Temperature (°C) | 0 | 1 | 2 | 3 | 4 | 5 | 5 | 5 | 5 |
-| O2 fraction (%) | 0.5 | 3 | 8 | 13 | 18 | 21.5 | 22 | 22 (drift ±) | 22 |
+| CO2 partial pressure (kPa) | 18.0 | 16.0 | 12.8 | 9.0 | 5.0 | 1.6 | **0.5** | 0.4 | 0.4 |
+| O2 partial pressure (kPa) | 0.2 | 2.2 | 5.4 | 9.2 | 13.1 | **16.1** | 16.6 | 16.7 | 16.8 |
+| O2 fraction (%) | 0.7 | 5.6 | 11 | 16 | 20 | 21.5 | 22.1 | 22.3 (drift ±) | 22.1 |
+| CO2 + O2 (kPa; falls only by scrubbing) | 18.2 | 18.2 | 18.2 | 18.2 | 18.1 | 17.7 | 17.1 | 17.1 | 17.2 |
 | Biomass (BU) | 0 | 100 | 300 | 600 | 900 | 1,200 | 1,500 | 1,700 | 1,800 |
-| Events | Phase 3; F8 | Everest (33.7) passed | | | O2 window opens (69.6 kPa) | Breathable conditions met | Holds start (all in band) | **Breathable** (7 sols) | **Equilibrium** (14 sols) → beacon |
+| Events | Phase 3; F8 | Everest (33.7) passed | | | O2 window opens (69.6 kPa) | O2 push ≥ 16 kPa; CO2 still 1.6 (not yet breathable) | CO2 ≤ 0.5: holds start (all in band) | **Breathable** (7 sols) | **Equilibrium** (14 sols) → beacon |
 | Real hours | 26.3 | 28.0 | 29.6 | 31.3 | 33.0 | 34.6 | 35.6 | 38.0 | 40.3 |
 
-CO2 is left out of the Phase 3 table until the CO2 budget (§8) is settled. The flow channel check against these curves is in DESIGN.md (Flow and Task Design).
+**Named sinks and sources in Phase 3 (rule A):** flora and algae vats swap CO2 for O2 one for one (CO2 falls, O2 rises by the same amount); decay and fire swap it back; carbon scrubbers lock CO2 into carbonate rock and make **no** O2 (so CO2 + O2 falls only when scrubbing: 1.1 kPa over the climb above); Phase 3 processors add filler gas only. Total pressure is held constant during conversion (simplification; the real drop is about 0.33 kPa per kPa converted, HS read more). All values *invented* around the SME's calc (18.5 kPa of CO2 needed). Prototype check: O2 reaches the window by sol 25 with no grind (SME round 3 §1.4). The flow channel check is in DESIGN.md (Flow and Task Design).
 
 ## 4. Holds: what players do (M-16)
 
@@ -124,8 +129,8 @@ CO2 is left out of the Phase 3 table until the CO2 budget (§8) is settled. The 
 | Flora bloom | A biome grows fast | O2 +0.6 %/sol → fire band | Prune, add CO2 source, slow vats | A5, B4 |
 | Fauna grazing | Settled thawlings graze a patch | Biomass −5 %; O2 output dips | Move or widen the quiet zone, reseed | B2, D1 |
 | Emitter wear | One emitter fails | Temperature −1 °C/sol | Repair (failure report names it) | C2 |
-| Polar winter | Seasonal frost (game-sized: the real seasonal swing is ~25–30 % of the air, which the game deliberately doesn't model) | Pressure −1.5 kPa over 2 sols | Run processors harder; accept a small dip | B2, A1 |
-| Decay pulse | Old biomass dies back | CO2 +0.1 kPa/sol | Reseed; keep the biome young-to-mature mix | A5 |
+| Weather low (replaces "polar winter" in holds; SME round 3: at equilibrium, nitrogen and O2 can't freeze out at the poles) | A passing low-pressure system | Pressure −1.5 kPa over 2 sols, then recovers (*invented*; about 2 % of 75 kPa) | Run processors harder; accept a small dip | B2, A1, A2 (boiling point dips a little: FI-2) |
+| Decay pulse | Old biomass dies back | CO2 +0.1 kPa/sol **and O2 −0.1 kPa/sol** (one for one, rule A) | Reseed; keep the biome young-to-mature mix | A5, B2 |
 
 All drift-event sizes above are *invented* balance numbers.
 
@@ -253,8 +258,8 @@ Lesson the numbers build: planting more raises O2 quickly at first, then only a 
 |---|---|
 | ~~Polar frost direction~~ | Done (SME round 2): reversible reservoir above |
 | Ice–albedo: total capped at **2 °C** (*invented*, generous upper bound on the SME's ~0.4–1 °C estimate) | Decided; spread over melting from the Thaw on |
-| Puddle drying time below 5 kPa (0 °C up to the boiling point) | **0.1 sol (2 minutes)**, *invented*. **Hard limit: must stay under 0.25 sol**, because forecast F4a is scored by "no liquid water at that spot 0.25 sol after the ice changes state". Asked the SME for a plausible real range (depends on wind, humidity, temperature; real value missing). The threshold-vs-curve check treats this as a forecast-critical number |
-| **Phase 3 CO2 budget:** what processors and Outgassers add (CO2 vs. untracked filler gas), so CO2 can fall from its Phase 2 level to ≤ 0.5 kPa | **Open, important.** If most added gas is CO2, Phase 3 must remove tens of kPa. Needs a composition rule (Lead Game Designer) checked by the SME before the Phase 3 curve is final |
+| Puddle drying time below 5 kPa (0 °C up to the boiling point) | **0.05 sol at 0.6 kPa rising to 0.2 sol at 5 kPa** (grows with pressure, SME round 3 direction), *invented*, inside the SME's accepted 0.02–0.25 sol. Puddles here are thin films; frozen counts as "no liquid". **Hard limit: must stay under 0.25 sol**, because forecast F4a is scored by "no liquid water at that spot 0.25 sol after the ice changes state". SME round 3: plausible; real thin films dry in about 1–3 h at 0.7–1 mm/h (R5, calc); a 1 cm puddle would not. The threshold-vs-curve check treats this as a forecast-critical number |
+| ~~Phase 3 CO2 budget~~ | **Decided: rule A** ("CO2 is the oxygen source"; DESIGN.md, Phase 3 composition rule). CO2 at the Phase 3 gate 18.0 kPa (*invented*, inside the SME's 17–19 kPa range) |
 | Ice-to-water rule thresholds (DESIGN.md §2) | SME confirmation of the draft rule |
 | The 35 % group throughput assumption; the build/wait split | Prototype action log |
 | Fauna cap | Technical Lead (performance) |

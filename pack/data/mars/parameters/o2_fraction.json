@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:o2_fraction",
+  "kind": "stored",
+  "unit": "%",
+  "start": 0.1,
+  "min": 0,
+  "max": 100,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

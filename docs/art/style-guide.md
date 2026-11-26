@@ -290,7 +290,7 @@ The Technical Lead sets up `pack/assets/` and may move assets into the companion
 | Particles | **8×8** (dust, vapor, spores, bubbles), 16×16 max | 1–4 frames |
 | Sky bodies | Sun **32×32**, Phobos 16×16, Deimos and Earth drawn as small quads (2–4 px) | Sun drawn at 0.66× vanilla quad size (keyframes §3.1) |
 | Clouds | **256×256 greyscale density map** (`environment/clouds_density.png`), tileable; brighter = appears at lower coverage | TL option A (ARCHITECTURE.md §2.5.3): mesh rebuilt at 5 coverage steps (5 / 8 / 20 / 35 / 45 %). Concept generated (asset E-10) |
-| GUI sprites | **Single sprites with nine-slice scaling** in `textures/gui/sprites/`, declared in `.png.mcmeta` (vanilla since 1.20.2 per TL, **unverified**; check with one panel in Stage 2). Fallback: 256×256 atlas per screen family | Panels: 9×9 px source sprites with a 3 px border (slate panel, paper card, backing strip). Two variants where needed: `_hud` and `_paper` (4.4a) |
+| GUI sprites | **Single sprites with nine-slice scaling** in `textures/gui/sprites/`, declared in `.png.mcmeta` (verified for 1.21.1 by the TL, round 3). Fallback: 256×256 atlas per screen family | Panels: 9×9 px source sprites with a 3 px border (slate panel, paper card, backing strip). Two variants where needed: `_hud` and `_paper` (4.4a) |
 | HUD icons | 9×9 and 16×16 | Index parameter icons need both sizes |
 | Epilogue / ending cards | **192×108** GUI px illustration | Pixel illustrations, 16:9 |
 | Pack icon / logo | 128×128 pack icon; title logo 256×64 | |
@@ -321,7 +321,7 @@ pack/assets/mars/textures/
 
 ### 5.4 Models
 - Block and item models: vanilla JSON model format, made in Blockbench or by hand.
-- Entity models and animations: **vanilla Java box models and vanilla keyframe animations**, exported from Blockbench's "Modded Entity" format (TL decision, ARCHITECTURE.md §2.13; export for 1.21.1 **unverified**, test one animation in Stage 2). GeckoLib is the fallback only if missing blends make the rear-up → shove → curl → roll sequence look broken. Because vanilla doesn't blend, each transition the thawlings need gets a **short dedicated animation** (≤ 0.4 s): idle → bask, bask → idle, rear-up → curl. Art delivers Blockbench sources plus exported textures.
+- Entity models and animations: **vanilla Java box models and vanilla keyframe animations**, with animations as NeoForge JSON content in `pack/assets/mars/neoforge/animations/entity/`, exported with Blockbench's "Animation to JSON Converter" (TL decision, ARCHITECTURE.md §2.13; verified for 1.21.1 in TL round 3). GeckoLib is the fallback only if missing blends make the rear-up → shove → curl → roll sequence look broken. Because vanilla doesn't blend, each transition the thawlings need gets a **short dedicated animation** (≤ 0.4 s): idle → bask, bask → idle, rear-up → curl. Art delivers Blockbench sources plus exported textures.
 - Keep machine models within one block where possible; multi-block machines get a clear front face with the status lamp.
 
 ### 5.5 Placeholders
@@ -472,6 +472,20 @@ The crew are never seen; their traces tell the story (story bible §4.3). Props 
 **The dome** is the Phase 1 home: warm interior light (`#F5E3C3` lamp color, LED lamps, no open flames, since there is no O2 to burn outside and no reason to waste it inside), grow lights `#E8C8F0`-tinted in the greenhouse corner, frost on the glass at night (keyframes §3.2).
 
 ---
+
+### 8.1 The Training Hall (class lobby on Earth)
+Story bible §3.6; built with the Lead Game Designer (layout and signs are theirs). Asset S-10. The only Earth scene in the game, so it should feel like **Earth: warm daylight, green outside, calm**, the opposite of the dome. No learning job is required; the wall chart is a light A1/D2 anchor.
+
+| Element | Spec |
+|---|---|
+| Building | Small indoor hall (about 15 × 9 × 6 blocks) in the vanilla overworld, built mostly from **vanilla blocks** (smooth stone, oak, glass, white concrete): no new textures needed, and players see a familiar schema before Mars |
+| Window | One wide glass wall facing real overworld terrain, so the sky outside is the real vanilla Earth sky and green hills. The first and last time the player sees a blue sky until equilibrium: a quiet setup for the ending |
+| Mars globe | One-block model (F-S): rust sphere `#9A5B3C` with a pale polar cap and a dark band, on an alloy stand |
+| Wall chart "Earth vs. Mars" | Painting-style texture 64 × 32 (4 × 2 blocks): two globes and **pictogram bars** (pressure gauge icon, thermometer icon). **No numbers in the texture** (§4.5: text in textures can't be translated or read at distance). The numbers (101 kPa vs. 0.6 kPa; about 15 °C vs. −60 °C, SME round 3) appear on the look-at card in Cairn Mono |
+| Join terminal | One-block model (F-S): slate panel with a lamp; look-at card "Terminal: enter your team code" |
+| Signs | Vanilla signs with the Game Designer's text (optional to read) |
+| Lighting | Vanilla daylight through the window plus warm lamps; no Mars palette anywhere in the hall |
+| Sound | Vanilla overworld ambience through the window; no Mars beds, no feedback cues (nothing fires here). On assignment, sound fades out with the screen |
 
 ## 9. The helmet and the helmet-off moment
 

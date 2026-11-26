@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:biomass",
+  "kind": "stored",
+  "unit": "BU",
+  "start": 0,
+  "min": 0,
+  "max": 100000,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

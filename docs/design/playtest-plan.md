@@ -91,6 +91,7 @@ Also record, once per session:
 | Breathable | Try to reach Breathable with low pressure and high O2% | The Monitor shows O2 partial pressure clearly, and the failure is explained |
 | Ending cards | Reach the beacon with each fauna outcome (debug commands allowed) | Each card reads as a description, not a grade |
 | Thresholds | Compare gate numbers across standard, classroom, and `group.size` = 4 | Identical in all three |
+| Phase 3 CO2 rule A | Seed biomes; then over-scrub CO2 on purpose in a second run | CO2 and O2 move as a mirrored pair; scrubbing lowers CO2 + O2; the over-scrub run can still reach the window with the O2 generator; O2 reaches the window by ~sol 25 of Phase 3 with no grind |
 
 ## Two separate passes (DESIGN.md, Fidelity levels)
 

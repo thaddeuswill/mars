@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:pressure",
+  "kind": "stored",
+  "unit": "kPa",
+  "start": 0.6,
+  "min": 0,
+  "max": 200,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

@@ -85,7 +85,7 @@ Iteration with subject-matter and customer review at **every** phase, not only a
 
 | Artifact | Subject Matter Expert reviews | User (customer) reviews | When |
 |---|---|---|---|
-| Objectives and criteria (0.6), NGSS map (6.1) | Science in each criterion; NGSS codes word for word | Signs off the goal set (stable, TEAM.md 8.1) | Done once in Stage 1; again only through the consensus process; NGSS verbatim check before the educator guide is published |
+| Objectives and criteria (0.6), NGSS map (6.1) | Science in each criterion; NGSS codes word for word | Signs off the goal set (stable, TEAM.md 8.1) | Done once in Stage 1; again only through the consensus process. NGSS word-for-word check: **done** (SME round 3) |
 | Forecasts (F1–F10, FI-1–FI-4) and their explanations | Every question, distractor, and explanation before it's built; **external science teachers** review distractors and explanations before Stage 3 (teacher review pack) | Plays them in the Stage 3 slice (F1, F4a, F2) and in the Stage 5 run (**a full classroom-preset run plus spot checks**, user decision round 3); says which feel like a test | Before build; after each playtest that touches them |
 | Journal entries, Earth links, Shift Briefings, worked example card | Every science line | Reads them in play (Lens A / Lens B walkthrough) | Before build; after each playtest |
 | Keeper's Report questions and rubrics | Answer keys and sample answers; **external science teachers** review the transfer-task key and rubric anchors before Stage 3 | Reads them; rubric check by two raters on playtest answers | Stage 3 (Report 1), Stage 4 (rest), Stage 5 (rubric calibration) |
@@ -542,8 +542,8 @@ Where the game simplifies, the journal says so. This keeps the learning honest. 
 
 | ID | Phase / trigger | Brings back | Mixed with | Goals |
 |---|---|---|---|---|
-| FI-1 | P2 / first dust storm warning after the first emitter runs | Storms cut solar power (F1) | Warming rate (A3) | C1, A3, B1, B3 |
-| FI-2 | P3 / first polar winter warning | Pressure sets water's boiling point (F4a, F4b) | Seasonal pressure dip (B2) | A2, B2, B3 |
+| FI-1 | P2 / first dust storm warning after the first emitter runs (stem names the solar-powered emitters, SME round 3) | Storms cut solar power (F1) | Warming rate (A3) | C1, A3, B1, B3 |
+| FI-2 | P3 / first passing low-pressure weather warning (SME round 3: a polar-winter dip can't happen at equilibrium) | Pressure sets water's boiling point (F4a, F4b) | A short weather-driven pressure dip | A2, B3 |
 | FI-3 | P3 / first solar event in Phase 3 | Air absorbs radiation (F2, F7) | Helmet-off life on the surface | A4, B3 |
 | FI-4 | P3 / dust storm warning during a hold | Storms cut solar power (F1) | Algae vats and CO2 (A5) | C1, A5, B1, B3 |
 
@@ -654,6 +654,17 @@ Decided 2026-11-26: the vertical slice includes a thin Phase 1 learning layer so
 | 8 | **Misconception** (multiple choice) | A2 | Post-test "water always boils at 100 °C" item | Same | MS-PS1-4 |
 | 9 | **Cue-free "spontaneous use"** (open response) | B1, B2, B5, D2 | New: an Earth news-style scenario that names no science idea, e.g. "A town wants to drain a wetland to build a factory. What should they think about before they decide?" | Whether the student *chooses on their own* to use systems reasoning (side effects, loops, trade-offs) | — (SEP: Constructing explanations; CCC: Systems and system models) |
 
+**Keys and science check (SME round 3, `round3-review.md` §4.4):**
+
+| Item | Key notes |
+|---|---|
+| 1–4 | Same as the post-test anchors; checked when those items are written |
+| 5 | Earth lake or farm link diagram: accept links with correct direction, e.g. fertilizer → algae growth (+); algae → water O2 at night (−) (textbook eutrophication; citation **unverified**) |
+| 6 | Loop type in a new Earth example. Use **ice–albedo** (reinforcing) or **wetland loss → less humidity → more wetland loss** (reinforcing): both are the examples in HS-ESS2-2's clarification statement (verified) |
+| 7 | "21 % O2 is always breathable": **false**; the answer turns on O2 partial pressure. Distractor: "true, because Earth's air is 21 %" |
+| 8 | "Water always boils at 100 °C": **false**; lower on mountains (Everest about 72 °C, calc) |
+| 9 | Wetland-drain scenario: well chosen (HS-ESS2-2 names wetland loss as a feedback example). Anchor for a 4: names the humidity–wetland loop, or the loss of a carbon store (wetland soils store carbon: **unverified** this round) |
+
 **Item 9 rubric (naturalization, 1–4)**, added to `docs/learning/rubrics.md` when the items are written:
 - 4: Unprompted, uses at least two systems ideas (a side effect with its cause chain, a loop, or a trade-off with a cost), correctly applied.
 - 3: Unprompted, uses one systems idea correctly.
@@ -686,7 +697,7 @@ Chapter 9 names four purposes. Map of each assessment piece (✅ serves it, 🟡
 
 **Gaps:**
 - **(b) Tailoring is deliberately thin.** We adapt hints and fading, not content or path, because we don't build an automatic learner model at launch (TEAM.md §3, "adaptive"). Accepted for launch.
-- **(a) "Who needs help?" isn't flagged.** The overview lists data but doesn't point at students. Proposed rule-based "needs a look" flag in the class overview, never shown to students and never a grade: own forecast accuracy below 1 in 3 after 3 forecasts in a phase; the same failure cause recurring twice after the student's own fix; a report unsent for more than 2 sessions; no own events for a whole session while present. (Handoff to the Technical Lead, who is checking cost.)
+- **(a) "Who needs help?" isn't flagged.** The overview lists data but doesn't point at students. Proposed rule-based "needs a look" flag in the class overview, never shown to students and never a grade: own forecast accuracy below 1 in 3 after 3 forecasts in a phase; the same failure cause recurring twice after the student's own fix; a report unsent for more than 2 sessions; no own events for a whole session while present. Numbers live in `data/mars/learning/flags.json` (ARCHITECTURE.md §8.6; teacher-only, never shown to students, never exported as a grade). Starting values I set: `forecast_accuracy_below`: 0.33 after `min_forecasts`: 3 per phase; `repeat_after_own_fix`: 2; `report_unsent_sessions`: 2 (or past `interrupt.debriefMaxDefers`); `no_own_events_sessions`: 1 while present. Tune after Stage 3.
 - **(c) Reflections get no feedback on quality in game.** By design (no automatic scoring of free text); the teacher returns rubric scores. The educator guide asks teachers to return them before the next debrief.
 
 ### 3.8 Behavioral indicators
@@ -1169,6 +1180,8 @@ The teacher needs to answer three questions: *Where is each group? What has each
 
 **Technical Lead additions (ARCHITECTURE.md §8.6, round 2): all accepted.** `forecasts_late` in `players.csv` (late answers are a signal of prompts arriving mid-task; not scored); `void` as a forecast result (never happened, skipped by "set phase", or rolled back; not scored and not counted as expired); `names_replaced` in `reflections.csv` (tells the teacher to read that answer with care). My round-2 additions for the Technical Lead to add: `forecasts_interleaved_answered`, `forecasts_interleaved_correct`, `forecasts_scaffolded`, `worked_example`, `briefings_opened` (players.csv), and the "needs a look" flags (3.7) in the class overview, not the export.
 
+**Technical Lead round-3 columns: all accepted.** `forecasts_replay` (players.csv: forecasts re-issued after a rollback; shown, never scored); `guidance_changes` (planets.csv: how often the level changed mid-unit, so evidence can be read under the right conditions); `third_party_mods` (planets.csv: whether Mekanism and Create were on; context only). Printable ID slips carry **IDs only**; the teacher writes names by hand if needed, and the slips stay in the classroom.
+
 **Tuning numbers I own** (data, not code; starting values, to be checked against Stage 3 action-log counts):
 
 | Key | Value | Meaning |
@@ -1217,7 +1230,7 @@ Decided 2026-11-26: no LMS integration before release. After release it is **opt
 
 ## 6. NGSS Alignment
 
-Mapped to NGSS performance expectations (PEs), with the science practices (SEPs) and crosscutting concepts (CCCs) the game exercises. The SME reviewed every code on 2026-11-26 ([docs/science/ngss-verification.md](docs/science/ngss-verification.md)). The session's network blocked nextgenscience.org, so codes were checked through state mirrors and search copies. **Verify each code word for word against the official NGSS text before the educator guide is published** (about 30 minutes with normal web access).
+Mapped to NGSS performance expectations (PEs), with the science practices (SEPs) and crosscutting concepts (CCCs) the game exercises. The SME reviewed every code on 2026-11-26 and, in round 3, **checked all of them word for word on nextgenscience.org** ([docs/science/ngss-verification.md](docs/science/ngss-verification.md), "Round 3"). Two assessment boundaries matter for how we use them: MS-ESS1-3 excludes recall (so A1 is a data task), and HS-ESS3-6 is limited to using published model results (so the debrief's published Earth data carries it, not the game).
 
 ### 6.1 Performance expectations
 
@@ -1229,8 +1242,8 @@ Mapped to NGSS performance expectations (PEs), with the science practices (SEPs)
 | A4 Radiation | — (introduce as a concept) | HS-PS4-4 (EM radiation only; magnetic shielding is beyond this PE) |
 | A5 CO2/O2 exchange | MS-LS1-6 | HS-LS2-5; HS-ESS2-6 (needs carbon reservoirs on the Monitor) |
 | B1 / B2 Systems and feedback | MS-LS2-4 (B1) | HS-ESS2-2 |
-| B3 Prediction from models | — (practice, see SEPs) | HS-ESS3-6 |
-| B4 / B5 Trade-offs and consequences | MS-ETS1-2 | HS-ETS1-3; HS-LS2-6 (stability and change) |
+| B3 Prediction from models | — (practice, see SEPs) | HS-ESS3-6 (via published Earth data in debriefs; the PE's boundary limits it to published model results) |
+| B4 / B5 Trade-offs and consequences | MS-ETS1-2; related for B5: MS-ESS3-3 (only with an Earth side-effect example) | HS-ETS1-3; HS-LS2-6 (stability and change) |
 | C1 Resource planning | MS-ETS1-1, MS-ETS1-2 | HS-ETS1-1 (only when paired with an Earth challenge in the transfer task or a debrief), HS-ETS1-2 |
 | C2 Design, test, improve | MS-ETS1-4; MS-ETS1-3 (only if failure reports let players compare fixes, else related) | HS-ETS1-2, HS-ETS1-4 (moderate). Not HS-ETS1-3, which belongs to B4/B5 (SME round 2) |
 | C3 Data use | — (practice only: Analyzing and interpreting data) | — (practice only) |
@@ -1242,7 +1255,7 @@ Mapped to NGSS performance expectations (PEs), with the science practices (SEPs)
 - HS-ESS2-6 needs the Monitor to show carbon per reservoir at high school depth (Lead Game Designer).
 - HS-LS2-6 needs a claim-evaluation question in the Phase 3 debrief (now in Keeper's Report 3, HS variant).
 - HS-ESS2-2 would be a near-exact fit with an ice–albedo feedback in the game (optional; Lead Game Designer).
-- MS-ESS3-3 for B5 was suggested but its wording is **unverified**; not added.
+- MS-ESS3-3 for B5: wording now verified (SME round 3); listed as **related**, not aligned, because it fits only with an Earth side-effect example (cta.md §4).
 
 ### 6.2 Science and engineering practices (SEPs)
 

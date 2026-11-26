@@ -14,7 +14,7 @@ Order of first play: Shift Briefing 3 → first flora (F8, flora Earth link) →
 | `type` | Shift Briefing |
 | `trigger` | Keeper's Report 2 sent or deferred (Phase 3 begins) |
 | `delivery` | BELL briefing card after the report screen (one sequence); copy in the journal |
-| `text.ms` | **Shift Briefing.** This shift: hold the balance. Plants add O2 and take in CO2. Keep O2 inside the Air window: too little and you can't breathe, too much and fires start. Holding is harder than climbing. Notice what you give up to hold the balance. |
+| `text.ms` | **Shift Briefing.** This shift: hold the balance. Plants turn CO2 into O2. Keep O2 inside the Air window: too little and you can't breathe, too much and fires start. Holding is harder than climbing. Notice what you give up to hold the balance. |
 | `text.hs` | Same as MS |
 | `goal_ids` | A5, B4 |
 | `instructional_purpose` | Advance organizer: the new job is a band, not a number; names the trade-off before it bites |

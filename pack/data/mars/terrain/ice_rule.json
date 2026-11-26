@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "about": "Ice-to-water rule (DESIGN.md §2; SME docs/science/round2-review.md §1.1; ARCHITECTURE.md 2.5). Rules are checked in order; the first match wins. Thresholds are plain numbers and never scale.",
+  "boiling_point": "mars:boiling_point",
+  "rules": [
+    { "result": "stay_ice",     "when": { "local_temp_c_at_most": 0.0 } },
+    { "result": "sublimate",    "when": { "pressure_kpa_below": 0.611657 } },
+    { "result": "boil_away",    "when": { "local_temp_at_or_above_boiling_point": true } },
+    { "result": "short_puddle", "when": { "pressure_kpa_below": 5.0 } },
+    { "result": "stable_water", "when": {} }
+  ],
+  "short_puddle_dry_sols": 0.1,
+  "short_puddle_dry_sols_note": "Invented balance number (DESIGN.md threshold-vs-curve table). Must stay below 0.25 sol, the F4a outcome-check delay."
+}

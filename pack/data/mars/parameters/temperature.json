@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:temperature",
+  "kind": "stored",
+  "unit": "°C",
+  "start": -60,
+  "min": -120,
+  "max": 60,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

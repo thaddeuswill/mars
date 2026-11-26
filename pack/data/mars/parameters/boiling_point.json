@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "mars:boiling_point",
+  "kind": "derived",
+  "unit": "°C",
+  "formula": "antoine",
+  "input": "mars:pressure",
+  "antoine": {
+    "pressure_unit": "mmHg",
+    "a": 8.07131,
+    "b": 1730.63,
+    "c": 233.426,
+    "kpa_to_mmhg": 7.50062,
+    "valid_from_kpa": 0.611657,
+    "below_valid": "no_liquid"
+  },
+  "source": "Antoine equation for water, log10(P[mmHg]) = A - B / (C + T[°C]); standard coefficients (1-100 °C range). Matches the SME's calculated table (docs/science/round2-review.md §1.1: 0.7 kPa -> 2 °C, 5 kPa -> 33 °C). Below the triple point (0.611657 kPa) there is no liquid phase, so no boiling point."
+}

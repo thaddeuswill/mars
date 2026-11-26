@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "mars:co2_partial",
+  "kind": "stored",
+  "unit": "kPa",
+  "start": 0.57,
+  "min": 0,
+  "max": 200,
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+}

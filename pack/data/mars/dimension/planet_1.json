@@ -1,0 +1,18 @@
+{
+  "type": "mars:mars",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "mars:regolith_flats",
+      "lakes": false,
+      "features": false,
+      "layers": [
+        { "block": "minecraft:bedrock", "height": 1 },
+        { "block": "minecraft:stone", "height": 56 },
+        { "block": "minecraft:red_sandstone", "height": 4 },
+        { "block": "minecraft:red_sand", "height": 3 }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

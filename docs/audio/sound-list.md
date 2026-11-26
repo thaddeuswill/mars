@@ -55,7 +55,7 @@
 | AU-W04 | Power drop | `interior.power_drop` | One-shot, Int | Solar output below demand | Power drops | Lamp flicker, Monitor power row, dusty panel texture | C1 | 3 | Spec'd |
 | AU-W05 | Dosimeter clicks (slow) | `suit.dosimeter.click` | One-shot ×3, Suit, rate-driven | **Dose rate** = `mars:surface_radiation` (already pressure-attenuated) × local shielding | Dosimeter clicking | HUD trefoil pulse + dose number | A4 | 3 | Spec'd (§6.2) |
 | AU-W06 | Dosimeter clicks (fast) | `suit.dosimeter.click_fast` | Same files, separate event for subtitle | Dose rate ≥ 0.4 | Dosimeter clicking fast | Same | A4 | 3 | Spec'd |
-| AU-W07 | Dosimeter background ticks | `suit.dosimeter.background` | One-shot, Suit | Pressure < 5 kPa, outside, fading to 0 at 30 kPa | Dosimeter ticks | Dose number | A4 | 3 | Spec'd **[SME]** |
+| AU-W07 | Dosimeter background ticks | `suit.dosimeter.background` | One-shot, Suit | 0.1/s outside below 5 kPa, fading to a **floor of 0.02/s** (never zero) above 30 kPa and inside sealed volumes; rates invented | Dosimeter ticks | Dose number | A4 | 3 | Spec'd, SME ✓ (round 3) |
 | AU-W08 | Ground creak (collapse warning) | `terrain.ground.creak` | One-shot ×3, Con | Ground-ice lens melt state (local) | Ground creaks | `regolith_cracked` texture, drip particles | B5, C2 | 4 | Spec'd (§8.4) |
 | AU-W09 | Ground collapse | `terrain.ground.collapse` | One-shot ×2, Con + Ext | Collapse event | Ground collapses | Ground sinks, dust puffs | B5, C2 | 4 | Spec'd |
 | AU-W10 | Flash puddle boils away | `water.puddle_boil` | One-shot 2–4 s, Ext | Local temp at or above the boiling point at current pressure (`mars:boiling_point`) | Puddle boils away | Boiling puddle (4 frames), dense wisps | A2 | 3 | Spec'd |
@@ -124,7 +124,7 @@ Each "set" = start, running loop, worn, failed (wind-down), repaired, unless not
 | AU-M08 | Dust-off station jets | `machine.dust_off.blast` | One-shot ×2, Int | Player uses station | Air jets blast dust | Dust particles off suit; exposure icon clears | C1, C2 (perchlorate) | 3 | Spec'd |
 | AU-M09 | Atmospheric processor set | `machine.atmo_processor.*` | Set, Ext | Machine state | Processor thumps | Status lamp | B1, B4 | 4 | Needed |
 | AU-M10 | Super-greenhouse emitter set (vent hiss, no puff) | `machine.emitter.*` | Set, Ext | Machine state | Emitter vents hiss | Heat shimmer, vent glow | A3 | 4 | Spec'd |
-| AU-M11 | Ice extractor (deep-crust water extractor) set (drill thump) | `machine.extractor.*` | Set, Ext | Machine state | Drill thumps | Status lamp | A2 | 4 | Needed |
+| AU-M11 | Ice extractor set (drill thump) | `machine.extractor.*` | Set, Ext | Machine state | Drill thumps | Status lamp | A2 | 4 | Needed |
 | AU-M12 | Algae vat bubbling | `machine.algae_vat.*` | Set, rate-driven, Int/Ext | **Vat output** | Algae vat bubbles | Bubble particles | A5 | 4 | Spec'd |
 | AU-M13 | Carbon scrubber set + carbonate crumble | `machine.scrubber.*` | Set, Ext | Machine state; scrubber output | Scrubber whirs | Carbonate deposit grows | A5 | 4 | Needed |
 | AU-M14 | Meltwater treatment set | `machine.meltwater_treatment.*` | Set, Int | Machine state | Filter pump runs | Status lamp | C2, A2 | 4 | Needed |
@@ -192,6 +192,32 @@ All in the **neutral** category. No roars, growls, screeches, or screams.
 | **Total** | **99** | **84** | **9** | **3** | **3** | **0** | **0** |
 
 Rows AU-W12 and AU-W17 are deliberate silences (no file). AU-M16 and AU-E03 make no new file. Several rows are sets (variants, machine states).
+
+## Production estimate and cut tiers (Lead Artist's estimate, round 3)
+
+The Producer's budget (budget.md §2) used about 2 h per sound, **~230 h**. My estimate by type, recorded or synthesized, including variants, pre-filtered versions, subtitles, and `sounds.json` entries:
+
+| Group | Rows that need files | Hours per row | Hours |
+|---|---|---|---|
+| Ambient beds, pre-filtered (A01–A03, A09, A14) | 5 | 4 | 20 |
+| Other ambience (A04–A08, A10–A13) | 7 | 2 | 14 |
+| Weather, hazards, terrain (W, minus the 2 silences) | 15 | 2 | 30 |
+| Suit and player (S01–S05, S07, S08) | 7 | 2 | 14 |
+| Block sound sets (S06, ~12 materials) | 12 | 1.5 | 18 |
+| Alarms (L; designed and tested on laptop speakers) | 3 | 3 | 9 |
+| Feedback and UI (U) | 15 | 2 | 30 |
+| Machine full sets (start, loop, worn, fail, repair) | 10 | 5 | 50 |
+| Machine simple loops and one-shots | 8 | 2 | 16 |
+| Thawlings (F; voice design needs care) | 13 | 2.5 | 33 |
+| Ending (E01, E02) | 2 | 2 | 4 |
+| Loudness and mix pass, laptop-speaker and headphone checks, subtitle review | — | — | 22 |
+| **Total** | | | **~260 h** |
+
+**Revision: ~260 h, about 30 h more than the Producer's ~230 h**, mainly from machine sets (5 states each) and the pre-filtered beds. Music (AU-X01, 32 h) is budgeted separately.
+
+**Primary vs. secondary (for cut item 5: "secondary sounds made as simple synthesized versions").** Every sound keeps its subtitle and visual twin either way.
+- **Primary (never simplified):** all alarms (L), all feedback cues AU-U01–U09, the pressure beds AU-A01–A03 and AU-A14, AU-A04, AU-A06, AU-A09, AU-A11, the Outgasser AU-M01–M03, AU-M04 (filter whine teaches wear), AU-M08, AU-M10, AU-M12, AU-M16, AU-M18, AU-M19, dosimeter AU-W05–W07, storm AU-W01, AU-W02, AU-W04, ice and fire AU-W08, AU-W10, AU-W13–W16, helmet-off AU-S02–S04, airlock AU-S07–S08, thawlings AU-F01, F03, F05, F06, F08, F09, F10, F12, ending AU-E01–E02. These carry a learning cue or the emotional peak.
+- **Secondary (may be simple synthesized versions):** AU-A05, A07, A08, A10, A12, A13; AU-W03, W09, W11; AU-S01, S05, S06; AU-M05, M06, M07, M09, M11, M13, M14, M15, M17, M20; AU-F02, F04, F07, F11, F13; AU-U10–U15. About **105 h** at full effort; simple versions take about half, so cut item 5 saves **~50 h** (the Producer estimated ~40).
 
 ## Stage 2 prototype minimum
 AU-A01 (thin wind with the pressure filter) and AU-M01 (Outgasser drone), as synthesized placeholders, so the prototype can test whether players notice the outside getting louder as pressure rises. Everything else can wait for Stage 3.

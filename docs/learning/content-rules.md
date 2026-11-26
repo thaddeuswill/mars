@@ -14,7 +14,7 @@ Feasibility of each check is the Technical Lead's call; rules they can't automat
 
 | ID | Rule | What the check reads | Prove it can fail |
 |---|---|---|---|
-| **CR-F1** | **Every forecast's keyed answer matches the current physics.** Run the forecast's situation in the simulation from its trigger state for the forecast's horizon, with no player action (or with the action the question states), and compare the outcome with the keyed choice | Forecast JSON (`trigger`, `horizon_sols`, `keyed_choice`, `outcome_check`) + Index simulation + gate and physics data | Change the ice-to-water threshold in a test datapack so F4a's ice melts instead of sublimating: CR-F1 must fail on F4a and print the simulated outcome |
+| **CR-F1** | **Every forecast's keyed answer matches the current physics.** Outcome checks about water count frozen water as "no liquid" (F4a). Also checked: every **event** a forecast rests on can physically happen in the phase where it fires (SME round 3: the polar-winter dip was impossible at equilibrium). Run the forecast's situation in the simulation from its trigger state for the forecast's horizon, with no player action (or with the action the question states), and compare the outcome with the keyed choice | Forecast JSON (`trigger`, `horizon_sols`, `keyed_choice`, `outcome_check`) + Index simulation + gate and physics data | Change the ice-to-water threshold in a test datapack so F4a's ice melts instead of sublimating: CR-F1 must fail on F4a and print the simulated outcome |
 | CR-F2 | Every forecast has exactly one keyed answer, and the keyed answer is the only choice whose `outcome_check` passes | Forecast JSON | Key two choices on a copy of F1 |
 | CR-F3 | Every forecast's trigger can fire before its outcome is visible by at least the minimum lead (≥ ~1 sol of the active preset; LEARNING.md 4.6 rule 7), in **both** standard and classroom presets | Trigger and outcome timing from the simulation under each preset | Shorten F1's warning to 0.2 sol |
 | CR-F4 | Every forecast is reachable: some solver run reaches its trigger (PROCESS.md: "every gate and story beat reachable") | Solver playthrough log | Put F5's trigger behind an unreachable gate |
@@ -46,7 +46,7 @@ Trigger: any change to gate data (`data/mars/gates/`), Index contribution or phy
 | **CR-H2** | **A hint never states the answer**: it doesn't name the exact block, recipe, or setting that fixes it (banned-token list per failure type, written by the Lead Game Designer) | Language files + per-type banned tokens | Write "Place a seal block at x" into a hint |
 | CR-H3 | The cause a failure report names is the simulation's actual largest cause (the same one the Monitor cause breakdown lists first) | Failure event cause vs. Monitor cause list | Make the report name a minor cause |
 | CR-H4 | Hint levels rise only after a repeat of the same cause (adaptive feedback); the outcome form appears only after the viewing player's own fix held (LEARNING.md 4.8) | Per-player fade state + event history | Show the outcome form to a player with no own fix |
-| CR-H5 | Shift Briefings and worked-example lines name only machines and values that exist and are unlocked at that moment | Briefing and card text keys vs. unlock state | Name the atmospheric processor in the P1 briefing |
+| CR-H5 | Shift Briefings and worked-example lines name only machines and values that exist and are unlocked at that moment. **Partly automatable (accepted, Technical Lead round 3):** each line declares the IDs it names in a `names` field and the solver checks them; free prose without declared IDs stays on the manual list (§5) | `names` field vs. unlock state | Name the atmospheric processor in the P1 briefing |
 | CR-H6 | Drift event alerts name a real active drift event | Drift events vs. alert messages | Send an alert with no event |
 
 ## 3. Record and evidence rules
@@ -72,6 +72,7 @@ Trigger: any change to gate data (`data/mars/gates/`), Index contribution or phy
 ## 5. Stays manual (can't be automated well)
 
 - Science correctness of explanations and Earth links (SME review, LEARNING.md evaluation loop).
+- CR-H5 for free prose that declares no `names`.
 - Whether a hint is *useful* (playtest).
 - Tone, fairness of the D1 voices, and "no right answer" framing (Lead Game Designer, SME, me).
 - Rubric calibration (two raters, playtest answers).

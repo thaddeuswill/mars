@@ -109,7 +109,8 @@ On a class server (several group planets, ARCHITECTURE.md §6.2), players who ar
 
 | Element | Spec |
 |---|---|
-| Place | A small indoor hall on Earth: a window with a blue sky and green hills, benches, a Mars globe, a wall chart "Earth vs. Mars" (pressure 101 kPa vs. 0.6 kPa; −60 °C vs. about 15 °C) **[verify Earth mean temperature wording with SME]** |
+| Place | A small indoor hall on Earth: a window with a blue sky and green hills, benches, a Mars globe, a wall chart "Earth vs. Mars": *"Average temperature: about 15 °C on Earth, about −60 °C on Mars. Air pressure: 101 kPa vs. 0.6 kPa."* (SME round 3: accurate, NASA fact sheets) |
+| Structure (with the Lead Artist) | One room about 15 × 11 × 6 blocks in the vanilla overworld (Technical Lead: ~3–4 developer days); one window wall, benches for 30, the join terminal by the door, the wall chart opposite the window. Built from our own textures, matching the dome's palette so it reads as "the program" |
 | Signs (all optional to read) | "Watch teams are assigned by your instructor." / "Have a team code? Use the terminal." / "Your watch starts when your team is called." |
 | Join | A terminal block runs `/mars join <code>` (ARCHITECTURE.md §6.2). Assignment by the teacher works the same way |
 | Safety | No damage, no hunger, no hazards, no building, no inventory carried to Mars (cleared on assignment) |

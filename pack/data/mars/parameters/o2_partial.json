@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:o2_partial",
+  "kind": "derived",
+  "unit": "kPa",
+  "formula": "product_percent",
+  "inputs": ["mars:pressure", "mars:o2_fraction"],
+  "source": "O2 partial pressure = pressure x O2 fraction / 100 (DESIGN.md §1)."
+}

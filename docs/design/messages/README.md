@@ -41,6 +41,37 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 
 **Arguments** in `{braces}` are filled by the game (e.g. `{hold_sols}` is 3 in standard play and 1 in classroom mode). Text never hard-codes a number that a preset changes.
 
+## Lock points, reveals, rests_on, and names (data fields for the Technical Lead)
+
+These fields go in every entry's datapack JSON (ARCHITECTURE.md §2.6.2). They are listed here once so they can be checked together (content rules CR-F9, CR-H5; threshold-vs-curve check).
+
+**Forecasts**
+| Forecast | `lock` (closes at the first of) | `reveals` (held until the lock) | `rests_on` (thresholds the correct answer depends on) |
+|---|---|---|---|
+| F1 | Storm onset | `log.storm.onset`; solar output drop; Monitor solar cause line "Dust on panels" | Storm solar cut > 0 (balance §2) |
+| F2 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; HUD dose meter; Monitor dose read-more | Shelter factor < open-ground factor (balance §6a) |
+| F3 | 1 sol after Start (Monitor open shows the card first) | Monitor pressure cause line "Outgasser"; `example.outgasser` step 5 result | Outgasser rate > 0 and ≪ Earth pressure |
+| F4a | Ice block changes state | Ice change itself; F4a journal page; `earth.f4a.sublimation` | Pressure < 5 kPa; boiling point at pressure; puddle drying < 0.25 sol |
+| F4b | Ice block changes state | Ice change; `beat.09.thaw` journal entry; `journal.gate.thaw` | Pressure ≥ 5 kPa at the Thaw (~22 kPa); boiling point > local temperature |
+| F5 | 1 sol after Start (card first on Monitor open) | Monitor temperature cause line "Emitter"; `earth.f5.greenhouse` | Emitter contribution > 0 |
+| F6 | New machine has run 0.25 sol | Fauna page F before/after; raid log lines | Raids ∝ signature (balance §6) |
+| F7 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; expected dose read-more | Pressure ≥ 5 kPa; atmosphere factor < 1 (balance §6a) |
+| F8 | 1 sol after the kit (card first on Monitor open) | Monitor O2 and CO2 cause lines; carbon flow view | Rule A swap (DESIGN.md Phase 3 composition rule) |
+| F9 | O2 reaches 23 % or 0.5 sol | `beat.15.o2_fire`; Air window "Fire risk in…" line | Fire band 23 % |
+| F10 | Temperature trend turns down or 0.5 sol | Monitor temperature trend; `failure.emitter_wear` | Emitter contribution needed to hold temperature |
+
+**Beats and messages that could give a forecast away:** `beat.04.storm_warning` (written so it doesn't: no mention of solar), `log.solar.*` (only `shelter` reveals F2/F7, and it is the lock), `example.outgasser` (never states the result), Shift Briefings (no forecast answers: checked).
+
+**`names` (machines and values a line names; CR-H5: must exist and be unlocked when shown)**
+| Entry | `names` |
+|---|---|
+| `landing.checklist` | suit O2, Planetary Monitor, pressure, air mix, seal kit, battery, airlock, dust-off station, journal |
+| `briefing.shift1` | O2, water, power, life support |
+| `briefing.shift2` | atmospheric processor, super-greenhouse emitter, pressure, temperature (unlocked at Phase 2 begins: OK) |
+| `briefing.shift3` | O2, CO2, Air window (Phase 3 begins: OK) |
+| `example.outgasser` | Regolith Outgasser, regolith, battery, Monitor pressure causes |
+| `example.processor` | atmospheric processor, Outgasser |
+
 ## Word counts and reading time (essential classroom text)
 
 Planning rate: 100 words per minute (Lead Instructional Designer's conservative assumption; story bible §7.3). Budget: 1,500 words (15 minutes) for essential story text across the unit.
