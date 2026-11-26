@@ -1,12 +1,14 @@
 # Forecasts, Reflections, Earth Links, and Keeper's Record
 
-**Owner:** Lead Instructional Designer · **Status:** Draft 1, 2026-11-26 · **Depends on:** [LEARNING.md](../../LEARNING.md), [story bible](../design/story-bible.md), [science review](../science/accuracy-review.md)
+**Owner:** Lead Instructional Designer · **Status:** Draft 2, 2026-11-26 (interleaved forecasts, fading, Record triggers that reward skill, flow-feedback wording rules) · **Depends on:** [LEARNING.md](../../LEARNING.md), [story bible](../design/story-bible.md), [science review](../science/accuracy-review.md)
 
 This file specifies the learning content that lives in the game: what each forecast, reflection question, Earth link, and Keeper's Record page must do. The Lead Game Designer writes the final in-game wording in the story bible's voices; the SME checks every science claim; I review the result against the goal and criterion.
 
 Every entry here becomes an entry in the shared feedback format (DOCUMENTATION.md 5.1) when it's built. Fields not listed here (`id`, `delivery`, `motivational_purpose`, `status`) are filled in by the Lead Game Designer and Technical Lead.
 
 **Status of science content:** all sample answers and explanations are **draft, SME check needed** unless marked otherwise. Nothing here may ship as fact without that check.
+
+**Pending SME round-2 review (not yet applied).** The SME's review `docs/science/round2-review.md` §3.1 arrived while this draft was written. It finds all F1–F10 keyed answers accurate, three distractors partly true (F1, F4a, F9), two explanations needing a nuance (F6, F8), and two triggers to change: **F4a almost never fires** (pressure passes the triple point on about sol 1), recommended trigger "warmed ice while pressure < 5 kPa"; **F7** should fire once pressure ≥ 5 kPa. I haven't rewritten F1–F10 here; that's the next pass, after reading the full review. Content-rule CR-F1 (`content-rules.md`) would have caught the F4a problem automatically.
 
 ---
 
@@ -20,6 +22,9 @@ Every entry here becomes an entry in the shared feedback format (DOCUMENTATION.m
 - The result is shown at the next natural pause, first in the queue: right or wrong, plus a 1–2 sentence explanation either way.
 - At least 3 forecasts per phase, so the B3 criterion (own accuracy per phase) has enough data.
 - HS variant adds a "why" follow-up choice. Only the main question counts toward B3; the "why" counts toward the goal's Keeper's Record page.
+- **One answer per player per forecast**, locked on submit; late, expired, and replayed forecasts don't score (LEARNING.md 3.10).
+- **Scaffold fading** (LEARNING.md 4.8): Phase 1 questions add a "Check: …" pointer to the Monitor value; Phase 2 only on new topics (F5); Phase 3 none. Pointers return for a player whose accuracy in the phase is below 1 in 3 after 3 forecasts.
+- **Result wording** (LEARNING.md 4.5, feedback for flow): a miss reads "The planet did X. Here's why." plus the Monitor line that would have shown it. Never "Wrong!". A hit gets plain acknowledgment.
 
 | ID | Phase / trigger | Question (MS) | Choices (correct first here; shuffle in game) | HS "why" follow-up | Goals | Notes |
 |---|---|---|---|---|---|---|
@@ -39,6 +44,19 @@ Count per phase: P1 4 (F1, F2, F3, F4a), P2 4 (F4b, F5, F6, F7), P3 3 (F8, F9, F
 
 **Stage 3 vertical slice:** F1 and F4a (and F2 if the radiation spike is in the slice).
 
+### 1.1 Interleaved forecasts (FI): draft stems, science pending the SME
+
+Design: LEARNING.md 2.3. Each brings back an earlier idea in a new situation, with **no topic label**. Always followed by the full explanation, right or wrong (4.8). Counts toward the B3 tally of the phase it's asked in. A correct FI also fills the source goal's Keeper's Record page. **Every stem, choice, and key below is pending the SME**; don't build from it yet.
+
+| ID | Phase / trigger | Stem (MS, draft) | Intended key (pending SME) | Distractors (draft) | Source idea | Goals | Depends on |
+|---|---|---|---|---|---|---|---|
+| FI-1 | P2 / first dust storm warning after the first emitter runs | "A dust storm arrives in about a sol. What happens to the planet's warming while it lasts?" | Warming slows | Warming speeds up · No change | Storms cut solar power (F1) | C1, A3, B1, B3 | Emitters (or their power) are affected by solar loss. **If emitters don't draw solar power, swap the stem to processors and pressure** (Lead Game Designer) |
+| FI-2 | P3 / first polar winter warning | "Polar winter is coming. Pressure will drop a little. What happens to the temperature water boils at?" | It drops a little | It rises · It doesn't change | Pressure sets the boiling point (F4a, F4b) | A2, B2, B3 | Polar winter drift event (balance sheet §4); Monitor shows boiling point |
+| FI-3 | P3 / first solar event in Phase 3 | "A solar event is coming. The air is much thicker than at your first one. Compared with then, how much radiation reaches the ground?" | Much less | More · The same | Air absorbs radiation (F2, F7) | A4, B3 | Spikes weaken as the atmosphere thickens (DESIGN.md); SME on whether helmet-off surface exposure is safe enough to say anything more |
+| FI-4 | P3 / dust storm warning during a hold | "A storm will cut solar power for about a sol. Your algae vats run on solar. What will CO2 do?" | Rise | Fall · Stay the same | Storms cut solar power (F1) | C1, A5, B1, B3 | Balance sheet §4: storm → vats slow → CO2 +0.15 kPa/sol; needs a ≥ 1 sol storm warning in Phase 3 (Lead Game Designer) |
+
+Phase 2: FI-1 always. Phase 3: pool of FI-2, FI-3, FI-4; each player gets the first two whose events fire. Counts per phase become P1 4, P2 5, P3 5.
+
 ---
 
 ## 2. Keeper's Report reflections
@@ -47,12 +65,20 @@ One question per report. The player's answer is part of the report sent to Earth
 
 | Report | Gate | MS question | HS question | Goals | Rubric |
 |---|---|---|---|---|---|
-| 1 | Phase 2 begins | "What almost failed in the dome, and what would you do differently next time?" Sentence starter: "The ___ almost failed because ___. Next time I would ___." | Same, plus: "What did the Monitor show that helped you find the cause?" | C2, C1, C3 | Not rubric-scored; C2 and C3 evidence for the Keeper's Record and teacher check-in |
+| 1 | Phase 2 begins | "What almost failed in the dome, and what would you do differently next time?" Sentence starter (shown): "The ___ almost failed because ___. Next time I would ___." | Same, plus: "What did the Monitor show that helped you find the cause?" | C2, C1, C3 | Not rubric-scored; C2 and C3 evidence for the Keeper's Record and teacher check-in |
 | 2 | Phase 3 begins | "Was waking the thawlings worth it? Give one reason from what you saw." Starter: "I think ___ because I saw ___." | "Was waking the thawlings worth it? Give your reason, and the strongest reason someone could give against you." | D1, B5, B2 | D1, B5 |
 | 3 | Equilibrium | "To hold the balance, what did you have to give up? Was it worth it?" | "A colonist claims: 'Once the planet is balanced, it will stay balanced.' Is that claim right? Use what happened on your planet as evidence." | B4, B2 (HS: HS-LS2-6 claim evaluation) | B4 is scored by post-test; Report 3 is formative |
 | Final | Beacon lit (story bible 6.5) | "The ships are coming. What should the colonists know before they land?" | Same, plus: "What does your planet teach about Earth?" | D1, D2 | D1, D2 |
 
 **Changes from the story bible's draft:** "Was waking them worth it?" now asks for a reason from what the player saw, so it can be scored as argument from evidence (D1 rubric). The HS versions ask for a counter-reason or a claim evaluation (NGSS: argument from evidence; HS-LS2-6).
+
+**Sentence starters fade (MS):** shown on Reports 1 and 2; on Report 3 and the Final question they sit behind a "Need a start?" button (logged). HS gets no starters.
+
+**A report answer fills a Keeper's Record page only if it's at least one sentence (≥ 8 words)** (LEARNING.md 4.9). Quality is the teacher's call.
+
+**After Action Review:** each report also shows a "Your shift" block: own builds, claims and fixes, forecasts right and missed, with missed topics linked to their blank Record pages, in positive terms (LEARNING.md 4.3).
+
+**Paper and oral alternatives:** if `reflections.csv` is off, the same questions are on the paper worksheet (educator guide §6). A teacher may take an oral answer and score it with the same rubric.
 
 **Group play:** every player gets their own copy of each report question. A player who was absent when the gate fired finds it waiting ("Since last shift: report not sent").
 
@@ -88,20 +114,20 @@ Header: *"What the colonists will need to know."* One page per goal. A page fill
 | Goal | Page title (colony language, draft) | Fills when the player… (any one) |
 |---|---|---|
 | A1 | How Mars is different from home | Gets F3 right, or a "What caused it?" check on a Phase 1 hazard right |
-| A2 | Why water won't stay liquid here, and what would change that | Gets F4a or F4b right (HS: both, with the "why") |
+| A2 | Why water won't stay liquid here, and what would change that | Gets F4a, F4b, or FI-2 right (HS: two of them, with the "why") |
 | A3 | How to warm a planet | Gets F5 right (HS: and its "why") |
-| A4 | Staying safe from the Sun's storms | Gets F2 or F7 right |
+| A4 | Staying safe from the Sun's storms | Gets F2, F7, or FI-3 right |
 | A5 | Plants, air, and keeping the balance | Gets F8 or F9 right |
-| B1 | What changes what | Gets 3 "What caused it?" checks right |
+| B1 | What changes what | Gets 3 "What caused it?" checks right **on the first attempt** |
 | B2 | Loops that grow and loops that settle | Gets F6's "why" right (HS), or answers Report 2 (MS) |
 | B3 | Reading the planet ahead | Own forecast accuracy in the current phase beats the previous phase |
 | B4 | What it costs to hold the balance | Gets F10 right and answers Report 3 |
 | B5 | When a fix causes a new problem | Answers Report 2 |
 | C1 | Getting through a storm | Gets F1 right, and placed or refueled life support before the first storm |
 | C2 | Fixing it so it stays fixed | Own repair (claimed and marked fixed on the Shift Board) of a failure type, with no repeat from the same cause that phase |
-| C3 | Checking the data first | Opened the Monitor before at least half of own major builds (minimum 3 builds) |
+| C3 | Checking the data first | Opened the Monitor (≥ ~1 s) before at least half of own major builds (minimum 3 builds) |
 | D1 | Sharing a planet | Answers Report 2 or the final question |
-| D2 | What Mars teaches about Earth | Answers the final question, or opens 3 "On Earth" read-more pages |
+| D2 | What Mars teaches about Earth | Answers the final question, or an Earth-link question in a report (≥ 8 words). *Opening "On Earth" pages no longer counts: it rewarded activity, not skill (LEARNING.md 4.9)* |
 
 A filled page shows the player's own words where there are some (report answers), which supports the "writing for the colonists" frame. Pages for answering a report fill on *answering*; quality is scored by the teacher, not the game.
 
@@ -119,5 +145,5 @@ A filled page shows the player's own words where there are some (report answers)
 | Reading-time planning rate | Plan at **100 words per minute** for students in this age range. This is a deliberately conservative design assumption to cover weaker readers, **not** a research norm; published fluency norms were not checked in this session (**unverified**). At 100 wpm, the story bible's ~780 words of essential classroom messages take about 8 minutes, inside its 15-minute budget |
 | MS band | Main text only; one "On Earth" line; sentence starters on reflection questions; forecasts without the "why" follow-up |
 | HS band | Same main text; "read more" adds numbers and a second Earth example; "why" follow-ups on forecasts; counter-argument or claim-evaluation reflection questions; Monitor shows carbon per reservoir (if built) |
-| Never band-gated | Safety warnings, fiction notes, and the core explanation of each forecast result appear in both bands |
+| Never band-gated | Safety warnings, fiction notes, and the core explanation of each forecast result appear in both bands. Fading (LEARNING.md 4.8) can move a *correct* answer's explanation behind one click in later phases, in both bands alike; a wrong answer always shows it |
 | Accessibility | Nothing time-limited; everything replayable from the archive; key information also shown visually |

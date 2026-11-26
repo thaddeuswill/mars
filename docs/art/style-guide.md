@@ -567,3 +567,92 @@ Network access to NASA and reference sites was blocked in this session, so **no 
 | 6 | Real Mars color sources | See [planetary-keyframes.md](planetary-keyframes.md) §2 |
 | 7 | Braille Institute, Atkinson Hyperlegible (SIL Open Font License 1.1; **license file to verify**) | Reading face (4.8) |
 | 8 | Minecraft Java font JSON providers (bitmap, ttf, space, unihex, reference); **not opened this session** | What a resource-pack font can do (4.8) |
+
+---
+
+## 13. Learning mechanisms in play: visual specs
+
+Answers DESIGN.md "Learning Mechanisms in Play" rows that name the Lead Artist, and the "Feedback types and timing" table. The Lead Game Designer owns screen layout and wording; these are the visual system and a **proposed** layout. Applies PROCESS.md §4 (one message at a time; no modal pop-ups for progress; values bigger than labels; mark the next step; backing under every line over the world).
+
+### 13.1 Salient new-log highlight (Feedback types: "Feedback must be salient")
+Goals: feedback salience for all goals; mainly **B1, C2, C3** (the log names causes and failures).
+
+| Element | Spec |
+|---|---|
+| **Monitor "Log" tab** | When an unread entry arrives, the tab **flashes at 1 Hz** (0.5 s on, 0.5 s off) for **5 cycles**, then stays highlighted. Hard limit 3 flashes per second (4.6); we use 1 |
+| Highlight (steady) | Tab gets a **badge**: the severity shape of the most serious unread entry (circle Info, diamond Gate, triangle Warning, octagon Failure; `_hud` variants) plus an unread count in Cairn Mono (1–9, then "9+"). Shape and number carry the meaning, color is the third channel |
+| Re-flash | A new entry restarts the 5 cycles only if 30 s have passed since the last run, so a busy period doesn't blink constantly |
+| **Monitor block in the world** | A 2×2 px indicator lamp on the block face, top right. Blinks at 1 Hz for up to 60 s while the viewing player has unread entries, then glows steady. Drawn per player on the client from that player's own read state (TL to confirm) |
+| Sound twin | Log chime AU-U01 (rate-limited, audio direction §7.3). Subtitle "New colony log entry" |
+| HUD toast | Existing (§7.1), **one at a time** at the top; others queue. Hidden while any full-screen sheet is open |
+| Reduced motion | Accessibility setting "Reduce flashing": no flash; steady badge and lamp only |
+| Cleared | When the player opens the Log tab, the badge clears for the entries shown |
+
+### 13.2 Next-gate goal display (Flow: clear goals)
+DESIGN.md: "Next: pressure 5 kPa, 62%". Goals: **A1, B3, C3** (reading progress data); motivational: clear goals.
+
+| Element | Spec |
+|---|---|
+| Place | Top strip of the Monitor's Overview page, full width **404 × 38 GUI px** (layout in 13.4). A one-row compact version can be pinned to the HUD side (opt-in; on a 90 % strip; hidden over sheets). No pop-up ever announces progress |
+| Header | Gate diamond icon + "Next:" in Cairn Display + gate name. This is the **marked next step**: a 2 px `#F0E442` accent bar down the left edge |
+| Condition rows (1–3) | Per condition: parameter icon (U-01 `_hud`) · real name ("Pressure") · **value / target** in Cairn Mono at 2× ("3.1 / 5 kPa") · progress bar 80 × 5 px · percentage · trend arrow shape (↑ → ↓ as icons). Values are bigger than labels |
+| Met condition | Bar full with a bold outline + check icon + word "met". Unmet: hollow bar. Neutral fill `#E8E3D8`; met fill `#009E73` with the check (never color alone) |
+| Holds (Dome stable, Breathable, Equilibrium) | A row of **sol pips**: filled circle = sol held, hollow = to go, circle with two bars = hold paused. Count follows the active preset (3 / 7 / 14 standard; 1 / 2 / 3 classroom); pips 5 px wide, so 14 fit in 70 px |
+| Machine-state gate (Dome stable) | "Life support steady" + pips (no Index bar) |
+| Falling values | The bar shows the **current** value, so it falls; trend arrow down + word "falling". Gates already reached stay reached (lock-in): they move to a "Reached" list, not shown in the strip |
+| After Equilibrium | "Next: build the beacon" (wording: Lead Game Designer) |
+| "Just finished" | When a gate is reached, the strip shows "Reached: Phase 2 begins" with the gate diamond until the player's next real action (build, use a machine, leave the dome), then switches to the next gate (PROCESS.md §4) |
+
+**Open question (Lead Game Designer and Lead Instructional Designer):** how is the percentage computed? My recommendation: **linear in the value's own unit, from the previous gate's threshold (or the start value) to this gate's threshold**, because "62 % of the way" in kPa is what a 12-year-old expects, and the real numbers sit beside it. The pressure **gauge** stays on a log scale (§11.1); the two are labeled differently ("62 %" vs. the gauge's tick labels), so they don't contradict each other.
+
+### 13.3 Progressive disclosure on the Monitor (Cognitive load: one idea at a time)
+DESIGN.md: Phase 1 shows pressure, O2, power, temperature; hydrosphere at the Thaw; O2/CO2 balance and biomass in Phase 3. Goals: **A1–A5, C3**.
+
+| Element | Spec |
+|---|---|
+| **Fixed slots** | Every value has a fixed slot that never moves between phases, so players' spatial memory holds. Two panels: **Planet** (pressure, temperature, hydrosphere, O2, CO2, biomass) and **Dome** (O2 supply, power, water) |
+| Planet vs. Dome | Different frames so the two are never confused: Planet panel has a rust frame `#9A5B3C` and a small planet icon; Dome panel a slate frame `#59616A` and a dome icon. Phase 1's "O2" on the Dome panel is the dome's supply, not the planet's 0.1 % (question for the Lead Game Designer, report) |
+| Not yet in play | Slot drawn as a faint dashed outline `#3A4048`, **no label, no icon**: the layout doesn't jump later, and there is nothing to read now. Not a greyed-out row with a name (PROCESS.md §4: only offer what the player can use now) |
+| Reveal | At the gate: the slot frame fades in (1 s), then the value; a "NEW" tag (diamond + word) stays for 1 sol of play. No separate sound; the gate chime already played |
+| "Read more" (depth by band) | A book icon + "More" button. Expanded rows indent under their parent with a 1 px `#59616A` rule on the left. Middle school: partial pressures are here; high school: shown by default |
+| **Cause breakdown** (fading) | Disclosure triangle (▶ closed / ▼ open, drawn as icons) + "Causes (3)". Open by default in Phases 1–2, **closed by default in Phase 3** (DESIGN.md Fading). Remembered per player |
+| **Cause lines on the graph** (Multimedia: text next to what it explains) | The value's trend graph (160 × 60 GUI px) carries up to **3 callouts**, each tied by a 1 px leader line to the point where that cause started: machine icon + ≤ 4 words + signed rate in Cairn Mono ("Outgassers ×4 +0.40 kPa/sol"). No separate legend |
+
+### 13.4 Proposed Monitor Overview layout (fits 420 × 236 GUI px)
+Straw-man wireframe: [palettes/monitor-overview-wireframe-strawman.png](palettes/monitor-overview-wireframe-strawman.png) (generated by script; boxes and labels only; **placeholder**).
+
+| Box | x, y, w, h (GUI px) |
+|---|---|
+| Tabs (Overview, Log, Fauna from Thaw, Air from Phase 3) | 8, 4, 404, 12 |
+| Next-gate strip | 8, 20, 404, 38 |
+| Planet panel (2 × 3 slots, each 130 × 54) | 8, 62, 268, 170 |
+| Dome panel (3 slots, each 128 × 54) | 280, 62, 132, 170 |
+
+Each slot: icon 16 × 16 at top left, real name in the reading face, value in Cairn Mono at 2×, trend arrow, mini bar 60 × 4. The Air window (§11.2) and pressure gauge (§11.1) open from their slots as detail views at the same 420 × 236 size.
+
+### 13.5 Journal "what happened" pages (Multimedia: pair words with visuals)
+Goals: whichever goal the entry teaches (gate entries: A1–A5, B1, D2).
+- Page: one **diagram panel 120 × 72 GUI px** above ≤ 60 words (DESIGN.md).
+- Diagram style: 1 px `#2A2420` lines on paper `#EDE4D3`; at most three paper-ink accents (4.4a); labels written **on** the diagram, next to the part they name; cause arrows are solid, "not this" arrows dashed. Same icons as the Monitor (`_paper` variants).
+- If a Monitor graph is the visual, it is redrawn in paper style, not screenshotted.
+- Asset row U-25 (one diagram per gate entry and per forecast explanation; count from the Lead Instructional Designer).
+
+### 13.6 Shift Briefing card (Advance organizers)
+- BELL panel (§7.1) with a clipboard icon and header "Shift briefing", 2–3 lines, delivered at a natural pause at phase start.
+- The 1–2 parameter icons the briefing names are shown large on the card, and the **same slots on the Monitor get a "watch" ring** (2 px `#F0E442` outline + eye icon) for the first sol of the phase. That links the organizer to the place the player will look.
+
+### 13.7 Landing checklist (controls first, in story)
+- BELL's "first shift checklist": 5–7 items, each a hollow box that becomes a check icon, on a 90 % strip at the **top left** (toasts are top right), max 120 × 80 GUI px.
+- Key bindings drawn as key-cap boxes with the bound key's name (read from the player's settings, never hard-coded).
+- Hides over any full-screen sheet. "Skip" for experienced players (DESIGN.md).
+
+### 13.8 Worked example: Hana's notes on the first Outgasser
+- Her taped-note style (§7.2 paper slip with tape), attached to the side of the Outgasser's machine screen: numbered steps, each with a small pictogram, ≤ 12 words per step. Paper-ink colors only.
+- "Skip notes" link for experienced players. After the first Outgasser, the note shrinks to a folded corner the player can reopen (fading).
+
+### 13.9 Process and outcome feedback, and fading (Feedback types table)
+| Feedback | Visual |
+|---|---|
+| Process (new situation) | Full failure report: What failed · Likely cause · Hint (§7.1), with Hana's slip the first time |
+| Repeat of the same failure (fading) | **Compact report:** one line on the log panel: octagon + machine name + "again: likely cause" + a "details" disclosure. Failure tone at −3 dB (audio direction §7.2) |
+| Outcome (familiar situation) | Trend arrows, next-gate bars, sol pips. No card |

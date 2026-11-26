@@ -88,6 +88,9 @@ Use these words the same way everywhere.
 | **Straw-man asset** | A simple placeholder (box, circle, text box) used in early prototypes so core logic can be tested without asset effort. Also a concept design shown to the owner and SME for face validity. |
 | **Plumbing prototype** | A thin end-to-end prototype of a back-end capability (e.g. the LMS export) that shows what is feasible before the full build. |
 | **Boiling point at current pressure** | A derived Monitor value: the temperature at which water boils at the planet's current pressure (0 °C at 0.61 kPa, about 33 °C at 5 kPa). It alone drives the ice states and the heavy vapor wisps. |
+| **Iteration** | One round of agent tasks, or one build-and-test loop. Iterations sit inside roadmap stages. |
+| **Face-validity check** | The owner or SME judging whether a concept looks like what it claims to be. |
+| **Risk gate table** | For a change: what could break · the check that catches it · the result. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -195,7 +198,7 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Custom Mars dimension; gates lock in; fauna scales with infrastructure plus a threshold config | DESIGN.md: Decisions | User decision |
 | 2026-11-26 | Ages 12–18, two grade bands; NGSS; classroom mode; local logging (now pseudonymous on the server, anonymous in every export) | LEARNING.md: Decisions | User decision |
 | 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md | From user research |
-| 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
+| 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; the Technical Lead adopted it in its rewrite of ARCHITECTURE.md (round 1) and raised no objection |
 | 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
 | 2026-11-26 | **Design exercise:** no real students will use this. Everything (classroom mode, NGSS, teacher tools, minors' privacy) is designed as if they would, as practice in student-centered design. Real playtests mean the user playing, plus agent walkthroughs. | TEAM.md | User decision |
 | 2026-11-26 | Equilibrium pressure target ~75 kPa so 21% O2 is breathable; Breathable gate uses O2 partial pressure (≥ ~16 kPa) and CO2 partial pressure (≤ 0.5 kPa) | DESIGN.md | User decision on SME recommendation |
@@ -413,6 +416,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Producer | Round 2: roadmap, budget, QA plan, risks, consensus brief, process review | `ROADMAP.md`, `docs/production/`, `PROCESS.md` | `docs/team/reports/2026-11-26-producer-round2.md` |
 | 2026-11-26 | Subject Matter Expert | Round 2: science verdicts, value audit, external-review list | `docs/science/round2-review.md` | `docs/team/reports/2026-11-26-subject-matter-expert-round2.md` |
 | 2026-11-26 | Lead Artist | First art direction, keyframes, asset list | `docs/art/` | `docs/team/reports/2026-11-26-lead-artist-art-direction.md` |
 | 2026-11-26 | Lead Instructional Designer | Apply decisions, per-student measures, RETAIN, priorities, prompts, rubrics | `LEARNING.md`, `docs/learning/` | `docs/team/reports/2026-11-26-lead-instructional-designer-decisions-applied.md` |
@@ -433,6 +437,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | A new process rule can silently conflict with a decided rule the same day ("no modal progress pop-ups" vs. a blocking, deferrable Keeper's Report). When a process document lands, check it against TEAM.md 8.6 and the other decided rules. | Producer |
 | 2026-11-26 | Check each physics threshold against the balance curve. A threshold the curve passes in the first sol hides that regime and any forecast built on it (the ice rule broke forecast F4a). After every physics or balance change, run the forecast check with "threshold vs. curve". | Subject Matter Expert |
 | 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
 | 2026-11-26 | Owner attached a handoff from an earlier game project (docs/team/reference/GAME_DEV_HANDOFF.md). Adopted as process: PROCESS.md (iteration gates, definition of done, regression gate, UI and workflow rules, retro log) and BACKLOG.md (owner's words, acceptance, current iteration). Assumption: the owner wants the lessons applied; to confirm. | Coordinator, from the user's attachment |

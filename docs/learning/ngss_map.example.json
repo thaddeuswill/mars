@@ -1,22 +1,163 @@
 {
-  "_about": "Example content for data/mars/learning/ngss_map.json (ARCHITECTURE.md 8.6). Goal ID + band -> NGSS codes. Owners: Lead Instructional Designer and SME. Source: LEARNING.md 6.1, from docs/science/ngss-verification.md (SME, 2026-11-26). Codes checked via state mirrors and search copies; a word-for-word check on nextgenscience.org is still outstanding. C1/C2 split follows the SME's mapping notes (C1: ETS1-1, ETS1-2; C2: ETS1-3, ETS1-4), pending SME confirmation.",
-  "version": 1,
-  "verification": "sme-reviewed-2026-11-26; verbatim-check-pending",
+  "_about": "Example content for data/mars/learning/ngss_map.json (ARCHITECTURE.md 8.6). Goal ID + band -> NGSS codes. Owners: Lead Instructional Designer and SME. Source: LEARNING.md 6.1, from docs/science/ngss-verification.md (SME, 2026-11-26). Codes checked via state mirrors and search copies; a word-for-word check on nextgenscience.org is still outstanding. C1/C2 split confirmed by the SME in round 2 (docs/science/round2-review.md 3.4), with HS C2 changed to HS-ETS1-2 and HS-ETS1-4.",
+  "version": 2,
+  "verification": "sme-reviewed-2026-11-26-round2; verbatim-check-pending",
   "goals": {
-    "A1": { "ms": ["MS-ESS1-3"], "hs": [], "hs_related": [], "practice_only": false, "note": "Assessed with data, not recall. HS: background knowledge." },
-    "A2": { "ms": ["MS-PS1-4"], "hs": [], "hs_related": ["HS-ESS2-5"], "practice_only": false, "note": "MS via DCI PS1.A (state changes with temperature or pressure). HS extends MS-PS1-4; HS-ESS2-5 only if water-regolith effects are shown." },
-    "A3": { "ms": ["MS-ESS3-5"], "hs": ["HS-ESS2-4"], "hs_related": [], "practice_only": false, "note": "MS-ESS3-5 counts via the Earth debrief (period 14)." },
-    "A4": { "ms": [], "hs": ["HS-PS4-4"], "hs_related": [], "practice_only": false, "note": "MS: concept only. HS-PS4-4 covers EM radiation only; magnetic shielding is beyond it." },
-    "A5": { "ms": ["MS-LS1-6"], "hs": ["HS-LS2-5", "HS-ESS2-6"], "hs_related": [], "practice_only": false, "note": "HS-ESS2-6 needs the carbon flow view on the Monitor." },
-    "B1": { "ms": ["MS-LS2-4"], "hs": ["HS-ESS2-2"], "hs_related": [], "practice_only": false, "note": "" },
-    "B2": { "ms": [], "hs": ["HS-ESS2-2"], "hs_related": [], "practice_only": false, "note": "MS-LS2-4 does not cover feedback loops." },
-    "B3": { "ms": [], "hs": ["HS-ESS3-6"], "hs_related": [], "practice_only": false, "note": "MS: practice only (Developing and using models)." },
-    "B4": { "ms": ["MS-ETS1-2"], "hs": ["HS-ETS1-3", "HS-LS2-6"], "hs_related": [], "practice_only": false, "note": "HS-LS2-6 needs the claim-evaluation question in Keeper's Report 3 (HS)." },
-    "B5": { "ms": ["MS-ETS1-2"], "hs": ["HS-ETS1-3"], "hs_related": [], "practice_only": false, "note": "MS-ESS3-3 suggested by SME, wording unverified, not used." },
-    "C1": { "ms": ["MS-ETS1-1", "MS-ETS1-2"], "hs": ["HS-ETS1-1", "HS-ETS1-2"], "hs_related": [], "practice_only": false, "note": "Split of the ETS1-1..4 range, pending SME confirmation." },
-    "C2": { "ms": ["MS-ETS1-3", "MS-ETS1-4"], "hs": ["HS-ETS1-3", "HS-ETS1-4"], "hs_related": [], "practice_only": false, "note": "Split of the ETS1-1..4 range, pending SME confirmation." },
-    "C3": { "ms": [], "hs": [], "hs_related": [], "practice_only": true, "note": "SEP: Analyzing and interpreting data." },
-    "D1": { "ms": [], "hs": [], "hs_related": [], "practice_only": true, "note": "No PE; NGSS PEs don't assess values. SEP: Engaging in argument from evidence." },
-    "D2": { "ms": ["MS-ESS3-5"], "hs": ["HS-ESS2-4", "HS-ESS3-6"], "hs_related": [], "practice_only": false, "note": "Counts only with the D2 Earth content and debrief." }
+    "A1": {
+      "ms": [
+        "MS-ESS1-3"
+      ],
+      "hs": [],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "Assessed with data, not recall. HS: background knowledge."
+    },
+    "A2": {
+      "ms": [
+        "MS-PS1-4"
+      ],
+      "hs": [],
+      "hs_related": [
+        "HS-ESS2-5"
+      ],
+      "practice_only": false,
+      "note": "MS via DCI PS1.A (state changes with temperature or pressure). HS extends MS-PS1-4; HS-ESS2-5 only if water-regolith effects are shown."
+    },
+    "A3": {
+      "ms": [
+        "MS-ESS3-5"
+      ],
+      "hs": [
+        "HS-ESS2-4"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "MS-ESS3-5 counts via the Earth debrief (period 14)."
+    },
+    "A4": {
+      "ms": [],
+      "hs": [
+        "HS-PS4-4"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "MS: concept only. HS-PS4-4 covers EM radiation only; magnetic shielding is beyond it."
+    },
+    "A5": {
+      "ms": [
+        "MS-LS1-6"
+      ],
+      "hs": [
+        "HS-LS2-5",
+        "HS-ESS2-6"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "HS-ESS2-6 needs the carbon flow view on the Monitor."
+    },
+    "B1": {
+      "ms": [
+        "MS-LS2-4"
+      ],
+      "hs": [
+        "HS-ESS2-2"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": ""
+    },
+    "B2": {
+      "ms": [],
+      "hs": [
+        "HS-ESS2-2"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "MS-LS2-4 does not cover feedback loops."
+    },
+    "B3": {
+      "ms": [],
+      "hs": [
+        "HS-ESS3-6"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "MS: practice only (Developing and using models)."
+    },
+    "B4": {
+      "ms": [
+        "MS-ETS1-2"
+      ],
+      "hs": [
+        "HS-ETS1-3",
+        "HS-LS2-6"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "HS-LS2-6 needs the claim-evaluation question in Keeper's Report 3 (HS)."
+    },
+    "B5": {
+      "ms": [
+        "MS-ETS1-2"
+      ],
+      "hs": [
+        "HS-ETS1-3"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "MS-ESS3-3 suggested by SME, wording unverified, not used."
+    },
+    "C1": {
+      "ms": [
+        "MS-ETS1-1",
+        "MS-ETS1-2"
+      ],
+      "hs": [
+        "HS-ETS1-1",
+        "HS-ETS1-2"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "SME round 2: keep. HS-ETS1-1 counts only where the transfer task or a debrief pairs C1 with an Earth challenge."
+    },
+    "C2": {
+      "ms": [
+        "MS-ETS1-3",
+        "MS-ETS1-4"
+      ],
+      "hs": [
+        "HS-ETS1-2",
+        "HS-ETS1-4"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "SME round 2: HS-ETS1-3 dropped (it belongs to B4/B5). HS-ETS1-4 is a moderate fit. MS-ETS1-3 fits only if failure reports let the player compare fixes; otherwise treat it as related."
+    },
+    "C3": {
+      "ms": [],
+      "hs": [],
+      "hs_related": [],
+      "practice_only": true,
+      "note": "SEP: Analyzing and interpreting data."
+    },
+    "D1": {
+      "ms": [],
+      "hs": [],
+      "hs_related": [],
+      "practice_only": true,
+      "note": "No PE; NGSS PEs don't assess values. SEP: Engaging in argument from evidence."
+    },
+    "D2": {
+      "ms": [
+        "MS-ESS3-5"
+      ],
+      "hs": [
+        "HS-ESS2-4",
+        "HS-ESS3-6"
+      ],
+      "hs_related": [],
+      "practice_only": false,
+      "note": "Counts only with the D2 Earth content and debrief."
+    }
   }
 }

@@ -16,7 +16,7 @@ You decide how the game is built and make sure it can be built.
 - **Build the code:** the companion mod, KubeJS scripts, data files, build and test setup.
 
 ## You own
-- `ARCHITECTURE.md`
+- `ARCHITECTURE.md`, `docs/tech/` (licenses, school deployment, test strategy, build plan)
 - `mod/` (companion mod source), `pack/` (pack manifest, configs, KubeJS scripts), build files, CI config
 
 ## How you work
