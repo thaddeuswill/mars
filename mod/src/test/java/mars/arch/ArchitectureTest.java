@@ -18,7 +18,8 @@ class ArchitectureTest {
   void pureCoreHasNoMinecraftDependencies() {
     noClasses()
         .that()
-        .resideInAnyPackage("mars.core..", "mars.index.sim..", "mars.dimension.ice..")
+        .resideInAnyPackage(
+            "mars.core..", "mars.index.sim..", "mars.dimension.ice..", "mars.hazards.dust..")
         .should()
         .dependOnClassesThat()
         .resideInAnyPackage("net.minecraft..", "net.neoforged..", "com.mojang..")

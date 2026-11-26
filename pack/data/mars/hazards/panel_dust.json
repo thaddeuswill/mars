@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "about": "Solar panel dust tuning (DESIGN.md 'Solar panel dust'; docs/design/balance-sheet.md §2a, approved draft with SME refinements). Every value here is an invented game-balance number unless its tag says otherwise. Timing scales with pace.rateMultiplier; no physical threshold is touched.",
+  "source": "docs/design/balance-sheet.md §2a",
+  "stage_interval_sols": {
+    "value": 3,
+    "divided_by": ["storm_cap", "pace.rateMultiplier"],
+    "tag": "invented",
+    "note": "About 15 times faster than real (real arrays lose about 0.2 % of output per sol, searched); the journal says so. Phase 2 3.75, Phase 3 6, Equilibrium 12 sols follow from dividing by the storm cap."
+  },
+  "max_stage": 4,
+  "output_by_stage_percent": {
+    "value": [100, 92, 82, 70, 60],
+    "tag": "invented",
+    "note": "Stage 4 is a floor; optimistic against InSight's fall to about 10 % (journal note)."
+  },
+  "partly_cleaned": {
+    "recovers_fraction_of_lost_output": 0.5,
+    "applies_from_stage": 2,
+    "tag": "invented",
+    "note": "From stage 4 (60 %) to 80 %; stage 3 (70 %) to 85 %; stage 2 (82 %) to 91 %."
+  },
+  "storm_end": {
+    "stages_added": 1,
+    "stages_added_if_storm_cap_at_least": { "storm_cap": 0.8, "stages_added": 2 },
+    "tag": "invented",
+    "note": "Added when the storm ends, never before (keeps the F1 lock point clean). A design choice, not science."
+  },
+  "dust_devil": {
+    "chance_per_sol": 0.01,
+    "per": "panel_group",
+    "phases": [1, 2],
+    "applies_from_stage": 2,
+    "result": "partly_cleaned",
+    "tag": "invented",
+    "note": "Real Spirit about 0.15 % per sol (calc). Rolled in simulation time with a seeded RNG (ARCHITECTURE.md 2.17)."
+  },
+  "rain": {
+    "phase": 3,
+    "target_stage": 1,
+    "or_partly_cleaned_if_cleaner": true,
+    "never_below_stage": 1,
+    "tag": "invented",
+    "note": "Panels under open sky only."
+  },
+  "local_dust": {
+    "rate_multiplier": 2,
+    "radius_blocks": 8,
+    "sources": ["player_digging", "heavy_machinery", "machine_exhaust"],
+    "tag": "invented",
+    "note": "Plausible; the only real support is landing plumes (searched)."
+  },
+  "storm_output": {
+    "sunlight_cut_per_storm_cap": 0.6,
+    "formula": "stage_factor * (1 - 0.6 * storm_cap)",
+    "tag": "invented",
+    "note": "Phase 1 worst case 24 %."
+  }
+}

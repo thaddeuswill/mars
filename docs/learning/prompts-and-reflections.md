@@ -82,6 +82,31 @@ Run on the current documents. DESIGN.md now has the SME's boiling-point ice rule
 
 **Alignment after round 3 (on paper):** every goal is still taught, practiced, given feedback, and measured. Only FI-4 is conditional (storm cap). Also noted: the Phase 1 "Check:" pointers hide once a player's own accuracy is ≥ 1 in 3 after 3 forecasts, a slightly faster fade than my §4.8 default (pointer on every Phase 1 forecast). **Accept**: it fades on the player's own evidence, which is the principle. F4a's pointer ("Where does water boil here?") points at the data without stating the answer (CR-H2), and the `scaffold` flag lets the B3 analysis separate pointed answers.
 
+### 1.4 Forecast check after the panel dust mechanic (BACKLOG #26; threshold vs. curve, including events)
+
+Inputs: DESIGN.md "Solar panel dust", balance sheet §2a (output by stage 100 / 92 / 82 / 70 / 60 %; with a storm, output = stage factor × (1 − 0.6 × storm cap); storm dust added **at storm end**; caps 1.0 / 0.8 / 0.5 / 0.25), dust-review.md. The worst case for a "power drops" key is a player whose panels sit at the 60 % floor before the storm and who **cleans them during the storm** (to 100 %).
+
+| ID | Phase (cap) | Storm factor | No player action | Worst case (stage 4 before, cleaned during) | Result |
+|---|---|---|---|---|---|
+| F1 | 1 (1.0) | 0.40 | Drops at every stage | 60 % → 40 %: drops | **Pass** |
+| FI-1 | 2 (0.8) | 0.52 | Drops | 60 % → 52 %: drops, margin 8 points | **Pass, narrow.** Also: with batteries on the shared grid, emitter output may not fall during a short storm even though solar falls |
+| FI-4 | 3 (0.5) | 0.70 | Drops (CO2 rises) | 60 % → 70 %: **power rises**, vats speed up, CO2 may fall | **Fails on net outcome** for a player who cleans mid-storm |
+
+**Fix (all three): resolve these forecasts by the storm's own cause line, not by the net change.** The Monitor already splits power into "Storm: less sunlight −n %" and "Panel dust −n %" (B1), and every contribution has a source ID. So F1, FI-1, and FI-4 resolve on the storm-attributed contribution: solar lost to the storm (F1), emitter output lost to the storm (FI-1), CO2 added because vats slowed in the storm (FI-4). That contribution has the keyed sign whatever the player does with a brush or a battery. It is also what the question asks ("while the storm lasts", "what the storm does"). New content rule **CR-F10** (content-rules.md). Explanations stay as written; FI-4's result may add: "If you cleaned your panels during the storm, your power went up, but the storm itself still cut it."
+
+**Other dust checks**
+
+| Check | Finding | Result |
+|---|---|---|
+| F1 lock and reveals | Storm dust is added at storm **end**, after F1 locks at onset: nothing reveals the answer early. Pre-storm drift shows on the separate "Panel dust" line. **But** the Lead Game Designer's F1 `reveals` list (messages/README.md) names the Monitor line **"Dust on panels"**. The storm's line is "Storm: less sunlight". Holding the panel-dust line until F1 locks would hide it from its own first appearance (stage 1, about sol 3) until the first storm, which breaks its progressive disclosure | **Fix the reveals entry** to "Storm: less sunlight" (handoff) |
+| F1 science claim | F1's `science_claims` says the 2018 storm "ended Opportunity's mission"; the SME says what ended it is a missing value | Reword to "left Opportunity without enough power" (handoff; journal-dust.md §6) |
+| Dust journal notes vs. forecasts | `journal.dust.storm_timing` fires at the first storm's **end** (after F1 resolves); `journal.dust.panels` fires at stage 1 and says nothing about storms | **Pass** (CR-F9) |
+| Events (dust devil 1 %/sol, Phase 3 rain to stage 1) | Neither changes a keyed answer: a dust devil can only raise output between storms; rain leaves panels at 92 %, and the storm still cuts on top | **Pass** |
+| C1 evidence opportunity | First storm about sol 14 (balance §2); one stage per 3 sols, so uncleaned panels are at stage ≥ 2 by then; a warning window of ≥ 1 sol gives time to clean | **Pass**: the C1 dust indicator can actually occur |
+| Phase 1 curve | Assumes cleaning about every 6 sols (≈ 91 % average); the classroom Phase 1 check is already slightly slow (2.7 h vs 2.4 h) | Lead Game Designer's to measure in the prototype; no forecast rests on it |
+
+**Alignment after the dust mechanic (on paper):** C1, B1, B5, C2, and D2 are still taught, practiced, given feedback, and measured, and the mechanic adds teaching to each (LEARNING.md alignment table). It adds a new C1 indicator and a new B1 "What caused it?" item. No goal loses anything. Conditional on CR-F10 (FI-4), and on the reveals fix (F1).
+
 Alignment effect: A2's in-game teaching and measures (F4a, F4b, FI-2) stand **only if DESIGN.md adopts the SME's boiling-point ice rule** (handoff to the Lead Game Designer). Until then the A2 row in LEARNING.md's alignment table is "covered, conditional".
 
 **Stage 3 vertical slice:** F1 and F4a (and F2 if the radiation spike is in the slice).
@@ -192,7 +217,7 @@ Header: *"What the colonists will need to know."* One page per goal. A page fill
 | B3 | Reading the planet ahead | Own forecast accuracy in the current phase beats the previous phase |
 | B4 | What it costs to hold the balance | Gets F10 right and answers Report 3 |
 | B5 | When a fix causes a new problem | Answers Report 2 |
-| C1 | Getting through a storm | Gets F1 right, and placed or refueled life support before the first storm |
+| C1 | Getting through a storm | Gets F1 right, **and** either placed or refueled life support before the first storm, **or** cleaned a dusty panel (stage ≥ 2) while a storm warning was active (LEARNING.md 5.5: cleaning clean panels, or with no storm coming, doesn't count) |
 | C2 | Fixing it so it stays fixed | Own repair (claimed and marked fixed on the Shift Board) of a failure type, with no repeat from the same cause that phase |
 | C3 | Checking the data first | Opened the Monitor (≥ ~1 s) before at least half of own major builds (minimum 3 builds) |
 | D1 | Sharing a planet | Answers Report 2 or the final question |

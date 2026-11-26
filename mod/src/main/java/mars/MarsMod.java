@@ -18,6 +18,7 @@ public final class MarsMod {
   public MarsMod(IEventBus modBus) {
     SelfTest.installIfEnabled(modBus);
     SelfTest.step("mod_constructed");
+    mars.machines.MarsMachines.register(modBus);
     NeoForge.EVENT_BUS.addListener(TravelCommands::register);
     // Dev-only screenshot helper: client only, and only with -Dmars.devtools=true.
     if (FMLEnvironment.dist.isClient() && Boolean.getBoolean("mars.devtools")) {

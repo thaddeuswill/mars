@@ -99,6 +99,11 @@ def add_quad(name, pts, uvs, mat):
     for loop, uv in zip(mesh.loops, uvs): uvl.data[loop.index].uv = uv
     ob = bpy.data.objects.new(name, mesh); sc.collection.objects.link(ob); ob.data.materials.append(mat)
 
+# model bounds in Minecraft px (for framing large models such as the 2.2 m round array)
+MINX = min(min(el["from"][0], el["to"][0]) for el in model["elements"]); MAXX = max(max(el["from"][0], el["to"][0]) for el in model["elements"])
+MINZ = min(min(el["from"][2], el["to"][2]) for el in model["elements"]); MAXZ = max(max(el["from"][2], el["to"][2]) for el in model["elements"])
+MAXY = max(max(el["from"][1], el["to"][1]) for el in model["elements"])
+LARGE = MINX < 0 or MINZ < 0 or MAXX > 16 or MAXZ > 16
 for i, el in enumerate(model["elements"]):
     a, b = el["from"], el["to"]
     for fname, fd in el["faces"].items():
@@ -113,12 +118,14 @@ for i, el in enumerate(model["elements"]):
         add_quad(f"e{i}{fname}", pts, uvs, material(tex, fname))
 
 if opts["ground"] and not opts["transparent"]:
-    for gx in range(-1, 2):
-        for gz in range(-1, 2):
+    G = 3 if LARGE else 1
+    for gx in range(-G, G + 1):
+        for gz in range(-G, G + 1):
             a = (gx * 16, -0.01, gz * 16); b = (gx * 16 + 16, -0.01, gz * 16 + 16)
             add_quad(f"g{gx}{gz}", FACES["up"](a, b), [(0, 0), (1, 0), (1, 1), (0, 1)], material(opts["ground"], "up"))
 if opts["ref"]:
-    a, b = (19.2, 0, 4.8), (28.8, 28.8, 11.2)  # 0.6 x 1.8 x 0.4 blocks, one block east
+    rx = max(19.2, MAXX + 4.8)                  # 0.6 x 1.8 x 0.4 m player box, 0.3 m east of the model
+    a, b = (rx, 0, 4.8), (rx + 9.6, 28.8, 11.2)
     m = bpy.data.materials.new("ref"); m.use_nodes = True; nt = m.node_tree; nt.nodes.clear()
     o = nt.nodes.new("ShaderNodeOutputMaterial"); e = nt.nodes.new("ShaderNodeEmission")
     e.inputs["Color"].default_value = hexlin("#A9B0B8"); nt.links.new(e.outputs[0], o.inputs["Surface"])
@@ -135,12 +142,19 @@ if opts["shading"] == "lit":
 cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); cam.data.type = "ORTHO"
 wide = opts["ref"] or opts["ground"]
 cam.data.ortho_scale = 2.6 if opts["ref"] else (2.0 if wide else 1.7)
+if LARGE:  # fit the whole model (and the player box) instead of one block
+    span = (max(MAXX, (rx + 9.6) if opts["ref"] else MAXX) - MINX) / 16
+    cam.data.ortho_scale = max(cam.data.ortho_scale, span * 1.35, (MAXZ - MINZ) / 16 * 1.35)
 sc.collection.objects.link(cam); sc.camera = cam
 d = 4
 # Blender +y = Minecraft north. iso looks at the north (front) and east faces from above.
 pos = {"iso": (d * 0.8, d, d * 0.8), "front": (0, d, 0.5), "back": (0, -d, 0.5),
        "side": (d, 0, 0.5), "top": (0, 0.001, d)}[view]
 target = mathutils.Vector((0.25 if opts["ref"] else 0, 0, 0.5 if view != "top" else 0))
+if LARGE:
+    right = (rx + 9.6) if opts["ref"] else MAXX
+    top_y = max(MAXY, 28.8 if opts["ref"] else 0)
+    target = mathutils.Vector((((MINX + right) / 2 - 8) / 16, 0, (top_y / 2) / 16 if view != "top" else 0))
 cam.location = mathutils.Vector(pos) + mathutils.Vector((target.x, 0, 0))
 cam.rotation_euler = (target - cam.location).to_track_quat("-Z", "Y").to_euler()
 if view == "top":

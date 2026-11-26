@@ -9,6 +9,8 @@ import java.util.UUID;
 import mars.dimension.MarsDimensions;
 import mars.dimension.ice.IceResult;
 import mars.dimension.ice.IceRule;
+import mars.machines.MarsMachines;
+import mars.machines.SolarPanelBlock;
 import mars.planets.TravelCommands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -164,6 +166,57 @@ public final class BootChecks {
           SelfTest.check(
               "dimension.biome", "mars:regolith_flats", biome, biome.equals("mars:regolith_flats"));
     }
+
+    // Machines (BACKLOG #26): registered with the expected IDs and block-state properties.
+    java.util.List<String> missing = new java.util.ArrayList<>();
+    for (String id :
+        java.util.List.of(
+            "regolith_outgasser",
+            "regolith_oven",
+            "solar_panel",
+            "battery",
+            "oxygen_maker",
+            "planetary_monitor")) {
+      ResourceLocation rl = ResourceLocation.fromNamespaceAndPath("mars", id);
+      if (!net.minecraft.core.registries.BuiltInRegistries.BLOCK.containsKey(rl)
+          || !net.minecraft.core.registries.BuiltInRegistries.ITEM.containsKey(rl)) {
+        missing.add(id);
+      }
+    }
+    ok &=
+        SelfTest.check(
+            "machines.registered",
+            "6 machine blocks and items",
+            missing.isEmpty() ? "all 6 present" : "missing " + missing,
+            missing.isEmpty());
+    BlockState panel =
+        MarsMachines.SOLAR_PANEL
+            .get()
+            .defaultBlockState()
+            .setValue(SolarPanelBlock.DUST_STAGE, 4)
+            .setValue(SolarPanelBlock.PARTLY_CLEANED, true);
+    String props = panel.getValues().toString();
+    ok &=
+        SelfTest.check(
+            "machines.panel_state",
+            "solar_panel has facing, dust_stage 0-4, partly_cleaned",
+            props,
+            props.contains("dust_stage=4")
+                && props.contains("partly_cleaned=true")
+                && props.contains("facing"));
+    ServerLevel testLevel = server.overworld();
+    BlockPos at = new BlockPos(0, 200, 0);
+    testLevel.setBlockAndUpdate(at, panel);
+    BlockState placed = testLevel.getBlockState(at);
+    ok &=
+        SelfTest.check(
+            "machines.panel_placed",
+            "placed panel keeps dust_stage=4, partly_cleaned=true",
+            placed.toString(),
+            placed.is(MarsMachines.SOLAR_PANEL.get())
+                && placed.getValue(SolarPanelBlock.DUST_STAGE) == 4
+                && placed.getValue(SolarPanelBlock.PARTLY_CLEANED));
+    testLevel.removeBlock(at, false);
 
     boolean command = server.getCommands().getDispatcher().getRoot().getChild("mars") != null;
     ok &=

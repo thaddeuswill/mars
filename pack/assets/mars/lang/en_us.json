@@ -1,5 +1,12 @@
 {
   "commands.mars.go.success": "You are on Mars (planet 1). The planet is empty for now: this is the Stage 1 build.",
   "commands.mars.go.missing": "The Mars dimension isn't loaded. Check the server log for errors from the mars mod.",
-  "commands.mars.back.success": "You are back at the world spawn."
+  "commands.mars.back.success": "You are back at the world spawn.",
+  "itemGroup.mars.machines": "Mars Terraforming",
+  "block.mars.regolith_outgasser": "Regolith Outgasser",
+  "block.mars.regolith_oven": "Regolith Oven",
+  "block.mars.solar_panel": "Solar Panel",
+  "block.mars.battery": "Battery",
+  "block.mars.oxygen_maker": "Oxygen Maker (CO2)",
+  "block.mars.planetary_monitor": "Planetary Monitor"
 }
