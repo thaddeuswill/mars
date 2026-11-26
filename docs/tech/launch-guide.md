@@ -29,6 +29,12 @@ You need **Minecraft: Java Edition** (not Bedrock, not Minecraft Education) and 
    - Alternative with cheats on: `/execute in mars:planet_1 run tp @s 0 64 0`.
 7. **What you should see:** flat red sand to the horizon, a tan sky and tan-brown fog (the start-of-game colours from the planetary keyframes, here set as plain biome colours), no mobs, no weather. If you see something else, a screenshot helps.
 
+## 1a. The machines (batch 2 build)
+
+Six machine blocks are in the creative inventory under the **Mars Terraforming** tab: Regolith Outgasser, Regolith Oven, Solar Panel, Battery, Oxygen Maker (CO2), Planetary Monitor. They **do nothing yet** (behaviour is Stage 2); you can place them, and their front faces you when placed. The art is placeholder: the small magenta squares are the deliberate "not final" marker, not missing textures.
+
+To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~2 mars:solar_panel[dust_stage=3]` (stages 0–4), or `/setblock ~ ~ ~2 mars:solar_panel[dust_stage=4,partly_cleaned=true]`.
+
 ## 2. Developer commands (from `mod/`)
 
 All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.267, and Minecraft 1.21.1 on first use. Java 21 must be installed.
@@ -36,9 +42,9 @@ All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.26
 | Command | What it does | Ran here? |
 |---|---|---|
 | `./gradlew build` | Compiles, checks formatting (Spotless), runs the unit tests, builds `build/libs/mars-0.1.0-stage1.jar` | Yes, passes |
-| `./gradlew test` | Unit tests only (pure core, content files, architecture rules) | Yes, 37 tests pass |
+| `./gradlew test` | Unit tests only (pure core, content files, dust tuning vs. the balance sheet, machine assets, architecture rules) | Yes (see the latest report for the count) |
 | `./gradlew spotlessApply` | Reformats Java to Google Java Style | Yes |
-| `./gradlew runGameTestServer` | Headless GameTest server with the mod: boot checks, then exits (non-zero on any failure) | Yes, 7/7 checks pass |
+| `./gradlew runGameTestServer` | Headless GameTest server with the mod: boot checks (including machine registration and panel dust state), then exits (non-zero on any failure) | Yes (see the latest report) |
 | `./gradlew runSelftestServer` | Real dedicated server: loads the Mars level, runs the boot checks (including travelling a fake player to Mars), stops cleanly | **No: needs the Minecraft EULA accepted** (see below) |
 | `./gradlew runClient` | The game with the mod, at 1280×720 | Only through the screenshot run (section 3) |
 | `./gradlew runServer` | A normal dev server | No (EULA) |
@@ -47,4 +53,4 @@ All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.26
 
 ## 3. Screenshots
 
-`tools/screenshots/run-shots.sh` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Results and limits are in the Stage 1 report.
+`tools/screenshots/run-shots.sh [script]` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. `tools/screenshots/batch2.shots` places every machine and the panel at dust stages 0, 2, 4 and partly cleaned. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Results and limits are in the Stage 1 report.
