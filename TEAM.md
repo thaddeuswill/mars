@@ -99,6 +99,11 @@ Use these words the same way everywhere.
 | **"Useful now" list** | Up to three recommended builds shown beside the next-gate bar. |
 | **Asserts** | The condition a story beat that makes a claim about the world must satisfy. |
 | **Lock point** | The moment a forecast closes, before any hint, warning, or example that would give the answer away. |
+| **Interleaved forecast (FI)** | A forecast that brings back an earlier idea in a new situation, with no topic label. |
+| **Outcome form / re-scaffold** | Outcome form: feedback shrunk to its result after the player's own fix held. Re-scaffold: full process feedback returns after an error. |
+| **"Your shift" block** | The per-player after-action review inside a Keeper's Report. |
+| **"Needs a look" flag** | A teacher-only pointer in the class overview. Never a grade. |
+| **Player ID slip** | A paper slip carrying a student's pseudonymous ID for tests. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -228,6 +233,8 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Licensing plan (not legal advice; unverified): our code MIT; our art, audio, story and journal text CC BY 4.0; educator materials CC BY 4.0. Never retexture or redistribute All Rights Reserved assets (Create, FTB Library) and never ship ProbeJS. No LICENSE file is added until release, because this is a design exercise. | docs/tech/mod-licenses.md | User decision on coordinator recommendation |
 | 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
 | 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
+| 2026-11-26 | Record pages fill from skill, never from activity (answers of 8 or more words; the D2 page no longer fills from opening pages). One scored answer per player per forecast. Grade bands set science depth, not the amount of help. Model-based assessment out of scope at launch. | LEARNING.md | Lead Instructional Designer |
+| 2026-11-26 | Proposed: Shift Board C2 credit goes to the player who did the repair (not the claimer). Changes DESIGN.md Group Play; Game Designer to agree. | LEARNING.md §3.0 | Lead Instructional Designer; pending |
 | 2026-11-26 | Sleep never skips Mars time; the sky follows simulation time. Storm caps scale gameplay as well as the look. Ice–albedo capped at about 2 °C (invented) plus the real polar CO2 release. Mast gas gauges are fitted at Phase 3 (pending Artist and Instructional Designer). Training Hall lobby. One lead crew voice per phase (Hana, Basu, Moreno); Mensah only in report replies. | DESIGN.md, docs/design/ | Lead Game Designer |
 | 2026-11-26 | Keeper's Report is never modal: one log line plus a side-panel entry, opened full screen only by the player's choice or at the next natural pause | docs/design/ui-specs.md §0 | Lead Game Designer, agreed with the Producer; Instructional Designer to confirm |
 | 2026-11-26 | Ice rule implemented as data (`ice_rule.json`) using per-chunk cached heat sources with distance falloff, shared by server and client; boiling point from the Antoine equation computed once per planet per step | ARCHITECTURE.md §2.5 | Technical Lead, on the SME's finding |
@@ -437,6 +444,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 | 2026-11-26 | Lead Game Designer | Apply decisions, C-01 fix, balance sheet, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-decisions-applied.md` |
 | 2026-11-26 | Subject Matter Expert | Science accuracy and NGSS verification | `docs/science/` | `docs/team/reports/2026-11-26-subject-matter-expert-science-ngss.md` |
 | 2026-11-26 | Producer | Consistency review, risk register | `docs/production/` | `docs/team/reports/2026-11-26-producer-consistency-review.md` |
+| 2026-11-26 | Lead Instructional Designer | Round 2: decisions applied, per-student measures, fading plan, educator guide, content rules | `LEARNING.md`, `docs/learning/` | `docs/team/reports/2026-11-26-lead-instructional-designer-round2.md` |
 | 2026-11-26 | Lead Game Designer | Round 2: design updates, messages, UI specs, balance, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-round2.md` |
 | 2026-11-26 | Lead Game Designer | Story bible | `docs/design/story-bible.md` | `docs/team/reports/2026-11-26-lead-game-designer-story-bible.md` |
 
@@ -451,6 +459,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Review another role's draft against your requirements instead of writing a competing spec, and send requirements before the text is drafted. | Lead Instructional Designer |
 | 2026-11-26 | Forecasts need an explicit lock point before any hint, warning, or worked example that reveals the answer. | Lead Game Designer |
 | 2026-11-26 | When a new requirement seems to break a privacy rule, look for a narrow interface at the boundary (e.g. the `NameScrubber`) before relaxing the rule. | Technical Lead |
 | 2026-11-26 | A new process rule can silently conflict with a decided rule the same day ("no modal progress pop-ups" vs. a blocking, deferrable Keeper's Report). When a process document lands, check it against TEAM.md 8.6 and the other decided rules. | Producer |
