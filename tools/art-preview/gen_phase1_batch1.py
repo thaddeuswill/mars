@@ -249,8 +249,8 @@ models["o2_generator"] = {
         # two loops, as in PIA24201: from a fitting on top, up, over the edge, and down the side to a low fitting
         fitting([4, 12, 6], [6, 13, 8]), tube([4, 13, 6], [5, 15, 7]), tube([0, 14, 6], [5, 15, 7]),
         tube([0, 3, 6], [1, 14, 7]), fitting([1, 2, 6], [2, 4, 8]),                   # west loop
-        fitting([10, 12, 8], [12, 13, 10]), tube([11, 13, 8], [12, 14, 9]), tube([11, 13, 8], [16, 14, 9]),
-        tube([15, 5, 8], [16, 13, 9]), fitting([14, 4, 8], [15, 6, 10])]}             # east loop, lower and shorter
+        fitting([10, 12, 4], [12, 13, 6]), tube([11, 13, 4], [12, 14, 5]), tube([11, 13, 4], [16, 14, 5]),
+        tube([15, 5, 4], [16, 13, 5]), fitting([14, 4, 4], [15, 6, 6])]}             # east loop, near the front edge so the X ribs stay visible
 for el in models["o2_generator"]["elements"]:       # tube and fitting faces: uv sized to the face so pixels stay square
     if el["from"] == [2, 0, 3]: continue
     a, b = el["from"], el["to"]; dx, dy, dz = b[0] - a[0], b[1] - a[1], b[2] - a[2]

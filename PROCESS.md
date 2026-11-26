@@ -20,6 +20,7 @@ How the team works day to day. Adapted from the lessons in `docs/team/reference/
 - **Never invent a number that's meant to be real.** Real-world values live in sourced documents (`docs/science/`). If a real value is missing, build the feature without the number and list the value as missing. Game-balance numbers we do invent: say so, give the reasoning, and flag them for a balance pass (`docs/design/balance-sheet.md`).
 - **"Accept" with a check still running is conditional.** Record acceptance only after the check passes.
 - **Report in the owner's terms.** Lead with what changed for the player. Say what a screenshot or walkthrough shows, not what a function does. Say plainly when something failed and what we did.
+- **Owner reply format (standing, from the owner):** short. Three parts: **what changed**; **recommended next steps**; and, for anything visual, **a screenshot**. The owner then accepts, changes, adds, or says to continue with the backlog. No long summaries, no process detail unless asked. Decisions still go through the questions-with-a-recommendation rule above.
 
 ## 2. Definition of done
 
