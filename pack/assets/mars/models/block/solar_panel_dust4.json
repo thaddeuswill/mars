@@ -1,8 +1,8 @@
 {
  "parent": "block/block",
  "textures": {
-  "particle": "mars:block/solar_panel_dusty_top",
-  "cells": "mars:block/solar_panel_dusty_top",
+  "particle": "mars:block/solar_panel_dust4_top",
+  "cells": "mars:block/solar_panel_dust4_top",
   "frame": "mars:block/solar_panel_frame",
   "post": "mars:block/solar_panel_post"
  },

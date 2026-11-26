@@ -1,0 +1,197 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/solar_panel_dust2_top",
+  "cells": "mars:block/solar_panel_dust2_top",
+  "frame": "mars:block/solar_panel_frame",
+  "post": "mars:block/solar_panel_post"
+ },
+ "elements": [
+  {
+   "from": [
+    4,
+    0,
+    4
+   ],
+   "to": [
+    12,
+    2,
+    12
+   ],
+   "faces": {
+    "north": {
+     "texture": "#post",
+     "uv": [
+      4,
+      0,
+      12,
+      2
+     ]
+    },
+    "south": {
+     "texture": "#post",
+     "uv": [
+      4,
+      0,
+      12,
+      2
+     ]
+    },
+    "east": {
+     "texture": "#post",
+     "uv": [
+      4,
+      0,
+      12,
+      2
+     ]
+    },
+    "west": {
+     "texture": "#post",
+     "uv": [
+      4,
+      0,
+      12,
+      2
+     ]
+    },
+    "up": {
+     "texture": "#frame",
+     "uv": [
+      4,
+      4,
+      12,
+      12
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    7,
+    2,
+    7
+   ],
+   "to": [
+    9,
+    9,
+    9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#post",
+     "uv": [
+      7,
+      0,
+      9,
+      7
+     ]
+    },
+    "south": {
+     "texture": "#post",
+     "uv": [
+      7,
+      0,
+      9,
+      7
+     ]
+    },
+    "east": {
+     "texture": "#post",
+     "uv": [
+      7,
+      0,
+      9,
+      7
+     ]
+    },
+    "west": {
+     "texture": "#post",
+     "uv": [
+      7,
+      0,
+      9,
+      7
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    9,
+    0
+   ],
+   "to": [
+    16,
+    10,
+    16
+   ],
+   "rotation": {
+    "origin": [
+     8,
+     9.5,
+     8
+    ],
+    "axis": "x",
+    "angle": -22.5
+   },
+   "faces": {
+    "up": {
+     "texture": "#cells",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "down": {
+     "texture": "#frame",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#frame",
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ]
+    },
+    "south": {
+     "texture": "#frame",
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ]
+    },
+    "east": {
+     "texture": "#frame",
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ]
+    },
+    "west": {
+     "texture": "#frame",
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ]
+    }
+   }
+  }
+ ]
+}

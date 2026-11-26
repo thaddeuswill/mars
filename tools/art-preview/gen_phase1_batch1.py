@@ -138,10 +138,10 @@ DRIFT_ROWS = (13, 14)                                            # low edge of t
 def level(stage, x, y):
     u = U[y][x]; drift = y in DRIFT_ROWS
     if stage == 0: return 0
-    if stage == 1: return (2 if y == 14 else 1) if drift else (1 if u < 0.10 else 0)
-    if stage == 2: return 3 if drift else (2 if u < 0.10 else 1)
-    if stage == 3: return 3 if (drift or u < 0.75) else 2
-    return 4 if u > 0.90 else 3
+    if stage == 1: return (2 if y == 14 else 1) if drift else (1 if u < 0.30 else 0)      # first film: specks + drift
+    if stage == 2: return 3 if drift else (2 if u < 0.50 else 1)                          # light veil: lifted ~1/3 or more
+    if stage == 3: return 3 if (drift or u < 0.80) else 2                                 # heavy: mostly ground colour
+    return 4 if u > 0.65 else 3                                                           # full even veil, lighter
 LEVEL_COLOR = "rvxDE"
 def stage_px(stage, cleaned=False):
     px = [[None] * 16 for _ in range(16)]
@@ -150,14 +150,14 @@ def stage_px(stage, cleaned=False):
             role = CELL[y][x]
             if role == "frame": px[y][x] = "3"
             elif role == "cut": px[y][x] = "p"
-            elif role == "seam": px[y][x] = "s" if stage <= 1 else "q"   # light seams when clean; dark lines under a veil
+            elif role == "seam": px[y][x] = "s" if stage <= 2 else "q"   # light seams until the veil is heavy; then dark lines
             else: px[y][x] = LEVEL_COLOR[level(stage, x, y)]
     if cleaned:   # wind cleared streaks out of a heavy veil (Opportunity, 2014): horizontal runs back to clean
         random.seed(2014)
-        for _ in range(7):
-            y = random.choice([yy for yy in range(1, 13) if yy not in (7, 8)]); x0 = random.randrange(1, 11)
-            for x in range(x0, x0 + random.choice((3, 4, 5))):
-                if CELL[y][x] == "cell": px[y][x] = "r" if random.random() < 0.7 else "v"
+        for _ in range(11):
+            y = random.choice([yy for yy in range(1, 13) if yy not in (7, 8)]); x0 = random.randrange(1, 10)
+            for x in range(x0, x0 + random.choice((4, 5, 6))):
+                if CELL[y][x] == "cell": px[y][x] = "r"
     return px
 STAGES = {f"solar_panel_dust{k}": stage_px(k) for k in range(5)}
 STAGES["solar_panel_partly_cleaned"] = stage_px(3, cleaned=True)
@@ -214,16 +214,19 @@ def pockets(t, x0, y0, lamp):
             t.rect(x0 + a, y0 + c, x0 + b, y0 + d, "H"); t.rect(x0 + a, y0 + c, x0 + b, y0 + c, "G"); t.rect(x0 + a, y0 + c, x0 + a, y0 + d, "G")
             t.rect(x0 + b, y0 + d, x0 + b, y0 + d, "I")
     if lamp:  # status lamp in a dark ring, in the lower-right pocket
-        t.rect(x0 + 8, y0 + 8, x0 + 11, y0 + 11, "1"); t.rect(x0 + 9, y0 + 9, x0 + 10, y0 + 10, "g")
+        t.rect(x0 + 7, y0 + 7, x0 + 11, y0 + 11, "J"); t.rect(x0 + 8, y0 + 8, x0 + 11, y0 + 11, "1")
+        t.rect(x0 + 9, y0 + 9, x0 + 10, y0 + 10, "g")        # lamp in a dark ring, framed by the light rib
 fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); fa.save()
 fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); fb.save()
 en = T("o2_generator_end"); enr = en.region(3, 4, 12, 15)
-en.rect(3, 4, 12, 15, "H"); en.box(3, 4, 12, 15, "J")
-for k in range(1, 11):                               # X ribs: two diagonals across the 10 x 12 end face
-    yy = 4 + round(k * 11 / 10)
-    if 4 < yy < 15:
-        en.dot(3 + k, yy, "J"); en.dot(12 - k, yy, "J")
-        if yy + 1 < 15: en.dot(3 + k, yy + 1, "G"); en.dot(12 - k, yy + 1, "G")   # rib shadow below
+en.rect(3, 4, 12, 15, "I"); en.box(3, 4, 12, 15, "J")
+# X ribs (round 2: one-pixel diagonals with shadows read as noise in the iso render; now 2 px wide, light on mid gold)
+for k in range(0, 12):
+    yy = 4 + k; xa = 3 + round(k * 9 / 11); xb = 12 - round(k * 9 / 11)
+    for xx in (xa, xa + 1, xb, xb - 1):
+        if 3 <= xx <= 12: en.dot(xx, yy, "J")
+    for xx in (xa - 1, xb + 1):
+        if 4 <= xx <= 11 and en.px[yy][xx] == "I": en.dot(xx, yy, "H")
 en.save()
 sd_ = T("o2_generator_side"); sdr = sd_.region(3, 4, 12, 15)
 sd_.rect(3, 4, 12, 15, "H"); sd_.box(3, 4, 12, 15, "J"); sd_.rect(4, 8, 11, 8, "J"); sd_.rect(4, 12, 11, 12, "J"); sd_.rect(4, 9, 11, 9, "G"); sd_.rect(4, 13, 11, 13, "G"); sd_.save()
@@ -244,17 +247,19 @@ models["o2_generator"] = {
     "elements": [
         {"from": [2, 0, 3], "to": [14, 12, 13], "faces": {"north": face("front", far), "south": face("back", fbr),
             "east": face("end", enr), "west": face("side", sdr), "up": face("top", tpr), "down": face("top", tpr)}},
-        fitting([4, 12, 6], [6, 13, 8]), fitting([10, 12, 6], [12, 13, 8]),          # top fittings
-        tube([4, 13, 6], [5, 15, 7]), tube([4, 15, 6], [12, 16, 7]), tube([11, 13, 6], [12, 15, 7]),   # arch over the top
-        fitting([1, 9, 6], [2, 11, 8]), fitting([1, 2, 6], [2, 4, 8]),               # west-side fittings
-        tube([0, 3, 6], [1, 10, 7])]}                                                 # loop down the west side
+        # two loops, as in PIA24201: from a fitting on top, up, over the edge, and down the side to a low fitting
+        fitting([4, 12, 6], [6, 13, 8]), tube([4, 13, 6], [5, 15, 7]), tube([0, 14, 6], [5, 15, 7]),
+        tube([0, 3, 6], [1, 14, 7]), fitting([1, 2, 6], [2, 4, 8]),                   # west loop
+        fitting([10, 12, 8], [12, 13, 10]), tube([11, 13, 8], [12, 14, 9]), tube([11, 13, 8], [16, 14, 9]),
+        tube([15, 5, 8], [16, 13, 9]), fitting([14, 4, 8], [15, 6, 10])]}             # east loop, lower and shorter
 for el in models["o2_generator"]["elements"]:       # tube and fitting faces: uv sized to the face so pixels stay square
     if el["from"] == [2, 0, 3]: continue
     a, b = el["from"], el["to"]; dx, dy, dz = b[0] - a[0], b[1] - a[1], b[2] - a[2]
-    base = 8 if any(f["uv"][0] >= 8 for f in el["faces"].values()) else 0
+    base = 10 if any(f["uv"][0] >= 8 for f in el["faces"].values()) else 2   # start past the placeholder corner
     size = {"north": (dx, dy), "south": (dx, dy), "east": (dz, dy), "west": (dz, dy), "up": (dx, dz), "down": (dx, dz)}
     for k, f in el["faces"].items():
-        w, h = size[k]; f["uv"] = [base, 0, base + min(w, 8), min(h, 8)]
+        # tubes are one flat off-white pixel stretched along the tube (no stretched detail); fittings a 2 x 2 silver patch
+        f["uv"] = [base, 2, base + 1, 3] if base == 2 else [base, 2, base + 2, 4]
 
 # ---------- M-13 Planetary Monitor: console with a tilted screen ----------
 sc = T("planetary_monitor_screen", "k"); scr = sc.region(1, 4, 14, 12)
@@ -313,10 +318,13 @@ for name, m in models.items():  # per used face region: <= 6 colors besides the 
             if not os.path.exists(os.path.join(TEX, tex + ".png")): fails.append(f"missing texture {tex}")
 # meaning-bearing pairs must reach 3:1 (WCAG 1.4.11); shape-only pairs should reach 2:1 (target, reported)
 meaning = [("lamp g on its ring 1", "g", "1"), ("heater slot o on door 1", "o", "1"), ("oven light L on frame 1", "L", "1"),
-           ("dust streak highlight E on cell r", "E", "r"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
+           ("dust highlight E on clean cell r", "E", "r"), ("veil D vs clean cell r (state)", "D", "r"),
+           ("dark seam q on veil D", "q", "D"), ("cut-out p on veil D", "p", "D"), ("tube W on gold H", "W", "H"),
+           ("lamp ring 1 vs light rib J", "1", "J"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
            ("screen gauge g on k", "g", "k"), ("unread b on k", "b", "k"), ("empty segment 4 on well 1", "4", "1")]
-shape = [("PV frame 3 vs cell r", "3", "r"), ("door 1 vs body 3", "1", "3"), ("stripes o vs 1", "o", "1"),
-         ("tank window i vs tank 3", "i", "3"), ("dust streak and drift D vs cell r", "D", "r"), ("dust D vs Mars sky", "D", None), ("stack 2 vs sky", "2", None)]
+shape = [("PV frame 3 vs clean cell r", "3", "r"), ("PV frame 3 vs veil D", "3", "D"), ("light seam s vs clean cell r", "s", "r"),
+         ("gold rib J vs pocket H", "J", "H"), ("pocket shadow G vs H", "G", "H"), ("fitting 4 vs gold H", "4", "H"), ("gold H vs Mars sky", "H", None), ("door 1 vs body 3", "1", "3"), ("stripes o vs 1", "o", "1"),
+         ("tank window i vs tank 3", "i", "3"), ("dust D vs Mars sky", "D", None), ("stack 2 vs sky", "2", None)]
 print("Meaning-bearing contrast (need >= 3:1):")
 for label, a, b2 in meaning:
     r = cr(P[a], P[b2]); print(f"  {label:32s} {r:5.1f}  {'ok' if r >= 3 else 'LOW'}")
@@ -335,5 +343,60 @@ for fn in sorted(os.listdir(TEX)):
                 for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                     if 0 <= x + dx < 16 and 0 <= y + dy < 16 and im.getpixel((x + dx, y + dy)) not in ok:
                         fails.append(f"{fn}: lamp pixel at {x},{y} touches a non-ring color"); break
+# ---- OKLab and colour-vision simulation (Machado, Oliveira & Fernandes 2009, severity 1.0) ----
+MX = {"normal": None,
+      "protan": [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+      "deutan": [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.011820, 0.042940, 0.968881]],
+      "tritan": [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]]}
+def oklab_lin(l):
+    r, g, b = l
+    L_ = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+    M_ = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+    S_ = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+    return (0.2104542553 * L_ + 0.7936177850 * M_ - 0.0040720468 * S_, 1.9779984951 * L_ - 2.4285922050 * M_ + 0.4505937099 * S_,
+            0.0259040371 * L_ + 0.7827717662 * M_ - 0.8086757660 * S_)
+def sim_lin(c, k):
+    l = [lin(v) for v in c]
+    if MX[k]: l = [min(1, max(0, sum(MX[k][i][j] * l[j] for j in range(3)))) for i in range(3)]
+    return l
+def dE(c1, c2, k): return math.dist(oklab_lin(sim_lin(c1, k)), oklab_lin(sim_lin(c2, k)))
+print("Colour-vision checks (OKLab dE, normal / protan / deutan / tritan):")
+for label, a, b2, need in (("gold I vs safety orange o", "I", "o", 0.10), ("gold J vs UI yellow y", "J", "y", 0.10),
+                           ("gold edge rib J vs regolith T (edge on ground)", "J", "T", 0.10), ("veil D vs clean cell r", "D", "r", 0.10)):
+    ds = [dE(rgb(P[a]), rgb(P[b2]), k) for k in MX]; ok_ = min(ds) >= need
+    print(f"  {label:40s} " + " / ".join(f"{d:.3f}" for d in ds) + f"  {'ok' if ok_ else 'LOW'} (need {need} in all)")
+    if not ok_: fails.append(f"colour-vision {label} min {min(ds):.3f}")
+# ---- dust progression: superset, visible steps, structure kept ----
+order = {c: i for i, c in enumerate(LEVEL_COLOR)}
+names = [f"solar_panel_dust{k}" for k in range(5)]
+pxs = [STAGES[n] for n in names]
+for k in range(1, 5):
+    for y in range(16):
+        for x in range(16):
+            if CELL[y][x] == "cell" and order[pxs[k][y][x]] < order[pxs[k - 1][y][x]]:
+                fails.append(f"dust{k} at {x},{y} has less dust than dust{k-1} (not a superset)")
+def mean_lab(px, k, roles=("cell",)):
+    cells = [rgb(P[px[y][x]]) for y in range(16) for x in range(16) if CELL[y][x] in roles]
+    labs = [oklab_lin(sim_lin(c, k)) for c in cells]
+    return tuple(sum(v[i] for v in labs) / len(labs) for i in range(3))
+NONCOLOUR = {1: "specks and a drift band appear along the low edge (pattern change)"}
+print("Dust steps (mean OKLab dE of the CELL area vs the previous stage, where the dust sits; need >= 0.035 in normal and 2 of 3")
+print("simulations, or a non-colour cue). Whole-face dE (cells + seams + cut-outs + frame) is shown after the slash group for reference:")
+for k in range(1, 5):
+    ds = {m: math.dist(mean_lab(pxs[k], m), mean_lab(pxs[k - 1], m)) for m in MX}
+    passed = ds["normal"] >= 0.035 and sum(ds[m] >= 0.035 for m in ("protan", "deutan", "tritan")) >= 2
+    changed = sum(pxs[k][y][x] != pxs[k - 1][y][x] for y in range(16) for x in range(16)) / 256
+    note = "ok" if passed else (f"colour step small; non-colour cue: {NONCOLOUR[k]} ({changed:.0%} of pixels change)" if k in NONCOLOUR and changed >= 0.08 else "TOO SMALL")
+    face_d = math.dist(mean_lab(pxs[k], "normal", ("cell", "seam", "cut", "frame")), mean_lab(pxs[k - 1], "normal", ("cell", "seam", "cut", "frame")))
+    print(f"  dust{k-1} -> dust{k}: " + " / ".join(f"{ds[m]:.3f}" for m in MX) + f"  (whole face {face_d:.3f})  {note}")
+    if note == "TOO SMALL": fails.append(f"dust step {k-1}->{k} too small")
+print("Panel structure per stage (seams and cut-outs stay; contrast vs the dominant cell colour):")
+from collections import Counter
+for n, px in list(zip(names, pxs)) + [("solar_panel_partly_cleaned", STAGES["solar_panel_partly_cleaned"])]:
+    dom = Counter(px[y][x] for y in range(16) for x in range(16) if CELL[y][x] == "cell").most_common(1)[0][0]
+    seam = Counter(px[y][x] for y in range(16) for x in range(16) if CELL[y][x] == "seam").most_common(1)[0][0]
+    best = max(cr(P[c], P[dom]) for c in (seam, "p", "3"))
+    print(f"  {n:28s} cells {dom}  seam {seam}  best structure contrast {best:.1f}  {'ok' if best >= 2 else 'WEAK'}")
+    if best < 2: fails.append(f"{n}: panel structure unreadable")
 print("FAILS:" if fails else "All checks passed.", *fails, sep="\n  ")
 sys.exit(1 if fails else 0)
