@@ -58,6 +58,7 @@ The Monitor shows only the values in play (DESIGN.md, Cognitive load). A new row
 |---|---|---|---|
 | Start (Landing) | **Pressure** (log-scale gauge with milestones, style guide §11.1), **Temperature**, **Water** line ("Water boils here at {boil_c} °C") | "Air mix" fact line: about 95 % CO2, almost no O2 (static text in Phase 1; Landing step 3 points at it; A1) | Phase 1 is about pressure; the water line must be there before F4a so its "Check:" pointer has something to point at |
 | First ice change (F4a) | (water line gets its outline highlight and a BELL line) | HS: triple-point notch explained | A2 moment: the boiling point sits next to the event |
+| First panel at dust stage 1 | Dome tab power row gets the cause line **"Panel dust −{n} %"** (separate from "Storm: less sunlight −{n} %"); looking at a panel shows its stage bar | — | Power drift needs a named cause the moment it starts (DESIGN.md, Solar panel dust) |
 | Dome stable | Pressure cause lines get "Outgasser" | — | First lever |
 | Phase 2 begins | Temperature cause lines (emitters, polar frost) | HS: polar frost loss as a named sink (B2) | Second lever |
 | Thaw | **Hydrosphere** (% surface water), **Fauna** page (fauna pressure F, signatures by machine, map with quiet zones) | Ground-ice survey layer | Water and fauna arrive together |

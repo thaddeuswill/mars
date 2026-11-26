@@ -65,6 +65,24 @@ Phase 2 begins at about 8.3 h, on target (~8 h). The curve is flat before Dome s
 
 ---
 
+## 2a. Solar panel dust (draft; DESIGN.md, Solar panel dust)
+
+All numbers *invented* (game balance). Real accumulation and cleaning rates: requested from the SME; nothing here is a real figure.
+
+| Item | Value | Reasoning |
+|---|---|---|
+| Stage interval (time on the surface) | 3 sols per stage ÷ storm cap; ÷ `pace.rateMultiplier` | Visible change over a few sols; stage 4 after ~12 sols if never cleaned. Phase 1 cap 1.0 → 3 sols; Phase 3 cap 0.5 → 6; Equilibrium 0.25 → 12 |
+| Classroom (×4) | 0.75 sol per stage (~15 minutes) | Same proportion as standard; at most one cleaning trip per class period |
+| Storm adds | +1 stage at storm end; +2 if storm cap ≥ 0.8 | Dust settles out as the storm clears; nothing added before onset (F1 lock point) |
+| Local activity | ×2 dust rate within 8 blocks of the player's digging or a running Outgasser intake | B5: your own work dusts your panels |
+| Phase 3 rain | Resets panels under open sky to stage 0 | A visible benefit of the wetter world (B2) |
+| Output by stage | 0: 100 % · 1: 92 % · 2: 82 % · 3: 70 % · 4: 60 % (floor) · partly cleaned: 85 % | Drift, not a cliff; floor keeps an uncleaned dome alive but short of power |
+| With a storm | Output = stage factor × (1 − 0.6 × storm cap) | Phase 1 worst case: stage 4 in a storm → 24 %. A strong C1 lesson; batteries must cover it |
+| Panel brush | Back to stage 0; ~2 s per panel; 64 uses | Cheap, quick, but needs a trip outside (suit O2) |
+| Panel wiper (from Phase 2) | Keeps a row at ≤ stage 1; costs 1 power unit per sol per panel and one bearing every 10 sols | Route choice: time vs. power and parts |
+| Dust devil | 5 % chance per sol per panel group (Phases 1–2); panels at stage ≥ 2 become "partly cleaned" | Rare, lucky, visible; fiction based on real wind cleaning (SME to source) |
+| Phase 1 curve assumption | Panels cleaned about every 6 sols (average output ≈ 90 %) | §2 curve stands only if power stays above Outgasser demand; measure in the prototype |
+
 ## 3. Required net rates per phase (standard, solo)
 
 These set the machine sizes. Each phase's machines must reach these averages with a realistic build-up.
