@@ -64,8 +64,9 @@ Use these words the same way everywhere.
 | **Classroom mode** | Config preset: faster pacing, teacher tools, world pause. |
 | **Colony Record** | In-game page where learners see which goals they've shown. |
 | **Planetary Monitor** | In-game block showing Index values, trends, and causes. |
-| **Keeper** | What the story's characters call the player. Proposed in the story bible; pending approval. |
-| **Thawlings** | The fictional dormant fauna. Proposed name; pending approval. |
+| **Keeper** | What the story's characters call the player (approved). |
+| **Thawlings** | The fictional dormant fauna (working name; not yet cleared against existing works). |
+| **Group planet** | In classroom mode, one world shared by a group of 3–5 students. A class runs several. |
 | **Action log** | Local, anonymous record of player actions, for assessment. |
 | **PE / SEP / CCC** | NGSS performance expectation / science and engineering practice / crosscutting concept. |
 | **Well-structured / ill-structured** | Problem types; decide how to handle and route a problem. See the agent role files. |
@@ -93,6 +94,10 @@ If a document or report uses one of these terms differently, flag it in the revi
 - **Where decisions live:** gameplay in `DESIGN.md`, learning in `LEARNING.md`, technical in `ARCHITECTURE.md`, schedule in `ROADMAP.md`. This file keeps a short log pointing to them.
 - **Evidence beats argument:** playtests, prototypes, and sources settle disagreements where possible.
 
+### Still open (needs the user)
+- Who runs real playtests with people, and how often (blocks every stage exit from Stage 2 on).
+- Licenses for our own code, assets, and educator materials.
+
 ## 5. What Teammates Can Count On
 
 Implicit expectations, so we don't have to restate them each time.
@@ -117,6 +122,16 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | ISD / ADDIE as the learning design framework | LEARNING.md | From user research |
 | 2026-11-26 | Systems in Java, content in data, glue in KubeJS; server authoritative | ARCHITECTURE.md | Coordinator proposal; not yet reviewed by Technical Lead |
 | 2026-11-26 | Two goals: instructional value and market appeal, neither wins by default | DESIGN.md: Two Goals | User decision |
+| 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
+| 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
+| 2026-11-26 | Teacher CSV export uses anonymous IDs only; no username option | LEARNING.md, ARCHITECTURE.md (to update) | User decision on Producer recommendation |
+| 2026-11-26 | Custom journal, not FTB Quests | DESIGN.md (to update) | User decision on Producer recommendation |
+| 2026-11-26 | Minimal learning layer moves into the Stage 3 vertical slice | ROADMAP.md (to update) | User decision on Producer recommendation |
+| 2026-11-26 | LMS integration after release, opt-in only | ROADMAP.md, ARCHITECTURE.md (to update) | User decision on Producer recommendation |
+| 2026-11-26 | Producer owns README.md | README.md | User decision on Producer recommendation |
+| 2026-11-26 | Fauna: option B (fictional descendants of hypothetical underground microbial life, clearly labeled) plus real environmental effects (perchlorate dust, ground collapse from melting ice) | DESIGN.md (to update) | User decision on coordinator recommendation |
+| 2026-11-26 | Fauna: non-lethal options (deterrents, quiet zones); "later life stage" replaces "mutation"; ending cards describe fauna outcomes without ranking | DESIGN.md, story bible | User decision on Lead Game Designer recommendation |
+| 2026-11-26 | Story: player is the "Keeper"; planned-solo-watch backstory approved; recorded messages text-first | story bible | User decision on Lead Game Designer recommendation |
 
 ## 7. Building the Shared Model: Four Skills
 
