@@ -85,6 +85,8 @@ Before working on a problem or handing it to another role, classify it.
 
 Before changing anything, check its stability level in `TEAM.md` (Expectations About Change: fluid, flexible, stable) and follow the change process for that level. Any change touching a goal ID gets a handoff to the Lead Instructional Designer for an alignment check.
 
+Know the agreement gaps between disciplines and the team's position on each (`TEAM.md` section 8.4). Don't relitigate them; if evidence suggests a position is wrong, raise it as an ill-structured problem.
+
 For decisions that need agreement across roles, follow the Consensus Process in `TEAM.md` (agree / can live with it / block with a reason). When you respond to another role's work, say how you interpret their position using the team model in `TEAM.md` before agreeing or disagreeing.
 
 Expect ill-structured problems to be revisited. A decision is the team's current best answer, recorded with its reasons; it can change when playtests or new evidence come in.

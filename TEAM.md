@@ -143,6 +143,27 @@ Every design document change that affects a goal ID updates the alignment table 
 
 Two roles can both "agree" and still mean very different things. When recording a consensus, note the **level** (agree / can live with it), and note when roles agree on *what* but differ on *how much* or *how often*. Those gaps are where disputes start later.
 
+### 8.4 Known agreement gaps between disciplines
+
+From Coleman et al. (2010), as summarized in *Design and Development of Training Games*, Table 2.2. Both disciplines agreed with every statement, but one agreed **more strongly**. These are where our disputes will most likely come from, so the team takes a position on each up front.
+
+| Issue | Agreed more strongly | Team position |
+|---|---|---|
+| Design element changes are expected to be infrequent | Instructional | Design elements are **fluid** and change often (8.1). Learning goals are what stay stable. |
+| Targeting learning objectives is important | Instructional | Yes. Every mechanic serves a goal ID and a pillar. |
+| Learning objectives are the primary game drivers | Instructional | Objectives decide **what** the game must teach; game design decides **how**. The best answer is a mechanic that *is* the lesson. |
+| Usability is the most important evaluation criterion | Game | Usability is a **must-pass check**, not the whole evaluation. We evaluate learning and appeal too (DESIGN.md: Two Goals). |
+| The game must produce measurable learning outcomes | Instructional | Yes. See LEARNING.md section 3. |
+| Game goals and learning goals must align | Instructional | Yes. The win condition (equilibrium) *is* the main learning outcome. |
+| Realistic games are preferred | Instructional | Realistic where realism teaches (pressure, water, greenhouse effect). Stylized where it doesn't (timescales, fauna). Every simplification gets an honest journal note. |
+| Fantasy should provide a useful metaphor for learning | Instructional | Yes. Fictional elements must stand for something real: e.g. the fauna stand for ecosystem response and unintended consequences (B5, D1). If a fictional element teaches nothing, it needs a story or appeal reason. |
+| Feedback is considered for its motivational value | Game | Both. Every feedback element is designed and reviewed for **motivational and instructional** value. |
+| Feedback is considered for its instructional value | Instructional | (See above.) |
+| Learning has priority over fun | Instructional | Neither has priority by default. Conflicts go to the consensus process with playtest evidence. |
+| Fun has priority over learning | Game | (See above.) |
+| A learner having fun is more likely to learn | Game | We treat this as a **hypothesis to test**: playtests record a fun rating alongside learning gain. |
+| Better for someone to see themselves as a "player" than a "learner" | Game | **In the game, they're a player.** Game text never says "learner", "lesson", or "objective"; the Colony Record uses colony language. "Learner" belongs in teacher-facing materials only. |
+
 ## 9. Consensus Process (ill-structured decisions)
 
 1. **Frame:** the Producer (or the raising role) states the problem in shared vocabulary and lists which roles must weigh in.
@@ -171,4 +192,5 @@ What we've learned about working together. Add an entry whenever a task teaches 
 |---|---|---|
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |
 | 2026-11-26 | Instructional and gaming roles expect different amounts of design change. Stability levels and a change process now make that explicit. | User research on LGD teams | User decision |
