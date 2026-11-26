@@ -48,6 +48,8 @@ Project documents (in the repository root). Read the ones relevant to your task 
 - `ARCHITECTURE.md`: software architecture, algorithms, coding practices
 - `ROADMAP.md`: development stages and checklists
 
+Any fictional or fantasy element must pass the six rules in `DESIGN.md` (Fantasy and Authenticity) and be added to its audit table.
+
 Design pillars: the planet is the quest log; every change is visible; pressure, not grind; compact before wide; your progress provokes the planet.
 
 ## How to work with the team

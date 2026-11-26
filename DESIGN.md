@@ -122,6 +122,48 @@ This is an ill-structured design problem: there's no single right design, and le
 - Disagreements are settled by playtest evidence where possible, not by whichever role argues hardest.
 - Each roadmap stage checks both goals before moving on, using the Success Scorecard in [TEAM.md](TEAM.md) (section 8.5).
 
+## Fantasy and Authenticity
+
+Fantasy can pull players in, keep them playing, and help learning (better retention, transfer, confidence), but only when it's designed on purpose (Malone & Lepper; Asgari & Kaufman, 2004; Gunter et al., 2008). Fantasy details that are interesting but irrelevant can distract, set up wrong ideas (negative learning), and add extraneous cognitive load on top of content that's already demanding (Clark & Mayer, 2003; Clark et al., 2006). Instructional disciplines also prefer more realism, and want fantasy to act as a useful metaphor for the objectives (Coleman et al., 2010).
+
+### Rules for every fantasy element
+
+1. **Purpose:** it must be a metaphor for a learning goal, **or** have a stated motivational purpose, and never conflict with a goal.
+2. **Complementary activity:** what the player *does* with it must exercise the thinking skill being taught (e.g. predicting, balancing, diagnosing), not something unrelated.
+3. **Negative-learning check:** if a player could leave believing something false about real Mars or Earth, the game must correct it (journal "real vs. game" note) or the element must change.
+4. **Cognitive load:** don't introduce new fantasy at the same moment as new science. Fantasy detail lives in optional lore; core science is never hidden behind it.
+5. **Seductive-detail test:** if it's interesting but teaches nothing and serves no clear motivational purpose, cut it.
+6. **Realistic by default:** real physics and real numbers wherever realism teaches. Stylize only where realism would teach nothing (e.g. centuries-long timescales).
+
+### Fantasy and authenticity audit
+
+| Element | Real or fantasy | Metaphor / purpose | Player activity matches skill? | Negative-learning risk | Status |
+|---|---|---|---|---|---|
+| Starting values (pressure, temperature, CO2) | Real | — | Reading the Monitor (C3) | Low | Keep |
+| Dust storms: visibility, solar loss, dust wear | Real | — | Planning around power loss (C1) | Low. **Avoid** storms with damaging wind force: Mars's thin air can't do that, and it's a common misconception from films. | Keep, with that limit |
+| Radiation spikes | Real | — | Shielding decisions (A4) | Low | Keep |
+| Atmospheric processors, greenhouse emitters, orbital mirrors, ice-comet impacts | Based on real proposals, simplified | Engineering interventions | Choosing and balancing interventions (B4) | Medium: implies these are proven technologies | Keep; journal labels them as proposed ideas |
+| Terraforming in ~40 hours | Fantasy (timescale) | Compresses centuries into play | Cause and effect visible in play (B1) | Medium: "terraforming is quick" | Keep; journal states real timescales |
+| Breathable air at equilibrium | Simplified | Win condition = learning outcome | Holding the balance (B4, A5) | Medium: real Mars likely can't keep a thick atmosphere without a magnetic field | Keep; journal note on atmospheric loss |
+| **Dormant subterranean fauna** | **Fantasy** | Ecosystem response and unintended consequences (B5, D1) | Defending infrastructure — **weak match** unless their behavior is driven by the player's terraforming choices | **High:** "there are animals on Mars". No life has been found on Mars. | **Needs team decision** (below) |
+| Engineered flora and biome seeding | Plausible future technology | Photosynthesis and the carbon cycle (A5) | Balancing O2 and CO2 (B4) | Low-medium | Keep; based on real plant and algae biology |
+| Colonization beacon and ships | Fiction (story frame) | Motivation: a clear end goal | — (motivational) | Low | Keep |
+| Player alone in a dome (backstory) | Fiction | Motivation and urgency | — (motivational) | Low | Keep; story bible must pass the rules above |
+
+### Open decision: the fauna (ill-structured)
+
+The fauna serve appeal strongly and are a good metaphor for unintended consequences, but they carry the biggest negative-learning risk in the game. Options for the team:
+
+| Option | Appeal | Learning | Accuracy risk |
+|---|---|---|---|
+| **A. Keep as fiction, clearly labeled.** Journal says plainly: no life has been found on Mars; these creatures are invented. | High | Metaphor intact | Medium, reduced by labeling |
+| **B. Ground in real speculation.** Fauna are fictional descendants of *hypothetical* underground microbial life, which scientists do study as a possibility. The journal explains what's real (the search for life, extremophiles on Earth) and what's invented. | High | Stronger: links to astrobiology and D1 ethics ("what if there *was* life here?") | Lower, if labeled carefully |
+| **C. Replace with an environmental response.** No creatures. The "blowback" is runaway effects instead: sinkholes from melting ground ice, toxic perchlorate dust from wet soil, algae blooms clogging machines. | Lower (no creatures to fight) | Strong, and fully realistic | Very low |
+
+Whichever option is chosen, rule 2 applies: fauna behavior should respond to the player's terraforming choices (more emitters → more aggression), so dealing with them exercises systems thinking, not just combat.
+
+Recommendation: **B**, with some of C's real effects (perchlorates, ground collapse) added alongside the fauna. It needs review by the Lead Game Designer, Lead Instructional Designer, and Subject Matter Expert through the consensus process.
+
 ## Decisions
 
 | Decision | Answer | What it means for the design |

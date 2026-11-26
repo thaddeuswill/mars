@@ -155,7 +155,7 @@ From Coleman et al. (2010), as summarized in *Design and Development of Training
 | Usability is the most important evaluation criterion | Game | Usability is a **must-pass check**, not the whole evaluation. We evaluate learning and appeal too (DESIGN.md: Two Goals). |
 | The game must produce measurable learning outcomes | Instructional | Yes. See LEARNING.md section 3. |
 | Game goals and learning goals must align | Instructional | Yes. The win condition (equilibrium) *is* the main learning outcome. |
-| Realistic games are preferred | Instructional | Realistic where realism teaches (pressure, water, greenhouse effect). Stylized where it doesn't (timescales, fauna). Every simplification gets an honest journal note. |
+| Realistic games are preferred | Instructional | Realistic where realism teaches (pressure, water, greenhouse effect). Stylized where it doesn't (timescales, fauna). Every simplification gets an honest journal note. Rules and audit: DESIGN.md, Fantasy and Authenticity. |
 | Fantasy should provide a useful metaphor for learning | Instructional | Yes. Fictional elements must stand for something real: e.g. the fauna stand for ecosystem response and unintended consequences (B5, D1). If a fictional element teaches nothing, it needs a story or appeal reason. |
 | Feedback is considered for its motivational value | Game | Both. Every feedback element is designed and reviewed for **motivational and instructional** value. |
 | Feedback is considered for its instructional value | Instructional | (See above.) |
@@ -222,6 +222,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 |---|---|---|
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
 | 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
 | 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |
 | 2026-11-26 | Instructional and gaming roles expect different amounts of design change. Stability levels and a change process now make that explicit. | User research on LGD teams | User decision |
