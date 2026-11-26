@@ -215,18 +215,19 @@ Keyframes at 0, 2, 10 (Hydrosphere gate), 20, 30 (equilibrium).
 
 Water color steps: ΔE 0.06, 0.06, 0.03 (normal); deuteranopia 0.05, 0.06, 0.04. The last step is subtle on purpose: by then the change is carried by rain and clouds.
 
-**Ice and water states (follows the DESIGN.md ice-to-water rule).** These are the core A2 visuals, so each has its own look that does not rely on color.
+**Ice and water states (follows the ice-to-water rule as corrected by the SME, round 2 §1.1).** Each warmed ice or water block compares its **local temperature** with the **boiling point of water at the current pressure** (the Monitor's derived value: 0 °C at 0.61 kPa, about 33 °C at 5 kPa, SME). Pressure passes the triple point (0.611 kPa) in about the first sol, so the below-triple-point state is rare; the **Phase 1 look near a heater is the flash puddle**. DESIGN.md's table still shows the old rule; the Lead Game Designer is updating it (SME handoff), and these visuals follow the corrected rule. These are the core A2 visuals, so each has its own look that does not rely on color.
 
-| State | When (DESIGN.md rule) | What the player sees | Assets |
+| State | When (corrected rule) | What the player sees | Assets |
 |---|---|---|---|
-| **Sublimating ice** | Pressure < 0.61 kPa, warmed ice (Phase 1, near a heater) | The ice block shrinks in 4 steps (layers 16 → 12 → 8 → 4 px tall), each step puffing **vapor wisps** (white, rising, fading). **No water ever appears.** Ground under it stays dry | `water_ice_shrink_1..3`, particle `vapor_wisp` |
-| **Flash puddle** | 0.61–5 kPa, local temp > 0 °C | A thin puddle (1 px water layer) appears, **bubbles and steams hard** for 2–4 s, then vanishes. Short-lived, clearly "boiling away" | `puddle_boiling` (4 frames), `vapor_wisp` dense |
-| **Day puddle, night ice** (Thaw) | ≥ 5 kPa, local temp > 0 °C by day, ≤ 0 °C at night | By day, a puddle (2 px) with light wisps. At night it turns into a **thin ice sheet** (white rime pattern on a flat layer). Next day, puddle again. The cycle is the visual: warmth comes and goes, so does water | `puddle`, `puddle_frozen` |
-| **Pooling water** (Hydrosphere) | ≥ 5 kPa and stays above 0 °C; hydrosphere rising | Full water blocks, **no wisps**, gentle surface animation; edges darken the ground (wet regolith `#6E4430`). Pools grow outward by block ticks | `mars_water` (still/flowing), `wet_regolith` |
+| **Flash puddle** (Phase 1 near a heater) | Local temp **at or above the boiling point** at current pressure | A thin puddle (1 px water layer) appears, **bubbles and steams hard** for 2–4 s, then vanishes. Short-lived, clearly "boiling away" | `puddle_boiling` (4 frames), `vapor_wisp` dense |
+| **Day puddle, night ice** (Thaw) | Local temp between 0 °C and the boiling point by day, ≤ 0 °C at night | By day, a puddle (2 px) with light wisps. At night it turns into a **thin ice sheet** (white rime pattern on a flat layer). Next day, puddle again. The cycle is the visual: warmth comes and goes, so does water | `puddle`, `puddle_frozen` |
+| **Pooling water** (Hydrosphere) | Local temp stays between 0 °C and the boiling point; hydrosphere rising | Full water blocks, **no heavy wisps**, gentle surface animation; edges darken the ground (wet regolith `#6E4430`). Pools grow outward by block ticks | `mars_water` (still/flowing), `wet_regolith` |
 | **Stable seas** | ≥ 30 kPa and ≥ 0 °C | Same as pooling, plus water color moving toward blue (table above) | — |
+| *Sublimating ice (rare)* | Pressure below 0.611 kPa (about the first sol only), warmed ice | The ice block shrinks in 4 steps (16 → 12 → 8 → 4 px), puffing vapor wisps; no water. Kept because a player who warms ice on sol 1 must see the right thing; not a planned teaching moment | `water_ice_shrink_1..3`, `vapor_wisp` |
 
 - **Vapor wisp particle:** 8×8, 4 frames, `#F4F1EA` at 60 % → 0 % alpha, rises 1 block over 1.5 s.
-- The amount of wisp over a water surface goes **down** as pressure goes up (wisps per second: 6 at < 5 kPa, 2 at 5–30 kPa, 0 at ≥ 30 kPa). "Wisps = water escaping" is a readable cue for the boiling-point idea **[SME]**.
+- **Heavy wisps** (6 per second) appear when the local temperature is **near or above the boiling point** at current pressure ("near" = within 5 °C: an **invented** game margin, flagged for the balance pass). They are the visible sign of boiling (A2). As pressure rises, the boiling point rises, so heavy wisps over ordinary warm water die out on their own.
+- **Light wisps** (1 per second) over water on cold mornings, at **any** pressure, because steam over water warmer than the air also happens on Earth (sea smoke; SME round 2 §2.6). The journal never says "no wisps means no evaporation".
 
 ### 3.4 O2 fraction (%): fire, bubbles
 
