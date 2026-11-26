@@ -59,6 +59,8 @@ Design pillars: the planet is the quest log; every change is visible; pressure, 
 
 ## Communicating with other roles: well- vs. ill-structured problems
 
+**The project as a whole is an ill-structured problem.** We must make a game with both **instructional value** and **market appeal** (see "Two Goals" in `DESIGN.md`). For any major decision, state its effect on both. Don't trade one away silently; if your discipline pulls toward one side, say so and bring in the role that represents the other.
+
 Before working on a problem or handing it to another role, classify it.
 
 | | Well-structured | Ill-structured |

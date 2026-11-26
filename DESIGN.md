@@ -97,6 +97,31 @@ With a custom Mars world, the companion mod is no longer small: it owns the dime
 4. **Phase 3 content:** biome seeding, O2/CO2 balancing, helmet-off check.
 5. **Ending:** colonization beacon and a cinematic or credits moment.
 
+## Two Goals: Instructional Value and Market Appeal
+
+This is an ill-structured design problem: there's no single right design, and learning value and appeal often pull against each other. Neither side wins by default.
+
+| | Instructional value | Market appeal |
+|---|---|---|
+| **Who judges it** | Teachers, learning outcomes data | Students, hobbyist players, teachers choosing what to adopt |
+| **Success looks like** | Pre/post learning gain; goals met in the Colony Record (see LEARNING.md) | Students want to keep playing; teachers adopt it and come back; hobbyists download, rate, and finish it |
+| **Draft measures** | Success criteria in LEARNING.md section 3 | Playtest fun rating; share of students who ask to keep playing; teacher setup under 30 minutes; completion rate; ratings and downloads on mod sites |
+
+**Where they pull against each other**
+| Tension | Risk if learning wins | Risk if appeal wins |
+|---|---|---|
+| Journal text and prompts | Feels like homework; players skip it | Science gets lost |
+| Realistic physics | Slow, abstract, less exciting | Teaches misconceptions |
+| Difficulty and failure | Frustration from "productive failure" | No real problem-solving |
+| Classroom pacing | Rushed, less play | Doesn't fit a school unit |
+| Fauna and combat | Toned down too far | Combat crowds out the science |
+
+**How the team resolves them**
+- The best solutions serve both: the mechanic *is* the lesson (design pillar 1, and section 4.4 of LEARNING.md: the win condition is the learning outcome).
+- Every major decision is reviewed by several roles, with the trade-off stated for both goals.
+- Disagreements are settled by playtest evidence where possible, not by whichever role argues hardest.
+- Each roadmap stage checks both goals before moving on.
+
 ## Decisions
 
 | Decision | Answer | What it means for the design |
