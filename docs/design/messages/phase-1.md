@@ -152,7 +152,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `prompt.ms` | A dust storm reaches the dome in about 1 sol. What will happen to your solar power? |
 | `prompt.hs` | Same as MS |
 | `choices` | It drops · It rises · It stays the same |
-| `why.hs` | Why? — Dust blocks sunlight · Wind turns the panels away · Cold makes panels stronger |
+| `why.hs` | Why? — Dust blocks sunlight · Wind turns the panels away · The Sun gives off less light during storms |
 | `result.ms` | Solar power dropped. Dust in the air blocks sunlight before it reaches your panels. Less light, less power. What could you store before the next storm? |
 | `result.hs` | Solar power dropped. Dust blocks sunlight before it reaches your panels. Mars's thin air can't push hard enough to move panels; the dust is the problem. What could you store before the next one? |
 | `goal_ids` | B3, C1 |
@@ -177,7 +177,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `prompt.ms` | A burst of radiation from the Sun arrives in about 1 sol. Where will you get the least radiation? |
 | `prompt.hs` | A solar event arrives in about 1 sol. Where will a Keeper get the smallest radiation dose? |
 | `choices` | Inside, under thick shielding · Out on open ground · On top of a hill · Next to a running machine |
-| `why.hs` | Why does Mars's surface get more radiation than Earth's? — Thin air and no global magnetic field · Mars is closer to the Sun · Red soil gives off radiation |
+| `why.hs` | Why does Mars's surface get more radiation than Earth's? — Thin air and no global magnetic field · Mars is closer to the Sun · The red color soaks up radiation |
 | `result.ms` | Thick shielding stops most of it. Mars has thin air and no planet-wide magnetic field. So more of the Sun's radiation reaches the ground than on Earth. |
 | `result.hs` | Shielding and depth block most of the dose. Thin air and no global magnetic field let more radiation reach Mars's surface. Mars is actually farther from the Sun than Earth; the difference is the shield, not the distance. |
 | `goal_ids` | A4, B3 |
@@ -217,30 +217,32 @@ The note never states the result (it would give away F3). It shows where to look
 
 ## 8. F4a: Ice near a heater, thin air
 
-**Design note (physics check, TEAM.md lesson "physics change triggers a forecast check").** The balance sheet's Phase 1 curve passes the triple point (0.61 kPa) at about sol 1. So in most of Phase 1, warmed ice **melts for a moment and the water boils away** (0.61–5 kPa row of the ice-to-water rule), not straight to vapor. The original correct choice ("turn straight to vapor, with no puddle") would be wrong for most players. The choices below are true in both pressure bands, and the result text picks the band. No numbers changed. **SME: please confirm.**
+**Design note (SME round 2, §1.1 and §3.1).** Pressure passes the triple point (0.611 kPa) at about sol 1, so in Phase 1 warmed ice near a heater almost always **melts and boils away at once** (the heater is far above the boiling point, which is only 2–30 °C below 5 kPa). The pure "straight to vapor" case shows only in the first sol. The trigger, question, and choices follow the SME's fix: true for sublimation and for instant boiling. The result text picks the case.
 
 | Field | Value |
 |---|---|
 | `id` | `forecast.f4a.ice_thin_air` |
 | `type` | forecast |
-| `trigger` | First ice block whose local temperature passes 0 °C while global pressure < 5 kPa (Phase 1), and the Landing checklist is done |
+| `trigger` | First ice block warmed above 0 °C locally while global pressure < 5 kPa, after Landing. Fallback: the oven sample tray (DESIGN.md, Core Design Check) |
 | `lock` | The ice block changes state |
-| `delivery` | BELL forecast card at once if the player is in the dome or at a machine screen, else at the next natural pause; the ice change is held up to 0.25 sol for the answer (heater warming curve) |
-| `prompt.ms` | This ice is now above 0 °C, but the air is very thin. What will it do? |
+| `delivery` | Side-panel card at once if the player is in the dome or at a machine screen, else at the next natural pause; the ice change is held up to 0.25 sol for the answer (heater warming curve) |
+| `prompt.ms` | The heater has warmed this ice above 0 °C. The air is very thin. What will it do? |
 | `prompt.hs` | Same as MS |
-| `choices` | Vanish, leaving no water that lasts · Melt into a puddle that stays · Stay frozen |
-| `why.hs` | Why? — The air is too thin for water to stay liquid · Ice on Mars isn't water · It's still too cold |
-| `result.ms` (pressure < 0.61 kPa) | The ice turned straight into vapor. No puddle. The air is so thin that water can't be liquid at all. This jump is called sublimation. |
-| `result.ms` (0.61–5 kPa) | The ice melted for a moment, then the water boiled away. The air is so thin that water boils near its freezing point. Warm is not enough. |
-| `result.hs` (pressure < 0.61 kPa) | Below about 0.61 kPa, ice can't melt at all; it sublimates straight to vapor. Liquid water needs more pressure. Check the Monitor's water line. |
-| `result.hs` (0.61–5 kPa) | Above 0.61 kPa ice can melt, but at this pressure water boils at about {boil_c} °C, so it boils away at once. Liquid water needs warmth and thicker air. |
+| `choices` | Disappear into vapor, leaving no water · Melt into a puddle that stays · Stay frozen |
+| `why.hs` | Why? — In thin air, water boils at a low temperature · The heater destroys the water · It's still too cold |
+| `result.ms` (local temp ≥ boiling point; the usual Phase 1 case) | The ice melted and boiled away at once. The air here is so thin that water boils just above freezing. Melted ice boils off before it can make a puddle. |
+| `result.ms` (pressure < 0.611 kPa) | The ice turned straight into vapor. No puddle. The air is so thin that water can't be liquid at all. This is called sublimation. |
+| `result.ms` (0 °C to boiling point, below 5 kPa) | The ice made a small puddle, then it dried up fast. In thin air, water boils near freezing and evaporates quickly. Warm is not enough. |
+| `result.hs` (≥ boiling point) | At {pressure} kPa water boils at about {boil_c} °C. The heater is hotter than that, so melted ice boils off at once. Liquid water needs warmth **and** thicker air. Check the Monitor's water line. |
+| `result.hs` (< 0.611 kPa) | Below 0.611 kPa (water's triple point), ice can't melt at all; it sublimates straight to vapor. Liquid water needs more pressure. |
+| `result.hs` (0 °C to boiling point) | Below its boiling point ({boil_c} °C here) the water doesn't boil, but in thin, dry air it evaporates fast and cools until it refreezes. Pools need thicker air. |
 | `goal_ids` | A2, B3 |
 | `instructional_purpose` | The A2 misconception moment: phase changes depend on pressure, not only on 0 °C. Example for the F4b contrast |
 | `motivational_purpose` | Surprise and discovery ("where did it go?") |
 | `hint_level` | — |
-| `science_claims` | Triple point 0.611657 kPa (SME ref 14); below it ice sublimates; just above it liquid forms briefly then boils or evaporates (SME refs 14, 15); boiling point at current pressure from the SME's Antoine table |
+| `science_claims` | Triple point 0.611657 kPa (AR [14]); boiling points by pressure (SME calc, Antoine: 0.7 kPa → 2 °C … 5 kPa → 33 °C); liquid below its boiling point evaporates fast in thin dry air (AR [15]) |
 | `fiction_note` | None |
-| `status` | draft (SME to confirm the two-band wording) |
+| `status` | draft (SME round 2 fix applied; ID to update the spec) |
 
 **Earth link after F4a** (journal "On Earth" line, Keeper's notes voice):
 | Field | Value |
@@ -249,13 +251,13 @@ The note never states the result (it would give away F3). It shows where to look
 | `type` | Earth link (journal line) |
 | `trigger` | F4a result shown |
 | `delivery` | Last line of the F4a journal page |
-| `text.ms` | On Earth: frost can vanish on a cold, sunny morning without melting. Freeze-dried food is made the same way, at low pressure. |
-| `text.hs` | Same as MS. Read more: on Earth this happens below freezing, when ice sublimates into very dry air; freeze-drying lowers the pressure to speed it up. |
+| `text.ms` | On Earth, ice can turn straight to vapor too. Old ice cubes shrink in the freezer, and freeze-dried food is made this way. |
+| `text.hs` | Same as MS. Read more: this jump from ice to vapor is called sublimation. Freeze-drying lowers the pressure to speed it up. Real Mars ice does it too, slowly, even below 0 °C. |
 | `goal_ids` | A2, D2 |
 | `instructional_purpose` | One real Earth example of the same physics (transfer) |
 | `motivational_purpose` | "That's in my kitchen too" |
 | `hint_level` | — |
-| `science_claims` | Frost can sublimate without melting; freeze-drying uses low pressure **[SME: verify examples]** |
+| `science_claims` | Freezer ice shrinkage and freeze-drying are sublimation (SME round 2 §3.2, approved; textbook, not opened); Phoenix saw ice sublimate (round 2 [S1][S2]) |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -269,7 +271,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `type` | Earth link (gate journal entry, last line) |
 | `trigger` | Dome stable gate |
 | `delivery` | Journal gate entry, "On Earth" line |
-| `text.ms` | On Earth, thick air presses on us all the time, for free. Mars's air pressure is less than 1 % of Earth's. |
+| `text.ms` | Mars's air pushes with less than 1 % of the force of Earth's air. Earth's thick air protects us for free. |
 | `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. Your dome has to make up the difference. |
 | `goal_ids` | A1, D2 |
 | `instructional_purpose` | Mars vs. Earth pressure as a ratio, anchored to the dome the player just stabilized |
@@ -291,12 +293,12 @@ Mensah's first message. Voice: kind teacher, curious about the data, never quizz
 | `type` | recorded message (Earth desk) |
 | `trigger` | Keeper's Report 1 sent (or the gate + 1 sol if deferred), delay 0.5 sol × `story.delayScale` |
 | `delivery` | Recorded message, text first |
-| `text.ms` | Keeper, this is Sefa Mensah at mission control. Your pressure curve made my week. On Earth, thick air keeps puddles and oceans liquid. On a high mountain the air is thinner, so water boils at a lower temperature. You're climbing the other way. |
-| `text.hs` | Same as MS. Read more: on top of Everest (about 34 kPa), water boils near 70 °C. At your 5 kPa it boils near 33 °C. Every kPa you add raises it. |
+| `text.ms` | Keeper, this is Sefa Mensah at mission control. Your pressure curve made my week. On high mountains, water boils below 100 °C. On top of Everest it boils at about 70 °C. You're climbing the other way. |
+| `text.hs` | Same as MS. Read more: Everest's summit air is about 34 kPa. At your 5 kPa, water boils at about 33 °C. Every kPa you add raises it. |
 | `goal_ids` | A1, A2, D2 |
 | `instructional_purpose` | Earth example of pressure setting the boiling point; sets up the F4b contrast |
 | `motivational_purpose` | Someone on Earth is reading your data; a new warm voice after the crew |
 | `hint_level` | — |
-| `science_claims` | Water boils at a lower temperature at altitude; Everest summit ~33.7 kPa (SME milestone value), boiling near 70 °C **[SME: verify]**; at 5 kPa boils near 33 °C (SME Antoine table) |
+| `science_claims` | Everest summit about 33.7 kPa → boils at about 72 °C (SME calc, AR [17]; approved line says "about 70"); at 5 kPa about 33 °C (SME calc) |
 | `fiction_note` | None |
 | `status` | draft |

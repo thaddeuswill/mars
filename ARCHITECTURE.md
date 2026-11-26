@@ -212,7 +212,7 @@ Details: section 7 (backups, rollback), section 8 (IDs, log, CSV, grade band, Co
   2. Apply coupling: temperature gets a greenhouse term (from pressure, CO2, and super-greenhouse gas); ice melts into hydrosphere only when temperature and pressure allow liquid water; biomass converts CO2 to O2; decay returns CO2.
   3. Apply sinks and decay (e.g. polar frost loss, pressure leak without upkeep).
   4. Clamp to physical limits.
-  5. Recompute **derived values** (O2 partial pressure = pressure × O2 fraction; CO2 fraction = CO2 partial pressure ÷ pressure; boiling point of water at the current pressure). CO2 is **stored** as a partial pressure (kPa) and O2 as a fraction (%), matching DESIGN.md §1; the other form of each is derived. Derived values are defined in data and are read-only. They are part of the synced snapshot, so the Planetary Monitor shows them like any other value (DESIGN.md §1).
+  5. Recompute **derived values** (O2 partial pressure = pressure × O2 fraction; CO2 fraction = CO2 partial pressure ÷ pressure; boiling point of water at the current pressure, from the Antoine equation with coefficients in data, valid from the triple point up). CO2 is **stored** as a partial pressure (kPa) and O2 as a fraction (%), matching DESIGN.md §1; the other form of each is derived. Derived values are defined in data and are read-only. They are part of the synced snapshot, so the Planetary Monitor shows them like any other value (DESIGN.md §1).
   6. Post `IndexUpdatedEvent` if anything changed by more than a small amount.
 - Simple step-by-step (Euler) integration is enough at this step size. Coefficients live in data so balance can be tuned without code.
 
@@ -264,17 +264,30 @@ Four kinds of condition, all defined in data with the same condition language (c
 ### 2.5 World response
 - **Sky and fog:** the client interpolates between keyframes defined in data. **Any Index parameter or derived value can be an input** (consistency review M-17); the Lead Artist chooses which parameter drives which visual. Smooth transitions, no per-frame lookups.
 - **Terrain changes** (ice → vapor or water, regolith → soil): driven by random block ticks with a probability scaled by the Index, so the whole world isn't rewritten at once.
-- **Local temperature for the ice rule** (DESIGN.md §2): global mean + day/night offset + heat from nearby machines.
+- **Ice rule (updated 2026-11-26 from the SME's round 2 review, `docs/science/round2-review.md` §1.1).** Each warmed ice block compares its **local temperature** with `mars:boiling_point` (the boiling point of water at the planet's current pressure, already a derived value, 2.1) instead of using fixed pressure bands only:
+
+  | Pressure | Local temperature | Server result |
+  |---|---|---|
+  | < 0.611 kPa | > 0 °C | Sublimate: shrink the ice, no water |
+  | ≥ 0.611 kPa | ≥ `mars:boiling_point` | Melt and boil away at once (flash puddle, then gone) |
+  | 0.611–5 kPa | 0 °C to boiling point | Short-lived puddle that evaporates after a balance-sheet time and refreezes when cold |
+  | ≥ 5 kPa | 0 °C to boiling point | Water stays |
+  | any | ≤ 0 °C | Stays ice |
+
+  The rule table is data (`data/mars/dimension/ice_rule.json`, thresholds as plain numbers and the name of the derived value), so the SME's or Lead Game Designer's later changes need no code. The forecast content check (CR-F1) runs against this same table.
+
+- **Local temperature** = global mean + day/night offset + machine heat at that block.
+  - **Why this matters more now:** with fixed bands, local temperature only had to answer "above 0 °C?". Against the boiling point it has to answer "how far above 0 °C?" (2 °C at 0.7 kPa, 33 °C at 5 kPa), so ice right next to a heater should boil while ice a few blocks away only puddles. A heat value that is uniform across a 16×16 chunk would give every ice block in the chunk the same result and lose that gradient.
 
   | Approach | Cost per ice random tick | Notes |
   |---|---|---|
-  | **Per-block, exact** (sum heat from every machine within range, with distance falloff) | Look up ~9 chunks in the per-chunk index and loop over their machines: tens to hundreds of operations | Estimate: with simulation distance 4 (81 chunks per player) and vanilla's default 3 random ticks per chunk section per tick, a player's area gets a few thousand random ticks per tick. If ~10 % land on ice, that is several hundred lookups per tick per player. Likely well under a millisecond, but it grows with players × machines. *Estimate, not measured.* |
-  | **Cached per-chunk heat map (recommended)** | One map read: O(1) | Each chunk stores the heat it receives from machines. Recomputed for the ~9 chunks around a machine only when that machine is built, removed, or switched. Heat is uniform within a chunk (16 × 16 blocks), which is fine for "ice near a heater melts". |
-  | Global only | O(1) | Loses "ice near machines melts first", which the Thaw beat needs. Not recommended. |
+  | Per-block, exact (sum heat from every machine within range, with falloff) | ~9 chunk lookups plus a loop over their machines: tens to hundreds of operations | A player's area gets a few thousand random ticks per tick (simulation distance 4, vanilla's 3 random ticks per section); if ~10 % land on ice, several hundred lookups per tick per player. *Estimate, not measured.* Grows with players × machines |
+  | Cached per-chunk heat, uniform in the chunk | One map read | Cheapest, but loses the near/far gradient the new rule needs. **No longer recommended alone** |
+  | **Cached per-chunk heat sources with falloff (recommended)** | One map read + one distance calculation for each of at most 2 sources: about 10 arithmetic operations, O(1) | Each chunk caches the **two strongest heat sources** that reach it (position, heat in °C at the source, range), recomputed for the ~9 chunks around a machine only when it is built, removed, switched, or shrouded. Local heat = sum over the cached sources of `heat × max(0, 1 − distance / range)`. Then one comparison with `mars:boiling_point` (read once per simulation step, not per block) |
 
-  **Recommendation:** the cached per-chunk heat map. Same player-visible behavior at constant cost. If playtests show chunk edges look wrong, add a cheap distance falloff from the nearest machine only.
+  **Cost of the new comparison itself:** one subtraction and two comparisons per ice random tick. The boiling point is computed once per planet per simulation step (Antoine equation, 2.1), not per block. **Total added cost over the old plan:** a few floating-point operations per ice random tick; still far under a millisecond per player per tick (*estimate, to confirm in the Stage 3 load test*).
 
-- **Chunk heat reaches the client** as a chunk data attachment with sync (the 1.21.1 NeoForge branch has `AttachmentType.Builder#sync`: [source](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/attachment/AttachmentType.java); the earliest 21.1.x build that has it is **unverified**, so pin a recent build such as the MDK's 21.1.267). Fallback: a custom payload sent on `ChunkWatchEvent` and on change. Cost: one float per chunk, sent only when a machine changes state.
+- **Chunk heat reaches the client** (the two cached sources per chunk, so the client can show the same near/far gradient for the frost-free ring, wisps, and shimmer) as a chunk data attachment with sync (the 1.21.1 NeoForge branch has `AttachmentType.Builder#sync`: [source](https://raw.githubusercontent.com/neoforged/NeoForge/1.21.1/src/main/java/net/neoforged/neoforge/attachment/AttachmentType.java); the earliest 21.1.x build that has it is **unverified**, so pin a recent build such as the MDK's 21.1.267). Fallback: a custom payload sent on `ChunkWatchEvent` and on change. Cost: two small records (position, heat, range) per chunk, sent only when a machine changes state.
 
 #### 2.5.1 Signals: world-state values that aren't Index parameters
 
@@ -299,14 +312,14 @@ Answers the Lead Artist's handoff (planetary keyframes §1.2a). Units live in ea
 | Biomass | `mars:biomass` | Stored parameter | BU | `index` | |
 | O2 partial pressure | `mars:o2_partial` | Derived | kPa | `index` | Weather-mast O2 tube; Air window |
 | CO2 fraction | `mars:co2_fraction` | Derived | % | `index` | Not used by art; Monitor "read more" |
-| Boiling point of water | `mars:boiling_point` | Derived | °C | `index` | Vapor wisp rate (§3.3) |
+| Boiling point of water | `mars:boiling_point` | Derived, **synced to the client in the snapshot** | °C | `index` | Drives the server ice rule (2.5) **and** the client vapor wisps: heavy wisps where local temperature ≥ boiling point, light wisps between 0 °C and it (SME round 2, item 16). Monitor boiling-point line |
 | **Storm strength** | `mars:storm_strength` | **Signal** | 0–1 | `hazards` | See below. Client smoothing **off** (the server envelope already ramps) |
 | Radiation spike × pressure scale | `mars:surface_radiation` | Signal | 0–1 (relative to a full spike at 0.6 kPa) | `hazards` | Already includes the pressure attenuation; art doesn't multiply again |
 | Fauna pressure | `mars:fauna_pressure` | Signal | F (balance sheet §6) | `fauna` | Thawling frills, settling |
 | Breathable condition | `mars:breathable_air` | Live condition (boolean) | on/off | `gates` | Helmet, visor, Air window dot. The three parts are `mars:pressure`, `mars:o2_partial`, `mars:co2_partial` |
-| Local temperature | `local_temperature` (client-computed, not a key) | Derived on the client | °C | `client` | `mars:temperature` + day/night offset (from data, by time of sol) + `mars:chunk_heat` of the chunk |
-| Machine heat in a chunk | `mars:chunk_heat` | Chunk attachment | °C added | `machines` | 2.5 above |
-| Ice state (sublimate, flash puddle, day puddle, pool) | none: these are **server block changes** | Server rule table | — | `dimension` | Not client keyframes. The client just draws the block the server placed |
+| Local temperature | `local_temperature` (client-computed, not a key) | Derived on the client | °C | `client` | `mars:temperature` + day/night offset (from data, by time of sol) + falloff heat from the chunk's cached sources (`mars:chunk_heat`). Same formula as the server, shared code in `core` |
+| Machine heat in a chunk | `mars:chunk_heat` | Chunk attachment: up to 2 heat sources (position, heat, range) | °C | `machines` | 2.5 above |
+| Ice state (sublimate, boil away, short-lived puddle, pool) | none: these are **server block changes** | Server rule table comparing local temperature with `mars:boiling_point` (2.5) | — | `dimension` | Not client keyframes. The client just draws the block the server placed |
 | Machine and flora output (bubbles), scrubber cumulative output (deposits) | Block entity fields | Local | — | `machines` | Synced with the block entity's update packet |
 | Seeded flora nearby, quiet-zone state | Blocks and block entities | Local | — | `dimension`, `fauna` | |
 
@@ -1007,7 +1020,7 @@ Classrooms run on weak hardware (risk R-08). Costs per system, on the server:
 | Pause check | Top of each step | One flag read |
 | Sealing flood fill | On block change near a sealed volume | Up to the volume cap, spread over several ticks |
 | Fauna spawn weight | Vanilla spawn cycle | A few chunk lookups in the per-chunk index |
-| Terrain random ticks (ice, soil) | Vanilla random ticks | One read of the cached per-chunk heat map per tick on our blocks (2.5) |
+| Terrain random ticks (ice, soil) | Vanilla random ticks | One read of the chunk's cached heat sources, a falloff for at most 2 sources, and one comparison with the boiling point: about 10 arithmetic operations per random tick on our blocks (2.5) |
 | Chunk heat map, fauna pressure F, ending-card counters | When a machine changes state, or on the counted event | Recompute ~9 chunks or one running sum; no ticking |
 | Action log | Per event (buffer) + every 5 s (disk) | Small allocation; batched writes on a background thread |
 | Backups, rollback, export | Session start / on command | Background thread or server stopped; never during play |

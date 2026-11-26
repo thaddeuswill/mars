@@ -129,7 +129,7 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 | Goal | Taught by (game content) | Practiced by | Feedback | Measured: individual | Group evidence (formative) | Status |
 |---|---|---|---|---|---|---|
 | A1 Mars vs. Earth | Phase 1 Shift Briefing (2.1); Phase 1 hazards (incl. real perchlorate dust); Monitor values and milestones (Armstrong line 6.3 kPa, Everest pressure ~33.7 kPa); gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
-| A2 Liquid water | Ice-to-water rule (DESIGN.md §2): ice near heaters turns to vapor in early Phase 1, brief puddles that boil away later in Phase 1, water that stays from 5 kPa and above 0 °C; Monitor shows water's boiling point | Forecasts F4a (Phase 1) and F4b (Thaw); interleaved FI-2 (Phase 3, 2.3); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
+| A2 Liquid water | Ice-to-water rule (DESIGN.md §2, SME round-2 version): ice warmed near heaters in Phase 1 melts and boils away at once (boiling point a few °C); barely warmed ice gives a brief puddle; water stays from 5 kPa while above 0 °C and below the boiling point; Monitor shows water's boiling point. **Depends on DESIGN.md adopting the SME's rule** (Lead Game Designer) | Forecasts F4a (Phase 1) and F4b (Thaw); interleaved FI-2 (Phase 3, 2.3); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
 | A3 Greenhouse effect | Greenhouse emitters (factory-made greenhouse gases); temperature curve | Forecast F5 | Temperature trend; journal | Post-test explanation | — | Covered. Depends on the emitter journal naming what it emits (SME; Lead Game Designer) |
 | A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2, spaced), interleaved FI-3 (Phase 3) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
 | A5 CO2/O2 exchange | Phase 3 balancing; flora; CO2 from decay; carbon scrubbers; carbon flow view on the Monitor | Forecasts F8, F9; flora-bloom and decay drift events | Fires or stability; Monitor (O2 fraction **and** O2 partial pressure) | Post-test explanation; F8 result | Breathable condition (O2 partial pressure ≥ 16 kPa, pressure ≥ 75 kPa, CO2 ≤ 0.5 kPa) held for the active preset's hold time | Covered. **Concern:** narrow O2 window at 75 kPa may be hard to read at MS depth (4.7) |
@@ -233,12 +233,13 @@ Science wording checked by the SME (`docs/science/accuracy-review.md` Part D).
 | Misconception | Evidence it's common | How the game confronts it |
 |---|---|---|
 | "Mars has no atmosphere at all" | Plausible; prevalence **unverified** | Monitor starts at about 0.6 kPa, not zero (less than 1% of Earth's air pressure) |
-| "Water always melts at 0 °C and boils at 100 °C" | Prevalence **unverified** | At Mars's low pressure, warmed ice turns straight to vapor, or melts and quickly boils away. Water only pools once the pressure is high enough to keep its boiling point well above its freezing point (ice-to-water rule: vapor, then brief puddles in Phase 1, pooling water from 5 kPa; forecasts F4a and F4b) |
+| "Water always melts at 0 °C and boils at 100 °C" | Prevalence **unverified** | In Phase 1, water's boiling point is only a few degrees above freezing (the Monitor shows it), so ice warmed by a heater melts and boils away at once; barely warmed ice makes a brief puddle. Water pools once pressure is high enough to keep the boiling point well above everyday temperatures (SME round-2 ice rule; game line 5 kPa; forecasts F4a and F4b) |
 | "The greenhouse effect is the ozone hole" | **Documented** (Boyes & Stanisstreet, cited in accuracy-review.md [28]) | Journal entry contrasts them when emitters unlock |
 | "CO2 is the only greenhouse gas" | **Documented**: students often don't count CO2 or water vapor as greenhouse gases, and confuse which gases count (same research, [28]) | The emitters make factory-made greenhouse gases that trap heat far better than CO2; the emitter journal entry names them (no potency number until verified) |
 | "Air with 21% oxygen is always breathable" | Risk the old design could have *created* (SME finding 1) | Breathable depends on O2 partial pressure. The Monitor shows both the O2 percentage and the O2 partial pressure; the journal says "your lungs care how much oxygen pushes into them, not just the percent" |
 | "More oxygen is always better" | Plausible; prevalence **unverified** | Oxygen overshoot causes fires in Phase 3 |
 | "Fixing one problem fixes the system" | A systems-thinking target, not a science fact | Real side effects carry the lesson: ground collapse from melting ground ice and perchlorate in meltwater. Warming also wakes the fauna; **the fauna are fiction**, so the journal says no life has been found on Mars and pairs it with a real Earth side effect (D2 content) |
+| "Plants only respire at night" / "plants don't respire" (candidate) | **Documented** in diagnostic research on photosynthesis and respiration (Haslam & Treagust, 1987, per SME round2-review §7; not opened) | F8 uses it as a distractor; F8's explanation says plants give off some CO2 day and night and take in more than they give off while growing in light; decay pulses (CO2 from biomass) show respiration on the Monitor |
 | "Mars has life underground" (risk the game could *create*) | Risk flagged by SME and story bible | Every fauna journal entry carries the fiction note (section 1, Science accuracy notes) |
 
 **Pre-test** (section 3.3) confirms prior knowledge and catches these misconceptions before play.
@@ -392,7 +393,7 @@ When scope, schedule, or a design change forces a choice, goals get resources in
 | B2 Feedback loops | Yes (fauna, storms) | Yes (balancing) | Yes (HS-ESS2-2) | Yes | 4 | **Primary** |
 | B4 Trade-offs | Yes (Phase 2–3) | Yes (the band *is* a trade-off) | Yes (HS-ETS1-3) | Yes | 4 | **Primary** |
 | D2 Link to Earth | No (journal, story, debriefs) | No | Yes (MS-ESS3-5 for D2; HS-ESS2-4) | Yes | 2 | **Primary** (override, see rationale) |
-| C2 Design, test, improve | Yes (failures in all phases) | Partial | Yes (MS/HS-ETS1-3, -4) | Partial | 2+ | Secondary |
+| C2 Design, test, improve | Yes (failures in all phases) | Partial | Yes (MS-ETS1-4; HS-ETS1-2, -4) | Partial | 2+ | Secondary |
 | C3 Data use | Yes (Monitor, all phases) | Partial | No (practice only) | Yes | 2+ | Secondary |
 | B3 Prediction | Partial (forecasts are an added layer) | Partial | No (HS-ESS3-6 Moderate) | Partial | 1+ | Secondary |
 | B5 Unintended consequences | Yes (fauna, Phase 2–3) | No | No (Moderate) | Yes | 2 | Secondary |
@@ -610,7 +611,7 @@ Decided 2026-11-26: the vertical slice includes a thin Phase 1 learning layer so
 | Item | Goal | Why it's in the slice |
 |---|---|---|
 | One gate journal entry (Dome stable), with its "On Earth" line | A1, D2 | Tests reading level and length |
-| Forecasts F1 (dust storm) and F4a (ice turns to vapor), and F2 if the radiation spike is in the slice | B3, C1, A2, A4 | Tests the forecast flow and hidden answers in a group |
+| Forecasts F1 (dust storm) and F4a (warmed ice vanishes, no water), and F2 if the radiation spike is in the slice | B3, C1, A2, A4 | Tests the forecast flow and hidden answers in a group |
 | One failure report (seal breach) with Hana's tip | C2 | Tests "hints, not answers" |
 | Keeper's Record skeleton with 2 pages (C1, C2) and the "Cairn team" section | C1, C2 | Tests own-evidence vs. group-milestone display |
 | Action log with actor IDs, and a CSV export | All | Tests per-student evidence end to end |
@@ -768,6 +769,8 @@ Simple behaviors (a fact, a step) are easy to detect from single events. **Compl
 | Water phase change under pressure; partial pressure and breathability; feedback-loop identification; engineering trade-offs | — | A2, A5 (HS), B1, B2, B4, C1 | **No instrument found** this session; **we build these** from the blueprint (3.3) |
 
 **What each instrument tests vs. what the game trains:** the GECI tests energy-flow physics that the game doesn't simulate (we show warming from gases, not radiation transfer), so a gain on it would mostly come from debrief 2, not from play. Our own items test what play trains: predicting outcomes in new scenarios, reading data tables, and naming loops and trade-offs. Report the two separately.
+
+**External review we still need** (SME round2-review §11; the teacher-facing items fold in here): the **transfer-task answer key** (rubrics.md) needs a high school Earth or environmental science teacher plus a carbon-cycle scientist, because it will be used to grade and some link strengths are uncertain; the **forecast distractors and explanations** need middle and high school science teachers, because whether a distractor *reads* as wrong to a 12–18-year-old is a classroom judgment; the **NGSS mapping** needs a science teacher or state NGSS coordinator. Until then these stay "accepted, pending external review". The planetary-scientist and climate-modeler items (ice rule, ice–albedo, polar frost) affect forecasts F4a, F4b, FI-2, and B2 content; they're tracked in the SME's list.
 
 **Validation steps for our own items (Stage 4–6):** blueprint review by the SME and the user; a read-aloud check for reading level; a pilot with stand-in learners (the user, in persona); item analysis after the first real use (difficulty, discrimination); check that rubric scores and in-game indicators (3.8) point the same way.
 
@@ -1195,7 +1198,8 @@ Mapped to NGSS performance expectations (PEs), with the science practices (SEPs)
 | B1 / B2 Systems and feedback | MS-LS2-4 (B1) | HS-ESS2-2 |
 | B3 Prediction from models | — (practice, see SEPs) | HS-ESS3-6 |
 | B4 / B5 Trade-offs and consequences | MS-ETS1-2 | HS-ETS1-3; HS-LS2-6 (stability and change) |
-| C1 / C2 Engineering design | MS-ETS1-1 to MS-ETS1-4 | HS-ETS1-1 to HS-ETS1-4 |
+| C1 Resource planning | MS-ETS1-1, MS-ETS1-2 | HS-ETS1-1 (only when paired with an Earth challenge in the transfer task or a debrief), HS-ETS1-2 |
+| C2 Design, test, improve | MS-ETS1-4; MS-ETS1-3 (only if failure reports let players compare fixes, else related) | HS-ETS1-2, HS-ETS1-4 (moderate). Not HS-ETS1-3, which belongs to B4/B5 (SME round 2) |
 | C3 Data use | — (practice only: Analyzing and interpreting data) | — (practice only) |
 | D1 Ethics | — (no PE; NGSS PEs don't assess values. Practice: Engaging in argument from evidence) | — (same) |
 | D2 Link to Earth | MS-ESS3-5 | HS-ESS2-4, HS-ESS3-6 |

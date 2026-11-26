@@ -5,7 +5,7 @@
 **Depends on:** [DESIGN.md](../../DESIGN.md) §1–3 (Index, gates, ice-to-water rule, hazards), [balance sheet](../design/balance-sheet.md), [SME accuracy review](../science/accuracy-review.md), [style guide](style-guide.md).
 **Reference swatches:** [palettes/palette-sheet-v1-placeholder.png](palettes/palette-sheet-v1-placeholder.png) (placeholder; the hex values in this file win if they ever differ).
 
-> **SME review flags in this file:** every row marked **[SME]** needs a science check. The biggest one is the **sky path from tan through rose to blue** (§2.3, §3.1). The SME is checking the "tan toward pink" claim now. My values are a best grounded guess and are marked where they are stylized.
+> **SME review (round 2, 2026-11-26, [docs/science/round2-review.md](../science/round2-review.md) §2, §4, §5) is applied in this draft:** sky path accepted (rose Phase 2 sky stays, **with a required label**, §2.3); air column "about 2×"; flame bands corrected (§3.4); aurora covers the whole sky and scales with the solar spike only (§3.7); ice states and heavy wisps now follow the **boiling point at current pressure** (§3.3); weather mast fixes (§3.9). Rows still marked **[SME]** are not yet checked.
 
 ---
 
@@ -43,7 +43,8 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 |---|---|---|---|
 | Sky zenith, horizon, night sky, sunset halo and band, fog color, fog start/end, sun aureole, star density, cloud height (§3.1) | **Pressure** (kPa) | log10 | Index parameter |
 | Storm overlay on sky, fog, sun; dust particles (§3.7) | **Storm strength** (0–1, current weather event) | linear | Derived (weather state); max capped by gameplay phase |
-| Radiation glow and click rate (§3.7) | **Radiation spike active** × **pressure** scale | linear | Event + Index parameter |
+| Aurora glow (§3.7) | **Radiation spike strength** only (not pressure; SME round 2 §2.8) | linear | Event |
+| Dosimeter click rate (§3.7, audio direction §6.2) | **Radiation spike strength** × **pressure** scale × local shielding | linear | Event + Index parameter + derived |
 | Windsock angle, sounding balloon height (§3.1, §3.9) | **Pressure** | log10 | Index parameter |
 | Exterior sound gain and low-pass (§3.1; full audio inputs in [audio direction](../audio/audio-direction.md) §9.1) **[SME]** | **Pressure** | log10 | Index parameter |
 | Weather-mast thermometer (§3.9) | **Temperature**, global mean | linear | Index parameter |
@@ -51,7 +52,7 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 | Dawn frost cover, burn-off time, dome-glass frost, thermometer (§3.2) | **Temperature**, global mean (°C) | linear | Index parameter |
 | Frost-free ring and heat shimmer near machines (§3.2) | **Local temperature** (per-chunk heat map, ARCHITECTURE.md §2.5) | threshold | Derived |
 | Ice state: sublimate / flash puddle / day puddle / pool (§3.3) | **Pressure** + **local temperature** (DESIGN.md ice-to-water rule) | rule table | Index parameter + derived |
-| Vapor wisp rate over water (§3.3) | **Pressure** (against the boiling point at that pressure) | step | Index parameter (boiling point is a Monitor derived value) |
+| Heavy vapor wisps over water and warmed ice (§3.3) | **Local temperature** compared with the **boiling point at current pressure** (the Monitor's derived value) | threshold | Derived |
 | Water color, underwater fog, clouds coverage and color, rain, ground fog (§3.3) | **Hydrosphere** (% of surface) | linear | Index parameter |
 | Flame size, flicker, fire spread (§3.4) | **O2 fraction** (%) | bands | Index parameter |
 | Helmet on/off, visor return, Air window dot (§3.4, style guide §9, §11) | **Breathable condition**: O2 partial pressure, pressure, CO2 partial pressure | live check | Derived |
@@ -85,7 +86,7 @@ Input names below are descriptive; the Technical Lead maps them to the real data
     { "at": 0.6,  "sky_zenith": "#A87B5A", "sky_horizon": "#D2AE86", "fog": "#C49A73",
       "sunset_halo": "#7E9CC4", "sunset_band": "#8A6A55", "night": "#0D0B0E",
       "fog_start": 0.70, "fog_end": 1.00 },
-    { "at": 75.0, "sky_zenith": "#4A7AC2", "...": "..." }
+    { "at": 75.0, "sky_zenith": "#6A93CF", "...": "..." }
   ]
 }
 ```
@@ -100,23 +101,23 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 
 | Real observation | Source (not opened; **unverified** details) | What we take from it |
 |---|---|---|
-| The daytime sky is a pale **butterscotch / tan**, because fine suspended dust (particles around 1.5 µm) absorbs blue light and scatters red | Smith & Lemmon (1999), Mars Pathfinder imager opacity results, *JGR Planets*; Lemmon et al. (2004), "Atmospheric imaging results from the Mars Exploration Rovers", *Science* 306 | Start sky: tan, brighter near the horizon, slightly darker and redder at the zenith |
+| The daytime sky is a pale **butterscotch / tan**, because fine suspended dust (particles around 1.5 µm, size **unverified**) absorbs blue light and scatters red | Smith & Lemmon (1999), Mars Pathfinder imager opacity results, *JGR Planets*; Lemmon et al. (2004), "Atmospheric imaging results from the Mars Exploration Rovers", *Science* 306; **Bell, Savransky & Wolff (2006), "Chromaticity of the Martian sky", *JGR* 111, doi:10.1029/2006JE002687** (best source for sky color: color tracks dust opacity; SME [S16]) | Start sky: tan, brighter near the horizon, slightly darker and redder at the zenith |
 | Published sky colors vary (tan, butterscotch, salmon, "pinkish") with dust load, time of day, and **image processing** (approximate true color vs. white-balanced). Early Viking releases were mis-colored | Bell et al. (2003), Pancam investigation and calibration, *JGR* | Our start sky is a **mid** dust day, not a storm day. "Pink" descriptions of today's Mars exist; see §2.3 |
 | **Sunsets are blue** near the sun: dust scatters blue light forward, close to the sun's direction | NASA/JPL-Caltech/MSSS, Curiosity Mastcam sunset in Gale Crater, PIA19400 (sol 956, April 2015) | Start sunset halo: cool blue. This flips to warm orange at equilibrium (§3.1) |
 | The Sun looks about **2/3 as wide** and gives about **43 %** of Earth's light | Geometry: Mars at ~1.52 AU (1/1.52 ≈ 0.66; 1/1.52² ≈ 0.43) | Sun quad drawn at **0.66×** vanilla size. Light level is **not** lowered (gameplay readability; stylized) |
 | Surface: bright **reddish dust** (iron oxides) over **darker basaltic sand**; fresh rock under the dust is **grey** | Curiosity's first drill hole ("John Klein", 2013) showed grey powder; dark dunes in Gale crater (Bagnold dunes) | Three ground families: rust regolith, bright dust, dark basalt sand; grey for drilled or broken rock |
-| Exposed **ground ice vanished** over a few days without melting | Phoenix lander, "Dodo-Goldilocks" trench (2008) | Phase 1 ice sublimates: shrinks with vapor wisps, no water (DESIGN.md ice-to-water rule) |
+| Exposed **ground ice vanished** over a few days without melting, by sublimation into cold, dry air | Phoenix lander, "Dodo-Goldilocks" trench (2008, sols 20–24; confirmed, SME [S1]) | **Supports slow sublimation of cold ice only.** Phoenix was **above** the triple point (SME [S2]), so it is **not** evidence for below-triple-point physics. Used for the high school read-more line, not for the Phase 1 heater look (that is a flash puddle, §3.3) |
 | **Frost** forms on the ground | Viking Lander 2, Utopia Planitia, frost images (1979) | Dawn frost cover keyed to temperature (§3.2) |
 | Thin **water-ice clouds** occur today | Curiosity cloud observations (several campaigns, e.g. 2019, 2021) | Faint high wisps even at hydrosphere 0 (§3.3) |
-| Mars has **aurora**; visible-light aurora was reported from the surface in 2024 | MAVEN diffuse aurora (Schneider et al., 2015, *Science*); Perseverance visible aurora (2024; **unverified**) | Optional faint night glow during radiation spikes (§3.7) **[SME]** |
+| Mars has **aurora**: diffuse aurora from solar energetic particles; the first **visible** aurora seen from the surface was **green** (oxygen, 557.7 nm), during a March 2024 solar storm | MAVEN diffuse aurora (Schneider et al., 2015, *Science*); **Knutsen et al. (2025), *Science Advances* 11, eads1563** (Perseverance; verified by SME [S18]) | Optional faint green **whole-sky** night glow during solar spikes, scaled by spike strength only (§3.7) |
 | **Phobos** orbits faster than Mars spins, so it rises in the west and sets in the east | Phobos orbital period ~7.7 h < 24.6 h sol | Optional night-sky detail (asset list) |
 
 ### 2.2 What happens as the air thickens (physics reasoning) **[SME]**
 
 This is my own reasoning, for the SME to check:
 - A blue sky comes from **Rayleigh scattering** by gas molecules. It grows with the **mass of air above you** (pressure ÷ gravity).
-- Mars's gravity is about 0.38 of Earth's, so the same surface pressure means about **2.6×** more air overhead. At **75 kPa** on Mars, the column is about **1.9×** Earth's (75/101.3 × 9.81/3.71).
-- So at equilibrium, **with low dust**, the sky should be **blue, probably deeper at the zenith and paler/whiter near the horizon than Earth's.**
+- Mars's gravity is about 0.38 of Earth's, so the same surface pressure means about **2.6×** more air overhead. At **75 kPa** on Mars, the column is **about 2×** Earth's (75/101.3 × 9.81/3.71 = 1.96; SME round 2 §2.2).
+- So at equilibrium, **with low dust**, the sky should be **blue**. SME round 2 §2.3: with twice Earth's air overhead, more light scatters more than once, so the sky is most likely a **brighter, paler, whiter blue** with a whiter horizon, not a deeper zenith (physics reasoning, not a published simulation). The 75 kPa key now follows that (§3.1).
 - In between, weak blue scattering mixes with the warm dust glow. A mix of warm tan and cool blue light gives a **desaturated, cooler, greyish-rose to lavender** sky, not a clean pink.
 - The sunset flips: with thick air and little dust, blue is scattered **out** of the long sunset path, so sunsets turn **orange-red**, like Earth's.
 
@@ -124,9 +125,9 @@ This is my own reasoning, for the SME to check:
 
 | Where | Real / expected | What we do | Why |
 |---|---|---|---|
-| Phase 2 sky (5–15 kPa) | Probably a subtle, desaturated shift **[SME]** | A clearly **rose / mauve** tint (`#A0736C` → `#927489` zenith) | The Phase 2 gate needs a visible sky change (story beat 7: "the sky shifts"). Matches the story bible's "pink sky" in Phase 2. My first, more realistic value was below the visible threshold (style guide §4.2) |
+| Phase 2 sky (5–15 kPa) | A subtle, dust-dependent shift toward cooler, greyer, slightly purple (SME round 2 §2.1: direction accurate; saturation and timing exaggerated) | A clearly **rose / mauve** tint (`#A0736C` → `#927489` zenith) | The Phase 2 gate needs a visible sky change (story beat 7: "the sky shifts"). My first, more realistic value was below the visible threshold (style guide §4.2). User decision: keep, labeled stylized. **Required label** (journal, Phase 2 gate, both bands; SME wording): *"More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them."* It also gets the SIMPLIFIED badge (style guide §7.4). Handoff: Lead Game Designer (journal text) |
 | Light level | Mars sunlight is ~43 % of Earth's | Vanilla light levels | Play readability; light level is not a learning goal |
-| Equilibrium sky | Deeper blue than Earth's, if dust is low **[SME]** | `#4A7AC2` zenith, a touch warmer at the horizon than Earth-like | Keeps a residual dust warmth so it still feels like Mars; deliberately **not** vanilla Minecraft's sky color |
+| Equilibrium sky | Brighter, paler, whiter blue than Earth's, if dust is low (SME round 2 §2.3, reasoning) | `#6A93CF` zenith (was `#4A7AC2`), whiter horizon `#B8CDE2` (was `#A9C3DF`) | Follows the SME's optional note; low stakes (sky color is not taught as a fact). Deliberately **not** vanilla Minecraft's sky color |
 | Fog getting closer as pressure rises | More air = more haze over distance (aerial perspective) is real; Mars today also has dust haze | Fog start pulls in from 70 % to 30 % of render distance | Makes "thicker air" visible (DESIGN.md: "thicker sky fog") |
 | Salt crust (perchlorate) | Perchlorate in soil is not visible | Pale salt crust where brine dried | Gives the real hazard a place to be seen; journal says the salts are invisible in real soil **[SME wording]** |
 | Flame thresholds | Real flame limits depend on O2 fraction and total pressure | Simple bands by O2 fraction (§3.4) | Readable; numbers **[SME]** |
@@ -145,8 +146,8 @@ Keyframes at 0.6 (start), 5 (Phase 2 gate), 15, 30 (Phase 3 gate), **75 (equilib
 
 | Property | 0.6 kPa | 5 kPa | 15 kPa | 30 kPa | 75 kPa |
 |---|---|---|---|---|---|
-| Sky zenith | `#A87B5A` | `#A0736C` | `#927489` | `#727EAC` | `#4A7AC2` |
-| Sky horizon | `#D2AE86` | `#CDA696` | `#C8ABAA` | `#C0BAC3` | `#A9C3DF` |
+| Sky zenith | `#A87B5A` | `#A0736C` | `#927489` | `#727EAC` | `#6A93CF` |
+| Sky horizon | `#D2AE86` | `#CDA696` | `#C8ABAA` | `#C0BAC3` | `#B8CDE2` |
 | Fog color (day) | `#C49A73` | `#BD9384` | `#B39A9C` | `#A9AAB9` | `#B4C6D8` |
 | Sunset halo (around the sun) | `#7E9CC4` (blue) | `#8A98BE` | `#A29CAE` | `#CCA388` | `#F2A35E` (orange) |
 | Sunset band (horizon away from sun) | `#8A6A55` | `#8C6660` | `#8E6670` | `#B07466` | `#D9714F` |
@@ -169,7 +170,9 @@ Keyframes at 0.6 (start), 5 (Phase 2 gate), 15, 30 (Phase 3 gate), **75 (equilib
 | 0.6 → 5 | 0.041 | 0.036 | 0.036 | 0.018 | 0.023 (tritanopia) |
 | 5 → 15 | 0.047 | 0.026 | 0.034 | 0.044 | 0.037 |
 | 15 → 30 | 0.067 | 0.043 | 0.049 | 0.087 | 0.054 |
-| 30 → 75 | 0.061 | 0.046 | 0.079 | 0.074 | 0.044 |
+| 30 → 75 | 0.068 | 0.055 | 0.079 | 0.074 | 0.061 (deuteranopia) |
+
+(30 → 75 row rechecked 2026-11-26 after the paler equilibrium sky; both new values pass in all three simulations: zenith ≥ 0.061, horizon ≥ 0.048.)
 
 Where a step is weak (0.6 → 5 sunset halo; tritanopia at 0.6 → 5), the **windsock, balloon, fog distance, and sound** change at the same time, so the Phase 2 change never relies on color alone.
 
@@ -377,7 +380,7 @@ Sky **slate-lavender blue** `#727EAC`; sunset halo has turned neutral-warm (`#CC
 Sky blue, clouds and rain, moss and grass spreading, bubbles in ponds, normal flames. The change is **the helmet coming off** (style guide §9.2): the world was already this color; the sound world opens.
 
 ### 4.8 Equilibrium — "Earned relief"
-Deep blue zenith `#4A7AC2`, pale horizon, **orange sunsets** (`#F2A35E` halo, `#D9714F` band): the reverse of the blue Mars sunset at the start. Regular rain, green ground, settled thawlings nesting in quiet zones, spore drift, full sound. The beacon sequence plays in this world (style guide §10).
+Bright, pale blue zenith `#6A93CF`, whitish horizon `#B8CDE2`, **orange sunsets** (`#F2A35E` halo, `#D9714F` band): the reverse of the blue Mars sunset at the start. Regular rain, green ground, settled thawlings nesting in quiet zones, spore drift, full sound. The beacon sequence plays in this world (style guide §10).
 
 ---
 

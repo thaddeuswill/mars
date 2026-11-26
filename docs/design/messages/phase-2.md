@@ -57,7 +57,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `trigger` | F5 result shown |
 | `delivery` | Last line of the emitter journal page |
 | `text.ms` | On Earth: CO2, methane, and water vapor trap heat too. That's the greenhouse effect. It is not the ozone hole. |
-| `text.hs` | Same as MS. Read more: the ozone hole is a different problem. It lets more of the Sun's UV light reach the ground; it is not what traps heat. |
+| `text.hs` | Same as MS. Read more: greenhouse gases absorb infrared energy given off by the ground and send some of it back down. Water vapor mostly responds to warming rather than starting it. The ozone hole is a different problem (UV light). |
 | `goal_ids` | A3, D2 |
 | `instructional_purpose` | Transfer to Earth's greenhouse gases; corrects the greenhouse–ozone confusion (SME misconception row, Boyes & Stanisstreet) |
 | `motivational_purpose` | "This is the thing from the news" |
@@ -74,14 +74,14 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 |---|---|
 | `id` | `forecast.f4b.ice_thick_air` |
 | `type` | forecast |
-| `trigger` | Thaw gate reached; issued when the first ground-ice block near a warm machine passes 0 °C locally (pressure already ≥ 5 kPa) |
+| `trigger` | Thaw gate reached; issued when the first ground-ice block near a warm machine passes 0 °C locally (pressure then about 22 kPa, boiling point about 62 °C: SME calc) |
 | `lock` | That ice block changes state (held up to 0.25 sol for the answer, as F4a) |
 | `delivery` | BELL forecast card at the next natural pause; result first in queue |
 | `prompt.ms` | Last time, warmed ice vanished. Now the air is much thicker. What will warmed ice do? |
 | `prompt.hs` | Same as MS |
 | `choices` | Melt into water that stays while it's warm · Vanish into vapor again · Stay frozen |
 | `why.hs` | What changed? — Thicker air raised water's boiling point · The ice is a different kind · The machine is stronger |
-| `result.ms` | The water stays now. Thicker air presses on the water, so it doesn't boil away. Water needs warmth and thick air together. At night it freezes again. |
+| `result.ms` | The water stays now. Thicker air raises water's boiling point, so it doesn't boil away. Water needs warmth and thick air together. At night it freezes again. |
 | `result.hs` | The water stays. At {pressure} kPa water boils near {boil_c} °C, well above freezing, so liquid water can last. Below 0 °C it still freezes. Warmth and pressure both had to change. |
 | `goal_ids` | A2, B3 |
 | `instructional_purpose` | Non-example to F4a's example: same warmth, different pressure, different result |
@@ -98,13 +98,13 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `type` | Earth link (gate journal entry, last line) |
 | `trigger` | Thaw gate |
 | `delivery` | Journal gate entry, "On Earth" line |
-| `text.ms` | On Earth: our thick, warm air is why puddles last. |
-| `text.hs` | Same as MS. Read more: in the Arctic today, frozen ground (permafrost) is thawing. The ground sinks and cracks roads and buildings, like the ground near your warm machines. |
+| `text.ms` | On Earth, thick air keeps water from boiling away. That's why puddles last. |
+| `text.hs` | Same as MS. Read more: in the Arctic, frozen ground is thawing. Roads crack and houses tilt as the ice underneath melts, like the ground near your warm machines. |
 | `goal_ids` | A2, B5, D2 |
 | `instructional_purpose` | A2 transfer; HS adds a real unintended consequence of thawing ground |
 | `motivational_purpose` | Connects the ground-collapse hazard to something real |
 | `hint_level` | — |
-| `science_claims` | Thawing permafrost damages infrastructure in the Arctic **[SME: verify]** |
+| `science_claims` | Thawing permafrost damages Arctic infrastructure (SME round 2 [S6], accurate) |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -123,8 +123,8 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `prompt.hs` | Same as MS |
 | `choices` | They go up · They go down · No change |
 | `why.hs` | What kind of loop is this? — Reinforcing: damage leads to more building, more thawlings · Balancing: thawlings keep machine numbers steady · Not a loop |
-| `result.ms` | More visits. Thawlings come to warm, wet, buzzing machines. Each machine adds to fauna pressure on the Monitor. Fighting doesn't lower it. What would? |
-| `result.hs` | More visits: fauna pressure went from {f_before} to {f_after}. Damage makes you build more, which draws more thawlings: a reinforcing loop. Fighting treats the symptom; it doesn't lower the pull. What would? |
+| `result.ms` | More visits. Thawlings come to warm, wet, buzzing machines. Each machine adds to fauna pressure on the Monitor. If you answer damage by building more, the visits keep growing. What would lower the pull? |
+| `result.hs` | Fauna pressure went from {f_before} to {f_after}. This is a reinforcing loop when you answer damage by building more machines. Without your rebuilding, broken machines go quiet and the loop balances. Fighting doesn't lower the pull. |
 | `goal_ids` | B2, B5, B3 |
 | `instructional_purpose` | A reinforcing loop the player is inside; points at signature (the cause), not the symptom |
 | `motivational_purpose` | Tension; the player's own choices set the difficulty |
@@ -141,10 +141,10 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 |---|---|
 | `id` | `forecast.f7.solar_thicker` |
 | `type` | forecast |
-| `trigger` | First solar event scheduled after pressure is at least twice the pressure at F2; issued with `log.solar.warn` |
+| `trigger` | First solar event scheduled once pressure ≥ 5 kPa (SME round 2: about 8× today's air overhead, a clear difference); issued with `log.solar.warn`. The scheduler guarantees one in Phase 2 |
 | `lock` | `log.solar.shelter` at T−0.25 sol (it shows the expected surface dose) |
 | `delivery` | As F2 |
-| `prompt.ms` | The air is much thicker than at your last solar event. How much radiation will reach the ground this time? |
+| `prompt.ms` | The air is much thicker than at your first solar event. How much radiation will reach the ground this time? |
 | `prompt.hs` | Same as MS |
 | `choices` | Less than last time · More than last time · The same |
 | `why.hs` | Why? — More air means more matter to absorb it · Thicker air reflects the Sun · The thawlings block it |
@@ -170,12 +170,12 @@ The key D2 message. Supports the class debrief in period 14 (the classroom graph
 | `type` | recorded message (Earth desk) |
 | `trigger` | Keeper's Report 2 sent (or gate + 1 sol if deferred), delay 0.5 sol × `story.delayScale` |
 | `delivery` | Recorded message, text first |
-| `text.ms` | Keeper, I read your report. On Earth we are adding greenhouse gas too. You do it with a plan. We did it without meaning to, as a side effect of burning fuel. Our records show more CO2 and a warmer Earth over the last century. And thawing frozen ground releases more carbon, which warms things more. A loop, like yours. |
-| `text.hs` | Same as MS. Read more: scientists conclude that human activities are the main cause of warming since the mid-1900s. CO2 has been measured at Mauna Loa, Hawaii, since 1958. Melting ice also leaves darker ground and sea that absorb more sunlight: another reinforcing loop. |
+| `text.ms` | Keeper, I read your report. On Earth we are adding greenhouse gas too. You do it with a plan. We did it without meaning to, mostly by burning coal, oil, and gas. Our records show more CO2 and a warmer Earth since the 1800s. Thawing frozen ground releases more carbon: a reinforcing loop, like yours. |
+| `text.hs` | Same as MS. Read more: scientists conclude that human activities are the main cause of recent warming. Records: the Mauna Loa CO2 record and NASA's temperature record. Melting Arctic ice leaves darker sea that absorbs more sunlight: another reinforcing loop. The Arctic has warmed nearly 4 times faster than the globe. |
 | `goal_ids` | D2, A3, B2, B5 |
 | `instructional_purpose` | Evidence of Earth's warming and its main cause (MS-ESS3-5, HS-ESS2-4 context); a real reinforcing loop matched to the thawling loop; emissions as a side effect (B5) |
 | `motivational_purpose` | The Mars story suddenly matters at home; no blame, no lecture |
 | `hint_level` | — |
-| `science_claims` | Atmospheric CO2 and global temperature rose over the last century; human activities are the main cause (IPCC AR6) **[SME: verify wording and source]**; Mauna Loa record since 1958 **[SME: verify]**; permafrost carbon feedback; ice–albedo feedback **[SME: verify]** |
+| `science_claims` | Human activity is the main cause of recent warming (IPCC AR6 WG1 SPM, not opened); NOAA Mauna Loa and NASA GISTEMP records (not opened); permafrost carbon (Schuur et al. 2015, not opened); Arctic ~3.8× global rate (round 2 [S5]). **The "about 1.1 °C" figure is left out until sourced** (SME 10.1) |
 | `fiction_note` | None (no thawlings or Earth organisms paired in this message) |
 | `status` | draft |

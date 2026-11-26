@@ -91,6 +91,7 @@ Use these words the same way everywhere.
 | **Iteration** | One round of agent tasks, or one build-and-test loop. Iterations sit inside roadmap stages. |
 | **Face-validity check** | The owner or SME judging whether a concept looks like what it claims to be. |
 | **Risk gate table** | For a change: what could break · the check that catches it · the result. |
+| **Signal** | A read-only world-state value (storm strength, surface radiation, fauna pressure) published by one system module into the planet snapshot. Visuals and conditions read it like an Index parameter, but it isn't one. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -221,6 +222,7 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
 | 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
 | 2026-11-26 | Ice rule changed: compare each ice block's local temperature with the boiling point at current pressure (not a pressure band); the flash puddle near a heater is the Phase 1 look. Flame bands corrected (no flame below 14% O2). Verdicts in round2-review §11 stay "accepted, pending external review". | docs/science/round2-review.md | Subject Matter Expert; design edits sent to roles |
+| 2026-11-26 | Clouds use a density map (mesh rebuilt on coverage change); heat shimmer is particles only (it carries meaning, so it must look the same for every player); thawlings use vanilla entity animation; art and content live in `pack/assets/` and `pack/data/` built into the mod jar; every goal page fills from player-scope events only; every player and forecast pair gets exactly one result; test strategy adopted | ARCHITECTURE.md §2.5, §2.6.1, §2.13, §3.2, §8.5; docs/tech/test-strategy.md | Technical Lead |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
@@ -416,6 +418,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Technical Lead | Round 2: architecture extensions, test strategy, build plan, licensing plan | `ARCHITECTURE.md`, `docs/tech/` | `docs/team/reports/2026-11-26-technical-lead-round2.md` |
 | 2026-11-26 | Producer | Round 2: roadmap, budget, QA plan, risks, consensus brief, process review | `ROADMAP.md`, `docs/production/`, `PROCESS.md` | `docs/team/reports/2026-11-26-producer-round2.md` |
 | 2026-11-26 | Subject Matter Expert | Round 2: science verdicts, value audit, external-review list | `docs/science/round2-review.md` | `docs/team/reports/2026-11-26-subject-matter-expert-round2.md` |
 | 2026-11-26 | Lead Artist | First art direction, keyframes, asset list | `docs/art/` | `docs/team/reports/2026-11-26-lead-artist-art-direction.md` |
@@ -437,6 +440,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | When a new requirement seems to break a privacy rule, look for a narrow interface at the boundary (e.g. the `NameScrubber`) before relaxing the rule. | Technical Lead |
 | 2026-11-26 | A new process rule can silently conflict with a decided rule the same day ("no modal progress pop-ups" vs. a blocking, deferrable Keeper's Report). When a process document lands, check it against TEAM.md 8.6 and the other decided rules. | Producer |
 | 2026-11-26 | Check each physics threshold against the balance curve. A threshold the curve passes in the first sol hides that regime and any forecast built on it (the ice rule broke forecast F4a). After every physics or balance change, run the forecast check with "threshold vs. curve". | Subject Matter Expert |
 | 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
