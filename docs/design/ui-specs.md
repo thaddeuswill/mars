@@ -27,7 +27,7 @@ Follows TEAM.md 8.6 as decided (option I-C: LEARNING.md §4.6 rules 1–11 as th
 - **"Card"** in the message files means a side-panel card, never a modal window.
 - **Gate reached:** the world changes and the side panel shows "Phase 2 reached" with what unlocked. No modal. **Keeper's Report (confirms the Producer's fix for the PROCESS.md vs. I-C rule 3 conflict):** one log line ("Keeper's Report ready to send") plus a side-panel entry. The report opens full screen **only when the player chooses it, or at the next natural pause** (with a "Later" button). It never opens over danger or building, so it is never a modal pop-up for progress. An unsent report is re-offered **at most once per session** plus the "Since last shift" recap line (flow guard 1).
 - **Sequence at a gate:** report → Mensah's reply (after its delay) → Shift Briefing. One item visible at a time; together they count as one pop-up.
-- **Forecasts:** shown in the side panel at the next natural pause; result first in the queue; deferred forecasts lock as "expired", never wrong. No new forecast or report pop-up in the last ~5 minutes of a class (teacher end-of-session signal).
+- **Forecasts:** shown in the side panel at the next natural pause; result first in the queue; deferred forecasts lock as "expired", never wrong. No new forecast or report pop-up in the last ~5 minutes of a class (teacher end-of-session signal). **Monitor open with an unanswered F3, F5, or F8:** the forecast card shows first ("Log your forecast before you look"; Answer or Skip), then the Monitor. Looking never silently closes a forecast (LEARNING.md lock-point rule, CR-F9).
 - **Caps are config values** (`ui.popupMinMinutes` ≈ 10, `ui.logLinesPerMinute` ≈ 3), set from Stage 3 action-log counts (flow guard 2).
 - **Groups:** one player's prompt never pauses others.
 
@@ -46,7 +46,7 @@ A block in the dome (and later in outposts). Opening it is a **natural pause** (
 | Right strip | Milestones and alerts: space weather (§4), storm forecast, fauna page link (from Thaw) | A4, C1, B2 |
 | Bottom | "Read more" (HS default open; MS closed) | — |
 
-**Fading (LEARNING.md fading gap):** cause breakdowns are open by default in Phases 1–2 and **closed by default in Phase 3** (one click opens them). The Lead Instructional Designer owns the fading schedule; this is the UI hook.
+**Cause breakdown default per phase (fading hook; ID owns the schedule, LEARNING.md §4.8):** Phase 1: open on every value row. Phase 2: open on values new this phase (temperature, hydrosphere, fauna), closed on pressure. Phase 3: closed by default, one click opens. **Re-scaffold:** whenever a value leaves its band (or a hold pauses), that row's breakdown opens by itself and stays open until the value is back in band.
 
 ---
 
@@ -56,8 +56,8 @@ The Monitor shows only the values in play (DESIGN.md, Cognitive load). A new row
 
 | Shown from | Planet rows added | Derived and extra displays | Why then |
 |---|---|---|---|
-| Start (Landing) | **Pressure** (log-scale gauge with milestones, style guide §11.1), **Temperature** | "Air mix" fact line: CO2 95 %, O2 0.1 % (static text in Phase 1, A1) | Phase 1 is about pressure; temperature is flat but anchors A1 |
-| First ice change (F4a) | **Water** line: "Water boils here at {boil_c} °C" | HS: triple-point notch explained | A2 moment needs the boiling point next to the event |
+| Start (Landing) | **Pressure** (log-scale gauge with milestones, style guide §11.1), **Temperature**, **Water** line ("Water boils here at {boil_c} °C") | "Air mix" fact line: about 95 % CO2, almost no O2 (static text in Phase 1; Landing step 3 points at it; A1) | Phase 1 is about pressure; the water line must be there before F4a so its "Check:" pointer has something to point at |
+| First ice change (F4a) | (water line gets its outline highlight and a BELL line) | HS: triple-point notch explained | A2 moment: the boiling point sits next to the event |
 | Dome stable | Pressure cause lines get "Outgasser" | — | First lever |
 | Phase 2 begins | Temperature cause lines (emitters, polar frost) | HS: polar frost loss as a named sink (B2) | Second lever |
 | Thaw | **Hydrosphere** (% surface water), **Fauna** page (fauna pressure F, signatures by machine, map with quiet zones) | Ground-ice survey layer | Water and fauna arrive together |
@@ -156,7 +156,7 @@ When all three show a check **and** the hold is complete, the helmet icon change
 
 **Not used:** a single "breathability %" number (hides the two causes).
 
-**World cue:** the **weather mast** (§7) shows the same O2 and CO2 values as gas tubes outside, so the panel has an honest in-world twin.
+**World cue:** from Phase 3 the **weather mast** (§7) carries O2 and CO2 **gauges** (indicator bars, never tinted gas) showing the same values, so the panel has an honest in-world twin. Its barometer shows pressure from the start.
 
 ---
 
@@ -181,9 +181,15 @@ The content lists the Artist asked for (crops, biome types, maintenance parts, b
 
 ---
 
+## 7a. Recipe view and session end
+
+**Locked items: "Unlocks at…".** Locked recipes are hidden, never greyed out (PROCESS.md §4). On **gentle** and **standard** guidance, the recipe view ends with one quiet line naming the next unlock in planet terms: *"More machines unlock at Phase 2 (pressure 5 kPa)."* On **expert**, no line.
+
+**Shift log** (optional, classroom): at the teacher's end-of-session pause, a three-line side-panel card from the player's own data (messages/phase-1.md §13).
+
 ## 8. Journal
 
-**Keeper's Report sheet.** Play summary (built from data), own forecast tally, one reflection question, a text box, **Send** and **Later**. Beside every free-text box, in both bands (`report.name_note`): *"Don't write your name or anyone else's. Your report goes to Earth with your Keeper number only."* In classroom mode the note adds (`report.name_note.class`): *"Your teacher can read this."* (LEARNING.md §5.4; reflections.csv scrubbing is the Technical Lead's backstop.)
+**Keeper's Report sheet.** Delivered as one log line plus a side-panel entry (§0). Contents: a **"Your shift"** block first (own events only, in positive terms: machines you built, failures you fixed, forecasts you logged and got right, times you checked the Monitor before building; missed forecast topics link to their blank Keeper's Record pages), then the team summary (built from data), own forecast tally, one reflection question, a text box, **Send** and **Later**. Beside every free-text box, in both bands (`report.name_note`): *"Don't write your name or anyone else's. Your report goes to Earth with your Keeper number only."* In classroom mode the note adds (`report.name_note.class`): *"Your teacher can read this."* (LEARNING.md §5.4; reflections.csv scrubbing is the Technical Lead's backstop.)
 
 Tabs: **Shift notes** (gate entries, Hana's notes, briefings) · **Messages** (archive, unread marked with a dot and a count) · **Forecasts** (own tally per phase: "Phase 1: 3 of 4 right") · **What caused it?** (self-check page; final name of the old "Explain it") · **Keeper's Record** (header "What the colonists will need to know"; own-evidence pages and the "Cairn team" section).
 

@@ -25,7 +25,7 @@ Each change to the planet should be visible and felt: sky color, weather, which 
 
 ### Phase 2: Industrial Geo-Engineering (Mid Game)
 - **Setting:** Expanding out from the bio-dome with airlocks, pressurized transit tubes, and automated outposts.
-- **Mechanics:** Atmospheric processors, super-greenhouse gas emitters, and deep-crust water extractors that thicken the atmosphere and raise surface temperatures.
+- **Mechanics:** Atmospheric processors, super-greenhouse gas emitters, and **ice extractors** (drills that melt buried ground ice for water) that thicken the atmosphere and raise surface temperatures.
 - **Threats:** Ecosystem blowback. Warmth and water wake dormant underground fauna (fictional, clearly labeled), which later reach a larger **later life stage**. They are drawn to machines, not to the player. The real side effects of warming come too: ground collapse where buried ice melts under buildings, and perchlorate salts dissolving into meltwater.
 
 ### Phase 3: Biome Seeding & Equilibrium (Late Game)
@@ -47,7 +47,7 @@ One server-wide state object drives all progression (settled: one Index per worl
 |---|---|---|---|---|
 | Pressure (kPa) | 0.6 | ≥ 75 | Regolith Outgassers (Phase 1), atmospheric processors (Phase 2+) | Fewer suit leaks, thicker sky fog, liquid water possible (with warmth) |
 | Temperature (°C, global mean) | −60 | ≥ 5 | Super-greenhouse gas emitters, orbital mirrors, ice–albedo feedback (small, capped ~2 °C) | Ice can melt (with pressure), fewer cold-damage zones |
-| Hydrosphere (% of surface covered by liquid water) | 0 | ≥ 30 | Deep-crust extractors, ice-comet impacts, melting ground ice | Surface water, rain, wakes fauna |
+| Hydrosphere (% of surface covered by liquid water) | 0 | ≥ 30 | Ice extractors, ice-comet impacts, melting ground ice | Surface water, rain, wakes fauna |
 | O2 fraction (%) | 0.1 | 19–23 (fire-safety band) | Algae vats, seeded biomes | Fire possible; above 23 %, fire hazard |
 | CO2 (partial pressure, kPa) | 0.57 | ≤ 0.5 | Raised by outgassers and decay; lowered by biomes and carbon scrubbers | Must fall while temperature holds (balancing act) |
 | Biomass (biomass units) | 0 | ≥ 1,500 (draft) | Seeded flora spreading naturally | Unlocks self-sustaining biomes |
@@ -111,6 +111,10 @@ Boiling points (SME calc): 0.7 kPa → 2 °C, 1 → 7, 2 → 18, 3 → 24, 4 →
 | Breathable pressure | 75 kPa | ~25 sols into Phase 3 | rest of Phase 3 | F9, beat 17 | OK |
 | Fire band | 23 % O2 | Phase 3, player-driven | — | F9 (fires on entering the window, before 23 %) | OK |
 | Ice–albedo cap | 2 °C total | Spread over Phase 2 melting | — | Monitor cause line | OK (small by design) |
+| Puddle drying time below 5 kPa | 0.1 sol (invented) | Phase 1, whenever ice is barely warmed | — | F4a outcome check at 0.25 sol | OK: 0.1 < 0.25 (hard limit) |
+| Radiation atmosphere factor | 0.35 at 5 kPa | Phase 2 start | — | F7 (fires at ≥ 5 kPa) | OK: dose about a third of the first event |
+| Drift-event start | First hold or first established flora | Phase 3, ~sol 3–5 | — | FI-2, FI-4, F10 fallback | OK |
+| Storm warning lead | ≥ 1 sol, every phase | All phases | — | F1, FI-1, FI-4 | OK |
 The check also found an arithmetic error in the balance sheet §3 (Phase 3 needs +1.8 kPa/sol for 25 sols, not +1.1); fixed there. Re-run this table whenever a gate, physics rule, or curve changes.
 
 Progress is shown in the world itself: sky tint, fog density, the storm table, and block ticks (ice → vapor or water, regolith → soil near seeded flora). A diegetic **Planetary Monitor** block shows the numbers, trends, causes, and milestones.
@@ -410,7 +414,7 @@ Specs for the gaps above that the Lead Game Designer owns. Final text is in [doc
 |---|---|---|
 | Raise pressure (Phase 1–2) | Many cheap Outgassers: low build cost, more upkeep parts | Fewer atmospheric processors: expensive, more power, less upkeep |
 | Warm the planet (Phase 2) | Super-greenhouse emitters: cheap, high fauna signature | Orbital mirror uplink: expensive and slow to build, **no ground signature** |
-| Water for the dome (Phase 2) | Meltwater treatment: cheap, needs perchlorate filters | Deep-crust extractor: costly power, clean water, high signature |
+| Water for the dome (Phase 2) | Surface meltwater plus treatment: cheap, needs perchlorate filters | Ice extractor drilling deep, clean ice: costly power, cleaner water, high signature |
 | Fauna (Phase 2–3) | Shrouds: −15 % output | Quiet zones: land left unbuilt |
 | O2 (Phase 3) | Algae vats: fast, controllable, need power | Seeded biomes: slow, free once established, can overshoot |
 The orbital mirror route is new: its numbers go to the balance sheet as a draft after the Stage 2 prototype; science framing to the SME (mirrors are a real proposal, SME review B4).
@@ -714,7 +718,7 @@ What each phase contains, for scope and for checking that no phase overloads (co
 | | Phase 1 | Phase 2 | Phase 3 |
 |---|---|---|---|
 | Gates | Dome stable, Phase 2 begins | Thaw, Hydrosphere, Phase 3 begins | Breathable, Equilibrium |
-| New machines (in-house) | Regolith Oven, solar panel, battery, O2 generator, water reclaimer, dust-off station, Regolith Outgasser, weather mast | Atmospheric processor, super-greenhouse emitter, orbital mirror uplink, ice extractor, deep-crust extractor, meltwater treatment, transit tubes, insulation shroud, lure station, quiet-zone marker | Algae vat (from Hydrosphere), carbon scrubber, soil treatment, 4 biome seed kits, beacon components |
+| New machines (in-house) | Regolith Oven, solar panel, battery, O2 generator, water reclaimer, dust-off station, Regolith Outgasser, weather mast | Atmospheric processor, super-greenhouse emitter, orbital mirror uplink, ice extractor, meltwater treatment, transit tubes, insulation shroud, lure station, quiet-zone marker | Algae vat (from Hydrosphere), carbon scrubber, soil treatment, 4 biome seed kits, beacon components |
 | Hazards | Seal breach, wear, dust storms, solar events, perchlorate dust | Fauna (stirring, later life stage), ground collapse, salty meltwater, polar frost | Drift events (6 types), O2 overshoot fire, decay pulses |
 | Forecasts | F1, F2, F3, F4a | F4b, F5, F6, F7 | F8, F9, F10 |
 | Monitor rows (planet) | 2 (+ water line) | 4 (+ fauna page) | 6 (+ Air window, carbon flow) |
@@ -750,6 +754,9 @@ What each phase contains, for scope and for checking that no phase overloads (co
 | Storm caps scale gameplay as well as look | "Storms weaken as the air thickens" must be true in the mechanics (B2) | Look only (a visual lie) | Learning: honest loop. Appeal: late storms are milder | Late storms stop mattering as drift events |
 | Ice–albedo capped at ~2 °C; polar CO2 release as the real speed-up (SME options a + b) | Honest size; the Arctic contrast serves D2; the reinforcing loop still exists | Big albedo effect (teaches a wrong size); albedo only (loses the speed-up) | Learning: B2, D2 accurate. Appeal: a visible pressure bump at the Thaw | External climate reviewer disagrees (SME §11) |
 | Weather-mast gas gauges fitted at Phase 3 | Matches the Monitor's disclosure; lower load | Show from start (more for Phase 1 to read) | Learning: one idea at a time. Appeal: an "upgrade" moment | ID or Artist object, or A1 testing shows Phase 1 wants the gas mix in the world |
+| Pre-storm haze allowed before F1 locks (first dust storm, keyframes §3.7a step 1) | Reading the sky is the observation skill we want; prediction from cues is still prediction. Guard: the haze is fog only and starts at the T−1 sol warning; **the sun's brightness and solar output must not drop before F1 locks at storm onset** (lock-point rule) | No haze (loses a world cue); haze that dims the sun early (reveals F1) | Learning: rewards observation; B3 stays valid. Appeal: a storm you can see coming | Stage 3 F1 accuracy is near 100 % and players say the sky gave it away |
+| Name: **ice extractor** (not "deep-crust water extractor") | One plain name that says what it does; matches the Thaw unlock "ice extraction" | Keep both (two names for one job) | Learning: less load. Appeal: none lost | Never |
+| Music: vanilla music off on Mars; one original ending piece (Lead Artist default) | Silence and thin-air sound carry the setting; the ending earns its one piece | Vanilla tracks (break the Mars mood); a full score (cost) | Appeal: stronger ending. Learning: pressure-driven sound stays audible | Playtesters find long sessions too quiet |
 | Character load: one crew voice per phase | Players met three crew names in one burst at Dome stable | Keep all voices essential | Learning: less backstory load. Appeal: Moreno's apology becomes optional (Basu carries it) | Playtesters miss Moreno in Phase 2 |
 
 

@@ -215,6 +215,23 @@ No ranking, no score, no "good" or "bad" label (story bible rule 7).
 
 ---
 
+## 6a. Hazard thresholds for UI and art (draft, requested by the Lead Artist)
+
+All *invented* game numbers unless tagged. Direction checked against the SME's sources where noted; sizes are play values.
+
+| Item | Value | Notes |
+|---|---|---|
+| Suit O2 capacity | 100 units = 1 sol outside at rest (*invented*) | Refill at wall tanks |
+| Suit O2 warning | ≤ 25 % (HUD icon + tone, log line) | Not blocking |
+| Suit O2 critical | ≤ 10 % (HUD flashes ≤ 3 per second; first time is a blocking warning, I-C rule 3) | Damage starts at 0 % |
+| Radiation dose meter | 0–100 game units, decays 10 units per sol when sheltered | A game meter, not sieverts. Journal never converts it to real units |
+| Dose bands | 0–29 normal · **30 elevated** (HUD icon) · **60 harmful** (weakness effect, slower mining) · **90 severe** (damage over time) | *Invented* |
+| Solar event surface dose rate | 30 units per 0.1 sol in open ground at 0.6 kPa (*invented*) | So 0.2 sol in the open reaches "harmful" in the first event |
+| Atmosphere factor | dose × (0.6 ÷ pressure)^0.5, capped at 1 (*invented curve*; direction sourced: more air overhead absorbs more, SME round 2 §3.1) | 1.0 at 0.6 kPa; 0.35 at 5 kPa (F7: a clear difference); 0.14 at 30 kPa; 0.09 at 75 kPa |
+| Shielding per block between player and sky | Regolith or rock ×0.5 per block; water ×0.5 per block; dome glass ×0.9; metal plate ×0.7 (*invented*) | Three blocks of regolith ≈ ×0.13 |
+| Shelter (core module) | ×0.05 (*invented*) | The "inside, under thick shielding" answer to F2 |
+| Perchlorate exposure | +1 level per unbrushed airlock entry; 3 levels = mild effect (slower O2 refill); clears 1 level per sol | *Invented*; real toxicity sourced (SME round 2 §1.5) |
+
 ## 7. Phase 3 carbon and biomass (draft)
 
 | Item | Value |

@@ -14,7 +14,7 @@ Order of first play: Shift Briefing 3 → first flora (F8, flora Earth link) →
 | `type` | Shift Briefing |
 | `trigger` | Keeper's Report 2 sent or deferred (Phase 3 begins) |
 | `delivery` | BELL briefing card after the report screen (one sequence); copy in the journal |
-| `text.ms` | **Shift Briefing.** This shift: hold the balance. Plants add O2 and take in CO2. Keep O2 inside the Air window: too little and you can't breathe, too much and fires start. Holding is harder than climbing. |
+| `text.ms` | **Shift Briefing.** This shift: hold the balance. Plants add O2 and take in CO2. Keep O2 inside the Air window: too little and you can't breathe, too much and fires start. Holding is harder than climbing. Notice what you give up to hold the balance. |
 | `text.hs` | Same as MS |
 | `goal_ids` | A5, B4 |
 | `instructional_purpose` | Advance organizer: the new job is a band, not a number; names the trade-off before it bites |
@@ -33,7 +33,7 @@ Order of first play: Shift Briefing 3 → first flora (F8, flora Earth link) →
 | `id` | `forecast.f8.flora_gases` |
 | `type` | forecast |
 | `trigger` | Player places the first biome seed kit |
-| `lock` | Monitor O2 or CO2 line opened, or 1 sol |
+| `lock` | 1 sol after the kit is placed; Monitor open shows the card first (`forecast.look_first`, phase-1.md §11) |
 | `delivery` | BELL forecast card at the seed kit screen; result at the next natural pause after 2 sols |
 | `prompt.ms` | You seed a large field of plants. What will happen to O2 and CO2? |
 | `prompt.hs` | Same as MS |

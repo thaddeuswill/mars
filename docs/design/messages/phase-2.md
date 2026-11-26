@@ -14,7 +14,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `type` | Shift Briefing |
 | `trigger` | Keeper's Report 1 sent or deferred (Phase 2 begins) |
 | `delivery` | BELL briefing card, right after the report screen (one sequence, counts as one pop-up); copy in the journal |
-| `text.ms` | **Shift Briefing.** This shift: change the planet faster. Processors thicken the air. Emitters warm it. Watch pressure and temperature together: ice needs both to become water. Warm machines change the ground near them. |
+| `text.ms` | **Shift Briefing.** This shift: change the planet faster. Processors thicken the air. Emitters warm it. Watch pressure and temperature together: ice needs both to become water. Warm machines change the ground near them. Notice what else changes when the planet warms. |
 | `text.hs` | Same as MS |
 | `goal_ids` | A2, A3, B5 |
 | `instructional_purpose` | Advance organizer: two new levers, the two values that matter together (A2), and a heads-up that machines have side effects (B5) without naming the fauna |
@@ -33,7 +33,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `id` | `forecast.f5.emitter_temperature` |
 | `type` | forecast |
 | `trigger` | Player presses Start on the first super-greenhouse emitter (machine screen = natural pause) |
-| `lock` | Monitor temperature page opened, or 1 sol, whichever first |
+| `lock` | 1 sol after Start; Monitor open shows the card first (`forecast.look_first`, phase-1.md §11) |
 | `delivery` | BELL forecast card on the machine screen; result at the next natural pause after 2 sols |
 | `prompt.ms` | You start the greenhouse emitter. What will the surface temperature do over the next few sols? |
 | `prompt.hs` | Same as MS |

@@ -12,6 +12,9 @@ Status key: ✅ done · 🟡 in progress · ⬜ not started. Owner in brackets w
 - **Risk gate:** for each change in the stage, a table of what could break and the check that catches it, each with a result.
 - **The owner looks at it:** a walkthrough, mockup, or screenshot (at 1280×720 once builds exist) for everything the player will see.
 - **Accept is conditional while a check runs:** a stage is "accepted, pending <check>" until every SME review, alignment check, consensus, or automated run it depends on has passed. Only then is it marked ✅.
+- **Owner platform checklist:** at every stage exit the owner confirms which platforms the stage was checked on (Windows, macOS, weak hardware) and what wasn't covered. Checklist and who tests what: [docs/production/owner-actions.md](docs/production/owner-actions.md).
+
+Testing detail: [qa-plan.md](docs/production/qa-plan.md), which follows the Technical Lead's test layers in [docs/tech/test-strategy.md](docs/tech/test-strategy.md). Things only the owner can do: [owner-actions.md](docs/production/owner-actions.md).
 
 ---
 
@@ -31,16 +34,18 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 Producer estimates, ±50%, re-estimated after Stage 3 from measured rates. Details: [budget.md](docs/production/budget.md).
 
-| Stage | Team hours | User play hours |
+| Stage | Team hours | Owner hours |
 |---|---|---|
-| 1 Pre-production (remaining) | 330 | — |
-| 2 Prototype | 300 | ~2 |
-| 3 Vertical slice | 1,190 | ~15 |
-| 4 Production | 2,740 | ~15 |
-| 5 Alpha | 410 | ~20 |
-| 6 Beta | 540 | ~20 |
-| 7 Release | 310 | ~3 |
-| **Total** | **5,820** | **~75** |
+| 1 Pre-production (remaining) | 376 | ~5 |
+| 2 Prototype | 311 | ~4.5 |
+| 3 Vertical slice | 1,304 | ~17.5 |
+| 4 Production | 2,870 | ~16 |
+| 5 Alpha | 464 | ~21 |
+| 6 Beta | 542 | ~21 |
+| 7 Release | 312 | ~4 |
+| **Total** | **6,179** | **~89** |
+
+Revision 2 (Round 3). Owner hours include playtests, reviews, platform checklists, and finding external reviewers. Scope verdict: achievable through Stage 3; Stage 4 has about a 15% buffer in the cut list, so a bigger overrun needs an owner scope call (budget.md §4).
 
 ---
 
@@ -79,7 +84,7 @@ Chapter 9 (ACEDT) recommends integrating with the learning environment early and
 | Class server (several planets, start paused, backups, export) | Stage 3: the slice runs on the class server, not only singleplayer | Stage 5 end-to-end server pass |
 | Instructor training (how a teacher runs a session: pause, pacing, overview, export) | Stage 3: a one-page teacher quick-start for the slice, tried by the user playing the teacher | Stage 4 educator guide chapter; Stage 6 unit walkthrough |
 | Documentation (educator guide, IT sheet, worksheets) | Stage 3: IT sheet and data notice drafts checked against the slice | Stage 4 full drafts; integration pass each stage (qa-plan.md) |
-| LMS plumbing | Stage 4: **prototype only**, an xAPI file written to disk with pseudonymous IDs, never sent anywhere; no LMS connection | After release, opt-in (ARCHITECTURE.md §11) |
+| LMS plumbing | Stage 5: **offline converter only** (owner decision): turns an exported `events.csv` into xAPI statements for a local test store; never ships; no student data leaves the machine | After release, opt-in (ARCHITECTURE.md §11) |
 
 **Early adopters and champions (for any future pilot).** This is a design exercise, so there is no pilot. If one ever happens, start with one or two teachers who already run Java Edition and want this (early adopters), and give one of them a champion role: they try each build first, help other teachers, and feed back problems. Don't start with a reluctant school.
 
@@ -131,9 +136,9 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 **Project setup**
 - ⬜ Pack managed as text files (packwiz) so mod lists and configs live in git [TL]
-- ⬜ Folder layout: `pack/` (manifest, configs, KubeJS scripts, `assets/`), `mod/` (companion mod), `docs/` [TL]
+- ✅ Folder layout created: `pack/` (assets, config, data, defaultconfigs, kubejs, licenses, mods) and `mod/` skeletons; plan in [docs/tech/build-plan.md](docs/tech/build-plan.md). Empty: nothing builds yet [TL]
 - ⬜ Local dev instance and dedicated test server can be launched from the repo [TL]
-- ⬜ Basic CI: the pack builds and the server boots without errors [TL]
+- ⬜ **Basic CI at Stage 1 exit** (owner decision): runs the fast test layers L0–L2 from [docs/tech/test-strategy.md](docs/tech/test-strategy.md) (no Minecraft needed); later layers (server boot, GameTests) join as they exist [TL]
 - ✅ Consistency review and risk register ([docs/production/](docs/production/)); both Stage 1 blockers closed on paper
 - ✅ QA plan drafted: test passes, severity levels, invariants, exit criteria ([qa-plan.md](docs/production/qa-plan.md))
 - ✅ Effort budget and cut list ([budget.md](docs/production/budget.md))
@@ -163,13 +168,16 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ✅ Science accuracy review ([docs/science/](docs/science/)); [SME] and [verify] tags still open in art and story docs [SME]
 - ✅ Art direction: style guide, keyframes, asset list, palette sheet ([docs/art/](docs/art/)); visual mockups still missing [A]
 - ⬜ Audio direction and sound list in `docs/audio/` (Lead Artist owns audio; direction now sits in asset list §9) [A]
-- ⬜ **Weather mast** added to DESIGN.md (user decision; asset M-30) [GD]
+- ✅ **Weather mast** added to DESIGN.md (user decision; asset M-30); CO2 gauge fitted at the Phase 3 gate (owner decision) [GD]
+- ✅ In-house machine list (about 21 machines) in DESIGN.md; Mekanism and Create optional and late, unlocked at Hydrosphere (owner decision) [GD]
+- ✅ `guidance` setting adopted (gentle / standard / expert; gentle is the classroom default; thresholds never change) (owner decision) [GD, ID]
 
 **Before leaving Stage 1**
+- ⬜ **Owner action:** seek three external reviewers before Stage 3: a planetary scientist (ice rule), a climate modeler (ice–albedo and polar frost), science teachers (transfer-task key and forecast distractors). SME prepares the review packs from [docs/science/round2-review.md](docs/science/round2-review.md) §11 [owner, SME; see owner-actions.md]
 - ⬜ **Full-team story review** (DESIGN.md, Story review): every role reviews the story bible against the six story elements, perspective round first; SME in every pass [P runs, all roles]
 - ✅ Consensus recorded on goal priority tiers (T-C) and interruption rules (I-C): owner decision on the team's recommendation [P]
 
-**Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists ✅; both consensus items recorded; story review held; QA invariant tests exist for every Stage 2 system; definition of done (document version, then build version for the skeleton).
+**Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists ✅; both consensus items recorded; story review held; QA invariant tests exist for every Stage 2 system; basic CI green for L0–L2; owner platform checklist; definition of done (document version, then build version for the skeleton).
 
 ---
 
@@ -197,7 +205,8 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 **Debates this stage:** fun vs. learning with real evidence; usability; functional fidelity of the Index model.
 
-- ⬜ Stage 2a: paper and spreadsheet prototypes for the alternatives above; findings filed by the Lead Game Designer [GD, ID, A]
+- ⬜ **Stage 2a (scheduled first, owner decision):** paper and spreadsheet prototypes for the alternatives above, plus the `guidance` levels and the orbital mirror route as a B4 choice; findings filed by the Lead Game Designer before any Stage 2b code [GD, ID, A]
+- ⬜ **Face-validity review** of concept sketches (Monitor wireframe, sky strip, weather mast, thawling silhouettes, Outgasser; `docs/art/concepts/`): owner and SME, one sitting, during Stage 2a [A runs; owner, SME]
 - ⬜ Planetary Index stored in world save data and readable by command [TL]
 - ⬜ Simulation clock and sols (simulation time; sleeping never advances it) [TL]
 - ⬜ Pause and resume; **GameTests confirming that pause stops third-party machines** (Mekanism, Create); fallback "pause = stop the server" [TL]
@@ -234,7 +243,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ "Phase 2 begins" gate (pressure ≥ 5 kPa) [TL]
 - ⬜ Ice-to-water rule, Phase 1 part (ice turns to vapor below the triple point) [TL]
 - ⬜ Planetary Monitor block with cause lines, milestones, and **next-gate display** ("Next: pressure 5 kPa, 62%") [TL, A, GD]
-- ⬜ **Weather mast** prop (windsock, balloon, thermometer, gas tubes) [A, TL]
+- ⬜ **Weather mast** prop (windsock, lift balloon, spirit thermometer; pointer gas gauges fitted later at the Phase 3 gate) [A, TL]
 - ⬜ Group planets: planet registry and player assignment; group rate scale [TL]
 
 **Onboarding and scaffolding**
@@ -254,6 +263,9 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 **Story, art, audio**
 - ⬜ Essential Phase 1 story beats (1, 3, 4, 5, 6, 7) [GD]
 - ⬜ Phase 1 art from the asset list (Stage 3 rows) [A]
+- ⬜ Three original pixel fonts (Cairn Display, Text, Mono) with a glyph-existence test [A, TL]
+- ⬜ `guidance` setting in the slice: all three levels, gentle default in classroom, expert not offered in classroom; level logged and exported [TL, GD, ID]
+- ⬜ External reviewers' replies (ice rule, ice–albedo, transfer key, distractors) folded in before Stage 3 content is final [SME]
 - ⬜ Phase 1 audio: pressure-driven exterior ambience (AU-01), suit sounds, storm, dosimeter, message and log chimes (AU-01 to AU-04, AU-11), with subtitles [A; SME checks the sound physics]
 - ⬜ Accessibility pass for Phase 1 (qa-plan.md) [A]
 - ⬜ Name check: Thawlings, Cairn Dome, BELL, crew names against existing works, before Stage 4 content writing [P]
@@ -292,19 +304,22 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 **Gameplay Phase 2 — Geo-Engineering**
 - ⬜ Transit tubes, outposts [TL, A]
 - ⬜ Atmospheric processors, super-greenhouse gas emitters, deep-crust extractors (in-house) [TL, GD]
-- ⬜ Orbital mirrors, ice-comet impacts: **cut list item 1**; build only if the Stage 3 re-estimate allows [GD]
+- ⬜ **Orbital mirror route** (owner decision): orbital mirror uplink warms with no ground fauna signature, expensive and slow; a B4 route choice against emitters [TL, GD, A, SME]
+- ⬜ Ice-comet impacts: **cut list item 1**; build only if the Stage 3 re-estimate allows [GD]
+- ⬜ Ice–albedo feedback capped at about 2 °C, plus the real polar CO2 release loop (owner decision, a+b) [TL, GD, SME]
+- ⬜ Mekanism and Create: optional and late, unlocked at Hydrosphere, hidden from recipe viewers until then and hidden in the classroom preset; never needed for a gate (owner decision) [TL]
 - ⬜ Thaw gate; ice-to-water rule, full (brief puddles, then pooling) with the chunk heat map [TL]
 - ⬜ Hydrosphere gate content: surface water, algae vats [TL]
 - ⬜ **Ground collapse** after the Thaw, with a survey scan for ice lenses [TL, GD, A]
-- ⬜ **Perchlorate, Phase 2 stage:** meltwater treatment (cut list item 6) [TL, GD]
+- ⬜ **Perchlorate, Phase 2 stage:** meltwater treatment (cut list item 8) [TL, GD]
 - ⬜ Dormant fauna (thawlings): spawn rules tied to temperature, water, and machine signature; planet caps [TL, GD, A]
-- ⬜ Fauna **later life stage** at the Hydrosphere gate (never "mutation"); one per family if cut list item 9 applies [TL, GD, A]
-- ⬜ Fauna options: lethal defense (never lowers fauna pressure), **shrouds**, **quiet zones**, **lures** (cut list item 8) [TL, GD, A]
+- ⬜ Fauna **later life stage** at the Hydrosphere gate (never "mutation"); one per family if cut list item 12 applies [TL, GD, A]
+- ⬜ Fauna options: lethal defense (never lowers fauna pressure), **shrouds**, **quiet zones**, **lures** (cut list item 11) [TL, GD, A]
 - ⬜ Phase 2 Shift Briefing [GD, ID]
 
 **Gameplay Phase 3 — Equilibrium**
 - ⬜ Biome seed kits and the spread of flora [TL, A]
-- ⬜ **Perchlorate, Phase 3 stage:** soil treatment (cut list item 4) [TL, GD]
+- ⬜ **Perchlorate, Phase 3 stage:** soil treatment (cut list item 6) [TL, GD]
 - ⬜ O2/CO2 balancing machines (including carbon scrubbers), CO2 from decay, and failure states [TL, GD]
 - ⬜ **Drift events** during holds and Phase 3 (balance sheet §4) [TL, GD]
 - ⬜ Breathable live check, helmet-off, and the **Breathable air gauge** (LEARNING.md §4.7) [TL, GD, A, ID]
@@ -313,7 +328,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Phase 3 Shift Briefing [GD, ID]
 
 **Group play**
-- ⬜ **Shift Board**: claim and fix failures; actor IDs in the log [TL, GD, A]
+- ⬜ **Shift Board**: claim and fix failures; actor IDs in the log; **C2 credit goes to the player who did the repair** (owner decision) [TL, GD, A]
 - ⬜ Colony posts suggested at each phase start [GD]
 
 **Learning layer (full)**
@@ -327,9 +342,11 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Close alignment gaps: radiation forecast (A4, done as F2/F7), Earth-link content (D2) [ID]
 
 **Story, art, audio**
-- ⬜ Story writing for the remaining essential beats, plus optional beats if budget allows (cut list item 5) [GD]
-- ⬜ Art: textures, models, sky/fog, clouds and shimmer (cut list item 3) [A, TL]
-- ⬜ Audio: machines, fire, ice and water, ground collapse, thawlings, flora, beacon (AU-05 to AU-12), with subtitles [A]
+- ⬜ Story writing for the remaining essential beats, plus optional beats if budget allows (cut list item 7) [GD]
+- ⬜ Art: textures, models, sky/fog, clouds and shimmer (cut list item 4) [A, TL]
+- ⬜ Audio: the rest of [docs/audio/sound-list.md](docs/audio/sound-list.md) (machines, fire, ice and water, ground collapse, thawlings, flora, beacon), with subtitles; secondary sounds may be simple synthesized versions (cut list item 5) [A]
+- ⬜ Music: **one original ending piece**; vanilla music off on Mars; phase pieces on the cut list (proposed default) [A]
+- ⬜ Real Perseverance recording in the journal only, labeled REAL, **only if its license is verified** (proposed default) [A, P]
 - ⬜ Accessibility pass: color never the only signal, colorblind-safe palettes, subtitles, UI legible on small screens [A]
 
 **Classroom and educator**
@@ -340,7 +357,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ IT requirements sheet from [docs/tech/school-deployment.md](docs/tech/school-deployment.md) in the educator guide [ID, TL]
 - ⬜ Player guide and in-game help [GD]
 - ⬜ Performance budget: ticking machines in a typical late-game base, measured on the test server [TL]
-- ⬜ LMS plumbing prototype: xAPI file written locally with pseudonymous IDs; nothing sent off the server [TL]
+- ⬜ **`docs/tech/server-setup.md`**: how a teacher installs, starts, pauses, backs up, and exports a class server [TL]
 
 **Exit criteria:** every gate in DESIGN.md is reachable in a normal playthrough and by the automatic solver (PROCESS.md §3); the alignment table has no gaps; the fantasy audit covers every new element; definition of done (build version).
 
@@ -352,7 +369,8 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 **Debates this stage:** evaluation criteria and results; revisit TEAM.md 8.4 positions with playtest data.
 
-- ⬜ Full run from spawn to beacon: user in the classroom preset, plus standard-mode spot checks with debug shortcuts; agent walkthroughs for the rest [user, GD]
+- ⬜ **Owner's run (decided):** a full classroom-preset run from spawn to beacon, plus standard-mode spot checks with debug shortcuts, not the full 40 hours; agent walkthroughs for the rest [owner, GD]
+- ⬜ **Offline LMS converter** (owner decision): exported `events.csv` → xAPI statements in a local test store; never ships; no student data leaves the machine [TL, ID]
 - ⬜ No progression blockers (soft-locks, unreachable gates, uncraftable items)
 - ⬜ Multiplayer tested on a dedicated server (several planets; the user runs several local accounts)
 - ⬜ Saves survive restarts, rollback, and pack updates
@@ -376,7 +394,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Performance on low-end hardware checked
 - ⬜ Config options for difficulty or pacing, if needed
 - ⬜ Learning study design: pre/post test protocol and success criteria (LEARNING.md §3.4), written as if a class would take it; learning gain can't be measured in this design exercise
-- ⬜ **Optional delayed post-test** (a few weeks after the unit) to check retention: closes RETAIN's naturalization gap [ID]
+- ⬜ **Delayed post-test** (decided: a design artifact; a few weeks after the unit) to check retention: closes RETAIN's naturalization gap [ID, SME]
 - ⬜ Classroom unit walkthrough: the user plays the teacher through the 23-period plan; setup under 30 minutes [user, ID, TL]
 
 **Exit criteria:** the pack can be finished and the pacing feels right to the user; Scorecard passes on every lens the project can measure; definition of done (build version).
@@ -408,9 +426,10 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 | Item | Note |
 |---|---|
-| Support window | Proposal: 12 months of fixes and mod updates (~8 h/month) |
+| Support window | Proposal: 12 months, ~8 h/month (about 1 day per NeoForge 21.1.x bump plus setup questions, Technical Lead estimate, unverified) |
 | Version ports | 1.21.1 is ageing (R-06); each port is a separate scope decision |
-| LMS integration | Opt-in only, off by default; xAPI file export first; privacy review before building (ARCHITECTURE.md §11, LEARNING.md §5.6) |
+| LMS integration | Opt-in only, off by default; builds on the Stage 5 offline converter; privacy review before building (ARCHITECTURE.md §11, LEARNING.md §5.6) |
+| "Veteran" hobbyist setting | Deferred until after Stage 3 (owner decision); only if Lens B playtests ask for it |
 | Voice audio | Only if the Stage 3 narration revisit recommends it |
 | Lessons from user-generated content | Feed challenge datapacks and teacher feedback into the next update |
 
@@ -418,12 +437,13 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 ## Where We Are Now
 
-**Stage 1 (Pre-production), in progress.** The design documents are drafted and both Stage 1 blockers are closed on paper: Phase 1 now has the Regolith Outgasser (C-01), and classes play in groups of 3–5 per planet on one server (C-02). Nothing is built yet. The plan through Stage 3 is achievable; Stage 4 is at the edge and will be re-estimated after the slice (budget.md §4).
+**Stage 1 (Pre-production), in progress (Round 3).** Design documents are drafted, both Stage 1 blockers are closed on paper, and the owner has decided every pending recommendation (TEAM.md Decision Log, Round 3). The folder layout exists; nothing builds yet. Budget revision 2: 6,179 team-hours and ~89 owner-hours. The plan through Stage 3 is achievable; Stage 4 is at the edge, with about a 15% buffer in the cut list (budget.md §4).
 
 Next actions:
 1. **Apply the decided consensus** (owner: goal tiers T-C, interruption rules I-C; [consensus-round2.md](docs/production/consensus-round2.md)): LEARNING.md §1 and §4.6 marked decided; config keys for the caps. [ID, GD, TL]
 2. **Hold the full-team story review** of the story bible before Stage 3. [P, all]
-3. **Build the foundation:** packwiz layout, companion-mod skeleton with an empty Mars dimension, CI, Spotless, unit tests. [TL]
-4. **Decide the in-house machine list** and the oxygen/sealing approach. [GD, TL]
+3. **Build the foundation:** companion-mod skeleton with an empty Mars dimension (build-plan.md), packwiz, Spotless, unit tests, and basic CI for L0–L2. [TL]
+4. **Cost the in-house machine list and the mirror route**, and decide the oxygen/sealing approach. [TL]
 5. **Review the UI specs draft** ([docs/design/ui-specs.md](docs/design/ui-specs.md)) against PROCESS.md §4 UI rules and the decided interruption rules (I-C). [GD, A, ID]
-6. **Ask the user** for the open questions in [BACKLOG.md](BACKLOG.md) (third-party mod depth; full 40-h run; delayed post-test; Stage 2 fail-cheap scope).
+6. **Owner actions** ([owner-actions.md](docs/production/owner-actions.md)): find three external reviewers; plan who tests on Windows, macOS, and weak hardware.
+7. **Phase 3 CO2 budget** (open, ill-structured; Game Designer with the SME): where the CO2 from Outgassers and processors goes, so Phase 3 isn't a grind or a false climb (risk R-52).

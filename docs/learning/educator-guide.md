@@ -5,7 +5,7 @@
 > **Requires Minecraft Java Edition. It can't run in Minecraft Education.**
 > Minecraft Education is a separate product built on Bedrock and doesn't support community mods; Education licenses don't work for Java Edition (`docs/tech/school-deployment.md`, findings 1–3).
 
-**Team note (remove before publishing).** This project is a design exercise; no real class will use this guide. It is written as if one would. Before publishing: the NGSS codes need a word-for-word check on nextgenscience.org; the Earth data sources for debrief 2 need the SME to open and cite them; the server setup guide (Technical Lead) must exist; and a real teacher should review it (risk R-29). Quick version for the Stage 3 slice: [teacher-quickstart-slice.md](teacher-quickstart-slice.md).
+**Team note (remove before publishing).** This project is a design exercise; no real class will use this guide. It is written as if one would. Before publishing: the NGSS codes need a word-for-word check on nextgenscience.org; the Earth data sources for debrief 2 need the SME to open and cite them; the server setup guide (Technical Lead) must exist; and a real teacher should review it (risk R-29). **External review (owner decision, round 3):** before Stage 3 the team seeks three outside reviewers: a planetary scientist, a climate modeler, and science teachers. The teachers review the transfer-task answer key, the forecast distractors and explanations, the report rubrics, and this guide; their requests are in [teacher-review-pack.md](teacher-review-pack.md). Until they report, those items are marked "pending external review". Quick version for the Stage 3 slice: [teacher-quickstart-slice.md](teacher-quickstart-slice.md).
 
 ---
 
@@ -78,6 +78,7 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 
 1. Install and start the server in classroom mode. It starts **paused**.
 2. Open one planet per group; set each planet's **group size** (3–5) and **grade band** (middle or high school). Leave **guidance** on **gentle** (the classroom default: the game points at problems and explains what's locked). You may choose **standard** for a confident group; it gives fewer hints but still names every cause. Guidance never changes the science or the numbers.
+   **Subtitles are on by default** in the classroom pack (useful in noisy rooms and for students who can't use sound). Every important sound also has a visual cue.
 3. Assign students to planets (or give out join codes).
 4. Print the **player ID slips** (one per student) from the class overview. Students write their ID, never their name, on pre/post tests.
 5. Print the pre-test, the paper reflection worksheet (§6) as a backup, and the Mars/Earth data table for debrief 1.
@@ -87,6 +88,7 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 
 - **Groups of 3–5** share one planet. Mix experienced and new Minecraft players.
 - **Colony posts** are suggested roles: Life Support, Atmosphere, Survey, Biology, Data. Posts **rotate each phase** (the game suggests them at each phase start). Make sure every student has at least one turn on the Data post or at the Monitor before a big build.
+- **Shift Board credit.** When a student repairs a failure, the repair counts as *their* evidence, even if a teammate claimed it on the Shift Board. Claiming is still useful for coordinating.
 - **Personal pieces stay personal.** Each student answers their own forecasts (hidden from teammates until resolved), their own "What caused it?" checks, and their own Keeper's Reports. The planet's progress belongs to the group.
 - **Grade only individual evidence** (§7). A strong player can reach every gate for the group; that doesn't mean every student learned it.
 - **Absent students** find a "Since last shift" summary and any unsent reports waiting. The planet's speed doesn't change when someone is absent.
@@ -223,9 +225,10 @@ Criterion for rubric-scored objectives: **3 of 4 or higher**. Return rubric scor
 | Question | Columns | How to read them |
 |---|---|---|
 | Is the student taking part? | `sessions_present`, `sols_played` | Low numbers explain thin evidence |
+| What help did they have? | `guidance` (also in `planets.csv`) | Gentle or standard. Compare students on the same setting; standard gives fewer hints |
 | Is their predicting improving? | `forecast_accuracy_p1`, `_p2`, `_p3`, `b3_criterion_met` | `b3_criterion_met` = Phase 3 accuracy at least 20 points above Phase 1, with ≥ 3 forecasts per phase. "not enough data" is common for absent students |
 | Are they guessing or missing prompts? | `forecasts_expired`, `forecasts_late` | Many expired = prompts missed (busy or absent), not wrong. Not scored either way |
-| Do their fixes hold? | `failures_fixed`, `repeat_failures_after_own_fix` | Credit goes to the student who did the repair. Repeats after their own fix = talk to them about root causes |
+| Do their fixes hold? | `failures_fixed`, `repeat_failures_after_own_fix` | Credit goes to the student **who did the repair**, not to a teammate who only claimed it on the Shift Board (decided). Repeats after their own fix = talk to them about root causes |
 | Do they check data first? | `major_builds`, `monitor_checks_before_builds` | About half or more is the target |
 | Have they sent reports? | `report_1` … `report_final` | "no" = remind them, or use the paper worksheet |
 | Which objectives have they shown? | `<goal>_shown`, `<goal>_evidence` (e.g. `A2_shown`, `A2_evidence`) | One piece of the student's **own** evidence. Formative; not mastery |
@@ -256,7 +259,7 @@ So `reflections.csv` is **not anonymous** in the way the other files are. Treat 
 
 ## 9. Optional delayed post-test
 
-About **4 weeks** after the post-test (3–6 weeks is fine; note the actual gap). 9 items, ~25 minutes, on paper. Students write their player ID from the slip. **Don't review the unit before it**; the point is to see what stuck.
+Part of the planned learning study (Stage 6). About **4 weeks** after the post-test (3–6 weeks is fine; note the actual gap). 9 items, ~25 minutes, on paper. Students write their player ID from the slip. **Don't review the unit before it**; the point is to see what stuck.
 
 What it contains: four items repeated from the post-test (A2, A3, A5, B4), two new-scenario items (B1, B2), two misconception checks, and one open question about an Earth situation that doesn't name any science idea. That last one shows whether students use systems thinking on their own (side effects, loops, trade-offs). Scoring rubric and blueprint: LEARNING.md §3.6.
 
@@ -280,7 +283,7 @@ Use **Set phase** to start a planet at a later phase. The overview marks the obj
 
 - NGSS codes: word-for-word check on nextgenscience.org (SME; host blocked so far).
 - Earth graphs for debrief 2: named, opened, and cited by the SME.
-- The transfer-task answer key and forecast distractors: review by real science teachers (SME external review list).
+- The transfer-task answer key, forecast distractors, rubrics, and this guide: review by outside science teachers (owner decision; [teacher-review-pack.md](teacher-review-pack.md)).
 - Server setup guide and IT one-pager (Technical Lead).
 - Player ID slips printable from the class overview (Technical Lead).
 - Teacher review of this whole guide (risk R-29).

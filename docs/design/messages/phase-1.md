@@ -29,7 +29,7 @@ Controls first, content second (DESIGN.md, Landing). No forecast fires until the
 | intro | Storm's over, Keeper. Damage logged. First-shift checklist is ready. **[Start checklist]** **[I know the drill]** | — |
 | 1 | Walk to the shelter door. | Player reaches the door |
 | 2 | Find your suit O2 (bubble icon). Top it up at the wall tank. | O2 refilled |
-| 3 | Open the Planetary Monitor. Read today's pressure. | Monitor opened, pressure line hovered or clicked |
+| 3 | Open the Planetary Monitor. Read today's pressure and air mix. | Monitor opened, pressure line and "Air mix" line shown (Air mix: about 95 % CO2, almost no oxygen; A1) |
 | 4 | Take a seal kit from the locker. | Seal kit in inventory |
 | 5 | Hab B is leaking. Patch the cracked panel. | Breach sealed |
 | 6 | Power is low. Switch on the backup battery. | Battery on |
@@ -56,7 +56,7 @@ Length: 8 steps, ≤ 12 words each. Expected time 15–25 minutes with exploring
 | `type` | Shift Briefing |
 | `trigger` | Landing checklist done or skipped |
 | `delivery` | BELL briefing card in the side panel (non-modal, ui-specs §0); copy kept in the journal under "Briefings" |
-| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms cut solar power. Run life support {hold_sols} sols with no failures, and the relay link comes back. |
+| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms cut solar power. Run life support {hold_sols} sols with no failures, and the relay link comes back. Notice what almost fails, and why. |
 | `text.hs` | Same as MS |
 | `goal_ids` | C1, A1 |
 | `instructional_purpose` | Advance organizer: names the job, the values to watch, the main threat, and the next goal before play starts |
@@ -104,7 +104,7 @@ Three levels, faded by machine (DESIGN.md, Worked example). Taped to the machine
 |---|---|
 | `id` | `example.outgasser` (full), `example.processor` (completion), `example.later` (faded) |
 | `type` | worked example (Hana's notes) |
-| `trigger` | Full: first Regolith Outgasser placed. Completion: first atmospheric processor placed. Faded: first emitter, extractor, and later machine types |
+| `trigger` | Full: first Regolith Outgasser placed. Completion: first atmospheric processor placed. Faded: first emitter, ice extractor, and later machine types. "Hide Hana's notes" means they are **not shown again automatically**; every note stays in the journal |
 | `delivery` | Note on the machine + journal page; one step per line, each with a checkbox that ticks itself |
 | `goal_ids` | B1, C3, C1 |
 | `instructional_purpose` | Worked example for novices: shows the steps **and** where to look for the effect (cause line). Faded to a completion problem, then to nothing (expertise reversal) |
@@ -119,10 +119,10 @@ Three levels, faded by machine (DESIGN.md, Worked example). Taped to the machine
 |---|---|
 | title | Hana's notes: your first Outgasser |
 | 1 | Set it on solid ground near the dome. Short cables lose less power. |
-| 2 | Feed it regolith. Plain surface dirt is fine. It bakes gas out. |
+| 2 | Feed it regolith. Plain surface dirt is fine. Heat bakes out the gas trapped in it. |
 | 3 | It needs medium power. Can your battery carry it overnight? |
 | 4 | Switch it on. BELL will ask for a forecast. Guess first. |
-| 5 | After a sol, open the Monitor. Find "Outgasser" in the pressure causes. |
+| 5 | After a sol, open the Monitor. Find "Outgasser" in the pressure causes. That line proves it's your machine moving the air. |
 | 6 | One won't do much alone. That's normal. Watch the line, then decide. —H. |
 
 The note never states the result (it would give away F3). It shows where to look.
@@ -151,6 +151,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `delivery` | BELL forecast card at the next natural pause; result first in the queue at the next natural pause after onset + 0.25 sol |
 | `prompt.ms` | A dust storm reaches the dome in about 1 sol. What will happen to your solar power? |
 | `prompt.hs` | Same as MS |
+| `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: solar power on the Monitor's Dome tab. |
 | `choices` | It drops · It rises · It stays the same |
 | `why.hs` | Why? — Dust blocks sunlight · Wind turns the panels away · The Sun gives off less light during storms |
 | `result.ms` | Solar power dropped. Dust in the air blocks sunlight before it reaches your panels. Less light, less power. What could you store before the next storm? |
@@ -176,6 +177,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `delivery` | BELL forecast card at the next natural pause; result first in the queue at the next natural pause after the event ends |
 | `prompt.ms` | A burst of radiation from the Sun arrives in about 1 sol. Where will you get the least radiation? |
 | `prompt.hs` | A solar event arrives in about 1 sol. Where will a Keeper get the smallest radiation dose? |
+| `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: the Space weather line on the Monitor. |
 | `choices` | Inside, under thick shielding · Out on open ground · On top of a hill · Next to a running machine |
 | `why.hs` | Why does Mars's surface get more radiation than Earth's? — Thin air and no global magnetic field · Mars is closer to the Sun · The red color soaks up radiation |
 | `result.ms` | Thick shielding stops most of it. Mars has thin air and no planet-wide magnetic field. So more of the Sun's radiation reaches the ground than on Earth. |
@@ -197,10 +199,11 @@ The note never states the result (it would give away F3). It shows where to look
 | `id` | `forecast.f3.outgasser_pressure` |
 | `type` | forecast |
 | `trigger` | Player presses Start on the first Regolith Outgasser (the machine screen is a natural pause) |
-| `lock` | The player opens the Monitor's pressure page, or 1 sol passes, whichever is first |
+| `lock` | 1 sol after Start. If the player opens the Monitor while the forecast is unanswered, the forecast card shows **first** (`forecast.look_first`); answering or skipping it then opens the Monitor. Looking never silently closes a forecast |
 | `delivery` | BELL forecast card on the machine screen; result at the next natural pause after 1 sol |
 | `prompt.ms` | Your Outgasser is on. It bakes gas out of the soil. What will the Monitor show for pressure over the next sol? |
 | `prompt.hs` | Same as MS |
+| `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: how far pressure moved since you landed. |
 | `choices` | Pressure rises slowly · Pressure jumps to Earth's level · Nothing changes |
 | `why.hs` | Why so slowly? — A planet's air is huge next to one machine · The machine is broken · Gas leaks to space at once |
 | `result.ms` | Pressure is rising, a little each sol. One machine adds a small amount of gas to a whole planet's air. What would two do? |
@@ -228,6 +231,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `delivery` | Side-panel card at once if the player is in the dome or at a machine screen, else at the next natural pause; the ice change is held up to 0.25 sol for the answer (heater warming curve) |
 | `prompt.ms` | The heater has warmed this ice above 0 °C. The air is very thin. What will it do? |
 | `prompt.hs` | Same as MS |
+| `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: the Monitor's water line. Where does water boil here? |
 | `choices` | Disappear into vapor, leaving no water · Melt into a puddle that stays · Stay frozen |
 | `why.hs` | Why? — In thin air, water boils at a low temperature · The heater destroys the water · It's still too cold |
 | `result.ms` (local temp ≥ boiling point; the usual Phase 1 case) | The ice melted and boiled away at once. The air here is so thin that water boils just above freezing. Melted ice boils off before it can make a puddle. |
@@ -272,12 +276,13 @@ The note never states the result (it would give away F3). It shows where to look
 | `trigger` | Dome stable gate |
 | `delivery` | Journal gate entry, "On Earth" line |
 | `text.ms` | Mars's air pushes with less than 1 % of the force of Earth's air. Earth's thick air protects us for free. |
+| `journal.dome_stable.airmix` (gate entry, before the Earth line; both bands) | Outside air: about 95 % carbon dioxide, almost no oxygen, and very thin. You can't breathe it. |
 | `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. Your dome has to make up the difference. |
 | `goal_ids` | A1, D2 |
 | `instructional_purpose` | Mars vs. Earth pressure as a ratio, anchored to the dome the player just stabilized |
 | `motivational_purpose` | Pride: "I'm holding back a planet's worth of vacuum" |
 | `hint_level` | — |
-| `science_claims` | Mars surface pressure about 0.6 kPa, under 1 % of Earth's 101.3 kPa (SME Part A) |
+| `science_claims` | Mars surface pressure about 0.6 kPa, under 1 % of Earth's 101.3 kPa; CO2 95.1 %, O2 0.145 % (SME Part A, sourced) |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -302,3 +307,46 @@ Mensah's first message. Voice: kind teacher, curious about the data, never quizz
 | `science_claims` | Everest summit about 33.7 kPa → boils at about 72 °C (SME calc, AR [17]; approved line says "about 70"); at 5 kPa about 33 °C (SME calc) |
 | `fiction_note` | None |
 | `status` | draft |
+
+---
+
+## 11. Forecast card on Monitor open (`forecast.look_first`)
+
+| Field | Value |
+|---|---|
+| `id` | `forecast.look_first` |
+| `type` | forecast card variant |
+| `trigger` | Player opens the Monitor while they have an unanswered F3, F5, or F8 (the forecasts the Monitor would reveal) |
+| `delivery` | The forecast card shows before the Monitor sheet; **Answer** or **Skip this one** then opens the Monitor. Skipped = logged as unanswered, never wrong |
+| `text.ms` | Log your forecast before you look. |
+| `text.hs` | Same as MS |
+| `goal_ids` | B3, C3 |
+| `instructional_purpose` | Checking data (C3) never costs the player their prediction evidence (B3) silently |
+| `motivational_purpose` | A fair rule the player can see |
+| `status` | draft |
+
+## 12. Journal notes (world-cue explanations; both bands, MS text)
+
+| `id` | Trigger | Text | Science (SME round 2) |
+|---|---|---|---|
+| `journal.outgasser.puff` | First Outgasser running | The white puff is water vapor freezing into tiny ice crystals, like your breath on a cold day. The CO2 coming out is invisible. | §2.5, accurate |
+| `journal.sound.thin_air` | First trip outside after Landing | Thin air carries sound poorly. Sounds are quiet, and high pitches fade fast. As the air thickens, sound gets louder and fuller. | §4, accurate |
+| `journal.mast.balloon` | First look at the weather mast (or Landing step 7) | The lift balloon floats higher as the air gets thicker, because thicker air pushes up on it harder. | §2.7, acceptable simplification |
+| `journal.sky.stylized` | Phase 2 begins (first rose sky) | Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them. | §6 note 8 |
+
+## 13. Shift log (optional end-of-session mini-review, classroom)
+
+| Field | Value |
+|---|---|
+| `id` | `log.shift_end` |
+| `type` | end-of-session review (BELL) |
+| `trigger` | Teacher ends the session (world pauses); at the pause, never in the last minutes of play (I-C rule 5) |
+| `delivery` | Side panel, three lines from the player's **own** data; copy in the journal |
+| `text.ms` | **Shift log.** You did: {own_highlight}. Forecast: {last_forecast_result}. Open job: {open_job}. |
+| `text.hs` | Same as MS |
+| `goal_ids` | B3, C2, C3 (self-assessment) |
+| `instructional_purpose` | A small after-action review: one action, one prediction result, one next step |
+| `motivational_purpose` | Ends the class on something done, not a failure; sets up the next session |
+| `hint_level` | — |
+| `science_claims` | None |
+| `status` | draft (fits the story: BELL already writes shift logs) |

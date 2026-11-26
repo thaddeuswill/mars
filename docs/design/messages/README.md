@@ -9,6 +9,7 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 | [phase-1.md](phase-1.md) | Landing checklist, Shift Briefing 1, worked example (first Outgasser), solar-event warning lines, F1, F2, F3, F4a, Earth links: Dome stable, sublimation, Keeper's Report 1 reply |
 | [phase-2.md](phase-2.md) | Shift Briefing 2, F4b, F5, F6, F7, Earth links: Thaw, greenhouse effect, Keeper's Report 2 reply |
 | [phase-3.md](phase-3.md) | Shift Briefing 3, F8, F9, F10, Earth links: first flora, Keeper's Report 3 reply, Mensah's ending line |
+| [story-beats.md](story-beats.md) | Final text for the ten remaining essential story beats (1, 3, 4, 6, 9, 10, 12, 15, 17, 19) |
 | [failure-reports.md](failure-reports.md) | Failure report hint ladders, closing lines, and banned hint tokens per failure type (CR-H2) |
 
 ## Conventions
@@ -51,8 +52,9 @@ Planning rate: 100 words per minute (Lead Instructional Designer's conservative 
 | Worked example (full + completion) | 112 | 1.1 | 2.7 |
 | Mensah replies (Reports 1–3, ending line) | 152 | 1.5 | 3.1 |
 | **Story subtotal, these files** | **452** | **4.5** | |
-| Other essential story beats (1, 3, 4, 6, 9, 10, 12, 15, 17, 19: final text not yet written; budget ≤ 60 words each) | ≤ 600 | ≤ 6.0 | — |
-| **Essential story total (budget 1,500)** | **≤ ~1,050** | **≤ ~10.5** | Within budget |
+| Shift Briefing "Notice" lines (round 3) | 24 | 0.2 | — |
+| Essential story beats 1, 3, 4, 6, 9, 10, 12, 15, 17, 19 ([story-beats.md](story-beats.md); messages 300, journal parts 160) | 460 | 4.6 | — |
+| **Essential story total (budget 1,500)** | **936** | **9.4** | Within budget |
 | Forecasts F1–F10 (question, choices, one result each) | 609 | 6.1 | 3.7 |
 | Earth links (journal lines) | 93 | 0.9 | 2.4 |
 | Solar warnings | 47 | 0.5 | 5.2 |

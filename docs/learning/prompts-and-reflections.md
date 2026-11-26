@@ -64,6 +64,24 @@ Step added (SME lesson): for every threshold a forecast rests on, check **when t
 | FI-3 | Thicker air absorbs more | Phase 3 ≥ 30 kPa | **OK** |
 | FI-4 | Storm → vats slow → CO2 up | Balance sheet §4 drift table | **OK**, if storms in Phase 3 get a ≥ 1 sol warning |
 
+### 1.3 Forecast check, round 3 (threshold vs. curve, against DESIGN.md's table and the balance sheet as of round 3)
+
+Run on the current documents. DESIGN.md now has the SME's boiling-point ice rule and its own threshold-vs-curve table (DESIGN.md §2), so the A2 condition below is met on paper. Re-run after the Lead Game Designer's round-3 changes landed (DESIGN.md §2 table, balance sheet, messages, ui-specs): Phase 1 gas-mix source, forecast card first on Monitor open, puddle-drying time, drift events after the first flora, storm warning ≥ 1 sol in every phase, emitters on the shared solar grid.
+
+| ID | Threshold or number | Current value | Result |
+|---|---|---|---|
+| F4a | Puddle-drying time below 5 kPa must be < 0.25 sol (outcome check) | DESIGN.md: 0.1 sol, invented, with 0.25 sol as a hard limit | **Pass.** CR-F1 keeps testing it |
+| F4b | Thaw at ~22 kPa, boiling point ~62 °C | DESIGN.md table | **Pass** |
+| F7 | First solar event at ≥ 5 kPa | Phase 2 gate ~sol 25; scheduler guarantees one in Phase 2 | **Pass** |
+| F9 | Window opens at 69.6 kPa, 75 kPa ~25 sols into Phase 3 | DESIGN.md table | **Pass**; the "not thick enough yet" Air window state lasts only ~3 sols (fine: it's a transition, not a forecast) |
+| F1, FI-1 | Storm cuts solar | Per-phase storm cap 1.0 / 0.8 / 0.5 / 0.25 scales the solar cut; every storm warned ≥ 1 sol ahead; emitters draw from the shared solar grid (DESIGN.md) | **Pass** in Phases 1–2 (cap 1.0, 0.8). FI-1's dependency (what powers emitters) is now answered |
+| **FI-4** | Storm during a Phase 3 hold → vats slow → CO2 rises | Phase 3 cap 0.5 (solar cut ~30 %); 0.25 at Equilibrium (~15 %). Storms during holds are warned ≥ 1 sol ahead (landed) | **Conditional pass.** During holds the cap is 0.5, so the drift-table CO2 rise (+0.15 kPa/sol at full cut) shrinks to roughly half but should still be a rise. Rule: issue FI-4 only while the storm cap is ≥ 0.5; CR-F1 simulates it. If it fails, drop FI-4 from the pool (FI-2 and FI-3 keep Phase 3 at 5 forecasts) |
+| FI-2 | Polar winter drift → small pressure dip → boiling point drops a little | Drift events start at the first hold or first established flora (~sol 3–5 of Phase 3; landed) | **Pass**; the trigger comes a little later in Phase 3, which is fine |
+| F3, F5, F8 | Lock | Now "1 sol after Start"; opening the Monitor shows the forecast card first (`forecast.look_first`, Answer or Skip) | **Pass.** Checking data no longer costs a forecast. A "Skip" logs as unanswered, never wrong |
+| A1 | Phase 1 gas-mix source | Landing step 3 points at a Monitor "Air mix" fact line (about 95 % CO2, almost no O2); Dome stable journal line; sourced (SME Part A) | **Pass.** A1's four variables all have a Phase 1 teaching element |
+
+**Alignment after round 3 (on paper):** every goal is still taught, practiced, given feedback, and measured. Only FI-4 is conditional (storm cap). Also noted: the Phase 1 "Check:" pointers hide once a player's own accuracy is ≥ 1 in 3 after 3 forecasts, a slightly faster fade than my §4.8 default (pointer on every Phase 1 forecast). **Accept**: it fades on the player's own evidence, which is the principle. F4a's pointer ("Where does water boil here?") points at the data without stating the answer (CR-H2), and the `scaffold` flag lets the B3 analysis separate pointed answers.
+
 Alignment effect: A2's in-game teaching and measures (F4a, F4b, FI-2) stand **only if DESIGN.md adopts the SME's boiling-point ice rule** (handoff to the Lead Game Designer). Until then the A2 row in LEARNING.md's alignment table is "covered, conditional".
 
 **Stage 3 vertical slice:** F1 and F4a (and F2 if the radiation spike is in the slice).
@@ -185,6 +203,26 @@ A filled page shows the player's own words where there are some (report answers)
 **Framing response (story bible handoff):** accepted. "What the colonists will need to know" turns the record into something written for others, which fits the expecting-to-teach effect (LEARNING.md section 2; citation unverified) and keeps player language. The system and team term stays "Colony Record"; the in-game title is "Keeper's Record".
 
 ---
+
+## 4a. Journal diagram panels (asset U-25 count, for the Lead Artist)
+
+Style guide §13.5: each "what happened" page has one 120 × 72 diagram panel above ≤ 60 words. One diagram per **mechanism**, not per entry: entries and forecast results that teach the same mechanism share a diagram (with a state variant where needed). **Count: 11 diagrams** (7 essential, 4 simple).
+
+| # | Diagram (mechanism) | Used by | Goals | Fidelity plan |
+|---|---|---|---|---|
+| 1 | Water and pressure: boiling point vs. pressure, with "you are here" (two states: thin air, thick air) | Thaw gate entry; F4a, F4b, FI-2 results | A2 | Essential |
+| 2 | Greenhouse: sunlight in, heat trapped by factory gases | First-emitter entry; F5, F10 results | A3 | Essential |
+| 3 | Gas exchange: plant takes in CO2, gives off O2; small respiration arrow | Phase 3 begins / first flora entry; F8 result | A5 | Essential |
+| 4 | Air window: pressure × O2 with the breathable, too-little-oxygen, and fire zones | Breathable gate entry; F9 result | A5, B4 | Essential |
+| 5 | Fauna loop: machines → thawlings → damage → rebuilding (reinforcing), with the "without rebuilding" branch dashed | Hydrosphere entry; F6 result | B2, B5 | Essential |
+| 6 | Pressure ladder: Mars start, triple point, 5 kPa, Armstrong line, Everest, 75 kPa, Earth | Phase 2 begins entry | A1, B1 | Essential |
+| 7 | Holding the band: several values with their bands and one balancing loop | Equilibrium entry | B4, B2 | Essential |
+| 8 | Mars vs. Earth air: two columns, pressure and makeup | Dome stable entry | A1 | Simple |
+| 9 | Storm and solar power: dust between Sun and panel | F1, FI-1, FI-4 results | C1, B1 | Simple |
+| 10 | Radiation column: less air above → more dose; shielding | F2, F7, FI-3 results | A4 | Simple |
+| 11 | One machine vs. a whole planet's air (scale) | F3 result | A1, B1 | Simple |
+
+Science content is SME-checked before drawing (labels follow the forecast and journal text).
 
 ## 5. Reading level and grade-band rules
 
