@@ -40,6 +40,14 @@ neoForge {
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
+        // Dev-only screenshot client (BACKLOG #19): tools/screenshots/run-shots.sh starts it under Xvfb.
+        shotsClient {
+            client()
+            gameDirectory = project.file('run-shots')
+            programArguments.addAll '--width', '1280', '--height', '720'
+            systemProperty 'mars.devtools', 'true'
+            systemProperty 'mars.shots.script', (project.findProperty('marsShotScript') ?: file('../tools/screenshots/stage1.shots').absolutePath)
+        }
         // Boot test (test-strategy L3): starts a headless GameTest server with the mod,
         // runs the mars GameTests, then exits. The boot guard and watchdog are switched on.
         gameTestServer {
@@ -138,6 +146,6 @@ spotless {
 }
 
 // A hard limit so a hung server can never hang the build (test-strategy 2.2, third line of defence).
-tasks.matching { it.name in ['runGameTestServer', 'runSelftestServer'] }.configureEach {
+tasks.matching { it.name in ['runGameTestServer', 'runSelftestServer', 'runShotsClient'] }.configureEach {
     timeout = java.time.Duration.ofMinutes(15)
 }

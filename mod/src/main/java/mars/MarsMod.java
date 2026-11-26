@@ -4,6 +4,7 @@ import mars.planets.TravelCommands;
 import mars.selftest.SelfTest;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,10 @@ public final class MarsMod {
     SelfTest.installIfEnabled(modBus);
     SelfTest.step("mod_constructed");
     NeoForge.EVENT_BUS.addListener(TravelCommands::register);
+    // Dev-only screenshot helper: client only, and only with -Dmars.devtools=true.
+    if (FMLEnvironment.dist.isClient() && Boolean.getBoolean("mars.devtools")) {
+      mars.client.dev.DevTools.init();
+    }
     LOG.info("Mars companion mod constructed (stage 1 skeleton)");
   }
 }

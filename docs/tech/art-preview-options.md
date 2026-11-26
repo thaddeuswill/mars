@@ -33,3 +33,23 @@ Shapes, proportions, and texture readability of block models, rendered by `tools
 
 ## Decision needed from the owner
 (a) Approve running the Blockbench headless server in a scratch folder, pinned to a specific commit; (b) first have its source reviewed (read-only: install scripts, network calls, file access), then decide; or (c) skip Blockbench and go straight to in-game screenshots.
+
+---
+
+## Appendix: read-only source review of the Blockbench headless MCP (2026-11-26)
+
+Nothing was executed. Reviewed by a web-fetch reader: `package.json`, the launcher `bin/blockbench-mcp-headless.mjs`, `headless/index.ts`, `server.ts`, `document/store.ts`, `render/bb-render.ts`, `app/desktop.ts`, the headless README, and the commit page. Latest commit seen on `main`: `97a8a80d3a37bf95c5e136d93d2c7da399fff753` (merge of PR #86, 2026-10-25); the commit page is a snapshot, so re-check before pinning.
+
+**What looks careful:** stdio only (no listening port); no install scripts in the root or headless `package.json`; no telemetry in the code read; a path sandbox that requires every path to be inside `--root`, resolves symlinks, and refuses a symlink at the leaf; no shell-based spawns (`spawn`/`Bun.spawn` with argument arrays); atomic writes with revision checks; the launcher installs nothing beyond the `bun` npm dependency.
+
+**What a careful reviewer would flag:**
+1. **Supply chain:** `bunx github:…` runs code from a GitHub branch unless pinned; dependencies use caret ranges (`zod ^3.25.76`, `@modelcontextprotocol/sdk ^1.25.3`, `bun ^1.3.8`); a beta dev dependency (`blockbench-types 5.2.0-beta.2`) and an unexpected `replicate` (AI-model API client) dev dependency (not checked whether any headless code imports it). Lockfile existence not checked.
+2. **First render installs about 130 MB** (`three`, `three-blockbench`, Dawn) into `~/.cache/blockbench-mcp-headless`, outside `--root`. The command and registry are **unconfirmed** (`render/runtime.ts` was not read). The renderer needs WebGPU (Dawn); this sandbox has no GPU and Node 22.
+3. The render child process and the Blockbench launch **inherit the full environment** (so any secrets in it).
+4. `--bb-render` / `BB_RENDER_CLI` runs any JavaScript file named; `blockbench_launch` spawns a local executable.
+5. Every written model gets `ai_used` and `ai_agents` fields (the MCP client name); disable with `--no-ai-disclosure`.
+6. A commit "cap the size of a fetched geo.json at 10 MB" implies some tool fetches a URL; not located.
+
+**Not read (these matter most):** `render/runtime.ts`, `tools/*.ts`, `app/web-link.ts`, `render/engine/*`, any lockfile, transitive install scripts.
+
+**Mitigations if it is ever run:** pin to a full SHA (`bunx github:jasonjgardner/blockbench-mcp-plugin#<sha> --root <scratch dir>`); a scratch copy of the models as the only root; `--scratch` and `--render-home` inside the sandbox; a minimal environment (no tokens); skip rendering (every other tool works without it); don't use `blockbench_launch` or `--bb-render`; consider `--no-ai-disclosure`.

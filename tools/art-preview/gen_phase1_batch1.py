@@ -126,9 +126,16 @@ def pv(name, dusty):
         t.dot(cx, cy, "s"); t.dot(cx + 1, cy, "s"); t.dot(cx, cy + 1, "s")
     if dusty:
         random.seed(3)
-        for _ in range(26):
-            x, y = random.randrange(1, 15), random.randrange(1, 15); t.rect(x, y, min(14, x + 1), y, "E")
-        t.rect(1, 13, 14, 14, "E"); t.rect(1, 14, 14, 14, "D")                     # dust collects at the low edge
+        # round 1: E blotches read as holes against the tan sky; round 2: silting the whole grid in E turned the
+        # panel into a tan lattice. Round 3: short 2-3 px streaks of darker, redder dust (D) with a light
+        # top-left pixel (E), on the cells only; the grid stays visible; a drift at the low edge.
+        placed = 0
+        while placed < 11:
+            x, y = random.randrange(1, 13), random.randrange(1, 12); n = random.choice((2, 3))
+            if all(t.px[y][x + k] == "r" for k in range(n)):
+                for k in range(n): t.px[y][x + k] = "D"
+                t.px[y][x] = "E"; placed += 1
+        t.rect(1, 13, 14, 14, "D"); t.rect(1, 13, 14, 13, "E")                     # dust collects at the low edge
     return t.save(), reg
 _, pvr = pv("solar_panel_top", False); pv("solar_panel_dusty_top", True)
 sp = T("solar_panel_frame", "2"); fr1 = sp.region(0, 0, 15, 0); spb = sp.region(0, 2, 15, 15)
@@ -245,10 +252,10 @@ for name, m in models.items():  # per used face region: <= 6 colors besides the 
             if not os.path.exists(os.path.join(TEX, tex + ".png")): fails.append(f"missing texture {tex}")
 # meaning-bearing pairs must reach 3:1 (WCAG 1.4.11); shape-only pairs should reach 2:1 (target, reported)
 meaning = [("lamp g on its ring 1", "g", "1"), ("heater slot o on door 1", "o", "1"), ("oven light L on frame 1", "L", "1"),
-           ("dust E on cell r (dusty state)", "E", "r"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
+           ("dust streak highlight E on cell r", "E", "r"), ("screen text w on k", "w", "k"), ("screen gate y on k", "y", "k"),
            ("screen gauge g on k", "g", "k"), ("unread b on k", "b", "k"), ("empty segment 4 on well 1", "4", "1")]
 shape = [("PV frame 3 vs cell r", "3", "r"), ("door 1 vs body 3", "1", "3"), ("stripes o vs 1", "o", "1"),
-         ("tank window i vs tank 3", "i", "3"), ("stack 2 vs sky", "2", None)]
+         ("tank window i vs tank 3", "i", "3"), ("dust streak and drift D vs cell r", "D", "r"), ("dust D vs Mars sky", "D", None), ("stack 2 vs sky", "2", None)]
 print("Meaning-bearing contrast (need >= 3:1):")
 for label, a, b2 in meaning:
     r = cr(P[a], P[b2]); print(f"  {label:32s} {r:5.1f}  {'ok' if r >= 3 else 'LOW'}")
