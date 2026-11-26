@@ -6,3 +6,16 @@ A total-conversion Minecraft modpack about turning a dead Mars into a living wor
 - [LEARNING.md](LEARNING.md): learning goals, methods, and assessment
 - [ARCHITECTURE.md](ARCHITECTURE.md): software architecture, algorithms, and coding practices
 - [ROADMAP.md](ROADMAP.md): development stages and checklists
+
+## Team Agents
+
+Claude Code agents for each Learning Game Design (LGD) role live in `.claude/agents/`:
+
+| Agent | Role | Owns |
+|---|---|---|
+| `producer` | Producer / Project Manager | `ROADMAP.md`, `docs/production/` |
+| `technical-lead` | Technical Lead | `ARCHITECTURE.md`, `mod/`, `pack/` |
+| `lead-game-designer` | Lead Game Designer (incl. story) | `DESIGN.md`, `docs/design/` |
+| `lead-instructional-designer` | Lead Instructional Designer | `LEARNING.md`, `docs/learning/` |
+| `lead-artist` | Lead Artist | `docs/art/`, `pack/assets/` |
+| `subject-matter-expert` | Lead Subject Matter Expert | `docs/science/` |
