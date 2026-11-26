@@ -1,6 +1,6 @@
 # Story Bible — Mars Terraforming
 
-**Owner:** Lead Game Designer · **Status:** Draft 1, for team review · **Depends on:** [DESIGN.md](../../DESIGN.md), [LEARNING.md](../../LEARNING.md)
+**Owner:** Lead Game Designer · **Status:** Draft 2 (2026-11-26): user decisions applied (Keeper, backstory, fauna option B, non-lethal options, later life stage, ending cards, text-first messages, group planets) · **Depends on:** [DESIGN.md](../../DESIGN.md), [LEARNING.md](../../LEARNING.md)
 
 This is the reference for everything the story says and how the world says it. Writers of journal entries, colony log lines, failure reports, debriefs, and the ending work from this file.
 
@@ -38,7 +38,7 @@ The story has one job: **give players a reason to care about the planet's number
 | Element | For this game |
 |---|---|
 | **Setting** | Cairn Dome **[FICTION]**, a small terraforming pilot dome on Mars, in the mid-northern lowlands near buried ground ice. Thin CO2 air (0.6 kPa), −60 °C, toxic perchlorate soil, dust storms, radiation **[verify: matches Index start values]**. The whole planet is the stage; the dome is home base. |
-| **Protagonist** | **The Keeper**: you. A systems technician sent to keep the pilot dome running during the "watch" between crews. No fixed name, gender, or face; characters call you "Keeper." On servers, every player is a Keeper on the same team. |
+| **Protagonist** | **The Keeper** (approved): you. A systems technician sent to keep the pilot dome running during the "watch" between crews. No fixed name, gender, or face; characters call you "Keeper," never your username. In a group (3–5 players on one planet, or a small server), every player is a Keeper on the same watch team. |
 | **Characters** | Three crew members who just left (via recorded messages and traces), one scientist on Earth (via messages), the station system BELL (via the colony log), and the dormant fauna (via their behavior). Section 4. |
 | **Plot** | A storm hits right after the crew leaves. You keep the dome alive, restore contact, then push the planet toward living air. Warming wakes life the crew found but didn't tell you about. You decide how to share the planet with it, reach equilibrium, take off your helmet, and light the beacon that calls the colony ships. |
 | **Conflict** | Three layers, one per phase: **Keeper vs. the planet** (survive), **progress vs. life** (the fauna, and the crew's secret), **holding a balance** (equilibrium is a band, not a finish line). |
@@ -53,7 +53,7 @@ The story has one job: **give players a reason to care about the planet's number
 ### 3.1 The mission
 - **The Keeper program [FICTION].** Earth's space agencies are testing whether a small team with powerful machines can start warming and thickening Mars's air at one site, so a colony can follow. The machines in the game are far stronger and faster than any real technology. The journal says so (see 3.5).
 - **First Shift [FICTION].** A crew of three built Cairn Dome and its first machines over a long stay: Commander Dalia Moreno, biologist Dr. Teo Basu, and engineer Hana Kowalczyk.
-- **The watch.** Between crews, one Keeper (or a small Keeper team on servers) lives in the dome and keeps the machines running. Most of the work is automated. The Keeper is there because machines break.
+- **The watch** (backstory approved). Between crews, one Keeper (or a Keeper team of 3–5 on a group planet) lives in the dome and keeps the machines running. Most of the work is automated. The Keeper is there because machines break.
 - **The beacon [FICTION].** The colony fleet waits on Earth. It only launches when the site's beacon, a full-power transmitter and landing guide, sends proof that the air holds. That beacon recipe unlocks at the Equilibrium gate.
 
 ### 3.2 What happened (timeline)
@@ -61,7 +61,7 @@ The story has one job: **give players a reason to care about the planet's number
 | When | Event | Real-science anchor |
 |---|---|---|
 | Years before | Uncrewed cargo landers drop supply caches near the site. | Pre-placing cargo before crews arrive is a real mission-planning idea **[verify]**. |
-| First Shift, late in their stay | Basu drills deep ice cores and finds tiny, dormant organisms in a pocket of frozen brine. He reports to Earth. | Buried ground ice exists in Mars's mid-latitudes **[verify]**. Life on Mars: **none has ever been found. The organisms are [FICTION].** |
+| First Shift, late in their stay | Basu drills deep ice cores and finds tiny, dormant animals in a pocket of frozen brine, along with traces of the microbes he thinks they descend from. He reports to Earth. | Buried ground ice exists in Mars's mid-latitudes **[verify]**. Scientists do study whether microbes could survive in deep brines. Life on Mars: **none has ever been found. The organisms are [FICTION].** |
 | Same week | Earth tells the crew: keep the samples frozen, keep the pilot running, say nothing until results are confirmed. Moreno agrees. Basu objects, on the record (the "Fridge B" argument, delivered in Phase 2). | Rules to avoid contaminating other worlds are real ("planetary protection") **[verify: COSPAR policy]**. |
 | Handover, 9 days | The Keeper arrives. Hana trains you on the machines. Nobody mentions the samples. Basu leaves a sealed note in lab Fridge B "to open when it thaws." | — |
 | Launch | First Shift launches inside the departure window to meet their return ship in orbit. | Earth–Mars launch windows open about every 26 months **[verify]**. |
@@ -79,21 +79,29 @@ All of this is invented. The journal must say so each time it describes them.
 
 | Topic | Story answer | Real-science hook for the journal |
 |---|---|---|
-| What they are | A group of small animals the crew nicknamed **thawlings** (Basu's field label: "Group S," for *sleepers*). | Some Earth animals, like tardigrades, survive freezing and drying in a dormant state called cryptobiosis **[verify]**. |
+| What they are | A group of small animals the crew nicknamed **thawlings** (Basu's field label: "Group S," for *sleepers*). Basu's theory: they descend from microbes that lived deep underground long ago. That ancestry is the invented part (DESIGN.md option B). | Real: scientists search for signs of past or present microbial life on Mars, and some Earth microbes (extremophiles) live in ice, brine, and deep rock **[verify]**. Some Earth animals, like tardigrades, survive freezing and drying in a dormant state called cryptobiosis **[verify]**. |
 | Where they were | Dormant in frozen brine pockets deep in the ground ice, for a very long time. | Salty water stays liquid at lower temperatures than fresh water **[verify]**. |
-| Why they wake | Warmth and liquid water. **Thaw gate:** the first ones stir. **Hydrosphere gate:** they reach a larger, more active life stage. | Many Earth animals have life stages triggered by temperature and water (e.g. insects, frogs) **[verify]**. |
-| Why they go after machines | Emitters and extractors are the warmest, wettest, most vibrating things on the surface. The fauna are drawn to them for warmth and nesting. They are not hunting you. | Matches DESIGN.md: fauna pressure scales with active machines. |
+| Why they wake | Warmth and liquid water. **Thaw gate:** the first ones stir. **Hydrosphere gate:** they reach a larger, more active **later life stage**. | Many Earth animals have life stages triggered by temperature and water (e.g. insects, frogs) **[verify]**. |
+| Why they go after machines | Emitters and extractors are the warmest, wettest, most vibrating things on the surface. The fauna are drawn to them for warmth and nesting. They are not hunting you, and only fight back if attacked. | Matches DESIGN.md: fauna pressure is the sum of machine signatures. Shrouds and quiet zones lower it; fighting doesn't. |
 | What they become in Phase 3 | As biomes stabilize, they settle into them and live alongside the seeded flora. Whether they thrive depends on what the Keeper left them. | Earth link: ecosystems adjust when conditions change (HS-LS2-6) **[verify mapping]**. |
 
-**Wording rule: "life stages," not "mutations."** DESIGN.md calls the Hydrosphere fauna "mutated variants." In story text, these are a *later life stage*, not a mutation. "The heat made them mutate" teaches a common misconception (that individuals mutate in response to their environment). See Decisions needed and Handoffs.
+**Wording rule (decided): "later life stage," never "mutation."** The Hydrosphere fauna are a *later life stage* in every document, journal entry, and line of dialogue. "The heat made them mutate" teaches a common misconception (that individuals change their genes in response to their environment). DESIGN.md now uses the same wording.
+
+### 3.4a Real side effects alongside the fiction
+The fauna are not the only consequence of warming. Two real effects carry B5 without fiction (DESIGN.md, Hazard Systems):
+- **Perchlorate.** Mars soil holds toxic perchlorate salts **[verify]**. Hana's notes warn about dust in the airlock (Phase 1) and salty meltwater (Phase 2). Basu's soil notes explain why seed kits need treated soil (Phase 3).
+- **Ground collapse.** Melting ground ice under warm machines makes the ground sink. Mensah's Earth link: thawing permafrost damaging roads and buildings in the Arctic today **[verify]**.
 
 ### 3.5 Fiction notes the journal must carry
 | Fiction | Honest note (one line, grade 6–7) |
 |---|---|
-| Speed of terraforming | "Real terraforming would take hundreds or thousands of years. The game speeds it up." |
+| Speed of terraforming | "Warming Mars might take about 100 years. Filling its air with oxygen from plants could take up to 100,000 years. The game speeds it up." |
 | Machine power | "No real machine can do this yet. A small test device on a rover did make oxygen from Mars air." **[verify: MOXIE]** |
-| The fauna | "No life has ever been found on Mars. The thawlings are made up for this game." |
-| The atmosphere staying put | "Without a magnetic field, the solar wind would slowly strip this air away. The game ignores that." |
+| The fauna | "No life has ever been found on Mars. Scientists are still looking for tiny microbes that might live deep underground. The thawlings are made up for this game." |
+| The air you can breathe | "Your lungs care how hard oxygen pushes, not just the percent. That's why the air must be thick *and* oxygen-rich." |
+| Filler gas | "Earth's air is mostly nitrogen. Mars has very little. The game doesn't track it; real terraformers would have to find some." |
+| Where the gas comes from | "Real Mars soil and ice don't hold enough gas to thicken the air this much. The game exaggerates it." |
+| The atmosphere staying put | "Without a magnetic shield, the Sun's wind slowly strips Mars's air. That takes millions of years or more, so the game ignores it." |
 | The Keeper program, dome, fleet | No note needed beyond the game's opening card: "This story is fiction. The science is as real as we could make it." |
 
 ---
