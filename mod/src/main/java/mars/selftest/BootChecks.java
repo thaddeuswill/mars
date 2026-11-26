@@ -113,6 +113,26 @@ public final class BootChecks {
     }
 
     if (mars != null) {
+      // Travel FIRST, before any check loads chunk 0,0: the screenshots showed /mars go failing on
+      // an unloaded chunk while a later-ordered check passed.
+      FakePlayer fake =
+          FakePlayerFactory.get(
+              server.overworld(),
+              new GameProfile(
+                  UUID.fromString("6d617273-0000-4000-8000-000000000001"), "[MarsSelfTest]"));
+      boolean sent = TravelCommands.sendToMars(fake);
+      String where =
+          fake.level().dimension().location()
+              + String.format(" at %.1f %.1f %.1f", fake.getX(), fake.getY(), fake.getZ());
+      ok &=
+          SelfTest.check(
+              "travel.go",
+              "player in mars:planet_1 at 0.5 64.0 0.5",
+              "sent=" + sent + ", " + where,
+              sent
+                  && fake.level().dimension().equals(MarsDimensions.PLANET_1)
+                  && Math.abs(fake.getY() - 64.0) < 0.01);
+
       String type =
           mars.dimensionTypeRegistration()
               .unwrapKey()
@@ -143,25 +163,6 @@ public final class BootChecks {
       ok &=
           SelfTest.check(
               "dimension.biome", "mars:regolith_flats", biome, biome.equals("mars:regolith_flats"));
-
-      // Travel: a fake player (no network connection) is sent with the same code as /mars go.
-      FakePlayer fake =
-          FakePlayerFactory.get(
-              server.overworld(),
-              new GameProfile(
-                  UUID.fromString("6d617273-0000-4000-8000-000000000001"), "[MarsSelfTest]"));
-      boolean sent = TravelCommands.sendToMars(fake);
-      String where =
-          fake.level().dimension().location()
-              + String.format(" at %.1f %.1f %.1f", fake.getX(), fake.getY(), fake.getZ());
-      ok &=
-          SelfTest.check(
-              "travel.go",
-              "player in mars:planet_1 at 0.5 64.0 0.5",
-              "sent=" + sent + ", " + where,
-              sent
-                  && fake.level().dimension().equals(MarsDimensions.PLANET_1)
-                  && Math.abs(fake.getY() - 64.0) < 0.01);
     }
 
     boolean command = server.getCommands().getDispatcher().getRoot().getChild("mars") != null;

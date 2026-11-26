@@ -18,6 +18,8 @@ Sections 6–12 cover the classroom and data systems: group planets and hosting,
 >
 > **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a), interruption control (9.6).
 >
+> **Stage 1 build (2026-11-26):** code now exists in `mod/` (see [docs/tech/launch-guide.md](docs/tech/launch-guide.md)). The pure core in `mars.index.sim` and `mars.dimension.ice` matches 2.1 and 2.5; nothing else is wired to the world yet. Layout differences from the plan: `mod/` is a standalone Gradle build with its own wrapper; no Parchment mappings (its Maven host is blocked here); the ice rule lives in `data/mars/terrain/`.
+>
 > **Round 3 additions (2026-11-26):** owner decisions applied (repairer gets Shift Board credit, `guidance` setting, orbital mirror, Mekanism and Create optional and late, CI at Stage 1 exit, offline LMS converter in Stage 5); `mars:solar_spike` (2.5.1); forecast tags, lock points, and `reveals` (2.6.2); time on Mars (2.14); third-party mods (2.15); machine framework and cost (2.16); Training Hall (6.2); export and teacher-overview additions (8.5, 8.6); rechecks with the network open (mod-licenses.md, school-deployment.md). Server and teacher setup: [docs/tech/server-setup.md](docs/tech/server-setup.md). Test strategy: [docs/tech/test-strategy.md](docs/tech/test-strategy.md). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
 
 ---
@@ -276,7 +278,7 @@ Four kinds of condition, all defined in data with the same condition language (c
   | ≥ 5 kPa | 0 °C to boiling point | Water stays |
   | any | ≤ 0 °C | Stays ice |
 
-  The rule table is data (`data/mars/dimension/ice_rule.json`, thresholds as plain numbers and the name of the derived value), so the SME's or Lead Game Designer's later changes need no code. The forecast content check (CR-F1) runs against this same table.
+  The rule table is data (`data/mars/terrain/ice_rule.json`; **moved in Stage 1** from `data/mars/dimension/`, because `data/<namespace>/dimension/` is Minecraft's own dimension registry folder and any JSON there is loaded as a dimension, thresholds as plain numbers and the name of the derived value), so the SME's or Lead Game Designer's later changes need no code. The forecast content check (CR-F1) runs against this same table.
 
 - **Local temperature** = global mean + day/night offset + machine heat at that block.
   - **Why this matters more now:** with fixed bands, local temperature only had to answer "above 0 °C?". Against the boiling point it has to answer "how far above 0 °C?" (2 °C at 0.7 kPa, 33 °C at 5 kPa), so ice right next to a heater should boil while ice a few blocks away only puddles. A heat value that is uniform across a 16×16 chunk would give every ice block in the chunk the same result and lose that gradient.

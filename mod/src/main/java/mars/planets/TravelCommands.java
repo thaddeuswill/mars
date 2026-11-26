@@ -44,6 +44,10 @@ public final class TravelCommands {
     if (mars == null) {
       return false;
     }
+    // Load (and generate) the target chunk first: Level.getHeight returns the bottom of the world
+    // for an unloaded chunk, which dropped players into the void (found by the Stage 1
+    // screenshots).
+    mars.getChunk(0, 0);
     int y = mars.getHeight(Heightmap.Types.MOTION_BLOCKING, 0, 0);
     player.teleportTo(mars, 0.5, y, 0.5, player.getYRot(), player.getXRot());
     return true;
@@ -54,6 +58,7 @@ public final class TravelCommands {
     ServerPlayer player = src.getPlayerOrException();
     ServerLevel overworld = src.getServer().overworld();
     BlockPos spawn = overworld.getSharedSpawnPos();
+    overworld.getChunk(spawn.getX() >> 4, spawn.getZ() >> 4);
     int y = overworld.getHeight(Heightmap.Types.MOTION_BLOCKING, spawn.getX(), spawn.getZ());
     player.teleportTo(
         overworld, spawn.getX() + 0.5, y, spawn.getZ() + 0.5, player.getYRot(), player.getXRot());

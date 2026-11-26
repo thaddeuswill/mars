@@ -19,6 +19,14 @@ Start from NeoForge's 1.21.1 ModDevGradle MDK template, read 2026-11-26 ([gradle
 | `mod_license` | All Rights Reserved | Left at the MDK default until release (no licence file until then, mod-licenses.md "Our own licences") |
 | Run configs | client, server, gameTestServer, data | same, plus `selftest` and `shots` (section 5) |
 
+## 1a. What was actually built (Stage 1, 2026-11-26)
+
+- `mod/` is a **standalone** Gradle build (`mod/settings.gradle`, wrapper in `mod/`), not a subproject of a root build. Simpler, and the only build we have.
+- **No Parchment mappings:** `maven.parchmentmc.org` is not reachable from the build environment. Parameter names are Mojang's defaults; nothing else changes.
+- Spotless 8.1.0 with google-java-format; JUnit 5.11.4, ArchUnit 1.4.1, Gson 2.11.0 for pure tests (pure tests run without Minecraft on the classpath).
+- Run configurations added: `gameTestServer` (boot checks), `selftestServer` (dedicated server; needs the owner's EULA acceptance), `shotsClient` (dev screenshots).
+- Owner instructions: [launch-guide.md](launch-guide.md).
+
 ## 2. Repository layout
 
 ```

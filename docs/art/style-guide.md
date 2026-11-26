@@ -76,6 +76,7 @@ Four tones per material, dark to light. Shadows shift slightly cooler and highli
 | Grass | `#4B6E2E` | `#5E853A` | `#79A14B` | `#93B967` | Pioneer grass |
 | Alloy (dome, machines) | `#3B4148` | `#59616A` | `#7E8790` | `#A8B0B7` | Cool neutral |
 | Thawling | `#4A4A5E` (edge) | `#7A7C96` | `#8E8FA6` | `#C9C6D2` | See section 6 |
+| Photovoltaic cell (solar panels) | `#1B2433` | `#24324A` | `#2F4462` | `#4A6488` | Added in Phase 1 batch 1: real cells are dark blue-black. Cells on alloy-3 frame 2.7 : 1; dust `#D09A6E` on cells 4.0 : 1 |
 
 **Accent:** safety orange `#E69F00` with a 45° stripe pattern; dome glass `#C8DCE4` at 35 % alpha.
 

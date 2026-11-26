@@ -129,10 +129,11 @@ def pv(name, dusty):
         # round 1: E blotches read as holes against the tan sky; round 2: silting the whole grid in E turned the
         # panel into a tan lattice. Round 3: short 2-3 px streaks of darker, redder dust (D) with a light
         # top-left pixel (E), on the cells only; the grid stays visible; a drift at the low edge.
-        placed = 0
-        while placed < 11:
+        placed = tries = 0
+        while placed < 11 and tries < 2000:
+            tries += 1
             x, y = random.randrange(1, 13), random.randrange(1, 12); n = random.choice((2, 3))
-            if all(t.px[y][x + k] == "r" for k in range(n)):
+            if all(t.px[y][x + k] in "rq" for k in range(n)):  # on cells only (cell lines q count as cell)
                 for k in range(n): t.px[y][x + k] = "D"
                 t.px[y][x] = "E"; placed += 1
         t.rect(1, 13, 14, 14, "D"); t.rect(1, 13, 14, 13, "E")                     # dust collects at the low edge
