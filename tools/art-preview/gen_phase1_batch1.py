@@ -1,5 +1,6 @@
 """Generate STRAW-MAN (fidelity code SM) textures, block models, item models, and blockstates for the
-Phase 1 dome machines, batch 1 (asset list M-05, M-07, M-08, M-09, M-10, M-13, plus T-01 regolith).
+Phase 1 dome machines: batch 1 (M-07, M-08, M-10, M-13, T-01) and batch 2 (M-05 MOXIE-style Oxygen maker,
+M-09 solar panel dust stages 0-4, M-09a partly cleaned).
 Uses only style-guide palette colors and runs the numeric checks. Run with: python3 -I gen_phase1_batch1.py
 Every texture carries the 2x2 magenta placeholder marker (style guide §5.5) in the top-left of each used region."""
 import json, os, math, sys

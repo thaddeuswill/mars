@@ -15,7 +15,7 @@ apt-get install -y --no-install-recommends blender   # Ubuntu 24.04 package: Ble
 |---|---|
 | `render_model.py` | Renders one block model in one view (Blender, headless) |
 | `render_batch.py` | Renders a list of models (iso with ground and a player-size box, front, top, 32×32 front silhouette) and composes a labeled contact sheet |
-| `gen_phase1_batch1.py` | Generates the Phase 1 batch 1 straw-man textures, block models, item models, and blockstates into `pack/assets/mars/`, from palette colors only, and runs the numeric checks (palette-only, ≤ 6 colors per face, no pure black or white, contrast of meaning-bearing pairs ≥ 3:1, every lamp pixel inside a dark ring). Exits non-zero on any failure |
+| `gen_phase1_batch1.py` | Generates the Phase 1 straw-man assets (batch 1, plus batch 2: the MOXIE-style Oxygen maker and the five solar panel dust stages with the partly cleaned state). Dust checks: each stage is a superset of the last, each step changes the cell area by OKLab ΔE ≥ 0.035 (normal and 2 of 3 colour-vision simulations), and the panel structure stays readable. Also checks gold against the hazard accents in all simulations. Generates the textures, block models, item models, and blockstates into `pack/assets/mars/`, from palette colors only, and runs the numeric checks (palette-only, ≤ 6 colors per face, no pure black or white, contrast of meaning-bearing pairs ≥ 3:1, every lamp pixel inside a dark ring). Exits non-zero on any failure |
 
 ## Use
 ```bash
@@ -34,6 +34,9 @@ blender -b -P tools/art-preview/render_model.py -- <model.json> <texture_dir> <o
 
 ## Interactive viewer (browser)
 `python3 tools/art-preview/build_viewer.py` builds `docs/art/viewer/index.html` from `viewer_template.html`: a single page (three.js from jsDelivr, pinned 0.158.0; models and textures embedded) with orbit, zoom, view presets, an all-machines lineup, a Mars ground, a player-for-scale box, and a turntable. `--fragment` writes the form the Artifact tool wants. It draws models the same way as the Blender script (same corner order, UVs, per-face brightness). Tested headless in Chromium with software GL; not Minecraft.
+
+## Browser viewer
+`build_viewer.py` builds `docs/art/viewer/index.html` (and `--fragment`) from `viewer_template.html`. Textures are flagged sRGB in three.js (without that, colours showed washed out in a headless Chrome check). Picking the solar panel shows a **Dust level** slider (0–4) and a **Partly cleaned** button that swap the model live; the overview uses dust 0.
 
 ## Known limits
 - Fixed orthographic cameras; no player-eye perspective.

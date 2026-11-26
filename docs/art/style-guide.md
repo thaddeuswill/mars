@@ -76,7 +76,9 @@ Four tones per material, dark to light. Shadows shift slightly cooler and highli
 | Grass | `#4B6E2E` | `#5E853A` | `#79A14B` | `#93B967` | Pioneer grass |
 | Alloy (dome, machines) | `#3B4148` | `#59616A` | `#7E8790` | `#A8B0B7` | Cool neutral |
 | Thawling | `#4A4A5E` (edge) | `#7A7C96` | `#8E8FA6` | `#C9C6D2` | See section 6 |
-| Photovoltaic cell (solar panels) | `#1B2433` | `#24324A` | `#2F4462` | `#4A6488` | Added in Phase 1 batch 1: real cells are dark blue-black. Cells on alloy-3 frame 2.7 : 1; dust `#D09A6E` on cells 4.0 : 1 |
+| Photovoltaic cell (solar panels) | `#1C1A21` (cut-outs) | `#26232C` (seams under a veil) | `#322D38` (cell) | `#4E4957` (light seam) | **Sourced (batch 2):** clean InSight cells measured as median `#322D38`, luminance 0.028, a near-black with a faint purple-grey cast (NASA/JPL-Caltech PIA22876; the photo has a colour cast, so the hue is approximate). Replaces batch 1's unsourced "dark blue-black" ramp. Frame alloy-3 on cells 3.7 : 1 |
+| Dust veil on cells | `#5C4743` (1/3) | `#89614C` (2/3) | `#B97C52` (= bright dust 3) | `#D09A6E` (= bright dust 4) | Steps from the clean cell toward ground dust, mixed in OKLab. The real veil measured `#D88F62` against ground `#C07A50` (PIA25286, strongly orange-processed, approximate); ours sits in range. Dark seam `#26232C` on veil 4.5 : 1, cut-out on veil 5.0 : 1 |
+| Gold plating (Oxygen maker) | `#5C4320` | `#7E5E2C` | `#A3823F` | `#C9AE6A` | **Sourced:** MOXIE is gold-plated (PIA24201, PIA24203); the photo's gold face measured about `#7B5A2E` median (my reading; strong highlights, approximate). Muted on purpose so it stays distinct from the hazard accents: gold `#A3823F` vs safety orange OKLab ΔE ≥ 0.12, light gold `#C9AE6A` vs UI yellow ≥ 0.14, in all three colour-vision simulations. Tubes use salt-crust `#E7E2D6` (off-white); fittings use alloy 3–4 |
 
 **Accent:** safety orange `#E69F00` with a 45° stripe pattern; dome glass `#C8DCE4` at 35 % alpha.
 
@@ -87,6 +89,22 @@ Four tones per material, dark to light. Shadows shift slightly cooler and highli
 3. **One light direction:** top-left, like vanilla convention, so our blocks sit with vanilla ones.
 4. **No dithering gradients** across a face; use 2–3 px clusters. Noise reads as dirt at 16×16 and blurs at distance.
 5. **Values over hues:** a texture must still read when converted to grayscale (section 4.3).
+
+### 2.4 Weathering: solar panel dust stages
+Dust builds on solar panels gradually and is cleared suddenly (owner request, BACKLOG #22; mechanic in DESIGN.md "Solar panel dust", numbers invented). Real basis: dust settles slowly and evenly (InSight went from clean in 2018, **PIA22876**, to a full veil by 2022, **PIA25286**); wind can clear it suddenly and unevenly (Opportunity 2014, **PIA17759** before, **PIA18079** after; SME dust review §3).
+
+| Stage (asset id) | What changes | Seams and cut-outs |
+|---|---|---|
+| `solar_panel_dust0` clean | Near-black purple-grey cells in rows, thin lighter seams | Light seams; dark cut-outs |
+| `solar_panel_dust1` first film | About 30 % of cell pixels take a thin film; a drift along the low edge | Light seams; dark cut-outs |
+| `solar_panel_dust2` light veil | Every cell lifted at least a third toward ground dust; half of them two-thirds; the drift reaches ground colour | Light seams; dark cut-outs |
+| `solar_panel_dust3` heavy veil | About 80 % of cells at ground-dust colour | **Seams become dark lines** (as on the real veiled array); cut-outs dark |
+| `solar_panel_dust4` full veil | An even veil; a third of the pixels a lighter dust tone | Dark seams; dark cut-outs |
+| `solar_panel_partly_cleaned` | A heavy veil with **irregular cleared patches, different on each sub-panel** (one nearly clean, one untouched), as a dust devil leaves it | Dark seams; dark cut-outs |
+
+**Rules (checked by `tools/art-preview/gen_phase1_batch1.py`):** one fixed dust map, so each stage is a **superset** of the one before (no pixel ever gets less dust going up); each step changes the mean colour of the cell area by **OKLab ΔE ≥ 0.035** in normal vision and at least two of the three simulations (measured: 0.039, 0.149, 0.142, 0.050 in normal vision); the panel stays readable at every stage (structure contrast ≥ 2 : 1 between seams, cut-outs, or frame and the dominant cell colour). Stages don't change during a storm; storm dust lands at clearing (keyframes §3.7a).
+
+**Panel dust stage bar** (look-at readout; ui-specs / DESIGN.md "a small bar, shape not colour only"): five 3 × 5 GUI px slots in a row on the look-at card's ≥ 90 % strip; filled slots = dust stage (0 = all hollow outlines, 4 = all filled), filled in bright dust `#D09A6E` with a 1 px `#1E2328` outline, hollow slots outlined in `#A9B0B8`. The word ("Dust 3 of 4 · heavy veil") and the output ("Output 70 %") sit beside it. "Partly cleaned" shows a slashed slot (diagonal line through the filled slots) plus the word. Shape (count of filled slots) carries the stage; colour is the third channel.
 
 ---
 

@@ -10,5 +10,7 @@ Downsized copies (about 1000 px) of NASA/JPL-Caltech images, used only to audit 
 | `PIA22876.jpg` | InSight's first selfie (Dec 2018) | Clean solar arrays; used for colour measurement |
 | `PIA25286.jpg` | InSight array after about four years of dust | Used for the dust look and colour measurement |
 | `PIA18080.jpg` | Opportunity self-portrait after a wind cleaning (2014) | **False-colour version.** Used for layout only (rows of small cells); its colours are not real |
+| `PIA17759.jpg` | Opportunity self-portrait, January 2014, **before** a wind cleaning | Caption: component images taken about three weeks before the rover's 10th anniversary on Mars. Arrays under an even dust veil, cell grid still faintly visible. Added for the "partly cleaned" state (SME dust review §3) |
+| `PIA18079.jpg` | Opportunity self-portrait, late March 2014, **after** winds removed much of the dust | Caption: "approximately true color". Cleaning is uneven: most panels darker and cleaner, some areas still dusty. Used for the patchy "partly cleaned" look |
 
 Colour numbers taken from these photos are approximate: the images carry their own white balance and processing (the 2022 InSight image is strongly orange).

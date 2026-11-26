@@ -151,7 +151,9 @@ function start() {
       img.onload = () => {
         const t = new THREE.Texture(img);
         t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false;
-        t.wrapS = t.wrapT = THREE.RepeatWrapping; t.needsUpdate = true; tex[name] = t; res();
+        t.wrapS = t.wrapT = THREE.RepeatWrapping;
+        if (THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;  // PNGs are sRGB; without this three.js shows them washed out
+        t.needsUpdate = true; tex[name] = t; res();
       };
       img.onerror = res; img.src = uri;
     }));
