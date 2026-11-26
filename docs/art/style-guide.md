@@ -169,6 +169,39 @@ UI uses the **Okabe–Ito palette** (Okabe & Ito, 2008, *Color Universal Design*
 
 Targets follow WCAG 2.1: **4.5 : 1 for text**, **3 : 1 for icons and graphical parts** (success criteria 1.4.3 and 1.4.11). Meaning is always in the text word too ("WARNING:", "FAILED:"), never in text color alone.
 
+**The table above is for the slate panel only.** The same colors fail on paper and over the open world; see 4.4a.
+
+### 4.4a Two backgrounds: paper sheets and the open world (numeric check)
+
+The same row style (a severity icon, a sigil, a badge) appears on **light paper** (journal, message slips, Hana's notes, `#EDE4D3`) and on **dark panels or strips over the 3D world** (HUD toasts, log, look-at readouts). Icons drawn for one vanish on the other (PROCESS.md §4). Checked with WCAG 2.1 contrast, my script, 2026-11-26 (scratch only):
+
+**On paper `#EDE4D3`, the Okabe–Ito colors fail:** yellow 1.0 : 1, body text 1.0, sky blue 1.8, orange 1.8, purple 2.4, green 2.7. So paper uses a darker **paper-ink set**, same hue family, and the meaning stays in shape and word:
+
+| Role | HUD / slate color | Paper-ink color | Contrast on paper | Allowed on paper for |
+|---|---|---|---|---|
+| Text | `#E8E3D8` | `#2A2420` | 12.1 : 1 | All text |
+| Warning (orange) | `#E69F00` | `#8A5A00` | 4.7 : 1 | Text and icons |
+| Gate / milestone (yellow) | `#F0E442` | `#6B6200` | 4.9 : 1 | Text and icons |
+| Info (sky blue) | `#56B4E9` | `#1F6A99` | 4.6 : 1 | Text and icons |
+| OK / real (green) | `#009E73` | `#006B4E` | 5.2 : 1 | Text and icons |
+| Fiction (purple) | `#CC79A7` | `#8E3F6C` | 5.4 : 1 | Text and icons |
+| Failure (vermillion) | `#D55E00` | `#A34500` | 4.9 : 1 | Text and icons |
+| Blue | `#0072B2` | `#0072B2` | 4.1 : 1 | Icons only |
+
+**Over the 3D world, every line of text needs a backing** (PROCESS.md §4). Worst case is text in front of the sun disc `#FFF6E0` or a bright cloud `#F4F4F2`:
+
+| Backing `#1E2328` at | Body | Secondary | Orange | Sky blue | Yellow | Green | Purple | Vermillion | Result |
+|---|---|---|---|---|---|---|---|---|---|
+| 60 % | 3.5 | 2.0 | 2.0 | 1.9 | 3.4 | 1.3 | 1.5 | 1.2 | Fails |
+| 80 % | 6.6 | 3.9 | 3.8 | 3.7 | 6.4 | 2.5 | 2.8 | 2.2 | Colored text fails |
+| **90 % (rule)** | **9.3** | **5.4** | **5.3** | **5.1** | **9.0** | 3.5 | 3.9 | 3.1 | **Pass** (green, purple, vermillion as icons only) |
+
+**Rules**
+- Every HUD text line sits on a `#1E2328` strip at **≥ 90 % opacity**, with 2 GUI px padding. No text floats on the sky.
+- **Outline instead of a strip** is allowed only for 1–2 word in-world labels (e.g. a look-at title): 1 GUI px `#1E2328` outline (14.7 : 1 against the brightest sky).
+- **Every icon family has two variants:** `_hud` (1 px `#E8E3D8` light outer edge, Okabe–Ito fill, for slate and strips) and `_paper` (1 px `#2A2420` ink edge, paper-ink fill). Families: Index parameter icons (U-01), speaker sigils (U-07), Real/Simplified/Fiction badges (U-10), severity icons (U-15), status shapes (U-16), gate diamond, trend arrows, helmet icons, colony post icons. Asset list row U-31.
+- **Check at the smallest window:** 1280×720 at GUI scale 3 (427×240 GUI px) and GUI scale 2. Every screen's text color is checked against **the background it actually sits on** in that layout, not against a swatch. This joins the numeric checks above and goes into the screenshot regression check (PROCESS.md §3; handoff to the Technical Lead).
+
 ### 4.5 Small classroom screens
 Assumption (**unverified**, Technical Lead to confirm with school hardware data): many school laptops run **1366×768** or **1280×720**. Minecraft limits the GUI scale so the scaled screen stays at least 320×240; at 1280×720 the largest scale is 3, giving a **427×240** GUI-pixel canvas.
 
@@ -176,7 +209,7 @@ Assumption (**unverified**, Technical Lead to confirm with school hardware data)
 |---|---|
 | Every custom screen fits in | **420×236 GUI px** (fits 1280×720 at GUI scale 3, with margin) |
 | Body text readable at | GUI scale 2 on a 1366×768 screen (vanilla font, 9 px line height → 18 screen px) |
-| Font | **Vanilla Minecraft font** for all body text (localization, Unicode support, legibility). No custom pixel font for paragraphs. A custom display font is allowed only for titles. |
+| Fonts | Deliberate faces per role (section 4.8). The vanilla font is used only where vanilla draws the text (chat, vanilla tooltips, subtitles) and as a documented glyph fallback for translations |
 | Minimum icon size | 9×9 GUI px for icons carrying meaning; 16×16 preferred |
 | Text in textures | **None** that carries meaning (it can't be translated or read at distance). Signs and labels in the world are decoration; the real words are in tooltips and the journal. |
 | HUD toasts | Max 3 lines, top-right, never over the crosshair or hotbar; stay ≥ 6 s and can be reopened from the journal (no time-pressured reading, LEARNING.md) |
@@ -189,7 +222,31 @@ Assumption (**unverified**, Technical Lead to confirm with school hardware data)
 - Sky and fog transitions are smoothed (keyframes §1.3), never snapped.
 
 ### 4.7 Sound cues need subtitles
-Every gameplay sound has a subtitle string (vanilla subtitle system). This is a requirement on whoever owns audio (asset list §9).
+Every gameplay sound has a subtitle string (vanilla subtitle system), and every sound that carries meaning has a visual twin. Full rules: [audio direction](../audio/audio-direction.md) §1; every sound and its subtitle and twin: [sound list](../audio/sound-list.md). The Lead Artist owns audio (user decision, 2026-11-26).
+
+### 4.8 Typography
+
+The process rule (PROCESS.md §4): pick deliberate faces, never fall back to the default font, and check glyphs before using them.
+
+**What Minecraft 1.21.1 lets a resource pack do** (from the vanilla font system; **TL to confirm details for 1.21.1**): a font is a JSON file in `assets/<namespace>/font/` listing **providers**: `bitmap` (a PNG glyph sheet we draw), `ttf` (a TrueType/OpenType file, with size, oversample, and shift settings), `space` (fixed-width gaps), `unihex`, and `reference` (chain another font). Any text component can name a font (`"font": "mars:mono"`), and our own screens can draw with any font. **Limits:** vanilla UI (chat, vanilla tooltips, subtitles) keeps `minecraft:default` unless we override it for the whole game, which we won't; TTF text may look soft next to 16×16 pixel art at small sizes (**unverified**; straw-man render test needed).
+
+| Role | Face | Used for | Source and license | Glyph set we need |
+|---|---|---|---|---|
+| **Display** | **Cairn Display** (original bitmap, by us), cap height 7 px | Screen titles, gate names, "Next:" headers, ending titles | Original; project asset license (open decision in TEAM.md) | A–Z, 0–9, basic punctuation, Latin-1 accents; uppercase only |
+| **Numbers** | **Cairn Mono** (original bitmap, by us), every glyph 6 px advance (tabular, so changing values don't jitter) | Every changing number: Monitor values, gauges, look-at readouts, sol counters, HUD O2 and dose | Original; project asset license | 0–9, `+` `−` (U+2212, true minus), `.` `,` `%` `°` `/` `:` `×` `≥` `≤`, arrows `↑` `→` `↓` (U+2191–2193), `▲` `▼`, thin space (U+2009), unit letters for kPa, °C, %, BU, sol, kHz |
+| **Reading** | **Atkinson Hyperlegible** via the `ttf` provider | Journal, message slips, colony log, failure reports, HUD lines, Monitor labels | Braille Institute; **SIL Open Font License 1.1** (to verify against the license file before shipping). Chosen because it was designed for low-vision legibility, with clearly different I / l / 1 and O / 0 | Latin, curly quotes `“ ” ‘ ’`, en dash, ellipsis, `°`, `−`, `·`. The font file ends with a `reference` to `minecraft:default` **only** so translations into other scripts still render (a documented glyph fallback, not the design default) |
+
+- **Alternatives considered:** the vanilla font for all body text (my first draft; rejected under the new process rule, and its arrows and symbols come from a different-looking fallback); fonts made to imitate Minecraft's (rejected: imitation); IBM Plex Mono (OFL) as a TTF number face (good backup if the bitmap mono slips).
+- **If the TTF render test fails** at 1280×720 (GUI scale 2 and 3): draw an original bitmap reading face, "Cairn Text", Latin only. Effort estimate ~3–5 days (Producer to weigh).
+- **Glyph check:** before any string uses a symbol, check the face it's drawn in has that glyph. Proposed test (Technical Lead): for every language key, find its font, and assert every code point exists in that font's providers. Check marks and crosses are **icons**, not font glyphs.
+- **Text hygiene:** units on every value; thousands separators (`1,500 BU`) from one helper; true minus sign on negative values (`−60 °C`); curly quotes in English text; no full stop after `?` or `!`.
+- **Values bigger than labels:** on stat rows the number is drawn at 2× (Cairn Mono at scale 2, 14 GUI px tall) and the label at 1× in the reading face.
+- **Sizes:** body text line 9 GUI px; at GUI scale 2 that is 18 screen px, at scale 3, 27. Never smaller.
+- **Wrapped text has a set width** before it's placed on a screen (PROCESS.md §4). Widths per panel are in the UI spec (Lead Game Designer); the art default is 200 GUI px for log lines and 180 for paper slips.
+
+### 4.9 Names in labels: name things the way the domain does
+
+Labels use **real instrument and machine names** (PROCESS.md §4): "Dosimeter", "Pressure gauge", "Gas analyzer", "Thermometer", "Windsock", "Tethered balloon", "Airlock", "Carbon scrubber", "Electrolysis O2 generator". Plain-language help sits **next to** the real name at middle school depth ("Dosimeter: counts radiation"), never instead of it. Air check labels follow this too (§11.2). Final wording is the Lead Game Designer's and Lead Instructional Designer's; this is the visual rule (name first, larger; help second, secondary color).
 
 ---
 
@@ -316,7 +373,7 @@ BELL is "a careful instrument": calm, exact, never a personality (story bible §
 | Element | Spec |
 |---|---|
 | Panel | Dark slate `#1E2328`, 1 px border `#59616A`, square corners |
-| Text | `#E8E3D8`, vanilla font, ≤ 20 words per line (story bible) |
+| Text | `#E8E3D8`, reading face (4.8), numbers in Cairn Mono, ≤ 20 words per line (story bible). Over the world: on a ≥ 90 % strip (4.4a) |
 | Sol stamp | Prefix `Sol 41` in `#A9B0B8` |
 | Severity | An icon **and** a word: Info (circle "i", `#56B4E9`), Gate/milestone (diamond, `#F0E442`), Warning (triangle "!", `#E69F00`), Failure (octagon "×", `#D55E00` fill, white glyph). The text stays `#E8E3D8`; meaning is in icon shape + word |
 | BELL mark | A plain bracket glyph `[ ]` in `#A9B0B8`. No face, no eye, no glow. Never sinister: no red eye, no scanning line |
@@ -336,7 +393,7 @@ Messages cross space with a delay (story bible §4.1), so they look like **print
 | Audio | No play button unless audio exists (voice is not planned) |
 | Faces | **No portraits at launch.** Sigils carry identity. Avoids likeness and diversity-of-depiction risk at this stage; can be revisited |
 
-**Speaker sigils** (shape is the identity; color is a second channel):
+**Speaker sigils** (shape is the identity; color is a second channel). The colors below are the `_hud` variants. **On the paper slip, use the paper-ink set (4.4a)**: five of the six HUD colors fall below 3 : 1 on paper.
 
 | Speaker | Sigil | Color |
 |---|---|---|
@@ -351,7 +408,7 @@ Messages cross space with a delay (story bible §4.1), so they look like **print
 
 ### 7.3 Journal and Keeper's Record
 - The journal looks like a field notebook: grid-paper pages `#EDE4D3` with faint grid lines `#D9CFBC`, tabs on the side, each tab with an icon.
-- The Keeper's Record header reads *"What the colonists will need to know"* (story bible §6.4). Filled entries get a stamped seal (shape) in `#009E73`; unfilled are dashed outlines.
+- The Keeper's Record header reads *"What the colonists will need to know"* (story bible §6.4). Filled entries get a stamped seal (shape) in paper-ink green `#006B4E` (the HUD green `#009E73` is only 2.7 : 1 on paper); unfilled are dashed outlines in `#2A2420`.
 - Gate entries follow the story bible order; the **"On Earth"** line gets a small globe icon.
 
 ### 7.4 Real / Simplified / Fiction badges
@@ -362,6 +419,8 @@ Supports DESIGN.md fantasy rule 3 and the story bible's fiction flags. Every jou
 | Real | Solid circle with a check | "REAL" | `#009E73` |
 | Simplified | Half-filled circle with a tilde | "SIMPLIFIED" | `#E69F00` |
 | Fiction | Dashed-outline circle with a star | "MADE UP FOR THIS GAME" | `#CC79A7` |
+
+Badges appear on journal paper, so they use the `_paper` variants (paper-ink colors, 4.4a); the colors in the table are the `_hud` variants used on the Monitor.
 
 (Wording is the Lead Game Designer's and Lead Instructional Designer's call; this is the visual system.)
 
@@ -404,7 +463,8 @@ The emotional peak of the game. It should feel like a breath.
 | 0.0 s | Player removes helmet (action or prompt) | Suit seal release: a soft click and a short hiss |
 | 0.0–1.5 s | Visor frame lifts upward out of view; the frame's corner brackets go last | Suit fan and breathing loop fade out |
 | 1.5–4.5 s | No color change to the world (the world was already this color; the point is that *you* changed) | Exterior sound opens: full-frequency wind, water, flora rustle, distant thawling chirrs fade in to full volume |
-| 4.5 s → | Clear view, no HUD frame. Moreno's message slip arrives | Ambient stays open; no music sting over the moment (let the world be heard) |
+| 4.5 s → | Clear view, no HUD frame | Ambient stays open; no music sting, no chime (let the world be heard). First breath at 2.0 s (audio direction §4) |
+| ≥ 10 s | Moreno's message slip arrives (moved from 4.5 s so it doesn't land on the moment) | Message cue at −3 dB |
 
 - No fade to black, no camera cut, no flash.
 - Because helmet-off is a **live condition**, if the air becomes unbreathable the visor returns with a warning (triangle + word + sound) and the sound world closes back in.
@@ -419,7 +479,7 @@ Grounding: microphones on the Perseverance rover recorded Mars sound as much qui
 | 30 kPa | Clearer; mid frequencies return | Same, quieter |
 | ≥ 75 kPa | Full, Earth-like | (helmet off possible) |
 
-Numbers (gain and low-pass values) are in keyframes §3.1. **Audio has no owner on the team yet** (asset list §9; handoff to the Producer).
+Numbers (gain and low-pass values) are in keyframes §3.1 and [audio direction](../audio/audio-direction.md) §3, marked **[SME]** while the SME checks them. Audio is owned by the Lead Artist (user decision, 2026-11-26).
 
 ---
 
@@ -463,7 +523,7 @@ The Lead Game Designer owns the UI specs (screens, flows, wording). This section
 **Visual answer, two levels:**
 
 **Level 1 (default, middle school band): three checks and a zoomed O2 gauge.**
-- **Air check row:** three small gauges side by side, each with a target notch and a check / cross shape: **"Thick enough"** (pressure ≥ 75 kPa) · **"Oxygen push"** (O2 partial pressure ≥ 16 kPa) · **"Low CO2"** (≤ 0.5 kPa). When all three show a check, a helmet-off icon lights (shape changes from closed helmet to open helmet). "Oxygen push" follows the story bible's middle school wording, "how hard the oxygen pushes".
+- **Air check row:** three small gauges side by side, each with a target notch and a check / cross shape: **"Thick enough"** (pressure ≥ 75 kPa) · **"Oxygen push"** (O2 partial pressure ≥ 16 kPa) · **"Low CO2"** (≤ 0.5 kPa). When all three show a check, a helmet-off icon lights (shape changes from closed helmet to open helmet). "Oxygen push" follows the story bible's middle school wording, "how hard the oxygen pushes". Under the naming rule (4.9) each check shows the **real name first** ("Pressure", "O2 partial pressure", "CO2 partial pressure") with the plain words as the help line at middle school depth; wording is for the Lead Game Designer and Lead Instructional Designer.
 - **Zoomed O2 gauge:** the O2 bar shows only **15 % to 27 %**, so the window fills about an eighth of the bar instead of a sliver. Zones, each with a pattern **and** a pictogram:
 
 | Zone | Range | Pattern | Pictogram |
@@ -505,3 +565,5 @@ Network access to NASA and reference sites was blocked in this session, so **no 
 | 4 | Ottosson (2020), "A perceptual color space for image processing" (OKLab) | Color distances, interpolation |
 | 5 | Maurice et al. (2022), "In situ recording of Mars soundscape", *Nature* | Sound direction |
 | 6 | Real Mars color sources | See [planetary-keyframes.md](planetary-keyframes.md) §2 |
+| 7 | Braille Institute, Atkinson Hyperlegible (SIL Open Font License 1.1; **license file to verify**) | Reading face (4.8) |
+| 8 | Minecraft Java font JSON providers (bitmap, ttf, space, unihex, reference); **not opened this session** | What a resource-pack font can do (4.8) |

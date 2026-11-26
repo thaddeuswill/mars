@@ -1,7 +1,7 @@
 # Budget: Effort, Scope Check, and Cut List
 
 **Owner:** Producer · **Issued:** 2026-11-26 (Round 2) · **Stage:** 1 (Pre-production) · **Stability:** flexible (re-estimated at every stage gate)
-**Sources:** [ROADMAP.md](../../ROADMAP.md), [DESIGN.md](../../DESIGN.md) (Fun–learning matrix, Learning Mechanisms in Play), [LEARNING.md](../../LEARNING.md) §1 goal priorities (**proposed**, consensus pending: [consensus-round2.md](consensus-round2.md)), [ARCHITECTURE.md](../../ARCHITECTURE.md), [docs/art/asset-list.md](../art/asset-list.md), [docs/design/playtest-plan.md](../design/playtest-plan.md), role reports in `docs/team/reports/`.
+**Sources:** [ROADMAP.md](../../ROADMAP.md), [DESIGN.md](../../DESIGN.md) (Fun–learning matrix, Learning Mechanisms in Play), [LEARNING.md](../../LEARNING.md) §1 goal priorities (**decided: option T-C**, [consensus-round2.md](consensus-round2.md)), [ARCHITECTURE.md](../../ARCHITECTURE.md), [docs/art/asset-list.md](../art/asset-list.md), [docs/design/playtest-plan.md](../design/playtest-plan.md), role reports in `docs/team/reports/`.
 
 This is the "Budget" document in the DOCUMENTATION.md map. For a design exercise, money isn't the constraint. Two things are: **team effort** and **the user's time** (the only human who plays builds and approves decisions).
 
@@ -101,28 +101,34 @@ A full 40-hour standard run in Stage 5 would raise the total to ~95 h. **Recomme
 | Option | What | Effect on instructional value | Effect on market appeal | Schedule | Recommendation |
 |---|---|---|---|---|---|
 | A. Keep everything | 5,820 h | Full | Full | Highest risk of slip; no buffer | No |
-| **B. Commit through Stage 3, then cut by tier** | Build Stage 3 as planned. Take cuts 1–2 now (no goal impact). Re-estimate Stage 4 from measured rates. If Stage 4 is over budget by more than 15%, take cuts 3–8 in order; over 30%, go to cuts 9–11 | Protects every Primary goal; Secondary goals keep one teaching, one feedback, one measure | Loses spectacle first (mirrors, comets, trailer), then the weakest fauna option (lures) | Keeps the release date honest; decides with evidence | **Yes** |
+| **B. Commit through Stage 3, then cut by T-C order** | Build Stage 3 as planned. Take cuts 1–2 now (no goal impact). Re-estimate Stage 4 from measured rates. If Stage 4 is over budget by more than 15%, take cuts 3–7 in order (no-unique-goal, Redesign, and tier items); over 30%, go to cuts 8–10 (Core reductions and the owner's third-party call) | Protects every Primary goal; Secondary goals keep one teaching, one feedback, one measure | Loses spectacle first (mirrors, comets, trailer, clouds), Core fauna content last | Keeps the release date honest; decides with evidence | **Yes** |
 | C. Cut deep now | Take cuts 1–11 before Stage 3 (~505 h, ~9%) | Same as B at worst case | Loses more appeal than needed if Stage 3 shows we can afford it | Safest | No: cuts before evidence, and still doesn't remove the main uncertainty (the mod's size) |
 
 **Note:** even all eleven cuts save only ~505 h, about 18% of Stage 4. If the Stage 3 measurement shows Stage 4 at double the estimate, cuts aren't enough. The next lever would be an ill-structured scope call for the user (for example, release with a smaller Phase 3 content set and add biomes in an update). That isn't proposed now.
 
 ### 4.3 Cut list (ordered)
 
-Order rule: cut items that carry **no unique goal** first; then items that serve only **Can be deemphasized** goals (A4, D1) beyond their minimum; then **Redesign**-quadrant items for **Secondary** goals; then reduce Secondary content to its minimum. Never cut a **Primary** goal's only teaching, feedback, or measure (LEARNING.md §1, DOCUMENTATION.md §3). Goal tiers are **proposed**; if the consensus changes them, this order is re-run.
+**Order rule (option T-C, decided by the owner):** two orders, one for each kind of item.
+- **Learning content** (journal depth, forecasts, optional beats, reflection prompts) is ordered by **goal tier**: Can be deemphasized (A4, D1) first, down to each tier's minimum; then Secondary, down to one teaching, one feedback, one individual measure each. Primary goals are never reduced (LEARNING.md §1).
+- **Features** (machines, mechanics, effects, art, media) are ordered by **fun–learning quadrant**: items with no unique goal and Moderation-quadrant items first; then Redesign-quadrant items; **Core-quadrant features last**, even when the goal they carry is deemphasized (e.g. fauna options and ending cards carry D1 but are Core, so they are protected).
+- Never cut a **Primary** goal's only teaching, feedback, or measure (DOCUMENTATION.md §3).
+- **Any cut that takes a goal below its tier's minimum is a subset decision for the owner with the full team** (ACEDT "broad first, then drill down"; consensus brief §1.7), never one role's call.
 
-| # | Cut | Saves (h) | Goals affected (tier) | Fun–learning quadrant | Appeal cost | Confirm with |
-|---|---|---|---|---|---|---|
-| 1 | Orbital mirrors and ice-comet impacts | ~120 | None unique: A3 via emitters, A2 via extractors | Moderation (high fun, low added learning) | Medium: spectacle | Lead Game Designer |
-| 2 | Trailer and cinematic ending → credits; ending cards stay | ~60 | None | Moderation | Medium: marketing | Lead Artist |
-| 3 | Lures (keep shrouds and quiet zones) | ~40 | B2, B4, D1 still carried by shrouds and quiet zones | Core set; lures are its weakest member (Lead Game Designer's own cut order) | Low | Lead Game Designer |
-| 4 | Perchlorate soil stage (Phase 3) | ~25 | C1, C2 (Secondary) | Redesign (chore risk) | None or positive | Lead Game Designer, SME |
-| 5 | Optional beats for deemphasized goals: beats 11 and 16 (D1) and forecast F7 (A4 repeat) become archive lines | ~30 | A4, D1 (Can be deemphasized): keep Report 2 question, final reflection, F2 | n/a (content depth) | Low | Lead Instructional Designer, Lead Game Designer |
-| 6 | Clouds and heat shimmer (keep water, frost, flame, mast) | ~40 | None unique; hydrosphere stays visible through water | Moderation | Low-medium; helps school hardware (R-08) | Lead Artist, Technical Lead |
-| 7 | One later life stage per fauna family only | ~60 | B5 (Secondary) carried by the first stage | Core (only extra variants cut) | Low-medium | Lead Game Designer |
-| 8 | Third-party mods (Mekanism, Create) reduced to optional, minimal recipe hooks | ~40–100 | None: learning-critical machines are in-house (DESIGN.md) | n/a | **Medium-high for tech-pack fans.** Ill-structured; user call | Lead Game Designer, Technical Lead, user |
-| 9 | Perchlorate meltwater stage (Phase 2); Phase 1 dust-off stays | ~40 | C2 (Secondary); D2 still carried by ground collapse and Earth links | Redesign | None | Lead Game Designer, SME |
-| 10 | Carbon reservoirs flow view → Monitor cause lines only | ~20 | A5, B2 (Primary) keep cause lines and forecasts | Redesign | None | Lead Game Designer, Lead Instructional Designer |
-| 11 | Voice audio for BELL stays deferred (already text-first) | 0 in budget | Narration research favors voice; revisit after Stage 3 | n/a | Low | Producer, Lead Game Designer |
+The list below interleaves the two orders by hours saved and risk. Column "Ordered by" says which rule places each item.
+
+| # | Cut | Ordered by | Saves (h) | Goals affected (tier) | Fun–learning quadrant | Appeal cost | Confirm with |
+|---|---|---|---|---|---|---|---|
+| 1 | Orbital mirrors and ice-comet impacts | Quadrant | ~120 | None unique: A3 via emitters, A2 via extractors | Moderation (high fun, low added learning) | Medium: spectacle | Lead Game Designer |
+| 2 | Trailer and cinematic ending → credits; ending cards stay | Quadrant | ~60 | None | Moderation | Medium: marketing | Lead Artist |
+| 3 | Clouds and heat shimmer (keep water, frost, flame, mast) | Quadrant | ~40 | None unique; hydrosphere stays visible through water | Moderation | Low-medium; helps school hardware (R-08) | Lead Artist, Technical Lead |
+| 4 | Perchlorate soil stage (Phase 3) | Quadrant | ~25 | C1, C2 (Secondary) | Redesign (chore risk) | None or positive | Lead Game Designer, SME |
+| 5 | Optional beats for deemphasized goals: beats 11 and 16 (D1) and forecast F7 (A4 repeat) become archive lines | Tier | ~30 | A4, D1 (Can be deemphasized): keep Report 2 question, final reflection, F2 | n/a (content depth) | Low | Lead Instructional Designer, Lead Game Designer |
+| 6 | Perchlorate meltwater stage (Phase 2); Phase 1 dust-off stays | Quadrant | ~40 | C2 (Secondary); D2 still carried by ground collapse and Earth links | Redesign | None | Lead Game Designer, SME |
+| 7 | Carbon reservoirs flow view → Monitor cause lines only | Quadrant (Primary guard) | ~20 | A5, B2 (Primary) keep cause lines and forecasts | Redesign | None | Lead Game Designer, Lead Instructional Designer |
+| 8 | Lures (keep shrouds and quiet zones) | Quadrant (Core, weakest member) | ~40 | B2, B4, D1 still carried by shrouds and quiet zones | Core set; lures are its weakest member (Lead Game Designer's own cut order) | Low | Lead Game Designer |
+| 9 | One later life stage per fauna family only | Quadrant (Core, extras only) | ~60 | B5 (Secondary) carried by the first stage | Core (only extra variants cut) | Low-medium | Lead Game Designer |
+| 10 | Third-party mods (Mekanism, Create) reduced to optional, minimal recipe hooks | Quadrant (owner call) | ~40–100 | None: learning-critical machines are in-house (DESIGN.md) | n/a | **Medium-high for tech-pack fans.** Ill-structured; user call | Lead Game Designer, Technical Lead, user |
+| 11 | Voice audio for BELL stays deferred (already text-first) | Tier (media) | 0 in budget | Narration research favors voice; revisit after Stage 3 | n/a | Low | Producer, Lead Game Designer |
 
 **Stop line: never cut** (each is a Primary goal's carrier or a must-pass check): Planetary Index and Monitor with cause lines and next-gate display (B1, C3); Regolith Outgasser, processors, emitters (A3, B1); ice-to-water rule (A2); storms, polar frost, fauna by machine signature (B2); Phase 3 O2/CO2 balancing, drift events, Breathable gauge (A5, B4); the forecast system (Primary infrastructure, LEARNING.md §1 B3 note); Earth links, Keeper's Reports, transfer task (D2); ground collapse (Core; B5 and the permafrost D2 link); shrouds, quiet zones, and ending cards (Core; without them D1 is hollow); accessibility; privacy.
 
@@ -139,3 +145,4 @@ Order rule: cut items that carry **no unique goal** first; then items that serve
 | Date | Change |
 |---|---|
 | 2026-11-26 | First issue (Round 2): effort budget, user-time budget, scope check, cut list ordered by proposed goal tiers. |
+| 2026-11-26 | Cut order rewritten to option T-C (owner decision): tier orders learning content, quadrant orders features; subset decisions go to the owner. Licensing plan noted (no budget effect). |

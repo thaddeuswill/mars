@@ -6,6 +6,33 @@
 
 **Method:** I read every document in full and cross-checked numbers, decisions, goal IDs, roadmap coverage, and architecture support for each feature. I checked every finding against the five design pillars. This was a document review only. Nothing was played or built.
 
+## Status update (Round 2, 2026-11-26)
+
+Checked against the Round 1 reports in `docs/team/reports/`. All findings below are **closed on paper**; each still needs its build-time check (qa-plan.md).
+
+| Finding | Closed by | Where |
+|---|---|---|
+| C-01 Phase 1 pressure source | Lead Game Designer: Regolith Outgasser at Dome stable | DESIGN.md §2; balance sheet §2 |
+| C-02 Classroom group model | User decision: groups of 3–5 per planet; one server, one dimension per group | DESIGN.md Group Play; ARCHITECTURE.md §6 |
+| M-01 Play periods | Lead Instructional Designer: 23 periods, 17 play | LEARNING.md §5.2 |
+| M-02 Threshold multiplier | Lead Game Designer: rates and holds only | DESIGN.md; balance sheet §5 |
+| M-03, M-05 to M-11 | Technical Lead | ARCHITECTURE.md §2.2, §7, §8, §10 |
+| M-04 Breathable values | SME review, user decision (75 kPa, partial pressures) | DESIGN.md §1–2 |
+| M-12 Journal | User decision: custom | DESIGN.md §4 |
+| M-13 KubeJS row | Lead Game Designer | DESIGN.md §4 |
+| M-14, M-15 Individual measures; A4, B4 objectives | Lead Instructional Designer | LEARNING.md §3.0, §0.6 |
+| M-16 Idle holds | Lead Game Designer: overlapping holds, drift events | balance sheet §4 |
+| M-17 Visible cues for all six values | Lead Artist | docs/art/planetary-keyframes.md |
+| M-18 Roadmap gaps | Producer | ROADMAP.md |
+| M-19 Learning layer in the slice | User decision | LEARNING.md §3.5; ROADMAP Stage 3 |
+
+**New minor findings (Round 2 spot check):**
+- **N-01:** DESIGN.md Group Play says Shift Board credit goes to the claimer's log "(anonymous ID)"; TEAM.md vocabulary says "pseudonymous" for the action log. Owner: Lead Game Designer.
+- **N-02:** asset list §9 says audio has "no owner yet"; the Lead Artist owns audio (user decision). Owner: Lead Artist.
+- **N-03:** PROCESS.md §4 "no modal pop-ups for progress" vs. interruption rule 3 (blocking, deferrable phase debrief). Proposed reconciliation in consensus-round2.md §3. Owners: Lead Instructional Designer, Lead Game Designer.
+- **N-04:** `.claude/agents/producer.md` lists only ROADMAP.md and docs/production/; the Producer now also owns README.md, DOCUMENTATION.md, PROCESS.md, BACKLOG.md. `.claude/agents/technical-lead.md` doesn't list `docs/tech/`. Owner: coordinator.
+- **N-05:** TEAM.md Decision Log says the architecture rule is "not yet reviewed by Technical Lead"; the Technical Lead has since rewritten ARCHITECTURE.md. Owner: coordinator.
+
 ## Severity levels
 
 | Level | Meaning |

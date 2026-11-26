@@ -31,7 +31,7 @@ O2 and CO2 are colorless. If the sky turned "oxygen blue" or "CO2 brown", the ga
 
 - **The sky is driven by pressure and dust,** which are what really color a sky (a thicker atmosphere scatters more blue light; suspended dust makes the sky tan).
 - **O2 and CO2 show through what they do:** fire, plant growth, bubbles, carbonate deposits, temperature. "You can't see the gas, but you can see its effects" is itself a good science lesson (A5).
-- **An in-world instrument shows the gas mix:** the **weather mast** (§3.8), a proposed prop outside the dome.
+- **An in-world instrument shows the gas mix:** the **weather mast** (§3.9), adopted by the user (2026-11-26), standing outside the dome where it can be read from a dome window.
 
 ARCHITECTURE.md §2.5 now lets any Index parameter or derived value drive sky and fog, with the Lead Artist choosing. **Choice:** sky and fog are driven by **pressure, storm strength, and hydrosphere**. O2 and CO2 drive **no** sky or fog value.
 
@@ -44,8 +44,10 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 | Sky zenith, horizon, night sky, sunset halo and band, fog color, fog start/end, sun aureole, star density, cloud height (§3.1) | **Pressure** (kPa) | log10 | Index parameter |
 | Storm overlay on sky, fog, sun; dust particles (§3.7) | **Storm strength** (0–1, current weather event) | linear | Derived (weather state); max capped by gameplay phase |
 | Radiation glow and click rate (§3.7) | **Radiation spike active** × **pressure** scale | linear | Event + Index parameter |
-| Windsock angle, sounding balloon height (§3.1) | **Pressure** | log10 | Index parameter |
-| Exterior sound gain and low-pass (§3.1, audio) | **Pressure** | log10 | Index parameter |
+| Windsock angle, sounding balloon height (§3.1, §3.9) | **Pressure** | log10 | Index parameter |
+| Exterior sound gain and low-pass (§3.1; full audio inputs in [audio direction](../audio/audio-direction.md) §9.1) **[SME]** | **Pressure** | log10 | Index parameter |
+| Weather-mast thermometer (§3.9) | **Temperature**, global mean | linear | Index parameter |
+| Weather-mast windsock flutter sound (§3.9, audio) | **Pressure** | log10 | Index parameter |
 | Dawn frost cover, burn-off time, dome-glass frost, thermometer (§3.2) | **Temperature**, global mean (°C) | linear | Index parameter |
 | Frost-free ring and heat shimmer near machines (§3.2) | **Local temperature** (per-chunk heat map, ARCHITECTURE.md §2.5) | threshold | Derived |
 | Ice state: sublimate / flash puddle / day puddle / pool (§3.3) | **Pressure** + **local temperature** (DESIGN.md ice-to-water rule) | rule table | Index parameter + derived |
@@ -54,7 +56,7 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 | Flame size, flicker, fire spread (§3.4) | **O2 fraction** (%) | bands | Index parameter |
 | Helmet on/off, visor return, Air window dot (§3.4, style guide §9, §11) | **Breathable condition**: O2 partial pressure, pressure, CO2 partial pressure | live check | Derived |
 | Bubbles from algae vats and water plants (§3.4) | **Machine / flora block output** (local) | linear | Local, not Index |
-| Weather-mast gas tubes (§3.5) | **O2 partial pressure** and **CO2 partial pressure** (kPa) | linear | Derived |
+| Weather-mast gas analyzer columns (§3.5, §3.9) | **O2 partial pressure** and **CO2 partial pressure** (kPa) | linear (O2), square root (CO2) | Derived |
 | Carbonate deposits at scrubbers (§3.5) | **Scrubber cumulative output** (local) | step | Local |
 | Ground conversion, flora color (§3.6) | **Seeded flora nearby** (block ticks), probability scaled by **biomass** (BU) | ticks | Local + Index parameter |
 | Spore particles, rustle ambient (§3.6) | **Biomass** (BU) | linear | Index parameter |
@@ -157,8 +159,8 @@ Keyframes at 0.6 (start), 5 (Phase 2 gate), 15, 30 (Phase 3 gate), **75 (equilib
 | Cloud base height | High (Y 220) | High | Y 200 | Y 190 | Y 180 |
 | Windsock angle (weather mast, in wind) | Hangs at 5° | 15° | 35° | 55° | 80° (near level) |
 | Sounding balloon (weather mast) | On the ground, slack | 2 blocks up | 4 | 6 | 8 blocks up, taut |
-| Exterior sound gain (direction for audio) | 0.25 | 0.40 | 0.60 | 0.75 | 1.00 |
-| Exterior low-pass cutoff (direction for audio) | 1.5 kHz | 3 kHz | 5 kHz | 8 kHz | Off |
+| Exterior sound gain (audio direction §3.2) **[SME]** | 0.25 | 0.40 | 0.60 | 0.75 | 1.00 |
+| Exterior low-pass cutoff (audio direction §3.2) **[SME]** | 1.5 kHz | 3 kHz | 5 kHz | 8 kHz | Off |
 
 **Measured step sizes** (OKLab ΔE; ~0.02 is just noticeable; target ≥ 0.035, style guide §4.2):
 
@@ -309,6 +311,33 @@ Dust storms are not an Index value, but they drive the sky in Phase 1 and get we
 | **Quiet zone** | Not a block the player has to read as "magic". A **marker post** (a survey stake with a round sign showing a sleeping-thawling pictogram), placed by the player to name the area, plus the natural look of land with **no machines**: frost undisturbed, thawling nests, grazing. On the Monitor map, quiet zones are hatched areas | Fauna, biomass |
 | **Thawling later life stage** | See style guide §6.2: larger, longer dome, tall frills, broad scraper plate. Still an animal: no teeth, no spikes, no glowing eyes | Hydrosphere gate |
 
+### 3.9 Weather mast (adopted prop: honest world cue for the gas mix)
+
+**Status:** adopted by the user (2026-11-26). **Real or fantasy:** a real kind of instrument, simplified. Landers have carried weather masts (Viking's meteorology boom; Phoenix's wind "telltale"; **details unverified**). Goals: **A1, A5, B1, C3** (reading an instrument in the world, then checking the Monitor). It is the world-side partner of the Monitor: rough and glanceable, not precise. The Monitor's Air window (style guide §11.2) is the precise instrument.
+
+**Model:** 1 × 1 block footprint, mast 4 blocks tall, alloy ramp with safety-orange bands (style guide §2.2). Silhouette from 30 blocks: a thin pole, an arm with a cone at the top, a round balloon on a line. Readable by shape at a glance; numbers come from looking at it (look-at readout, below).
+
+| Part | Where on the mast | Driving input | Axis | Keyframes / mapping | Real basis |
+|---|---|---|---|---|---|
+| **Windsock** (cone on an arm) | Top, Y+4 | **Pressure** | log10 | Angle 5° / 15° / 35° / 55° / 80° at 0.6 / 5 / 15 / 30 / 75 kPa (§3.1). Sway ±5° at 0.3 Hz; during storms +10° (cap 85°) | Wind force grows with air density **[SME]** |
+| **Tethered sounding balloon** | Reel at the base; balloon floats above | **Pressure** | log10 | On the ground / 2 / 4 / 6 / 8 blocks up (§3.1); line slack below 5 kPa, taut at 75 | Buoyant lift grows with air density **[SME]** |
+| **Thermometer** (bulb column, 12 px) | Mast face, Y+1.5 (eye level) | **Temperature**, global mean | linear | 1 / 3 / 5 / 8 / 9 px at −60 / −40 / −20 / 0 / 5 °C (§3.2). Notch at 0 °C (water) | Real instrument |
+| **Gas analyzer: O2 column** (12 px) | Mast face, left of the thermometer | **O2 partial pressure** (kPa) | linear | px = clamp(round(12 × pp ÷ 24), 0, 12). Target notch at 16 kPa (8 px) | Real instruments measure gas mix; the column display is simplified |
+| **Gas analyzer: CO2 column** (12 px) | Mast face, right of the thermometer | **CO2 partial pressure** (kPa) | square root | px = clamp(round(2 × √pp), 1, 12) (matches §3.5: 0.57 → 1, 2 → 3, 5 → 4, 20 → 9). Target notch at 0.5 kPa | Same |
+| Flutter sound, tether creak | — | **Pressure** | log10 | Audio direction §3.2 (AU-A11, AU-A12) | — |
+
+**Rules for the gas columns (we don't paint invisible gases, §1.2):**
+- Both columns use the **same neutral fill** `#E8E3D8` in a dark tube `#2A3036`. Never blue for O2 or brown for CO2.
+- Identity is by **shape and position**: the O2 ring icon above the left column, the CO2 molecule icon above the right (asset U-01, HUD variant), the thermometer bulb in the middle.
+- A tooltip line and the journal say: "The columns are an instrument's display. Both gases are invisible."
+- The O2 breathable window (16–17.25 kPa at 75 kPa) is under one pixel on the column. **That's fine:** the mast shows direction and rough size; the Monitor's Air window shows the window.
+
+**Look-at readout** (asset U-29): when the crosshair is on the mast within 8 blocks, a small HUD card (on a backing strip, style guide §4.4a) lists the real instrument names and values in the monospace number face (§4.8): "Windsock", "Pressure 3.1 kPa"; "Thermometer −58 °C"; "Gas analyzer O2 0.004 kPa · CO2 0.62 kPa". Units always shown; true minus sign (U+2212).
+
+**Placement:** one mast is part of the Cairn Dome structure, visible from a dome window, so a Phase 1 player can read it without going outside. Players can craft more for outposts (recipe: Lead Game Designer).
+
+**Regression:** every part reads the live value, so the windsock droops and the balloon sinks if pressure falls (§5).
+
 ---
 
 ## 4. Gate snapshots: the whole world at each gate
@@ -378,5 +407,6 @@ Gates stay unlocked (lock-in), but the look always tells the truth about the pla
 | Flame bands by O2 fraction (§3.4) | SME | Well-structured |
 | Outgasser vapor-puff explanation; wisp rate vs. pressure; carbonate deposits; windsock physics; aurora glow | SME | Well-structured |
 | Map the input names in §1.2a to real data keys; confirm storm strength is exposed as a derived value | Technical Lead | Well-structured |
-| Weather mast as a new prop outside the dome | Lead Game Designer | Well-structured (design addition) |
+| Weather mast: **adopted** (user, 2026-11-26). Add it to DESIGN.md (Index section or hazards) and the fantasy audit as "real instrument, simplified"; place one in the Cairn Dome structure | Lead Game Designer | Well-structured |
+| Pressure-driven sound claim and values (§3.1 sound rows, audio direction §3) | SME | Well-structured (check) |
 | Cloud coverage changes need a custom cloud renderer | Technical Lead (cost) | Well-structured |

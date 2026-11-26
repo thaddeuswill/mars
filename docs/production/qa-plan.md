@@ -53,9 +53,36 @@ Issue IDs: `QA-<stage>-<number>` (e.g. `QA-3-012`) until GitHub Issues take over
 | **Save and update tests** | Saves survive restarts, pack updates, rollback; evidence survives rollback | Technical Lead | automated |
 | **Scorecard review** | All seven Scorecard lenses (TEAM.md 8.5) | Whole team; Producer runs | review |
 | **Integration tests** | The pack with the things around it: Mekanism, Create, and KubeJS (recipes, gating, pause); the class server (several planets, start paused, backups, export); the educator guide and worksheets against the actual build (every step, screenshot, and number matches) | Technical Lead (mods, server), Lead Instructional Designer (educator materials) | automated + review |
-| **External SME review** | **We have no external SME** (no planetary scientist or science teacher); our SME role is internal (risk R-51). Science content is checked against published primary sources by the internal SME. Before release, the user may arrange an optional external review of the journal science and the educator guide | SME; user (optional) | review |
+| **External expert review** | Our SME role is internal; there is no standing external SME (risk R-51). Science is checked against published primary sources by the internal SME. **Decided (owner): one external expert review at Stage 5**, of the journal science, forecasts, and the educator guide. The owner finds the reviewer; the SME prepares the review pack (claims list with sources); findings use the severity scale above | SME (prepares), owner (arranges), external reviewer | review |
 
-## 4. Invariants (automated from Stage 2)
+### 3.1 Chapter 9 testing tasks
+
+From the user's Chapter 9 pages (ACEDT), via the coordinator. Each task maps to the test types above.
+
+| Testing task | What it means for us | When | Who | Caution |
+|---|---|---|---|---|
+| **Formative feedback** | Every symptom found (stuck player, wrong forecast pattern, idle hold) is analyzed for its **root cause from several perspectives** before a fix is chosen: usability, prior-knowledge assumption, content, balance, technical. A perspective round (TEAM.md 8.5) for any S1 or S2 that touches more than one discipline | Every iteration, Stages 2–6 | Finder proposes; the owning roles analyze together; Producer tracks | Don't fix the symptom in one discipline when the cause is in another (e.g. a "too hard" report caused by an unclear Monitor, not by balance) |
+| **Playtesting** | **Alpha** playtests with the SME and internal testers (the owner plus agent walkthroughs); **beta** ideally with the target group (ages 12–18) | Alpha: Stages 3–5. Beta: Stages 5–6 | Owner plays; Lead Game Designer reports; SME reviews | **With only the owner as tester, avoid strong conclusions.** Label findings as design judgment, check them with the owner and the SME, and never claim learning gain or age fit (R-17). No minors are recruited (design exercise) |
+| **Software testing** | Unit, GameTests, invariants, the headless playthrough and gate solver (section 4a), save and update tests, integration tests | Every build from Stage 2 | Technical Lead | A passing check that read nothing is worse than none (print what it read) |
+| **Usability testing** | Can players use the controls, Monitor, journal, machines, and teacher tools without outside help? Task-based sessions (playtest-plan.md tasks with time limits); screenshots at 1280×720 looked at by a person | Stage 2 first (usability is the prototype's priority), then every stage | Owner; Lead Game Designer; Lead Artist for readability | Must-pass check, not the whole evaluation (TEAM.md 8.4) |
+| **Validation testing** | Does the game do what it was designed to do for its learners? Learning goals checked against the alignment table and the pre/post test design; Scorecard; external expert review of science and the educator guide | Stage 5 (external review), Stage 6 (Scorecard, unit walkthrough) | Lead Instructional Designer, SME, external reviewer | In a design exercise, validation of learning gain can't be done; validate the **instrument and alignment**, and say so |
+
+## 4a. Regression gate (from PROCESS.md §3)
+
+Once the mod exists, these run on every build, locally and later in CI:
+
+- **Headless playthrough through the real code:** seal the dome, raise pressure, reach each gate, breathe, build the beacon. Runs N times across standard mode, classroom mode, group size 1 and 5, and an "everything at once" stress case. Exits non-zero on failure and prints the first failing check with its ID.
+- **Gate solver:** every gate and every story beat is reachable by an automatic solver; an unreachable gate is an S1 soft-lock.
+- **Checks state where things must be**, not only where they mustn't (e.g. "the next-gate chip is at the top center and names pressure 5 kPa", not just "the chip is on screen").
+- **Every new check is proven to fail** against the old code, for the right reason.
+- **Checks print what they read.**
+- **Tests restore any global state they change.**
+- **Determinism:** seeded content (forecast wording variants, drift events) reads the same after save and load.
+- **Content rules as tests:** a hint appears only for a problem that really exists and never states the answer; story beats match gate conditions; every forecast has a correct answer under current physics.
+- **Readability:** text color against its real background at 1280×720.
+- **Saves:** schema version and migration per change; never overwrite a newer save; corrupt the main file on purpose to test the backup fallback.
+
+## 4b. Invariants (automated from Stage 2)
 
 These are S1 if they ever fail. Each becomes a test as soon as its system exists.
 
@@ -104,6 +131,7 @@ These are S1 if they ever fail. Each becomes a test as soon as its system exists
 | | Save and update pass | Restarts, rollback, pack update | automated |
 | | Privacy pass | All invariants I-5 to I-9; export audit | automated + review |
 | | Integration pass | Class server end to end (setup, pause, backup, rollback, export); educator guide steps match | automated + user + review |
+| | **External expert review** (owner decision) | Journal science, forecasts, educator guide reviewed by one outside expert the owner finds | review |
 | **6 Beta** | Tuning pass | Pacing, fauna, hazards against targets | user |
 | | Unit walkthrough | 23-period unit with the user playing the teacher; setup under 30 minutes | user + review |
 | | Scorecard pass | All seven lenses | review |
@@ -130,7 +158,7 @@ A stage exits when its ROADMAP exit criterion is met **and**:
 | 2 | 0 | ≤ 5, none tagged `learning` or `accuracy` | P1 and P2 reports filed; Scorecard: Usability and Feasibility rows reviewed |
 | 3 | 0 | ≤ 5, none tagged `learning`, `accuracy`, `privacy`, `accessibility` | S1 and S2 reports filed; Phase 1 time within ±25% of the curve; load-test numbers replace placeholders; Scorecard all rows reviewed |
 | 4 | 0 | ≤ 10, none tagged `accuracy` or `privacy` | Every gate reachable; alignment table has no gaps; fantasy audit complete |
-| 5 | 0 | ≤ 10 | No known blockers; saves survive updates |
+| 5 | 0 | ≤ 10 | No known blockers; saves survive updates; external expert review done and its S1 findings fixed (S2 findings scheduled) |
 | 6 | 0 | 0 tagged `learning`, `accuracy`, `privacy`, `accessibility` | Scorecard passes on every lens the project can measure (Learning-gain row marked "not measurable in a design exercise") |
 | 7 | 0 | 0 | Release checklist complete |
 
@@ -138,11 +166,11 @@ A stage exits when its ROADMAP exit criterion is met **and**:
 
 - [ ] All redistribution permissions confirmed, including Modrinth and CurseForge flags ([docs/tech/mod-licenses.md](../tech/mod-licenses.md); R-23, R-40)
 - [ ] ProbeJS not in the shipped pack; Create's assets untouched; license notices in `pack/licenses/`
-- [ ] Our own licenses chosen and in the repo (R-25)
+- [ ] LICENSE files added per the licensing plan (owner decision): code MIT; art, audio, story, journal, and educator materials CC BY 4.0. Third-party notices per [docs/tech/mod-licenses.md](../tech/mod-licenses.md)
 - [ ] Names cleared (R-36); Minecraft usage guidelines read (R-26)
 - [ ] No open S1 or S2
 - [ ] Every [verify], [SME], and **unverified** tag either resolved or kept out of game text
-- [ ] External SME review done, or explicitly waived by the user (R-51)
+- [ ] External expert review (Stage 5) findings closed or accepted by the owner (R-51)
 - [ ] Educator package: guide (with "Requires Java Edition; not Minecraft Education", IT sheet, data notice), worksheets, 23-period unit plan, pre/post test, paper reflection fallback
 - [ ] Server pack boots from a clean machine; teacher setup under 30 minutes
 - [ ] Version number and changelog (section 8)
@@ -158,4 +186,4 @@ A stage exits when its ROADMAP exit criterion is met **and**:
 
 | Date | Change |
 |---|---|
-| 2026-11-26 | Draft 1. Added ACEDT test versions, integration tests, and the external SME line (coordinator input from Chapter 9). |
+| 2026-11-26 | Draft 1. Added ACEDT test versions, integration tests, and the external SME line (coordinator input from Chapter 9). Added Chapter 9 testing tasks (3.1), the regression gate (4a), the Stage 5 external expert review and the licensing plan (owner decisions). |

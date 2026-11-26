@@ -55,7 +55,7 @@ Length: 8 steps, ≤ 12 words each. Expected time 15–25 minutes with exploring
 | `id` | `briefing.shift1` |
 | `type` | Shift Briefing |
 | `trigger` | Landing checklist done or skipped |
-| `delivery` | BELL briefing card (one screen, dismiss with one click); copy kept in the journal under "Briefings" |
+| `delivery` | BELL briefing card in the side panel (non-modal, ui-specs §0); copy kept in the journal under "Briefings" |
 | `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms cut solar power. Run life support {hold_sols} sols with no failures, and the relay link comes back. |
 | `text.hs` | Same as MS |
 | `goal_ids` | C1, A1 |

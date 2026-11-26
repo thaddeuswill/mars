@@ -54,7 +54,7 @@ Source: the user's Chapter 9 pages on the ACEDT multidisciplinary learning game 
 |---|---|---|---|
 | **1. Product iteration** | Repeated passes through analysis → core design → experience design → development → testing, each producing a better version of the game, from paper or rapid prototypes to a feature-complete game. When a problem shows up (too hard because of usability, wrong assumptions about prior knowledge, only some objectives taught), revisit requirements, prioritize with the customer and SMEs, and fix the highest-priority element first | Each roadmap stage from 2 to 7 is one or more product iterations. Each ends with a build, a test pass (qa-plan.md), a Scorecard review, and a team debrief (TEAM.md 8.7). Findings go into a ranked list; the top items are fixed first | **Stages 2–3: short iterations**, about one build per 1–2 weeks of team time, each with a user playtest session. **Stage 4: one iteration per gameplay phase** (Phase 2, then Phase 3). **Stages 5–6: one per test version** (alpha, beta). **Stage 7: candidate release** |
 | **2. Task iteration** | Inside a stage, core tasks run in no fixed order; progress on one reveals new considerations for others. Each core discipline stays aware of key decisions and weighs in, which keeps instructional and gaming elements balanced | The **change impact check** (TEAM.md 8.2) on every flexible or stable change, and on fluid changes touching more than one area; handoffs in reports; the debate schedule (TEAM.md §4) with a perspective statement from every role | **Continuous**: every task report. Producer checks at every stage gate that no handoff is left unanswered |
-| **3. Customer and SME iteration** | At every key point, iterate with the customer and SMEs so decisions are appropriate, accurate, authentic, and complete. Internal SMEs give frequent feedback on small details; external SMEs and the customer give critical review | **Customer = the user.** **Internal SME = our Subject Matter Expert role.** There is **no external SME** (no planetary scientist or science teacher): risk R-51. The user may arrange an optional external review | **SME:** every content item before it is "final" (shared format status field); every gate or physics change; every stage gate. **User:** one decision batch per stage, plus each playtest session's report; critical review at the end of Stages 2, 3, 5 and before release |
+| **3. Customer and SME iteration** | At every key point, iterate with the customer and SMEs so decisions are appropriate, accurate, authentic, and complete. Internal SMEs give frequent feedback on small details; external SMEs and the customer give critical review | **Customer = the user.** **Internal SME = our Subject Matter Expert role.** There is **no standing external SME** (no planetary scientist or science teacher on the team): risk R-51. **Decided (owner): one external expert review at Stage 5**; the owner finds the reviewer | **SME:** every content item before it is "final" (shared format status field); every gate or physics change; every stage gate. **User:** one decision batch per stage, plus each playtest session's report; critical review at the end of Stages 2, 3, 5 and before release |
 | **Local iteration** | Back-and-forth between phases while building and applying earlier decisions, plus a tight development-and-testing loop. Integration problems (with other mods, the learning environment, supporting materials) surface here | Automated tests and invariants on every build; an **integration test pass** each stage from 3 on (qa-plan.md §5): Mekanism, Create, KubeJS; the class server; the educator guide against the build | **Every build** (automated); integration pass **per stage** |
 
 ### Test versions (local iteration)
@@ -145,13 +145,13 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ✅ Curriculum: NGSS
 - ✅ Classroom mode: groups of 3–5 per planet; 23-period unit with 17 play periods (~11.3 h)
 - 🟡 NGSS codes verified: replacement table in [docs/science/ngss-verification.md](docs/science/ngss-verification.md), checked through mirrors; verbatim check on nextgenscience.org pending (host blocked) [SME]
-- 🟡 Learning goals mapped to game content (alignment table); **goal priority tiers proposed, consensus pending** [ID]
+- 🟡 Learning goals mapped to game content (alignment table); goal priority tiers decided (T-C) [ID]
 - 🟡 Pre/post test: blueprint done (LEARNING.md §3.3); items not written [ID]
 - ✅ Action log approved: pseudonymous on the server, anonymous in every export
 - ✅ Action-log format and CSV export defined (LEARNING.md §5.5, ARCHITECTURE.md §8.6); `goals.csv` handed to [TL]
 - ✅ Prompts, reflections, and rubrics drafted ([docs/learning/](docs/learning/))
 - ⬜ Task analysis and media analysis (missing from the document map) [ID]
-- 🟡 Interruption rules: draft (TEAM.md 8.6) and instructional review (LEARNING.md §4.6); consensus pending [ID, GD]
+- ✅ Interruption rules decided: option I-C, now in TEAM.md 8.6; numbers are config values tuned in Stage 3 [ID, GD]
 
 **Design data**
 - ✅ Balance sheet ([docs/design/balance-sheet.md](docs/design/balance-sheet.md)): Index values, Phase 1 pressure, rates, holds, classroom pacing, fauna numbers (untested starting values)
@@ -159,7 +159,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - 🟡 Content inventory: the asset list ([docs/art/asset-list.md](docs/art/asset-list.md), 144 rows) covers it in part; a design-side inventory per phase is still missing [GD]
 - ✅ Story bible draft 2 ([docs/design/story-bible.md](docs/design/story-bible.md))
 - ✅ Playtest plan for solo user playtests ([docs/design/playtest-plan.md](docs/design/playtest-plan.md))
-- ⬜ UI specs: Planetary Monitor (with next-gate display and Breathable air gauge), journal, Keeper's Record, forecasts, failure reports, Keeper's Reports, Shift Board, HUD [GD, A]
+- 🟡 UI specs: Planetary Monitor (with next-gate display and Breathable air gauge), journal, Keeper's Record, forecasts, failure reports, Keeper's Reports, Shift Board, HUD: draft 1 in [docs/design/ui-specs.md](docs/design/ui-specs.md) [GD, A]
 - ✅ Science accuracy review ([docs/science/](docs/science/)); [SME] and [verify] tags still open in art and story docs [SME]
 - ✅ Art direction: style guide, keyframes, asset list, palette sheet ([docs/art/](docs/art/)); visual mockups still missing [A]
 - ⬜ Audio direction and sound list in `docs/audio/` (Lead Artist owns audio; direction now sits in asset list §9) [A]
@@ -167,7 +167,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 **Before leaving Stage 1**
 - ⬜ **Full-team story review** (DESIGN.md, Story review): every role reviews the story bible against the six story elements, perspective round first; SME in every pass [P runs, all roles]
-- ⬜ Consensus recorded on goal priority tiers and interruption rules [P]
+- ✅ Consensus recorded on goal priority tiers (T-C) and interruption rules (I-C): owner decision on the team's recommendation [P]
 
 **Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists ✅; both consensus items recorded; story review held; QA invariant tests exist for every Stage 2 system; definition of done (document version, then build version for the skeleton).
 
@@ -296,10 +296,10 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Thaw gate; ice-to-water rule, full (brief puddles, then pooling) with the chunk heat map [TL]
 - ⬜ Hydrosphere gate content: surface water, algae vats [TL]
 - ⬜ **Ground collapse** after the Thaw, with a survey scan for ice lenses [TL, GD, A]
-- ⬜ **Perchlorate, Phase 2 stage:** meltwater treatment (cut list item 9) [TL, GD]
+- ⬜ **Perchlorate, Phase 2 stage:** meltwater treatment (cut list item 6) [TL, GD]
 - ⬜ Dormant fauna (thawlings): spawn rules tied to temperature, water, and machine signature; planet caps [TL, GD, A]
-- ⬜ Fauna **later life stage** at the Hydrosphere gate (never "mutation"); one per family if cut list item 7 applies [TL, GD, A]
-- ⬜ Fauna options: lethal defense (never lowers fauna pressure), **shrouds**, **quiet zones**, **lures** (cut list item 3) [TL, GD, A]
+- ⬜ Fauna **later life stage** at the Hydrosphere gate (never "mutation"); one per family if cut list item 9 applies [TL, GD, A]
+- ⬜ Fauna options: lethal defense (never lowers fauna pressure), **shrouds**, **quiet zones**, **lures** (cut list item 8) [TL, GD, A]
 - ⬜ Phase 2 Shift Briefing [GD, ID]
 
 **Gameplay Phase 3 — Equilibrium**
@@ -328,7 +328,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 **Story, art, audio**
 - ⬜ Story writing for the remaining essential beats, plus optional beats if budget allows (cut list item 5) [GD]
-- ⬜ Art: textures, models, sky/fog, clouds and shimmer (cut list item 6) [A, TL]
+- ⬜ Art: textures, models, sky/fog, clouds and shimmer (cut list item 3) [A, TL]
 - ⬜ Audio: machines, fire, ice and water, ground collapse, thawlings, flora, beacon (AU-05 to AU-12), with subtitles [A]
 - ⬜ Accessibility pass: color never the only signal, colorblind-safe palettes, subtitles, UI legible on small screens [A]
 
@@ -358,6 +358,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - ⬜ Saves survive restarts, rollback, and pack updates
 - ⬜ Privacy pass: export audit and invariants I-5 to I-9 [TL, ID]
 - ⬜ Consent and safety plan for minors written as a design artifact (no minors are recruited in this design exercise) [P, ID]
+- ⬜ **External expert review** (owner decision): one outside expert reviews the journal science, forecasts, and educator guide. The owner finds the reviewer; the SME prepares the review pack (claims with sources); S1 findings fixed before Stage 5 exits [owner, SME, ID]
 
 **Exit criteria:** no known blocker bugs; definition of done (build version).
 
@@ -387,7 +388,8 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 **Debates this stage:** operational lifetime; user-generated content; what we learned as a team.
 
 - ⬜ All redistribution permissions confirmed, including platform flags (from Stage 1)
-- ⬜ Our own licenses chosen: code, assets, educator materials (user decision; recommended before Stage 4)
+- ✅ Licensing plan decided (owner): **code MIT; art, audio, story, journal, and educator materials CC BY 4.0**
+- ⬜ LICENSE files added at release (none before then, per the plan); third-party notices per [docs/tech/mod-licenses.md](docs/tech/mod-licenses.md) [P, TL]
 - ⬜ Pack exported for Modrinth (main) and CurseForge (from packwiz)
 - ⬜ Server pack published (offline classroom bundle with license notices)
 - ⬜ Pack page: description, screenshots, trailer (trailer is cut list item 2)
@@ -419,9 +421,9 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 **Stage 1 (Pre-production), in progress.** The design documents are drafted and both Stage 1 blockers are closed on paper: Phase 1 now has the Regolith Outgasser (C-01), and classes play in groups of 3–5 per planet on one server (C-02). Nothing is built yet. The plan through Stage 3 is achievable; Stage 4 is at the edge and will be re-estimated after the slice (budget.md §4).
 
 Next actions:
-1. **Record consensus** on goal priority tiers and interruption rules ([consensus-round2.md](docs/production/consensus-round2.md)). [P, ID, GD]
+1. **Apply the decided consensus** (owner: goal tiers T-C, interruption rules I-C; [consensus-round2.md](docs/production/consensus-round2.md)): LEARNING.md §1 and §4.6 marked decided; config keys for the caps. [ID, GD, TL]
 2. **Hold the full-team story review** of the story bible before Stage 3. [P, all]
 3. **Build the foundation:** packwiz layout, companion-mod skeleton with an empty Mars dimension, CI, Spotless, unit tests. [TL]
 4. **Decide the in-house machine list** and the oxygen/sealing approach. [GD, TL]
-5. **Write the UI specs** for the Monitor (next-gate display, Breathable air gauge), journal, Keeper's Record, and Shift Board. [GD, A, ID]
-6. **Ask the user** for the open questions in [BACKLOG.md](BACKLOG.md) (licenses; third-party mod depth; full 40-h run; delayed post-test; Stage 2 fail-cheap scope).
+5. **Review the UI specs draft** ([docs/design/ui-specs.md](docs/design/ui-specs.md)) against PROCESS.md §4 UI rules and the decided interruption rules (I-C). [GD, A, ID]
+6. **Ask the user** for the open questions in [BACKLOG.md](BACKLOG.md) (third-party mod depth; full 40-h run; delayed post-test; Stage 2 fail-cheap scope).

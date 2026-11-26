@@ -1,7 +1,7 @@
 # Consensus Brief, Round 2: Goal Priority Tiers and Interruption Rules
 
 **Facilitator:** Producer · **Date:** 2026-11-26 · **Process:** TEAM.md §9 (frame → positions → common ground → options → agreement check → decide → record)
-**Status:** Positions gathered from documents. The Lead Game Designer is giving its position in parallel; the coordinator adds it to section 1.2 and 2.2 and records the outcome. Nothing here is decided.
+**Status: DECIDED (2026-11-26) by the owner** ("go with your recommendations"): goal priority tiers **option T-C**, interruption rules **option I-C**. Recorded in the TEAM.md Decision Log (TEAM.md 8.6 now carries I-C) and BACKLOG.md. The decision is the **owner's**, made before the Lead Game Designer's position arrived; that position is still pending and is added to sections 1.2, 2.2, and 3 when it comes. If it raises a concern, it is recorded as "revisit if" (TEAM.md §9 step 7), not as a reopening.
 
 Both items are **ill-structured**: the definition is agreed, but several answers are valid and they trade instructional value against appeal and cost. Both are **flexible** items (TEAM.md 8.1): they change at stage boundaries or with evidence, with an alignment check.
 
@@ -119,18 +119,26 @@ The Instructional Designer names rules 3 and 4 as the likely points of differenc
 
 ---
 
-## 3. Agreement check (for the coordinator to fill)
+## 3. Agreement check and outcome
 
 Levels: **Agree** · **Can live with it** (note the concern) · **Block** (reason tied to a learning goal, pillar, science accuracy, safety, or feasibility).
 
 | Role | Tiers: leading option T-C | Interruptions: leading option I-C | Concern to revisit |
 |---|---|---|---|
-| Lead Instructional Designer | | | |
-| Lead Game Designer | | | |
+| Lead Instructional Designer | Position on record (LEARNING.md §1): T-C keeps its tiers unchanged; formal level not yet given | Position on record (LEARNING.md §4.6): I-C is its version plus two flow guards; it stated it could live with a stricter pop-up limit; formal level not yet given | — |
+| Lead Game Designer | **Pending** | **Pending** | Its UI specs (docs/design/ui-specs.md) already point pop-ups to TEAM.md 8.6 |
 | Producer | **Agree** | **Agree** | Revisit D1 tier after the Stage 3 story test |
-| Technical Lead (perspective) | | | |
-| Lead Artist (perspective) | | | |
-| SME (perspective) | | | |
+| Technical Lead (perspective) | Pending | Pending | Cost of the caps, wrap-up signal, and logging |
+| Lead Artist (perspective) | Pending | Pending | Salience of log lines; no sound over voice |
+| SME (perspective) | Pending | Pending | Expected: nothing to add |
 
-**If no blocks:** record in the TEAM.md Decision Log with the level of agreement; the Lead Instructional Designer updates LEARNING.md §1 and §4.6 (status "decided"); the coordinator replaces TEAM.md 8.6 with the agreed rules; the Technical Lead adds the config keys; the Producer marks the 8.8 rows done.
+**Decision:** T-C and I-C. **Decided by:** the owner, on the Producer's recommendation, before all positions arrived (TEAM.md §9 step 6 allows the owner to decide). **Consensus level:** not measured; record each role's level as it arrives.
+
+**Revisit if:** the Lead Game Designer's position raises a block-level concern; the Stage 3 story test shows the D1 thread is or isn't engaging (tier of D1); Stage 3 action-log counts show the caps or reminder rule hurt flow or measurement (I-C numbers).
+
+**Follow-up found after the decision (well-structured, for the Lead Instructional Designer and Lead Game Designer):** PROCESS.md §4 (from the owner's handoff lessons) says "no modal pop-ups for progress", while rule 3 in I-C still allows a phase debrief (Keeper's Report) as a blocking, deferrable interruption. Proposed reconciliation: a Keeper's Report is **offered** at the gate as one colony-log line plus a side-panel entry, and opens as a full screen only when the player chooses it or at the next natural pause; first life-threatening warnings stay the only true blocking interruptions. This fits I-C's intent (limited deferral, re-offered once per session) and the process rule.
+
+**Done (record):** coordinator recorded the decision in TEAM.md and BACKLOG.md. Still to do: Lead Instructional Designer marks LEARNING.md §1 and §4.6 decided; Technical Lead adds the config keys; Producer marks the TEAM.md 8.8 rows (proposed to the coordinator).
+
+*(Original instructions, kept for reference.)* **If no blocks:** record in the TEAM.md Decision Log with the level of agreement; the Lead Instructional Designer updates LEARNING.md §1 and §4.6 (status "decided"); the coordinator replaces TEAM.md 8.6 with the agreed rules; the Technical Lead adds the config keys; the Producer marks the 8.8 rows done.
 **If a block remains:** the user decides, or the Stage 3 playtest settles it (TEAM.md §9 step 6).

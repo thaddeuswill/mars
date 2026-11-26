@@ -53,10 +53,27 @@ Covers every candidate mod and tool named in `ARCHITECTURE.md` and `DESIGN.md` �
 
 **Read.** 1.21.1 is still the version with the widest mod support for our stack, but it is no longer the newest. Staying on it is the low-risk choice for Stage 1. The risk is that 1.21.1 builds stop getting fixes during our ~7 roadmap stages. Logged under Risks in the report (R-06).
 
+## Our own licences (plan)
+
+**Decision (user, 2026-11-26, on coordinator recommendation). A plan, not legal advice; unverified by any legal review.**
+
+| What | Planned licence | Notes |
+|---|---|---|
+| Our code (companion mod, KubeJS scripts, build and test scripts) | **MIT** | Same as Mekanism and Create's code; compatible with linking LGPL KubeJS/NeoForge as separate jars **[unverified, not legal advice]** |
+| Our non-code content: art, audio, story and journal text, keyframes, datapack content | **CC BY 4.0** | Teachers and players may adapt and share with credit (fits the user-generated-content hook, TEAM.md §4) |
+| Educator materials (guide, worksheets, rubrics) | **CC BY 4.0** | |
+| Third-party content | Their own licences, unchanged | **Never** retexture or redistribute All Rights Reserved assets (Create's assets, FTB Library). **Never** ship ProbeJS (GPL-3.0, dev only) |
+
+- **No `LICENSE` file is added to the repository until release**, because this is a design exercise (user decision). Until then, `mod/` and `pack/` carry no licence header; the build plan adds the files at Stage 7.
+- At release: a `LICENSE` (MIT) at the root and in the mod jar, a `LICENSE-CONTENT` (CC BY 4.0) covering `pack/assets/` and `pack/data/`, and `pack/licenses/` with every bundled third-party licence and notice.
+- **Revisit if** a school or publisher needs different terms, or a legal review says the MIT/CC split doesn't work for a mixed jar.
+
 ## Still to do
 
 1. Recheck Modrinth and CurseForge distribution flags for every mod (needs `modrinth.com` and `curseforge.com` allowed).
 2. Recheck Registrate and Rhino on their 1.21.1 branches.
 3. Check JUnit 5 and ArchUnit licenses.
 4. Name a standalone oxygen/suit candidate, or record "build our own" (ROADMAP Stage 1).
-5. Our own licenses (code, assets, educator materials) are a user decision (TEAM.md §4 "Still open").
+5. Our own licences: **planned** (section above); add files at release.
+6. Sodium for NeoForge (performance mod candidate, ARCHITECTURE.md 2.5.3): PolyForm Shield 1.0.0 ([LICENSE, 1.21.1/stable](https://raw.githubusercontent.com/CaffeineMC/sodium/1.21.1/stable/LICENSE.md)). Check whether it permits bundling in our offline classroom pack before adding it.
+7. GeckoLib: MIT ([LICENSE, main](https://raw.githubusercontent.com/bernie-g/geckolib/main/LICENSE)). Not adopted (ARCHITECTURE.md 2.13); recorded in case the animation decision is revisited.

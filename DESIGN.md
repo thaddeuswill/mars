@@ -368,6 +368,215 @@ Verbal and visual information use separate channels (Baddeley & Hitch, 1974; May
 ### Open risk
 Narrative and play can both overload players: in Adams et al. (2012), a slideshow beat both a narrative game and the same game without narrative. That makes usability and low extraneous load **the** priority for the Stage 2 prototype, not polish.
 
+### Closing the gaps (Round 2, 2026-11-26)
+
+Specs for the gaps above that the Lead Game Designer owns. Final text is in [docs/design/messages/](docs/design/messages/README.md); screens in [docs/design/ui-specs.md](docs/design/ui-specs.md). All are **fluid**; none has been playtested.
+
+**Landing (controls first, in story).** BELL's first-shift checklist: 8 steps inside and just outside the dome (move, suit O2, Monitor, seal kit, patch a breach, battery, airlock and dust-off, journal). ~15–25 minutes. Each step ticks when the action is detected, and the target gets an outline and an arrow (not color only). "I know the drill" skips it with a 3-line summary. No forecast fires until it is done or skipped; F1 follows only when the first storm is scheduled. Goals: C1 (plus the controls schema). *Rationale:* players without the Minecraft or tech-mod schema can't learn science while fighting controls (deHaan et al., 2010). *Alternatives:* separate tutorial world (breaks the story rule "onboarding stays in story"); no tutorial (loses Lens A players). *Trade-offs:* learning: lower extraneous load; appeal: 15–25 minutes before the "real" game, cut by the skip. *Revisit if* playtest S1 shows Lens A stuck for more than 2 minutes on a step, or the checklist takes over 30 minutes.
+
+**In-house machines for all learning-critical work.** Every machine needed to pass a gate or to see a science relationship is ours: Regolith Oven, Regolith Outgasser, solar panel, battery, O2 generator, water reclaimer, dust-off station, atmospheric processor, super-greenhouse emitter, orbital mirror uplink, ice extractor, meltwater treatment, algae vat, carbon scrubber, soil treatment, biome seed kits, insulation shroud, lure station, quiet-zone marker, weather mast, beacon parts. **One interface pattern** for all of them: input slot, output slot, power bar, status lamp (shape-coded), and two fixed lines: **"Effect on planet"** (its live Index contribution, e.g. "+0.10 kPa/sol") and **"Costs"** (build, power per sol, upkeep part, fauna signature). Mekanism and Create are **optional and late**: unlocked at Hydrosphere for automation and logistics, never required for a gate, never used in journal science, hidden from recipe viewers until unlocked, and hidden by default in the classroom preset. Goals: all (lower load on every goal). *Rationale:* third-party interfaces add extraneous load and recipe depth (risk R-04). *Alternatives:* curated Mekanism subset (still complex; their GUIs aren't ours to simplify); no third-party mods (loses Lens B appeal). *Trade-offs:* learning: every lesson machine is simple and labeled with its effect; appeal: tech-pack fans still get automation late; cost: more machines for us to build (Technical Lead, Producer). *Revisit if* the Stage 2 prototype shows the in-house set is too costly to build, or Lens B playtests show boredom before Hydrosphere.
+
+**Cost rule (one written rule, shown where it matters).** Every machine pays four things, always shown on its "Costs" line: build materials (once), power per sol, one maintenance part every N sols (balance sheet), and its fauna signature (from Thaw on). On a group planet the dome's stores, power grid, and parts are shared; whoever builds a machine is credited in the action log, but the whole team pays its upkeep. Nothing has hidden costs.
+
+**Route choices (depth for little code).** Each big job has at least two routes that fix the same thing at different costs, so choosing is a systems decision (B4):
+| Job | Route A | Route B |
+|---|---|---|
+| Raise pressure (Phase 1–2) | Many cheap Outgassers: low build cost, more upkeep parts | Fewer atmospheric processors: expensive, more power, less upkeep |
+| Warm the planet (Phase 2) | Super-greenhouse emitters: cheap, high fauna signature | Orbital mirror uplink: expensive and slow to build, **no ground signature** |
+| Water for the dome (Phase 2) | Meltwater treatment: cheap, needs perchlorate filters | Deep-crust extractor: costly power, clean water, high signature |
+| Fauna (Phase 2–3) | Shrouds: −15 % output | Quiet zones: land left unbuilt |
+| O2 (Phase 3) | Algae vats: fast, controllable, need power | Seeded biomes: slow, free once established, can overshoot |
+The orbital mirror route is new: its numbers go to the balance sheet as a draft after the Stage 2 prototype; science framing to the SME (mirrors are a real proposal, SME review B4).
+
+**Worked example: the first Outgasser.** Hana's notes taped to the first Outgasser walk through six steps, each with a short reason: placement, feed, power for the night, switch on (and guess before looking: F3), then *where to look* (the Outgasser line in the Monitor's pressure causes). The notes never state the result, so F3 stays a real prediction. Fading: the first atmospheric processor gets a **completion** version (two steps left for the player), later machines get "You know the drill by now. —H." "Hide Hana's notes" turns them off for experienced players. Goals: B1, C3, C1. *Rationale:* worked examples help novices and hurt experts (expertise reversal), so they fade and can be skipped. *Revisit if* Lens A still can't find the cause line after the example.
+
+**Shift Briefings (advance organizers).** Three BELL briefings (≤ 45 words): Phase 1 after Landing ("keep the dome alive"), Phase 2 after Keeper's Report 1 ("change the planet faster; watch pressure and temperature together"), Phase 3 after Keeper's Report 2 ("hold the balance"). Each names the job, the values to watch, and what's new, without spoiling the fauna. Shown in the side panel, not as a modal pop-up (PROCESS.md §4), and kept in the journal. Goals: C1, A1, A2, A3, B5, A5, B4.
+
+**Character load.** Only BELL and one crew voice are essential per phase (Hana, Basu, Moreno, in that order); Mensah speaks only in Keeper's Report replies. Check and changes: story bible §4.4.
+
+**Feedback wording: positive and fixable (added from user research, Chapter 6).** Failure reports name the **system**, never the player ("Hab B lost air", not "You let Hab B leak"); give the likely cause; and give a hint as a question or as "what holds" ("Seals hold where every outside edge is covered"), never blame and never the full fix. When the player's fix holds, BELL closes the loop with one positive line ("Hab B holding. Seal good."). Story bible §8.3 sample checked: it passes (cause + question hint); the closing line is added.
+
+## Flow and Task Design (added from user research)
+
+From *Design and Development of Training Games*, Chapter 6 (Csikszentmihalyi; Rouse 2004; Schell 2008; Koster 2005; Chen). Design judgment, not playtested.
+
+### Flow conditions
+| Flow condition | How we meet it | Unclear spots and fixes | Status / owner |
+|---|---|---|---|
+| **Clear tasks** | Gates are world conditions; the next-gate display states the target and progress; Shift Briefings name the job | "Raise pressure" alone has no end. Fixed by the next-gate bar ("Pressure 5 kPa, 62 %, ~4 sols"). "Hold the balance" is unclear until the hold counter and Air window are on screen: both shown from Phase 3 | ✅ Spec'd (ui-specs §3, §5) |
+| **Clear, immediate feedback** | World responds at once (sky, ice, frost, fire); Monitor trend arrows and cause lines; forecast results first in queue | Pressure changes are slow: a new machine moves the number only a little in a sol. The machine's "Effect on planet" line and the cause line confirm it immediately | ✅ |
+| **Concentration (few distractions)** | Interruption rules (TEAM.md 8.6); one message at a time; no modal pop-ups for progress; HUD hidden over full-screen sheets | Message bursts at gates (report, briefing, journal entry, crew message). Fixed: one sequence in the side panel, one item visible at a time | 🟡 Consensus pending (rules) |
+| **Attainable, balanced goal** | Gates sized by the balance sheet; holds pause before they reset | The narrow O2 window (21.5–23 % at 75 kPa) may feel unattainable at MS age. Air window shows it widening with pressure; LEARNING.md §4.7 playtest check | 🟡 Playtest |
+
+| Flow characteristic | Our design |
+|---|---|
+| **Control** (actions visibly affect the outcome) | Every Index change has a named cause; fauna follow the player's own machine signature; no hidden difficulty (see DDA below) |
+| **Less self-awareness** | Diegetic UI (Monitor, journal, log); player language only; no quizzes |
+| **Altered sense of time** | A risk in class: players lose track of the period. The teacher's end-of-session signal and rule 5 (no new critical failure in the last ~5 minutes) protect them |
+
+### The three task types
+| Task type | Ours | Interface support |
+|---|---|---|
+| **Explicit** (dictated by the game) | Gates, the next-gate display, forecasts, Shift Briefings, Landing checklist, beacon components | Next-gate bar, "Useful now" list, journal |
+| **Implicit** (expected, not dictated) | Stay alive, keep the dome sealed, maintain machines, hold values in band, keep fauna pressure manageable | Dome tab (O2, water, power, wear), Shift Board, Air window, hold counters, fauna page. Each implicit task has a gauge that shows how well it's going |
+| **Player-driven** (self-set) | Base and outpost design, layout, which routes and interventions to use, where to leave quiet zones, biome placement | Emergent play from simple interacting rules (Index contributions, signatures, ice-to-water rule). We don't script these; we make sure every rule they combine is visible on the Monitor |
+
+### The flow channel against our pacing
+Difficulty should rise with skill, between anxiety and boredom. Checked against the balance sheet:
+
+| Stretch (standard) | New skill demanded | Difficulty source | Risk | Check |
+|---|---|---|---|---|
+| Landing (0–0.4 h) | Controls | None (safe) | Boredom for Lens B | Skip option |
+| Phase 1 to Dome stable (~3 h) | C1 loop, sealing | Wear, first storm, first solar event | Anxiety for Lens A (several systems at once) | Landing first; one new system per event |
+| Dome stable → 5 kPa (~5 h) | First lever (B1) | Storm dips; frost sink grows near 5 kPa | Boredom in the flat waiting stretch | Outgasser builds every 1–2 sols; ice and F4a discovery; perchlorate; next-gate estimate shows the end |
+| Phase 2 (~18 h) | Two levers, A2, fauna loop | Fauna scale with signature; ground collapse | Longest phase; thinnest story per hour (story bible §6.2) | Fauna and route choices add new patterns every few hours; watch idle time |
+| Phase 3 build (~9 h) | Balancing A5, B4 | Drift events, overshoot | Anxiety from the narrow O2 window | Air window, F9 early, time-to-edge estimate |
+| Holds (~4.7 h, overlapping) | Holding under drift | One drift event per 1–1.5 sols (classroom 0.5–0.75) | Boredom if events repeat; anxiety if they stack | Six event types mixing parameters (interleaving); prototype rule: if "waiting" is reported, shorten Equilibrium to 10 sols before adding events (balance sheet §4) |
+
+### Challenge balance (Chapter 6, 2.6)
+| Book tip | Our design |
+|---|---|
+| Start simplified; open features as skill grows | Three phases; progressive disclosure of Monitor rows (2 → 4 → 6); Mekanism and Create only at Hydrosphere |
+| Know the audience | Two lenses (12-year-old new to tech packs; experienced 17-year-old); grade bands |
+| Don't introduce many skills at once | Landing teaches controls before science; one lever per gate (Outgasser at Dome stable; processor and emitter at Phase 2; fauna options at Hydrosphere; seeding at Phase 3) |
+| Just-in-time guidance tied to current actions | Hana's notes on the machine being built; failure reports on the failure that happened; forecasts triggered by the player's own actions (F3, F5, F6, F8, F10) |
+| Don't over-specify | Hints, not answers; worked example fades; no step-by-step quest lines |
+| Chapter-based design: tutorial, then harder missions that build on earlier ones | Landing → Phase 1 → 2 → 3, each building on the last (pressure → temperature and water → balance) |
+| Chapters of reasonable length | 8 / 18 / 14 h standard; 4 / 7 / 6 periods classroom. Phase 2 is long; its mid-phase gates (Thaw, Hydrosphere) act as sub-chapters with their own world change |
+| Add interface as skill grows | Monitor rows, fauna page, Air window, carbon flow view appear when needed |
+
+### Dynamic difficulty adjustment (DDA)
+Chen argues most DDA weakens the player's sense of control. **Ours keeps control because every difficulty change comes from a visible choice the player made:**
+- Fauna pressure = the sum of the player's machine signatures, shown on the fauna page, lowered by shrouds and quiet zones.
+- Hints get more specific after repeated failures of the same kind (adaptive feedback); this changes *information*, not *difficulty*.
+- Classroom pace and group size are **configured** by a teacher, visible in settings, and never change thresholds.
+- **Confirmed: no hidden difficulty changes exist** in the design: no rubber-banding of storms, wear, or drift events based on how well the player is doing. Storm frequency follows pressure and biomass (visible values). Drift events follow a fixed schedule in sols. If anyone proposes a hidden adjustment, it goes through the consensus process.
+
+**Difficulty as information (PROCESS.md §5).** A `guidance` setting (proposed, fluid): **gentle** (default in classroom) points at the problem, explains blocks, shows "Useful now", and one quiet line on what unlocks more ("More machines unlock at Phase 2: 5 kPa"); **standard** gives hints only after repeat failures; **expert** gives no hints, no "Useful now", no worked example. Thresholds and rates are the same at every level. Needs an ID alignment check (hint levels are feedback).
+
+### Fun as pattern mastery (Koster 2005)
+Fun is the brain's reward for learning patterns; its opposites are **noise** (patterns we can't read) and **boredom** (patterns with nothing left to teach). The Index relationships are our patterns.
+
+| Phase | Patterns to master | Noise risk | Boredom risk | Mitigation |
+|---|---|---|---|---|
+| 1 | Supply vs. demand (O2, power, water); storms cut solar; one machine moves the planet a little | Many dome systems at once | Waiting for 5 kPa | Landing; one system per event; next-gate estimate; ice discovery |
+| 2 | Pressure × temperature → water; signature → fauna (reinforcing loop); warmth → ground collapse | Two levers plus fauna plus collapse within a few hours | Long build-out once patterns are known | Thaw and Hydrosphere spaced apart; route choices; Basu's sites |
+| 3 | O2/CO2 exchange; band holding; maturity slowdown; drift recovery | Six values plus Air window | Holds after the pattern is mastered | Cause breakdown closed by default (less clutter); drift events mix parameters; beacon building during holds |
+
+### Paradox of choice
+Too many options at once overloads players and makes every choice feel costly. **"Useful now"** lists ≤ 3 recommended machines per gate on the Monitor and at the top of the recipe view (ui-specs §3); locked recipes are hidden, not greyed out. Recommendations never lock anything.
+
+## Motivation and Player Types (added from user research)
+
+| Principle (Chapter 6) | Our design | Check |
+|---|---|---|
+| **Intrinsic over extrinsic** | Rewards are the planet changing: sky, water, plants, helmet off. Intrinsic rewards lead more readily to flow | ✅ |
+| **Rewards as control** (if-then rewards cut creativity and shift focus to the reward) | No points, XP, loot for forecasts, or rewards for reading. Forecasts give an explanation, not a prize. Gates unlock tools that are needed for the next job, not bonuses | ✅ None of our rewards reads as control. Watch the Keeper's Record: pages fill from evidence, never pay out items |
+| **Baseline rewards** (fair acknowledgment of completed work) | **Our baseline:** gate unlock moments (world change + BELL line + side-panel "just finished" note), Keeper's Reports and Mensah's replies, the Keeper's Record pages filling, the ending cards. Missing acknowledgment feels like cheating, so every gate and hold gets one | ✅ Spec'd |
+| **No achievement system at launch** | Fits: achievements risk acting as control. If added after playtests, they must be goal-like, unexpected, and verbal or informational (e.g. a BELL line "First storm survived with no power loss"), never a points tally | ✅ Decided (draft) |
+| **Engagement tied to performance** | Flow keeps players engaged; cognitive engagement is the one tied to learning (TEAM.md §3) | Playtest |
+| **Scarcity** (players value what costs effort) | Gates, resource limits, the compact dome. What players earn is tied to **player skill, not avatar skill**: the Keeper has no XP or levels; progress is planet state | ✅ |
+| **Zeigarnik effect** (visible unfinished tasks drive completion) | Next-gate bar with progress; hold rings; blank Keeper's Record pages. **Caution:** avoid "get every quest" compulsion. Every visible task is tied to a learning goal; there are no collectible checklists | ✅ |
+| **Experiential design: five dimensions** | Sensory: art and pressure-driven audio. Cognitive: task structure (gates, forecasts, holds). Active: agency (routes, building, fauna choices). Affective: story emotion arc (story bible §2). Relational: group planets, colony posts, Shift Board | ✅ |
+
+### Bartle player types (players move between them)
+| Type | What they get here | Note |
+|---|---|---|
+| **Explorers** | Ice and water discovery, Basu's drill sites, the archive, lore notes, the weather mast, the survey scan | Rich |
+| **Achievers** | Gates, holds, Keeper's Record pages, the beacon, forecast tally (own, per phase) | No leaderboard by design (unranked ending) |
+| **Socializers** | Group planets, colony posts, Shift Board, the shared Monitor, class debriefs | Classroom-strong; solo players get the crew's messages instead |
+| **Killers** | Lethal fauna defense, which works but never lowers fauna pressure | **No PvP: a deliberate choice, not a gap.** Reasons: classroom safety for ages 12–18 on shared planets; one student could wreck a group's evidence and progress; PvP teaches nothing in our goals. The competitive urge is served by the planet itself (storms, drift events, fauna raids) |
+
+## Core Design Check (added from user research)
+
+From Chapter 9 (ACEDT core design). Core design = the gaming front end, core rules, general mechanics, and the nature of the unfolding play; level details come later.
+
+### What's stable now, and what the Stage 2 prototype may overturn
+| Stable now (core) | May be overturned by the Stage 2 prototype |
+|---|---|
+| One Planetary Index; gates lock in; thresholds never scale | Whether six values are readable at MS age, or Phase 3 needs fewer on screen |
+| The core loop: build → Index responds → read Monitor → adjust | Whether the Monitor is enough feedback, or the world cues must carry more (style of instruction) |
+| Three phases; equilibrium as a band; beacon as the end | The phase split (8/18/14) and hold lengths |
+| Diegetic feedback (Monitor, journal, log); forecasts as the main per-player evidence | Whether forecasts feel like play or homework; how often they can fire |
+| Fauna driven by machine signature; non-lethal options | Whether the signature loop is legible enough to teach B2 |
+| Player-driven story inside a designer frame | Whether text-first messages are read at all (narration revisit) |
+
+### Story foundation against the book's criteria
+| Criterion | Story bible | Result |
+|---|---|---|
+| Grounded in the learning objectives | §1 table maps every story job to goal IDs | ✅ |
+| Meaningful context | Keeper on watch; colonists depend on what you learn | ✅ |
+| Plot embeds instructional sequencing | Arc follows pressure → water and warmth → balance; beats tied to gates | ✅ |
+| Premise with room for many learning experiences | Whole planet, three phases, routes, fauna choices | ✅ |
+| Player can create their own story | Unranked ending cards read from world state; group choices; colony posts | ✅ |
+
+### Four questions for every design decision
+Asked in reviews and in the change impact check (proposed to the Producer for TEAM.md 8.2; kept here until then):
+1. How is this instruction part of the game?
+2. What is this part of the game teaching?
+3. How does this instructional technique affect gameplay?
+4. Does this aspect support or distract from the instruction?
+
+### How we align gaming and instructional strategy
+| Approach | Used? | Why |
+|---|---|---|
+| 1. Naturally compatible strategies | **Yes, primary.** Guided discovery with implicit hints (world, cause lines) and explicit hints (failure reports, Hana's notes) fits open-world Minecraft play | |
+| 2. Instruction first | Partly: goals came first (story "objectives first"), but no instructional sequence is forced on the open world | |
+| 3. From key game capabilities | **Yes.** The game lets players safely see consequences that are rare, slow, or dangerous in reality: centuries of warming, runaway loops, an O2 fire, waking life. They fail safely (gates lock in; rollback) and replay | |
+| 4. Build both together | **Yes, for feedback.** Guidance ranges from direct consequences (world) and iconic cues (HUD shapes, trend arrows) to instructive text (failure reports, forecast results). Iconic cues are unobtrusive but can be missed, so life-threatening firsts may be modal; everything else waits for natural pauses (TEAM.md 8.6) | |
+
+### Instructional logic: rules that depend on a player action
+Our logic is **fixed with rule-based hints**: fixed triggers (gates, first events) plus rules that interpret actions (repeat failures escalate hints). In free play, a player may never take the action a rule needs. Each such rule, and what happens if the player never acts:
+
+| Rule depends on | Goal | If the player never does it | Fallback |
+|---|---|---|---|
+| Warming ice in Phase 1 (F4a) | A2 | No F4a; the A2 contrast with F4b is lost | The water reclaimer's sample tray: at Dome stable, Hana's note asks the player to drop an ice sample in the oven tray (it happens in front of them). F4b still fires at Thaw |
+| Starting the first Outgasser (F3, worked example) | B1, A1 | Can't reach 5 kPa without it | None needed: required for progress |
+| Starting an emitter (F5) | A3 | Can't reach 0 °C without warming; the mirror route also warms | F5 also triggers on the first orbital mirror uplink (same question, "mirror" wording) |
+| Adding machines after Hydrosphere (F6) | B2 | A player who shrouds early or stops building never sees F6 | B2 still measured by Report 2 (MS) and the post-test; F6 also fires if fauna pressure rises by 3 from any cause |
+| A solar event after pressure doubles (F7) | A4 | Scheduler-dependent | The event scheduler guarantees one solar event in Phase 2 after the doubling |
+| Turning emitters down (F10) | B4 | Careful players may never do it | The emitter-wear drift event (guaranteed during holds) triggers F10 |
+| Building on ground ice (ground collapse) | B5 | No collapse seen | B5 is carried by the fauna loop and Report 2; collapse is optional evidence |
+| Claiming repairs on the Shift Board | C2 | Solo or untidy groups never claim | Solo: own repairs credited automatically. Group: unclaimed repairs credit the player who placed the fix block |
+| Opening the Monitor before builds | C3 | — | Measured passively; the next-gate bar puts the Monitor in front of players |
+If players find any of these hard or confusing in playtests, we treat it as a sign the strategy is misaligned, not that players are wrong.
+
+### The "why" behind the approach (so the "how" can change)
+| Goal of the approach (why) | Current method (how), may change |
+|---|---|
+| The player learns by changing the planet and seeing why it changed | Monitor cause lines, world cues |
+| Each player leaves individual evidence on a shared planet | Forecasts, reports, own repairs |
+| Science never waits behind story or fantasy | Text-first messages, optional lore, fantasy rules |
+| The player feels in control of difficulty | Signature-driven fauna, configured pacing |
+No detailed gaming element is locked in that couldn't carry the instruction later: the Monitor, journal, and forecasts are data-driven (datapack JSON), so a playtest can change them without code.
+
+### Prototype early: what the first playable must prove
+Prototype the Index simulation before building content: first as a **paper or spreadsheet model** of the balance sheet (curves, holds, drift events), then the Stage 2 rapid prototype. **Straw-man assets** in Stage 2: machines as plain colored boxes with a text label and a status shape; the Monitor as text rows with ASCII-style bars; thawlings as a placeholder mob shape; sky as two or three flat keyframes; no audio except one chime. Conceptual designs go to the user and the SME for face validity before art starts.
+
+| The first playable must prove | Pass when |
+|---|---|
+| Index values move with machines, and the Monitor names the cause | Tester points to the cause of every change (task 6–7, playtest plan) |
+| Phase 1 curve matches the balance sheet within ±20 % | Real time to 5 kPa 6.5–10 h standard; 2–3 h classroom |
+| Thresholds are identical in all presets | Gate numbers equal across standard, classroom, group 4 |
+| The ice-to-water rule reads as three states | Tester describes vapor, brief puddle, lasting water at the right pressures |
+| A forecast can be issued, deferred, locked, and resolved | Action log shows all four states |
+| The next-gate bar gives a clear end | Tester can say how close the next gate is without opening the docs |
+
+### First experience to design in detail: the first dust storm
+Experience design works on one experience at a time so game, instruction, and art can agree on it. **First pick: the first dust storm in Phase 1** (story beat 4, F1, C1, B3). It touches every layer (world cue, warning, forecast, power loss, recovery, Hana's tip) at small scale, sits in the Stage 3 vertical slice, and is the first real test of "pressure, not grind". Detail spec to write next (handoff to the Lead Artist and Lead Instructional Designer for a joint pass).
+
+## Content Lists (for art and recipes)
+
+Lists the Lead Artist asked for. Names follow the domain (real crop and instrument names). Counts are design drafts; recipes and numbers go to the balance sheet after the Stage 2 prototype.
+
+| List | Items | Goals | Notes |
+|---|---|---|---|
+| **Dome greenhouse crops** (Phase 1 food; asset F-08, 3 growth stages each) | Potato, lettuce, dwarf wheat, tomato | C1 | Tomato answers the dead-tomato trace ("Next shift: you try"). All four are crops studied for space farming **[SME: verify]** |
+| **Biome seed kits** (Phase 3; asset F-07) | 1 **Biocrust** (pioneer: cyanobacteria and lichen crust; grows on treated regolith) · 2 **Tundra meadow** (mosses, sedges, cold grasses; needs biocrust soil) · 3 **Wetland margin** (algae mats, reeds; needs adjacent water) · 4 **Cold forest** (dwarf conifers and shrubs; needs meadow soil and temperature ≥ 5 °C) | A5, B2, B4 | A succession chain: each kit needs the soil the one before makes. Teaches that ecosystems build on each other. Real-biology basis **[SME: verify]** |
+| **Maintenance parts** (asset I-01) | Filter cartridge (air and perchlorate dust), seal kit (seals and gaskets merged), bearing (fans, pumps, rotors), heater coil (ovens, Outgassers, emitters) | C1, C2 | Four parts serve all machines. The Artist's "gasket" merges into the seal kit (one fewer item, same job) |
+| **Beacon components** (asset I-07; recipes unlock at Breathable, assembly at Equilibrium) | Mast segment (×7), transmitter core, dish array (uses the repaired main dish design), landing-guide lamp (×8, the style guide's lamp ring), **air record** | B4 (holding the band) | The air record is crafted at the Monitor only at Equilibrium: it stores the hold data, the "proof that the air holds" the fleet is waiting for. Five icon types |
+
+
 ## Story Approach (Chapter 4)
 
 Applies *Design and Development of Training Games*, Chapter 4. The story bible (`docs/design/story-bible.md`) carries the detail; this section records the approach.

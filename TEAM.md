@@ -87,6 +87,7 @@ Use these words the same way everywhere.
 | **Embedded assessment** | Assessment built into play (the action log, forecasts, Keeper's Record). Four purposes: inform an instructor, tailor in-game instruction, give feedback, evaluate against standards. |
 | **Straw-man asset** | A simple placeholder (box, circle, text box) used in early prototypes so core logic can be tested without asset effort. Also a concept design shown to the owner and SME for face validity. |
 | **Plumbing prototype** | A thin end-to-end prototype of a back-end capability (e.g. the LMS export) that shows what is feasible before the full build. |
+| **Boiling point at current pressure** | A derived Monitor value: the temperature at which water boils at the planet's current pressure (0 °C at 0.61 kPa, about 33 °C at 5 kPa). It alone drives the ice states and the heavy vapor wisps. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -216,6 +217,7 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Licensing plan (not legal advice; unverified): our code MIT; our art, audio, story and journal text CC BY 4.0; educator materials CC BY 4.0. Never retexture or redistribute All Rights Reserved assets (Create, FTB Library) and never ship ProbeJS. No LICENSE file is added until release, because this is a design exercise. | docs/tech/mod-licenses.md | User decision on coordinator recommendation |
 | 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
 | 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
+| 2026-11-26 | Ice rule changed: compare each ice block's local temperature with the boiling point at current pressure (not a pressure band); the flash puddle near a heater is the Phase 1 look. Flame bands corrected (no flame below 14% O2). Verdicts in round2-review §11 stay "accepted, pending external review". | docs/science/round2-review.md | Subject Matter Expert; design edits sent to roles |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
@@ -411,6 +413,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Subject Matter Expert | Round 2: science verdicts, value audit, external-review list | `docs/science/round2-review.md` | `docs/team/reports/2026-11-26-subject-matter-expert-round2.md` |
 | 2026-11-26 | Lead Artist | First art direction, keyframes, asset list | `docs/art/` | `docs/team/reports/2026-11-26-lead-artist-art-direction.md` |
 | 2026-11-26 | Lead Instructional Designer | Apply decisions, per-student measures, RETAIN, priorities, prompts, rubrics | `LEARNING.md`, `docs/learning/` | `docs/team/reports/2026-11-26-lead-instructional-designer-decisions-applied.md` |
 | 2026-11-26 | Technical Lead | Architecture gaps, licenses, school deployment | `ARCHITECTURE.md`, `docs/tech/` | `docs/team/reports/2026-11-26-technical-lead-architecture-gaps.md` |
@@ -430,6 +433,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Check each physics threshold against the balance curve. A threshold the curve passes in the first sol hides that regime and any forecast built on it (the ice rule broke forecast F4a). After every physics or balance change, run the forecast check with "threshold vs. curve". | Subject Matter Expert |
 | 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
 | 2026-11-26 | Owner attached a handoff from an earlier game project (docs/team/reference/GAME_DEV_HANDOFF.md). Adopted as process: PROCESS.md (iteration gates, definition of done, regression gate, UI and workflow rules, retro log) and BACKLOG.md (owner's words, acceptance, current iteration). Assumption: the owner wants the lessons applied; to confirm. | Coordinator, from the user's attachment |
 | 2026-11-26 | Chapter 9 (development and testing): straw-man assets in early prototypes; one experience designed at a time; back end built in stages with a plumbing prototype; environment integration early; playtesting (alpha with SME and internal testers, beta with target group; wary when the tester isn't representative); formative feedback needs root-cause analysis from several perspectives; performance tracking, gaming-the-system, and validation need an assessment expert. Routed to the Technical Lead, Game Designer, Instructional Designer, Producer, Artist, and SME. | User research |

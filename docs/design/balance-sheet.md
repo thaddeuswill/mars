@@ -168,6 +168,7 @@ This matches the settled ~11–12 h and the ~17 play periods. Same proportions a
 | Raids per sol | 0.15 × F after Thaw; × 1.5 after Hydrosphere | A raid = a few thawlings heading for the highest-signature machine |
 | Planet cap (active thawlings) | 12 + 4 per configured player, hard cap 30 | Performance; Technical Lead to confirm |
 | Lethal defense | Allowed; does **not** lower F | Treats the symptom; raids keep coming while F is high |
+| Thawling defensive shove (only when hit) | Juvenile (stirring): knockback only, 0 damage. Later life stage: 1 damage (half a heart) + knockback, once, then curl and roll away. Never chase | Invented game numbers (draft, 2026-11-26); keeps "they only fight back if attacked" true (style guide §6.4) |
 | Group S population | 0–100 index: +2 per raid that reaches a quiet zone, −1 per thawling killed, +0.5/sol per settled colony in a biome | Drives the ending cards |
 
 **Behavior.** Thawlings go after machines, not players. They defend themselves if attacked. Settled thawlings (Phase 3, in a quiet zone or stable biome) graze and nest and stop raiding.
@@ -208,3 +209,6 @@ Lesson the numbers build: planting more raises O2 quickly at first, then only a 
 | Ice–albedo feedback size | SME |
 | The 35 % group throughput assumption; the build/wait split | Prototype action log |
 | Fauna cap | Technical Lead (performance) |
+| Orbital mirror uplink (new route: warming with no ground signature): cost, build time, °C/sol | Stage 2 prototype; SME for framing (DESIGN.md, Route choices) |
+| Maintenance part intervals per machine (filter, seal kit, bearing, heater coil) | Stage 2 prototype (Hana's "Filters every 2 sols" is the Phase 1 anchor) |
+| `guidance` setting (gentle / standard / expert): which hints each level shows | ID alignment check (DESIGN.md, Difficulty as information) |

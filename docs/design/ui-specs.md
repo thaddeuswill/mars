@@ -8,6 +8,29 @@
 - Every number has an icon or a picture next to it. Every value shows a trend arrow (shape: up, flat, down).
 - Middle school (MS) and high school (HS) bands see the same layout; HS adds numbers and "read more" (LEARNING.md §5 grade-band rules).
 
+- **PROCESS.md §4 UI rules apply to every screen:** one message at a time at the top; no modal pop-ups for progress; HUD panels hidden over full-screen sheets; values drawn larger than their labels; the next step marked; a dark backing strip behind every line over the 3D world, with HUD variants of icons drawn for light journal pages; only actions the player can do now (locked recipes hidden, not greyed out; on gentle guidance one quiet line says what unlocks more); real instrument and machine names; a deliberate pixel font for the journal and Monitor (Lead Artist), with every glyph we use checked (°, −, ×, ₂ if used, curly quotes); thousands separators and units on every number through one formatting helper ("1,500 BU", "−20 °C", "0.57 kPa").
+- **Size check:** 420×236 GUI px is 1280×720 at GUI scale 3. Every screen is checked by screenshot at 1280×720 (PROCESS.md §2).
+
+---
+
+## 0. Message delivery (interruption option I-C)
+
+Follows TEAM.md 8.6 as decided (option I-C: LEARNING.md §4.6 rules 1–11 as the Stage 3 test configuration, with the two flow guards).
+
+| Surface | What goes there | Modal? | Counts toward the pop-up cap? |
+|---|---|---|---|
+| **Top line** (one at a time, backing strip) | The newest colony-log line; others queue behind it (≤ ~3 per minute, similar lines merged: "3 filters worn") | No | No (log-line cap) |
+| **Side panel** (right edge, collapsible) | Next-gate bar, "just finished" note (stays until the next real action: placing, mining, or opening a machine), forecast prompts, Shift Briefings, "Report ready to send", unread messages | No | Forecast prompts and briefings: yes, when they open automatically at a natural pause |
+| **Full-screen sheet** (HUD hidden) | Journal, Monitor, Keeper's Report, Keeper's Record, machine screens | Opened by the player, or by the game only at a natural pause | Keeper's Report auto-open: yes |
+| **Blocking warning** | Only life-threatening firsts: first O2 critical, first breach, first solar-event exposure outside | Yes | No (safety) |
+
+- **"Card"** in the message files means a side-panel card, never a modal window.
+- **Gate reached:** the world changes and the side panel shows "Phase 2 reached" with what unlocked. No modal. If the player is at a natural pause, the Keeper's Report sheet opens with a "Later" button; otherwise "Report ready to send" waits in the side panel. An unsent report is re-offered **at most once per session** plus the "Since last shift" recap line (flow guard 1).
+- **Sequence at a gate:** report → Mensah's reply (after its delay) → Shift Briefing. One item visible at a time; together they count as one pop-up.
+- **Forecasts:** shown in the side panel at the next natural pause; result first in the queue; deferred forecasts lock as "expired", never wrong. No new forecast or report pop-up in the last ~5 minutes of a class (teacher end-of-session signal).
+- **Caps are config values** (`ui.popupMinMinutes` ≈ 10, `ui.logLinesPerMinute` ≈ 3), set from Stage 3 action-log counts (flow guard 2).
+- **Groups:** one player's prompt never pauses others.
+
 ---
 
 ## 1. The Planetary Monitor: overall layout
@@ -139,7 +162,7 @@ When all three show a check **and** the hold is complete, the helmet icon change
 
 ## 6. HUD
 
-Minimal, vanilla-style. Left: suit O2 (bubble icon + bar + number), suit power. Right: active warnings as shaped icons (storm, solar event, radiation dose, perchlorate exposure), each with a short word. Top center: optional next-gate chip (§3). No HUD element flashes more than 3 times per second (style guide §4.6). Messages arrive as one colony-log line at the bottom left; pop-ups follow the interruption rules (TEAM.md 8.6, consensus pending).
+Minimal, vanilla-style. Left: suit O2 (bubble icon + bar + number), suit power. Right: active warnings as shaped icons (storm, solar event, radiation dose, perchlorate exposure), each with a short word. Top center: optional next-gate chip (§3). No HUD element flashes more than 3 times per second (style guide §4.6). Messages arrive as one colony-log line at the top (§0); everything else follows option I-C (§0). All HUD panels hide when a full-screen sheet opens.
 
 ---
 

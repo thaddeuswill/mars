@@ -1,6 +1,6 @@
 # Playtest Plan — Solo Designer Playtests
 
-**Owner:** Lead Game Designer · **Status:** Draft 1 (2026-11-26) · **Depends on:** [DESIGN.md](../../DESIGN.md), [balance-sheet.md](balance-sheet.md), [story-bible.md](story-bible.md), [ROADMAP.md](../../ROADMAP.md)
+**Owner:** Lead Game Designer · **Status:** Draft 2 (2026-11-26): functionality and instructional passes, one scenario per goal ID, flow and motivation checks, observation prompts, root-cause sheet · **Depends on:** [DESIGN.md](../../DESIGN.md), [balance-sheet.md](balance-sheet.md), [story-bible.md](story-bible.md), [ROADMAP.md](../../ROADMAP.md)
 
 ## Who plays and what that can tell us
 
@@ -92,10 +92,84 @@ Also record, once per session:
 | Ending cards | Reach the beacon with each fauna outcome (debug commands allowed) | Each card reads as a description, not a grade |
 | Thresholds | Compare gate numbers across standard, classroom, and `group.size` = 4 | Identical in all three |
 
+## Two separate passes (DESIGN.md, Fidelity levels)
+
+Every session from S1 on runs **two passes over the same build**, recorded on separate sheets so "it works" is never mistaken for "it teaches".
+
+| | **Functionality pass** ("does it work?") | **Instructional effectiveness pass** ("does it teach?") |
+|---|---|---|
+| Question | Do triggers fire, values move, logs record, text fit, saves load? | Could a player in Lens A or B say what the scenario was meant to teach, in their own words, after playing it? |
+| How | Debug commands allowed (`/mars index set`, `/mars gate force`); check the action log and screenshots at 1280×720 | Play without debug commands and without the design docs; answer the scenario's "say it" prompt out loud **before** reading the result text |
+| Pass when | Every check in the scenario's Functionality column is true, with the log line or screenshot as proof | The "say it" answer matches the scenario's target idea for that lens. **Lens judgment, not learning evidence** (solo adult tester) |
+| Owner of fixes | Technical Lead (bugs), Lead Game Designer (data) | Lead Game Designer and Lead Instructional Designer together |
+
+Order: functionality first; an instructional pass on a broken build measures nothing.
+
+## Test scenarios: one per goal ID
+
+Each scenario checks that its goal can be completed in play: taught, practiced, given feedback, and measured. Setup gives the quickest way to reach the moment (debug allowed in the functionality pass only).
+
+| Goal | Scenario | Setup | Functionality pass: passes when | Instructional pass: "say it" prompt and target |
+|---|---|---|---|---|
+| A1 | Compare outside with Earth | Fresh world; finish Landing; reach Dome stable | Monitor shows pressure, temperature, air mix; Dome stable "On Earth" line shows; milestones draw on the log gauge | "How is the air outside different from Earth's?" Target: much thinner (under 1 %), colder, mostly CO2 |
+| A2 | Three states of water | Warm ice near a heater at ~1 kPa; again at 5 kPa and > 0 °C local | F4a shows the correct band text; ice vanishes or boils away; at 5 kPa water stays and refreezes at night; Monitor water line shows the boiling point | "Why did the ice vanish before and stay as water now?" Target: pressure, not only warmth, decides whether water stays liquid |
+| A3 | First emitter warms the planet | Phase 2; start one emitter | F5 issued on Start, locks on Monitor open or 1 sol; temperature trend up with "Emitter" cause line | "How does the emitter warm Mars?" Target: its gases trap heat that would escape to space; not CO2; not the ozone hole |
+| A4 | Two solar events | Phase 1 event, then one after pressure doubles | Warnings at T−1 and T−0.25 sol; F2/F7 lock at the shelter line; dose lower at the second event; first exposure outside blocks once | "Why is the surface dangerous in a solar event, and why less now?" Target: thin air, no global magnetic field; more air absorbs more |
+| A5 | Seeding moves both gases | Phase 3; place one seed kit | F8 issued; O2 rises, CO2 falls on the Monitor; mature patch slows uptake | "What did the plants do to the air?" Target: take in CO2, give off O2; slows as they mature |
+| B1 | Name the cause | Any phase; let a value change from two causes (e.g. Outgassers and a storm) | Every change has a cause line; "What caused it?" page offers the event | "What changed pressure today?" Target: names both causes from the Monitor |
+| B2 | Inside a loop | Hydrosphere; add 3 machines; then shroud 2 | F6 fires; fauna pressure F rises, then falls with shrouds; raids follow F | "Why do more machines bring more thawlings, and is that a loop?" Target: reinforcing loop through signature; shrouds lower the pull |
+| B3 | Forecast tally improves | Play through a phase answering every forecast | Tally per phase in the journal; expired forecasts logged as unanswered | "Did your forecasts get better? Why?" Target: names a pattern learned (e.g. pressure before water) |
+| B4 | Hold the band under drift | Phase 3 hold; two drift events | Hold pauses then resumes; Air window shows edges and time-to-edge; F10 fires on emitter wear | "What did you give up to hold the band?" Target: names a real cost (power, land, output) |
+| B5 | A fix makes a new problem | Build a warm machine on a scanned ice lens | Cracked ground warning, then collapse; failure report names melting ground ice | "What went wrong, and why was it hard to see coming?" Target: the warming that helped also melted the ground |
+| C1 | Through the first storm | Phase 1; first storm forecast | F1 issued 1 sol ahead; solar drops 60 %; battery reserve carries the dome | "What did you do before the storm, and why?" Target: stored power or cut use for life-critical needs first |
+| C2 | Fix it so it stays fixed | Cause a seal breach twice | First report has Hana's tip; second is more specific; after a holding fix, BELL's positive closing line; no repeat from the same cause | "What did you change the second time?" Target: fixed the cause (outside edge), not the symptom |
+| C3 | Data before building | Before placing a third Outgasser | Action log records Monitor opened before the build | "What did the Monitor tell you before you built?" Target: reads the trend or estimate |
+| D1 | The thawling choice | Reach Phase 3 with any fauna strategy | Report 2 question offered (deferrable, re-offered once per session); answer saved to reflections.csv | "Was waking them worth it? One reason from what you saw." Target: a claim plus evidence (D1 rubric) |
+| D2 | Mars teaches about Earth | Reach the beacon; read Mensah's replies | Every gate entry has an "On Earth" line; final question offered; HS read more opens | "What does your planet teach about Earth?" Target: one matched mechanism (greenhouse, loop, carbon cycle) |
+
+## Flow and motivation checks (added from user research)
+
+| Check | Scenario | Pass when |
+|---|---|---|
+| Flow: clear tasks | Every 10 minutes, without the docs, say what you're working toward | Can name the next gate or the current hold every time |
+| Flow: clear, immediate feedback | After each new machine, find its effect | Sees "Effect on planet" at once and a cause line within 1 sol |
+| Flow: concentration | Count interruptions during building or danger | Zero non-safety interruptions mid-task; pop-ups within the config cap |
+| Flow: attainable goal | Phase 3 Air window, Lens A | Tester can say how to widen the window (raise pressure) |
+| Flow channel | Note "bored" and "overwhelmed" moments on the sheet | No boredom stretch > 5 min; no overwhelm moment with > 1 new system introduced |
+| Control / no hidden DDA | Compare raids against fauna pressure F | Raids track F; no change in difficulty without a visible cause |
+| Fun: noise vs. boredom | At each phase end: "what pattern did you just learn? what's still noise?" | One pattern named per phase; noise items listed for redesign |
+| Paradox of choice | First visit to the recipe view after each gate | Tester picks a sensible build within 2 min using "Useful now" |
+| Rewards not controlling | Rate whether any reward felt like a bribe | No reward named as "I did it only for the reward" |
+| Baseline acknowledgment | At every gate and hold end | A visible "just finished" note, world change, and BELL line each time |
+| Zeigarnik without compulsion | Note any urge to "complete" something unrelated to a goal | None found, or each one tied to a goal ID |
+| Player types | One run as explorer (archive, sites), one as achiever (fastest gates) | Both find enough to do; neither needs PvP |
+
+## Observation prompts (Chapter 9)
+
+Direct observation matters most for a learning game. When anyone other than the designer plays (the user, adult friends in a group test, SME at alpha), the observer notes:
+- **Questions the tester asks** out loud, word for word. Each one is a missing piece of guidance.
+- **Interactions between testers** in group tests: who explains what to whom, who holds the keyboard, who is left out.
+- **"Do you need help?"** Ask every ~15 minutes, and note the answer *and* what you see. Testers often don't realize they're stuck.
+- **Breezers and strugglers.** A tester who breezes through shows what a strong player does (record their path as a model); one who struggles shows where guidance is missing (record the exact moment).
+- **Silent stops:** any pause over 2 minutes with no action.
+
+**Caution on evidence.** Alpha testers here are the user and SME-level adults, not ages 12–18. Don't draw strong conclusions from a non-representative group; check findings with the user and the SME before changing a stable or flexible item.
+
+## Root-cause sheet (for every issue found)
+
+Analyze each symptom from several perspectives before fixing it; then the team prioritizes together (TEAM.md 8.7).
+
+| # | Symptom (what was seen, with time) | Interface? | Gameplay–instruction conflict? | Wrong expertise level? (Lens A vs. B) | Science or text? | Most likely root cause | Goal IDs touched | Severity (Blocker / Major / Minor) | Owner |
+|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | | |
+
+Rule: if players find a learning moment hard or confusing, check first whether the strategy is misaligned (DESIGN.md, Core Design Check) before adding more text or hints.
+
 ## Analysis and prioritizing
 
 After each session, the designer files a short report in `docs/design/` (e.g. `playtest-S1-report.md`) with:
 - Measured times and curves vs. the balance sheet.
+- Each issue through the root-cause sheet above.
 - Issues ranked: **Blocker** (can't continue or teaches something false) → **Major** (idle over 5 min, stuck over 5 min, text far over budget, a lens likely to quit) → **Minor**.
 - For each change: goal IDs touched (handoff to the Lead Instructional Designer if any), and its effect on fun and on learning (fun–learning matrix).
 - Which findings are measured (times, curves, bugs) and which are lens judgments.

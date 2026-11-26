@@ -22,7 +22,8 @@ Status key: ✅ draft exists · 🟡 partial · ⬜ missing · 📅 planned for 
 | Balance sheet | Every Index value, rate, hold, pacing model, and fauna number | `docs/design/balance-sheet.md` | Lead Game Designer | ✅ Draft 1 (untested starting values) |
 | Playtest plan | Solo user playtest sessions, tasks, observation sheet, lenses | `docs/design/playtest-plan.md` | Lead Game Designer | ✅ Draft 1 |
 | Story Overview Document | Dialog, narration, settings, characters | `docs/design/story-bible.md` | Lead Game Designer | ✅ Draft 2 (full-team story review pending) |
-| UI specs | Monitor, journal, Keeper's Record, forecasts, reports, Shift Board, HUD | — (`docs/design/`) | Lead Game Designer, Lead Artist | ⬜ Missing (Stage 1 item) |
+| UI specs | Monitor, journal, Keeper's Record, forecasts, reports, Shift Board, HUD | `docs/design/ui-specs.md` | Lead Game Designer, Lead Artist | 🟡 Draft 1 arrived Round 2 (not yet reviewed by the Producer) |
+| Message content | Journal entries, forecasts, colony log, recorded messages per phase, in the shared format (5.1) | `docs/design/messages/` | Lead Game Designer (with ID and SME review) | 🟡 Draft arrived Round 2 (not yet reviewed by the Producer) |
 | Audience analysis | Who the learners are | `LEARNING.md` §0.1–0.2 | Lead Instructional Designer | ✅ Draft |
 | Content analysis | What must be learned, by type | `LEARNING.md` §0.3; `docs/science/` | Lead Instructional Designer, SME | ✅ Draft |
 | Task analysis | The steps and decisions players must master | — | Lead Instructional Designer | ⬜ Missing |
@@ -48,12 +49,15 @@ Status key: ✅ draft exists · 🟡 partial · ⬜ missing · 📅 planned for 
 ### Management documents
 | Standard document | Purpose | Our file | Owner | Status |
 |---|---|---|---|---|
-| Schedule / roadmap | Allocation of time and work; iteration model | `ROADMAP.md` | Producer | ✅ |
+| Schedule / roadmap | Allocation of time and work; iteration model (ACEDT); stage exits use PROCESS.md definition of done | `ROADMAP.md` | Producer | ✅ |
 | Budget | Allocation of resources: effort hours per stage and role, the user's time, scope check, cut list | `docs/production/budget.md` | Producer | ✅ Draft 1 (±50%; re-estimate after Stage 3) |
 | Risk register | Threats and mitigations | `docs/production/risk-register.md` | Producer | ✅ Round 2 |
 | QA plan | Severity levels, test types, invariants, test passes per stage, exit criteria, release checklist | `docs/production/qa-plan.md` | Producer | ✅ Draft 1 |
 | Consistency review | Cross-document contradictions with owners | `docs/production/consistency-review.md` | Producer | ✅ Round 1 findings closed on paper |
-| Consensus briefs | Positions, common ground, options for ill-structured team decisions | `docs/production/consensus-round2.md` | Producer | ✅ Round 2 (awaiting positions) |
+| Consensus briefs | Positions, common ground, options for ill-structured team decisions | `docs/production/consensus-round2.md` | Producer | ✅ Round 2 decided (T-C, I-C) |
+| Process | Iteration gates, definition of done, regression gate, UI and workflow rules, retro log | `PROCESS.md` | Producer (coordinator adds retro rows) | ✅ Draft, reviewed Round 2 |
+| Backlog | Owner's requests in their words, acceptance criteria, current iteration, open questions for the owner | `BACKLOG.md` | Producer (coordinator adds requests as they arrive) | ✅ Current |
+| Licensing plan | Our licenses (code MIT; art, audio, story, journal, educator materials CC BY 4.0) and third-party obligations | TEAM.md Decision Log; `docs/tech/mod-licenses.md` (third-party) | Producer, Technical Lead | ✅ Decided; LICENSE files at release |
 | Team model and decision log | Shared understanding and decisions | `TEAM.md` | Producer (coordinator merges) | ✅ |
 | Task reports | What each task did, its handoffs and risks | `docs/team/reports/` | Each role (coordinator files) | ✅ |
 
@@ -73,7 +77,7 @@ Each discipline needs different information to make decisions. When writing a do
 
 | Discipline | Needs to know | Mainly from |
 |---|---|---|
-| Producer | Scope, effort, status, risks, decisions, owners | ROADMAP, risk register, TEAM |
+| Producer | Scope, effort, status, risks, decisions, owners | ROADMAP, BACKLOG, budget, risk register, TEAM |
 | Technical Lead | Exact behaviors, numbers, data formats, triggers, limits | DESIGN, LEARNING (feedback and logging), story bible (message triggers), art specs |
 | Lead Game Designer | Learning goals and constraints, science limits, technical cost, art direction | LEARNING, docs/science, ARCHITECTURE, docs/art |
 | Lead Instructional Designer | Which mechanic teaches what; feedback text and triggers; what data is logged | DESIGN, story bible, ARCHITECTURE (action log) |
@@ -153,5 +157,6 @@ This format maps directly to the datapack JSON the Technical Lead will use, so t
 ## 6. Keeping Documentation Alive
 
 - Documents are updated **in the same task** as the decision, not later.
+- Requests that arrive mid-task are logged in `BACKLOG.md` first, then routed (PROCESS.md §1).
 - The Producer reviews this map at each roadmap stage: missing documents, stale documents, broken traceability.
 - If a document isn't read by anyone, merge or cut it.

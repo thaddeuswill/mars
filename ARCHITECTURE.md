@@ -16,7 +16,7 @@ Sections 6–12 cover the classroom and data systems: group planets and hosting,
 >
 > **Still pending Stage 1** (consistency review m-19): whether oxygen and sealing are custom or come from a standalone mod. Everything below assumes a custom sealing system, marked where it matters.
 >
-> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
+> **Round 2 additions (2026-11-26):** signals (2.5.1), the keyframe input map (2.5.2), clouds and heat shimmer (2.5.3–2.5.4), the forecast lifecycle (2.6.1), Shift Board actors (2.8), Monitor disclosure and next-gate display (2.9), feedback fading (2.10), weather mast (2.11), sound system (2.12), entity animation (2.13), repository and asset layout (3.2), name scrubbing (8.7), final export columns (8.6), embedded assessment feasibility (11a), interruption control (9.6). Test strategy: [docs/tech/test-strategy.md](docs/tech/test-strategy.md). Build plan: [docs/tech/build-plan.md](docs/tech/build-plan.md).
 
 ---
 
@@ -414,6 +414,7 @@ Feasibility check of DESIGN.md "Learning Mechanisms in Play". Both are **cheap a
 **Next-gate display** ("Next: pressure 5 kPa, 62 %"). The server picks the next gate from a data order list per planet and, each simulation step, adds a small block to the snapshot: for each condition of that gate, `{parameter, current, start, target, axis}`, plus hold progress for hold gates.
 - **One bar per condition, not one combined percentage.** Phase 3 needs pressure **and** temperature; a single "71 %" would hide which one is behind (the same reasoning as the Air window, style guide §11.2).
 - **Progress uses the gauge's axis.** Pressure uses log10, like the Monitor gauge, so 62 % means the same on the bar and the gauge. On a linear axis, 0.6 → 5 kPa would show 62 % at 3.3 kPa; on log10 it shows 62 % at 2.2 kPa. The Lead Game Designer and Lead Artist pick which one players see; the code supports both (`axis` per condition).
+- **Time-to-gate estimate** ("~4 sols at this rate", ui-specs.md): the server keeps the last few steps' rate per parameter (it already has the summed contributions), divides the remaining distance by it, and sends "no estimate" when the rate is zero or negative. Cost: one division per condition per step.
 - **Progress can go down.** If pressure falls, the bar falls. That is intended (regression must be visible, DESIGN.md §1).
 - **Machine-state gates** (Dome stable): progress = sols without a life-support failure ÷ 3 (or the classroom hold).
 - **Hold gates:** a second bar for "held X of Y sols", paused when out of band.
@@ -572,6 +573,8 @@ The rules that keep components clean and free of hidden side effects:
 6. **Immutable snapshots for readers.** Readers get a copy (`IndexSnapshot`), so nothing can change state by accident while reading it.
 7. **Game state and evidence live apart.** Rolling back the game never erases what students showed (section 7).
 8. **Identity stops at one boundary.** Minecraft UUIDs exist in memory and in one mapping file. Everything learning writes uses pseudonyms (section 8).
+9. **Build just what the learning experience needs** (Chapter 9). Each back-end piece is first built as the smallest prototype that tells us whether it is feasible, then as end-to-end plumbing; the staging is in [docs/tech/test-strategy.md](docs/tech/test-strategy.md) §9.
+10. **Identify things by ID, never by display name.** Registry IDs, machine IDs, and data IDs only; an ArchUnit rule forbids reading translated text in game logic (test-strategy §5).
 
 ---
 
@@ -865,6 +868,33 @@ One JSON file per message in `data/mars/story/messages/` (story beats) or `data/
 - **No ranking or score** anywhere in the data format (story bible §6.5, DESIGN.md).
 - The final reflection answer goes to the learning record and the `reflections.csv` export.
 
+### 9.6 Interruption control (decided: option I-C)
+
+Implements TEAM.md 8.6 and LEARNING.md §4.6 (user decision, option I-C, as the **Stage 3 test configuration**). One per-player `InterruptionGate` on the server decides, for each queued item, whether it may pop up now, go only to the colony log, or wait. The client's cue queue (2.12) applies the same decision to sounds.
+
+**Config keys** (server TOML; numbers are starting values, final numbers set from Stage 3 action-log counts):
+
+| Key | Standard | Classroom | Rule |
+|---|---|---|---|
+| `interrupt.popupMinIntervalMin` | 10 | 10 | At most one non-urgent pop-up per ~10 min of **play** per player (rule 4). Time counts only while the player is online and the session runs |
+| `interrupt.logLinesPerMin` | 3 | 3 | Colony-log lines per player per minute; extra lines wait |
+| `interrupt.logMergeWindowSec` | 60 | 60 | Similar lines (same message type and cause) inside the window merge into one ("Seal breach ×3") |
+| `interrupt.reportReofferPerSession` | 1 | 1 | An unsent Keeper's Report is re-offered at most once per session, plus the "Since last shift" recap line |
+| `interrupt.debriefMaxDefers` | 2 | 2 | Limited debrief deferral (LEARNING.md §4.6; Lead Instructional Designer sets the number) |
+| `session.wrapUpMinutes` | — | 5 | After the teacher's **wrap-up signal** (`/mars wrapup` or the overview button, or automatically this many minutes before a scheduled end if the teacher sets one), no new forecast and no report pop-up, no new critical failure from drift or fauna scheduling (rule 5). Life-threatening warnings still fire |
+| `interrupt.dangerWindowSec` | 10 | 10 | "In danger" = took damage, an active hazard at the player's position, or O2 low within this many seconds. Non-urgent items wait (rule 1) |
+| `interrupt.buildingWindowSec` | 5 | 5 | "Actively building" = placed or broke a block within this many seconds |
+
+**Order in the queue:** forecast results first, then failure reports, then story messages, then journal entries. Within a type, oldest first.
+
+**Natural pauses** (rule 2) are server-visible events: entering a sealed volume, sleeping, opening the Monitor or journal, a gate reached. The client reports "screen opened" as an action packet; the server decides.
+
+**Never pauses the group.** Nothing a single player is shown blocks anyone else: no world pause, no shared modal, no "waiting for all players". Only the teacher's pause stops a planet (7.2).
+
+**Logging** (LEARNING.md §4.6 rule "every interruption, deferral, and expiry logged"): `interrupt.shown` (item, kind: popup / log / blocking), `interrupt.deferred` (item, reason: danger / building / cap / wrapup / player_deferred), `interrupt.expired` (item; forecasts expire as `expired`, never wrong: 2.6.1), `session.wrapup` (teacher signal). All with the player's pseudonym.
+
+**Cost:** a few timestamps per player and a small sorted queue; checked when an item is queued and at each natural pause. No per-tick work beyond the danger flag, which the hazard code already sets.
+
 ---
 
 ## 10. Admin API, Teacher Commands, Debug Commands
@@ -887,7 +917,7 @@ interface AdminControl {
 
 - **Set phase** latches every gate up to that gameplay phase, sets the Index to the phase's start values (from `data/mars/phases/<phase>.json`), and files the skipped essential messages (9.2). Unlocks happen through the normal `GateReachedEvent`, so recipes and journal entries follow without special cases.
 - **No credit for admin changes.** Events carry `Cause.ADMIN` or `Cause.DEBUG`; the Colony Record ignores them (8.5).
-- **Teacher commands** (`mars.teacher`): `pause`, `resume`, `backup`, `rollback`, `planet assign`, `phase set`, `band set`, `export`, `who`, `forget`. All are also buttons in the teacher overview, so no teacher needs to type commands or edit config files (risk R-18).
+- **Teacher commands** (`mars.teacher`): `pause`, `resume`, `wrapup`, `backup`, `rollback`, `planet assign`, `phase set`, `band set`, `export`, `who`, `forget`. All are also buttons in the teacher overview, so no teacher needs to type commands or edit config files (risk R-18).
 - **Debug commands** (`mars.debug`, and only when `debug.enabled = true`): `set`, `latch`, `unlatch`, `step`. Used for the Stage 2 debug requirement (set every Index value).
 
 ---
