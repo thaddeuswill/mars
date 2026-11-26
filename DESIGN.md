@@ -164,6 +164,42 @@ Whichever option is chosen, rule 2 applies: fauna behavior should respond to the
 
 Recommendation: **B**, with some of C's real effects (perchlorates, ground collapse) added alongside the fauna. It needs review by the Lead Game Designer, Lead Instructional Designer, and Subject Matter Expert through the consensus process.
 
+## Fun
+
+Both disciplines agree fun is important and desirable, but **not necessary for instructional effectiveness**. They differ on priority: instructional designers put learning first, game designers put fun first, and game designers believe more strongly that fun helps learning (Coleman et al., 2010). The team's positions are in TEAM.md 8.4. This section turns them into design practice.
+
+### Why fun matters for this game specifically
+Fun isn't required for learning in general. Here it is required for other reasons:
+- **Market appeal** is one of our two goals. Hobbyists play voluntarily for ~40 hours, and nobody does that without fun.
+- **Classroom buy-in:** teachers adopt what students engage with.
+- **Time on task:** the learning happens through play, so players who stop playing stop learning.
+
+So fun is a **success criterion** (Scorecard: Appeal), not a claim that fun causes learning. Whether fun improves learning here is a hypothesis our playtests test (fun rating vs. learning gain).
+
+### What fun means in this game
+Fun should come **from the learning activity itself**, not be decoration added around it.
+
+| Kind of fun | Where it comes from | Learning it carries |
+|---|---|---|
+| **Mastery and challenge** | Keeping the dome alive; holding equilibrium | Resource planning (C1), balancing (B4) |
+| **Discovery** | Trying a machine and seeing the planet respond | Cause and effect (B1), prediction (B3) |
+| **Building and creating** | Domes, outposts, transit networks | Engineering design (C2) |
+| **Visible progress** | Sky turning from tan toward blue, water pooling, plants spreading | Every Index parameter (A1–A5) |
+| **Tension and threat** | Storms, radiation spikes, fauna attacks | Unintended consequences (B5), diagnosis (C2) |
+| **Story and fantasy** | Backstory, colony log, the beacon | Motivation; ethics (D1) |
+| **Cooperation** | Shared planet on small servers | Trade-offs (B4) |
+
+### Fun–learning matrix
+Every feature is placed on this grid in design reviews.
+
+| | **High learning** | **Low learning** |
+|---|---|---|
+| **High fun** | **Core.** Protect and invest here. | **Allowed in moderation** if it passes the fantasy rules (no negative learning, low extra load) and supports motivation. Keep it light. |
+| **Low fun** | **Redesign.** Find the fun inside the learning activity, don't just add a reward on top. | **Cut.** |
+
+### Player, not learner
+In game text and UI the person is a **player** and a colonist: no "lesson", "objective", "quiz", or "learner". Learning is framed as colony work: predictions are "forecasts", the Colony Record tracks "colony expertise", reflection questions come from the colony log. Teacher-facing materials use instructional language.
+
 ## Decisions
 
 | Decision | Answer | What it means for the design |

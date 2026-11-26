@@ -159,7 +159,7 @@ From Coleman et al. (2010), as summarized in *Design and Development of Training
 | Fantasy should provide a useful metaphor for learning | Instructional | Yes. Fictional elements must stand for something real: e.g. the fauna stand for ecosystem response and unintended consequences (B5, D1). If a fictional element teaches nothing, it needs a story or appeal reason. |
 | Feedback is considered for its motivational value | Game | Both. Every feedback element is designed and reviewed for **motivational and instructional** value. |
 | Feedback is considered for its instructional value | Instructional | (See above.) |
-| Learning has priority over fun | Instructional | Neither has priority by default. Conflicts go to the consensus process with playtest evidence. |
+| Learning has priority over fun | Instructional | Neither has priority by default. Fun comes *from* the learning activity; features are placed on the fun–learning matrix (DESIGN.md, Fun). Conflicts go to the consensus process with playtest evidence. |
 | Fun has priority over learning | Game | (See above.) |
 | A learner having fun is more likely to learn | Game | We treat this as a **hypothesis to test**: playtests record a fun rating alongside learning gain. |
 | Better for someone to see themselves as a "player" than a "learner" | Game | **In the game, they're a player.** Game text never says "learner", "lesson", or "objective"; the Colony Record uses colony language. "Learner" belongs in teacher-facing materials only. |
@@ -222,6 +222,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 |---|---|---|
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
+| 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
 | 2026-11-26 | Each discipline defines success differently. The team now uses a combined Success Scorecard and a perspective round at reviews (TEAM.md 8.5). | User research |
 | 2026-11-26 | Disciplines agree on the same LGD issues at different strengths (Coleman et al., 2010). The team now holds an explicit position on each (TEAM.md 8.4). | User research |
