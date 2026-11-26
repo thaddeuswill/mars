@@ -20,7 +20,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 ---
 
-## Stage 0 — Concept 🟡
+## Stage 0 — Concept ✅
 
 *Goal: know what we're making and why it's fun.*
 
@@ -30,15 +30,15 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ✅ Progress scope: global
 - ✅ Target playtime: ~40 hours (pacing split in DESIGN.md)
 - ✅ Target audience: singleplayer and small servers
-- ⬜ Ad Astra's Mars or a custom dimension?
-- ⬜ Can the planet regress to an earlier phase?
-- ⬜ Pick a multiplayer scaling approach (options in DESIGN.md)
+- ✅ Mars world: custom dimension
+- ✅ Regression: gates lock in
+- ✅ Multiplayer scaling: fauna by infrastructure, plus a gate-threshold config
 
 **Exit criteria:** all open questions answered and recorded in DESIGN.md.
 
 ---
 
-## Stage 1 — Pre-production ⬜
+## Stage 1 — Pre-production 🟡
 
 *Goal: lock the technical foundation and the numbers before writing content.*
 
@@ -47,6 +47,8 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Every candidate mod checked for that version, plus actively maintained
 - ⬜ **Redistribution permissions checked** for each mod (Modrinth/CurseForge allow-lists or the author's license). This blocks release if skipped.
 - ⬜ Decide the companion-mod scope: what KubeJS can do vs. what needs Java code
+- ⬜ Oxygen, sealing, and suits: find a standalone mod that can read the Planetary Index, or plan to build them
+- ⬜ Companion mod skeleton: builds, loads, and registers an empty Mars dimension
 
 **Project setup**
 - ⬜ Pack managed as text files (e.g. packwiz) so mod lists and configs live in git
@@ -163,8 +165,9 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 
 ## Where We Are Now
 
-We're in **Stage 0**. The next actions are:
+Stage 0 is done. We're starting **Stage 1**. The next actions are:
 
-1. Answer the two remaining open questions in DESIGN.md and pick a multiplayer scaling approach.
-2. Confirm the Minecraft version and the mod list (Stage 1).
-3. Start the balance sheet. It's the document the rest of the project will lean on most.
+1. Confirm the Minecraft version and check each candidate mod against it.
+2. Decide how oxygen, sealing, and suits will work now that Ad Astra is out.
+3. Set up the repo layout and a companion mod skeleton that loads an empty Mars dimension.
+4. Start the balance sheet, using the 8 / 18 / 14 hour pacing split.

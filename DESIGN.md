@@ -45,7 +45,8 @@ One server-wide state object drives all progression. Machines write to it and wo
 | Biomass          | 0      | threshold   | Seeded flora spreading naturally            | Unlocks self-sustaining biomes                          |
 
 - Persist it in world saved data so it survives restarts and is shared in multiplayer.
-- Rates scale with machine count and tier, and can **regress**: unmaintained machines, storms, and fauna damage all push values back. That keeps the mid game active rather than idle.
+- Rates scale with machine count and tier, and values can **fall**: unmaintained machines, storms, and fauna damage all push them back. That keeps the mid game active rather than idle.
+- **Gates lock in.** Once a gate is reached it stays unlocked even if the values drop below its threshold. Falling values cost progress toward the *next* gate and bring back hazards (thicker storms, colder surface), but never take away unlocked recipes or phases. The one exception is the helmet-off state: it is a live check, so the air can become unbreathable again if O2 leaves the band.
 - O2 and CO2 pull against each other in the late game. Too much O2 means fire hazards and runaway flora; too much CO2 cancels the warming. Equilibrium is a band to hold, not a number to hit.
 
 ### 2. Phase Gates (the world as quest log)
@@ -78,14 +79,15 @@ Target **NeoForge, Minecraft 1.21.1** unless a key mod forces otherwise. Confirm
 
 | Role                         | Candidate(s)                     | Notes                                                  |
 |------------------------------|----------------------------------|--------------------------------------------------------|
-| Mars dimension, O2, suits    | Ad Astra (or a custom dimension) | Reuse oxygen distribution and suits. Gate rocketry off or repurpose it. |
+| Mars dimension               | **Custom** (companion mod)       | Full control of sky, fog, weather, and terrain response to the Planetary Index |
+| O2, sealing, suits           | Custom, or a standalone oxygen/suit mod if one fits | Must hook into the Planetary Index so ambient O2 and pressure come from world state |
 | Industry / gas processing    | Mekanism, Create                 | Gas chemistry maps well onto atmospheric processing    |
 | Scripting the Planetary Index | KubeJS (+ ProbeJS for dev)      | Global state, recipe gating, event hooks               |
 | Worldgen                     | Datapack + TerraBlender, or custom | Regolith, ice caps, buried fauna lairs              |
 | Optional guidance            | FTB Quests (as a lore journal)   | Reads world-state gates only, no NPC questlines        |
-| Custom content               | Small companion mod              | Planetary Index storage, sky/fog shaders, fauna, storm weather |
+| Custom content               | Companion mod (core of the pack) | Dimension, Planetary Index storage, sky/fog rendering, storm weather, fauna |
 
-KubeJS can prototype most of the loop. A small companion mod will probably be needed for sky/fog rendering, custom weather, and storing the index efficiently.
+With a custom Mars world, the companion mod is no longer small: it owns the dimension, the Planetary Index, rendering, and weather. KubeJS stays the place for recipes, gate unlocks, and tuning, so balance changes don't need a Java rebuild.
 
 ### 5. Milestones
 
@@ -102,6 +104,9 @@ KubeJS can prototype most of the loop. A small companion mod will probably be ne
 | Progress scope | **Global**: one planet shared by everyone on the server | One Planetary Index per world. All players' machines feed it and all players face the same threats. |
 | Audience | **Singleplayer and small servers** (roughly 1–6 players) | Balance for one player first. On servers, more players means more machines, so rates and threats need a player-count check (see below). |
 | Playtime | **About 40 hours** from spawn to beacon | Pacing targets below. |
+| Mars world | **Custom dimension** | Built in the companion mod. Ad Astra is out; oxygen and suits need a replacement (see mod stack). |
+| Regression | **Gates lock in** | Values can fall, unlocked phases and recipes cannot. See Planetary Index. |
+| Multiplayer scaling | **Fauna by infrastructure, plus a gate-threshold config** | See below. |
 
 ### Pacing Targets (40 hours, solo)
 
@@ -121,9 +126,8 @@ With global progress, a group of four could otherwise finish in a quarter of the
 - **Scale fauna pressure** with the number of active emitters rather than player count, so it tracks how hard the group pushes.
 - **Accept faster group runs** and only scale threats. This is simplest, and may be fine for casual servers.
 
-Recommendation: scale fauna by infrastructure (already a design pillar), and add a server config multiplier for gate thresholds that defaults to 1.0.
+**Chosen:** fauna pressure scales with the number of active terraforming machines, and a server config multiplier for gate thresholds defaults to 1.0 (singleplayer unchanged).
 
 ## Open Questions
 
-- Fork Ad Astra's Mars, or build a custom dimension for full control over sky and weather?
-- Can terraforming regress all the way back to an earlier phase, or do phase gates lock in once reached?
+None at the concept level. Technical questions are tracked in Stage 1 of [ROADMAP.md](ROADMAP.md).
