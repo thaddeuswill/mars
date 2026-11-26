@@ -36,13 +36,17 @@ view 3 65.5 1.5 0 15
 wait 60
 shot batch2_oxygen_maker_monitor_close
 wait 20
-view 0.5 69 4 0 60
+view 0.5 71 3.5 0 62
 wait 60
 shot batch2_panels_from_above
 wait 20
 view 0.5 66 5.5 0 30
 wait 60
 shot batch2_panels_low_angle
+wait 20
+view 4 66.5 5.5 0 45
+wait 60
+shot batch2_panels_stage4_vs_partly_cleaned
 wait 20
 view 10 68 -2 45 25
 wait 60
