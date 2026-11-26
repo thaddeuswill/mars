@@ -331,8 +331,73 @@ Verbal and visual information use separate channels (Baddeley & Hitch, 1974; May
 | **Advance organizers** (Ausubel, 1960) | At each phase start, a short **Shift Briefing** from BELL says what's ahead in plain colony terms ("This shift: the ice. Watch temperature and pressure together."). | ⬜ Gap | Lead Game Designer, Lead Instructional Designer |
 | Constructivism: purposeful, authentic, player-directed, challenging, collaborative, reflective | Open-ended play; real Mars values; no single path; group planets; Keeper's Reports. | ✅ | — |
 
+### Feedback types and timing (Chapter 3)
+| Principle | How we apply it | Status | Owner |
+|---|---|---|---|
+| **Process vs. outcome feedback** (Earley et al., 1990): process feedback explains what to do differently; outcome feedback is like a score | New content gets process feedback (failure reports with cause and a hint; forecast explanations). Familiar content gets outcome feedback (Monitor trend arrows, gate progress). | 🟡 | Lead Instructional Designer |
+| Too much process feedback overwhelms novices (Wood, 2000) | One cause and one hint per failure report; "read more" for the rest. | ✅ | — |
+| **Fade** from process to outcome feedback as skill grows | Process detail shrinks for repeated situations. See fading above. | ⬜ Gap | Lead Instructional Designer |
+| Immediate vs. delayed feedback: research is split; immediate is generally best | Immediate world response and brief failure note; deeper explanation delayed to a natural pause (TEAM.md 8.6). | ✅ | — |
+| Achievements: role is unclear in research | No achievement system at launch. The Keeper's Record is the progress record. Revisit after playtests. | ✅ Decided (draft) | Lead Game Designer |
+| Feedback must be **salient** (sound cue, highlight) | New log entries get a soft chime and a flashing Monitor tab (≤ 3 flashes per second). | 🟡 | Lead Artist |
+| Debriefing and after-action review are essential (Peters & Vissers, 2004) | Keeper's Reports at each gate. | ✅ | — |
+
 ### Open risk
 Narrative and play can both overload players: in Adams et al. (2012), a slideshow beat both a narrative game and the same game without narrative. That makes usability and low extraneous load **the** priority for the Stage 2 prototype, not polish.
+
+## Story Approach (Chapter 4)
+
+Applies *Design and Development of Training Games*, Chapter 4. The story bible (`docs/design/story-bible.md`) carries the detail; this section records the approach.
+
+### Objectives first
+The story was built after the learning goals and to serve them, not the other way around. A change to the goals changes the content, and the story follows. (Matches the book's process: objectives → audience → story elements, side by side with content.)
+
+### Designer-driven or player-driven?
+**Player-driven inside a designer frame.** Open goals and free building call for a player-driven story (Church, 1999); the designer frame (the Keeper's watch, the crew's messages, the beacon) gives purpose and the D1 ethics thread.
+- Because it's player-driven, **the connection between each action and the game's reaction must be absolutely clear**: Monitor cause lines and visible world change.
+- **Story stays within the player's scope of control.** Background events (Earth's decisions, the First Shift) are reminded through repeated messages and props, not single subtle mentions, so players don't miss them.
+
+### Storytelling methods
+| Method | Type | Our use |
+|---|---|---|
+| **Player actions** (action verbs match story verbs) | Integrated | **Primary.** The story verbs are seal, raise, warm, thaw, seed, balance. Those are exactly what the player does. |
+| Scripted scenes | Integrated | Few: first storm arrival, first thaw, helmet-off. Triggered by gates, never taking control from the player for long. |
+| In-game dialog | Integrated | None two-way. Characters speak through one-way recorded messages. |
+| Voice-over | Integrated | Text first (decided); possible later for BELL. Never while an alarm is sounding (the two would compete). |
+| **In-game text** | Integrated | Colony log, notes, journal. Lowest cost; short and paired with visuals. |
+| Cut-scenes, animatics | Encapsulating | Only the ending sequence. Encapsulated moments halt play, so they're kept to the beacon. |
+| Slide show | Encapsulating | Possibly the Keeper's Report summaries. |
+| External media | Encapsulating | Educator materials and the launcher page set up the story before play. |
+
+Rule: where story and high interactivity meet, **separate them by time or space**. Story beats land at natural pauses (TEAM.md 8.6), not mid-building.
+
+### Voice decisions (compare the book's DCT example)
+| Question | Our answer |
+|---|---|
+| Character narrator or omnipotent narrator? | Station system **BELL** as a character voice, plus crew messages. No omnipotent narrator. |
+| Does the player see themselves? | First person; hands and suit only. |
+| Avoiding gendered references to the player | Addressed as "Keeper" or "you". No he/she for the player anywhere. |
+| How does the player communicate in the story? | Through actions, Keeper's Reports to Earth, and Shift Board entries. |
+
+### Stay in story
+The onboarding ("Landing", the controls tutorial) is **in story**: the Keeper's first shift checklist from BELL, not a separate tutorial screen. Every later system follows the same protocol as the tutorial (BELL briefs, the log confirms briefly).
+
+### Relevance and motivation
+- **Relevance:** the story connects to what 12–18 year olds already know: Mars rovers and missions in the news, climate change on Earth (D2), survival and building games.
+- **Motivation ("so what?"):** the colonists arriving depend on what the Keeper learns ("what the colonists will need to know").
+- **Audience attributes** are in LEARNING.md section 0.
+
+### Development challenges and our mitigations
+| Challenge | Mitigation |
+|---|---|
+| Underestimating story writing time (about 2 hours per line of dialog, by one estimate) | Text-first, one-way messages; word limits per medium (story bible); story writing scheduled in Stage 4 with an effort budget *(Producer)*. |
+| Dialog without enough player choice | Choice lives in play (interventions, fauna options, colony posts), not in dialog trees. |
+| Story integrated too late | Story bible exists before any code; the Stage 3 vertical slice includes the essential Phase 1 beats; story tested in the first playtest. |
+| Relying too heavily on story | No "story sandwich" (story, then an info dump, then story); story is spread throughout. Ending cards are descriptive and unranked; the player's own choices make the story. |
+| Metaphor causing negative transfer | Fantasy rules and audit (above); fauna labeled fiction. |
+
+### Story review (the book's StoryJam step)
+Before Stage 3, a full-team story review: each role reviews the story bible against all six story elements (characters, voice, setting, plot, conflict and resolution, emotion), using the perspective round. The SME is involved in every pass.
 
 ## Group Play: One Planet, 3–5 Players
 

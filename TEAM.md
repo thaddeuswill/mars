@@ -76,6 +76,8 @@ Use these words the same way everywhere.
 | **Colony post** | An optional, rotating role for a player on a group planet. |
 | **Drift event** | An event that pushes a value out of band during a hold. |
 | **Regolith Outgasser** | The Phase 1 pressure source, unlocked at Dome stable. |
+| **Air window** | Monitor display of the breathable, fire-safe O2 range. |
+| **Keyframe** | A visual data point the client interpolates between, keyed on a named Index input. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -174,6 +176,9 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Multiplayer scaling uses a static group-size rate scale (set in config, not from who's online); thresholds never scale | DESIGN.md: Multiplayer Scaling | Lead Game Designer; follows the user-approved accuracy rule. User may override. |
 | 2026-11-26 | Game state and learning evidence are stored separately; rollback never deletes evidence | ARCHITECTURE.md §7 | Technical Lead |
 | 2026-11-26 | The pack requires Minecraft Java Edition; it can't run in Minecraft Education | docs/tech/school-deployment.md | Fact (Technical Lead research) |
+| 2026-11-26 | We don't paint invisible gases: O2 and CO2 never drive sky or fog color; they show through effects and instruments | docs/art/planetary-keyframes.md | Lead Artist |
+| 2026-11-26 | Visuals follow live Index values, not gates | docs/art/planetary-keyframes.md | Lead Artist |
+| 2026-11-26 | Story is player-driven inside a designer frame; story verbs match player actions; onboarding stays in story | DESIGN.md: Story Approach | Coordinator, from user research |
 | 2026-11-26 | Playtests: the user plays the builds; agents add design walkthroughs | ROADMAP.md | User decision |
 | 2026-11-26 | Classroom model: groups of 3–5 students share one planet; a class runs several planets | DESIGN.md, LEARNING.md, ARCHITECTURE.md (to update) | User decision |
 | 2026-11-26 | Classroom unit stretched to ~17 play periods; keep ~11–12 h of play | LEARNING.md (to update) | User decision on Producer recommendation |
@@ -363,6 +368,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Lead Artist | First art direction, keyframes, asset list | `docs/art/` | `docs/team/reports/2026-11-26-lead-artist-art-direction.md` |
 | 2026-11-26 | Lead Instructional Designer | Apply decisions, per-student measures, RETAIN, priorities, prompts, rubrics | `LEARNING.md`, `docs/learning/` | `docs/team/reports/2026-11-26-lead-instructional-designer-decisions-applied.md` |
 | 2026-11-26 | Technical Lead | Architecture gaps, licenses, school deployment | `ARCHITECTURE.md`, `docs/tech/` | `docs/team/reports/2026-11-26-technical-lead-architecture-gaps.md` |
 | 2026-11-26 | Lead Game Designer | Apply decisions, C-01 fix, balance sheet, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-decisions-applied.md` |
@@ -381,6 +387,8 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Running numeric checks on palettes (perceptual difference and colorblind simulation) caught two invisible "visible changes". Check visuals numerically, not by eye. | Lead Artist |
+| 2026-11-26 | Applied Chapter 3 feedback research and Chapter 4 story research (DESIGN.md: Story Approach). | User research |
 | 2026-11-26 | A physics change (ice-to-water rule) silently broke an assessment item (forecast F4). Any gate or physics change triggers a forecast check, not just an alignment-table check. | Lead Instructional Designer |
 | 2026-11-26 | New root documents can appear mid-task. Check README for new documents at the start of every task. | Technical Lead |
 | 2026-11-26 | A story beat quietly contradicted the physics after gate conditions changed. When gate conditions change, check story beats against them. | Lead Game Designer |
