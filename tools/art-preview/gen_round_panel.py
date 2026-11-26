@@ -9,7 +9,9 @@ elements, no overlaps (so no z-fighting). The disc spans x and z from -9.5 to 25
 element range [-16, 32]. One 48 x 48 texture covers the 3 x 3 block area (-16..32), so the texel density stays
 16 px per block, matching every other asset.
 
-Writes solar_panel_round_dust0..4 and solar_panel_round_partly_cleaned (models, item models, blockstates, textures)
+Batch 3 (owner chose the round array, BACKLOG #28): writes the GAME's panel models solar_panel_round_dust0..4 and
+solar_panel_round_partly_cleaned (block models and textures; the blockstate and item model are the Technical Lead's).
+Diameter 2.2 m (dimensions.md §1, opened NASA sources) = 35.2 px; drawn as 35 px
 and runs the numeric checks (palette only, superset dust rule, step size, structure, colour count)."""
 import json, math, os, random, sys
 from PIL import Image
@@ -77,18 +79,23 @@ def stage_px(stage, cleaned=False):
             elif ro == "cut": px[j][i] = "p"
             elif ro == "seam": px[j][i] = "s" if stage <= 2 else "S"   # softened veil seams: 1 px dark tan-brown
             else: px[j][i] = LEVEL[level(stage, i, j)]
-    if cleaned:   # patchy cleaning, different per segment (SME dust review §3; PIA17759 -> PIA18079)
-        cr = random.Random(1759)
-        for k in range(SEGMENTS):
-            amount = cr.choice((0, 0.1, 0.25, 0.45, 0.65))
-            for j in range(N):
-                for i in range(N):
-                    if ROLE[j][i] != "cell": continue
-                    r, a = polar(i, j)
-                    if int(a // (360 / SEGMENTS)) == k and U[j][(i * 7) % N] < amount: px[j][i] = "r"
+    if cleaned:
+        # Batch 3: must read as different from stage 4 in a WIDE shot (in-game screenshot: the speckled version looked
+        # like stage 4 from a distance). Uneven cleaning by segment (SME dust review §3; PIA17759 -> PIA18079), now as
+        # LARGE CONTIGUOUS clean wedges: dark clean cells next to light veil, a big lightness difference.
+        # Per segment: 1.0 = cleaned out to the rim band, 0.55 = inner half cleaned, 0 = untouched veil.
+        plan = (1.0, 1.0, 0.55, 0, 0, 1.0, 1.0, 0.55, 0, 0.55, 0, 0)
+        for j in range(N):
+            for i in range(N):
+                if ROLE[j][i] != "cell": continue
+                r, a = polar(i, j); k = int(a // SEG)
+                if plan[k] and r < (R - 2.5) * plan[k]: px[j][i] = "r"
     return px
+# Batch 3: these ARE the game's solar panel models, under the names the registered blockstate uses (the Technical
+# Lead's blockstates/solar_panel.json maps dust_stage 0-4 -> solar_panel_round_dust0..4 and partly_cleaned ->
+# solar_panel_round_partly_cleaned; the item model's parent is solar_panel_round_dust0).
 STAGES = {f"solar_panel_round_dust{k}": stage_px(k) for k in range(5)}
-STAGES["solar_panel_round_partly_cleaned"] = stage_px(3, cleaned=True)
+STAGES["solar_panel_round_partly_cleaned"] = stage_px(4, cleaned=True)
 
 # ---- geometry: merge rows with the same chord into one cuboid ----
 runs = []
@@ -120,13 +127,12 @@ for name, px in STAGES.items():
     for j in range(N):
         for i in range(N):
             if px[j][i]: im.putpixel((i, j), rgb(P[px[j][i]]) + (255,))
-    # placeholder marker: 2 x 2 on the rim at the top of the disc
-    for (i, j) in ((23, 7), (24, 7), (23, 8), (24, 8)):
-        if ROLE[j][i]: im.putpixel((i, j), rgb(P["m"]) + (255,))
+    # placeholder marker (batch 3): ONE pixel at the top-left-most painted pixel (style guide §5.5)
+    mi, mj = next((i, j) for j in range(N) for i in range(N) if ROLE[j][i])
+    im.putpixel((mi, mj), rgb(P["m"]) + (255,))
     im.save(os.path.join(TEX, tex + ".png"))
     json.dump(model_for(tex), open(os.path.join(A, "models", "block", name + ".json"), "w"), indent=1)
-    json.dump({"parent": "mars:block/" + name}, open(os.path.join(A, "models", "item", name + ".json"), "w"), indent=1)
-    json.dump({"variants": {"": {"model": "mars:block/" + name}}}, open(os.path.join(A, "blockstates", name + ".json"), "w"), indent=1)
+    # blockstate and item model are the Technical Lead's (blockstates/solar_panel.json, models/item/solar_panel.json)
 
 # ---- checks ----
 fails = []
@@ -173,5 +179,23 @@ for name, px in STAGES.items():
 print(f"Softened veil seam S {P['S']} on veil D: {cr(P['S'], P['D']):.1f}:1 (target 2:1); cut-out p on veil D: {cr(P['p'], P['D']):.1f}:1")
 print(f"Geometry: disc {len(runs)} cuboids + post + base = {len(runs) + 2} elements per model; "
       f"x/z extent {-16 + min(r[0][0] for r in runs)} to {-16 + max(r[0][1] for r in runs)} px (allowed -16..32)")
+# partly cleaned must differ from stage 4 at a distance: mean cell colour dE >= 0.10 and a large contiguous clean area
+pc, d4 = STAGES["solar_panel_round_partly_cleaned"], STAGES[names[4]]
+dpc = math.dist(mean(pc), mean(d4))
+seen, best = set(), 0
+for j in range(N):
+    for i in range(N):
+        if pc[j][i] == "r" and (i, j) not in seen:
+            stack, n = [(i, j)], 0; seen.add((i, j))
+            while stack:
+                x, y = stack.pop(); n += 1
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    q = (x + dx, y + dy)
+                    if 0 <= q[0] < N and 0 <= q[1] < N and q not in seen and pc[q[1]][q[0]] in ("r", "s", "S", "p") and ROLE[q[1]][q[0]] in ("cell", "seam", "cut"):
+                        seen.add(q); stack.append(q)
+            best = max(best, n)
+cells = sum(1 for j in range(N) for i in range(N) if ROLE[j][i] == "cell")
+print(f"Partly cleaned vs stage 4: mean cell dE {dpc:.3f} (need >= 0.10); largest connected clean area {best} px ({best / cells:.0%} of cells; need >= 10 %)")
+if dpc < 0.10 or best / cells < 0.10: fails.append("partly cleaned not distinct enough from stage 4")
 print("FAILS:" if fails else "All checks passed.", *fails, sep="\n  ")
 sys.exit(1 if fails else 0)

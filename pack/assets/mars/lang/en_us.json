@@ -8,5 +8,7 @@
   "block.mars.solar_panel": "Solar Panel",
   "block.mars.battery": "Battery",
   "block.mars.oxygen_maker": "Oxygen Maker (CO2)",
-  "block.mars.planetary_monitor": "Planetary Monitor"
+  "block.mars.planetary_monitor": "Planetary Monitor",
+  "block.mars.solar_panel.needs_space": "The solar array needs a clear 3 × 3 space around it.",
+  "block.mars.solar_panel_canopy": "Solar Panel"
 }

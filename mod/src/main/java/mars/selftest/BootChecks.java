@@ -31,6 +31,152 @@ import net.neoforged.neoforge.common.util.FakePlayerFactory;
 public final class BootChecks {
   private BootChecks() {}
 
+  /** Round solar array footprint rule (ARCHITECTURE.md 2.18), in the overworld at y 200. */
+  static boolean footprintChecks(MinecraftServer server) {
+    boolean ok = true;
+    ServerLevel level = server.overworld();
+    BlockPos c = new BlockPos(8, 200, 8);
+    BlockState panel = MarsMachines.SOLAR_PANEL.get().defaultBlockState();
+    level.setBlockAndUpdate(c, panel);
+    ok &=
+        SelfTest.check(
+            "footprint.fillers",
+            "8 canopy cells pointing at the centre",
+            describeFootprint(level, c),
+            countCanopy(level, c) == 8);
+
+    BlockState corner = level.getBlockState(c.offset(-1, 0, -1));
+    String cornerShape = corner.getShape(level, c.offset(-1, 0, -1)).bounds().toString();
+    ok &=
+        SelfTest.check(
+            "footprint.corner_shape",
+            "corner cell: x and z 0.4375..1.0, y 0.625..0.6875 (array edge only)",
+            cornerShape,
+            cornerShape.contains("0.4375")
+                && cornerShape.contains("0.625")
+                && cornerShape.contains("0.6875"));
+    String centreShape = level.getBlockState(c).getCollisionShape(level, c).bounds().toString();
+    ok &=
+        SelfTest.check(
+            "footprint.centre_shape",
+            "centre collision 0..1 wide, 0..0.6875 high (base, post, array)",
+            centreShape,
+            centreShape.contains("0.0, 0.0, 0.0") && centreShape.contains("0.6875"));
+
+    level.setBlockAndUpdate(c, panel.setValue(SolarPanelBlock.DUST_STAGE, 3));
+    ok &=
+        SelfTest.check(
+            "footprint.dust_change_keeps_fillers",
+            "still 8 canopy cells after dust_stage=3",
+            "count=" + countCanopy(level, c),
+            countCanopy(level, c) == 8);
+
+    // Breaking an overhang cell as a survival player breaks the whole array and drops one panel.
+    net.neoforged.neoforge.common.util.FakePlayer fake =
+        net.neoforged.neoforge.common.util.FakePlayerFactory.get(
+            level,
+            new com.mojang.authlib.GameProfile(
+                java.util.UUID.fromString("6d617273-0000-4000-8000-000000000002"),
+                "[MarsFootprint]"));
+    fake.setPos(c.getX() + 0.5, c.getY() + 1, c.getZ() - 2.5);
+    boolean destroyed = fake.gameMode.destroyBlock(c.offset(1, 0, -1));
+    java.util.List<net.minecraft.world.entity.item.ItemEntity> drops =
+        level.getEntitiesOfClass(
+            net.minecraft.world.entity.item.ItemEntity.class,
+            new net.minecraft.world.phys.AABB(c).inflate(3));
+    String dropRead = drops.stream().map(e -> e.getItem().toString()).toList().toString();
+    ok &=
+        SelfTest.check(
+            "footprint.break_overhang",
+            "centre and all 8 cells gone, one mars:solar_panel dropped",
+            "destroyed="
+                + destroyed
+                + ", centre="
+                + level.getBlockState(c)
+                + ", cells="
+                + countCanopyAny(level, c)
+                + ", drops="
+                + dropRead,
+            level.getBlockState(c).isAir()
+                && countCanopyAny(level, c) == 0
+                && drops.size() == 1
+                && drops.get(0).getItem().is(MarsMachines.SOLAR_PANEL.get().asItem()));
+    drops.forEach(e -> e.discard());
+
+    // Removing the centre clears the cells.
+    level.setBlockAndUpdate(c, panel);
+    level.setBlockAndUpdate(c, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+    ok &=
+        SelfTest.check(
+            "footprint.remove_centre",
+            "no canopy cells left",
+            "cells=" + countCanopyAny(level, c),
+            countCanopyAny(level, c) == 0);
+
+    // A blocked cell: the placement rule says no (players get "needs a clear 3 × 3 space").
+    level.setBlockAndUpdate(c.offset(1, 0, 1), Blocks.STONE.defaultBlockState());
+    boolean clear = SolarPanelBlock.footprintClear(level, c);
+    ok &=
+        SelfTest.check(
+            "footprint.blocked",
+            "footprintClear=false with stone in one cell",
+            "footprintClear=" + clear,
+            !clear);
+    level.setBlockAndUpdate(
+        c.offset(1, 0, 1), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+    boolean clearAgain = SolarPanelBlock.footprintClear(level, c);
+    ok &=
+        SelfTest.check(
+            "footprint.clear",
+            "footprintClear=true once the cell is empty",
+            "footprintClear=" + clearAgain,
+            clearAgain);
+    return ok;
+  }
+
+  private static int countCanopy(ServerLevel level, BlockPos c) {
+    int n = 0;
+    for (int dx = -1; dx <= 1; dx++) {
+      for (int dz = -1; dz <= 1; dz++) {
+        BlockPos p = c.offset(dx, 0, dz);
+        BlockState s = level.getBlockState(p);
+        if (s.getBlock() instanceof mars.machines.SolarPanelCanopyBlock
+            && mars.machines.SolarPanelCanopyBlock.centreOf(p, s).equals(c)) {
+          n++;
+        }
+      }
+    }
+    return n;
+  }
+
+  private static int countCanopyAny(ServerLevel level, BlockPos c) {
+    int n = 0;
+    for (int dx = -1; dx <= 1; dx++) {
+      for (int dz = -1; dz <= 1; dz++) {
+        if (level.getBlockState(c.offset(dx, 0, dz)).getBlock()
+            instanceof mars.machines.SolarPanelCanopyBlock) {
+          n++;
+        }
+      }
+    }
+    return n;
+  }
+
+  private static String describeFootprint(ServerLevel level, BlockPos c) {
+    StringBuilder b = new StringBuilder();
+    for (int dz = -1; dz <= 1; dz++) {
+      for (int dx = -1; dx <= 1; dx++) {
+        BlockState s = level.getBlockState(c.offset(dx, 0, dz));
+        b.append(
+            s.getBlock() instanceof mars.machines.SolarPanelCanopyBlock
+                ? "C"
+                : s.is(MarsMachines.SOLAR_PANEL.get()) ? "P" : ".");
+      }
+      b.append(dz < 1 ? "/" : "");
+    }
+    return b.toString();
+  }
+
   /** Runs every check; returns true if all passed. */
   public static boolean run(MinecraftServer server, boolean expectLevel) {
     boolean ok = true;
@@ -217,6 +363,7 @@ public final class BootChecks {
                 && placed.getValue(SolarPanelBlock.DUST_STAGE) == 4
                 && placed.getValue(SolarPanelBlock.PARTLY_CLEANED));
     testLevel.removeBlock(at, false);
+    ok &= footprintChecks(server);
 
     boolean command = server.getCommands().getDispatcher().getRoot().getChild("mars") != null;
     ok &=

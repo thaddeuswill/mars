@@ -1,0 +1,59 @@
+# Round solar array (BACKLOG #28): footprint, overhang, selection outline, lighting under the overhang.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+# Four arrays on the ground, 4 blocks apart, fronts north (toward the camera).
+cmd /setblock -6 64 6 mars:solar_panel[facing=north,dust_stage=0]
+cmd /setblock -2 64 6 mars:solar_panel[facing=north,dust_stage=2]
+cmd /setblock 2 64 6 mars:solar_panel[facing=north,dust_stage=4]
+cmd /setblock 6 64 6 mars:solar_panel[facing=north,dust_stage=4,partly_cleaned=true]
+# A battery right next to a footprint (outside it) to show neighbours still fit.
+cmd /setblock 4 64 6 mars:battery[facing=north]
+# A raised array on a 5x5 platform so the camera can look under the overhang.
+cmd /fill -2 64 12 2 66 16 minecraft:smooth_stone
+cmd /setblock 0 67 14 mars:solar_panel[facing=north,dust_stage=2]
+wait 60
+view 0.5 66.5 -2 0 22
+wait 80
+fps
+shot round_front_noon
+wait 20
+view 0.5 72 2 0 55
+wait 60
+shot round_from_above_noon
+wait 20
+view 0.5 72 0 0 58
+wait 60
+shot round_from_above_noon_flying
+wait 20
+cmd /gamemode spectator
+view -2 62.45 2.6 0 -4
+wait 60
+shot round_under_overhang_noon
+wait 20
+cmd /gamemode creative
+wait 20
+view -2.5 65.5 2.5 0 41
+hud on
+wait 40
+shot round_selection_outline_corner_cell
+wait 20
+hud off
+cmd /time set 12600
+wait 60
+cmd /gamemode spectator
+view -2 62.45 2.6 0 -4
+wait 60
+shot round_under_overhang_dusk
+wait 20
+cmd /gamemode creative
+wait 20
+view 0.5 66.5 -2 0 22
+wait 60
+shot round_front_dusk
+wait 20
+quit

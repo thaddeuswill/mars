@@ -47,9 +47,9 @@ class T:
     def region(s, x0, y0, x1, y1):  # a used uv region (inclusive px)
         s.regions.append((x0, y0, x1, y1)); return [x0, y0, x1 + 1, y1 + 1]
     def save(s):
-        # one 2x2 marker per texture file, in the top-left of its largest region (style guide §5.5)
+        # one 1 px marker per texture file, at the top-left pixel of its largest region (style guide §5.5)
         x0, y0, x1, y1 = max(s.regions, key=lambda r: (r[2] - r[0] + 1) * (r[3] - r[1] + 1))
-        if x1 - x0 >= 3 and y1 - y0 >= 3: s.rect(x0, y0, x0 + 1, y0 + 1, "m")
+        if x1 - x0 >= 3 and y1 - y0 >= 3: s.dot(x0, y0, "m")   # batch 3: 1 px (was 2 x 2; read as "broken" in game)
         im = Image.new("RGBA", (16, 16))
         im.putdata([rgb(P[c]) + (255,) for row in s.px for c in row]); im.save(os.path.join(TEX, s.name + ".png"))
         return s
@@ -121,109 +121,50 @@ models["regolith_oven"] = {
         "north": face("front", orr), "south": face("side", osr), "east": face("side", osr), "west": face("side", osr),
         "up": face("top", otr), "down": face("top", otr)}}]}
 
-# ---------- M-09 Solar panel: five dust stages + partly cleaned (style guide §2.4 weathering) ----------
-# Layout (PIA22876 clean, PIA18080 layout only): a 2 x 2 square of sub-panels on an alloy frame and cross; each
-# sub-panel is rows of small rectangular cells (2 px tall) with thin lighter seams, plus a few dark cut-outs.
-CELL = [[None] * 16 for _ in range(16)]       # role of each pixel: frame, seam, cut, cell
-for y in range(16):
-    for x in range(16):
-        if x in (0, 15) or y in (0, 15) or x in (7, 8) or y in (7, 8): CELL[y][x] = "frame"
-        else:
-            lx, ly = (x - 1) % 8, (y - 1) % 8      # 0..5 inside a sub-panel
-            CELL[y][x] = "seam" if (ly in (2, 5) or lx == 2) else "cell"
-for (x, y) in ((2, 4), (12, 1), (5, 12), (10, 10), (13, 13)): CELL[y][x] = "cut"
-random.seed(2201)
-U = [[random.random() for _ in range(16)] for _ in range(16)]   # one fixed dust map: stage k adds to stage k-1
-DRIFT_ROWS = (13, 14)                                            # low edge of the tilted panel
-# dust level per cell pixel: 0 clean (r), 1 film (v), 2 two-thirds (x), 3 ground dust (D), 4 dust highlight (E)
-def level(stage, x, y):
-    u = U[y][x]; drift = y in DRIFT_ROWS
-    if stage == 0: return 0
-    if stage == 1: return (2 if y == 14 else 1) if drift else (1 if u < 0.30 else 0)      # first film: specks + drift
-    if stage == 2: return 3 if drift else (2 if u < 0.50 else 1)                          # light veil: lifted ~1/3 or more
-    if stage == 3: return 3 if (drift or u < 0.80) else 2                                 # heavy: mostly ground colour
-    return 4 if u > 0.65 else 3                                                           # full even veil, lighter
-LEVEL_COLOR = "rvxDE"
-def stage_px(stage, cleaned=False):
-    px = [[None] * 16 for _ in range(16)]
-    for y in range(16):
-        for x in range(16):
-            role = CELL[y][x]
-            if role == "frame": px[y][x] = "3"
-            elif role == "cut": px[y][x] = "p"
-            elif role == "seam": px[y][x] = "s" if stage <= 2 else "q"   # light seams until the veil is heavy; then dark lines
-            else: px[y][x] = LEVEL_COLOR[level(stage, x, y)]
-    if cleaned:   # wind cleared streaks out of a heavy veil (Opportunity, 2014): horizontal runs back to clean
-        random.seed(2014)
-        # SME dust review §3: real wind cleaning (Opportunity 2014, PIA17759 -> PIA18079) was patchy and uneven between
-        # panels. So each of the four sub-panels gets its own amount of cleaning: irregular cleared patches (random walks)
-        # in the heavy veil, from almost clean to barely touched.
-        for q, (qx, qy) in enumerate(((1, 1), (9, 1), (1, 9), (9, 9))):
-            rnd = random.Random(1759 + q)
-            steps = (26, 4, 14, 0)[q]              # mostly cleaned / a little / about half / untouched
-            x, y = qx + rnd.randrange(6), qy + rnd.randrange(6)
-            for _ in range(steps):
-                for (cx, cy) in ((x, y), (x + 1, y), (x, y + 1)):
-                    if qx <= cx < qx + 6 and qy <= cy < qy + 6 and CELL[cy][cx] == "cell": px[cy][cx] = "r"
-                x = min(qx + 5, max(qx, x + rnd.choice((-1, 0, 1, 1)))); y = min(qy + 5, max(qy, y + rnd.choice((-1, 0, 1))))
-    return px
-STAGES = {f"solar_panel_dust{k}": stage_px(k) for k in range(5)}
-STAGES["solar_panel_partly_cleaned"] = stage_px(3, cleaned=True)
-pvr = None
-for name, px in STAGES.items():
-    t = T(name + "_top"); pvr = t.region(0, 0, 15, 15); t.px = [row[:] for row in px]; t.save()
+# ---------- M-09 Solar panel: the SQUARE panel is retired (owner, BACKLOG #28). The game's panel is the round
+# InSight-style array made by gen_round_panel.py. This script keeps only the shared frame and post textures. ----------
 sp = T("solar_panel_frame", "2"); fr1 = sp.region(0, 0, 15, 0); spb = sp.region(0, 2, 15, 15)
 sp.rect(0, 0, 15, 0, "1"); sp.rect(0, 2, 15, 15, "2"); sp.rect(0, 8, 15, 8, "1"); sp.rect(7, 2, 8, 15, "3")
 sp.save()
 po = T("solar_panel_post", "3"); por = po.region(7, 0, 8, 15); po.rect(7, 0, 7, 15, "4"); po.rect(8, 0, 8, 15, "2")
 pbr = po.region(4, 0, 11, 1); po.rect(4, 0, 11, 1, "1"); po.save()
-for name in STAGES:
-    top = name + "_top"
-    models[name] = {
-        "textures": {"particle": "mars:block/" + top, "cells": "mars:block/" + top,
-                     "frame": "mars:block/solar_panel_frame", "post": "mars:block/solar_panel_post"},
-        "elements": [
-            {"from": [4, 0, 4], "to": [12, 2, 12], "faces": {k: face("post", [4, 0, 12, 2]) for k in ("north", "south", "east", "west")} | {"up": face("frame", [4, 4, 12, 12])}},
-            {"from": [7, 2, 7], "to": [9, 9, 9], "faces": {k: face("post", [7, 0, 9, 7]) for k in ("north", "south", "east", "west")}},
-            {"from": [0, 9, 0], "to": [16, 10, 16], "rotation": {"origin": [8, 9.5, 8], "axis": "x", "angle": -22.5},  # cells tilt toward the front (north)
-             "faces": {"up": face("cells", pvr), "down": face("frame", [0, 0, 16, 16]),
-                       "north": face("frame", [0, 0, 16, 1]), "south": face("frame", [0, 0, 16, 1]),
-                       "east": face("frame", [0, 0, 16, 1]), "west": face("frame", [0, 0, 16, 1])}}]}
-
-# ---------- M-10 Battery: casing, shape-coded charge segments, + and - terminals ----------
-bf = T("battery_front"); bfr = bf.region(3, 4, 12, 15)
-bf.rect(3, 4, 12, 15, "3"); bf.bevel(3, 4, 12, 15); bf.rect(3, 5, 12, 5, "o")
-bf.rect(4, 6, 9, 15 - 1, "1")                               # dark well behind the charge gauge
-for n, y in enumerate((12, 10, 8)):                          # bottom-up: 2 charged (filled), 1 empty (hollow)
-    if n < 2: bf.rect(5, y, 8, y, "g")
-    else: bf.dot(5, y, "4"); bf.dot(8, y, "4")             # empty segment: only its two end marks (hollow)
-bf.rect(9, 6, 12, 9, "1"); bf.rect(10, 7, 11, 8, "g"); bf.save()
-bs = T("battery_side"); bsr = bs.region(3, 4, 12, 15); bs.rect(3, 4, 12, 15, "3"); bs.bevel(3, 4, 12, 15); bs.rect(3, 5, 12, 5, "o"); bs.save()
-bt = T("battery_top"); btr = bt.region(3, 3, 12, 12); bt.rect(3, 3, 12, 12, "2"); bt.box(3, 3, 12, 12, "1")
-tpo = bt.region(0, 0, 1, 1); bt.rect(0, 0, 1, 1, "o"); tmi = bt.region(14, 0, 15, 1); bt.rect(14, 0, 15, 1, "1"); bt.save()
-def small(tex, r): return {k: face(tex, r) for k in ("north", "south", "east", "west", "up")}
+# ---------- M-10 Battery, batch 3 at real scale: a wall-pack slab like a home battery (dimensions.md §5.3: Powerwall
+# about 1.1 x 0.7 x 0.15-0.19 m; an EARTH stand-in, no space-habitat size was found). Ours: 1.0 m tall (16 px),
+# 0.69 m wide (11 px), 0.19 m deep (3 px), on a small invented foot. No exposed terminals (real packs have none).
+bf = T("battery_front"); bfr = bf.region(2, 0, 12, 15)
+bf.rect(2, 0, 12, 15, "3"); bf.bevel(2, 0, 12, 15); bf.rect(3, 2, 11, 2, "o")
+bf.rect(4, 5, 8, 13, "1")                                   # dark well behind the charge gauge
+for n, y in enumerate((12, 10, 8, 6)):                       # bottom-up: 3 charged (filled), 1 empty (hollow)
+    if n < 3: bf.rect(5, y, 7, y, "g")
+    else: bf.dot(5, y, "4"); bf.dot(7, y, "4")             # empty segment: only its end marks (hollow)
+bf.rect(9, 5, 11, 8, "1"); bf.rect(10, 6, 10, 7, "g"); bf.save()   # status lamp (1 x 2 px) in a dark ring
+bs = T("battery_side"); bsr = bs.region(6, 0, 8, 15); bs.rect(6, 0, 8, 15, "3"); bs.rect(6, 0, 6, 15, "4"); bs.rect(8, 0, 8, 15, "2"); bs.rect(6, 2, 8, 2, "o")
+bft = bs.region(0, 0, 3, 3); bs.rect(0, 0, 3, 3, "1"); bs.save()
+bb = T("battery_back"); bb.region(2, 0, 12, 15); bb.rect(2, 0, 12, 15, "3"); bb.bevel(2, 0, 12, 15, hi="4", lo="2"); bb.rect(3, 2, 11, 2, "o"); bb.rect(4, 13, 10, 13, "2"); bb.save()
+bt = T("battery_top"); btr = bt.region(2, 6, 12, 8); bt.rect(2, 6, 12, 8, "2"); bt.rect(2, 6, 12, 6, "4"); bt.save()
 models["battery"] = {
-    "textures": {"particle": "mars:block/battery_side", "front": "mars:block/battery_front", "side": "mars:block/battery_side", "top": "mars:block/battery_top"},
+    "textures": {"particle": "mars:block/battery_side", "front": "mars:block/battery_front", "side": "mars:block/battery_side", "top": "mars:block/battery_top", "back": "mars:block/battery_back"},
     "elements": [
-        {"from": [3, 0, 3], "to": [13, 12, 13], "faces": {"north": face("front", bfr), "south": face("side", bsr),
+        {"from": [3, 0, 7], "to": [14, 16, 10], "faces": {"north": face("front", bfr), "south": face("back", [2, 0, 13, 16]),
             "east": face("side", bsr), "west": face("side", bsr), "up": face("top", btr), "down": face("top", btr)}},
-        {"from": [5, 12, 6], "to": [7, 14, 8], "faces": small("top", tpo)},
-        {"from": [9, 12, 6], "to": [11, 14, 8], "faces": small("top", tmi)}]}
+        {"from": [4, 0, 10], "to": [13, 2, 13], "faces": {k: face("side", [0, 0, 3, 2]) for k in ("north", "south", "east", "west", "up")}}]}   # foot (invented)
 
 # ---------- M-05 O2 generator, MOXIE-style (PIA24201, PIA24203): gold-plated box, pocket grid, X ribs on one end,
 # off-white tube loops, silver fittings. Process (MOXIE splits CO2; electrolysis splits water) is the Game Designer's.
 def pockets(t, x0, y0, lamp):
-    t.rect(x0, y0, x0 + 11, y0 + 11, "H")
-    ribs = (0, 4, 8, 11)
-    for r in ribs:
-        t.rect(x0 + r, y0, x0 + r, y0 + 11, "J"); t.rect(x0, y0 + r, x0 + 11, y0 + r, "J")
-    for a, b in ((1, 3), (5, 7), (9, 10)):          # each pocket: shadow on its top and left inner edge (recessed)
-        for c, d in ((1, 3), (5, 7), (9, 10)):
-            t.rect(x0 + a, y0 + c, x0 + b, y0 + d, "H"); t.rect(x0 + a, y0 + c, x0 + b, y0 + c, "G"); t.rect(x0 + a, y0 + c, x0 + a, y0 + d, "G")
-            t.rect(x0 + b, y0 + d, x0 + b, y0 + d, "I")
-    if lamp:  # status lamp in a dark ring, in the lower-right pocket
-        t.rect(x0 + 7, y0 + 7, x0 + 11, y0 + 11, "J"); t.rect(x0 + 8, y0 + 8, x0 + 11, y0 + 11, "1")
-        t.rect(x0 + 9, y0 + 9, x0 + 10, y0 + 10, "g")        # lamp in a dark ring, framed by the light rib
+    # Batch 3 (owner: "less like a waffle"): fewer, larger, SHALLOW panels in a clear rib frame. 2 columns x 3 rows of
+    # light gold panels (I) with a 1 px mid-gold lip along the top only (H); thin light ribs and outer frame (J).
+    # Round 2 had 3 x 3 deep pockets with dark (G) shadows on two sides, which read as a waffle at 4 blocks in game.
+    t.rect(x0, y0, x0 + 11, y0 + 11, "I")
+    t.box(x0, y0, x0 + 11, y0 + 11, "J")
+    # round 2 of batch 3: a darker 1 px lip under every top rib read as drawer handles; now the inner ribs are thin
+    # mid-gold lines (H) on flat light panels, inside a light outer frame (J): framed panels, no recess shadows.
+    t.rect(x0 + 6, y0 + 1, x0 + 6, y0 + 10, "H")
+    for r in (4, 8): t.rect(x0 + 1, y0 + r, x0 + 10, y0 + r, "H")
+    for (cx, cy) in ((1, 1), (7, 1), (1, 5), (7, 5), (1, 9)): t.dot(x0 + cx, y0 + cy, "J")   # a glint in each panel corner
+    if lamp:  # status lamp in a dark ring, in the lower-right panel
+        t.rect(x0 + 7, y0 + 9, x0 + 10, y0 + 11, "1"); t.rect(x0 + 8, y0 + 10, x0 + 9, y0 + 10, "g")
+        t.rect(x0 + 7, y0 + 11, x0 + 10, y0 + 11, "1")
 fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); fa.save()
 fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); fb.save()
 en = T("o2_generator_end"); enr = en.region(3, 4, 12, 15)
@@ -293,14 +234,13 @@ models["planetary_monitor"] = {
          "faces": {"north": face("screen", scr), "south": face("body", [0, 8, 14, 15]), "up": face("body", [0, 8, 14, 10]),
                    "east": face("body", [0, 8, 2, 15]), "west": face("body", [0, 8, 2, 15])}}]}
 
-# ---------- write models, item models, blockstates ----------
+# ---------- write block models only ----------
+# Batch 3: blockstates and item models belong to the registered blocks (Technical Lead, ARCHITECTURE.md §2.16-2.17;
+# ids regolith_outgasser, regolith_oven, solar_panel, battery, oxygen_maker -> model o2_generator, planetary_monitor).
+# Writing them here created orphans (BACKLOG #28), so this script now writes block models and textures only.
 for name, m in models.items():
     m = {"parent": "block/block", **m}
     json.dump(m, open(os.path.join(A, "models", "block", name + ".json"), "w"), indent=1)
-    json.dump({"parent": "mars:block/" + name}, open(os.path.join(A, "models", "item", name + ".json"), "w"), indent=1)
-    json.dump({"variants": {f"facing={f}": ({"model": "mars:block/" + name} | ({"y": r} if r else {}))
-                            for f, r in (("north", 0), ("east", 90), ("south", 180), ("west", 270))}},
-              open(os.path.join(A, "blockstates", name + ".json"), "w"), indent=1)
 
 # ---------- numeric checks ----------
 def lin(c): c /= 255; return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
@@ -309,7 +249,7 @@ def cr(a, b): la, lb = sorted((lum(a), lum(b)), reverse=True); return (la + 0.05
 fails = []
 for fn in sorted(os.listdir(TEX)):
     if not fn.endswith(".png"): continue
-    im = Image.open(os.path.join(TEX, fn)).convert("RGB"); cols = set(im.get_flattened_data())
+    im = Image.open(os.path.join(TEX, fn)).convert("RGBA"); cols = {p[:3] for p in im.get_flattened_data() if p[3] > 0}   # transparent pixels are unused
     bad = [c for c in cols if c not in PAL]
     if bad: fails.append(f"{fn}: non-palette colors {bad}")
     if (0, 0, 0) in cols or (255, 255, 255) in cols: fails.append(f"{fn}: pure black or white")
@@ -373,37 +313,6 @@ for label, a, b2, need in (("gold I vs safety orange o", "I", "o", 0.10), ("gold
     ds = [dE(rgb(P[a]), rgb(P[b2]), k) for k in MX]; ok_ = min(ds) >= need
     print(f"  {label:40s} " + " / ".join(f"{d:.3f}" for d in ds) + f"  {'ok' if ok_ else 'LOW'} (need {need} in all)")
     if not ok_: fails.append(f"colour-vision {label} min {min(ds):.3f}")
-# ---- dust progression: superset, visible steps, structure kept ----
-order = {c: i for i, c in enumerate(LEVEL_COLOR)}
-names = [f"solar_panel_dust{k}" for k in range(5)]
-pxs = [STAGES[n] for n in names]
-for k in range(1, 5):
-    for y in range(16):
-        for x in range(16):
-            if CELL[y][x] == "cell" and order[pxs[k][y][x]] < order[pxs[k - 1][y][x]]:
-                fails.append(f"dust{k} at {x},{y} has less dust than dust{k-1} (not a superset)")
-def mean_lab(px, k, roles=("cell",)):
-    cells = [rgb(P[px[y][x]]) for y in range(16) for x in range(16) if CELL[y][x] in roles]
-    labs = [oklab_lin(sim_lin(c, k)) for c in cells]
-    return tuple(sum(v[i] for v in labs) / len(labs) for i in range(3))
-NONCOLOUR = {1: "specks and a drift band appear along the low edge (pattern change)"}
-print("Dust steps (mean OKLab dE of the CELL area vs the previous stage, where the dust sits; need >= 0.035 in normal and 2 of 3")
-print("simulations, or a non-colour cue). Whole-face dE (cells + seams + cut-outs + frame) is shown after the slash group for reference:")
-for k in range(1, 5):
-    ds = {m: math.dist(mean_lab(pxs[k], m), mean_lab(pxs[k - 1], m)) for m in MX}
-    passed = ds["normal"] >= 0.035 and sum(ds[m] >= 0.035 for m in ("protan", "deutan", "tritan")) >= 2
-    changed = sum(pxs[k][y][x] != pxs[k - 1][y][x] for y in range(16) for x in range(16)) / 256
-    note = "ok" if passed else (f"colour step small; non-colour cue: {NONCOLOUR[k]} ({changed:.0%} of pixels change)" if k in NONCOLOUR and changed >= 0.08 else "TOO SMALL")
-    face_d = math.dist(mean_lab(pxs[k], "normal", ("cell", "seam", "cut", "frame")), mean_lab(pxs[k - 1], "normal", ("cell", "seam", "cut", "frame")))
-    print(f"  dust{k-1} -> dust{k}: " + " / ".join(f"{ds[m]:.3f}" for m in MX) + f"  (whole face {face_d:.3f})  {note}")
-    if note == "TOO SMALL": fails.append(f"dust step {k-1}->{k} too small")
-print("Panel structure per stage (seams and cut-outs stay; contrast vs the dominant cell colour):")
-from collections import Counter
-for n, px in list(zip(names, pxs)) + [("solar_panel_partly_cleaned", STAGES["solar_panel_partly_cleaned"])]:
-    dom = Counter(px[y][x] for y in range(16) for x in range(16) if CELL[y][x] == "cell").most_common(1)[0][0]
-    seam = Counter(px[y][x] for y in range(16) for x in range(16) if CELL[y][x] == "seam").most_common(1)[0][0]
-    best = max(cr(P[c], P[dom]) for c in (seam, "p", "3"))
-    print(f"  {n:28s} cells {dom}  seam {seam}  best structure contrast {best:.1f}  {'ok' if best >= 2 else 'WEAK'}")
-    if best < 2: fails.append(f"{n}: panel structure unreadable")
+# dust progression checks live in gen_round_panel.py (the round panel)
 print("FAILS:" if fails else "All checks passed.", *fails, sep="\n  ")
 sys.exit(1 if fails else 0)

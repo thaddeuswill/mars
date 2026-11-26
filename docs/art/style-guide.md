@@ -95,16 +95,16 @@ Dust builds on solar panels gradually and is cleared suddenly (owner request, BA
 
 | Stage (asset id) | What changes | Seams and cut-outs |
 |---|---|---|
-| `solar_panel_dust0` clean | Near-black purple-grey cells in rows, thin lighter seams | Light seams; dark cut-outs |
-| `solar_panel_dust1` first film | About 30 % of cell pixels take a thin film; a drift along the low edge | Light seams; dark cut-outs |
-| `solar_panel_dust2` light veil | Every cell lifted at least a third toward ground dust; half of them two-thirds; the drift reaches ground colour | Light seams; dark cut-outs |
-| `solar_panel_dust3` heavy veil | About 80 % of cells at ground-dust colour | **Seams become dark lines** (as on the real veiled array); cut-outs dark |
-| `solar_panel_dust4` full veil | An even veil; a third of the pixels a lighter dust tone | Dark seams; dark cut-outs |
-| `solar_panel_partly_cleaned` | A heavy veil with **irregular cleared patches, different on each sub-panel** (one nearly clean, one untouched), as a dust devil leaves it | Dark seams; dark cut-outs |
+| `solar_panel_round_dust0` clean | Near-black purple-grey cells in rows parallel to each segment's edge, thin lighter seams | Light seams; dark cut-outs |
+| `solar_panel_round_dust1` first film | About 30 % of cell pixels take a thin film; dust gathers along the rim (a flat disc has no low edge) | Light seams; dark cut-outs |
+| `solar_panel_round_dust2` light veil | Every cell lifted at least a third toward ground dust; half of them two-thirds; the rim band reaches ground colour | Light seams; dark cut-outs |
+| `solar_panel_round_dust3` heavy veil | About 72 % of cells at ground-dust colour | Seams turn **1 px dark tan-brown** `#7A4530` (softened, 2.2 : 1 on the veil); cut-outs dark |
+| `solar_panel_round_dust4` full veil | An even veil; about 20 % of pixels a lighter dust tone | Dark tan-brown seams; dark cut-outs |
+| `solar_panel_round_partly_cleaned` | A full veil with **large contiguous clean wedges**: some segments wiped to the rim, some half, some untouched | Seams and cut-outs as stage 4 |
 
-**Rules (checked by `tools/art-preview/gen_phase1_batch1.py`):** one fixed dust map, so each stage is a **superset** of the one before (no pixel ever gets less dust going up); each step changes the mean colour of the cell area by **OKLab ΔE ≥ 0.035** in normal vision and at least two of the three simulations (measured: 0.039, 0.149, 0.142, 0.050 in normal vision); the panel stays readable at every stage (structure contrast ≥ 2 : 1 between seams, cut-outs, or frame and the dominant cell colour). Stages don't change during a storm; storm dust lands at clearing (keyframes §3.7a).
+**Rules (checked by `tools/art-preview/gen_round_panel.py`):** one fixed dust map, so each stage is a **superset** of the one before (no pixel ever gets less dust going up); each step changes the mean colour of the cell area by **OKLab ΔE ≥ 0.035** in normal vision and at least two of the three simulations (round panel, measured: 0.067, 0.138, 0.120, 0.040 in normal vision); the panel stays readable at every stage (structure contrast ≥ 2 : 1 between seams, cut-outs, or frame and the dominant cell colour). Stages don't change during a storm; storm dust lands at clearing (keyframes §3.7a).
 
-**Round prototype (BACKLOG #25):** the same stages on a 12-segment round array (`solar_panel_round_*`, asset M-09b). Differences: dust drifts first along the **rim** (a flat disc has no low edge); at stages 3–4 the seams are **softened to 1 px dark tan-brown `#7A4530`** (2.2 : 1 on the veil) instead of near-black, with cut-outs kept dark (5.0 : 1). Steps measured 0.067, 0.138, 0.127, 0.040. The square panel keeps its near-black veil seams until the owner chooses.
+**Batch 3: the round array IS the game's panel** (owner, BACKLOG #28; the square set is retired). It uses the model names the registered blockstate expects (`solar_panel_round_dust0`–`4`, `solar_panel_round_partly_cleaned`), at the sourced **2.2 m** (NASA: PIA22736, science.nasa.gov, NSSDC; dimensions.md §1), 12 segments, a 3 × 3 block footprint with about 1 m overhang on each side. **Partly cleaned** is now a full veil with **large contiguous clean wedges** (some segments wiped to the rim, some half, some untouched), so it differs from stage 4 from far away (mean cell OKLab ΔE 0.116 from stage 4; the largest clean area is 29 % of the cells); the in-game screenshot showed the old speckled version almost identical to stage 4 in a wide shot. The rest of this paragraph describes the round array as first prototyped: Differences: dust drifts first along the **rim** (a flat disc has no low edge); at stages 3–4 the seams are **softened to 1 px dark tan-brown `#7A4530`** (2.2 : 1 on the veil) instead of near-black, with cut-outs kept dark (5.0 : 1). Steps measured 0.067, 0.138, 0.127, 0.040. The square panel keeps its near-black veil seams until the owner chooses.
 
 **Panel dust stage bar** (look-at readout; ui-specs / DESIGN.md "a small bar, shape not colour only"): five 3 × 5 GUI px slots in a row on the look-at card's ≥ 90 % strip; filled slots = dust stage (0 = all hollow outlines, 4 = all filled), filled in bright dust `#D09A6E` with a 1 px `#1E2328` outline, hollow slots outlined in `#A9B0B8`. The word ("Dust 3 of 4 · heavy veil") and the output ("Output 70 %") sit beside it. "Partly cleaned" shows a slashed slot (diagonal line through the filled slots) plus the word. Shape (count of filled slots) carries the stage; colour is the third channel.
 
@@ -346,9 +346,30 @@ pack/assets/mars/textures/
 - Keep machine models within one block where possible; multi-block machines get a clear front face with the status lamp.
 
 ### 5.5 Placeholders
-- Placeholder textures carry a **2×2 `#FF00FF` marker in the top-left corner** so nobody mistakes them for final art in screenshots or playtests.
+- Placeholder textures carry a **1 px `#FF00FF` marker** at the **top-left pixel of the texture's largest used region** (for the round panel's 48×48 texture: the top-left-most painted pixel of the disc), so nobody mistakes them for final art in screenshots or playtests.
+- Batch 3 change (owner, BACKLOG #28): it was a 2×2 marker. In the in-game screenshots (`tools/screenshots/out/20261126-185121/`) it read as large magenta corners and made the machines look broken at play distance; it also wasn't always top-left. One pixel is still findable up close and nearly invisible at play distance. Option considered and not taken: an inventory-only overlay (needs code; the Technical Lead can add it later if 1 px still distracts).
 - File names stay the final IDs (so swapping art never breaks code).
 - The asset list marks status **Placeholder** until final art lands.
+
+### 5.5a Real scale and deliberate exaggerations
+Scale: **1 block = 1 m = 16 px, so 1 px = 6.25 cm** (owner decision: size-accurate where sources allow; sizes from `docs/science/dimensions.md`). Anything smaller than 1 px can't be drawn at true size, so it is drawn larger **on purpose**. Every such feature:
+
+| Feature | Real size | Drawn as | Exaggeration | Source |
+|---|---|---|---|---|
+| Solar array seams and cell rows | A few mm to cm (cell size **missing**) | 1 px lines (6.25 cm); far fewer rows than real | Several times wider, fewer | dimensions.md §1, §6 |
+| Solar array thickness | **Missing**, likely under 6 cm | 1 px (6.25 cm) | At least 1×, probably more | §1 |
+| Solar array cut-outs | A few cm (photo) | 1 px squares | About 1–2× | PIA25286 (photo) |
+| Solar array rim frame | A few cm (photo) | 1 px ring | Probably 2× or more | PIA22876 (photo) |
+| Oxygen maker as a whole | MOXIE 0.24 × 0.24 × 0.31 m | 0.75 × 0.625 × 0.75 m box | **About 3× MOXIE** (owner option (a): one block; a crew unit would be about 0.3–0.55 m, so 1.4–2.5× that) | §3, §5.1 |
+| Oxygen maker tubes | Diameter **missing**, well under 6 cm | 1 × 1 px tubes (6.25 cm) | Several times thicker | §3 |
+| Oxygen maker fittings, ribs, X ribs, panel frames | A few cm | 1–2 px | About 2× | §3 (PIA24201) |
+| Status lamps on every machine | Indicator LEDs, under 1 cm (**invented** real equivalent) | 1×2 to 2×2 px (6–12 cm) | Many times larger: a readability device | — |
+| Battery charge segments | (no real counterpart; the real pack has none) | 3×1 px bars | Invented readout | §5.3 |
+| Monitor screen text lines and gauge | Text is mm high | 1 px rows | Symbolic, not text | §5.4 (missing) |
+| Outgasser hazard stripes, louvres, bolts | A few cm (**invented** object) | 1 px | About 1–2× | §5.2 (missing) |
+| Future weather mast: sensors 5 cm wide, mast 5–10 cm (invented) | under 1–1.6 px | Draw at 1–2 px | Up to 2× | §4 |
+
+Machines with **no real reference photo or size found** (dimensions.md §5.2–5.4): Regolith Outgasser, Regolith Oven, Planetary Monitor. Their designs stay as they were; only proportions are checked. The battery uses an **Earth home-battery stand-in** (about 1.1 × 0.7 × 0.15–0.19 m) because no space-habitat pack size was found.
 
 ### 5.6 Ownership, licensing, originality
 - **All our textures and models are original.** Don't copy, trace, or recolor vanilla Minecraft textures, or any other game's or mod's art. Vanilla textures are not ours to redistribute.

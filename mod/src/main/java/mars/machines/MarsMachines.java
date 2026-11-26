@@ -31,7 +31,12 @@ public final class MarsMachines {
   // Simple shapes in 1/16 block, centred and symmetric so facing and model don't matter.
   private static final VoxelShape OUTGASSER = Block.box(1, 0, 1, 15, 16, 15);
   private static final VoxelShape OVEN = Block.box(2, 0, 2, 14, 14, 14);
-  private static final VoxelShape PANEL = Block.box(0, 0, 0, 16, 10, 16);
+  // Round array centre: base, post, and the part of the array over its own cell (2.18).
+  private static final VoxelShape PANEL =
+      net.minecraft.world.phys.shapes.Shapes.or(
+          Block.box(4, 0, 4, 12, 1, 12),
+          Block.box(7, 1, 7, 9, 10, 9),
+          Block.box(0, 10, 0, 16, 11, 16));
   private static final VoxelShape BATTERY = Block.box(3, 0, 3, 13, 14, 13);
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
@@ -48,6 +53,19 @@ public final class MarsMachines {
       machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
   public static final DeferredBlock<MachineBlock> PLANETARY_MONITOR =
       machine("planetary_monitor", MONITOR, MachineBlock::new);
+
+  /** Invisible filler under the round array's overhang; no item, not in the tab. */
+  public static final DeferredBlock<SolarPanelCanopyBlock> SOLAR_PANEL_CANOPY =
+      BLOCKS.register(
+          "solar_panel_canopy",
+          () ->
+              new SolarPanelCanopyBlock(
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .strength(2.0f, 6.0f)
+                      .sound(SoundType.METAL)
+                      .noOcclusion()
+                      .noLootTable()));
 
   /** Every machine, in creative-tab order. */
   public static final List<DeferredBlock<? extends Block>> ALL =

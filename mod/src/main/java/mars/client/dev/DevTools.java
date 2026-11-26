@@ -195,6 +195,12 @@ public final class DevTools {
     mc.player.connection.sendCommand(
         String.format(
             java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", x, y, z, yaw, pitch));
+    // Stay where the camera was put: a creative player in the air would otherwise fall before
+    // the shot (found in the BACKLOG #28 screenshots). Spectators always fly.
+    if (mc.player.getAbilities().mayfly) {
+      mc.player.getAbilities().flying = true;
+      mc.player.onUpdateAbilities();
+    }
     mc.options.hideGui = true;
   }
 

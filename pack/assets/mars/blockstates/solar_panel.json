@@ -1,153 +1,153 @@
 {
  "variants": {
   "dust_stage=0,facing=north,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust0"
+   "model": "mars:block/solar_panel_round_dust0"
   },
   "dust_stage=0,facing=north,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned"
+   "model": "mars:block/solar_panel_round_partly_cleaned"
   },
   "dust_stage=1,facing=north,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust1"
+   "model": "mars:block/solar_panel_round_dust1"
   },
   "dust_stage=1,facing=north,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned"
+   "model": "mars:block/solar_panel_round_partly_cleaned"
   },
   "dust_stage=2,facing=north,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust2"
+   "model": "mars:block/solar_panel_round_dust2"
   },
   "dust_stage=2,facing=north,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned"
+   "model": "mars:block/solar_panel_round_partly_cleaned"
   },
   "dust_stage=3,facing=north,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust3"
+   "model": "mars:block/solar_panel_round_dust3"
   },
   "dust_stage=3,facing=north,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned"
+   "model": "mars:block/solar_panel_round_partly_cleaned"
   },
   "dust_stage=4,facing=north,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust4"
+   "model": "mars:block/solar_panel_round_dust4"
   },
   "dust_stage=4,facing=north,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned"
+   "model": "mars:block/solar_panel_round_partly_cleaned"
   },
   "dust_stage=0,facing=east,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust0",
+   "model": "mars:block/solar_panel_round_dust0",
    "y": 90
   },
   "dust_stage=0,facing=east,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 90
   },
   "dust_stage=1,facing=east,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust1",
+   "model": "mars:block/solar_panel_round_dust1",
    "y": 90
   },
   "dust_stage=1,facing=east,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 90
   },
   "dust_stage=2,facing=east,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust2",
+   "model": "mars:block/solar_panel_round_dust2",
    "y": 90
   },
   "dust_stage=2,facing=east,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 90
   },
   "dust_stage=3,facing=east,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust3",
+   "model": "mars:block/solar_panel_round_dust3",
    "y": 90
   },
   "dust_stage=3,facing=east,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 90
   },
   "dust_stage=4,facing=east,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust4",
+   "model": "mars:block/solar_panel_round_dust4",
    "y": 90
   },
   "dust_stage=4,facing=east,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 90
   },
   "dust_stage=0,facing=south,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust0",
+   "model": "mars:block/solar_panel_round_dust0",
    "y": 180
   },
   "dust_stage=0,facing=south,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 180
   },
   "dust_stage=1,facing=south,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust1",
+   "model": "mars:block/solar_panel_round_dust1",
    "y": 180
   },
   "dust_stage=1,facing=south,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 180
   },
   "dust_stage=2,facing=south,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust2",
+   "model": "mars:block/solar_panel_round_dust2",
    "y": 180
   },
   "dust_stage=2,facing=south,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 180
   },
   "dust_stage=3,facing=south,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust3",
+   "model": "mars:block/solar_panel_round_dust3",
    "y": 180
   },
   "dust_stage=3,facing=south,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 180
   },
   "dust_stage=4,facing=south,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust4",
+   "model": "mars:block/solar_panel_round_dust4",
    "y": 180
   },
   "dust_stage=4,facing=south,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 180
   },
   "dust_stage=0,facing=west,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust0",
+   "model": "mars:block/solar_panel_round_dust0",
    "y": 270
   },
   "dust_stage=0,facing=west,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 270
   },
   "dust_stage=1,facing=west,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust1",
+   "model": "mars:block/solar_panel_round_dust1",
    "y": 270
   },
   "dust_stage=1,facing=west,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 270
   },
   "dust_stage=2,facing=west,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust2",
+   "model": "mars:block/solar_panel_round_dust2",
    "y": 270
   },
   "dust_stage=2,facing=west,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 270
   },
   "dust_stage=3,facing=west,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust3",
+   "model": "mars:block/solar_panel_round_dust3",
    "y": 270
   },
   "dust_stage=3,facing=west,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 270
   },
   "dust_stage=4,facing=west,partly_cleaned=false": {
-   "model": "mars:block/solar_panel_dust4",
+   "model": "mars:block/solar_panel_round_dust4",
    "y": 270
   },
   "dust_stage=4,facing=west,partly_cleaned=true": {
-   "model": "mars:block/solar_panel_partly_cleaned",
+   "model": "mars:block/solar_panel_round_partly_cleaned",
    "y": 270
   }
  }

@@ -103,6 +103,33 @@ class MachineAssetsTest {
   }
 
   @Test
+  void canopyAndLootTablesExist() throws Exception {
+    JsonObject v =
+        read(assets().resolve("blockstates/solar_panel_canopy.json")).getAsJsonObject("variants");
+    for (int ox = 0; ox < 3; ox++) {
+      for (int oz = 0; oz < 3; oz++) {
+        assertTrue(
+            v.has("offset_x=" + ox + ",offset_z=" + oz), "canopy variant missing " + ox + "," + oz);
+      }
+    }
+    List<String> problems = checkModel("mars:block/solar_panel_canopy");
+    for (String id : IDS) {
+      Path loot = TestData.data("loot_table/blocks/" + id + ".json");
+      if (!Files.exists(loot)) {
+        problems.add("no loot table for " + id);
+      } else if (!read(loot).toString().contains("mars:" + id)) {
+        problems.add("loot table for " + id + " doesn't drop mars:" + id);
+      }
+    }
+    System.out.println(
+        "canopy: 9 variants; loot tables checked for "
+            + IDS.size()
+            + " machines; problems "
+            + problems);
+    assertTrue(problems.isEmpty(), problems.toString());
+  }
+
+  @Test
   void solarPanelCoversEveryStateAndRetiredModelsAreGone() throws Exception {
     JsonObject v =
         read(assets().resolve("blockstates/solar_panel.json")).getAsJsonObject("variants");
@@ -115,8 +142,8 @@ class MachineAssetsTest {
           String model = v.getAsJsonObject(key).get("model").getAsString();
           String expected =
               pc.equals("true")
-                  ? "mars:block/solar_panel_partly_cleaned"
-                  : "mars:block/solar_panel_dust" + stage;
+                  ? "mars:block/solar_panel_round_partly_cleaned"
+                  : "mars:block/solar_panel_round_dust" + stage;
           assertEquals(expected, model, key);
           n++;
         }

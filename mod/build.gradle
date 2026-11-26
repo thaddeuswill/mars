@@ -106,8 +106,11 @@ test {
 }
 
 // Copy our content (art, text, datapack) from ../pack into the jar (ARCHITECTURE.md 3.2, build plan 4).
+// -PmarsPackDir=<dir> builds the jar and dev runs from another pack copy (tests use the same property).
+def marsPackDir = project.findProperty('marsPackDir') ?: '../pack'
 processResources {
-    from('../pack') {
+    inputs.property('marsPackDir', marsPackDir)
+    from(marsPackDir) {
         include 'assets/**'
         include 'data/**'
         exclude '**/.gitkeep'
