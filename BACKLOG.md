@@ -21,7 +21,7 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 | Fading, worked examples, educator guide, delayed post-test (Instructional Designer) | 🟡 |
 | Architecture decisions, export data, sound hooks (Technical Lead) | 🟡 |
 | Audio direction, sound list, weather mast (Lead Artist) | 🟡 |
-| Consensus on goal priority tiers and interruption rules | ✅ Decided by the owner (T-C, I-C); Game Designer position pending |
+| Consensus on goal priority tiers and interruption rules | ✅ Decided by the owner (T-C, I-C); Game Designer agrees (rule 3 can live with it) |
 | Full-team story review before Stage 3 | ⬜ |
 
 ## Requests

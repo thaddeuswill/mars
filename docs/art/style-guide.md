@@ -265,8 +265,8 @@ The Technical Lead sets up `pack/assets/` and may move assets into the companion
 | Armor (EVA suit) layers | **64×32** per layer, 2 layers | Vanilla armor layout |
 | Particles | **8×8** (dust, vapor, spores, bubbles), 16×16 max | 1–4 frames |
 | Sky bodies | Sun **32×32**, Phobos 16×16, Deimos and Earth drawn as small quads (2–4 px) | Sun drawn at 0.66× vanilla quad size (keyframes §3.1) |
-| Clouds | 256×256 cloud map | Needs a custom renderer for coverage changes (TL cost) |
-| GUI sheets | **256×256** atlas per screen family | Panels built from 9-slice borders so screens can resize to fit 4.5 |
+| Clouds | **256×256 greyscale density map** (`environment/clouds_density.png`), tileable; brighter = appears at lower coverage | TL option A (ARCHITECTURE.md §2.5.3): mesh rebuilt at 5 coverage steps (5 / 8 / 20 / 35 / 45 %). Concept generated (asset E-10) |
+| GUI sprites | **Single sprites with nine-slice scaling** in `textures/gui/sprites/`, declared in `.png.mcmeta` (vanilla since 1.20.2 per TL, **unverified**; check with one panel in Stage 2). Fallback: 256×256 atlas per screen family | Panels: 9×9 px source sprites with a 3 px border (slate panel, paper card, backing strip). Two variants where needed: `_hud` and `_paper` (4.4a) |
 | HUD icons | 9×9 and 16×16 | Index parameter icons need both sizes |
 | Epilogue / ending cards | **192×108** GUI px illustration | Pixel illustrations, 16:9 |
 | Pack icon / logo | 128×128 pack icon; title logo 256×64 | |
@@ -285,8 +285,9 @@ pack/assets/mars/textures/
   entity/       thawling/thawling_juvenile.png, thawling_adult.png
   models/armor/ eva_suit_t1_layer_1.png, eva_suit_t1_layer_2.png
   particle/     dust_speck.png, vapor_wisp_0.png … _3.png
-  environment/  sun.png, phobos.png, earth_star.png, clouds.png
-  gui/          monitor.png, journal.png, message_card.png, colony_log.png
+  environment/  sun.png, phobos.png, earth_star.png, clouds_density.png
+  gui/sprites/  panel_slate.png, panel_paper.png, strip_hud.png (+ .png.mcmeta nine-slice)
+  font/         cairn_display.png, cairn_mono.png (bitmap sheets; font JSON in assets/mars/font/)
   misc/         visor_overlay.png
 ```
 
@@ -296,7 +297,7 @@ pack/assets/mars/textures/
 
 ### 5.4 Models
 - Block and item models: vanilla JSON model format, made in Blockbench or by hand.
-- Entity models and animations: tool and library are the **Technical Lead's call** (vanilla Java entity models vs. an animation library). Art delivers Blockbench source files plus exported textures either way.
+- Entity models and animations: **vanilla Java box models and vanilla keyframe animations**, exported from Blockbench's "Modded Entity" format (TL decision, ARCHITECTURE.md §2.13; export for 1.21.1 **unverified**, test one animation in Stage 2). GeckoLib is the fallback only if missing blends make the rear-up → shove → curl → roll sequence look broken. Because vanilla doesn't blend, each transition the thawlings need gets a **short dedicated animation** (≤ 0.4 s): idle → bask, bask → idle, rear-up → curl. Art delivers Blockbench sources plus exported textures.
 - Keep machine models within one block where possible; multi-block machines get a clear front face with the status lamp.
 
 ### 5.5 Placeholders

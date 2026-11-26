@@ -1,6 +1,6 @@
 # In-Game Messages: Final Text
 
-**Owner:** Lead Game Designer · **Status:** Draft 1 (2026-11-26). All text is **draft: SME check and ID review pending**. Nothing here ships as fact before the SME check. · **Spec:** [docs/learning/prompts-and-reflections.md](../../learning/prompts-and-reflections.md) (what each item must do) · **Voices:** [story bible](../story-bible.md) §4 and §8 · **Format:** [DOCUMENTATION.md](../../../DOCUMENTATION.md) §5.1
+**Owner:** Lead Game Designer · **Status:** Draft 1 (2026-11-26); SME round 2 fixes applied (F1, F2, F4a, F6, F7, F9, F10 and all Earth links). All text is still **draft: ID review pending**. Nothing here ships as fact before the SME check. · **Spec:** [docs/learning/prompts-and-reflections.md](../../learning/prompts-and-reflections.md) (what each item must do) · **Voices:** [story bible](../story-bible.md) §4 and §8 · **Format:** [DOCUMENTATION.md](../../../DOCUMENTATION.md) §5.1
 
 These files hold the final player-facing wording for forecasts, Earth links, the Landing checklist, Shift Briefings, the first worked example, and the solar-event warnings. They are the content source the Technical Lead turns into datapack JSON and language files (ARCHITECTURE.md §9).
 
@@ -9,6 +9,7 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 | [phase-1.md](phase-1.md) | Landing checklist, Shift Briefing 1, worked example (first Outgasser), solar-event warning lines, F1, F2, F3, F4a, Earth links: Dome stable, sublimation, Keeper's Report 1 reply |
 | [phase-2.md](phase-2.md) | Shift Briefing 2, F4b, F5, F6, F7, Earth links: Thaw, greenhouse effect, Keeper's Report 2 reply |
 | [phase-3.md](phase-3.md) | Shift Briefing 3, F8, F9, F10, Earth links: first flora, Keeper's Report 3 reply, Mensah's ending line |
+| [failure-reports.md](failure-reports.md) | Failure report hint ladders, closing lines, and banned hint tokens per failure type (CR-H2) |
 
 ## Conventions
 
@@ -43,6 +44,18 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 
 Planning rate: 100 words per minute (Lead Instructional Designer's conservative assumption; story bible §7.3). Budget: 1,500 words (15 minutes) for essential story text across the unit.
 
-| Block | Words (MS main text) | Minutes at 100 wpm |
-|---|---|---|
-| *Filled in by the count at the end of this task; see below* | | |
+| Block (MS main text, essential, both readings of each item once) | Words | Minutes at 100 wpm | Flesch–Kincaid grade (screen) |
+|---|---|---|---|
+| Landing checklist | 87 | 0.9 | 2.6 |
+| Shift Briefings (3) | 101 | 1.0 | 3.0 |
+| Worked example (full + completion) | 112 | 1.1 | 2.7 |
+| Mensah replies (Reports 1–3, ending line) | 152 | 1.5 | 3.1 |
+| **Story subtotal, these files** | **452** | **4.5** | |
+| Other essential story beats (1, 3, 4, 6, 9, 10, 12, 15, 17, 19: final text not yet written; budget ≤ 60 words each) | ≤ 600 | ≤ 6.0 | — |
+| **Essential story total (budget 1,500)** | **≤ ~1,050** | **≤ ~10.5** | Within budget |
+| Forecasts F1–F10 (question, choices, one result each) | 609 | 6.1 | 3.7 |
+| Earth links (journal lines) | 93 | 0.9 | 2.4 |
+| Solar warnings | 47 | 0.5 | 5.2 |
+| **Learning text in these files** | **749** | **7.5** | |
+
+Counted 2026-11-26 by script (words = tokens of letters/digits; F4a counts its usual-case result only). The grade formula scores short sentences low; it is a screen, not proof. A read-aloud check with playtesters is still needed (prompts-and-reflections.md §5). Spread over 17 play periods, all of it is under 1.5 minutes of reading per period.

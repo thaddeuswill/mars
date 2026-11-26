@@ -17,11 +17,11 @@ Players learn cause and effect (B1) only if they can tell **which** change cause
 
 | Index value | Main world channel (owned) | Backup channels | Where it shows |
 |---|---|---|---|
-| **Pressure** | **Sky color** (zenith, horizon), **fog distance**, **sunset color** | Windsock angle, sounding balloon height, exterior sound level, cloud height | Global |
-| **Temperature** | **Frost** (dawn frost cover, dome-glass frost, burn-off time) | Ice block behavior (with pressure), ice-crack sounds, thermometer on the weather mast | Global + local (near machines) |
+| **Pressure** | **Sky color** (zenith, horizon), **fog distance**, **sunset color** | Windsock angle, lift balloon height, barometer, exterior sound level, cloud height | Global |
+| **Temperature** | **Frost** (dawn frost cover, dome-glass frost, burn-off time) | Ice block behavior (with pressure), ice-crack sounds, spirit thermometer on the weather mast | Global + local (near machines) |
 | **Hydrosphere** | **Water**: ice state, puddles, pools, water color | Clouds, rain, morning ground fog | Global + local |
-| **O2** | **Flame**: whether fire can burn, flame size, fire spread | Bubbles from algae and water plants, weather-mast gas gauge, HUD | Local (wherever fire or flora is) |
-| **CO2** | **No color of its own** (see 1.2). Its effects: carbonate deposits at scrubbers, plant growth, and frost returning if CO2 drops before greenhouse gases hold the heat | Weather-mast gas gauge, Monitor | Local + via temperature |
+| **O2** | **Flame**: whether fire can burn, flame size, fire spread | Bubbles from algae and water plants, weather-mast gas analyzer (from Phase 3), HUD | Local (wherever fire or flora is) |
+| **CO2** | **No color of its own** (see 1.2). Its effects: carbonate deposits at scrubbers, plant growth, and frost returning if CO2 drops before greenhouse gases hold the heat | Weather-mast gas analyzer (from Phase 3), Monitor | Local + via temperature |
 | **Biomass** | **Ground**: regolith → biocrust → soil → moss → grass, and flora blocks | Spore/pollen particles, leaf rustle sound, thawlings settling | Local, spreading |
 | *(Dust storms, derived)* | Storm overlay on sky and fog (§3.7) | Dust particles, visor dust film, solar panels dimming | Global event |
 
@@ -37,32 +37,30 @@ ARCHITECTURE.md §2.5 now lets any Index parameter or derived value drive sky an
 
 ### 1.2a Inputs: which value drives which keyframe
 
-Input names below are descriptive; the Technical Lead maps them to the real data keys.
+Data keys are the Technical Lead's mapping (ARCHITECTURE.md §2.5.2). A **signal** is a read-only world-state value published by one module (ARCHITECTURE.md §2.5.1).
 
-| Visual (section) | Driving input | Axis | Kind |
-|---|---|---|---|
-| Sky zenith, horizon, night sky, sunset halo and band, fog color, fog start/end, sun aureole, star density, cloud height (§3.1) | **Pressure** (kPa) | log10 | Index parameter |
-| Storm overlay on sky, fog, sun; dust particles (§3.7) | **Storm strength** (0–1, current weather event) | linear | Derived (weather state); max capped by gameplay phase |
-| Aurora glow (§3.7) | **Radiation spike strength** only (not pressure; SME round 2 §2.8) | linear | Event |
-| Dosimeter click rate (§3.7, audio direction §6.2) | **Radiation spike strength** × **pressure** scale × local shielding | linear | Event + Index parameter + derived |
-| Windsock angle, sounding balloon height (§3.1, §3.9) | **Pressure** | log10 | Index parameter |
-| Exterior sound gain and low-pass (§3.1; full audio inputs in [audio direction](../audio/audio-direction.md) §9.1) **[SME]** | **Pressure** | log10 | Index parameter |
-| Weather-mast thermometer (§3.9) | **Temperature**, global mean | linear | Index parameter |
-| Weather-mast windsock flutter sound (§3.9, audio) | **Pressure** | log10 | Index parameter |
-| Dawn frost cover, burn-off time, dome-glass frost, thermometer (§3.2) | **Temperature**, global mean (°C) | linear | Index parameter |
-| Frost-free ring and heat shimmer near machines (§3.2) | **Local temperature** (per-chunk heat map, ARCHITECTURE.md §2.5) | threshold | Derived |
-| Ice state: sublimate / flash puddle / day puddle / pool (§3.3) | **Pressure** + **local temperature** (DESIGN.md ice-to-water rule) | rule table | Index parameter + derived |
-| Heavy vapor wisps over water and warmed ice (§3.3) | **Local temperature** compared with the **boiling point at current pressure** (the Monitor's derived value) | threshold | Derived |
-| Water color, underwater fog, clouds coverage and color, rain, ground fog (§3.3) | **Hydrosphere** (% of surface) | linear | Index parameter |
-| Flame size, flicker, fire spread (§3.4) | **O2 fraction** (%) | bands | Index parameter |
-| Helmet on/off, visor return, Air window dot (§3.4, style guide §9, §11) | **Breathable condition**: O2 partial pressure, pressure, CO2 partial pressure | live check | Derived |
-| Bubbles from algae vats and water plants (§3.4) | **Machine / flora block output** (local) | linear | Local, not Index |
-| Weather-mast gas analyzer columns (§3.5, §3.9) | **O2 partial pressure** and **CO2 partial pressure** (kPa) | linear (O2), square root (CO2) | Derived |
-| Carbonate deposits at scrubbers (§3.5) | **Scrubber cumulative output** (local) | step | Local |
-| Ground conversion, flora color (§3.6) | **Seeded flora nearby** (block ticks), probability scaled by **biomass** (BU) | ticks | Local + Index parameter |
-| Spore particles, rustle ambient (§3.6) | **Biomass** (BU) | linear | Index parameter |
-| Outgasser plume puff size (§3.8) | **Temperature** (global mean) | linear | Index parameter |
-| Thawling frills, settling (§3.8, style guide §6) | **Fauna pressure** and quiet-zone state (balance sheet §6) | state | Derived |
+| Visual (section) | Driving input | Data key | Axis | Kind | Smoothing |
+|---|---|---|---|---|---|
+| Sky zenith, horizon, night sky, sunset halo and band, fog color, fog start/end, sun aureole, star density, cloud height (§3.1) | **Pressure** (kPa) | `mars:pressure` | log10 | Index parameter | 30 s |
+| Storm overlay on sky, fog, sun; dust particles (§3.7) | **Storm strength** (0–1; capped by gameplay phase) | `mars:storm_strength` | linear | Signal (`hazards`) | 0 (server ramps) |
+| Aurora glow (§3.7) | **Solar spike strength** at the top of the air (not pressure; SME round 2 §2.8) | **New signal needed**, proposed `mars:solar_spike` (handoff: TL). Not `mars:surface_radiation`, which already includes pressure | linear | Signal | 0 |
+| Dosimeter click rate (§3.7, audio direction §6.2) | Radiation reaching the surface × local shielding | `mars:surface_radiation` × local shielding | linear | Signal + local | 0 |
+| Windsock angle, lift balloon height, barometer needle (§3.1, §3.9) | **Pressure** | `mars:pressure` | log10 | Index parameter | 30 s |
+| Exterior ambient beds (thin, mid, full) and exterior gain (§3.1; [audio direction](../audio/audio-direction.md) §3, §9) | **Pressure** | `mars:pressure` (`keyframes/ambient.json`) | log10 | Index parameter | 30 s |
+| Dawn frost cover, burn-off time, dome-glass frost, mast thermometer (§3.2, §3.9) | **Temperature**, global mean (°C) | `mars:temperature` | linear | Index parameter | 30 s |
+| Frost-free ring and heat shimmer particles near machines (§3.2) | **Local temperature** | `local_temperature` (client-computed from `mars:temperature` + day/night + `mars:chunk_heat`) | threshold | Derived (client) | — |
+| Ice state: boil away / day puddle / pool / rare sublimation (§3.3) | Local temperature vs. **boiling point** | **Server block changes**, not keyframes (rule uses `mars:boiling_point`) | rule table | Server | — |
+| Heavy and light vapor wisps (§3.3) | Local temperature vs. **boiling point at current pressure** | `local_temperature`, `mars:boiling_point` (synced) | threshold | Derived | — |
+| Water color, underwater fog, cloud coverage and color, rain, ground fog (§3.3) | **Hydrosphere** (% of surface) | `mars:hydrosphere` | linear | Index parameter | 30 s |
+| Flame size, flicker, fire spread (§3.4) | **O2 fraction** (%) and the pressure guard | `mars:o2_fraction` (0–100), `mars:pressure` | bands | Index parameter | — |
+| Helmet on/off, visor return, Air window dot (§3.4, style guide §9, §11) | **Breathable condition** | `mars:breathable_air` (parts: `mars:pressure`, `mars:o2_partial`, `mars:co2_partial`) | live check | Live condition | — |
+| Bubbles from algae vats and water plants (§3.4) | Machine / flora block output | Block entity field | linear | Local | — |
+| Weather-mast gas analyzer gauges (§3.5, §3.9) | **O2 and CO2 partial pressure** (kPa) | `mars:o2_partial`, `mars:co2_partial` | linear (O2), square root (CO2) | Derived | 30 s |
+| Carbonate deposits at scrubbers (§3.5) | Scrubber cumulative output | Block entity field | step | Local | — |
+| Ground conversion, flora color (§3.6) | Seeded flora nearby (block ticks), probability scaled by **biomass** | Blocks + `mars:biomass` | ticks | Local + Index | — |
+| Spore particles, rustle ambient (§3.6) | **Biomass** (BU) | `mars:biomass` | linear | Index parameter | 30 s |
+| Outgasser plume puff size (§3.8) | **Temperature** (global mean) | `mars:temperature` | linear | Index parameter | 30 s |
+| Thawling frills, settling (§3.8, style guide §6) | **Fauna pressure** and quiet-zone state | `mars:fauna_pressure` + block entities | state | Signal + local | — |
 
 ### 1.3 Interpolation rules for the client
 
@@ -75,13 +73,15 @@ Input names below are descriptive; the Technical Lead maps them to the real data
 | Outside the range | Clamp to the end keyframe |
 | Smoothing | The displayed value moves toward the live value with a time constant of **30 s real time**, so a gate or a debug command produces a visible 1–2 minute shift, never a snap |
 | Fog distances | Given as fractions of the player's render distance, so they work on low-end classroom settings; with a floor in blocks |
-| Performance | Values are looked up when the Index changes (at most once per second), not per frame (ARCHITECTURE.md §2.5). **No post-process shaders are required**; the optional heat shimmer has a particle fallback |
+| Performance | Values are looked up when the Index changes (at most once per second), not per frame (ARCHITECTURE.md §2.5). **No post-process shaders.** Heat shimmer ships as **particles only** (TL decision, ARCHITECTURE.md §2.5.4): it carries meaning, so it must look the same for every player |
 
-**Proposed data shape** (the Technical Lead owns the schema; this is only to show what the client needs):
+**Data shape** (schema owned by the Technical Lead, ARCHITECTURE.md §2.5.2; files live in `pack/assets/mars/keyframes/`: sky, fog, clouds, ambient, mast). `smoothing_s` is per file (30 s for Index parameters; **0 for signals** such as `mars:storm_strength`, which already ramp on the server). `overlay` is the storm layer (§3.7):
 
 ```json
 {
-  "input": "pressure_kpa", "axis": "log10", "space": "oklab",
+  "input": "mars:pressure", "axis": "log10", "space": "oklab", "smoothing_s": 30,
+  "overlay": { "input": "mars:storm_strength", "smoothing_s": 0, "mix": "toward",
+               "targets": { "sky_zenith": "#9A6A48", "sky_horizon": "#9A6A48", "fog": "#A8744E" }, "max_mix": 0.85 },
   "keys": [
     { "at": 0.6,  "sky_zenith": "#A87B5A", "sky_horizon": "#D2AE86", "fog": "#C49A73",
       "sunset_halo": "#7E9CC4", "sunset_band": "#8A6A55", "night": "#0D0B0E",
@@ -159,7 +159,7 @@ Keyframes at 0.6 (start), 5 (Phase 2 gate), 15, 30 (Phase 3 gate), **75 (equilib
 | Stars at night | Dense | Dense | Dense | Slightly fewer | Fewer (thicker air) |
 | Cloud base height | High (Y 220) | High | Y 200 | Y 190 | Y 180 |
 | Windsock angle (weather mast, in wind) | Hangs at 5° | 15° | 35° | 55° | 80° (near level) |
-| Sounding balloon (weather mast) | On the ground, slack | 2 blocks up | 4 | 6 | 8 blocks up, taut |
+| Lift balloon (weather mast) | On the ground, slack | 2 blocks up | 4 | 6 | 8 blocks up, taut |
 | Exterior sound gain (audio direction §3.2) **[SME]** | 0.25 | 0.40 | 0.60 | 0.75 | 1.00 |
 | Exterior low-pass cutoff (audio direction §3.2) **[SME]** | 1.5 kHz | 3 kHz | 5 kHz | 8 kHz | Off |
 
@@ -176,7 +176,7 @@ Keyframes at 0.6 (start), 5 (Phase 2 gate), 15, 30 (Phase 3 gate), **75 (equilib
 
 Where a step is weak (0.6 → 5 sunset halo; tritanopia at 0.6 → 5), the **windsock, balloon, fog distance, and sound** change at the same time, so the Phase 2 change never relies on color alone.
 
-**Physics note on the weather mast:** wind force on a windsock grows with air density, so in thin air a normal windsock barely lifts. The Phoenix lander's "telltale" was built extra-light so Mars wind could move it. Our windsock is a normal one; its rising with pressure is real physics, simplified **[SME]**.
+**Physics note on the weather mast:** wind force on a windsock grows with air density, so in thin air a normal windsock barely lifts. The Phoenix lander's "telltale" was built extra-light so Mars wind could move it. Our windsock is a normal one; its rising with pressure is real physics (SME round 2 §2.7: accurate; Mars air today is about 1.2 % of Earth's density, about 77 % at 75 kPa, calc). The **lift balloon** is an acceptable simplification: lift grows with air density; its height is really set by its line. Text: "Balloons float only when the air is thick enough to hold them up."
 
 **Monitor milestones** (DESIGN.md §2): the **Armstrong line (6.3 kPa)** and **Everest pressure (~33.7 kPa)** are not sky keyframes; they get a Monitor marker and a BELL log line. The sky passes them smoothly. Visual spec: style guide §11.
 
@@ -195,7 +195,7 @@ Keyframes at −60 (start), −40, −20 (Thaw gate), 0 (part of Phase 3 gate), 
 | Weather-mast thermometer (bulb column, of 12 px) | 1 px | 3 px | 5 px | 8 px | 9 px |
 
 - **Frost texture:** overlay with 1–2 px rime clusters, `#EEF2F4` highlight, `#C3CDD4` shade. Three densities (`frost_light`, `frost_medium`, `frost_heavy`).
-- **Heat around machines (local):** emitters, outgassers, and extractors melt frost in the chunks their heat reaches (the TL's per-chunk heat map; a 3-block soft edge is optional polish) and show **heat shimmer**. Shimmer is a post-process distortion if the TL can afford it; otherwise a particle fallback (faint rising 8×8 wavy particle, `#FFFFFF` at 12 % alpha). This also shows why thawlings come to machines.
+- **Heat around machines (local):** emitters, outgassers, and extractors melt frost in the chunks their heat reaches (the TL's per-chunk heat map; a 3-block soft edge is optional polish) and show **heat shimmer**. Shimmer is a **particle** (faint rising 8×8 wavy particle, 3 frames, `#FFFFFF` at 12 % alpha, 2–4 per second per running heat source). It is the only shipped version (TL decision); a shader may come later only as an extra on top. This also shows why thawlings come to machines.
 - **Falling temperature** (e.g. CO2 dropped before greenhouse gases could hold the heat) brings frost back: the same table, read downward.
 
 ### 3.3 Hydrosphere (% of surface covered by liquid water): water
@@ -233,14 +233,15 @@ Water color steps: ΔE 0.06, 0.06, 0.03 (normal); deuteranopia 0.05, 0.06, 0.04.
 
 **Input:** O2 fraction (%), bands. Breathability visuals use the derived breathable condition (O2 partial pressure, pressure, CO2 partial pressure).
 
-O2 has no sky color (§1.2). Keyframes by O2 fraction; the flame bands are **simplified** and need SME numbers. The SME review notes flammability depends mostly on O2 percentage, with total pressure mattering more below ~41 kPa. **[SME]**
+O2 has no sky color (§1.2). **Corrected per SME round 2 §2.4:** the first draft showed flames at 5–16 % O2, which would teach "fire burns in air with a third of Earth's oxygen". The bands are **game bands derived from sourced ignition limits** (about 14.1 % for rolled newspaper, 16 % for common plastics, 17.0 % for untreated wood, 23.5 % "oxygen-enriched" per OSHA; SME [S17], AR [9]); the band edges are rounded game choices.
 
-| O2 fraction | Flame look | Fire spread | Other cues |
+**Minimum-pressure guard:** no open flame below **20 kPa total pressure**, whatever the O2 fraction (same burning-is-harder-in-thin-air direction as AR [18]). **20 kPa is an invented balance number** (SME: no sourced value found; chosen below the Phase 3 gate so it never conflicts with the O2 rise in play). It stays out of journal text. Input: `mars:pressure`.
+
+| O2 fraction (and pressure ≥ 20 kPa) | Flame look | Fire spread | Other cues |
 |---|---|---|---|
-| < 5 % (start 0.1 %) | **No flame.** Using a fire item gives a 3-particle grey smoke puff (`#8C8480`) and a "fizz" sound | None | Dome uses LED lamps |
-| 5–12 % | **Struggling:** half-height flame, flickers at 2×, often goes out | None | — |
-| 12–16 % | Small steady flame (0.75 height) | Very slow | — |
-| 16–19 % | Normal flame | Slow | — |
+| < 14 % (start 0.1 %), **or pressure < 20 kPa** | **No flame.** Using a fire item gives igniter clicks and a 3-particle grey smoke puff (`#8C8480`) | None | Dome uses LED lamps |
+| 14–17 % | **Struggling:** half-height flame, flickers at 2 Hz (under the 3 Hz flash limit), often goes out | None | — |
+| 17–19 % | Small steady flame (0.75 height) | Very slow | — |
 | 19–23 % (fire-safety band) | Normal flame | Normal | — |
 | > 23 % (overshoot) | **Large:** flame 1.25× height, sparks (2 px `#FFD27A`) from hot machines and dry flora | Fast | HUD warning (triangle + word) and BELL failure reports (story beat 15) |
 
@@ -253,7 +254,7 @@ O2 has no sky color (§1.2). Keyframes by O2 fraction; the flame bands are **sim
 
 Start 0.57 kPa; it can rise in Phases 1–2 (outgassers, decay) and must end ≤ 0.5 kPa (DESIGN.md §1). No sky, fog, or water color is tied to CO2 (§1.2). Keyframes for the instrument and local cues:
 
-| CO2 partial pressure | Weather-mast CO2 tube (of 12 px) | Carbonate deposits at a running scrubber | Plant growth look |
+| CO2 partial pressure | Weather-mast CO2 gauge pointer (of 12 px scale; §3.9) | Carbonate deposits at a running scrubber | Plant growth look |
 |---|---|---|---|
 | 0.57 (start) | 1 px | — | — |
 | 5 | 4 px | — | — |
@@ -284,7 +285,7 @@ Keyframes at 0, 50 (first patch), 150 (first self-sustaining biome, balance shee
 
 ### 3.7 Dust storms and radiation spikes (events)
 
-**Input:** storm strength (0–1, derived weather state); radiation spike active × pressure.
+**Inputs:** `mars:storm_strength` (signal, 0–1); solar spike strength (proposed signal `mars:solar_spike`) for the aurora; `mars:surface_radiation` (already pressure-attenuated) for the dosimeter.
 
 Dust storms are not an Index value, but they drive the sky in Phase 1 and get weaker as pressure and biomass rise (DESIGN.md §3).
 
@@ -301,13 +302,13 @@ Dust storms are not an Index value, but they drive the sky in Phase 1 and get we
 
 **Maximum storm strength by stage:** Phase 1: 1.0 · Phase 2: 0.8 · Phase 3: 0.5 · equilibrium: 0.25 (light dust days). The Game Designer owns frequency; these caps keep the "storms die down" promise visible.
 
-**Radiation spikes:** HUD dosimeter clicks (sound + subtitle) and a trefoil icon with a slow pulse (1 per 2 s); at night, an optional faint aurora glow along the horizon, `#7FD8A0` at 15 % overlay **[SME: is this a fair image of Mars aurora?]**. Spikes weaken with pressure (DESIGN.md), so the glow and click rate scale down with the pressure keyframes (100 % at 0.6 kPa → 20 % at 75 kPa).
+**Radiation spikes:** HUD dosimeter clicks (sound + subtitle) and a trefoil icon with a slow pulse (1 per 2 s); at night, an optional faint **green aurora over the whole sky**: `#7FD8A0` overlay at up to 12 % across the sky, rising to 15 % toward the horizon, fading in and out over ≥ 2 s (no flashing). Real basis: Perseverance's visible green (557.7 nm oxygen) aurora during a March 2024 solar storm (Knutsen et al., 2025, *Science Advances* 11, eads1563; SME [S18]); diffuse aurora covers the sky fairly evenly (SME, detail not opened). **The aurora scales with solar spike strength only, not pressure** (SME round 2 §2.8: it glows tens of kilometers up; thicker air near the ground shields *you*, it doesn't switch off the aurora). What weakens with pressure is the **dose at the surface**: the dosimeter clicks follow `mars:surface_radiation`, which already includes the pressure attenuation (100 % at 0.6 kPa → 20 % at 75 kPa). So at equilibrium a strong spike still lights the sky, while the clicks stay slow: a good A4 contrast.
 
 ### 3.8 Machine and hazard cues (local, from the LGD handoff)
 
 | Cue | Look | Index link |
 |---|---|---|
-| **Regolith Outgasser plume** | A squat oven-like machine with a stack. Running: **white condensing vapor puffs** rise from the stack (water baked from soil freezes into a visible wisp in cold air), plus heat shimmer. The CO2 it releases is invisible, as in reality; the puff is the water. Puff size shrinks as temperature rises (warmer air, less condensation) **[SME]**. Worn: puffs irregular, status lamp triangle. Storm: puffs slower (power cut) | Pressure, temperature |
+| **Regolith Outgasser plume** | A squat oven-like machine with a stack. Running: **white condensing vapor puffs** rise from the stack (water baked from soil freezes into a visible wisp in cold air), plus heat shimmer. The CO2 it releases is invisible, as in reality; the puff is the water. Puff size shrinks as temperature rises (warmer air, less condensation; SME round 2 §2.5: accurate). Journal (MS, SME wording): "The white puff is water vapor freezing into tiny ice crystals, like your breath on a cold day. The CO2 coming out is invisible." Worn: puffs irregular, status lamp triangle. Storm: puffs slower (power cut) | Pressure, temperature |
 | **Ground-ice lenses (survey scan)** | When the player uses the survey scan, ice lenses under the ground show as **outlined translucent white blocks** with a diagonal-hatch pattern, through the terrain, for 10 s. Rock that is safe to build on shows a solid grey outline | Temperature, hydrosphere |
 | **Ground collapse warning** | Before collapse, surface blocks over a melting lens switch to `regolith_cracked` (dark crack lines in a polygon pattern, a common look for ground over ice) plus thin vapor or drip particles and a creaking sound. Then the ground **sinks one block** with dust puffs (optional camera shake, off by default) | Temperature |
 | **Insulation shroud** (shrouded machine) | A quilted, padded wrap over the machine (puffy squares, off-white `#D9D4C7` with grey seams), the stack fitted with a baffle. **No heat shimmer** and no frost-free ring around it. The status lamp stays visible through a cut-out. Thawlings that come near sniff, keep frills flat, and wander off | Fauna signature |
@@ -315,32 +316,34 @@ Dust storms are not an Index value, but they drive the sky in Phase 1 and get we
 | **Quiet zone** | Not a block the player has to read as "magic". A **marker post** (a survey stake with a round sign showing a sleeping-thawling pictogram), placed by the player to name the area, plus the natural look of land with **no machines**: frost undisturbed, thawling nests, grazing. On the Monitor map, quiet zones are hatched areas | Fauna, biomass |
 | **Thawling later life stage** | See style guide §6.2: larger, longer dome, tall frills, broad scraper plate. Still an animal: no teeth, no spikes, no glowing eyes | Hydrosphere gate |
 
-### 3.9 Weather mast (adopted prop: honest world cue for the gas mix)
+### 3.9 Weather mast (adopted prop: honest world cue for the instruments)
 
-**Status:** adopted by the user (2026-11-26). **Real or fantasy:** a real kind of instrument, simplified. Landers have carried weather masts (Viking's meteorology boom; Phoenix's wind "telltale"; **details unverified**). Goals: **A1, A5, B1, C3** (reading an instrument in the world, then checking the Monitor). It is the world-side partner of the Monitor: rough and glanceable, not precise. The Monitor's Air window (style guide §11.2) is the precise instrument.
+**Status:** adopted by the user (2026-11-26); SME round 2 §5: **plausible**, with the fixes applied below. **Real or fantasy:** real kinds of instrument, simplified. Real landers carried weather masts (Viking, Pathfinder, Phoenix's telltale, Curiosity's REMS, Perseverance's MEDA; SME, not opened). Goals: **A1, A5, B1, C3** (reading an instrument in the world, then checking the Monitor). It is the world-side partner of the Monitor: rough and glanceable, not precise. The Monitor's Air window (style guide §11.2) is the precise instrument.
 
-**Model:** 1 × 1 block footprint, mast 4 blocks tall, alloy ramp with safety-orange bands (style guide §2.2). Silhouette from 30 blocks: a thin pole, an arm with a cone at the top, a round balloon on a line. Readable by shape at a glance; numbers come from looking at it (look-at readout, below).
+**Model:** 1 × 1 block footprint, mast 4 blocks tall, alloy ramp with safety-orange bands (style guide §2.2). Silhouette from 30 blocks: a thin pole, an arm with a cone at the top, a round balloon on a line. Readable by shape at a glance; numbers come from the look-at readout (below).
 
-| Part | Where on the mast | Driving input | Axis | Keyframes / mapping | Real basis |
+| Part (real name on the label) | Where on the mast | Driving input (data key) | Axis | Keyframes / mapping | Science check |
 |---|---|---|---|---|---|
-| **Windsock** (cone on an arm) | Top, Y+4 | **Pressure** | log10 | Angle 5° / 15° / 35° / 55° / 80° at 0.6 / 5 / 15 / 30 / 75 kPa (§3.1). Sway ±5° at 0.3 Hz; during storms +10° (cap 85°) | Wind force grows with air density **[SME]** |
-| **Tethered sounding balloon** | Reel at the base; balloon floats above | **Pressure** | log10 | On the ground / 2 / 4 / 6 / 8 blocks up (§3.1); line slack below 5 kPa, taut at 75 | Buoyant lift grows with air density **[SME]** |
-| **Thermometer** (bulb column, 12 px) | Mast face, Y+1.5 (eye level) | **Temperature**, global mean | linear | 1 / 3 / 5 / 8 / 9 px at −60 / −40 / −20 / 0 / 5 °C (§3.2). Notch at 0 °C (water) | Real instrument |
-| **Gas analyzer: O2 column** (12 px) | Mast face, left of the thermometer | **O2 partial pressure** (kPa) | linear | px = clamp(round(12 × pp ÷ 24), 0, 12). Target notch at 16 kPa (8 px) | Real instruments measure gas mix; the column display is simplified |
-| **Gas analyzer: CO2 column** (12 px) | Mast face, right of the thermometer | **CO2 partial pressure** (kPa) | square root | px = clamp(round(2 × √pp), 1, 12) (matches §3.5: 0.57 → 1, 2 → 3, 5 → 4, 20 → 9). Target notch at 0.5 kPa | Same |
-| Flutter sound, tether creak | — | **Pressure** | log10 | Audio direction §3.2 (AU-A11, AU-A12) | — |
+| **Windsock** (cone on an arm) | Top, Y+4 | `mars:pressure` | log10 | Angle 5° / 15° / 35° / 55° / 80° at 0.6 / 5 / 15 / 30 / 75 kPa (§3.1). Sway ±5° at 0.3 Hz; storms +10° (cap 85°) | Accurate (SME §2.7) |
+| **Lift balloon** on a tether | Reel at the base; balloon above | `mars:pressure` | log10 | On the ground / 2 / 4 / 6 / 8 blocks up (§3.1); line slack below 5 kPa, taut at 75 | Acceptable simplification (SME §2.7) |
+| **Barometer** (dial, 8 × 8 px) | Mast face, Y+2 | `mars:pressure` | log10 | Needle sweeps 270° from 0.5 to 110 kPa, matching the Monitor gauge's log scale (style guide §11.1); notch at 75 kPa | Real instrument (REMS, MEDA pressure sensors). **Added** per SME's optional item: the most direct pressure instrument, strong A1 cue |
+| **Spirit thermometer** (12 px column) | Mast face, Y+1.5 | `mars:temperature` | linear | **Red spirit column `#B8322A`** in a clear tube `#D9DEE2` on a dark plate: 1 / 3 / 5 / 8 / 9 px at −60 / −40 / −20 / 0 / 5 °C (§3.2). Notch at 0 °C | **Not mercury:** mercury freezes at −38.8 °C (SME §5), so it couldn't read Mars. Alcohol thermometers are red-dyed; the red is the real dye, not a "hot" color code |
+| **Gas analyzer** (two gauges: O2 and CO2) | Box on the mast face, Y+1 | `mars:o2_partial`, `mars:co2_partial` | O2 linear; CO2 square root | Two **indicator gauges**: a vertical tick scale (12 px) with a moving **pointer** (`#E8E3D8` triangle on a `#2A3036` plate), target notch on each. O2: pointer px = clamp(round(12 × pp ÷ 24), 0, 12), notch at 16 kPa. CO2: px = clamp(round(2 × √pp), 1, 12) (matches §3.5), notch at 0.5 kPa | Acceptable as a gauge (SME §5). **Never tubes of tinted gas**: both gases are invisible (§1.2) |
+| *(optional, Stage 5)* Radiation sensor | Small dome on the arm | `mars:surface_radiation` | linear | Status lamp blinks at most 1 Hz during spikes | Real analogs (RAD, MEDA); pairs with the dosimeter (A4) |
+| Flutter sound, tether creak | — | `mars:pressure` | log10 | Audio direction §3.2 (AU-A11, AU-A12) | — |
 
-**Rules for the gas columns (we don't paint invisible gases, §1.2):**
-- Both columns use the **same neutral fill** `#E8E3D8` in a dark tube `#2A3036`. Never blue for O2 or brown for CO2.
-- Identity is by **shape and position**: the O2 ring icon above the left column, the CO2 molecule icon above the right (asset U-01, HUD variant), the thermometer bulb in the middle.
-- A tooltip line and the journal say: "The columns are an instrument's display. Both gases are invisible."
-- The O2 breathable window (16–17.25 kPa at 75 kPa) is under one pixel on the column. **That's fine:** the mast shows direction and rough size; the Monitor's Air window shows the window.
+**Gas analyzer rules (we don't paint invisible gases, §1.2):**
+- Identity by **shape, position, and label**: the O2 ring icon above the left gauge, the CO2 molecule icon above the right (U-01, HUD variant). Pointers and plates are the same neutral colors for both gases.
+- The look-at readout says: "Gas analyzer. Both gases are invisible; this shows how much of each there is."
+- The breathable O2 window (16–17.25 kPa at 75 kPa) is under one pixel here. **That's fine:** the mast shows direction and rough size; the Monitor's Air window shows the window.
 
-**Look-at readout** (asset U-29): when the crosshair is on the mast within 8 blocks, a small HUD card (on a backing strip, style guide §4.4a) lists the real instrument names and values in the monospace number face (§4.8): "Windsock", "Pressure 3.1 kPa"; "Thermometer −58 °C"; "Gas analyzer O2 0.004 kPa · CO2 0.62 kPa". Units always shown; true minus sign (U+2212).
+**When is the gas analyzer fitted? (ill-structured, small; Technical Lead raised it.)** The Monitor hides planet O2 and CO2 until Phase 3 (progressive disclosure, DESIGN.md), but a gas analyzer on the mast from sol 1 would show them early. My view (art and cognitive load lens): **fit the gas analyzer at the Phase 3 gate** (it arrives as Hana's last crate or a craftable mast upgrade), so the world and the Monitor reveal the same values at the same time, and the player gets a visible "new instrument" moment when O2 and CO2 start to matter. Cost: Phase 1–2 lose a world cue for CO2 rising from Outgassers (the Monitor's "read more" still has it). Alternative: fit it from the start and accept that the mast shows more than the Monitor. **Default in this spec: fitted at Phase 3**, pending the Lead Game Designer and Lead Instructional Designer (report handoff). Before Phase 3 the mounting plate is plain alloy, with no empty gauge or "locked" mark (PROCESS.md §4).
+
+**Look-at readout** (asset U-29): when the crosshair is on the mast within 8 blocks, a small HUD card on a ≥ 90 % backing strip (style guide §4.4a) lists real instrument names and values, numbers in Cairn Mono (style guide §4.8): "Barometer 3.1 kPa", "Thermometer −58 °C", "Windsock: light wind", and from Phase 3 "Gas analyzer O2 16.2 kPa · CO2 0.48 kPa". Units always; true minus sign (U+2212).
 
 **Placement:** one mast is part of the Cairn Dome structure, visible from a dome window, so a Phase 1 player can read it without going outside. Players can craft more for outposts (recipe: Lead Game Designer).
 
-**Regression:** every part reads the live value, so the windsock droops and the balloon sinks if pressure falls (§5).
+**Regression:** every part reads the live value, so the windsock droops, the balloon sinks, and the barometer falls if pressure falls (§5).
 
 ---
 
@@ -366,7 +369,7 @@ Tan sky `#A87B5A` → `#D2AE86` horizon; far, warm haze; small sun with a wide d
 Index barely moves (a machine-state gate). The visible change is **inside**: lamps stop flickering and go steady, all status lamps show solid squares, the dish is repaired (state swap), the relay icon appears on the Monitor. First Regolith Outgasser puffs appear outside.
 
 ### 4.3 Phase 2 begins (5 kPa) — "The sky shifts"
-The sky has slid from tan to **rose-tan** (`#A0736C`), haze a little closer, windsock lifts to 15°, balloon off the ground, exterior sounds slightly louder. Frost unchanged (temperature still −60). Ice near heaters still gives **flash puddles** only at the low end; from 5 kPa, the ice-to-water rule allows water to stay if it is warm enough, but it isn't warm yet. The 30 s smoothing makes the shift happen over about two minutes after the gate; story beat 7 plays as it does.
+The sky has slid from tan to **rose-tan** (`#A0736C`), haze a little closer, windsock lifts to 15°, balloon off the ground, exterior sounds slightly louder. Frost unchanged (temperature still −60). Ice right next to heaters still gives **flash puddles** (local temperature above the boiling point, now about 33 °C at 5 kPa); a little farther from the heat, warmed ice can now leave a puddle that lasts while it stays warm, but most ground is still far below 0 °C. The barometer needle passes the Phase 2 notch. The 30 s smoothing makes the shift happen over about two minutes after the gate; story beat 7 plays as it does.
 
 ### 4.4 Thaw (−20 °C, ~22 kPa) — "Wonder, then unease"
 Sky **mauve-lavender** (between 15 and 30 kPa keys), fog noticeably closer. Frost only on 35 % of the ground and gone by mid-morning. **Day puddles that freeze at night** around warm machines; ice-crack sounds. Heat shimmer at emitters. Thawling **tracks** in the dust near machines, then the first juveniles with frills fanned toward the heat. Fridge B's padlock hangs open.
@@ -406,11 +409,12 @@ Gates stay unlocked (lock-in), but the look always tells the truth about the pla
 
 | Item | Who | Type |
 |---|---|---|
-| Tan → rose → lavender → blue sky path; equilibrium blue at 1.9× Earth's air column (§2.2, §2.3) | SME | Well-structured (check) |
+| ~~Sky path; air column~~ Done (SME round 2): path accepted, label required (§2.3), "about 2×", paler equilibrium blue adopted | SME | Closed |
 | Replace estimated start colors with pixel samples from calibrated rover images | SME + Lead Artist | Well-structured |
-| Flame bands by O2 fraction (§3.4) | SME | Well-structured |
-| Outgasser vapor-puff explanation; wisp rate vs. pressure; carbonate deposits; windsock physics; aurora glow | SME | Well-structured |
-| Map the input names in §1.2a to real data keys; confirm storm strength is exposed as a derived value | Technical Lead | Well-structured |
+| ~~Flame bands~~ Done (SME round 2): corrected (§3.4); 20 kPa guard is invented, needs a sourced value if one exists | SME | Open for a source only |
+| ~~Outgasser puff, wisps, carbonate, windsock, aurora~~ Done (SME round 2): accurate or corrected here | SME | Closed |
+| ~~Data keys~~ Done (ARCHITECTURE.md §2.5.2). **New:** publish a solar-spike signal for the aurora (not pressure-attenuated) | Technical Lead | Well-structured |
 | Weather mast: **adopted** (user, 2026-11-26). Add it to DESIGN.md (Index section or hazards) and the fantasy audit as "real instrument, simplified"; place one in the Cairn Dome structure | Lead Game Designer | Well-structured |
 | Pressure-driven sound claim and values (§3.1 sound rows, audio direction §3) | SME | Well-structured (check) |
-| Cloud coverage changes need a custom cloud renderer | Technical Lead (cost) | Well-structured |
+| ~~Clouds~~ Decided (TL, option A): one 256×256 greyscale density map, delivered as a generated concept (asset E-10) | — | Closed |
+| Weather mast gas analyzer: fitted from the start, or at the Phase 3 gate (§3.9) | Lead Game Designer, Lead Instructional Designer (Lead Artist view given) | Ill-structured (small) |

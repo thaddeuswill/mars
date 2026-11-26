@@ -3,6 +3,8 @@
 **Owner:** Lead Artist (audio) · **Status:** Draft 1 (2026-11-26) · **Stability:** fluid; updated whenever DESIGN.md, the story bible, or the asset list adds content.
 **Direction:** [audio-direction.md](audio-direction.md) (section numbers below, "§", point there unless stated). **Replaces** the audio rows AU-01 to AU-12 in [asset-list.md](../art/asset-list.md) §9 (mapping at the end).
 
+**SME round 2 applied** (flame bands, boiling-point puddles, surface radiation, sound claim accurate). Machine names follow DESIGN.md's in-house machine list.
+
 **Original sounds only.** Every sound here is made by the team (recorded or synthesized). No sample libraries, nothing copied or resampled from vanilla Minecraft, other mods, or other games (§1.5). Vanilla actions keep their vanilla sounds and are not listed.
 
 ## Status key
@@ -28,9 +30,10 @@
 
 | ID | Sound | Event | Kind | Driving input | Subtitle | Visual twin | Goals / purpose | Stage | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| AU-A01 | Exterior wind, thin (< 5 kPa) | `ambient.exterior.wind_thin` | Loop, stereo bed, Ext | **Pressure** (log10), band < 5 kPa | Faint, thin wind | Sky color, fog distance, windsock hanging | A1, B1 | **2** | Spec'd (§3.2) **[SME]** |
-| AU-A02 | Exterior wind, muffled (5–30 kPa) | `ambient.exterior.wind_muffled` | Loop, stereo bed, Ext | Pressure, band 5–30 kPa | Muffled wind | Same, rose to lavender sky, windsock rising | A1, B1 | 3 | Spec'd **[SME]** |
-| AU-A03 | Exterior wind, full (≥ 30 kPa) | `ambient.exterior.wind_full` | Loop, stereo bed, Ext | Pressure, band ≥ 30 kPa | Wind | Blue sky, windsock near level | A1, B1 | 4 | Spec'd **[SME]** |
+| AU-A01 | Exterior wind, thin (< 5 kPa), pre-filtered 1.5 kHz | `ambient.exterior.wind_thin` | Loop, stereo bed, Ext | **Pressure** (log10), band < 5 kPa | Faint, thin wind | Sky color, fog distance, windsock hanging | A1, B1 | **2** | Spec'd (§3.2), SME ✓ |
+| AU-A02 | Exterior wind, mid (5–30 kPa), pre-filtered 5 kHz | `ambient.exterior.wind_mid` | Loop, stereo bed, Ext | Pressure, band 5–30 kPa | Muffled wind | Same, rose to lavender sky, windsock rising | A1, B1 | 3 | Spec'd, SME ✓ |
+| AU-A03 | Exterior wind, full (≥ 30 kPa), unfiltered | `ambient.exterior.wind_full` | Loop, stereo bed, Ext | Pressure, band ≥ 30 kPa | Wind | Blue sky, windsock near level | A1, B1 | 4 | Spec'd, SME ✓ |
+| AU-A14 | Exterior wind, full, heard through the helmet (pre-filtered 6 kHz) | `ambient.exterior.wind_full_helmet` | Loop, stereo bed, Ext | Pressure ≥ 30 kPa **and** helmet on; crossfades to AU-A03 at helmet-off | Wind, through helmet | Visor frame on screen | A5, A1 (helmet-off moment) | 4 | Spec'd (§3.5, §4) |
 | AU-A04 | Dome hum (wavering, steady) | `interior.dome_hum` | Loop ×2 states, Int | **Life support state** (Dome stable gate) | Dome hum wavers / Dome systems hum | Lamp flicker vs. steady lamps; status lamps | C1, C2 | 3 | Spec'd (§8.1) |
 | AU-A05 | Lamp buzz (before Dome stable) | `interior.lamp_buzz` | Loop, Int | Life support state | Lamps buzz | Lamp flicker | C2 | 3 | Spec'd |
 | AU-A06 | Ice cracks near warm machines | `terrain.ice_crack` | One-shot ×4, Ext | **Local temperature** (heat map) + global temperature | Ice cracks | Frost-free ring, ice block states | A2, B1 | 4 | Spec'd (§3.6) |
@@ -50,17 +53,17 @@
 | AU-W02 | Storm airborne hiss | `weather.storm.hiss` | Loop, Ext | Storm strength × pressure filter | Dust storm hisses | Storm fog and sky | C1, B2 | 3 | Spec'd |
 | AU-W03 | Storm on dome glass | `weather.storm.glass` | Loop, Int (from outside) | Storm strength | Dust taps on glass | Fog through glass | C1 | 3 | Spec'd |
 | AU-W04 | Power drop | `interior.power_drop` | One-shot, Int | Solar output below demand | Power drops | Lamp flicker, Monitor power row, dusty panel texture | C1 | 3 | Spec'd |
-| AU-W05 | Dosimeter clicks (slow) | `suit.dosimeter.click` | One-shot ×3, Suit, rate-driven | **Dose rate** = spike × pressure scale × shielding | Dosimeter clicking | HUD trefoil pulse + dose number | A4 | 3 | Spec'd (§6.2) |
+| AU-W05 | Dosimeter clicks (slow) | `suit.dosimeter.click` | One-shot ×3, Suit, rate-driven | **Dose rate** = `mars:surface_radiation` (already pressure-attenuated) × local shielding | Dosimeter clicking | HUD trefoil pulse + dose number | A4 | 3 | Spec'd (§6.2) |
 | AU-W06 | Dosimeter clicks (fast) | `suit.dosimeter.click_fast` | Same files, separate event for subtitle | Dose rate ≥ 0.4 | Dosimeter clicking fast | Same | A4 | 3 | Spec'd |
 | AU-W07 | Dosimeter background ticks | `suit.dosimeter.background` | One-shot, Suit | Pressure < 5 kPa, outside, fading to 0 at 30 kPa | Dosimeter ticks | Dose number | A4 | 3 | Spec'd **[SME]** |
 | AU-W08 | Ground creak (collapse warning) | `terrain.ground.creak` | One-shot ×3, Con | Ground-ice lens melt state (local) | Ground creaks | `regolith_cracked` texture, drip particles | B5, C2 | 4 | Spec'd (§8.4) |
 | AU-W09 | Ground collapse | `terrain.ground.collapse` | One-shot ×2, Con + Ext | Collapse event | Ground collapses | Ground sinks, dust puffs | B5, C2 | 4 | Spec'd |
-| AU-W10 | Flash puddle boils away | `water.puddle_boil` | One-shot 2–4 s, Ext | Pressure 0.61–5 kPa + local temp > 0 °C | Puddle boils away | Boiling puddle (4 frames), dense wisps | A2 | 3 | Spec'd |
+| AU-W10 | Flash puddle boils away | `water.puddle_boil` | One-shot 2–4 s, Ext | Local temp at or above the boiling point at current pressure (`mars:boiling_point`) | Puddle boils away | Boiling puddle (4 frames), dense wisps | A2 | 3 | Spec'd |
 | AU-W11 | Puddle freezes at dusk | `water.puddle_freeze` | One-shot ×2, Ext | Local temperature crossing 0 °C | Puddle freezes | Frozen puddle texture | A2 | 4 | Spec'd |
-| AU-W12 | Sublimating ice | — | **No sound (honest silence)** | — | — | Shrinking ice, vapor wisps | A2 | 3 | Spec'd (none) |
-| AU-W13 | Igniter fails to light | `fire.igniter_fail` | One-shot ×2, Con | **O2 fraction** < 5 % | Igniter fails to light | Grey smoke puff, no flame | A5 | 3 | Spec'd (§8.3) |
-| AU-W14 | Flame sputters | `fire.sputter` | Loop, Ext | O2 5–12 % | Flame sputters | Half-height flickering flame | A5 | 4 | Spec'd |
-| AU-W15 | Fire crackles | `fire.crackle` | Loop, Ext | O2 12–23 % | Fire crackles | Normal flame | A5 | 4 | Spec'd |
+| AU-W12 | Sublimating ice (rare: below the triple point, about the first sol) | — | **No sound (honest silence)** | — | — | Shrinking ice, vapor wisps | A2 | 3 | Spec'd (none) |
+| AU-W13 | Igniter fails to light | `fire.igniter_fail` | One-shot ×2, Con | **O2 fraction** < 14 %, or pressure < 20 kPa (invented guard) | Igniter fails to light | Grey smoke puff, no flame | A5 | 3 | Spec'd (§8.3) |
+| AU-W14 | Flame sputters | `fire.sputter` | Loop, Ext | O2 14–17 % | Flame sputters | Half-height flickering flame | A5 | 4 | Spec'd |
+| AU-W15 | Fire crackles | `fire.crackle` | Loop, Ext | O2 17–23 % | Fire crackles | Normal flame | A5 | 4 | Spec'd |
 | AU-W16 | Fire spreads fast, sparks | `fire.spread` | One-shot ×3, Ext | O2 > 23 % | Fire spreads fast | Large flame, sparks, HUD warning | A5, B4 | 4 | Spec'd |
 | AU-W17 | Aurora | — | **No sound (honest silence)** | — | — | Faint glow | A4 | 3 | Spec'd (none) |
 
@@ -111,17 +114,17 @@ Each "set" = start, running loop, worn, failed (wind-down), repaired, unless not
 
 | ID | Sound | Event (prefix) | Kind | Driving input | Subtitle (main) | Visual twin | Goals / purpose | Stage | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| AU-M01 | **Regolith Outgasser** drone + set | `machine.outgasser.*` | Set, Ext | Machine state; pressure filter | Outgasser drones | Status lamp, plume | B1, C3 | 3 | Spec'd (§8.2). **Placeholder wanted for Stage 2** |
+| AU-M01 | **Regolith Outgasser** drone (`run_thin` pre-filtered 1.5 kHz, `run_full`) + set | `machine.outgasser.*` | Set, Ext | Machine state; drone variants crossfaded by pressure | Outgasser drones | Status lamp, plume | B1, C3 | 3 | Spec'd (§8.2). **Placeholder wanted for Stage 2** |
 | AU-M02 | Outgasser chuff (synced to puffs) | `machine.outgasser.chuff` | One-shot ×4, Ext | **Puff rate and size** (visual; size from temperature) | Outgasser chuffs | Vapor puffs | B1 | 3 | Spec'd |
 | AU-M03 | Outgasser contact thump | `machine.outgasser.thump` | One-shot ×2, Con | Player within 3 blocks | Outgasser thumps | Plume, lamp | A1 (audible even in thin air) | 3 | Spec'd |
-| AU-M04 | O2 generator set + filter whine | `machine.o2_generator.*` | Set + whine loop, Int | Machine state; **filter wear** (whine pitch) | Filter whines | Worn lamp, Monitor O2 row | C2, C1 | 3 | Spec'd |
-| AU-M05 | Water recycler set | `machine.water_recycler.*` | Set, Int | Machine state | Pump gurgles | Status lamp | C1 | 3 | Spec'd |
+| AU-M04 | Electrolysis O2 generator set + filter whine | `machine.o2_generator.*` | Set + whine loop, Int | Machine state; **filter wear** (whine pitch) | Filter whines | Worn lamp, Monitor O2 row | C2, C1 | 3 | Spec'd |
+| AU-M05 | Water reclaimer set | `machine.water_reclaimer.*` | Set, Int | Machine state | Pump gurgles | Status lamp | C1 | 3 | Spec'd |
 | AU-M06 | Regolith Oven set | `machine.regolith_oven.*` | Set, Int | Machine state | Oven ticks | Status lamp | C1 | 3 | Needed |
 | AU-M07 | Battery hum | `machine.battery.hum` | Loop, Int | Charging/discharging | Battery hums | Charge bar | Mood | 3 | Needed |
 | AU-M08 | Dust-off station jets | `machine.dust_off.blast` | One-shot ×2, Int | Player uses station | Air jets blast dust | Dust particles off suit; exposure icon clears | C1, C2 (perchlorate) | 3 | Spec'd |
 | AU-M09 | Atmospheric processor set | `machine.atmo_processor.*` | Set, Ext | Machine state | Processor thumps | Status lamp | B1, B4 | 4 | Needed |
 | AU-M10 | Super-greenhouse emitter set (vent hiss, no puff) | `machine.emitter.*` | Set, Ext | Machine state | Emitter vents hiss | Heat shimmer, vent glow | A3 | 4 | Spec'd |
-| AU-M11 | Deep-crust extractor set (drill thump) | `machine.extractor.*` | Set, Ext | Machine state | Drill thumps | Status lamp | A2 | 4 | Needed |
+| AU-M11 | Ice extractor (deep-crust water extractor) set (drill thump) | `machine.extractor.*` | Set, Ext | Machine state | Drill thumps | Status lamp | A2 | 4 | Needed |
 | AU-M12 | Algae vat bubbling | `machine.algae_vat.*` | Set, rate-driven, Int/Ext | **Vat output** | Algae vat bubbles | Bubble particles | A5 | 4 | Spec'd |
 | AU-M13 | Carbon scrubber set + carbonate crumble | `machine.scrubber.*` | Set, Ext | Machine state; scrubber output | Scrubber whirs | Carbonate deposit grows | A5 | 4 | Needed |
 | AU-M14 | Meltwater treatment set | `machine.meltwater_treatment.*` | Set, Int | Machine state | Filter pump runs | Status lamp | C2, A2 | 4 | Needed |
@@ -177,7 +180,7 @@ All in the **neutral** category. No roars, growls, screeches, or screams.
 
 | Group | Rows | Spec'd | Needed | Blocked | Cut-list | Placeholder | Final |
 |---|---|---|---|---|---|---|---|
-| Ambience (A) | 13 | 13 | 0 | 0 | 0 | 0 | 0 |
+| Ambience (A) | 14 | 14 | 0 | 0 | 0 | 0 | 0 |
 | Weather, hazards, terrain (W) | 17 | 17 | 0 | 0 | 0 | 0 | 0 |
 | Suit and player (S) | 8 | 7 | 1 | 0 | 0 | 0 | 0 |
 | Alarms (L) | 3 | 3 | 0 | 0 | 0 | 0 | 0 |
@@ -186,7 +189,7 @@ All in the **neutral** category. No roars, growls, screeches, or screams.
 | Fauna (F) | 13 | 13 | 0 | 0 | 0 | 0 | 0 |
 | Ending (E) | 3 | 3 | 0 | 0 | 0 | 0 | 0 |
 | Music and voice (X) | 4 | 0 | 0 | 3 | 1 | 0 | 0 |
-| **Total** | **98** | **83** | **9** | **3** | **3** | **0** | **0** |
+| **Total** | **99** | **84** | **9** | **3** | **3** | **0** | **0** |
 
 Rows AU-W12 and AU-W17 are deliberate silences (no file). AU-M16 and AU-E03 make no new file. Several rows are sets (variants, machine states).
 

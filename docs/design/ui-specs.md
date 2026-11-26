@@ -25,7 +25,7 @@ Follows TEAM.md 8.6 as decided (option I-C: LEARNING.md §4.6 rules 1–11 as th
 | **Blocking warning** | Only life-threatening firsts: first O2 critical, first breach, first solar-event exposure outside | Yes | No (safety) |
 
 - **"Card"** in the message files means a side-panel card, never a modal window.
-- **Gate reached:** the world changes and the side panel shows "Phase 2 reached" with what unlocked. No modal. If the player is at a natural pause, the Keeper's Report sheet opens with a "Later" button; otherwise "Report ready to send" waits in the side panel. An unsent report is re-offered **at most once per session** plus the "Since last shift" recap line (flow guard 1).
+- **Gate reached:** the world changes and the side panel shows "Phase 2 reached" with what unlocked. No modal. **Keeper's Report (confirms the Producer's fix for the PROCESS.md vs. I-C rule 3 conflict):** one log line ("Keeper's Report ready to send") plus a side-panel entry. The report opens full screen **only when the player chooses it, or at the next natural pause** (with a "Later" button). It never opens over danger or building, so it is never a modal pop-up for progress. An unsent report is re-offered **at most once per session** plus the "Since last shift" recap line (flow guard 1).
 - **Sequence at a gate:** report → Mensah's reply (after its delay) → Shift Briefing. One item visible at a time; together they count as one pop-up.
 - **Forecasts:** shown in the side panel at the next natural pause; result first in the queue; deferred forecasts lock as "expired", never wrong. No new forecast or report pop-up in the last ~5 minutes of a class (teacher end-of-session signal).
 - **Caps are config values** (`ui.popupMinMinutes` ≈ 10, `ui.logLinesPerMinute` ≈ 3), set from Stage 3 action-log counts (flow guard 2).
@@ -170,7 +170,7 @@ Minimal, vanilla-style. Left: suit O2 (bubble icon + bar + number), suit power. 
 
 | Proposal | Decision | Spec |
 |---|---|---|
-| **Weather mast** (windsock, balloon, thermometer, gas tubes) | **Accept** (user adopted). | One stands outside the dome from the start (Landing step 7 passes it). Craftable after Dome stable for outposts (cheap: iron, glass, cloth). Shows the planet's values as world cues; it is not required for any gate. Goals: A1, A5, C3. Added to DESIGN.md fantasy audit as a real instrument, simplified (windsock physics **[SME]**) |
+| **Weather mast** | **Accept** (user adopted), with the SME's instrument fixes. | Instruments: windsock, lift balloon, red spirit thermometer (not mercury), dial barometer (kPa), and **O2 and CO2 gauges** (indicator bars, never tinted tubes). One stands outside the dome from the start (Landing step 7 passes it); craftable after Dome stable for outposts. **The gas gauges are fitted at Phase 3 begins** (BELL: "Gas gauges fitted to the weather mast"), matching the Monitor's progressive disclosure, so a Phase 1 player isn't shown a value the Monitor hides (Technical Lead's flag; my recommendation, lower cognitive load). The empty gauge brackets are visible from the start. Not required for any gate. Goals: A1, A4, A5, C3. *Needs the Artist's and ID's agreement (handoff)* |
 | **Quiet-zone marker post** | **Accept, with a rule change.** | The quiet zone is defined by the rule (no active machine within 48 blocks; balance sheet §6), not by the marker. Placing a marker **names** the zone, draws its 48-block ring on the Monitor fauna map, and warns ("Machine inside quiet zone") if a machine is switched on inside the ring. A zone works without a marker; the marker makes it visible and plannable (C3, B2, D1) |
 | **Thawling defensive behavior** (rear up, frills flared, short shove, curl and roll away; no lunge; no gore) | **Accept.** | Numbers added to the balance sheet §6 (draft): juveniles shove with knockback only, 0 damage; later-life-stage adults shove for 1 damage (half a heart) plus knockback, once, then flee. They never chase. This keeps "they only fight back if attacked" true and keeps lethal defense a choice with no reward beyond protecting a machine |
 | **Air window** | **Accept**, zone labels changed (§5) | — |
@@ -182,6 +182,8 @@ The content lists the Artist asked for (crops, biome types, maintenance parts, b
 ---
 
 ## 8. Journal
+
+**Keeper's Report sheet.** Play summary (built from data), own forecast tally, one reflection question, a text box, **Send** and **Later**. Beside every free-text box, in both bands (`report.name_note`): *"Don't write your name or anyone else's. Your report goes to Earth with your Keeper number only."* In classroom mode the note adds (`report.name_note.class`): *"Your teacher can read this."* (LEARNING.md §5.4; reflections.csv scrubbing is the Technical Lead's backstop.)
 
 Tabs: **Shift notes** (gate entries, Hana's notes, briefings) · **Messages** (archive, unread marked with a dot and a count) · **Forecasts** (own tally per phase: "Phase 1: 3 of 4 right") · **What caused it?** (self-check page; final name of the old "Explain it") · **Keeper's Record** (header "What the colonists will need to know"; own-evidence pages and the "Cairn team" section).
 

@@ -5,6 +5,7 @@
 Numbers and curves for the Planetary Index, pacing, holds, fauna, and group play. Nothing here has been playtested. Each table says what it assumes so the prototype can prove it wrong.
 
 **Rules this sheet follows**
+- **Every number is tagged** (SME round 2, value audit): *sourced* (from `docs/science/`), *calc* (arithmetic on sourced values), or *invented* (a game balance number, with its reasoning). Untagged numbers in this sheet are invented balance numbers.
 - **Physical thresholds never scale.** Triple point, 5 kPa, 30 kPa, 0 °C, −20 °C, the breathability condition, and the equilibrium band are the same in every mode and group size. Classroom mode and group size change **rates** and **hold times** only (SME accuracy review, finding 3; consistency review M-02).
 - **Time unit: the sol.** One sol = one in-game day = 20 real minutes of *simulation time*. Simulation time stops when the world is paused (definition owned by the Technical Lead, M-05). Standard: 3 sols per real hour.
 
@@ -45,9 +46,11 @@ So the real target is **O2 21.5–23 % at ≥ 75 kPa**. The window is narrow on 
 |---|---|---|---|---|
 | Regolith Oven (2 in the starting dome) | Start | +0.01 kPa each | Low | Water for the dome (bound water baked out of soil) |
 | **Regolith Outgasser** | **Dome stable** | +0.10 kPa each | Medium (solar or battery) | Nothing else: a pure terraforming machine, the player's first |
-| Polar frost loss (sink) | Always | −2 % of (pressure − 0.6) per sol while temperature < −40 °C; −1 % from −40 to −20 °C; 0 above −20 °C | — | A balancing loop (B2): the thicker the air, the more freezes out at the poles **[SME to verify direction and wording]** |
+| Polar frost (reversible reservoir) | Always | Takes −2 % of (pressure − 0.6) per sol below −40 °C; −1 % from −40 to −20 °C. Above −20 °C: returns what it took at +0.5 kPa/sol until empty, then up to **0.5 kPa** more from buried polar CO2 | — | *Invented* rates and thresholds; direction *sourced* (more CO2 raises the frost point; seasonal caps hold ~25–30 % of the air, SME round 2 [S3]); 0.5 kPa buried CO2 *calc* from [S4]. Balancing when cold, reinforcing when warm (B2) |
 
-Dust storms cut solar output by 60 % (Outgassers slow). Unmaintained Outgassers lose output (mechanical wear).
+Dust storms cut solar output by 60 % × storm cap (*invented* balance number; real storms vary, and the 2018 storm ended Opportunity's mission). Outgassers slow.
+
+**Storm caps scale gameplay and look (decided, answers the Technical Lead).** The storm cap (Phase 1: 1.0, Phase 2: 0.8, Phase 3: 0.5, Equilibrium: 0.25; Artist's values, ARCHITECTURE.md §2.5) multiplies the solar cut and the dust wear as well as the visuals, so "storms weaken as the air thickens" is true in the mechanics (B2). At cap 0.25 a storm cuts solar by 15 %. *Invented.* Revisit if late storms stop mattering as drift events (then raise the Phase 3 floor). Unmaintained Outgassers lose output (mechanical wear).
 
 **Standard solo curve** (assumed build order: first Outgasser at Dome stable on sol 9, then 2 by sol 11, 3 by sol 13, 4 by sol 16; one 2-sol storm on sols 14–15):
 
@@ -70,11 +73,36 @@ These set the machine sizes. Each phase's machines must reach these averages wit
 |---|---|---|---|---|
 | 1 | 24 | 0.6 → 5 kPa | −60 °C (flat) | +0.18 kPa/sol |
 | 2 | 54 | 5 → 30 kPa | −60 → 0 °C | +0.46 kPa/sol; +1.1 °C/sol |
-| 3 | 42 | 30 → 75 kPa | 0 → 5 °C | +1.1 kPa/sol (first 25 sols), then hold |
+| 3 | 42 | 30 → 75 kPa | 0 → 5 °C | +1.8 kPa/sol (first 25 sols), then hold *(was +1.1: arithmetic error, 45 kPa ÷ 25 sols = 1.8; found by the threshold-vs-curve check)* |
 
 Phase 3's pressure jump got larger when the target moved from 60 to 75 kPa (+15 kPa, user decision). Phase 3 machines must be sized for it; watch this in the prototype as a grind risk.
 
 ---
+
+## 3a. Phase 2 and 3 curves (standard, solo; draft)
+
+Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per hour.
+
+**Phase 2** (54 sols)
+| Sol of Phase 2 | 0 | 6 | 12 | 18 | 24 | 30 | 36 | 42 | 48 | 54 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Pressure (kPa) | 5.0 | 6.4 | 8.5 | 11.2 | 14.3 | 17.8 | 21.6 | 24.9 | 27.3 | **30.0** |
+| Temperature (°C) | −60 | −56 | −50 | −42 | −35 | −27 | **−20** | −13 | −6 | **0** |
+| Hydrosphere (%) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 12 | 16 |
+| Events | Phase 2; F5 | Armstrong line (6.3) | | Frost slows (−40 °C) | | | **Thaw**; F4b; polar release starts (+0.5 kPa/sol bump) | **Hydrosphere** (~sol 46); F6 | Ground collapse risk peaks | **Phase 3** |
+| Real hours | 8.3 | 10.3 | 12.3 | 14.3 | 16.3 | 18.3 | 20.3 | 22.3 | 24.3 | 26.3 |
+
+**Phase 3** (42 sols)
+| Sol of Phase 3 | 0 | 5 | 10 | 15 | 20 | 25 | 28 | 35 | 42 |
+|---|---|---|---|---|---|---|---|---|---|
+| Pressure (kPa) | 30 | 39 | 48 | 57 | 66 | **75** | 75 | 76 | 76 |
+| Temperature (°C) | 0 | 1 | 2 | 3 | 4 | 5 | 5 | 5 | 5 |
+| O2 fraction (%) | 0.5 | 3 | 8 | 13 | 18 | 21.5 | 22 | 22 (drift ±) | 22 |
+| Biomass (BU) | 0 | 100 | 300 | 600 | 900 | 1,200 | 1,500 | 1,700 | 1,800 |
+| Events | Phase 3; F8 | Everest (33.7) passed | | | O2 window opens (69.6 kPa) | Breathable conditions met | Holds start (all in band) | **Breathable** (7 sols) | **Equilibrium** (14 sols) → beacon |
+| Real hours | 26.3 | 28.0 | 29.6 | 31.3 | 33.0 | 34.6 | 35.6 | 38.0 | 40.3 |
+
+CO2 is left out of the Phase 3 table until the CO2 budget (§8) is settled. The flow channel check against these curves is in DESIGN.md (Flow and Task Design).
 
 ## 4. Holds: what players do (M-16)
 
@@ -96,8 +124,10 @@ Phase 3's pressure jump got larger when the target moved from 60 to 75 kPa (+15 
 | Flora bloom | A biome grows fast | O2 +0.6 %/sol → fire band | Prune, add CO2 source, slow vats | A5, B4 |
 | Fauna grazing | Settled thawlings graze a patch | Biomass −5 %; O2 output dips | Move or widen the quiet zone, reseed | B2, D1 |
 | Emitter wear | One emitter fails | Temperature −1 °C/sol | Repair (failure report names it) | C2 |
-| Polar winter | Seasonal frost | Pressure −1.5 kPa over 2 sols | Run processors harder; accept a small dip | B2, A1 |
+| Polar winter | Seasonal frost (game-sized: the real seasonal swing is ~25–30 % of the air, which the game deliberately doesn't model) | Pressure −1.5 kPa over 2 sols | Run processors harder; accept a small dip | B2, A1 |
 | Decay pulse | Old biomass dies back | CO2 +0.1 kPa/sol | Reseed; keep the biome young-to-mature mix | A5 |
+
+All drift-event sizes above are *invented* balance numbers.
 
 **Also available during holds:** building beacon components (recipes unlock at Breathable; final assembly at Equilibrium), settling quiet zones, visiting Basu's sites, and expanding biomes for margin. Nobody should wait with nothing to do.
 
@@ -191,7 +221,7 @@ No ranking, no score, no "good" or "bad" label (story bible rule 7).
 |---|---|
 | Established flora block | 1 BU; takes up CO2 and releases O2 while growing |
 | Young patch (first 3 sols) | Full uptake |
-| Mature patch | Uptake falls to 30 %: growth and decay nearly balance (real ecosystems near maturity are close to carbon-neutral **[SME to verify wording]**) |
+| Mature patch | Uptake falls to 30 % (*invented*). Wording (SME round 2 §1.6): "As a biome matures, the CO2 its plants take in and the CO2 released by decay get closer to balanced. A young, growing biome pulls CO2 down much faster. (Some old forests and peat bogs still store carbon slowly.)" Never say mature ecosystems stop storing carbon |
 | Decay | Dead flora returns CO2 (SME optional item, adopted) |
 | Self-sustaining biome | A seeded patch of ≥ 150 BU that survives 3 sols without a seed kit |
 | Equilibrium biomass | ≥ 1,500 BU |
@@ -204,9 +234,11 @@ Lesson the numbers build: planting more raises O2 quickly at first, then only a 
 
 | Item | Waiting on |
 |---|---|
-| Polar frost loss direction and rate | SME |
+| ~~Polar frost direction~~ | Done (SME round 2): reversible reservoir above |
+| Ice–albedo: total capped at **2 °C** (*invented*, generous upper bound on the SME's ~0.4–1 °C estimate) | Decided; spread over melting from the Thaw on |
+| Puddle evaporation time in the 0.611–5 kPa band | Invented; set in the Stage 2 prototype (start: 0.05 sol) |
+| **Phase 3 CO2 budget:** what processors and Outgassers add (CO2 vs. untracked filler gas), so CO2 can fall from its Phase 2 level to ≤ 0.5 kPa | **Open, important.** If most added gas is CO2, Phase 3 must remove tens of kPa. Needs a composition rule (Lead Game Designer) checked by the SME before the Phase 3 curve is final |
 | Ice-to-water rule thresholds (DESIGN.md §2) | SME confirmation of the draft rule |
-| Ice–albedo feedback size | SME |
 | The 35 % group throughput assumption; the build/wait split | Prototype action log |
 | Fauna cap | Technical Lead (performance) |
 | Orbital mirror uplink (new route: warming with no ground signature): cost, build time, °C/sol | Stage 2 prototype; SME for framing (DESIGN.md, Route choices) |

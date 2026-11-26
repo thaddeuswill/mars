@@ -28,11 +28,14 @@ Feasibility of each check is the Technical Lead's call; rules they can't automat
 Trigger: any change to gate data (`data/mars/gates/`), Index contribution or physics data (ice-to-water rule, breathable condition, fire band, polar frost, storm effects, radiation weakening), or the balance-sheet values those read.
 
 1. Run CR-F1 to CR-F5 on **every** forecast (F1–F10, FI-1 to FI-4), in standard and classroom presets, group sizes 1 and 5.
-2. Diff each forecast's simulated outcome against the last passing run, and print every forecast whose outcome **changed**, even if it still matches the key (a drift the designers should see).
-3. Re-run the HS "why" follow-ups' `outcome_check` where one exists.
-4. Re-check story beats that state a physical fact against the same gate data (TEAM.md Learning Log: a story beat once contradicted the physics).
-5. Re-check Keeper's Record triggers that point at a forecast id (a renamed or split forecast must not orphan a page).
-6. If any forecast fails: the build is red, and a handoff goes to the Lead Instructional Designer (content) and the SME (science), never a silent key change.
+2. **Threshold vs. curve** (SME round-2 lesson): for every physical threshold a forecast or story beat rests on (triple point, 5 kPa, boiling point at current pressure, −20 °C, 23 % O2), find the sol when the solver's balance curve first passes it. If a forecast's regime exists for less than ~2 sols of play, or the curve passes the threshold before the forecast can be issued, the check fails and prints the threshold, the sol it was passed, and the forecasts resting on it. (This is what broke F4a twice.)
+3. Diff each forecast's simulated outcome against the last passing run, and print every forecast whose outcome **changed**, even if it still matches the key (a drift the designers should see).
+4. Re-run the HS "why" follow-ups' `outcome_check` where one exists.
+5. Re-check story beats that state a physical fact against the same gate data (TEAM.md Learning Log: a story beat once contradicted the physics).
+6. Re-check Keeper's Record triggers that point at a forecast id (a renamed or split forecast must not orphan a page).
+7. If any forecast fails: the build is red, and a handoff goes to the Lead Instructional Designer (content) and the SME (science), never a silent key change.
+
+**Last manual run:** round 2, 2026-11-26, results in `prompts-and-reflections.md` §1.2.
 
 ## 2. Hint and clue rules
 

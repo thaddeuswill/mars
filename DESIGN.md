@@ -46,7 +46,7 @@ One server-wide state object drives all progression (settled: one Index per worl
 | Parameter | Start | Equilibrium | Raised by | Effects as it rises |
 |---|---|---|---|---|
 | Pressure (kPa) | 0.6 | ≥ 75 | Regolith Outgassers (Phase 1), atmospheric processors (Phase 2+) | Fewer suit leaks, thicker sky fog, liquid water possible (with warmth) |
-| Temperature (°C, global mean) | −60 | ≥ 5 | Super-greenhouse gas emitters, orbital mirrors, ice–albedo feedback | Ice can melt (with pressure), fewer cold-damage zones |
+| Temperature (°C, global mean) | −60 | ≥ 5 | Super-greenhouse gas emitters, orbital mirrors, ice–albedo feedback (small, capped ~2 °C) | Ice can melt (with pressure), fewer cold-damage zones |
 | Hydrosphere (% of surface covered by liquid water) | 0 | ≥ 30 | Deep-crust extractors, ice-comet impacts, melting ground ice | Surface water, rain, wakes fauna |
 | O2 fraction (%) | 0.1 | 19–23 (fire-safety band) | Algae vats, seeded biomes | Fire possible; above 23 %, fire hazard |
 | CO2 (partial pressure, kPa) | 0.57 | ≤ 0.5 | Raised by outgassers and decay; lowered by biomes and carbon scrubbers | Must fall while temperature holds (balancing act) |
@@ -78,26 +78,50 @@ Gates are world-state conditions, not quest checkboxes. Recipes, structures, and
 - **Monitor milestones (not gates):** the **Armstrong line** at 6.3 kPa ("water in your body would no longer boil; you still need a pressure suit") and **Everest pressure** at about 33.7 kPa. They unlock nothing; they give the climb visible landmarks (SME optional item, adopted).
 - **Holds overlap.** Breathable sits inside the equilibrium band, so both holds run at once. A hold counter pauses when a value leaves the band and resets only if it stays out for more than 1 sol. Details and drift events: balance sheet §4.
 
-**Ice-to-water rule (draft from SME review B1; SME to confirm the game thresholds).** Each ice block checks the **local** temperature (global mean plus day/night and nearby machine heat) and the global pressure.
+**Ice-to-water rule (SME round 2, §1.1: boiling-point version).** Each ice block compares its **local** temperature (global mean plus day/night and nearby machine heat) with 0 °C and with the **boiling point of water at the current pressure** (the derived value the Monitor already shows).
 
-| Pressure | Local temperature | What warmed ice does |
-|---|---|---|
-| < 0.61 kPa (below the triple point) | Any | Shrinks and turns straight to vapor. No water. |
-| 0.61 – 5 kPa | > 0 °C | Melts into a water block that boils or evaporates away within seconds |
-| ≥ 5 kPa | > 0 °C | Melts into water that stays while the local temperature stays above 0 °C |
-| Any | ≤ 0 °C | Stays ice |
+| Pressure | Local temperature | What warmed ice does | Player sees |
+|---|---|---|---|
+| < 0.611 kPa (below the triple point) | > 0 °C | Sublimates; no liquid | Ice shrinks, wisps, dry ground |
+| ≥ 0.611 kPa | ≥ boiling point at this pressure | Melts and **boils away at once** | Flash puddle, hard steaming |
+| 0.611 – 5 kPa | 0 °C up to the boiling point | Melts into a puddle that **evaporates quickly** and refreezes when it cools. Evaporation time is an **invented balance number** (balance sheet §8) | Short-lived puddle, light wisps |
+| ≥ 5 kPa | 0 °C up to the boiling point | Water stays | Puddle, then pools |
+| Any | ≤ 0 °C | Stays ice (simplified: real exposed ice slowly sublimates in dry air; HS read more) | Ice |
 
-So Phase 1 players see ice vanish into vapor near a heater, early Phase 2 players see short-lived puddles, and water only pools for good once pressure *and* temperature are high enough (A2). The gate keeps the name **Thaw** because it is when ground ice near machines starts to melt and the fauna stir; its journal entry says that melting needs both warmth and pressure.
+Boiling points (SME calc): 0.7 kPa → 2 °C, 1 → 7, 2 → 18, 3 → 24, 4 → 29, 5 → 33 °C. **5 kPa is a game line**, not a physical constant: the journal says "high enough that water no longer boils away at everyday temperatures".
+
+**What players see.** Pressure passes the triple point at about sol 1 (balance sheet §2), so in Phase 1 a heater (far hotter than the 2–30 °C boiling point) makes ice **melt and boil off at once, leaving no water**: the A2 lesson "in thin air, water boils at a low temperature", explained on the spot by the Monitor's boiling-point line. Ice warmed only a little gives a brief puddle. Pure sublimation shows only in the first sol (and in "set phase" or debug worlds). From 5 kPa, water pools where it is warm, and at the Thaw (about 22 kPa, boiling point about 62 °C) puddles last by day and refreeze at night. Forecast F4a now triggers below 5 kPa and its correct choice ("disappear into vapor, leaving no water") is true for both sublimation and instant boiling ([messages/phase-1.md](docs/design/messages/phase-1.md)). The gate keeps the name **Thaw** because it is when ground ice near machines starts to melt and the fauna stir; its journal entry says that melting needs both warmth and pressure.
+
+**Threshold-vs-curve check (re-run 2026-11-26, SME lesson: a threshold the curve passes in the first sol hides that regime and any forecast built on it).** Each physics threshold against the balance sheet's standard curves (balance sheet §2–3):
+
+| Threshold | Value | Reached at (standard) | Regime visible for | Forecast or beat that depends on it | Result |
+|---|---|---|---|---|---|
+| Triple point | 0.611 kPa | ~sol 1 | < 1 sol | F4a (old trigger) | **Hidden regime.** Fixed: F4a triggers below 5 kPa; boiling-point rule |
+| Boiling point vs. heater | 2–33 °C below 5 kPa | Whole Phase 1 | ~24 sols | F4a, Phase 1 journal | OK |
+| Phase 2 gate | 5 kPa | ~sol 25 | — | F7 now fires at ≥ 5 kPa | OK |
+| Armstrong line | 6.3 kPa | ~3 sols into Phase 2 | — | Beat 7a (optional) | OK |
+| Polar frost bands | −40 / −20 °C | ~18 and ~36 sols into Phase 2 | ~18 sols each | Polar winter drift event; Monitor cause line | OK |
+| Thaw | −20 °C | ~36 sols into Phase 2 (pressure ~22 kPa) | — | F4b, beat 9 | OK: F4b's "water stays" is true at 22 kPa |
+| Hydrosphere | 10 % | after Thaw | — | F6, beat 12 | OK |
+| Phase 3 gate | 30 kPa and 0 °C | ~sol 54 of Phase 2 | — | Report 2, SB3 | OK |
+| Everest pressure | 33.7 kPa | ~2 sols into Phase 3 | — | Monitor milestone | OK |
+| Breathable window opens | 69.6 kPa (16 ÷ 0.23) | ~22 sols into Phase 3 | ~3 sols before 75 kPa | Air window states (ui-specs §5) | OK, short: the "not thick enough yet" state is brief |
+| Breathable pressure | 75 kPa | ~25 sols into Phase 3 | rest of Phase 3 | F9, beat 17 | OK |
+| Fire band | 23 % O2 | Phase 3, player-driven | — | F9 (fires on entering the window, before 23 %) | OK |
+| Ice–albedo cap | 2 °C total | Spread over Phase 2 melting | — | Monitor cause line | OK (small by design) |
+The check also found an arithmetic error in the balance sheet §3 (Phase 3 needs +1.8 kPa/sol for 25 sols, not +1.1); fixed there. Re-run this table whenever a gate, physics rule, or curve changes.
 
 Progress is shown in the world itself: sky tint, fog density, the storm table, and block ticks (ice → vapor or water, regolith → soil near seeded flora). A diegetic **Planetary Monitor** block shows the numbers, trends, causes, and milestones.
 
 ### 3. Hazard Systems
 
 - **Oxygen and pressure:** suit O2 drains outside sealed volumes. Dome breaches vent the atmosphere. Sealing works by checking enclosed volumes.
-- **Dust storms:** a weather event that reduces visibility, cuts solar output, and wears exposed machines. Storms come less often as pressure and biomass rise. No damaging wind force (Mars's thin air can't do that).
+- **Dust storms:** a weather event that reduces visibility, cuts solar output, and wears exposed machines. Storms come less often as pressure and biomass rise, and a per-phase **storm cap** weakens both their look and their gameplay effects (solar cut, wear): 1.0 / 0.8 / 0.5 / 0.25 (balance sheet §2, invented). No damaging wind force (Mars's thin air can't do that).
+- **Weather mast (adopted, user decision).** An instrument mast outside the dome (and buildable at outposts): windsock, lift balloon, spirit thermometer, dial barometer, and O2/CO2 gauges fitted at Phase 3. It shows the planet's values in the world, so pressure and invisible gases have an honest world cue (A1, A4, A5, C3). Spec: [ui-specs.md](docs/design/ui-specs.md) §7; art: keyframes §3.
 - **Radiation spikes:** periodic solar events. Exposure on the surface builds a radiation effect, and shielding blocks and depth protect against it. Spikes weaken as the atmosphere thickens.
 - **Mechanical wear:** life-support machines lose durability and need maintenance parts. This keeps the early game tense and gives scrap a use.
-- **Polar frost (sink):** some of the added air freezes out at the poles while the planet is cold, so pressure leaks back a little each sol. It stops above −20 °C. A balancing loop the Monitor names as a cause (B2). **[SME to verify wording]**
+- **Polar frost (reversible reservoir; SME round 2 §1.2):** every Mars winter about a quarter of the air freezes onto the poles as dry ice (real), and the thicker the air, the more can freeze out. In the game, below −40 °C the poles take air back from the player (a **balancing** loop, B2); above −20 °C they give back what they took **plus up to about 0.5 kPa from buried polar CO2 ice** (SME calc from [S4]), so warming the poles releases gas that thickens the air (a **reinforcing** loop on the way up). Monitor cause line: "Polar frost: some CO2 freezes onto the poles as dry ice" / "Polar release: warm poles give CO2 back". The −40/−20 °C lines and the rates are **invented balance numbers**; whether a warmer Mars would still lose air to its poles is uncertain (HS read more says so).
+- **Ice–albedo (decided: SME options a + b combined).** When bright ice melts, darker ground absorbs more sunlight. Real but **small on Mars** (SME estimate about 1 °C or less), so its total contribution is **capped at about 2 °C** (invented balance number, a generous upper bound). Journal: "On Mars this is small, because there isn't much ice. On Earth's Arctic it's huge." The surprising speed-up the fun matrix wanted now comes from the real polar CO2 release above, not from an exaggerated albedo effect. Goals: B2, A3, D2 (the Arctic link).
 - **Perchlorate (real).** Mars soil holds toxic perchlorate salts. *Phase 1:* dust tracked in through an airlock without a dust-off station builds a mild "perchlorate exposure" effect and clogs filters. *Phase 2 (Hydrosphere):* meltwater picks up dissolved perchlorate and must be treated before the dome can use it. *Phase 3:* soil must be treated before seed kits take. Hazard, not grind: one machine or block answers each stage.
 - **Ground collapse (real effect).** After the Thaw, buried ground ice under or near warm machines can melt or sublimate, and the ground above sinks. A survey scan shows ice lenses; building on rock or on piles avoids it. Earth link: thawing permafrost damages buildings and roads today (D2).
 - **Ecosystem blowback (fauna):** see "The fauna: decision" under Fantasy and Authenticity. Fauna pressure scales with active terraforming machines, so how hard you push terraforming sets the difficulty.
@@ -174,7 +198,8 @@ Fantasy can pull players in, keep them playing, and help learning (better retent
 | Radiation spikes | Real | — | Shielding decisions (A4) | Low | Keep |
 | Regolith Outgasser | Based on real physics (heating soil releases bound gas and water), size exaggerated | First lever on the planet | Seeing cause and effect on the Monitor (B1, C3) | Medium: "Mars has enough gas in its soil to thicken the air". Real Mars doesn't (Jakosky & Edwards 2018, in SME review). | Keep; journal note: "Real soil and ice don't hold enough gas for this. The game exaggerates it." |
 | Atmospheric processors, super-greenhouse emitters, orbital mirrors, ice-comet impacts | Based on real proposals, simplified | Engineering interventions | Choosing and balancing interventions (B4) | Medium: implies these are proven technologies | Keep; journal labels them as proposed ideas; emitters say they make factory-made greenhouse gases, not CO2 |
-| Polar frost loss | Real (seasonal CO2 frost), simplified | Balancing loop | Reading a sink on the Monitor (B2) | Low | Keep, pending SME wording |
+| Polar frost and polar release | Real (seasonal CO2 frost; buried polar CO2 ice), simplified (one-way winters, invented thresholds) | Balancing loop when cold, reinforcing when warm | Reading sinks and sources on the Monitor (B2) | Low with the HS note that the warm-Mars behavior is uncertain | Keep (SME round 2 wording) |
+| Ice–albedo feedback | Real, size capped at ~2 °C (invented cap above the SME estimate) | Reinforcing loop; Earth Arctic link | Monitor cause line (B2, D2) | Low: journal says it is small on Mars | Keep |
 | Perchlorate dust and meltwater | Real | — | Airlock procedure, water treatment (C1, C2) | Low | Keep |
 | Ground collapse from melting ground ice | Real on Earth (permafrost); plausible on a warming Mars **[SME to verify the Mars framing]** | Unintended consequence | Surveying and building on rock (C2, B5) | Low | Keep |
 | Terraforming in ~40 hours | Fantasy (timescale) | Compresses centuries into play | Cause and effect visible in play (B1) | Medium: "terraforming is quick" | Keep; journal states real timescales (warming ~100 years; oxygen up to ~100,000 years) |
@@ -182,7 +207,7 @@ Fantasy can pull players in, keep them playing, and help learning (better retent
 | **Dormant subterranean fauna (thawlings)** | **Fantasy**, grounded in real speculation (option B, decided) | Ecosystem response and unintended consequences (B5, D1, B2) | **Yes:** their numbers follow the player's machine signature; non-lethal answers (shrouds, lures, quiet zones) are systems choices; fighting treats the symptom only | Medium, reduced by labeling: "there are animals on Mars". No life has been found on Mars. | **Keep, decided.** Journal labels them every time; Hydrosphere stage is a **later life stage**, never a "mutation" |
 | Engineered flora and biome seeding | Plausible future technology | Photosynthesis and the carbon cycle (A5) | Balancing O2 and CO2 (B4) | Low-medium | Keep; based on real plant and algae biology |
 | Colonization beacon and ships | Fiction (story frame) | Motivation: a clear end goal | — (motivational) | Low | Keep |
-| Weather mast (windsock, balloon, thermometer, gas tubes) | Real instruments, simplified (windsock rises with air density **[SME]**; gas tubes stand in for a gas analyzer) | Honest in-world cue for invisible gases (A1, A5) | Reading an instrument (C3) | Low: shows O2/CO2 as readings, never as sky color | Keep (user adopted) |
+| Weather mast | Real lander weather masts (Viking, Pathfinder, Phoenix telltale, Curiosity REMS, Perseverance MEDA), simplified. Instruments (SME round 2 §5): windsock (Phoenix telltale; accurate), **lift balloon** (no lander analog; acceptable), **red spirit thermometer** or dial (mercury freezes at −38.8 °C, unverified value), **dial barometer** in kPa (added: most direct A1 cue), O2 and CO2 **gauges or indicator bars**, never tinted tubes, optional radiation/UV sensor (A4) | Honest in-world cue for invisible gases and pressure (A1, A5, A4) | Reading an instrument (C3) | Low: readings, never colored gas | Keep (user adopted) |
 | Training Hall lobby (class servers) | Fiction, set on Earth before the story | Waiting area; no learning job | — | None | Keep (story bible §3.6) |
 | Player on a planned solo watch (backstory) | Fiction | Motivation and urgency | — (motivational) | Low | Keep (backstory approved); story bible passes the rules above |
 | Fauna ending cards | Fiction (outcome of the fauna fiction) | Consequences of the player's choices (D1) | Reflecting on what they did (D1) | Low: no ranking, no moral grade | Keep |
@@ -281,12 +306,12 @@ Design judgment only; nothing here is playtested yet. Re-place after each playte
 |---|---|---|---|---|
 | Regolith Outgasser (first planet lever) | High: first visible change to the planet | High: B1, C3 | Core | Adopt |
 | Armstrong line and Everest pressure milestones (SME optional) | High: memorable landmarks | High: A1 | Core | Adopt (Monitor milestones, not gates) |
-| Ice-to-water rule (vapor → brief puddles → pools) | High: discovery | High: A2 | Core | Adopt, SME to confirm thresholds |
+| Ice-to-water rule (boils away → brief puddles → pools) | High: discovery | High: A2 | Core | Adopt (SME round 2 boiling-point version) |
 | Breathable by O2 partial pressure | Medium: a harder, richer target | High: A1, A5, B4 | Core if the Monitor shows O2 partial pressure clearly; Redesign if players can't read it | Adopt; watch in playtest |
 | Drift events during holds | High: active tension | High: B4, C2, C3 | Core | Adopt |
 | Beacon components buildable during holds | Medium-high | Low | Moderation | Adopt (cuts idle time) |
-| Polar frost loss (sink) | Medium | High: B2 | Core-adjacent | Adopt, pending SME |
-| Ice–albedo feedback (SME optional) | Medium: a surprising speed-up | High: B2 | Core | Adopt as a Monitor cause line, size pending SME |
+| Polar frost and release (reversible) | Medium-high: a visible pressure bump when the poles warm | High: B2 (both loop types) | Core | Adopt (SME optional improvement) |
+| Ice–albedo feedback (SME optional) | Low-medium: small on Mars | High: B2, D2 (Arctic contrast) | Core-adjacent | Adopt, capped ~2 °C; the speed-up comes from polar release instead |
 | CO2 from decay (SME optional) | Medium: makes biomes living, not static | High: A5 | Core | Adopt |
 | Carbon reservoirs page on the Monitor (SME optional) | Low unless it answers "where did my CO2 go?" | High: A5, B2 | Redesign | Adopt as a simple flow view on the Monitor's Phase 3 page, opened from the CO2 line, not a separate screen |
 | Perchlorate dust, meltwater, soil | Medium (risk of chore) | Medium-high: A1, C1, C2, D2 | Redesign | Adopt with one block per stage; cut stages that test as chores |
@@ -327,7 +352,7 @@ Verbal and visual information use separate channels (Baddeley & Hitch, 1974; May
 | Pair words with visuals | Journal "what happened" pages pair a small diagram or Monitor graph with ≤ 60 words. No text-only science pages. | 🟡 | Lead Instructional Designer, Lead Artist |
 | Put text next to what it explains | Monitor labels and cause lines sit on the graph itself, not in a separate journal page. | 🟡 | Lead Artist |
 | Narration for explanations | Recorded messages are text-first (decided). Research favors narration, so **revisit after the Stage 3 playtest**: voice BELL's key explanations, with transcripts kept for accessibility. | 🟡 Revisit | Producer (scope), Lead Game Designer |
-| Sound builds context; use it sparingly | **Pressure-driven ambient sound:** at 0.6 kPa outside sounds are faint and thin; as the atmosphere thickens they become fuller. That's real physics (sound carries better in denser air) and an audio cue for pressure. Alarms only for life-threatening events. | ⬜ Gap | Lead Artist (audio), SME (check) |
+| Sound builds context; use it sparingly | **Pressure-driven ambient sound:** thin air carries sound poorly: sounds are quieter and high pitches fade fast. As the air thickens, sound gets louder and fuller (SME round 2 §4: accurate; Perseverance recordings, about 20 dB weaker than Earth). Our gain values are a milder, stylized version. Alarms only for life-threatening events. | 🟡 SME-checked; audio spec with Lead Artist | Lead Artist (audio) |
 | A cohesive style beats high-end graphics | Minecraft's low-resolution style is an asset (the book cites it). Our blocks, machines, and UI share one palette and style. Create's art is All Rights Reserved, so any visual matching uses our own original textures. | 🟡 | Lead Artist |
 | Self-referential, first-person point of view | First-person play; every message addresses the player directly as "you, Keeper" (Moreno & Mayer, 2004). | ✅ | — |
 
@@ -405,7 +430,7 @@ From *Design and Development of Training Games*, Chapter 6 (Csikszentmihalyi; Ro
 |---|---|---|---|
 | **Clear tasks** | Gates are world conditions; the next-gate display states the target and progress; Shift Briefings name the job | "Raise pressure" alone has no end. Fixed by the next-gate bar ("Pressure 5 kPa, 62 %, ~4 sols"). "Hold the balance" is unclear until the hold counter and Air window are on screen: both shown from Phase 3 | ✅ Spec'd (ui-specs §3, §5) |
 | **Clear, immediate feedback** | World responds at once (sky, ice, frost, fire); Monitor trend arrows and cause lines; forecast results first in queue | Pressure changes are slow: a new machine moves the number only a little in a sol. The machine's "Effect on planet" line and the cause line confirm it immediately | ✅ |
-| **Concentration (few distractions)** | Interruption rules (TEAM.md 8.6); one message at a time; no modal pop-ups for progress; HUD hidden over full-screen sheets | Message bursts at gates (report, briefing, journal entry, crew message). Fixed: one sequence in the side panel, one item visible at a time | 🟡 Consensus pending (rules) |
+| **Concentration (few distractions)** | Interruption rules (TEAM.md 8.6); one message at a time; no modal pop-ups for progress; HUD hidden over full-screen sheets | Message bursts at gates (report, briefing, journal entry, crew message). Fixed: one sequence in the side panel, one item visible at a time | ✅ Decided (I-C); caps tuned from Stage 3 logs |
 | **Attainable, balanced goal** | Gates sized by the balance sheet; holds pause before they reset | The narrow O2 window (21.5–23 % at 75 kPa) may feel unattainable at MS age. Air window shows it widening with pressure; LEARNING.md §4.7 playtest check | 🟡 Playtest |
 
 | Flow characteristic | Our design |
@@ -562,6 +587,16 @@ Prototype the Index simulation before building content: first as a **paper or sp
 | A forecast can be issued, deferred, locked, and resolved | Action log shows all four states |
 | The next-gate bar gives a clear end | Tester can say how close the next gate is without opening the docs |
 
+### Stage 2a paper prototypes (before any code)
+| Prototype | Form | What it tests | Goals |
+|---|---|---|---|
+| Index model | Spreadsheet of balance sheet §2–4 (rates, frost reservoir, holds, drift events) | Curves hit the pacing targets; every bend has a cause; threshold-vs-curve table | A1, A2, B1, B2 |
+| Monitor and next-gate bar | Paper or slide mock at 1280×720, straw-man boxes | A reader can name the next goal and the top cause in 10 seconds | B1, C3 |
+| Forecast flow | Index cards: issue → defer → lock → resolve, with a timer standing in for sols | Lock rules never reveal the answer early; expiry feels fair | B3 |
+| Air window | Paper slider for pressure and O2 | Lens A can say why the window widens | A5, B4 |
+| Landing checklist | Paper walkthrough with a new-to-modpacks tester (or Lens A role-play) | Steps are clear; time under 25 minutes | C1 |
+| First dust storm | Storyboard of the experience below | Warning → forecast → storm → recovery reads as one experience | C1, B3 |
+
 ### First experience to design in detail: the first dust storm
 Experience design works on one experience at a time so game, instruction, and art can agree on it. **First pick: the first dust storm in Phase 1** (story beat 4, F1, C1, B3). It touches every layer (world cue, warning, forecast, power loss, recovery, Hana's tip) at small scale, sits in the Stage 3 vertical slice, and is the first real test of "pressure, not grind". Detail spec to write next (handoff to the Lead Artist and Lead Instructional Designer for a joint pass).
 
@@ -655,7 +690,7 @@ With 3 players, Data merges into Atmosphere and Biology into Life Support. With 
 
 ### Coordination
 - **Shared Planetary Monitor** in the dome: the group's common picture.
-- **Shift Board:** claim a failure, mark it fixed. Credit for fixing goes to the claimer's log (anonymous ID) for C2 evidence.
+- **Shift Board:** claim a failure, mark it fixed. Credit for fixing goes to the claimer's log (pseudonymous ID on the server; anonymous in every export) for C2 evidence.
 - **Forecasts are individual** even when the group acts together, so each player's B3 evidence is their own.
 - **Absent players:** their post is covered by anyone; BELL's "Since last shift" recap catches them up. The planet's rates use the configured group size, not who is online, so an absence doesn't change the planet.
 - **No player-versus-player damage** by default.
@@ -664,6 +699,22 @@ With 3 players, Data merges into Atmosphere and Biology into Life Support. With 
 - Fauna pressure comes from machine signatures, so a group that builds twice the machines gets about twice the raids: about the same pressure **per player** as solo. A planet cap keeps mob counts playable (balance sheet §6).
 - Group rate scale: `1 / (1 + 0.35 × (n − 1))` for a configured group size n (balance sheet §5). With 4 players, each machine adds about half as much, so the planet moves at about solo speed while the building goes faster.
 - Classroom pacing is tuned for a group of 4. Groups of 3 or 5 work without retuning (about ±0.5 h over the unit).
+
+## Content Inventory by Phase
+
+What each phase contains, for scope and for checking that no phase overloads (cognitive load) or runs out of new patterns (boredom).
+
+| | Phase 1 | Phase 2 | Phase 3 |
+|---|---|---|---|
+| Gates | Dome stable, Phase 2 begins | Thaw, Hydrosphere, Phase 3 begins | Breathable, Equilibrium |
+| New machines (in-house) | Regolith Oven, solar panel, battery, O2 generator, water reclaimer, dust-off station, Regolith Outgasser, weather mast | Atmospheric processor, super-greenhouse emitter, orbital mirror uplink, ice extractor, deep-crust extractor, meltwater treatment, transit tubes, insulation shroud, lure station, quiet-zone marker | Algae vat (from Hydrosphere), carbon scrubber, soil treatment, 4 biome seed kits, beacon components |
+| Hazards | Seal breach, wear, dust storms, solar events, perchlorate dust | Fauna (stirring, later life stage), ground collapse, salty meltwater, polar frost | Drift events (6 types), O2 overshoot fire, decay pulses |
+| Forecasts | F1, F2, F3, F4a | F4b, F5, F6, F7 | F8, F9, F10 |
+| Monitor rows (planet) | 2 (+ water line) | 4 (+ fauna page) | 6 (+ Air window, carbon flow) |
+| Story beats (essential) | 0, 1, SB1, 3, 4, 5, 6, 6a | 7, SB2, 9, 10, 12 | 13, SB3, 15, 17, 19 |
+| Crops / kits | 4 greenhouse crops | — | 4 biome kits |
+| Keeper's Report | Report 1 (at Phase 2 begins) | Report 2 (at Phase 3 begins) | Report 3 (Equilibrium), final question |
+| Third-party mods | — | Mekanism, Create unlock at Hydrosphere (optional) | Optional |
 
 ## Decisions
 
@@ -682,6 +733,18 @@ With 3 players, Data merges into Atmosphere and Biology into Life Support. With 
 | Fauna | **Option B plus real environmental effects; non-lethal options; "later life stage"; unranked ending cards** (user decisions) | See "The fauna: decision". |
 | Equilibrium pressure | **≥ 75 kPa** (user decision on SME option B) | Lets ~22 % O2 reach the breathable O2 partial pressure. |
 | Story | **Player is the Keeper; planned-solo-watch backstory; text-first recorded messages** (user decisions) | See the story bible. |
+| Goal priorities and interruption rules | **T-C and I-C** (user, on the Producer's brief) | Fauna features in the Core quadrant are cut only after Redesign and Moderation items. Messages follow ui-specs §0 |
+
+**Round 2 decisions (Lead Game Designer, 2026-11-26; fluid unless marked)**
+| Decision | Rationale | Alternatives | Trade-offs (learning / appeal) | Revisit if |
+|---|---|---|---|---|
+| Sleep never skips Mars time; sky follows simulation time | Holds and storms are shared and in sols; a skip lets one player fast-forward a group | Vanilla sleep skip (breaks holds); skip only in solo (two rule sets) | Learning: holds stay honest. Appeal: nights can't be skipped | Nights feel idle in playtests |
+| Training Hall on Earth as the class lobby | Sits before the story's timeline; no contradiction with the handover backstory | Orbital transfer room (contradicts backstory); plain void (no fiction) | Learning: light A1/D2 anchor. Appeal: a calm first scene | Teachers find it slows class starts |
+| Storm caps scale gameplay as well as look | "Storms weaken as the air thickens" must be true in the mechanics (B2) | Look only (a visual lie) | Learning: honest loop. Appeal: late storms are milder | Late storms stop mattering as drift events |
+| Ice–albedo capped at ~2 °C; polar CO2 release as the real speed-up (SME options a + b) | Honest size; the Arctic contrast serves D2; the reinforcing loop still exists | Big albedo effect (teaches a wrong size); albedo only (loses the speed-up) | Learning: B2, D2 accurate. Appeal: a visible pressure bump at the Thaw | External climate reviewer disagrees (SME §11) |
+| Weather-mast gas gauges fitted at Phase 3 | Matches the Monitor's disclosure; lower load | Show from start (more for Phase 1 to read) | Learning: one idea at a time. Appeal: an "upgrade" moment | ID or Artist object, or A1 testing shows Phase 1 wants the gas mix in the world |
+| Character load: one crew voice per phase | Players met three crew names in one burst at Dome stable | Keep all voices essential | Learning: less backstory load. Appeal: Moreno's apology becomes optional (Basu carries it) | Playtesters miss Moreno in Phase 2 |
+
 
 ### Pacing Targets (40 hours, solo)
 

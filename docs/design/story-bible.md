@@ -62,7 +62,7 @@ The story has one job: **give players a reason to care about the planet's number
 |---|---|---|
 | Years before | Uncrewed cargo landers drop supply caches near the site. | Pre-placing cargo before crews arrive is a real mission-planning idea **[verify]**. |
 | First Shift, late in their stay | Basu drills deep ice cores and finds tiny, dormant animals in a pocket of frozen brine, along with traces of the microbes he thinks they descend from. He reports to Earth. | Buried ground ice exists in Mars's mid-latitudes **[verify]**. Scientists do study whether microbes could survive in deep brines. Life on Mars: **none has ever been found. The organisms are [FICTION].** |
-| Same week | Earth tells the crew: keep the samples frozen, keep the pilot running, say nothing until results are confirmed. Moreno agrees. Basu objects, on the record (the "Fridge B" argument, delivered in Phase 2). | Rules to avoid contaminating other worlds are real ("planetary protection") **[verify: COSPAR policy]**. |
+| Same week | Earth tells the crew: keep the samples frozen, keep the pilot running, say nothing until results are confirmed. Moreno agrees. Basu objects, on the record (the "Fridge B" argument, delivered in Phase 2). | Rules to avoid contaminating other worlds and Earth are real (COSPAR's planetary protection policy). They do **not** require keeping finds secret: "say nothing yet" was Earth's own choice, and the story must read that way (SME round 2). |
 | Handover, 9 days | The Keeper arrives. Hana trains you on the machines. Nobody mentions the samples. Basu leaves a sealed note in lab Fridge B "to open when it thaws." | — |
 | Launch | First Shift launches inside the departure window to meet their return ship in orbit. | Earth–Mars launch windows open about every 26 months **[verify]**. |
 | 2 days later | A regional dust storm builds. Solar power drops. A seal fails, the main dish is knocked out, machines wear down. BELL seals the core module and you ride out the storm in the shielded shelter. | Mars dust storms can grow to cover the planet and have ended solar-powered rover missions **[verify: 2018 storm]**. |
@@ -81,7 +81,7 @@ All of this is invented. The journal must say so each time it describes them.
 |---|---|---|
 | What they are | A group of small animals the crew nicknamed **thawlings** (Basu's field label: "Group S," for *sleepers*). Basu's theory: they descend from microbes that lived deep underground long ago. That ancestry is the invented part (DESIGN.md option B). | Real: scientists search for signs of past or present microbial life on Mars, and some Earth microbes (extremophiles) live in ice, brine, and deep rock **[verify]**. Some Earth animals, like tardigrades, survive freezing and drying in a dormant state called cryptobiosis **[verify]**. |
 | Where they were | Dormant in frozen brine pockets deep in the ground ice, for a very long time. | Salty water stays liquid at lower temperatures than fresh water **[verify]**. |
-| Why they wake | Warmth and liquid water. **Thaw gate:** the first ones stir. **Hydrosphere gate:** they reach a larger, more active **later life stage**. | Many Earth animals have life stages triggered by temperature and water (e.g. insects, frogs) **[verify]**. |
+| Why they wake | Warmth and liquid water. **Thaw gate:** the first ones stir. **Hydrosphere gate:** they reach a larger, more active **later life stage**. | Some animals wait dormant until rain or warmth returns, then wake and grow, like spadefoot toads that dig out after rain, or mosquito eggs that hatch when flooded (SME round 2 wording; not opened). |
 | Why they go after machines | Emitters and extractors are the warmest, wettest, most vibrating things on the surface. The fauna are drawn to them for warmth and nesting. They are not hunting you, and only fight back if attacked. | Matches DESIGN.md: fauna pressure is the sum of machine signatures. Shrouds and quiet zones lower it; fighting doesn't. |
 | What they become in Phase 3 | As biomes stabilize, they settle into them and live alongside the seeded flora. Whether they thrive depends on what the Keeper left them. | Earth link: ecosystems adjust when conditions change (HS-LS2-6) **[verify mapping]**. |
 
@@ -199,7 +199,7 @@ Rule (DESIGN.md, Context and narrative): don't overwhelm players with backstory.
 ### 5.2 Phase 1: Setup (Survival Desperation)
 **Start: Landing (controls first).** The storm has cleared. BELL's first log line reports damage and opens the **first-shift checklist**: eight short tasks inside the dome that teach movement, the suit's O2, the Monitor, sealing a block, and the airlock (DESIGN.md, Landing). Hana's notes are on every machine. The dish is dead. The only voice is BELL. Experienced players can skip the checklist with one choice ("I know the drill"); BELL then gives a 3-line summary. No forecast comes before the checklist is done or skipped. Then BELL's **Shift Briefing 1** says what this shift is about. Text: [messages/phase-1.md](messages/phase-1.md).
 
-**Middle.** The first failures teach the dome (failure reports with Hana's tips attached the first time). The first dust storm tests the player's planning (C1). A solar event forecast introduces radiation (proposed A4 prediction prompt). Ice carried near a heater vanishes without leaving a puddle: the air is too thin for liquid water to last (first A2 moment; DESIGN.md ice-to-water rule).
+**Middle.** The first failures teach the dome (failure reports with Hana's tips attached the first time). The first dust storm tests the player's planning (C1). A solar event forecast introduces radiation (proposed A4 prediction prompt). Ice carried near a heater melts and boils away at once, leaving no water: in air this thin, water boils just above freezing (first A2 moment, forecast F4a; DESIGN.md ice-to-water rule, boiling-point version).
 
 **Dome stable gate → the backlog arrives.** With life support steady, BELL can spare power for the relay link. Seven days of queued messages arrive. **Essential:** Hana's message, which hands over the first **Regolith Outgasser** plans ("Life support's steady. Time to start on the sky.") and her worked-example notes for building it (DESIGN.md, Worked example). **Optional, in the archive:** Moreno ("We saw the storm on your telemetry. We couldn't do anything. You did.") and Basu ("Keep Fridge B cold. I'll explain later. Sorry."). The mystery doesn't depend on the archive: when the relay comes up, BELL logs that Fridge B's lock is set to "Hold until thaw (T. Basu)", and Basu's sticky note on the fridge says "Keep cold. I'll explain. —T.B." **The player is no longer alone, and now has a mystery** and their first lever on the planet at the same moment (character load: §4.4).
 
@@ -208,7 +208,7 @@ Rule (DESIGN.md, Context and narrative): don't overwhelm players with backstory.
 ### 5.3 Phase 2: Rising conflict (Industrial Geo-Engineering)
 **Start.** BELL's **Shift Briefing 2**: the planet starts to answer back. Expansion. Outposts reach Basu's old drill sites. His markers and field notes hint at "something in the cores" without saying what.
 
-**Thaw gate.** Ice near warm extractors melts into small puddles by day that freeze again at night. Warmth alone isn't enough; the water lasts only where it is warm *and* the air is thick (A2 misconception moment, building on the Phase 1 vapor moment). Fridge B unlocks. Basu's note: "If you're reading this, it's warm enough. They might wake up. Watch them before you decide anything." Within a sol, BELL logs "unidentified motion near Extractor 1." The first thawlings appear.
+**Thaw gate.** Ice near warm extractors melts into small puddles by day that freeze again at night. Warmth alone isn't enough; the water lasts only where it is warm *and* the air is thick (A2 misconception moment, building on the Phase 1 boil-away moment). Fridge B unlocks. Basu's note: "If you're reading this, it's warm enough. They might wake up. Watch them before you decide anything." Within a sol, BELL logs "unidentified motion near Extractor 1." The first thawlings appear.
 
 **The secret.** Delivered about one sol after the first fauna sighting (gives the player time to see them first). **Essential (Basu):** "We knew they were there. Earth asked us to wait for test results. Dalia agreed. I argued, then I said nothing too. You should have heard it from us." **Optional, in the archive:** Moreno's own message ("I agreed. I should have told you.") and Mensah owning Earth's part of the decision. The recorded "Fridge B" argument between Moreno and Basu, both sides, fairly, is also in the archive (beat 11).
 
@@ -275,7 +275,7 @@ How the story carries it: Basu's notes describe each option as something he *wou
 | SB2 | Shift Briefing 2: "The planet starts to answer" | P2 / after Report 1 is sent or deferred | BELL briefing card | A2, A3, B5 (advance organizer) | **Essential** |
 | 7a | The Armstrong line (6.3 kPa): BELL logs it; Hana: "Your blood wouldn't boil now. Keep the suit on anyway." | P2 / Monitor milestone | Colony log, journal | A1 | Optional |
 | 8 | Basu's drill sites and sample caches | P2 / outposts | World traces, journal | A2, D1 | Optional |
-| 9 | Puddles by day, ice by night; Fridge B opens; first thawlings | P2 / **Thaw** | World, journal, colony log, Basu's note | **A2**, B5, **D1** | **Essential** |
+| 9 | Puddles by day, ice by night; Fridge B opens; first thawlings | P2 / **Thaw** | World, journal, colony log, Basu's note | **A2**, B5, **D1** | **Essential** · asserts: pressure ≥ 5 kPa and liquid water present near a machine |
 | 10 | The secret: Basu (essential); Moreno and Mensah (archive) | P2 / ~1 sol after first fauna | Recorded messages | **D1** | **Essential** (Basu's message) |
 | 11 | The "Fridge B" argument, both sides | P2 / found in log archive | Colony log archive | **D1** | Optional (summary line in beat 10) |
 | 12 | Surface water; thawlings in their later life stage hit machines; ground sinks near warm machines | P2 / **Hydrosphere** | World, failure reports, journal | B2, **B5**, C2 | **Essential** |
@@ -290,6 +290,24 @@ How the story carries it: Basu's notes describe each option as something he *wou
 | 20 | World continues; helmet check stays live | Post-ending | Colony log warnings | A5 | Automatic |
 
 **Density (standard mode).** 26 beats over ~40 h (21 story beats plus Landing, the worked example, and 3 Shift Briefings): about one every 1.5 hours, plus traces. By phase: P1 10 / 8 h, P2 8 / 18 h (including optional 7a), P3 7 / 14 h (plus the post-ending beat). Phase 2 is still the thinnest per hour; fauna encounters, outposts, and Basu's sites fill it. Watch this in playtests.
+
+**`asserts` on beats that claim something about the world (answers the Technical Lead).** A beat whose text states a fact about the planet carries an `asserts` condition in its datapack entry, in the same condition language as gates. The message is delivered only while the condition is true; if it's false at the due time, the beat waits (up to 1 sol) and then files to the archive with a note, and an automated check fails in testing (PROCESS.md §3: "story beats match gate conditions").
+
+| Beat | Claim in the text | `asserts` |
+|---|---|---|
+| 1 | Damage after a storm | dome has ≥ 1 open breach |
+| 4 | Storm in about 1 sol | storm scheduled within 0.8–1.2 sol |
+| 5 | Solar event in about 1 sol | solar event scheduled within 0.8–1.2 sol |
+| 7 | The sky changed | pressure ≥ 5 kPa |
+| 7a | Your blood wouldn't boil now | pressure ≥ 6.3 kPa |
+| 9 | Puddles by day | pressure ≥ 5 kPa and a liquid water block near a machine |
+| 12 | Thawlings hit machines; ground sinks | hydrosphere ≥ 10 % and (raid this sol or collapse this sol) |
+| 15 | O2 overshoot fire | O2 fraction > 23 % |
+| 16 | Thawlings settle | ≥ 1 settled colony |
+| 17 | You can take off your helmet | breathable condition true (live) |
+| 18–19 | The air holds | equilibrium hold complete |
+| Ending cards | Card conditions (ARCHITECTURE.md §9.5) | each card's own condition |
+| F4a / F4b results | Ice behavior | pressure band matching the result variant shown |
 
 ### 6.3 Journal
 - Every gate entry follows: **what you just saw → the real science → fiction note if needed → "On Earth" line (D2) → "read more."**
@@ -366,8 +384,8 @@ About 15 minutes of total reading for essential story across the unit, outside j
 ### 8.3 Sample lines
 
 **Journal entry (Thaw gate, middle school band):**
-> The ice by the extractor melted into a puddle today. Tonight it froze again. Back when the air was thinner, ice by the heater just vanished. To keep water liquid, we need warmth *and* thick air. One is not enough.
-> *On Earth: our thick, warm air is why puddles last.*
+> The ice by the extractor melted into a puddle today. Tonight it froze again. Back when the air was thinner, ice by the heater boiled away at once. To keep water liquid, we need warmth *and* thick air. One is not enough.
+> *On Earth, thick air keeps water from boiling away. That's why puddles last.*
 
 **Colony log (BELL, Thaw gate):**
 > Sol 41. Temperature −20 °C. Meltwater near Extractor 1, refroze overnight. Unidentified motion near Extractor 1. Logging.
@@ -380,7 +398,7 @@ About 15 minutes of total reading for essential story across the unit, outside j
 > They were sleeping, Keeper. Not dead. Sleeping. And we turned up the heat. I'm not saying stop. I'm saying look at them first. Then decide.
 
 **Recorded message (Mensah, reply to Keeper's Report 2):**
-> On Earth, we are adding greenhouse gas too. You are doing it with a plan. We did it without meaning to, as a side effect of burning fuel. Your report asked if waking them was worth it. People here ask a question like it about our own frozen ground.
+> On Earth, we are adding greenhouse gas too. You are doing it with a plan. We did it without meaning to, mostly by burning coal, oil, and gas. Your report asked if waking them was worth it. People here ask a question like it about our own frozen ground.
 
 (Final version of this reply, with grade-band variants: [messages/phase-2.md](messages/phase-2.md), `earth.report2.reply`.)
 

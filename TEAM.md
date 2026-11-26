@@ -92,6 +92,13 @@ Use these words the same way everywhere.
 | **Face-validity check** | The owner or SME judging whether a concept looks like what it claims to be. |
 | **Risk gate table** | For a change: what could break · the check that catches it · the result. |
 | **Signal** | A read-only world-state value (storm strength, surface radiation, fauna pressure) published by one system module into the planet snapshot. Visuals and conditions read it like an Index parameter, but it isn't one. |
+| **What caused it?** | The in-game name of the cause-checking prompt (the old "Explain it" check). |
+| **Shift Briefing** | A short phase-start message from BELL that works as an advance organizer. |
+| **Landing** | The first-shift checklist that teaches controls inside the story. |
+| **Training Hall** | The class lobby on Earth, before the story timeline, where unassigned players wait. |
+| **"Useful now" list** | Up to three recommended builds shown beside the next-gate bar. |
+| **Asserts** | The condition a story beat that makes a claim about the world must satisfy. |
+| **Lock point** | The moment a forecast closes, before any hint, warning, or example that would give the answer away. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -216,11 +223,13 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Rose/mauve Phase 2 sky kept, labeled stylized, pending SME check | docs/art | User decision on Lead Artist recommendation |
 | 2026-11-26 | Weather mast prop adopted (honest O2/CO2 world cue) | docs/art, DESIGN.md (to add) | User decision on Lead Artist recommendation |
 | 2026-11-26 | Lead Artist owns audio | README.md, agent files | User decision |
-| 2026-11-26 | Goal priority tiers: option T-C. Adopt LEARNING.md §1 tiers (Primary A2, A3, A5, B1, B2, B4, D2; Secondary A1, B3, B5, C1, C2, C3; can be deemphasized A4, D1) **plus the quadrant rule**: learning resources follow the goal tier; feature cut order follows the fun–learning quadrant, so Core-quadrant features (fauna options, ending cards, radiation spikes) are cut only after Redesign and Moderation items. Revisit D1's tier after the Stage 3 story test. Any cut that drops a goal below its tier's minimum goes to the user. Fallback if the Game Designer blocks on D1: T-B (D1 to Secondary). | LEARNING.md §1, docs/production/budget.md | User decision on Producer recommendation; Game Designer position pending |
-| 2026-11-26 | Interruption rules: option I-C (see TEAM.md 8.6) | TEAM.md 8.6, LEARNING.md §4.6 | User decision on Producer recommendation; Game Designer position pending |
+| 2026-11-26 | Goal priority tiers: option T-C. Adopt LEARNING.md §1 tiers (Primary A2, A3, A5, B1, B2, B4, D2; Secondary A1, B3, B5, C1, C2, C3; can be deemphasized A4, D1) **plus the quadrant rule**: learning resources follow the goal tier; feature cut order follows the fun–learning quadrant, so Core-quadrant features (fauna options, ending cards, radiation spikes) are cut only after Redesign and Moderation items. Revisit D1's tier after the Stage 3 story test. Any cut that drops a goal below its tier's minimum goes to the user. Fallback if the Game Designer blocks on D1: T-B (D1 to Secondary). | LEARNING.md §1, docs/production/budget.md | User decision on Producer recommendation; Game Designer: agrees with T-C (no block); I-C agree except rule 3 (can live with it) and rule 4 (agree), with two additions |
+| 2026-11-26 | Interruption rules: option I-C (see TEAM.md 8.6) | TEAM.md 8.6, LEARNING.md §4.6 | User decision on Producer recommendation; Game Designer: agrees with T-C (no block); I-C agree except rule 3 (can live with it) and rule 4 (agree), with two additions |
 | 2026-11-26 | Licensing plan (not legal advice; unverified): our code MIT; our art, audio, story and journal text CC BY 4.0; educator materials CC BY 4.0. Never retexture or redistribute All Rights Reserved assets (Create, FTB Library) and never ship ProbeJS. No LICENSE file is added until release, because this is a design exercise. | docs/tech/mod-licenses.md | User decision on coordinator recommendation |
 | 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
 | 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
+| 2026-11-26 | Sleep never skips Mars time; the sky follows simulation time. Storm caps scale gameplay as well as the look. Ice–albedo capped at about 2 °C (invented) plus the real polar CO2 release. Mast gas gauges are fitted at Phase 3 (pending Artist and Instructional Designer). Training Hall lobby. One lead crew voice per phase (Hana, Basu, Moreno); Mensah only in report replies. | DESIGN.md, docs/design/ | Lead Game Designer |
+| 2026-11-26 | Keeper's Report is never modal: one log line plus a side-panel entry, opened full screen only by the player's choice or at the next natural pause | docs/design/ui-specs.md §0 | Lead Game Designer, agreed with the Producer; Instructional Designer to confirm |
 | 2026-11-26 | Ice rule implemented as data (`ice_rule.json`) using per-chunk cached heat sources with distance falloff, shared by server and client; boiling point from the Antoine equation computed once per planet per step | ARCHITECTURE.md §2.5 | Technical Lead, on the SME's finding |
 | 2026-11-26 | Ice rule changed: compare each ice block's local temperature with the boiling point at current pressure (not a pressure band); the flash puddle near a heater is the Phase 1 look. Flame bands corrected (no flame below 14% O2). Verdicts in round2-review §11 stay "accepted, pending external review". | docs/science/round2-review.md | Subject Matter Expert; design edits sent to roles |
 | 2026-11-26 | Clouds use a density map (mesh rebuilt on coverage change); heat shimmer is particles only (it carries meaning, so it must look the same for every player); thawlings use vanilla entity animation; art and content live in `pack/assets/` and `pack/data/` built into the mod jar; every goal page fills from player-scope events only; every player and forecast pair gets exactly one result; test strategy adopted | ARCHITECTURE.md §2.5, §2.6.1, §2.13, §3.2, §8.5; docs/tech/test-strategy.md | Technical Lead |
@@ -428,6 +437,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 | 2026-11-26 | Lead Game Designer | Apply decisions, C-01 fix, balance sheet, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-decisions-applied.md` |
 | 2026-11-26 | Subject Matter Expert | Science accuracy and NGSS verification | `docs/science/` | `docs/team/reports/2026-11-26-subject-matter-expert-science-ngss.md` |
 | 2026-11-26 | Producer | Consistency review, risk register | `docs/production/` | `docs/team/reports/2026-11-26-producer-consistency-review.md` |
+| 2026-11-26 | Lead Game Designer | Round 2: design updates, messages, UI specs, balance, playtest plan | `DESIGN.md`, `docs/design/` | `docs/team/reports/2026-11-26-lead-game-designer-round2.md` |
 | 2026-11-26 | Lead Game Designer | Story bible | `docs/design/story-bible.md` | `docs/team/reports/2026-11-26-lead-game-designer-story-bible.md` |
 
 ## 11. Team Learning Log
@@ -441,6 +451,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | Forecasts need an explicit lock point before any hint, warning, or worked example that reveals the answer. | Lead Game Designer |
 | 2026-11-26 | When a new requirement seems to break a privacy rule, look for a narrow interface at the boundary (e.g. the `NameScrubber`) before relaxing the rule. | Technical Lead |
 | 2026-11-26 | A new process rule can silently conflict with a decided rule the same day ("no modal progress pop-ups" vs. a blocking, deferrable Keeper's Report). When a process document lands, check it against TEAM.md 8.6 and the other decided rules. | Producer |
 | 2026-11-26 | Check each physics threshold against the balance curve. A threshold the curve passes in the first sol hides that regime and any forecast built on it (the ice rule broke forecast F4a). After every physics or balance change, run the forecast check with "threshold vs. curve". | Subject Matter Expert |

@@ -5,9 +5,9 @@
 **Depends on:** [DESIGN.md](../../DESIGN.md), [story bible](../design/story-bible.md), [LEARNING.md](../../LEARNING.md) §4.6 (interruption rules), [TEAM.md](../../TEAM.md) 8.6, [planetary keyframes](../art/planetary-keyframes.md), [style guide](../art/style-guide.md).
 **Companion:** [sound-list.md](sound-list.md) (every sound, with status, subtitle, and visual twin).
 
-> **[SME] flags in this file.** The SME is checking them in parallel. The biggest is the claim in §3: **outdoor sound is thin and faint at 0.6 kPa and gets fuller as the air thickens.** The pressure keyframe values in §3.2 marked [SME] are not to be changed until the SME replies.
+> **SME round 2 (2026-11-26, [round2-review.md](../science/round2-review.md) §4): the pressure-driven sound claim is accurate** (Maurice et al., 2022, *Nature* 605, SME [S22], [S26]). Values marked **[SME ✓]** were checked and kept; rows still marked **[SME]** are new and not yet checked.
 
-> **Technical Lead** is designing the sound system hooks in parallel. §9 lists what audio needs from the client, as input to that work. It is not a technical design.
+> **Technical Lead round 2** designed the hooks (ARCHITECTURE.md §2.12). §9 now records how this direction fits them, and where it differs.
 
 ---
 
@@ -38,7 +38,7 @@
 - **Visual twins:** every meaningful cue has one (sound list column "Visual twin"). Audit rule: if the twin column is empty, the sound may only build mood.
 - **Laptop speakers:** cues that carry meaning have their main energy between **500 Hz and 4 kHz**, where small laptop speakers work (assumption; laptop speakers roll off in the low bass, **unverified** cutoff). Low rumbles are mood only.
 - **Hearing differences:** alarm patterns differ in **rhythm**, not only pitch, so players with high-frequency hearing loss can tell them apart.
-- **Volume categories:** every sound is in a vanilla category so players can turn groups down (proposed mapping in §9.3). Alarms are never only in a category that is commonly muted (music).
+- **Volume categories:** every sound is in a vanilla category so players can turn groups down (proposed mapping in §9.4). Alarms are never only in a category that is commonly muted (music).
 - **Classroom noise:** 20–30 laptops in one room. Nothing loops loudly while idle; the dome hum and suit fan are quiet beds (§8). A teacher can turn the pack's ambience off without losing any information (rule 5).
 - **No time-pressured listening:** nothing important is said only once in sound. Messages are text-first and archived (story bible §6.1).
 
@@ -61,36 +61,37 @@ Every sound belongs to one **path**. The path decides which filters apply. This 
 | **Contact (through the suit and ground)** | Own footsteps, tools on blocks the player touches, dust grains hitting the visor, ground creaks under the player | No | No | Sound you feel through your body and suit, so it stays audible in thin air. Stylized **[SME]** |
 | **Suit** | Suit fan, breathing, helmet seal, dosimeter clicks, suit alarms | No | n/a (inside the helmet) | Always audible while worn |
 | **Interior (sealed volume)** | Dome hum, interior machines, airlock, Monitor, Shift Board | No (dome air is at habitable pressure) | Only if the player wears the helmet indoors | Uses the sealing system to know the player is inside |
-| **Exterior heard from inside** | Storm, outside machines, thawlings, heard through dome walls | Yes, then × 0.30 gain and low-pass 800 Hz | No | Thin outside air plus walls: you barely hear the outside from in the dome |
+| **Exterior heard from inside** | Storm, outside machines, thawlings, heard through dome walls | Yes, then × 0.30 gain (the thin bed is used whatever the pressure, so it stays muffled) | No | Thin outside air plus walls: you barely hear the outside from in the dome |
 | **Interface** | Colony log chime, message cues, gate chime, failure and warning tones | No | No | Non-positional (heard the same anywhere). Never filtered, so feedback stays readable |
 
 **Listener state** (which path rules apply) comes from: in a sealed volume or not (sealing system, DESIGN.md §3), helmet on or off, and the live breathable condition.
 
 ---
 
-## 3. Pressure-driven ambient sound **[SME]**
+## 3. Pressure-driven ambient sound (SME ✓)
 
-### 3.1 The claim and its grounding **[SME]**
-**Claim:** at 0.6 kPa, outdoor sound is thin and faint; as the atmosphere thickens, outdoor sound gets louder, carries farther, and keeps more high frequencies.
+### 3.1 The claim and its grounding (SME ✓)
+**Claim (SME ✓):** at 0.6 kPa, outdoor sound is thin and faint; as the atmosphere thickens, outdoor sound gets louder, carries farther, and keeps more high frequencies.
 
-My reasoning, for the SME to check (**no source was opened this session; all details unverified**):
-1. **Thin air radiates less sound.** For the same vibrating source, the sound power carried by air grows with the air's density (acoustic impedance, density × speed of sound). Mars air at the surface is roughly 1 % of Earth's density, so sources sound much quieter. Perseverance's microphones recorded Mars as about **20 dB quieter** than Earth for similar sources (Maurice et al., 2022, *Nature*; figure **unverified**).
-2. **High pitches fade faster with distance on Mars.** Low-pressure CO2 absorbs high frequencies strongly, so far sounds lose their treble. The same paper reported **two speeds of sound** (low and high pitches travel at slightly different speeds, around 240 m/s and 250 m/s, with a change near 240 Hz; **unverified**).
+**Verdict: accurate** (SME round 2 §4). The grounding:
+1. **Thin air radiates less sound.** For the same vibrating source, the sound power carried by air grows with the air's density (acoustic impedance, density × speed of sound). Mars air at the surface is roughly 1 % of Earth's density, so sources sound much quieter. Maurice et al. (2022) predict, from the low pressure and CO2's properties, that sounds are about **20 dB weaker** on Mars than on Earth (a model prediction from acoustic impedance, not a side-by-side measurement; SME [S22], [S26]). Most sounds fade over about **one-eighth** of the distance they would on Earth [S26].
+2. **High pitches fade faster with distance on Mars.** Low-pressure CO2 absorbs high frequencies strongly, so far sounds lose their treble. Attenuation with distance was measured above 2 kHz, and there are **two speeds of sound** (about 240 m/s below 240 Hz and about 250 m/s above; SME [S22]). A fun high school fact; not needed in play.
 3. **At 75 kPa** (mostly filler gas plus O2, DESIGN.md §1) sound would be close to Earth's.
 
-**Deliberate simplifications** (stylization log, §10): we drive the change from **pressure only** and ignore the change in gas mix (CO2 to filler gas plus O2), which also matters. And we **compress** the range: start gain is 0.25 (about −12 dB), not −20 dB or less, so the player can still hear wind and machines and *notice the change*. A journal "real vs. game" note can say so (handoff to the Lead Game Designer).
+**Deliberate simplifications** (stylization log, §10): we drive the change from **pressure only** and ignore the change in gas mix (CO2 to filler gas plus O2), which also matters. And we **compress** the range: start gain is 0.25 (about −12 dB), not about −20 dB, so the player can still hear wind and machines and *notice the change* (SME: acceptable simplification for play). A journal "real vs. game" note can say so, using the SME's wording: "Thin air carries sound poorly: sounds are quieter and high pitches fade fast. As the air thickens, sound gets louder and fuller." (handoff to the Lead Game Designer).
 
 ### 3.2 Pressure keyframes for sound
 **Input:** Index pressure (kPa), **log10 axis**, same keyframes and the same 30 s smoothing as the sky (planetary keyframes §1.3, §3.1). Values apply to the **exterior airborne** path only.
 
 | Property | 0.6 kPa | 5 kPa | 15 kPa | 30 kPa | 75 kPa | Status |
 |---|---|---|---|---|---|---|
-| Exterior gain (linear amplitude) | 0.25 | 0.40 | 0.60 | 0.75 | 1.00 | **[SME]**, value from keyframes §3.1, unchanged |
-| Exterior low-pass cutoff | 1.5 kHz | 3 kHz | 5 kHz | 8 kHz | Off | **[SME]**, value from keyframes §3.1, unchanged |
-| Exterior audible range (× each sound's normal attenuation distance) | 0.50 | 0.60 | 0.75 | 0.90 | 1.00 | **[SME]**, new: "sound carries farther in thicker air" |
+| Exterior gain (linear amplitude) | 0.25 | 0.40 | 0.60 | 0.75 | 1.00 | **[SME ✓]** direction accurate; milder than real (acceptable). Applied to every exterior sound, including vanilla and third-party ones (gain only, ARCHITECTURE.md §2.12) |
+| Exterior low-pass cutoff | 1.5 kHz | 3 kHz | 5 kHz | 8 kHz | Off | **[SME ✓]** direction accurate. Baked into **pre-filtered files** (thin, mid, full) for our ambient beds and key teaching sounds (§9); no real-time filter in Stages 3–4 |
+| Exterior audible range (× each sound's normal attenuation distance) | 0.50 | 0.60 | 0.75 | 0.90 | 1.00 | Direction matches SME [S26] (real: about one-eighth of Earth's distance; ours is milder). **Stage 5 optional**: not in the TL's Stage 3–4 hooks |
 | Wind bed level (before exterior gain) | 0.15 | 0.30 | 0.50 | 0.70 | 0.80 | Style choice |
 | Wind bed character | Low rumble only, no whistle | Rumble + faint hiss | Hiss + gusts | Gusts + soft whistle on edges | Full wind, gusts, rustle (if biomass) | Style choice; follows the low-pass |
 | Windsock flutter level (weather mast, keyframes §3.9) | 0 (silent) | 0.20 | 0.50 | 0.80 | 1.00 | Style choice; matches the windsock angle |
+| Ambient bed in use (§3.4) | `wind_thin` | `wind_mid` | `wind_mid` | `wind_full` | `wind_full` | Crossfade over 10 s at 5 and 30 kPa |
 | Ambience subtitle (§3.4) | "Faint, thin wind" | "Muffled wind" | "Muffled wind" | "Wind" | "Wind" | Band edges: < 5, 5–30, ≥ 30 kPa |
 
 Effective level of an exterior sound = file level × its own volume × exterior gain × helmet filter (if worn) × distance falloff (using the scaled audible range).
@@ -101,10 +102,10 @@ Effective level of an exterior sound = file level × its own volume × exterior 
 - **Gate moment (Phase 2 begins, 5 kPa):** no stinger. The change is gradual by design; the gate chime (§7.1) marks the gate.
 
 ### 3.4 Subtitle parity for pressure
-Vanilla subtitles show what plays, not how it sounds. So the exterior wind bed is **three sound events**, one per pressure band, each with its own subtitle: `ambient.exterior.wind_thin` ("Faint, thin wind", < 5 kPa), `ambient.exterior.wind_muffled` ("Muffled wind", 5–30 kPa), `ambient.exterior.wind_full` ("Wind", ≥ 30 kPa). They crossfade over 10 s at the band edges. A deaf player gets the same pressure cue a hearing player does.
+Vanilla subtitles show what plays, not how it sounds. So the exterior wind bed is **three sound events**, one per pressure band, each pre-filtered and with its own subtitle: `ambient.exterior.wind_thin` ("Faint, thin wind", < 5 kPa, low-passed at 1.5 kHz), `ambient.exterior.wind_mid` ("Muffled wind", 5–30 kPa, low-passed at 5 kHz), `ambient.exterior.wind_full` ("Wind", ≥ 30 kPa, unfiltered). They crossfade over 10 s at the band edges. A deaf player gets the same pressure cue a hearing player does.
 
 ### 3.5 Helmet filter
-While the helmet is on, exterior airborne sound also passes a helmet filter: **gain × 0.70 (about −3 dB) and low-pass 6 kHz**, plus the suit fan bed masking it lightly. This is a stylization (helmets do muffle sound). It is what makes the helmet-off moment open up even at 75 kPa, where the pressure filter is already fully open (§4).
+While the helmet is on, exterior airborne sound also passes a helmet filter: **gain × 0.70 (about −3 dB)**, plus the suit fan bed masking it lightly. The muffling is baked into one extra file, `wind_full_helmet` (the full bed low-passed at 6 kHz), which plays instead of `wind_full` while the helmet is on; at helmet-off it crossfades to `wind_full`. This is a stylization (helmets do muffle sound). It is what makes the helmet-off moment open up even at 75 kPa, where the pressure filter is already fully open (§4).
 
 ### 3.6 Other ambience layers (exterior, all pass the pressure filter)
 
@@ -129,7 +130,7 @@ The emotional peak (story bible §5.4). It should sound like a breath of open ai
 | Before | Normal outdoor mix at ≥ 75 kPa: pressure filter open, helmet filter on, suit fan bed | — |
 | 0.0 s | **Seal release:** soft latch click, then a short hiss (0.4 s) | Suit path. Subtitle "Helmet seal opens" |
 | 0.0–1.5 s | Suit fan and any breathing loop fade out | Linear fade, 1.5 s |
-| 1.5–4.5 s | **Helmet filter lifts:** exterior gain 0.70 → 1.00, low-pass 6 kHz → off, over 3 s. Wind, water, leaves, distant thawling chirrs open to full range | No new sounds added; the world was already there. The change is that *you* hear it now |
+| 1.5–4.5 s | **Helmet filter lifts:** exterior gain 0.70 → 1.00, and `wind_full_helmet` crossfades to `wind_full`, over 3 s. Wind, water, leaves, distant thawling chirrs open to full range | No new sounds added; the world was already there. The change is that *you* hear it now |
 | 2.0 s | **First breath:** one slow unvoiced inhale and exhale, close to the listener | Breath only, no voice, no gendered sound (DESIGN.md voice decisions). Subtitle "You breathe in" |
 | 4.5–10 s | Open world sound only. **No music sting, no chime** | Let the world be heard |
 | ≥ 10 s | Moreno's message slip arrives with the normal message cue (§7.2) at −3 dB | Moved from 4.5 s in the first draft so the cue doesn't land on the moment (style guide §9.2 updated) |
@@ -184,13 +185,13 @@ Only these events may sound an alarm. Adding one needs the Lead Instructional De
 - **Storm warning:** BELL's log line uses the **Warning** tone (§7.1). No alarm.
 
 ### 6.2 Radiation spikes
-**Driving inputs:** **radiation spike active**, **pressure** (spikes weaken as the air thickens: 100 % at 0.6 kPa → 20 % at 75 kPa, same log10 scale as keyframes §3.7), and **local shielding** (shielding blocks and depth, DESIGN.md §3). Goal: **A4** (thin air and no magnetic field let radiation through; shielding helps).
+**Driving inputs:** **radiation reaching the surface** (`mars:surface_radiation`: the spike, already weakened by thicker air, 100 % at 0.6 kPa → 20 % at 75 kPa; SME ✓ that this weakens with pressure), and **local shielding** (shielding blocks and depth, DESIGN.md §3). Goal: **A4** (thin air and no magnetic field let radiation through; shielding helps).
 
 **Dosimeter clicks (suit path, unfiltered):**
 
 | Quantity | Value |
 |---|---|
-| Dose rate r (0–1) | spike strength × pressure scale × shielding factor (shielding numbers: Lead Game Designer) |
+| Dose rate r (0–1) | `mars:surface_radiation` (signal; already includes the pressure attenuation, ARCHITECTURE.md §2.5.2) × local shielding factor (shielding numbers: Lead Game Designer) |
 | Click rate | **0.2 + 7.8 × r clicks per second**, random (Poisson) intervals, capped at 8/s |
 | Background ticks (no spike) | **0.1 per second** outside when pressure < 5 kPa, fading to 0 at 30 kPa (log axis). Inside a sealed volume: none **[SME]** |
 | Click sound | Short dry tick, 3 random variants, main energy 2–4 kHz |
@@ -199,7 +200,7 @@ Only these events may sound an alarm. Adding one needs the Lead Instructional De
 
 - **The lesson is audible:** step under shielding during a spike and the clicks slow at once. That's A4's cause and effect in sound.
 - Spike start: BELL's log line with the **Warning** tone. Harmful dose: **Radiation alarm** (§5.1).
-- **Aurora is silent** (honest silence, §10).
+- **Aurora is silent** (honest silence, §10). It scales with the solar spike only, not pressure (SME round 2 §2.8), so a strong spike at equilibrium lights the sky while the clicks stay slow.
 
 ---
 
@@ -241,7 +242,7 @@ Everything else in the interface is either silent or a small diegetic action sou
 | Same cue repeated | A failure tone for the same machine and cause plays at most once per 2 minutes |
 | During an alarm | All feedback cues wait. When the alarm stops, the highest-priority waiting cue plays once (Failure > Warning > Gate > Message > Forecast > Log); the rest merge silently into the log badge |
 | During voice (if added later) | All feedback cues wait until the line ends + 0.5 s (rule 3) |
-| During danger, combat, or active building (TEAM.md 8.6 rule 1) | Cues still play (they don't stop play), but **no pop-up** accompanies them. Forecast and message cues wait for a natural pause |
+| During danger, combat, or active building (TEAM.md 8.6 rule 1) | **Feedback cues wait** for the natural-pause signal, as in the TL's cue queue (ARCHITECTURE.md §2.12; I accept it: simpler and lower load). **One exception, proposed:** a Warning tone about a *new hazard on its way* (storm or solar event coming) plays at once, because it is about safety and the player may need to act |
 | Classroom last ~5 minutes | Forecast cues wait for the next session (LEARNING.md §4.6, extended rule 5) |
 | Group planets | Planet events (gates, failures, messages) play for every player on the planet. Personal events (own forecast, own Record page) play only for that player |
 
@@ -274,7 +275,7 @@ Every terraforming and life-support machine has a sound set: **start, running lo
 
 | Machine | Running sound | State cues | Extra driving input |
 |---|---|---|---|
-| **Regolith Outgasser** | Low heater drone (≈ 80–120 Hz fundamental with a 400–800 Hz overtone so laptops carry it) + a soft **"chuff" synced to each vapor puff** from the stack (keyframes §3.8) | Start: igniter ticks, drone rises over 2 s. Worn: chuffs irregular, a rattle every few seconds. Storm power cut: drone drops pitch and chuffs slow, matching the slower puffs. Failed: drone winds down, one metal clank | Puff rate and size (visual), so sound and plume always agree; pressure filter. Contact thump (unfiltered) within 3 blocks, so it's never silent in Phase 1 |
+| **Regolith Outgasser** | Low heater drone (≈ 80–120 Hz fundamental with a 400–800 Hz overtone so laptops carry it) + a soft **"chuff" synced to each vapor puff** from the stack (keyframes §3.8) | Start: igniter ticks, drone rises over 2 s. Worn: chuffs irregular, a rattle every few seconds. Storm power cut: drone drops pitch and chuffs slow, matching the slower puffs. Failed: drone winds down, one metal clank | Puff rate and size (visual), so sound and plume always agree. Drone comes as **two pre-filtered files** (`run_thin` low-passed at 1.5 kHz, `run_full`), crossfaded by pressure like the wind bed, because this is the main machine that teaches "thin air, faint sound". Contact thump (unaffected by pressure) within 3 blocks, so it's never silent in Phase 1 |
 | O2 generator | Electrolysis bubbling + small fan + **filter whine** | Whine rises in pitch as the filter clogs (perchlorate dust, DESIGN.md §3); replaced filter: whine gone | Filter wear (C2: you can hear maintenance coming) |
 | Water recycler | Pump gurgle cycle (4 s) | Worn: gurgle stutters | — |
 | Regolith Oven | Oven tick and low hum | — | — |
@@ -296,19 +297,19 @@ Every terraforming and life-support machine has a sound set: **start, running lo
 **Concurrency:** at most **8 machine loops** audible at once (the nearest); others are culled. Loops of identical machines within 4 blocks merge into one louder loop (+3 dB) instead of stacking.
 
 ### 8.3 Fire (O2)
-**Driving input:** **O2 fraction** bands (keyframes §3.4). Goals A5, B4.
+**Driving input:** **O2 fraction** bands and the minimum-pressure guard, as corrected by the SME (keyframes §3.4). Goals A5, B4.
 | O2 band | Sound |
 |---|---|
-| < 5 % | **Igniter clicks, no catch** (click-click, nothing): honest, because the flame never forms. Subtitle "Igniter fails to light" |
-| 5–12 % | Weak sputter that keeps dying |
-| 12–23 % | Normal small crackle |
+| < 14 %, **or total pressure < 20 kPa** (invented guard) | **Igniter clicks, no catch** (click-click, nothing): honest, because the flame never forms. Subtitle "Igniter fails to light" |
+| 14–17 % | Weak sputter that keeps dying |
+| 17–23 % | Normal small crackle (quieter at 17–19 %) |
 | > 23 % | Louder crackle with a "whump" as fire spreads; sparks pop. Fire inside a sealed volume: **Fire alarm** |
 
 ### 8.4 Terrain and water
 | Event | Sound | Driving input | Goals |
 |---|---|---|---|
-| Ice sublimating (Phase 1) | **None** (honest silence, §10) | — | A2 |
-| Flash puddle boiling (0.61–5 kPa) | Brief fizzing boil, 2–4 s, quiet (pressure filter) | Pressure + local temperature (ice-to-water rule) | A2 |
+| Ice sublimating (rare: only below the triple point, about the first sol) | **None** (honest silence, §10) | — | A2 |
+| Flash puddle boiling (Phase 1 near a heater) | Brief fizzing boil, 2–4 s, quiet (pressure gain) | Local temperature **at or above the boiling point** at current pressure (`mars:boiling_point`; SME round 2 §1.1) | A2 |
 | Day puddle freezing at night | Thin ice "tick" at dusk | Local temperature | A2 |
 | Ground collapse warning | Low creak through the ground (contact path) 3–5 s before, then a thump and dust slide | Ground-ice lens melt state (local) | B5, C2 |
 
@@ -332,50 +333,55 @@ Every terraforming and life-support machine has a sound set: **start, running lo
 - Main energy in 500 Hz–3 kHz so they survive the pressure low-pass at Thaw (~22 kPa, cutoff ~6–7 kHz) and laptop speakers.
 - **A raid is not an alarm.** The player learns of it from the scrape sounds near the machine (if close), BELL's "motion near Extractor 1" log line (Log chime), and the failure report if damage happens (Failure tone).
 - **Shrouded machine:** thawlings that sniff it and leave make one disappointed snuffle (a readable "nothing warm here").
-- Category: **neutral** (animals), never hostile (§9.3).
+- Category: **neutral** (animals), never hostile (§9.4).
 
 ---
 
-## 9. What audio needs from the client (input for the Technical Lead)
+## 9. Fit with the Technical Lead's sound hooks (ARCHITECTURE.md §2.12)
 
-The TL owns the design of the hooks. This lists what the audio design depends on.
+The TL's design is adopted. This records what the audio content must supply, and where this direction asks for a little more.
 
-### 9.1 Inputs (descriptive names; TL maps them to data keys)
-| Input | Kind | Used by |
+### 9.1 Inputs (data keys from ARCHITECTURE.md §2.5.2)
+| Input | Data key | Used by |
 |---|---|---|
-| Pressure (kPa), **smoothed display value** (same as the sky) | Index parameter | Exterior gain, low-pass, range, wind bed, subtitle band, windsock, airlock hiss, background ticks, radiation pressure scale |
-| Global temperature; local temperature (per-chunk heat map) | Index + derived | Ice cracks, puddle freezing |
-| Hydrosphere (%) | Index | Drips, lapping, rain |
-| O2 fraction (%) | Index | Fire bands |
-| Biomass (BU) | Index | Rustle |
-| Breathable condition (live) | Derived | Helmet-off, Air alarm when helmet off |
-| Storm strength (0–1) | Derived weather state | Storm layers |
-| Radiation spike active, spike strength | Event | Dosimeter |
-| Local shielding factor at the player | Derived | Dosimeter |
-| Listener in a sealed volume; that volume's pressure loss | Sealing system | Path choice (§2), Air alarm |
-| Helmet state; suit O2; suit integrity; radiation dose | Player state | Suit path, alarms |
-| Machine state; puff rate; output; shrouded; filter wear | Block entity | Machine sounds |
-| Fauna state and behavior | Entity | Thawling sounds |
-| Colony log events with severity; message delivered; forecast prompt/result; report sent; Record page filled | Story and learning events (ARCHITECTURE.md §9) | Feedback cues |
-| Alarm state; voice playing | Client mix state | Priority and queue (§7.3, §7.4) |
-| Natural pause flag; classroom end-of-session signal | Learning layer | Queue |
+| Pressure, smoothed 30 s (same as the sky) | `mars:pressure` (`keyframes/ambient.json`, log10) | Bed crossfades and subtitles, exterior gain, windsock, airlock hiss, background ticks, Outgasser drone variants |
+| Temperature; local temperature | `mars:temperature`; client `local_temperature` | Ice cracks, puddle freezing |
+| Hydrosphere | `mars:hydrosphere` | Drips, lapping, rain |
+| O2 fraction; pressure guard | `mars:o2_fraction`, `mars:pressure` | Fire bands |
+| Biomass | `mars:biomass` | Rustle |
+| Boiling point | `mars:boiling_point` | Flash-puddle boil |
+| Breathable condition | `mars:breathable_air` | Helmet-off, Air alarm when helmet off |
+| Storm strength | `mars:storm_strength` (signal) | Storm layers |
+| Surface radiation × local shielding | `mars:surface_radiation` (signal) | Dosimeter |
+| Fauna pressure, behavior | `mars:fauna_pressure`, entity state | Thawling sounds |
+| In sealed volume; helmet; suit O2 and integrity; dose | Synced player state | Path choice (§2), suit path, alarms |
+| Machine state, puff rate, output, shroud, filter wear | Block entity fields | Machine sounds |
+| Log events with severity, messages, forecasts, reports, Record pages | Story and learning events (ARCHITECTURE.md §9) | Feedback cues |
+| Natural-pause signal; classroom end-of-session signal | Learning layer | Cue queue |
 
-### 9.2 Mix features needed
-1. A **global exterior filter**: gain and low-pass applied to every sound tagged *exterior*, updated when the smoothed pressure changes (at most once per second, like the sky). **Fallback if a real-time low-pass is too costly or not available:** pre-rendered variants per band (thin, muffled, full) crossfaded by gain, as already done for the wind bed (§3.4).
-2. A **helmet filter** stage (same mechanism, fixed values, §3.5).
-3. **Scaled attenuation distance** for exterior sounds by pressure (§3.2).
-4. A **cue queue** with the priority ladder, gaps, merging, and holds in §7.3–7.4.
-5. **Ducking** for alarms (and voice later).
-6. **Per-event subtitles**, including the three pressure-band wind events.
-7. **Loop culling** for machines (§8.2).
+### 9.2 What the content supplies
+1. **Pre-filtered ambient beds**: `wind_thin` (low-pass 1.5 kHz), `wind_mid` (5 kHz), `wind_full` (none), and `wind_full_helmet` (6 kHz), crossfaded by `keyframes/ambient.json`. Stereo allowed (non-positional).
+2. **Pre-filtered variants for the main teaching sound**: Outgasser drone `run_thin` and `run_full`. Every other exterior sound gets the **gain only** (TL hook, applied to vanilla and third-party sounds too).
+3. **Mono** files for every positional sound (TL: vanilla only places mono sounds in 3D; unverified in this session).
+4. A **subtitle** for every event (a unit test fails the build otherwise, ARCHITECTURE.md §2.12).
+5. The cue channels map: Alarm = §5; Voice = none yet; Feedback = §7.1 cues; World = everything else.
 
-### 9.3 Proposed vanilla sound categories
+### 9.3 Where this direction differs (for the TL to accept or push back)
+| Item | TL hook | This direction | Why |
+|---|---|---|---|
+| Merge window for identical cues | 3 s | Log chime merges within **10 s**; Info-only bursts once per 60 s | Sparing; 3 s still allows a chime every few seconds in busy periods |
+| Danger hold | Feedback waits during danger | Same, **plus one exception**: storm/solar warnings play at once | Safety information |
+| Helmet bed | Exterior beds open at helmet-off | One extra file, `wind_full_helmet` | Makes the 75 kPa helmet-off moment audible |
+| Audible range scaling | Not included | Stage 5 optional | Real effect, but gain already carries the cue |
+
+### 9.4 Proposed vanilla sound categories
 | Our sounds | Category |
 |---|---|
-| Exterior ambience, rain, wind bed | ambient / weather (rain and storm in weather) |
+| Exterior ambience, wind beds | ambient |
+| Rain, storm | weather |
 | Machines, airlock, terrain | blocks |
 | Thawlings | **neutral** (never hostile) |
-| Suit, footsteps, dosimeter, alarms | players (alarms must not sit in a category players usually mute; TL to confirm what's available in 1.21.1) |
+| Suit, footsteps, dosimeter, alarms | players (alarms must not sit in a category players usually mute; TL to confirm what 1.21.1 offers) |
 | Feedback cues, interface | the closest interface-type category in 1.21.1 (**unverified** which exist; TL to confirm) |
 | Music (if adopted, §12) | music |
 | Voice (if adopted later) | voice |
@@ -386,10 +392,10 @@ The TL owns the design of the hooks. This lists what the audio design depends on
 
 | Where | Real / expected | What we do | Why |
 |---|---|---|---|
-| Outdoor loudness at 0.6 kPa | Around 20 dB quieter than Earth for similar sources (**unverified**) | Gain 0.25 (≈ −12 dB) | Keeps the outside usable as a cue; the change is still clear **[SME]** |
-| Gas mix | Sound depends on gas type as well as pressure | Pressure only | One input per channel (keyframes §1.1) **[SME]** |
-| Contact sounds | Some sound reaches you through the suit and ground | Footsteps, tools, grain patter stay audible | Playability; plausible **[SME]** |
-| Helmet filter | Helmets muffle sound | −3 dB, low-pass 6 kHz | Makes helmet-off audible |
+| Outdoor loudness at 0.6 kPa | About 20 dB weaker than Earth (model prediction, SME [S22]) | Gain 0.25 (≈ −12 dB) | Keeps the outside usable as a cue; SME: acceptable simplification |
+| Gas mix | Sound depends on gas type as well as pressure | Pressure only | One input per channel (keyframes §1.1) |
+| Contact sounds | Some sound reaches you through the suit and ground | Footsteps, tools, grain patter stay audible | Playability; plausible **[SME]** (not yet checked) |
+| Helmet filter | Helmets muffle sound | −3 dB, plus a pre-filtered helmet bed (6 kHz) | Makes helmet-off audible |
 | Sublimation | Silent and slow | **No sound** | Honest; a hiss would teach a false idea |
 | Aurora | Silent | **No sound** | Honest |
 | Dust storms | Thin air: weak force, no howling | Grain patter and muffled hiss, no gale | Avoids the film misconception (DESIGN.md audit) |
@@ -467,8 +473,8 @@ Follows story bible §6.5 and style guide §10. Driving input: ending sequence s
 
 | Item | Who | Type |
 |---|---|---|
-| Check §3.1 claim and every [SME] row (§3.2 values, background ticks, contact path) | SME | Well-structured |
-| Sound system hooks and costs (§9); real-time low-pass vs. pre-rendered fallback; stereo attenuation; categories | Technical Lead | Well-structured |
+| ~~§3.1 claim~~ Accurate (SME round 2 §4). Still open: background ticks (§6.2), contact path (§2) | SME | Well-structured |
+| ~~Hooks~~ Done (ARCHITECTURE.md §2.12). Still open: categories (§9.4), the safety-warning exception during danger (§7.3), the helmet bed input, Stage 5 range scaling | Technical Lead | Well-structured |
 | Thresholds: suit O2 alarm, harmful dose, shielding factors | Lead Game Designer | Well-structured |
 | Neutral forecast-result cue; subtitles on by default in classroom | Lead Instructional Designer | Well-structured |
 | Music scope; real Mars recording in the journal | User (via Producer) | Ill-structured (scope, appeal) / well-structured (license) |

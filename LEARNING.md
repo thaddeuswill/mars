@@ -1,6 +1,6 @@
 # Learning Design
 
-**Owner:** Lead Instructional Designer · **Last updated:** 2026-11-26, round 2 (fading plan, process vs. outcome feedback map, worked example, interleaving, Shift Briefings, Air window check, reflections decision, delayed post-test, educator guide draft)
+**Owner:** Lead Instructional Designer · **Last updated:** 2026-11-26, round 2 (fading plan and process/outcome map; worked example; interleaving; Shift Briefings; Air window check; reflections decision; delayed post-test; priority tiers and interruption rules decided; Chapter 6 motivation lens; Chapter 9 evaluation loop, requirements, behavioral indicators, four purposes, performance tracking, validation; SME round 2 and Technical Lead round 2 applied; educator guide draft)
 
 This file follows an Instructional Systems Design (ISD) model, ADDIE. It starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions, followed by classroom mode (section 5) and NGSS alignment (section 6):
 
@@ -129,9 +129,9 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 | Goal | Taught by (game content) | Practiced by | Feedback | Measured: individual | Group evidence (formative) | Status |
 |---|---|---|---|---|---|---|
 | A1 Mars vs. Earth | Phase 1 Shift Briefing (2.1); Phase 1 hazards (incl. real perchlorate dust); Monitor values and milestones (Armstrong line 6.3 kPa, Everest pressure ~33.7 kPa); gate journal "On Earth" lines | Reading the Monitor; forecast F3 | Monitor values; gate journal | Post-test **data task**: compare a Mars/Earth data table | — | Covered |
-| A2 Liquid water | Ice-to-water rule (DESIGN.md §2, SME round-2 version): ice warmed near heaters in Phase 1 melts and boils away at once (boiling point a few °C); barely warmed ice gives a brief puddle; water stays from 5 kPa while above 0 °C and below the boiling point; Monitor shows water's boiling point. **Depends on DESIGN.md adopting the SME's rule** (Lead Game Designer) | Forecasts F4a (Phase 1) and F4b (Thaw); interleaved FI-2 (Phase 3, 2.3); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b results | Hydrosphere gate reached | Covered |
+| A2 Liquid water | Ice-to-water rule (DESIGN.md §2, SME round-2 version): ice warmed near heaters in Phase 1 melts and boils away at once (boiling point a few °C); barely warmed ice gives a brief puddle; water stays from 5 kPa while above 0 °C and below the boiling point; Monitor shows water's boiling point. **Depends on DESIGN.md adopting the SME's rule** (Lead Game Designer) | Forecasts F4a (Phase 1) and F4b (Thaw); interleaved FI-2 (Phase 3, 2.3); "What caused it?" | Ice behavior changes as pressure rises; journal | Post-test scenario; F4a, F4b, FI-2 results | Hydrosphere gate reached | **Covered, conditional**: F4a's trigger and key hold only under the SME's boiling-point ice rule and the new trigger (prompts-and-reflections §1.2) |
 | A3 Greenhouse effect | Greenhouse emitters (factory-made greenhouse gases); temperature curve | Forecast F5 | Temperature trend; journal | Post-test explanation | — | Covered. Depends on the emitter journal naming what it emits (SME; Lead Game Designer) |
-| A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2, spaced), interleaved FI-3 (Phase 3) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
+| A4 Radiation | Radiation spikes and shielding; solar-event story beat 5; journal | Forecast F2 (Phase 1), F7 (Phase 2 at ≥ 5 kPa, spaced), interleaved FI-3 (Phase 3) | Exposure effect; failure report; forecast result | Post-test scenario; F2 and F7 results | — | **Gap closed on paper**, if story beat 5 and a spike warning ~1 sol ahead are built (Lead Game Designer, Technical Lead) |
 | A5 CO2/O2 exchange | Phase 3 balancing; flora; CO2 from decay; carbon scrubbers; carbon flow view on the Monitor | Forecasts F8, F9; flora-bloom and decay drift events | Fires or stability; Monitor (O2 fraction **and** O2 partial pressure) | Post-test explanation; F8 result | Breathable condition (O2 partial pressure ≥ 16 kPa, pressure ≥ 75 kPa, CO2 ≤ 0.5 kPa) held for the active preset's hold time | Covered. **Concern:** narrow O2 window at 75 kPa may be hard to read at MS depth (4.7) |
 | B1 Cause and effect | Planetary Index responses; Monitor cause breakdown; worked example on the first Outgasser (2.2) | "What caused it?"; every forecast | Monitor cause breakdown | Post-test variable-link diagram | — | Covered |
 | B2 Feedback loops | Fauna vs. machine signature (reinforcing); ice–albedo (reinforcing, adopted); polar frost sink and storms vs. pressure (balancing); Monitor names each as a cause | Forecast F6; Keeper's Report 2; polar-winter and fauna-grazing drift events | Keeper's Report; Earth reply | Report 2 reflection and transfer task: one loop of each type | — | Covered. Ice–albedo adopted (size pending SME), which makes HS-ESS2-2 a near-exact fit |
@@ -145,6 +145,7 @@ Every goal must be **taught, practiced, given feedback, and measured** (TEAM.md 
 | D2 Link to Earth | Journal "On Earth" lines; Mensah's replies; Phase 2 debrief with Earth CO2 and temperature graphs | Keeper's Report reflections; transfer task | Mensah's replies; class debriefs | Transfer task and reflections, D2 rubric | — | **Content specified** in `docs/learning/prompts-and-reflections.md`; text not yet written; Earth facts need SME check |
 
 **Remaining gaps:**
+- **Round 2 alignment re-check (after the SME review):** no goal lost its teaching, feedback, or measure. Changes: A2 is conditional on the boiling-point ice rule (Lead Game Designer); A4's F7 fires earlier (clearer); C2's HS codes changed (HS-ETS1-2, -4); D2's Record page no longer fills from opening pages (now writing only). New elements added to rows: worked example (B1, C3), Shift Briefings (A1, C3), interleaved forecasts (A2, A4, C1).
 - A4 and D2 are closed in design only. Both need content written and built (Stage 4; A4's first forecast also belongs in the Stage 3 slice if the radiation spike is in it).
 - Several high school NGSS mappings are "Moderate" until specific content exists (section 6.1 notes): the D2 Earth content, carbon reservoirs on the Monitor (HS-ESS2-6), and a claim-evaluation question in the Phase 3 debrief (HS-LS2-6, now in Keeper's Report 3).
 
@@ -256,6 +257,8 @@ Different kinds of content need different teaching and testing approaches.
 | **Procedures** | Seal a dome, set up an O2 loop, maintain a machine | Guided first attempt, then practice with less support | Observed in play: completed without failure |
 | **Problem-solving** | Stabilize O2/CO2 while keeping temperature up | Open-ended challenges, productive failure, hints not answers | Group: reach and hold equilibrium. Individual: trade-off scenario and reflection |
 | **Attitudes** | Weighing terraforming ethics; linking to Earth's climate | Reflection questions, discussion | Rubric-scored written reflection |
+
+**Task analysis:** [docs/learning/cta.md](docs/learning/cta.md) (cognitive task analysis). **Media analysis:** [docs/learning/media-analysis.md](docs/learning/media-analysis.md).
 
 **Most of the content is cause and effect and problem-solving.** That's why simulation and discovery are the main strategies, and why assessment leans on prediction and performance rather than recall.
 
@@ -557,6 +560,8 @@ On a shared group planet, gates, the dome, and the breathable air belong to the 
 | **Group (per planet)** | Gates reached, dome survival, breathable condition held, equilibrium, beacon, drift events answered | Group progress, pacing decisions, class discussion. Never copied into one student's evidence |
 
 This rule also applies to the Keeper's Record (section 4.3): a page fills only from the player's **own** evidence. Group milestones show in a separate "Cairn team" section.
+
+**C2 credit on the Shift Board (answer to the Technical Lead, ARCHITECTURE.md §2.8): credit the player who did the repair (`shiftboard.creditRule = actor`), not a claimer who didn't repair.** C2 is "diagnose and fix so it stays fixed"; claiming a failure and handing it off shows coordination, not repair. The claim is still logged (useful for the teacher and for B4/C3 discussions), and a claimer who diagnosed the cause still earns C2 evidence through a correct "What caused it?" answer on that failure. `failure.repeat` → `prior_credit` follows the same rule. This changes DESIGN.md Group Play ("credit goes to the claimer"): handoff to the Lead Game Designer. **Revisit if** playtests show groups where one student always diagnoses and another always repairs (then consider shared credit).
 
 ### 3.1 In-game evidence (stealth assessment)
 
@@ -862,7 +867,7 @@ These rules go into the wording rules for the Lead Game Designer (story bible §
 ### 4.6 When feedback may interrupt play (decided: option I-C)
 
 **Status: decided** (user, 2026-11-26, option **I-C** in `docs/production/consensus-round2.md`; TEAM.md 8.6). Rules 1–11 below are the **Stage 3 test configuration**, with two flow guards that override my original wording of rule 3 and set rule 4's numbers as config:
-1. **Report re-offers are bounded:** an unsent Keeper's Report is re-offered **at most once per session**, plus the "Since last shift" recap line, not at every natural pause. The teacher overview still shows unsent reports.
+1. **Report re-offers are bounded:** an unsent Keeper's Report is re-offered **at most once per session**, plus the "Since last shift" recap line, not at every natural pause. The teacher overview still shows unsent reports. After 2 deferrals (`interrupt.debriefMaxDefers`) it stops popping up and waits in the side panel. Delivery is a log line plus a side-panel entry, opened full screen by choice or at the next natural pause (5.5; PROCESS.md §4).
 2. **Caps are config values:** pop-ups about 1 per 10 minutes; log lines about 3 per minute, merged when similar. Final numbers come from Stage 3 action-log counts (rule 10 logs every interruption, deferral, and expiry).
 
 - **Rationale:** keeps every measurement safeguard (reports can't vanish; forecasts expire instead of being scored late; results arrive first) while bounding the reminders that most threaten flow immersion. Disputed numbers become config, settled by playtest evidence (TEAM.md §4).
@@ -1154,7 +1159,27 @@ The teacher needs to answer three questions: *Where is each group? What has each
 | `goals.csv` | Goal ID | goal_id, record_page_title (colony language), ngss_ms, ngss_hs, practice_only (yes/no), priority_tier, scope. Generated from `ngss_map.json`, so teachers see codes without repeating them in every row |
 | `reflections.csv` | Written answer | player_id, planet, band, report_id, goal_ids, sol, text, d1_score, d2_score, b5_score (rubric columns left blank for the teacher; rubrics in `docs/learning/rubrics.md`) |
 
-`goals.csv` is new compared with ARCHITECTURE.md §8.6 (handoff to the Technical Lead). NGSS codes come from `data/mars/learning/ngss_map.json`; an example in that format is in [docs/learning/ngss_map.example.json](docs/learning/ngss_map.example.json).
+**Technical Lead additions (ARCHITECTURE.md §8.6, round 2): all accepted.** `forecasts_late` in `players.csv` (late answers are a signal of prompts arriving mid-task; not scored); `void` as a forecast result (never happened, skipped by "set phase", or rolled back; not scored and not counted as expired); `names_replaced` in `reflections.csv` (tells the teacher to read that answer with care). My round-2 additions for the Technical Lead to add: `forecasts_interleaved_answered`, `forecasts_interleaved_correct`, `forecasts_scaffolded`, `worked_example`, `briefings_opened` (players.csv), and the "needs a look" flags (3.7) in the class overview, not the export.
+
+**Tuning numbers I own** (data, not code; starting values, to be checked against Stage 3 action-log counts):
+
+| Key | Value | Meaning |
+|---|---|---|
+| `learning.monitorCheckWindowSols` | **0.25 sol** (accept the default) | Monitor viewed by the same player within this window before a major build counts for C3 |
+| Monitor minimum view (new key, Technical Lead) | **1 s** | Shorter views don't count (gaming guard, 3.10) |
+| `fade.retire_tip_after_own_fixes` | **1** | Hana's tip for a cause stops after the player's first own fix of it |
+| `fade.escalate_hint_after_repeats` | **[2, 4]** | Hint level 2 at the 2nd occurrence of an unfixed cause; level 3 at the 4th. Not faster: the player should try their own fix first (productive failure) |
+| Outcome form | after **1** own fix with no repeat of that cause on that machine in the phase | 4.8 |
+| Re-scaffold | back to **level 1** on any repeat after the player's own fix | 4.8 |
+| Forecast pointer return | accuracy **below 1 in 3 after 3** forecasts in the phase | 4.8 |
+| `interrupt.debriefMaxDefers` | **2** | After 2 deferrals the report stops being offered as a pop-up; it stays in the side panel, the "Since last shift" line still names it, and the teacher overview flags it. It never blocks |
+| `forecast.lateWindowSols` | 0.05 (accept) | — |
+
+**Model-based assessment** (ARCHITECTURE.md §11a.3): **confirmed out of scope** for launch (3.9). The event log keeps enough for an offline model later.
+
+**Keeper's Report delivery vs. "no modal pop-ups for progress"** (PROCESS.md §4; Producer's proposal): **accept.** A report is offered as one colony-log line plus an entry in the side panel; it opens full screen only when the player chooses it or at the next natural pause (gate reached counts). This keeps every measure (the report still can't vanish: re-offer once per session, the recap line, the side panel, the teacher flag) and removes the only blocking progress screen. Shift Briefings 2 and 3, which follow the report screen, then follow it whenever it is opened. Lead Game Designer to confirm in the UI spec.
+
+`goals.csv` is new compared with ARCHITECTURE.md §8.6 (handoff to the Technical Lead; now adopted there). NGSS codes come from `data/mars/learning/ngss_map.json`; an example in that format is in [docs/learning/ngss_map.example.json](docs/learning/ngss_map.example.json), now with `tier`, `scope` (always `player`), and `record_title_key` for each goal.
 
 **Reflections export: decision (user, 2026-11-26).**
 

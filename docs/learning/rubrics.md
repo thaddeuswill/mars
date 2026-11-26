@@ -1,6 +1,6 @@
 # Rubrics
 
-**Owner:** Lead Instructional Designer · **Status:** Draft 1, 2026-11-26 · Used by: teachers (educator guide), the learning study (Stage 6)
+**Owner:** Lead Instructional Designer · **Status:** Draft 2, 2026-11-26 (transfer-task answer key adopted from the SME) · Used by: teachers (educator guide), the learning study (Stage 6)
 
 Scored on written answers only (Keeper's Report reflections, final reflection, transfer task). Class discussion is formative and not scored. Each rubric is 1–4; the criterion in LEARNING.md 0.6 is **3 or higher**. The same rubric is used for both grade bands; HS answers are held to the HS descriptor where one is given.
 
@@ -56,4 +56,58 @@ Task: "Draw the feedback loops in Earth's carbon cycle. Label one reinforcing an
 | 2 | Some correct links; only one loop type correct, or loop types swapped |
 | 1 | Links mostly missing or wrong; no loop identified |
 
-Scores feed three measures: B1 (links), B2 (loops), D2 (the Earth system itself). The SME must check the answer key before use.
+Scores feed three measures: B1 (links), B2 (loops), D2 (the Earth system itself). Answer key below, drafted by the SME (round2-review.md §3.3) and adopted here.
+
+### Transfer task answer key (SME draft, adopted 2026-11-26)
+
+**Status:** SME-drafted; **pending external review** by a high school Earth or environmental science teacher and a carbon-cycle scientist before it grades real students (round2-review.md §11, item 5). Sources: IPCC AR6 WG1 chapter 5 (not opened by the SME).
+
+Directions use "+" (more A → more B) and "−" (more A → less B). **Loop type rule:** count the "−" links around the loop. Even (including zero) = **reinforcing**; odd = **balancing**.
+
+**Accept these links** (score toward "at least 4 correct links"):
+
+| Link | Sign | Notes |
+|---|---|---|
+| Burning fossil fuels → CO2 in air | + | An input, not a loop |
+| Cutting or burning forests → CO2 in air | + | Input |
+| CO2 in air → temperature (greenhouse effect) | + | Core link |
+| CO2 in air → plant growth (photosynthesis) | + | Size of this effect is uncertain; direction accepted |
+| Plant growth → CO2 in air | − | |
+| CO2 in air → CO2 taken up by the ocean | + | |
+| Ocean uptake → CO2 in air | − | |
+| Temperature → how much CO2 the ocean can hold | − | Warm water holds less gas |
+| Temperature → decay of soil and dead plants (respiration) | + | |
+| Decay → CO2 in air | + | |
+| Temperature → permafrost thaw | + | |
+| Permafrost thaw → CO2 and methane in air | + | |
+| Temperature → rock weathering | + | Very slow (100,000+ years) |
+| Rock weathering → CO2 in air | − | |
+| Temperature → wildfires | + | Also depends on drought |
+| Wildfires → CO2 in air | + | |
+
+**Accept these loops**
+
+| Loop | Type |
+|---|---|
+| CO2 → temperature → permafrost thaw → CO2 | Reinforcing |
+| CO2 → temperature → soil decay → CO2 | Reinforcing |
+| CO2 → temperature → ocean holds less CO2 → more CO2 stays in air | Reinforcing |
+| CO2 → temperature → wildfires → CO2 | Reinforcing |
+| CO2 → plant growth → CO2 down | Balancing |
+| CO2 → ocean uptake → CO2 down | Balancing |
+| CO2 → temperature → rock weathering → CO2 down | Balancing (slow) |
+
+**Partial credit and common errors**
+
+| Student answer | Score as |
+|---|---|
+| Ice–albedo loop (temperature → ice melts → darker surface → temperature) | A correct **climate** loop, but not a carbon-cycle loop. Counts for B2 (loop type), not for the carbon-cycle links |
+| "Fossil fuels → CO2 → warming" labeled as a loop | Not a loop (no path back). Correct links, wrong loop |
+| CO2 → plants → less CO2, labeled "reinforcing" | Loop types swapped (rubric score 2) |
+| Ozone hole in the diagram as a cause of warming | Misconception (D2 rubric score 1 for that link) |
+| "Plants make oxygen, so less CO2" with no direction | Partial link |
+| "Balancing = good, reinforcing = bad" | A misreading worth correcting in feedback: loop type describes behavior, not value |
+
+**Uncertainty note for teachers:** the **direction** of every link above is well established; how **strong** some are (plant growth response, soil decay, permafrost) is still being measured. Score direction, not size. Source basis: IPCC AR6 WG1 chapter 5 (**not opened**).
+
+**Scoring note (ID):** "at least 4 correct links" in the rubric means links from the accepted list with the right sign. A loop counts as correct when its type matches the sign rule. Ice–albedo earns B2 credit (loop type) but not carbon-cycle link credit.
