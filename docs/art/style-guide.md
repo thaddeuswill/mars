@@ -209,7 +209,7 @@ Assumption (**unverified**, Technical Lead to confirm with school hardware data)
 |---|---|
 | Every custom screen fits in | **420×236 GUI px** (fits 1280×720 at GUI scale 3, with margin) |
 | Body text readable at | GUI scale 2 on a 1366×768 screen (vanilla font, 9 px line height → 18 screen px) |
-| Fonts | Deliberate faces per role (section 4.8). The vanilla font is used only where vanilla draws the text (chat, vanilla tooltips, subtitles) and as a documented glyph fallback for translations |
+| Fonts | Original pixel faces per role (section 4.8). The vanilla font is used only where vanilla draws the text (chat, vanilla tooltips, subtitles) and as a documented glyph fallback for translations |
 | Minimum icon size | 9×9 GUI px for icons carrying meaning; 16×16 preferred |
 | Text in textures | **None** that carries meaning (it can't be translated or read at distance). Signs and labels in the world are decoration; the real words are in tooltips and the journal. |
 | HUD toasts | Max 3 lines, top-right, never over the crosshair or hotbar; stay ≥ 6 s and can be reopened from the journal (no time-pressured reading, LEARNING.md) |
@@ -230,14 +230,38 @@ The process rule (PROCESS.md §4): pick deliberate faces, never fall back to the
 
 **What Minecraft 1.21.1 lets a resource pack do** (from the vanilla font system; **TL to confirm details for 1.21.1**): a font is a JSON file in `assets/<namespace>/font/` listing **providers**: `bitmap` (a PNG glyph sheet we draw), `ttf` (a TrueType/OpenType file, with size, oversample, and shift settings), `space` (fixed-width gaps), `unihex`, and `reference` (chain another font). Any text component can name a font (`"font": "mars:mono"`), and our own screens can draw with any font. **Limits:** vanilla UI (chat, vanilla tooltips, subtitles) keeps `minecraft:default` unless we override it for the whole game, which we won't; TTF text may look soft next to 16×16 pixel art at small sizes (**unverified**; straw-man render test needed).
 
-| Role | Face | Used for | Source and license | Glyph set we need |
-|---|---|---|---|---|
-| **Display** | **Cairn Display** (original bitmap, by us), cap height 7 px | Screen titles, gate names, "Next:" headers, ending titles | Original; project asset license (open decision in TEAM.md) | A–Z, 0–9, basic punctuation, Latin-1 accents; uppercase only |
-| **Numbers** | **Cairn Mono** (original bitmap, by us), every glyph 6 px advance (tabular, so changing values don't jitter) | Every changing number: Monitor values, gauges, look-at readouts, sol counters, HUD O2 and dose | Original; project asset license | 0–9, `+` `−` (U+2212, true minus), `.` `,` `%` `°` `/` `:` `×` `≥` `≤`, arrows `↑` `→` `↓` (U+2191–2193), `▲` `▼`, thin space (U+2009), unit letters for kPa, °C, %, BU, sol, kHz |
-| **Reading** | **Atkinson Hyperlegible** via the `ttf` provider | Journal, message slips, colony log, failure reports, HUD lines, Monitor labels | Braille Institute; **SIL Open Font License 1.1** (to verify against the license file before shipping). Chosen because it was designed for low-vision legibility, with clearly different I / l / 1 and O / 0 | Latin, curly quotes `“ ” ‘ ’`, en dash, ellipsis, `°`, `−`, `·`. The font file ends with a `reference` to `minecraft:default` **only** so translations into other scripts still render (a documented glyph fallback, not the design default) |
+| Role | Face | Used for | Source and license |
+|---|---|---|---|
+| **Display** | **Cairn Display**: original bitmap pixel font by us, cap height 7 px, uppercase | Screen titles, gate names, "Next:" headers, ending titles | Original; project asset license (open decision in TEAM.md) |
+| **Reading** | **Cairn Text**: original bitmap pixel font by us, x-height 5 px, cap height 7 px, 9 px line; clearly different I / l / 1 and O / 0 (the legibility idea behind Atkinson Hyperlegible, drawn our own way) | Journal, message slips, colony log, failure reports, HUD lines, Monitor labels | Original; project asset license |
+| **Numbers** | **Cairn Mono**: original bitmap pixel font by us, every glyph a 6 px advance (tabular, so changing values don't jitter) | Every changing number: Monitor values, gauges, look-at readouts, sol counters, HUD O2 and dose | Original; project asset license |
 
-- **Alternatives considered:** the vanilla font for all body text (my first draft; rejected under the new process rule, and its arrows and symbols come from a different-looking fallback); fonts made to imitate Minecraft's (rejected: imitation); IBM Plex Mono (OFL) as a TTF number face (good backup if the bitmap mono slips).
-- **If the TTF render test fails** at 1280×720 (GUI scale 2 and 3): draw an original bitmap reading face, "Cairn Text", Latin only. Effort estimate ~3–5 days (Producer to weigh).
+- **Why pixel fonts** (the Lead Game Designer asked for a pixel font, round 2): they sit cleanly next to 16×16 art at every GUI scale, we control every glyph, and the license is ours. Effort estimate: about 3–5 days for the three faces, Latin only (Producer to weigh).
+- **Backup:** Atkinson Hyperlegible (Braille Institute, **SIL Open Font License 1.1**, license file to verify) through the `ttf` provider, if Cairn Text slips. Needs a render test at 1280×720 first, because TTF text may look soft beside pixel art (**unverified**).
+- **Translations:** each Cairn font file ends with a `reference` to `minecraft:default`, used **only** for scripts our faces don't cover (a documented glyph fallback, never the design default).
+- **Alternatives considered:** the vanilla font for all body text (my first draft; rejected under PROCESS.md §4, and its arrows and symbols come from a different-looking fallback); fonts that imitate Minecraft's (rejected: imitation); IBM Plex Mono (OFL) as a TTF number face (backup for Cairn Mono).
+
+**Glyph checklist** (every symbol our specs and UI text use; each must exist in the face that draws it):
+
+| Glyph | Code point | Used for | Cairn Display | Cairn Text | Cairn Mono |
+|---|---|---|---|---|---|
+| A–Z, a–z, 0–9, basic punctuation | U+0020–U+007E | Everything | Upper + digits | ✔ | Digits, unit letters (k, P, a, C, B, U, s, o, l, H, z, %) |
+| Latin-1 accents | U+00C0–U+00FF | Names, translations | ✔ | ✔ | — |
+| Degree sign ° | U+00B0 | °C | — | ✔ | ✔ |
+| True minus − | U+2212 | Negative values (−60 °C) | — | ✔ | ✔ |
+| En dash – | U+2013 | Ranges (19–23 %) | — | ✔ | ✔ |
+| Curly quotes “ ” ‘ ’ | U+201C, U+201D, U+2018, U+2019 | Quoted speech, apostrophes | ✔ | ✔ | — |
+| Ellipsis … | U+2026 | Truncated lines | — | ✔ | — |
+| Middle dot · | U+00B7 | Separators in readouts | ✔ | ✔ | ✔ |
+| Multiplication × | U+00D7 | "Outgassers ×4" | — | ✔ | ✔ |
+| ≥ ≤ | U+2265, U+2264 | Conditions ("≥ 75 kPa") | — | ✔ | ✔ |
+| Arrows ↑ → ↓ | U+2191, U+2192, U+2193 | Trends in text (icons are used on screens) | — | ✔ | ✔ |
+| Subscript two ₂ | U+2082 | "CO₂", "O₂" in player-facing text | ✔ | ✔ | ✔ |
+| Thin space | U+2009 | Between number and unit, thousands | — | ✔ | ✔ |
+| Micro µ | U+00B5 | Read-more science text (µm) | — | ✔ | — |
+
+Check marks, crosses, triangles, and disclosure arrows on screens are **icons**, not glyphs.
+
 - **Glyph check:** before any string uses a symbol, check the face it's drawn in has that glyph. Proposed test (Technical Lead): for every language key, find its font, and assert every code point exists in that font's providers. Check marks and crosses are **icons**, not font glyphs.
 - **Text hygiene:** units on every value; thousands separators (`1,500 BU`) from one helper; true minus sign on negative values (`−60 °C`); curly quotes in English text; no full stop after `?` or `!`.
 - **Values bigger than labels:** on stat rows the number is drawn at 2× (Cairn Mono at scale 2, 14 GUI px tall) and the label at 1× in the reading face.
@@ -351,7 +375,7 @@ pack/assets/mars/textures/
 ### 6.4 Animation and sound direction
 - **Gait:** a soft six-leg wave walk; slow (0.6× player walk speed for adults).
 - **Toward machines:** they approach, frills fan open, they press against the warm side and scrape. The "damage" is scraping and nesting, shown as scratch marks and frost-nest debris on the machine (overlay texture `machine_scraped`), not biting.
-- **Toward the player:** they ignore the player unless attacked. If hit: rear up, frills flared, a short shove, then curl and roll away. **No attack lunge with open mouth.**
+- **Toward the player:** they ignore the player unless attacked. If hit: **rear up (0.5 s, a readable warning), frills flared, a short body shove, then curl and roll away.** No lunge, no open mouth, no chase. Accepted by the Lead Game Designer (ui-specs §7; balance: juveniles shove with knockback only, adults 1 damage once, then flee). Because vanilla animation doesn't blend (§5.4), the sequence is three short clips: `rear_up` (10 frames at 20 fps), `shove` (6), `curl_roll` (16).
 - **Deterrents** (DESIGN.md): near an insulation shroud they sniff, frills stay flat, they lose interest (a visible "nothing warm here"). At a lure station they cluster and bask. In a quiet zone they slow down, graze, and nest.
 - **Sounds (direction for audio):** soft clicks, chirrs, a low hum when basking; a hiss when defending. No roars, screeches, or growls.
 - **Death (lethal defense):** no gore, no blood. The body curls and fades into a small salt-crust puff, like vanilla mobs' smoke, recolored.
@@ -524,19 +548,31 @@ The Lead Game Designer owns the UI specs (screens, flows, wording). This section
 **Visual answer, two levels:**
 
 **Level 1 (default, middle school band): three checks and a zoomed O2 gauge.**
-- **Air check row:** three small gauges side by side, each with a target notch and a check / cross shape: **"Thick enough"** (pressure ≥ 75 kPa) · **"Oxygen push"** (O2 partial pressure ≥ 16 kPa) · **"Low CO2"** (≤ 0.5 kPa). When all three show a check, a helmet-off icon lights (shape changes from closed helmet to open helmet). "Oxygen push" follows the story bible's middle school wording, "how hard the oxygen pushes". Under the naming rule (4.9) each check shows the **real name first** ("Pressure", "O2 partial pressure", "CO2 partial pressure") with the plain words as the help line at middle school depth; wording is for the Lead Game Designer and Lead Instructional Designer.
+- **Air check row:** three small gauges side by side, each with a target notch and a check / cross shape. Labels are the Lead Game Designer's (ui-specs §5): MS "Thick enough" / "Oxygen push" / "Low CO2"; HS "Pressure ≥ 75 kPa" / "O2 partial pressure ≥ 16 kPa" / "CO2 partial pressure ≤ 0.5 kPa". Under the naming rule (4.9) I'd suggest the MS rows also show the real name small under the plain words (e.g. "Oxygen push" with "O2 partial pressure" in secondary text): a suggestion, not a change. When all three show a check **and** the hold is complete, the helmet icon changes shape from closed to open.
 - **Zoomed O2 gauge:** the O2 bar shows only **15 % to 27 %**, so the window fills about an eighth of the bar instead of a sliver. Zones, each with a pattern **and** a pictogram:
 
-| Zone | Range | Pattern | Pictogram |
+| Zone (labels final, Lead Game Designer, ui-specs §5) | Range | Pattern | Pictogram |
 |---|---|---|---|
-| Too thin to breathe | below 16 kPa ÷ pressure (21.5 % at 75 kPa) | Sparse dots | Closed helmet |
-| **Breathe here** | from the lower edge to 23 % | Clear, with a bold outline | Open helmet |
-| Fire risk | above 23 % | Diagonal hatch | Flame |
+| **Too little oxygen** | below 16 kPa ÷ pressure (21.3 % at 75 kPa) | Sparse dots | Closed helmet |
+| **Breathable** | from the lower edge to 23 % | Clear, with a bold outline | Open helmet |
+| **Fire risk** | above 23 % | Diagonal hatch | Flame |
 
-- **The lower edge slides.** When pressure goes up, the "too thin" zone shrinks and the "breathe here" zone **widens on screen**. A player who pushes pressure higher literally sees the window open up. This is the B4 lesson made visible, and it is the main reason for this design.
+I accept the label change: "too thin" belongs to the pressure check, and mixing them would blur the two causes the panel separates.
+
+**The four pressure states** (ui-specs §5), drawn:
+
+| Pressure | Lower edge | Visual |
+|---|---|---|
+| ≥ 75 kPa | ≤ 21.3 % | Normal: Breathable zone clear with its bold outline |
+| 69.6–75 kPa | 21.3–23 % | Breathable zone keeps its outline but is **lightly hatched** (1 px lines every 4 px, `#59616A`), and the "Thick enough" check shows a cross. Text "Not thick enough yet" beside it |
+| < 69.6 kPa | > 23 % | No Breathable zone. The gauge shows only dots and hatch; text line "No safe oxygen level at this pressure. Raise pressure first." on the panel |
+| < 60 kPa | > 26.7 % (off scale) | Same, with the edge marker pinned to the top of the bar and an up-arrow icon |
+
+- **Time-to-edge line** under the gauge (ui-specs §5): clock icon + text, only when an edge is under 2 sols away; never flashes.
+- **The lower edge slides.** When pressure goes up, the "Too little oxygen" zone shrinks and the "Breathable" zone **widens on screen**. A player who pushes pressure higher literally sees the window open up. This is the B4 lesson made visible, and it is the main reason for this design.
 - A ghost notch shows where the edge would be at the next 5 kPa of pressure (optional, high school band).
 
-**Level 2 (high school band, "read more"): the Air window chart.** A small 2D chart: pressure across (60–100 kPa), O2 % up (15–27 %). The breathable, fire-safe region is the bold-outlined shape; the current state is a dot with a short trail of the last few sols. Fire-risk area hatched, too-thin area dotted. Fits 120×80 GUI px.
+**Level 2 (high school band, "read more"): the Air window chart.** A small 2D chart: pressure across (60–100 kPa), O2 % up (15–27 %). The breathable, fire-safe region is the bold-outlined shape; the current state is a dot with a short trail of the last few sols. Fire-risk area hatched, too-little-oxygen area dotted. Fits 120×80 GUI px.
 
 **Not used:** a single "breathability %" number. It hides the two causes the player has to balance.
 
@@ -546,6 +582,16 @@ The Lead Game Designer owns the UI specs (screens, flows, wording). This section
 - **Block:** a cork-and-metal board with pinned paper slips; the number of slips on the texture follows the number of open failure reports (0–6 slip variants), so the board shows "lots to fix" from across the room.
 - **Screen:** one row per open failure: failure icon (octagon), machine name and place, claimer's in-game name (or "Open"), and a **status shape**: hollow circle = open, half-filled = claimed, check = fixed. Text says the status too.
 - Same panel style as BELL's log (§7.1), with a paper-slip look for each row so it reads as "people's notes".
+
+### 11.3a Quiet zones on the Monitor fauna map and in the world
+The quiet zone is defined by the rule (no active machine within 48 blocks; ui-specs §7), not by the marker. The marker **names** the zone, **draws its ring**, and **warns**. Goals: C3, B2, D1.
+
+| Where | Visual |
+|---|---|
+| Fauna map, zone without a marker | Faint hatched area (diagonal hatch `#009E73` at 30 %, `_hud`), no ring, no name |
+| Fauna map, zone with a marker | Same hatch **plus** a 1 px dashed ring at the 48-block radius, the sleeping-thawling pictogram at the center, and the zone's name |
+| Machine switched on inside a ring | Ring turns to a solid `#E69F00` line at that segment, a warning triangle on the machine's map dot, log line "Machine inside quiet zone" (Warning tone, audio direction §7.1). Shape + word + sound, never color alone |
+| In the world | Marker post (M-27). For 10 s after placing, and whenever the player holds a marker, small ground dots (2 px particles, `#E8E3D8`) every 4 blocks along the 48-block ring, so the player sees how far it reaches. No permanent world ring (cost and clutter) |
 
 ### 11.4 Unranked ending cards
 - Every card uses the **same frame, same palette range, same size** (192×108 illustration plus a text line). No card is darker, sadder, gold-framed, starred, or scored.
@@ -566,7 +612,7 @@ Network access to NASA and reference sites was blocked in this session, so **no 
 | 4 | Ottosson (2020), "A perceptual color space for image processing" (OKLab) | Color distances, interpolation |
 | 5 | Maurice et al. (2022), "In situ recording of Mars soundscape", *Nature* | Sound direction |
 | 6 | Real Mars color sources | See [planetary-keyframes.md](planetary-keyframes.md) §2 |
-| 7 | Braille Institute, Atkinson Hyperlegible (SIL Open Font License 1.1; **license file to verify**) | Reading face (4.8) |
+| 7 | Braille Institute, Atkinson Hyperlegible (SIL Open Font License 1.1; **license file to verify**) | Backup reading face (4.8) |
 | 8 | Minecraft Java font JSON providers (bitmap, ttf, space, unihex, reference); **not opened this session** | What a resource-pack font can do (4.8) |
 
 ---
@@ -580,7 +626,7 @@ Goals: feedback salience for all goals; mainly **B1, C2, C3** (the log names cau
 
 | Element | Spec |
 |---|---|
-| **Monitor "Log" tab** | When an unread entry arrives, the tab **flashes at 1 Hz** (0.5 s on, 0.5 s off) for **5 cycles**, then stays highlighted. Hard limit 3 flashes per second (4.6); we use 1 |
+| **Monitor log button / tab** (placed by the UI spec) | When an unread entry arrives, the tab **flashes at 1 Hz** (0.5 s on, 0.5 s off) for **5 cycles**, then stays highlighted. Hard limit 3 flashes per second (4.6); we use 1 |
 | Highlight (steady) | Tab gets a **badge**: the severity shape of the most serious unread entry (circle Info, diamond Gate, triangle Warning, octagon Failure; `_hud` variants) plus an unread count in Cairn Mono (1–9, then "9+"). Shape and number carry the meaning, color is the third channel |
 | Re-flash | A new entry restarts the 5 cycles only if 30 s have passed since the last run, so a busy period doesn't blink constantly |
 | **Monitor block in the world** | A 2×2 px indicator lamp on the block face, top right. Blinks at 1 Hz for up to 60 s while the viewing player has unread entries, then glows steady. Drawn per player on the client from that player's own read state (TL to confirm) |
@@ -590,46 +636,50 @@ Goals: feedback salience for all goals; mainly **B1, C2, C3** (the log names cau
 | Cleared | When the player opens the Log tab, the badge clears for the entries shown |
 
 ### 13.2 Next-gate goal display (Flow: clear goals)
-DESIGN.md: "Next: pressure 5 kPa, 62%". Goals: **A1, B3, C3** (reading progress data); motivational: clear goals.
+Layout and rules are the Lead Game Designer's (ui-specs §3): `Next: Phase 2 · Pressure 5 kPa · [bar] 62 % · ~4 sols at this rate`, one bar per condition, a **log axis for pressure** (decided by the Game Designer on the Technical Lead's recommendation; I withdraw my linear suggestion), a "Useful now" list under the bar, and a top-center HUD chip that can be turned off and **never flashes**. Goals: **A1, B3, C3**; motivational: clear goals. The visual system:
 
 | Element | Spec |
 |---|---|
-| Place | Top strip of the Monitor's Overview page, full width **404 × 38 GUI px** (layout in 13.4). A one-row compact version can be pinned to the HUD side (opt-in; on a 90 % strip; hidden over sheets). No pop-up ever announces progress |
-| Header | Gate diamond icon + "Next:" in Cairn Display + gate name. This is the **marked next step**: a 2 px `#F0E442` accent bar down the left edge |
-| Condition rows (1–3) | Per condition: parameter icon (U-01 `_hud`) · real name ("Pressure") · **value / target** in Cairn Mono at 2× ("3.1 / 5 kPa") · progress bar 80 × 5 px · percentage · trend arrow shape (↑ → ↓ as icons). Values are bigger than labels |
-| Met condition | Bar full with a bold outline + check icon + word "met". Unmet: hollow bar. Neutral fill `#E8E3D8`; met fill `#009E73` with the check (never color alone) |
-| Holds (Dome stable, Breathable, Equilibrium) | A row of **sol pips**: filled circle = sol held, hollow = to go, circle with two bars = hold paused. Count follows the active preset (3 / 7 / 14 standard; 1 / 2 / 3 classroom); pips 5 px wide, so 14 fit in 70 px |
-| Machine-state gate (Dome stable) | "Life support steady" + pips (no Index bar) |
-| Falling values | The bar shows the **current** value, so it falls; trend arrow down + word "falling". Gates already reached stay reached (lock-in): they move to a "Reached" list, not shown in the strip |
-| After Equilibrium | "Next: build the beacon" (wording: Lead Game Designer) |
-| "Just finished" | When a gate is reached, the strip shows "Reached: Phase 2 begins" with the gate diamond until the player's next real action (build, use a machine, leave the dome), then switches to the next gate (PROCESS.md §4) |
+| Top bar | Full width of the Monitor screen, 404 × 30 GUI px (layout 13.4). **The marked next step:** a 2 px `#F0E442` accent bar on the left edge and the gate diamond icon |
+| Gate name | Cairn Display, `#F0E442` on slate |
+| Condition chip | Parameter icon (U-01 `_hud`) · real name · **value / target** in Cairn Mono at 2× ("3.1 / 5 kPa") · bar 80 × 5 px · percentage · trend arrow icon. Values bigger than labels |
+| Bar fill | Neutral `#E8E3D8` in progress; met = `#009E73` fill **plus** a check icon and the word "met" (never color alone). The lowest bar (the one holding the gate back) gets a 1 px `#F0E442` outline |
+| Pressure bar scale | Log axis; a tiny "log" tick pattern (ticks at 1, 2, 5 kPa closer together on the right) so the bar matches the Monitor gauge (§11.1) |
+| Estimate | Clock icon + "~4 sols at this rate" in secondary text; "Not rising: check causes" with a down/flat arrow icon and a link underline |
+| Dome stable | "Life support: 2/3 sols with no failures" with tick boxes (hollow → check icon); a failure empties them with a 0.5 s fade (no flash) |
+| Holds | Ring icon filling in segments ("Holding: 4/7 sols"); paused = ring with two bars + "Paused: O2 out of band" |
+| HUD chip | Top center, gate icon + bar on a ≥ 90 % strip (4.4a), 80 × 11 GUI px; hidden over full-screen sheets |
+| "Just finished" | "Reached: Phase 2 begins" with the gate diamond stays on the bar until the player's next real action (PROCESS.md §4) |
 
-**Open question (Lead Game Designer and Lead Instructional Designer):** how is the percentage computed? My recommendation: **linear in the value's own unit, from the previous gate's threshold (or the start value) to this gate's threshold**, because "62 % of the way" in kPa is what a 12-year-old expects, and the real numbers sit beside it. The pressure **gauge** stays on a log scale (§11.1); the two are labeled differently ("62 %" vs. the gauge's tick labels), so they don't contradict each other.
+**"Useful now" list (ui-specs §3):** up to 3 machine icons with names under the bar, each with a small **clipboard icon** (U-32: 9 × 9 and 16 × 16, `_hud` and `_paper`: a clipboard outline with two check lines; shape distinct from the journal book icon and the Shift Board pin). The same clipboard marks the pinned rows at the top of the recipe view. It recommends, never locks, so it never uses a lock or greyed look.
 
 ### 13.3 Progressive disclosure on the Monitor (Cognitive load: one idea at a time)
-DESIGN.md: Phase 1 shows pressure, O2, power, temperature; hydrosphere at the Thaw; O2/CO2 balance and biomass in Phase 3. Goals: **A1–A5, C3**.
+Rules are the Lead Game Designer's (ui-specs §2): planet rows go **2 → 4 → 6** by phase; a new row appears with a BELL log line and a **one-time outline**. Goals: **A1–A5, C3**. Visual system:
 
 | Element | Spec |
 |---|---|
-| **Fixed slots** | Every value has a fixed slot that never moves between phases, so players' spatial memory holds. Two panels: **Planet** (pressure, temperature, hydrosphere, O2, CO2, biomass) and **Dome** (O2 supply, power, water) |
-| Planet vs. Dome | Different frames so the two are never confused: Planet panel has a rust frame `#9A5B3C` and a small planet icon; Dome panel a slate frame `#59616A` and a dome icon. Phase 1's "O2" on the Dome panel is the dome's supply, not the planet's 0.1 % (question for the Lead Game Designer, report) |
-| Not yet in play | Slot drawn as a faint dashed outline `#3A4048`, **no label, no icon**: the layout doesn't jump later, and there is nothing to read now. Not a greyed-out row with a name (PROCESS.md §4: only offer what the player can use now) |
-| Reveal | At the gate: the slot frame fades in (1 s), then the value; a "NEW" tag (diamond + word) stays for 1 sol of play. No separate sound; the gate chime already played |
-| "Read more" (depth by band) | A book icon + "More" button. Expanded rows indent under their parent with a 1 px `#59616A` rule on the left. Middle school: partial pressures are here; high school: shown by default |
-| **Cause breakdown** (fading) | Disclosure triangle (▶ closed / ▼ open, drawn as icons) + "Causes (3)". Open by default in Phases 1–2, **closed by default in Phase 3** (DESIGN.md Fading). Remembered per player |
-| **Cause lines on the graph** (Multimedia: text next to what it explains) | The value's trend graph (160 × 60 GUI px) carries up to **3 callouts**, each tied by a 1 px leader line to the point where that cause started: machine icon + ≤ 4 words + signed rate in Cairn Mono ("Outgassers ×4 +0.40 kPa/sol"). No separate legend |
+| Row order fixed | Pressure, Temperature, Hydrosphere, O2, CO2, Biomass, top to bottom. New rows slot into their place; rows already shown never jump (spatial memory) |
+| Not yet in play | Nothing is drawn (ui-specs: values not shown simply aren't on screen). I withdraw my dashed-placeholder proposal in favor of the spec |
+| Reveal | One-time outline: 1 px `#F0E442` outline + "NEW" diamond tag, shown until the player opens that row once or 1 sol passes. No sound beyond the BELL log chime (audio direction §7) |
+| Phase 1 "Air mix" fact line | Static text line under the rows: "Air: CO2 95 %, O2 0.1 %" in secondary text, with the REAL badge (it is a real value) |
+| Water line (from the first ice change) | "Water boils here at 3 °C" with a droplet-and-flame icon; number in Cairn Mono |
+| Planet vs. Dome | Different frames so they're never confused: Planet column rust frame `#9A5B3C` with a planet icon; Dome column slate frame `#59616A` with a dome icon |
+| "Read more" (bottom) | Book icon + "Read more"; HS open by default, MS closed (ui-specs §1) |
+| **Cause breakdown** (fading) | Disclosure triangle icons ▶ / ▼ + "Causes (3)". Open by default in Phases 1–2, **closed by default in Phase 3** |
+| **Cause lines on the graph** (Multimedia: text next to what it explains) | The value page graph (last 10 sols) carries up to **3 callouts**, each tied by a 1 px leader line to the point where that cause started: machine icon + ≤ 4 words + signed rate in Cairn Mono ("Outgassers ×4 +0.40 kPa/sol"). No separate legend |
 
-### 13.4 Proposed Monitor Overview layout (fits 420 × 236 GUI px)
-Straw-man wireframe: [concepts/monitor-overview-wireframe-strawman.png](concepts/monitor-overview-wireframe-strawman.png) (generated by script at GUI scale 3, i.e. 1280×720; boxes and labels only; **straw-man**). Drawing it caught an error in my first numbers: 2 × 3 slots of 130 × 54 overflowed the Planet panel. The numbers below are the corrected ones.
+### 13.4 Monitor Overview layout (fits 420 × 236 GUI px)
+Follows ui-specs §1 (top bar; Dome left; Planet center; milestones and alerts right; read more at the bottom). Straw-man wireframe: [concepts/monitor-overview-wireframe-strawman.png](concepts/monitor-overview-wireframe-strawman.png), drawn by script at GUI scale 3 (1280×720), boxes and labels only. My first wireframe (a 2 × 3 grid of 130 × 54 slots) **overflowed its panel** when drawn; drawing it is what caught that, and it is superseded by this row layout.
 
 | Box | x, y, w, h (GUI px) |
 |---|---|
-| Tabs (Overview, Log, Fauna from Thaw, Air from Phase 3) | 8, 4, 404, 12 |
-| Next-gate strip | 8, 20, 404, 38 |
-| Planet panel (12 px header, then 2 × 3 slots of 128 × 48, 4 px gaps; first slot at 12, 76) | 8, 62, 268, 170 |
-| Dome panel (12 px header, 3 slots of 124 × 48, 4 px gaps; first slot at 284, 76) | 280, 62, 132, 170 |
+| Top bar (next gate + "Useful now") | 8, 4, 404, 30 + 12 |
+| Dome column (O2 reserve, water, power, filter wear, open failures) | 8, 50, 112, 162 |
+| Planet column (6 rows of 24 px + 12 px header) | 124, 50, 196, 162 |
+| Right strip (milestones, space weather, storm forecast, fauna link) | 324, 50, 88, 162 |
+| Bottom ("Read more") | 8, 216, 404, 14 |
 
-Each slot: icon 16 × 16 at top left, real name in the reading face, value in Cairn Mono at 2×, trend arrow, mini bar 60 × 4. The Air window (§11.2) and pressure gauge (§11.1) open from their slots as detail views at the same 420 × 236 size.
+Each planet row: icon 16 × 16, real name (reading face, 1×), value (Cairn Mono, 2×), trend arrow icon, one-line top cause in secondary text.
 
 ### 13.5 Journal "what happened" pages (Multimedia: pair words with visuals)
 Goals: whichever goal the entry teaches (gate entries: A1–A5, B1, D2).

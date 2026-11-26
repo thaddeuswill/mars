@@ -54,3 +54,25 @@
 - **Terms:** interleaved forecast (FI); outcome form; re-scaffold; "Your shift" block; "Needs a look" flag (teacher-only, never a grade); player ID slip.
 - **Decisions (LEARNING.md):** reflections export rules recorded; model-based assessment out of scope at launch; Record pages fill from skill, never activity (≥ 8-word answers); one scored answer per player per forecast; grade bands set science depth, not amount of help; proposed: C2 credit to the player who did the repair.
 - **Lessons:** review the owner's draft against learning requirements instead of writing a competing spec, and send requirements before the text is drafted; run threshold-vs-curve on every forecast (it found a second F4a flaw).
+
+---
+
+## Addendum: the Lead Game Designer's round 2 (filed by coordinator)
+
+Method: a document walkthrough of `docs/design/messages/`, `ui-specs.md`, and DESIGN.md against the alignment table. Nothing was built or playtested. All nine items accepted or agreed; no blocks; three conditional agreements.
+
+- **F4a:** accepts the Game Designer's trigger (pressure below 5 kPa) and three result texts, and drops its own extra "temperature at or above the boiling point" trigger. F4a is now scored by one outcome check: no liquid water at that spot 0.25 sol after the ice changes state (true for turns-to-vapor, boils-away, and evaporates-fast). **Condition:** the invented puddle-drying time below 5 kPa must be under 0.25 sol.
+- **F3, F5, F8 lock on Monitor open:** if a player with an unanswered forecast opens the Monitor, show the forecast card first ("Log your forecast before you look"). Closing it silently would make checking the data (C3) cost the player their prediction evidence (B3).
+- **F9, F10** close after 0.5 sol, under the ~1 sol lead in I-C rule 7: can live with it; watch the expiry rate in Stage 3.
+- **`guidance` setting (gentle / standard / expert): agree with four conditions.** (1) At every level failure reports still name the cause, forecast results still explain, and safety warnings still fire. (2) Gentle is the classroom default and expert isn't offered in classroom mode. (3) Fading still runs inside gentle. (4) The level is logged and exported, because it changes the conditions behind C2 and B3 evidence. Grade bands stay separate (the band sets science depth; guidance sets how much help). This replaces the "Veteran" idea.
+- **Mast gas gauges at Phase 3:** agree, with a condition: A1's "atmosphere makeup" (about 95% CO2) still needs a Phase 1 source (a gate journal line or Landing).
+- **Four-question change check:** agree, with one addition: "What is this teaching?" should name the goal IDs and "how will we know it worked?".
+- **Cause breakdown closed by default in Phase 3:** agree, but it should open by itself when a value leaves its band (the re-scaffold rule).
+- **I-C additions accepted:** report → Mensah's reply → Shift Briefing counts as one pop-up; a forecast closes before any message that gives its answer away (now content rule CR-F9, using a `reveals` field).
+- **Done:** LEARNING.md §4.6, §4.8, §4.10; `prompts-and-reflections.md` (F4a, F7, lock-point table, B1 first-try rule); `content-rules.md` (CR-F9); `educator-guide.md` (guidance setting).
+
+**Handoffs:** Game Designer (puddle-drying time under 0.25 sol; forecast card first on Monitor open; a Phase 1 source for Mars's gas mix; guidance conditions 1–3 in DESIGN.md; "how will we know?" in the four questions); Technical Lead (`reveals` field and check CR-F9; export `guidance` in planets.csv and players.csv; F4a outcome check); Producer (question wording, which the coordinator merged into TEAM.md 8.2).
+
+**Risks:** F4a's correctness depends on one invented balance number; forecasts closing on Monitor open could cost B3 evidence unless the card shows first.
+
+**Shared model updates:** *Lock point* (the moment a forecast closes, before any message, screen, or world cue that reveals the answer; CR-F9); *guidance* (how much help the game gives; separate from the grade band); lesson: a lock rule that fires on "Monitor opened" can turn the behavior we want into lost evidence. Check a lock against the goal of the action that triggers it.

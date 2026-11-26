@@ -22,6 +22,7 @@ Feasibility of each check is the Technical Lead's call; rules they can't automat
 | CR-F6 | Every forecast and FI item has `goal_ids`, NGSS codes resolve through `ngss_map.json`, and both `text.ms` and `text.hs` exist | Forecast JSON, NGSS map, language files | Delete one `text.hs` key |
 | CR-F7 | Interleaved forecasts (FI) never name their source idea or phase in the question text (no "remember", "like the ice", "Phase 1") | Language files, a small banned-phrase list | Add "Remember the ice?" to FI-2 |
 | CR-F8 | Length budgets: question ≤ 25 words, each choice ≤ 10, result explanation ≤ 40 (prompts-and-reflections §5) | Language files | Pad an explanation to 41 words |
+| CR-F9 | **A forecast locks before any message, screen, or world cue that gives its answer away** (e.g. F2's shelter advice, the Monitor page for F3/F5/F8). Every message whose text could reveal a forecast's answer declares that forecast in a `reveals` field; the check fails if such a message can be delivered to a player while that player's forecast is still open | Message JSON `reveals` + forecast lock conditions + solver log | Deliver `log.solar.shelter` before F2 locks |
 
 ### 1.1 Forecast-check list: runs whenever a gate or physics rule changes
 

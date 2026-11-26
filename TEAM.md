@@ -104,6 +104,7 @@ Use these words the same way everywhere.
 | **"Your shift" block** | The per-player after-action review inside a Keeper's Report. |
 | **"Needs a look" flag** | A teacher-only pointer in the class overview. Never a grade. |
 | **Player ID slip** | A paper slip carrying a student's pseudonymous ID for tests. |
+| **`guidance`** | A setting for how much help the game gives (gentle / standard / expert). Separate from the grade band, which sets science depth. Thresholds never change with it. |
 | **Action log** | Local record of player actions for assessment: pseudonymous on the server, anonymous in every export. |
 | **Forecast** | In-game name for a prediction prompt. |
 | **Keeper's Record** | In-game title of the Colony Record. |
@@ -234,6 +235,8 @@ Short pointers. Details live in the owning document.
 | 2026-11-26 | Plan one external review (a planetary scientist or a science teacher) of the science and learning design at Stage 5 (alpha). Optional; the owner identifies a reviewer. Until then, published sources stand in. | ROADMAP.md (to add) | User decision on coordinator recommendation |
 | 2026-11-26 | The handoff lessons in PROCESS.md and BACKLOG.md are confirmed as wanted | PROCESS.md | User decision on coordinator recommendation |
 | 2026-11-26 | Record pages fill from skill, never from activity (answers of 8 or more words; the D2 page no longer fills from opening pages). One scored answer per player per forecast. Grade bands set science depth, not the amount of help. Model-based assessment out of scope at launch. | LEARNING.md | Lead Instructional Designer |
+| 2026-11-26 | Proposed: `guidance` setting (gentle / standard / expert). Conditions: at every level failure reports name the cause, forecast results explain, and safety warnings fire; gentle is the classroom default and expert isn't offered in classroom mode; fading still runs inside gentle; the level is logged and exported. Game Designer and Instructional Designer agree; the owner's decision is pending (default: adopt). | DESIGN.md, LEARNING.md §4.10 | Lead Game Designer and Lead Instructional Designer |
+| 2026-11-26 | Report → Mensah's reply → Shift Briefing counts as one pop-up; a forecast locks before any message that gives its answer away (content rule CR-F9) | TEAM.md 8.6, LEARNING.md §4.6 | Lead Game Designer and Lead Instructional Designer agree (I-C additions) |
 | 2026-11-26 | Proposed: Shift Board C2 credit goes to the player who did the repair (not the claimer). Changes DESIGN.md Group Play; Game Designer to agree. | LEARNING.md §3.0 | Lead Instructional Designer; pending |
 | 2026-11-26 | Sleep never skips Mars time; the sky follows simulation time. Storm caps scale gameplay as well as the look. Ice–albedo capped at about 2 °C (invented) plus the real polar CO2 release. Mast gas gauges are fitted at Phase 3 (pending Artist and Instructional Designer). Training Hall lobby. One lead crew voice per phase (Hana, Basu, Moreno); Mensah only in report replies. | DESIGN.md, docs/design/ | Lead Game Designer |
 | 2026-11-26 | Keeper's Report is never modal: one log line plus a side-panel entry, opened full screen only by the player's choice or at the next natural pause | docs/design/ui-specs.md §0 | Lead Game Designer, agreed with the Producer; Instructional Designer to confirm |
@@ -303,6 +306,12 @@ Every design document change that affects a goal ID updates the alignment table 
 | Scope or schedule | Producer |
 
 Each affected role replies with its view before a flexible or stable change lands.
+
+**Four questions for every design decision** (from the Chapter 9 core design pages; gaming and instructional strategy are one joint task):
+1. How is this instruction part of the game?
+2. What is this part of the game teaching, **and how will we know it worked?** (name the goal IDs and the measure)
+3. How does this instructional technique affect the gameplay?
+4. Does this aspect support or distract from the instruction?
 
 ### 8.3 Level of agreement, not just agreement
 
@@ -459,6 +468,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
 | 2026-11-26 | Fantasy must be purposeful: metaphor or motivation, matching activity, no negative learning, low extra load. All fantasy elements are audited in DESIGN.md. | User research |
+| 2026-11-26 | A lock rule that fires on an action we want (like opening the Monitor) can turn that behavior into lost evidence. Check each lock against the goal of the action that triggers it. | Lead Instructional Designer |
 | 2026-11-26 | Review another role's draft against your requirements instead of writing a competing spec, and send requirements before the text is drafted. | Lead Instructional Designer |
 | 2026-11-26 | Forecasts need an explicit lock point before any hint, warning, or worked example that reveals the answer. | Lead Game Designer |
 | 2026-11-26 | When a new requirement seems to break a privacy rule, look for a narrow interface at the boundary (e.g. the `NameScrubber`) before relaxing the rule. | Technical Lead |
