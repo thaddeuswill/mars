@@ -20,10 +20,31 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class MachineBlock extends HorizontalDirectionalBlock {
   private final VoxelShape shape;
+  private final java.util.Map<Direction, VoxelShape> byFacing;
 
   public MachineBlock(Properties properties, VoxelShape shape) {
     super(properties);
     this.shape = shape;
+    this.byFacing = null;
+    registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+  }
+
+  /**
+   * For machines that are much thinner one way (the wall-pack battery): {@code northBox} is one box
+   * for facing north, given as {x0, y0, z0, x1, y1, z1} in pixels; the other facings rotate it
+   * about the block centre. Still a plain box, not the model's shape.
+   */
+  public MachineBlock(Properties properties, double[] northBox) {
+    super(properties);
+    java.util.Map<Direction, VoxelShape> m = new java.util.EnumMap<>(Direction.class);
+    double x0 = northBox[0], y0 = northBox[1], z0 = northBox[2];
+    double x1 = northBox[3], y1 = northBox[4], z1 = northBox[5];
+    m.put(Direction.NORTH, Block.box(x0, y0, z0, x1, y1, z1));
+    m.put(Direction.SOUTH, Block.box(16 - x1, y0, 16 - z1, 16 - x0, y1, 16 - z0));
+    m.put(Direction.EAST, Block.box(16 - z1, y0, x0, 16 - z0, y1, x1));
+    m.put(Direction.WEST, Block.box(z0, y0, 16 - x1, z1, y1, 16 - x0));
+    this.byFacing = m;
+    this.shape = m.get(Direction.NORTH);
     registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
 
@@ -46,6 +67,6 @@ public class MachineBlock extends HorizontalDirectionalBlock {
   @Override
   protected VoxelShape getShape(
       BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-    return shape;
+    return byFacing == null ? shape : byFacing.get(state.getValue(FACING));
   }
 }

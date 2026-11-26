@@ -603,6 +603,35 @@ Implements DESIGN.md "Solar panel dust" with the numbers from balance sheet §2a
 
 **Total remaining (unverified): about 11.5–12.5 developer-days**, on top of the machine framework. The shape stays a simple box (`0,0,0 → 16,10,16`) that doesn't follow the model, so a wider circular array model later needs only a shape change (and, if wider than one block, a multi-block placement rule).
 
+### 2.18 Round solar array: footprint, hitbox, and model approach (BACKLOG #28)
+
+**Decision (Technical Lead, fluid): a 3 × 3 footprint of one centre block plus eight invisible canopy blocks; the model stays vanilla JSON boxes (the Artist's 23-element pixel disc).**
+
+| Part | Rule | Tested |
+|---|---|---|
+| **Centre block** `mars:solar_panel` | Draws the whole array (model elements −9..25 px, inside the docs' allowed [−16, 32]). Shape = base + post + the part of the array over its own cell (top at 11 px) | GameTest `footprint.centre_shape`: read `[0,0,0]→[1,0.6875,1]` |
+| **Canopy cells** `mars:solar_panel_canopy` (no item, not in the tab) | Placed automatically in the 8 surrounding cells at the same height, for player placement and `/setblock` alike (`onPlace`). Each cell's shape is only the slice of the array's square outline over that cell, at the array's height (y 10..11 px), so **no shape ever leaves its own block** and selection and collision follow the overhang. Invisible (`RenderShape.INVISIBLE`); its particle texture is the frame | `footprint.fillers` read `CCC/CPC/CCC`; `footprint.corner_shape` read `[0.4375,0.625,0.4375]→[1,0.6875,1]` |
+| **Placement** | Needs all 8 surrounding cells free (replaceable: air, grass). Otherwise nothing is placed and the action bar says "The solar array needs a clear 3 × 3 space around it" (no silent failure). Neighbours outside the 3 × 3 are unaffected: a battery fits right next to a footprint | `footprint.blocked` / `footprint.clear`; screenshots (battery beside an array) |
+| **Breaking** | Breaking any cell breaks the whole array and drops one panel (loot table on the centre; canopy has none). Removing the centre clears its cells. A dust-stage change doesn't touch the cells | `footprint.break_overhang` read `destroyed=true … cells=0, drops=[1 mars:solar_panel]`; `footprint.remove_centre`; `footprint.dust_change_keeps_fillers` |
+| **Lighting** | Canopy blocks don't occlude or block light. In game the array's underside renders as an even dark disc with no light leaks, black patches, or holes, at noon and at dusk. The ground under the overhang is **not shadowed** (Minecraft lighting is per block; a non-occluding canopy casts no shadow) | Screenshots `round_under_overhang_noon`, `_dusk` |
+| **Culling** | An array centred on a chunk corner (16, 64, 16), with its overhang in three other chunks, rendered whole in two views. A view with the centre's chunk section fully outside the camera wasn't achieved, so frustum culling of the overhang is **not fully tested** | Screenshots `round_chunk_corner_*` |
+
+**Model approach compared** (cost and in-game look):
+
+| Approach | Cost | In-game look | Verdict |
+|---|---|---|---|
+| **Vanilla JSON boxes** (pixel disc, 23 elements) | **Zero code**; the Artist's generator already writes it; hot-reloadable; ~80–130 faces per array (Artist's estimate) | **Seen in game**: reads as a 12-segment fan from above, matches the pixel art, dust stages and partly cleaned distinct; stair-stepped edge at 1 px is invisible at play distance | **Chosen** |
+| `neoforge:obj` (Wavefront mesh) | No Java, but a second art pipeline (.obj/.mtl export), and UVs must match the 48 × 48 dust textures | **Not tried in game.** Smooth polygon edges would sit next to pixel-art blocks | Not adopted; revisit only if a tilt or fold animation is wanted |
+| `neoforge:composite` with per-part transforms | Unknown whether each part can carry its own transform (Artist: untested); JSON only | Not tried | Not adopted |
+
+Same footprint rule applies whatever the model approach, so switching later touches only the blockstate.
+
+**Known look issues (for the Artist and Game Designer):** at real scale (top at 0.69 m) the arrays read as low round tables from the front; the real InSight array sits on a lander deck about 1 m up (Artist, unsourced). The selection outline shows one box per cell (up to 9 for one array), and each corner box includes a small empty corner outside the 12-sided edge. A single whole-array outline would need a client render hook (`RenderHighlightEvent`), about 1 developer-day (unverified).
+
+**Cost of what was built:** about 1 developer-day including tests. **Per-tick cost: zero** (no ticking; work happens only on place and break).
+
+The **battery** (batch 3 wall pack, 16 px tall and 6 px deep) now uses one plain box that turns with facing (`{2,0,5,14,16,11}` north); GameTest `machines.battery_shape_turns`.
+
 ---
 
 ## 3. Coding Practices

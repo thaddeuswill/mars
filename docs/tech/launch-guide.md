@@ -33,7 +33,9 @@ You need **Minecraft: Java Edition** (not Bedrock, not Minecraft Education) and 
 
 Six machine blocks are in the creative inventory under the **Mars Terraforming** tab: Regolith Outgasser, Regolith Oven, Solar Panel, Battery, Oxygen Maker (CO2), Planetary Monitor. They **do nothing yet** (behaviour is Stage 2); you can place them, and their front faces you when placed. The art is placeholder: the small magenta squares are the deliberate "not final" marker, not missing textures.
 
-To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~2 mars:solar_panel[dust_stage=3]` (stages 0–4), or `/setblock ~ ~ ~2 mars:solar_panel[dust_stage=4,partly_cleaned=true]`.
+The solar panel is the round InSight-style array: it takes a **3 × 3 area** (the array overhangs about 1 m on each side); if any of the 8 surrounding spots is taken, nothing is placed and a message says so. Breaking any part breaks the whole array.
+
+To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:solar_panel[dust_stage=3]` (stages 0–4), or `/setblock ~ ~ ~3 mars:solar_panel[dust_stage=4,partly_cleaned=true]`.
 
 ## 2. Developer commands (from `mod/`)
 
@@ -53,4 +55,4 @@ All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.26
 
 ## 3. Screenshots
 
-`tools/screenshots/run-shots.sh [script]` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. `tools/screenshots/batch2.shots` places every machine and the panel at dust stages 0, 2, 4 and partly cleaned. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Results and limits are in the Stage 1 report.
+`tools/screenshots/run-shots.sh [script]` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. `tools/screenshots/batch2.shots` places every machine and the panel at dust stages 0, 2, 4 and partly cleaned; `round.shots` checks the round array's footprint, outline, and lighting under the overhang. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Results and limits are in the Stage 1 report.

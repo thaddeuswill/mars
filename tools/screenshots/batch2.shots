@@ -1,5 +1,5 @@
 # Batch 2 machines (BACKLOG #26): every machine in daylight, panels at dust stages 0, 2, 4 and partly cleaned.
-# Fronts face north (toward the camera at negative z).
+# Round arrays 4 blocks apart (3 x 3 footprints). Fronts face north (toward the camera at negative z).
 wait 100
 cmd /gamerule doDaylightCycle false
 cmd /gamerule doWeatherCycle false
@@ -12,10 +12,10 @@ cmd /setblock -3 64 4 mars:regolith_oven[facing=north]
 cmd /setblock 0 64 4 mars:battery[facing=north]
 cmd /setblock 3 64 4 mars:oxygen_maker[facing=north]
 cmd /setblock 6 64 4 mars:planetary_monitor[facing=north]
-cmd /setblock -4 64 8 mars:solar_panel[facing=north,dust_stage=0]
-cmd /setblock -1 64 8 mars:solar_panel[facing=north,dust_stage=2]
-cmd /setblock 2 64 8 mars:solar_panel[facing=north,dust_stage=4]
-cmd /setblock 5 64 8 mars:solar_panel[facing=north,dust_stage=4,partly_cleaned=true]
+cmd /setblock -6 64 9 mars:solar_panel[facing=north,dust_stage=0]
+cmd /setblock -2 64 9 mars:solar_panel[facing=north,dust_stage=2]
+cmd /setblock 2 64 9 mars:solar_panel[facing=north,dust_stage=4]
+cmd /setblock 6 64 9 mars:solar_panel[facing=north,dust_stage=4,partly_cleaned=true]
 cmd /give @s mars:regolith_outgasser
 cmd /give @s mars:regolith_oven
 cmd /give @s mars:solar_panel

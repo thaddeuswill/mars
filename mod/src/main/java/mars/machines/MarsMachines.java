@@ -37,7 +37,8 @@ public final class MarsMachines {
           Block.box(4, 0, 4, 12, 1, 12),
           Block.box(7, 1, 7, 9, 10, 9),
           Block.box(0, 10, 0, 16, 11, 16));
-  private static final VoxelShape BATTERY = Block.box(3, 0, 3, 13, 14, 13);
+  // Wall-pack battery (batch 3): thin, so its box turns with facing. Centred, 12 x 16 x 6 px.
+  private static final double[] BATTERY = {2, 0, 5, 14, 16, 11};
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
 
@@ -48,7 +49,7 @@ public final class MarsMachines {
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<MachineBlock> BATTERY_BLOCK =
-      machine("battery", BATTERY, MachineBlock::new);
+      BLOCKS.register("battery", () -> new MachineBlock(machineProperties(), BATTERY));
   public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
       machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
   public static final DeferredBlock<MachineBlock> PLANETARY_MONITOR =
@@ -96,19 +97,21 @@ public final class MarsMachines {
 
   private static <B extends Block> DeferredBlock<B> machine(
       String id, VoxelShape shape, BiFunction<BlockBehaviour.Properties, VoxelShape, B> ctor) {
-    DeferredBlock<B> block =
-        BLOCKS.register(
-            id,
-            () ->
-                ctor.apply(
-                    BlockBehaviour.Properties.of()
-                        .mapColor(MapColor.METAL)
-                        .strength(2.0f, 6.0f)
-                        .sound(SoundType.METAL)
-                        .noOcclusion(),
-                    shape));
+    DeferredBlock<B> block = BLOCKS.register(id, () -> ctor.apply(machineProperties(), shape));
     ITEMS.registerSimpleBlockItem(id, block, new Item.Properties());
     return block;
+  }
+
+  private static BlockBehaviour.Properties machineProperties() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(MapColor.METAL)
+        .strength(2.0f, 6.0f)
+        .sound(SoundType.METAL)
+        .noOcclusion();
+  }
+
+  static {
+    ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
   }
 
   public static void register(IEventBus modBus) {

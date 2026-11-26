@@ -37,7 +37,7 @@ shot round_under_overhang_noon
 wait 20
 cmd /gamemode creative
 wait 20
-view -2.5 65.5 2.5 0 41
+view -2.3 65.5 2.5 0 37
 hud on
 wait 40
 shot round_selection_outline_corner_cell
@@ -55,5 +55,17 @@ wait 20
 view 0.5 66.5 -2 0 22
 wait 60
 shot round_front_dusk
+wait 20
+# Chunk-border case: centre at (16, 64, 16), so the overhang reaches into three other chunks.
+cmd /setblock 16 64 16 mars:solar_panel[facing=north,dust_stage=0]
+cmd /time set 6000
+wait 60
+view 16.5 66.5 11 0 25
+wait 60
+shot round_chunk_corner_whole
+wait 20
+view 14.6 65.2 12.6 -20 62
+wait 60
+shot round_chunk_corner_centre_offscreen
 wait 20
 quit

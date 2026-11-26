@@ -364,6 +364,27 @@ public final class BootChecks {
                 && placed.getValue(SolarPanelBlock.PARTLY_CLEANED));
     testLevel.removeBlock(at, false);
     ok &= footprintChecks(server);
+    BlockState batN =
+        MarsMachines.BATTERY_BLOCK
+            .get()
+            .defaultBlockState()
+            .setValue(
+                net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING,
+                net.minecraft.core.Direction.NORTH);
+    BlockState batE =
+        batN.setValue(
+            net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING,
+            net.minecraft.core.Direction.EAST);
+    String batNorth = batN.getShape(server.overworld(), BlockPos.ZERO).bounds().toString();
+    String batEast = batE.getShape(server.overworld(), BlockPos.ZERO).bounds().toString();
+    ok &=
+        SelfTest.check(
+            "machines.battery_shape_turns",
+            "north thin in z (0.3125..0.6875), east thin in x",
+            "north " + batNorth + "; east " + batEast,
+            batNorth.contains("0.3125")
+                && batNorth.contains("0.6875")
+                && batEast.startsWith("AABB[0.3125"));
 
     boolean command = server.getCommands().getDispatcher().getRoot().getChild("mars") != null;
     ok &=
