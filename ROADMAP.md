@@ -57,6 +57,8 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Folder layout: `pack/` (manifest, configs, KubeJS scripts), `mod/` (companion mod), `docs/`
 - ⬜ Local dev instance and dedicated test server can be launched from the repo
 - ⬜ Basic CI: the pack builds and the server boots without errors
+- ✅ Consistency review and first risk register ([docs/production/](docs/production/))
+- ⬜ QA plan: test passes per stage, bug severity levels, exit criteria (`docs/production/`)
 
 **Learning design** (see [LEARNING.md](LEARNING.md))
 - 🟡 Learner and context analysis drafted (LEARNING.md section 0)
@@ -73,6 +75,10 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Balance sheet: every Planetary Index parameter, its rates, machine outputs, and gate thresholds in one table
 - ⬜ Rough pacing curve: when each gate should be reached against the target playtime
 - ⬜ Content inventory for each gameplay phase: blocks, items, machines, mobs, structures, events
+- 🟡 Story bible: setting, characters, backstory, plot arc across the three phases (`docs/design/`)
+- ⬜ UI specs: Planetary Monitor, journal, Colony Record, prediction prompts, failure reports, phase debriefs, HUD (`docs/design/`)
+- 🟡 Science reference and accuracy review of Index values, couplings, and gate thresholds (`docs/science/`)
+- ⬜ Art direction: style guide, palettes, sky/fog/terrain keyframes for each Index stage, asset list (`docs/art/`)
 
 **Exit criteria:** a fresh clone produces a launchable pack and server; the balance sheet exists.
 
@@ -103,7 +109,10 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Radiation spike event and shielding
 - ⬜ Life-support wear and maintenance parts
 - ⬜ Planetary Monitor block
-- ⬜ "Dome stable" gate, which unlocks the move to Phase 2
+- ⬜ "Dome stable" gate (unlocks airlocks, EVA suit tier 2, first outpost blueprint)
+- ⬜ Airlocks and EVA suit tier 2
+- ⬜ A Phase 1 way to raise pressure from 0.6 to 5 kPa (DESIGN.md lists regolith outgassing; not designed yet, see consistency review C-01)
+- ⬜ "Phase 2 begins" gate (pressure ≥ 5 kPa), which unlocks the move to Phase 2
 - ⬜ Early-game onboarding: does a new player know what to do without a wiki?
 
 **Exit criteria:** an outside playtester gets from spawn to the Phase 2 gate without help, and the time matches the pacing curve.
@@ -115,16 +124,18 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 *Goal: build out the remaining gameplay phases using the slice as the template.*
 
 **Gameplay Phase 2 — Geo-Engineering**
-- ⬜ Airlocks, transit tubes, outposts
+- ⬜ Transit tubes, outposts
 - ⬜ Atmospheric processors, greenhouse emitters, deep-crust extractors
+- ⬜ Other terraforming sources named in DESIGN.md: orbital mirrors, ice-comet impacts (scope check: first on the cut list, see risk R-01)
 - ⬜ Thaw: ice → water block behavior
+- ⬜ Hydrosphere gate content: surface water, algae vats
 - ⬜ Dormant fauna: spawn rules tied to temperature and water
 - ⬜ Mutated fauna variants that target infrastructure
 - ⬜ Infrastructure defense options
 
 **Gameplay Phase 3 — Equilibrium**
 - ⬜ Biome seed kits and the spread of flora
-- ⬜ O2/CO2 balancing machines and failure states
+- ⬜ O2/CO2 balancing machines (including carbon scrubbers) and failure states
 - ⬜ Storms weaken over time, and the sky shifts toward a living world
 - ⬜ Helmet-off check
 - ⬜ Colonization beacon and ending sequence
@@ -133,13 +144,17 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Art: textures, models, sounds, sky/fog shaders
 - ⬜ Lore journal entries triggered by world-state gates, including science explanations, prediction prompts, and reflection questions
 - ⬜ Local action log for assessment
-- ⬜ Learner feedback tools: Monitor cause breakdown, failure reports, Colony Record, phase debriefs
+- ⬜ Learner feedback tools: Monitor cause breakdown, failure reports, Colony Record, phase debriefs, "Explain it" check
 - ⬜ Educator guide and worksheets, including the 20-period unit plan
 - ⬜ Classroom mode preset (pacing, KubeJS recipe preset, world pause)
 - ⬜ Teacher tools: class overview, pause, rollback, set phase, log export, grade band
 - ⬜ Journal and quiz content written for both grade bands
 - ⬜ Close alignment gaps found in LEARNING.md: radiation prediction prompt (A4), Earth-link journal content (D2)
 - ⬜ Performance budget: how many ticking machines a typical late-game base runs, measured on the test server
+- ⬜ Player guide and in-game help
+- ⬜ Accessibility pass: color never the only signal, colorblind-safe palettes, subtitles for sound cues, UI legible on small screens
+- ⬜ Classroom deployment: how students launch the pack and join a class server; school network and IT requirements
+- ⬜ LMS integration needs defined (opt-in only, off by default; scope decision pending, Producer recommends post-release)
 
 **Exit criteria:** every gate in DESIGN.md is reachable in a normal playthrough.
 
@@ -153,6 +168,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ No progression blockers (soft-locks, unreachable gates, uncraftable items)
 - ⬜ Multiplayer tested on a dedicated server
 - ⬜ Saves survive restarts and pack updates
+- ⬜ Playtester recruitment plan, with consent and safety steps for minors, approved before any outside playtest in Stage 6
 
 **Exit criteria:** no known blocker bugs.
 
@@ -181,6 +197,7 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Server pack published
 - ⬜ Pack page: description, screenshots, trailer
 - ⬜ Changelog and versioning scheme for updates
+- ⬜ Educator package published: educator guide, worksheets, unit plan, pre/post test
 - ⬜ A place to report bugs (GitHub Issues)
 
 ---
@@ -193,3 +210,4 @@ Stage 0 is done. We're starting **Stage 1**. The next actions are:
 2. Decide how oxygen, sealing, and suits will work now that Ad Astra is out.
 3. Set up the repo layout and a companion mod skeleton that loads an empty Mars dimension.
 4. Start the balance sheet, using the 8 / 18 / 14 hour pacing split.
+5. Resolve the two blockers in [docs/production/consistency-review.md](docs/production/consistency-review.md): the Phase 1 pressure source and the classroom group model.

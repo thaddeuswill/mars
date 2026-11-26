@@ -215,6 +215,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Producer | Consistency review, risk register | `docs/production/` | `docs/team/reports/2026-11-26-producer-consistency-review.md` |
 | 2026-11-26 | Lead Game Designer | Story bible | `docs/design/story-bible.md` | `docs/team/reports/2026-11-26-lead-game-designer-story-bible.md` |
 
 ## 11. Team Learning Log
@@ -223,6 +224,7 @@ What we've learned about working together. Add an entry whenever a task teaches 
 
 | Date | Lesson | Source |
 |---|---|---|
+| 2026-11-26 | Parallel agents finished before new team protocols were added, so the coordinator applies them when filing. Protocol changes take effect from the next task. | Story bible and review filing |
 | 2026-11-26 | Agents start with no memory, so the shared model must be written down and read first. | Team setup | User decision |
 | 2026-11-26 | Gameplay phases and roadmap stages were easy to confuse; the vocabulary now separates them. | Early docs review |
 | 2026-11-26 | Fun isn't necessary for learning but is required for appeal and time on task. Fun must come from the learning activity; all features go on the fun–learning matrix. | User research |
