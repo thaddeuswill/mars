@@ -49,6 +49,8 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Decide the companion-mod scope: what KubeJS can do vs. what needs Java code
 - ⬜ Oxygen, sealing, and suits: find a standalone mod that can read the Planetary Index, or plan to build them
 - ⬜ Companion mod skeleton: builds, loads, and registers an empty Mars dimension
+- 🟡 Software architecture drafted ([ARCHITECTURE.md](ARCHITECTURE.md)): modules, APIs, algorithms, coding practices
+- ⬜ Spotless formatting and unit-test setup in the build
 
 **Project setup**
 - ⬜ Pack managed as text files (e.g. packwiz) so mod lists and configs live in git
