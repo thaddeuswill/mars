@@ -1,6 +1,6 @@
 # Art Style Guide — Mars Terraforming
 
-**Owner:** Lead Artist · **Status:** Draft 1 (2026-11-26), for team review · **Stability:** art, palettes, and sky/fog values are **fluid** (TEAM.md 8.1); the readability and accessibility rules in section 4 are meant to be **stable** once the team agrees to them.
+**Owner:** Lead Artist · **Status:** Draft 2 (2026-11-26, round 2: paper/HUD contrast, typography, naming, learning-mechanism visuals, UI-spec alignment), for team review · **Stability:** art, palettes, and sky/fog values are **fluid** (TEAM.md 8.1); the readability and accessibility rules in section 4 are meant to be **stable** once the team agrees to them.
 
 **Depends on:** [DESIGN.md](../../DESIGN.md), [story bible](../design/story-bible.md), [balance sheet](../design/balance-sheet.md), [SME accuracy review](../science/accuracy-review.md), [TEAM.md](../../TEAM.md).
 **Companion files:** [planetary-keyframes.md](planetary-keyframes.md) (how the world looks at every Index stage) · [asset-list.md](asset-list.md) (every asset and its status) · [palettes/palette-sheet-v1-placeholder.png](palettes/palette-sheet-v1-placeholder.png) (reference swatches, **placeholder**).
@@ -495,7 +495,7 @@ The emotional peak of the game. It should feel like a breath.
 - Because helmet-off is a **live condition**, if the air becomes unbreathable the visor returns with a warning (triangle + word + sound) and the sound world closes back in.
 
 ### 9.3 Sound across the whole game (direction note)
-Grounding: microphones on the Perseverance rover recorded Mars sound as much quieter than on Earth, with high pitches fading faster with distance (Maurice et al., 2022, *Nature*; not opened this session, **details unverified**). We use that direction, stylized:
+Grounding: microphones on the Perseverance rover recorded Mars sound as much quieter than on Earth, with high pitches fading faster with distance (Maurice et al., 2022, *Nature* 605; confirmed by the SME, round 2 [S22]). We use that direction, stylized:
 
 | Pressure | Exterior world sound | Inside helmet |
 |---|---|---|
@@ -504,7 +504,7 @@ Grounding: microphones on the Perseverance rover recorded Mars sound as much qui
 | 30 kPa | Clearer; mid frequencies return | Same, quieter |
 | ≥ 75 kPa | Full, Earth-like | (helmet off possible) |
 
-Numbers (gain and low-pass values) are in keyframes §3.1 and [audio direction](../audio/audio-direction.md) §3, marked **[SME]** while the SME checks them. Audio is owned by the Lead Artist (user decision, 2026-11-26).
+Numbers (gain and low-pass values) are in keyframes §3.1 and [audio direction](../audio/audio-direction.md) §3 (checked: accurate, SME round 2 §4; our values are milder than real, an accepted simplification). Audio is owned by the Lead Artist (user decision, 2026-11-26).
 
 ---
 
