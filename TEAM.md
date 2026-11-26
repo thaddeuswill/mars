@@ -64,6 +64,8 @@ Use these words the same way everywhere.
 | **Classroom mode** | Config preset: faster pacing, teacher tools, world pause. |
 | **Colony Record** | In-game page where learners see which goals they've shown. |
 | **Planetary Monitor** | In-game block showing Index values, trends, and causes. |
+| **Keeper** | What the story's characters call the player. Proposed in the story bible; pending approval. |
+| **Thawlings** | The fictional dormant fauna. Proposed name; pending approval. |
 | **Action log** | Local, anonymous record of player actions, for assessment. |
 | **PE / SEP / CCC** | NGSS performance expectation / science and engineering practice / crosscutting concept. |
 | **Well-structured / ill-structured** | Problem types; decide how to handle and route a problem. See the agent role files. |
@@ -213,6 +215,7 @@ Every completed task, so teammates can recall prior work. Full reports are saved
 
 | Date | Role | Task | Output | Report |
 |---|---|---|---|---|
+| 2026-11-26 | Lead Game Designer | Story bible | `docs/design/story-bible.md` | `docs/team/reports/2026-11-26-lead-game-designer-story-bible.md` |
 
 ## 11. Team Learning Log
 
