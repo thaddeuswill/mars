@@ -1,0 +1,29 @@
+# Stage 1 screenshot script for the dev-only helper (mars.client.dev.DevTools).
+# One step per line: cmd <command> | wait <ticks> | view x y z yaw pitch | hud on|off | fps | shot <name> | quit
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 2 64 4 minecraft:iron_block
+cmd /setblock 3 64 4 minecraft:glass
+cmd /setblock 4 64 4 minecraft:white_concrete
+cmd /setblock 3 65 4 minecraft:sea_lantern
+hud on
+wait 60
+fps
+shot stage1_mars_hud
+view 0.5 66 -4 0 20
+wait 80
+fps
+shot stage1_mars_blocks
+view -10 75 -10 -45 30
+wait 80
+shot stage1_mars_overview
+cmd /mars back
+wait 80
+hud off
+shot stage1_overworld
+quit

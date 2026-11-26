@@ -114,7 +114,12 @@ public final class DevTools {
   }
 
   private static void onScreenInit(ScreenEvent.Init.Post event) {
-    if (worldRequested || !(event.getScreen() instanceof TitleScreen)) {
+    // A fresh game directory shows the accessibility welcome screen first; treat it like the title.
+    boolean start =
+        event.getScreen() instanceof TitleScreen
+            || event.getScreen()
+                instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
+    if (worldRequested || !start) {
       return;
     }
     worldRequested = true;
