@@ -57,7 +57,9 @@ Every feature is checked against these. If a feature doesn't serve at least one,
 - ⬜ Basic CI: the pack builds and the server boots without errors
 
 **Learning design** (see [LEARNING.md](LEARNING.md))
+- 🟡 Learner and context analysis drafted (LEARNING.md section 0)
 - ⬜ Learner audience and curriculum alignment decided
+- ⬜ Classroom pacing approach decided
 - ⬜ Learning goals finalized and mapped to game content
 - ⬜ Pre/post test drafted
 - ⬜ Action-log format defined (local only, no personal data)

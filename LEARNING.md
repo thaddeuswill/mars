@@ -1,6 +1,6 @@
 # Learning Design
 
-This file answers four questions:
+This file starts with an analysis of the learners and context (section 0), which drives the strategy choices. It then answers four questions:
 
 1. **Learning goals:** what learners need to know or be able to do.
 2. **Methods and media:** how they get there.
@@ -10,6 +10,113 @@ This file answers four questions:
 > **Draft.** The audience is not set yet (age, classroom or self-directed, subject area). The goals below assume roughly **ages 12–18, informal or classroom use, earth and space science plus systems thinking**. Change the audience and the goals and measures should be revisited.
 
 The game already models real Mars conditions: the starting values in the Planetary Index (0.6 kPa pressure, −60 °C, 95% CO2) are close to the real planet. The learning design builds on that: **the mechanics are the lesson**, and the game doesn't stop to lecture.
+
+---
+
+## 0. Learner and Context Analysis
+
+This analysis determines which strategies and assessments fit. Everything marked *(assumed)* needs confirming; if it changes, sections 1–4 change with it.
+
+### 0.1 Targeted learners
+
+| | Primary | Secondary |
+|---|---|---|
+| **Who** | Students aged ~12–18 (middle and high school) *(assumed)* | Adult and teen hobbyist players who pick up the pack for fun |
+| **Setting** | Science class, STEM club, or after-school program | Home, singleplayer or a small friends' server |
+| **Motivation** | Mixed: some love Minecraft, some are there because the teacher said so | High and self-chosen |
+
+**Characteristics that shape the design**
+- **Minecraft familiarity is high but uneven.** Most know the basics; few have played tech modpacks. → Phase 1 has to teach modded machines from scratch, and survival must not punish newcomers before they learn the controls.
+- **Reading levels vary widely.** → Journal text kept short and plain (aim for roughly a grade 6–7 reading level), with a "read more" layer for depth. Key information is also shown visually.
+- **Attention in short sessions.** Classroom periods are 45–60 minutes. → Each session should end at a natural save point with something achieved.
+- **Mixed ability groups on servers.** → Global progress lets stronger players carry some load, so the Colony Record tracks each player's own contributions and predictions.
+- **Accessibility.** → Color is never the only signal (sky tint plus monitor numbers); subtitles for sound cues; no time-pressured reading.
+
+### 0.2 Prior knowledge and experience
+
+**Likely to know already**
+- States of matter (solid, liquid, gas), basic temperature
+- Plants need CO2 and light and produce O2 (photosynthesis, basic level)
+- Mars is red, cold, and far away
+
+**Likely gaps**
+- Atmospheric pressure as a concept, and how it affects boiling and freezing
+- Why the greenhouse effect works (what gases do with heat)
+- Radiation and magnetic fields
+- Feedback loops and equilibrium as ideas
+
+**Common misconceptions to design against**
+| Misconception | How the game confronts it |
+|---|---|
+| "Mars has no atmosphere at all" | Monitor starts at 0.6 kPa, not zero |
+| "Ice melts as soon as it's above 0 °C" | At low pressure, ice turns straight to vapor; water only pools once pressure is high enough |
+| "The greenhouse effect is the ozone hole" | Journal entry contrasts them when emitters unlock |
+| "More oxygen is always better" | Oxygen overshoot causes fires in Phase 3 |
+| "Fixing one problem fixes the system" | Blowback: warming wakes fauna |
+
+**Pre-test** (section 3.3) confirms prior knowledge and catches these misconceptions before play.
+
+### 0.3 Nature of the content
+
+Different kinds of content need different teaching and testing approaches.
+
+| Content type | Examples in this game | Teaching strategy | Assessment approach |
+|---|---|---|---|
+| **Facts** | Mars surface pressure is ~0.6 kPa; atmosphere is ~95% CO2 | Show in the Monitor and journal; repeat through play | Recall questions (pre/post test) |
+| **Concepts** | Pressure, greenhouse gas, equilibrium, feedback loop | Examples and non-examples in play; journal definitions at the moment they matter | Classify or identify examples |
+| **Cause and effect / principles** | More pressure → liquid water possible; more warming → fauna wakes | Simulation: act, observe, explain. Prediction prompts | Predict outcomes of new scenarios |
+| **Procedures** | Seal a dome, set up an O2 loop, maintain a machine | Guided first attempt, then practice with less support | Observed in play: completed without failure |
+| **Problem-solving** | Stabilize O2/CO2 while keeping temperature up | Open-ended challenges, productive failure, hints not answers | Performance: reach and hold equilibrium |
+| **Attitudes** | Weighing terraforming ethics; linking to Earth's climate | Reflection prompts, discussion | Rubric-scored reflection |
+
+**Most of the content is cause and effect and problem-solving.** That's why simulation and discovery are the main strategies, and why assessment leans on prediction and performance rather than recall.
+
+### 0.4 Learning environments
+
+| Environment | How it's used | Constraints to design for |
+|---|---|---|
+| **Classroom / computer lab** | Teacher runs a small server; students play in sessions, with discussion between | 45–60 min periods; school hardware may be weak; school networks may block game servers; teacher needs to pause, reset, or monitor |
+| **STEM club / after-school** | Longer sessions, small groups on a shared server | Fewer constraints; less teacher time for debriefs |
+| **Home, singleplayer** | Self-directed, at the learner's own pace | No teacher, so feedback and the Colony Record must stand alone |
+| **Online / remote class** | Students join a hosted server from home | Hosting cost; supervision |
+
+**Implications**
+- 40 hours is long for a class. A classroom unit would cover about 15–25 sessions. Options: a **classroom mode** with faster pacing (using the gate-threshold config), or teachers running selected phases. *(decision needed)*
+- Teacher tools: a way to see each student's Colony Record, pause the world, and roll back a save.
+- Performance budget must target modest school hardware (Stage 4 of the roadmap).
+
+### 0.5 Where learners will use it afterward (transfer)
+
+| Setting | What they'll do with it |
+|---|---|
+| Later science classes | Explain atmospheric pressure, the greenhouse effect, phase changes, and ecosystems |
+| Exams and coursework | Answer questions on Earth and space science and climate |
+| Discussions about Earth's climate | Reason about feedback loops and unintended consequences in real systems |
+| Everyday decisions and civic life | Think in systems: "what else does this change affect?" |
+| Future STEM study or careers | Engineering design habits: plan, test, fail, improve |
+
+Transfer to Earth is the main target. The transfer task in section 3.3 checks it directly.
+
+### 0.6 Behaviors, conditions, and criteria
+
+Each objective states the **behavior** (what the learner does), the **condition** (in what situation, with what resources), and the **criterion** (how well). These are the measurable versions of the goals in section 1.
+
+| Goal | Behavior | Condition | Criterion |
+|---|---|---|---|
+| A1 | Compare Mars and Earth on pressure, temperature, atmosphere, and radiation | Written post-test, no notes | At least 3 of 4 correct |
+| A2 | Explain why water can't stay liquid on Mars's surface and what must change | Written or verbal, given a scenario | Names both pressure and temperature |
+| A3 | Explain how greenhouse gases warm a planet | Written post-test | Correct mechanism (gases trap outgoing heat) |
+| A5 | Describe the CO2/O2 exchange and why balance matters | During Phase 3 play, and on post-test | Holds O2 in band for 7 in-game days; correct written explanation |
+| B1 | Draw links between planetary variables | Given a blank diagram of 5 variables | At least 4 correct links |
+| B2 | Identify a reinforcing and a balancing feedback loop | In the game or a new Earth example | One correct example of each |
+| B3 | Predict the effect of a change before making it | In-game prediction prompts | Phase 3 accuracy at least 20 points above Phase 1 |
+| B5 | Identify an unintended consequence of an intervention | Reflection prompt after Phase 2 | Names one and its cause |
+| C1 | Keep life support running through the first crisis | Phase 1 play, no outside help | Survives the first dust storm without the dome failing, within 2 attempts |
+| C2 | Diagnose and fix a failing system | After any failure report | Same failure doesn't recur from the same cause |
+| C3 | Use data to make a decision | Before a major build, with the Monitor | Checks the Monitor and can say why they chose the build |
+| D1/D2 | Argue a position on terraforming and link it to Earth | Reflection or class discussion | Rubric score of 3 out of 4 or higher |
+
+Criteria are first drafts. They should be checked against the first playtest, then adjusted.
 
 ---
 
@@ -160,6 +267,8 @@ A learner has met the outcomes when, in their own Colony Record:
 
 ## Open Questions
 
+- **Classroom pacing:** add a classroom mode with faster pacing, or have teachers run selected phases?
+- **Teacher tools:** how much does the teacher need to see and control (Colony Records, pause, rollback)?
 - **Who is the learner?** Age range, and is this for classrooms, clubs, or self-directed players?
 - **Curriculum alignment:** should goals map to a standard (e.g. NGSS earth and space science, or a national curriculum)?
 - **How visible is the learning?** Fully hidden, light journal prompts, or an explicit "education mode"?
