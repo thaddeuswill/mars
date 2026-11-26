@@ -42,3 +42,17 @@
 - **Terms:** fidelity plan codes (SM straw-man, C concept, F-E final essential, F-S final simple); `_hud` and `_paper` icon variants; paper-ink colors; visual twin (what shows a sound's meaning without sound); honest silence (a sound deliberately left out because the real thing is silent).
 - **Decisions:** audio direction and sound list adopted; alarms are a closed list of three, for life-threatening events only; the equilibrium sky is paler; text over the world sits on a strip at ≥ 90% opacity; original pixel fonts; mast gas gauges at Phase 3 (Instructional Designer pending, now agreed in its addendum).
 - **Lessons:** draw a straw-man wireframe at 1280×720 before speccing (it caught a layout overflow the numbers hid); check every color against each background it actually sits on.
+
+---
+
+## Addendum: round 3 follow-ups (filed by coordinator)
+
+All items accepted, no pushback. Sound production is now about **260 h** (up from 230), with the sound list split into primary and secondary for cut item 5. Still open: the optional pixel sampling of rover images.
+
+- **SME:** background dosimeter ticks fade to a floor and never reach zero (0.1 ticks per second outside below 5 kPa; 0.02 per second, about one a minute, outside above 30 kPa and inside sealed volumes; both rates invented and flagged for the balance pass). Contact sound marked SME ✓ plausible. Pixel sampling listed as an optional joint item (replace a start color only if it differs from the estimate by more than ΔE 0.02, then re-run the step checks).
+- **Technical Lead:** thawling animations in `pack/assets/mars/neoforge/animations/entity/` via Blockbench's "Animation to JSON Converter" (asset A-08); nine-slice GUI panels marked verified (U-34); aurora uses `mars:solar_spike`; alarms and feedback cues in the master sound category (the 1.21.1 category list is still to confirm in the code skeleton); mast gas gauges drawn only after the Phase 3 gate; Training Hall art spec (style guide §8.1, asset S-10): mostly vanilla blocks, a real Earth sky through the window, a Mars globe and a join terminal, a wall chart with pictograms only (numbers on the look-at card).
+- **Instructional Designer:** U-25 planned as 11 journal diagrams (7 essential, 4 simple), with an SME content check before drawing; three items decided (mast gauges at Phase 3, one neutral forecast-result sound, subtitles on by default in classroom mode); the pre-storm haze condition written into the first-storm storyboard (the solar output number doesn't drop before the storm arrives; the haze changes fog and the sun's glow only).
+- **Producer:** sound hours revised to about 260. Primary sounds are never simplified (alarms, feedback cues, pressure beds, the Outgasser, the dosimeter, fire, helmet-off, core thawling sounds). Secondary sounds total about 105 h at full effort; making them simple synthesized versions saves about 50 h. Every sound keeps its subtitle and visual twin. "Ice extractor" is now used consistently.
+- **Handoffs:** Producer (update budget.md §2 and cut item 5); SME (a content check of the 11 U-25 diagrams before drawing; optional pixel sampling); Game Designer (the Training Hall layout and signs; confirm the pre-storm haze in the joint storm pass).
+- **Risk:** the extra sound hours add to the Lead Artist's 18% share; cut item 5 offsets most of it.
+- **Shared model updates:** primary and secondary sounds; background dosimeter ticks never go silent; Training Hall built mostly from vanilla blocks with no numbers in textures; sound production estimate about 260 h.
