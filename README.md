@@ -4,6 +4,7 @@ A total-conversion Minecraft modpack about turning a dead Mars into a living wor
 
 ## Start here
 - [AGENTS.md](AGENTS.md): start here if you are Codex/ChatGPT or another coding agent joining the project
+- [HANDOFF.md](HANDOFF.md): current state, in-flight work and next steps for the next worker
 - [TEAM.md](TEAM.md): team shared mental model (read first)
 - [DOCUMENTATION.md](DOCUMENTATION.md): document map, traceability, and shared formats
 - [ROADMAP.md](ROADMAP.md): development stages, iteration model, and "Where We Are Now"

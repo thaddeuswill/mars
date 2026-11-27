@@ -6,6 +6,8 @@ Claude (Anthropic) has been the lead so far, running six role agents. You are an
 
 ## 1. Read these first (in this order, stop when you have enough)
 
+**`HANDOFF.md` has the current state, the in-flight work, open owner questions and the ordered next steps. Read it right after this file.**
+
 | File | Why |
 |---|---|
 | `README.md` | Index and ownership table |
@@ -77,7 +79,7 @@ tools/screenshots/          in-game screenshot harness and out/<timestamp>/ resu
 docs/                       team reports, design, learning, science, tech, art, production
 ```
 
-## 6. Current state and next tasks (update this section when it changes)
+## 6. Current state and next tasks (full detail in `HANDOFF.md`; update both when it changes)
 
 State as of 2026-11-27:
 - Stage 1 (mod skeleton, empty Mars world) done.
