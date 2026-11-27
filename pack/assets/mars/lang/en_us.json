@@ -80,7 +80,7 @@
   "earth.gate.dome_stable.ms": "Earth's air pushes on you with more than 100 times the force of Mars's air. You never notice, because the air and fluids inside your body push back with the same pressure.",
   "earth.gate.dome_stable.hs": "Earth's air pushes on you with more than 100 times the force of Mars's air. You never notice, because the air and fluids inside your body push back with the same pressure. Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. Your dome has to make up the difference.",
   "journal.sky.stylized.title": "The sky",
-  "journal.sky.stylized.ms": "More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them.",
+  "journal.sky.stylized.ms": "More air scatters more blue light, so the sky slowly turns less tan and more blue. The dust is still there. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them.",
   "guidance.current": "Guidance: %s. %s",
   "guidance.effect.gentle": "Gentle: all help is on.",
   "guidance.effect.standard": "Standard: all help is on.",

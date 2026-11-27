@@ -309,7 +309,7 @@ Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`
 | Key | Final text | Change and why |
 |---|---|---|
 | `monitor.plot.goal` | "%s: %s" ("Phase 2 begins: 5 kPa") | Keep, **only when pressure is the gate's only condition** (Phase 2 begins) |
-| `monitor.plot.goal.partial` (new) | "Pressure goal: %s" ("Pressure goal: 30 kPa") | For gates with other conditions (Phase 3 begins also needs 0 °C; Breathable): the plain label would say pressure alone opens the gate. When the line is above the goal and the gate is still open, the Next goal row must show the unmet condition (handoff) |
+| `monitor.plot.goal.partial` (new) | "Pressure goal: %s" ("Pressure goal: 30 kPa" for Phase 3 begins; "Pressure goal: 75 kPa" for Breathable) | The goal value is per gate, taken from that gate's pressure condition (Phase 3 begins 30 kPa, Breathable 75 kPa; SME, `docs/team/reports/2026-11-27-sme-on-earth-and-goal-label.md`). For gates with other conditions (Phase 3 begins also needs 0 °C; Breathable): the plain label would say pressure alone opens the gate. When the line is above the goal and the gate is still open, the Next goal row must show the unmet condition (handoff) |
 | `monitor.plot.rescaled` | "The graph now goes up to %s. The line looks lower, but the pressure did not drop." | "squashed" reads as damage and does not say that nothing was lost; the second sentence answers the misreading directly (C3) |
 | `monitor.plot.caption` | "Air pressure over time" | Keep, if room. Matches the row label "Air pressure" (§9 table) |
 | `monitor.goal.eta` / `eta_one` / `eta_soon` | "about %s sols" / "about 1 sol" / "under 1 sol" | Words instead of "~" and "<" (CR-T7b). If the panel is too narrow, keep "~" and add a tooltip "about"; Game Designer decides |
@@ -325,6 +325,8 @@ Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`
 | Landing step 6 (`landing.checklist`, `docs/design/messages/phase-1.md` §1) | "Place your two Ovens. Switch on the battery to power them." | Owner approved "battery and Ovens"; this order shows cause and effect (power first, then the effect). 11 words, within the 12-word limit. Detection: both Ovens placed and battery on. Game Designer owns the file |
 
 **Time-to-goal estimate and forecasts (CR-T8).** An "about N sols" line hands a player the answer to "when will the pressure reach 5 kPa?", which is what B3 asks them to work out from the slope and the goal line. It is shown under `guidance` gentle and standard, hidden under expert, and hidden for the value of any forecast that is open.
+
+**Sky label wording (2026-11-27, SME-recommended, owner accepted; SME to confirm).** `journal.sky.stylized`: "...so the sky slowly turns less tan and more blue. The dust is still there. Nobody has seen..." replaces "loses its dusty tan", so the air is not read as removing the dust. The hedge sentences are unchanged.
 
 **Open items from this review.** Sky label and Dome stable entry: see the report, sections 4a and 4b.
 
