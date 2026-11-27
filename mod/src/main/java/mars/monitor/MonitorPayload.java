@@ -29,6 +29,13 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     buf.writeCollection(v.rows(), MonitorPayload::writeRow);
     MonitorView.History h = v.history();
     buf.writeUtf(h.unit());
+    buf.writeNullable(
+        h.goalLine(),
+        (b, goal) -> {
+          b.writeUtf(goal.nameKey());
+          b.writeDouble(goal.value());
+          b.writeBoolean(goal.partial());
+        });
     buf.writeCollection(
         h.points(),
         (b, p) -> {
@@ -48,6 +55,9 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     double sols = buf.readDouble();
     List<MonitorView.Row> rows = buf.readList(MonitorPayload::readRow);
     String unit = buf.readUtf();
+    MonitorView.GoalLine goal =
+        buf.readNullable(
+            b -> new MonitorView.GoalLine(b.readUtf(), b.readDouble(), b.readBoolean()));
     List<MonitorView.Point> points =
         buf.readList(b -> new MonitorView.Point(b.readDouble(), b.readDouble()));
     List<MonitorView.Marker> markers =
@@ -55,7 +65,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
             b ->
                 new MonitorView.Marker(
                     b.readDouble(), b.readUtf(), b.readNullable(FriendlyByteBuf::readUtf)));
-    return new MonitorView(sols, rows, new MonitorView.History(points, markers, unit));
+    return new MonitorView(sols, rows, new MonitorView.History(points, markers, unit, goal));
   }
 
   private static void writeRow(FriendlyByteBuf buf, MonitorView.Row r) {

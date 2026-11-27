@@ -33,8 +33,14 @@ public record MonitorView(double sols, List<Row> rows, History history) {
    */
   public record Marker(double sol, String labelKey, String argKey) {}
 
+  public record GoalLine(String nameKey, double value, boolean partial) {}
+
   /** The pressure plot: points in time order, markers, and the unit for the axis label. */
-  public record History(List<Point> points, List<Marker> markers, String unit) {
+  public record History(List<Point> points, List<Marker> markers, String unit, GoalLine goalLine) {
+    public History(List<Point> points, List<Marker> markers, String unit) {
+      this(points, markers, unit, null);
+    }
+
     public static final History EMPTY = new History(List.of(), List.of(), "kPa");
 
     /** True when there are at least two points and they span a sol or more (else it says so). */
@@ -394,7 +400,37 @@ public record MonitorView(double sols, List<Row> rows, History history) {
                         .orElse("gate." + e.id().replace(':', '.')));
           });
     }
-    return new History(List.copyOf(pts), List.copyOf(marks), sim.model().unit(Ids.PRESSURE));
+    return new History(
+        List.copyOf(pts), List.copyOf(marks), sim.model().unit(Ids.PRESSURE), pressureGoal(sim));
+  }
+
+  private static GoalLine pressureGoal(PlanetSim sim) {
+    GoalLine last = null;
+    for (var gate : sim.gates().defs()) {
+      double value = pressureMinimum(gate.condition());
+      if (value > 0) {
+        last =
+            new GoalLine(
+                gate.nameKey(), value, !(gate.condition() instanceof mars.gates.Condition.Compare));
+        if (!sim.gates().isLatched(gate.id())) {
+          return last;
+        }
+      }
+    }
+    return last;
+  }
+
+  /** A lower pressure bound required by the gate, including conjunctions. */
+  private static double pressureMinimum(mars.gates.Condition condition) {
+    if (condition instanceof mars.gates.Condition.Compare c
+        && c.parameter().equals(Ids.PRESSURE)
+        && (c.op() == mars.gates.Condition.Op.GE || c.op() == mars.gates.Condition.Op.GT)) {
+      return c.value();
+    }
+    if (condition instanceof mars.gates.Condition.All all) {
+      return all.parts().stream().mapToDouble(MonitorView::pressureMinimum).max().orElse(0);
+    }
+    return 0;
   }
 
   /**

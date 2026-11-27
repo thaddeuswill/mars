@@ -85,17 +85,15 @@ public final class MonitorScreen extends Screen {
   /** The pressure plot. Returns the y below it (after the Sol labels). */
   private int drawPlot(GuiGraphics g, int left, int right, int top, int h) {
     MonitorView.History hist = view.history();
-    String topLabel = "";
-    double topValue = 1;
-    if (!hist.points().isEmpty()) {
-      double max = 0;
-      for (MonitorView.Point p : hist.points()) {
-        max = Math.max(max, p.value());
-      }
-      topValue = PlotScale.niceMax(max);
-      topLabel = Fmt.number(topValue, 0) + " " + hist.unit();
-    }
-    int gutter = Math.max(font.width("0"), font.width(topLabel)) + 4;
+    MonitorView.GoalLine goal = hist.goalLine();
+    double max = hist.points().stream().mapToDouble(MonitorView.Point::value).max().orElse(0);
+    double topValue = PlotScale.topFor(goal == null ? 0 : goal.value(), max);
+    String tick =
+        goal == null
+            ? Fmt.number(topValue, 0)
+            : Fmt.number(goal.value(), goal.value() == Math.rint(goal.value()) ? 0 : 1);
+    String topLabel = goal == null ? tick + " " + hist.unit() : "";
+    int gutter = Math.max(font.width(tick), font.width(topLabel)) + 4;
     int px = left + gutter;
     int pw = right - px;
     if (pw < 20) {
@@ -105,7 +103,16 @@ public final class MonitorScreen extends Screen {
     g.fill(px - 1, top, px, top + h + 1, PLOT_AXIS);
     g.fill(px - 1, top + h, px + pw, top + h + 1, PLOT_AXIS);
     g.drawString(font, "0", px - 3 - font.width("0"), top + h - 8, LABEL, false);
+    if (goal != null) {
+      int goalY = top + PlotScale.y(goal.value(), topValue, h);
+      g.fill(px, goalY, right, goalY + 1, CAUSE);
+      g.drawString(font, tick, px - 3 - font.width(tick), goalY - 3, LABEL, false);
+    }
     if (!hist.drawable()) {
+      if (goal != null) {
+        drawPlotGoal(g, goal, hist.unit(), px, right, top, h, new int[0], new int[0]);
+        return top + h + PLOT_LABEL_H;
+      }
       String msg = Component.translatable("monitor.plot.empty").getString();
       if (font.width(msg) > pw - 4) {
         msg = font.plainSubstrByWidth(msg, pw - 4 - font.width("…")) + "…";
@@ -148,6 +155,8 @@ public final class MonitorScreen extends Screen {
         g.fill(sxs[i] - 1, sys[i] - 1, sxs[i] + 2, sys[i] + 2, PLOT_LINE);
       }
     }
+    int[] goalLabel =
+        goal == null ? null : drawPlotGoal(g, goal, hist.unit(), px, right, top, h, sxs, sys);
     // Event labels after the series. A machine event ("Outgasser placed") is labelled before a
     // goal when they sit at the same sol. A label goes on the top or bottom band, whichever the
     // series does not cross; if both are crossed it goes on top over a backing so it stays legible.
@@ -182,6 +191,13 @@ public final class MonitorScreen extends Screen {
         continue;
       }
       int ty = band == 0 ? top : top + h - 9;
+      if (goalLabel != null
+          && lx < goalLabel[1]
+          && lx + lw > goalLabel[0]
+          && ty < goalLabel[2] + 9
+          && ty + 9 > goalLabel[2]) {
+        continue;
+      }
       if (band == 0 && !topFree || band == 1 && !bottomFree) {
         g.fill(lx - 1, ty, lx + lw + 1, ty + 9, BACKING);
       }
@@ -196,6 +212,47 @@ public final class MonitorScreen extends Screen {
     }
     drawSolLabel(g, last, px + pw, ly, 2);
     return top + h + PLOT_LABEL_H;
+  }
+
+  private int[] drawPlotGoal(
+      GuiGraphics g,
+      MonitorView.GoalLine goal,
+      String unit,
+      int left,
+      int right,
+      int top,
+      int height,
+      int[] xs,
+      int[] ys) {
+    String value =
+        Fmt.number(goal.value(), goal.value() == Math.rint(goal.value()) ? 0 : 1) + " " + unit;
+    String label =
+        (goal.partial()
+                ? Component.translatable("monitor.plot.goal.partial", value)
+                : Component.translatable(
+                    "monitor.plot.goal", Component.translatable(goal.nameKey()), value))
+            .getString();
+    if (label.length() > 24 || font.width(label) > right - left - 4) {
+      label = Component.translatable("monitor.plot.goal.partial", value).getString();
+    }
+    int x = right - font.width(label) - 2;
+    if (x < left + 2) {
+      return null;
+    }
+    int labelWidth = font.width(label);
+    int bottom = top + height - 9;
+    int[] range = seriesRange(xs, ys, x, right);
+    int ty = range[1] < bottom ? bottom : top;
+    if (ty == top && range[0] <= top + 9) {
+      int leftEdge = left + 2;
+      int[] leftRange = seriesRange(xs, ys, leftEdge, leftEdge + labelWidth);
+      if (leftRange[0] > top + 9) {
+        x = leftEdge;
+      }
+    }
+    g.fill(x - 1, ty, x + labelWidth + 1, ty + 9, BACKING);
+    g.drawString(font, label, x, ty + 1, CAUSE, false);
+    return new int[] {x - 1, x + labelWidth + 1, ty};
   }
 
   /** Lowest and highest pixel row the series reaches between two x positions. */

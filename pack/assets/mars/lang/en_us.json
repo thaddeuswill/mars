@@ -36,6 +36,8 @@
   "monitor.goal.not_rising": "Not rising",
   "monitor.close_hint": "Esc to close",
   "monitor.event.placed.regolith_outgasser": "Outgasser placed",
+  "monitor.plot.goal": "%s: %s",
+  "monitor.plot.goal.partial": "Pressure goal: %s",
   "monitor.plot.empty": "History starts after sol 1.",
   "monitor.row.next_goal": "Next goal",
   "monitor.row.goals_reached": "Goals reached",
