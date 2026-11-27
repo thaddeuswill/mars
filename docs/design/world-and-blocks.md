@@ -1,0 +1,196 @@
+# World and Blocks: how Mars stays Minecraft
+
+**Owner:** Lead Game Designer · **Written:** 2026-11-27 · **Status:** PROPOSAL for the owner (nothing here is built or accepted)
+**Question from the owner:** "what are we going to do for terrain generation and other blocks to create these things because I still want it to be Minecraft with mining, gardening, building, and everything"
+**Reads with:** DESIGN.md (phases, Content Lists), `docs/design/balance-sheet.md`, `docs/design/story-bible.md`, `pack/data/mars/dimension/planet_1.json`, `pack/data/mars/terrain/ice_rule.json`.
+**Marks used:** *invented* = our game number or design; **SME check** = real Mars claim not yet verified by us (the Subject Matter Expert must source it before it reaches a journal or sign); **unverified estimate** = effort guess, +/-50% (R-68, nothing measured yet).
+
+## 0. The short answer
+
+Today Mars is a flat slab (bedrock, 56 stone, 4 red sandstone, 3 red sand; no ores, caves, structures or plants). It works as a test bench, not as a Minecraft world. The plan:
+
+1. **Keep every Minecraft verb**: dig, build, farm, explore. Each one gets a job in the Planetary Index, but **the Index numbers do not change**. Resources decide what you can *build and where*, not how fast pressure rises. That keeps the balance sheet valid and the physics honest (thresholds never scale).
+2. **Replace the flat generator in three steps**, cheapest first. Step 1 is mostly data (JSON), so the owner sees real hills, ore and ice in the first build.
+3. **Add about 14 new blocks and 6 new items by the end of Phase 3**, most of them plain blocks with a texture, a loot table and a tag. Only a few need real code (ground ice behaviour, spreading biocrust, ground collapse).
+4. **Pillar check:** the planet is the quest log (ground ice is where Hydrosphere comes from, so you go and find it); every change is visible (meltwater, green patches); compact before wide (rich ground is near the dome at first; far ground is earned with tubes); your progress provokes the planet (warmth makes ice under your base collapse).
+
+## 1. What the player does, phase by phase
+
+### Phase 1: Survival (about 8 h standard)
+
+| Verb | What the player does | Resources and why | Feeds the Index / gate | Goals |
+|---|---|---|---|---|
+| **Mine** | Dig regolith and rock around the dome. Dig *down* and pile regolith *up* to shield the shelter and living quarters | Regolith and basalt are the shielding blocks already in the balance sheet (each block x0.5 dose; 3 blocks = about x0.13). **Hematite** (iron) for bearings and heater coils. **Silica sand** for dome glass and greenhouse panes. Rare **meteorite iron** as an exploring prize | Parts keep machines alive (C1). Shielding answers forecast F2. Heater coils build Outgassers and Ovens, which move pressure to the 5 kPa gate | A1, C1, C2, B1 |
+| **Build** | Compact hab: stack stories upward inside a sealed footprint. Airlock with a brush station. Solar panel arrays (3x3), batteries, Ovens, first Outgassers | Scarcity is real: a limited footprint of sealed, pressurised space; glass and parts cost ore | Power grid and Outgasser rate (existing slices 3 to 5) | B1, C1, C2 |
+| **Garden** | **Sealed dome greenhouse.** Wash perchlorate out of regolith, fill planters, grow potato, lettuce, dwarf wheat, tomato under lamps and warmth. Water from the dome reclaimer | Food is the pressure that keeps people away from the machines. Perchlorate washing is a real constraint (**SME check**: perchlorate in Mars soil is real; amounts and washing method to be verified) | Food and the dead-tomato lesson (C1). Does **not** change a Planetary Index row | C1, A1 |
+| **Explore** | Short trips (radius about 64 blocks) in a suit: find a hematite outcrop, a crater rim, the first ground-ice patch (a *survey scan* shows it, you do not guess) | Exploring sets up Phase 2: you learn where the ice is before you need it | Nothing yet; it plants B5 and A2 | A2, A4 |
+
+### Phase 2: Industrial Geo-Engineering (about 18 h standard)
+
+| Verb | What the player does | Resources and why | Feeds the Index / gate | Goals |
+|---|---|---|---|---|
+| **Mine** | Locate and drill **ground ice** (lenses a few blocks under regolith, thicker at higher "latitude" toward the polar cap). Quarry **sulfate/gypsum** and **carbonate rock** for tube hulls and insulation. Mine more iron for processors | **Ground ice must be under the ice extractor** to place it. Dry ground: it will not run | Hydrosphere gate (ice extractors), Thaw. The extractor's rate is the same number as today; terrain decides *where*, not *how fast* | A2, A3, B1 |
+| **Build** | Airlocks, **pressurised transit tubes** to outposts, outposts with their own panels, atmospheric processors, emitters, insulation shrouds | Tubes are the "expansion is earned" step: wide building is allowed only after Phase 2 begins. Build on rock, not on ice lenses | Temperature gate (emitters, mirror uplink). Ground collapse is a cost of putting heat on ice (B5) | B2, B5, C2 |
+| **Garden** | Not a Phase 2 theme. Greenhouse continues for food; meltwater needs treatment before it reaches planters (perchlorate dissolves in meltwater, real effect, **SME check**) | Keeps the farming verb alive and ties it to the salty-meltwater hazard | None (food, safety) | C1, B5 |
+| **Explore** | Survey for ice lenses, outposts, canyon walls, polar cap edge. Quiet zones and lure stations are placed on terrain you scouted | The map is the second quest log: every outpost sits on ground you read | Fauna signature (existing) | A4, B5, D1 |
+
+### Phase 3: Biome Seeding and Equilibrium (about 14 h standard)
+
+| Verb | What the player does | Resources and why | Feeds the Index / gate | Goals |
+|---|---|---|---|---|
+| **Mine** | Less digging, more **soil making**: crush basalt and carbonate for soil treatment; keep scrubbers fed (carbonate rock is where scrubbed CO2 ends up) | Mining shrinks on purpose: the late game is about balance, not extraction | Carbon scrubber locks CO2 (rule A in the balance sheet) | A5, B2 |
+| **Build** | Algae vats, scrubbers, soil treatment plants; the **beacon** (mast segments x7, transmitter core, dish array, 8 landing lamps) | Beacon parts are the long build, a visible monument | Breathable and Equilibrium holds | B4 |
+| **Garden** | **Seed biomes in a chain:** biocrust, tundra meadow, wetland margin, cold forest. Each needs the soil the one before made | The vanilla "grow a garden" fantasy, at planet size. Journal label: "On Earth this takes hundreds of years. The game speeds it up." | Biomass and the CO2-to-O2 swap (existing rule A numbers) | A5, B2, B4 |
+| **Explore** | Walk the green you made; find the places the water pooled; choose where the next patch goes | The reward screen is the world itself | None (feedback) | B4, D2 |
+
+## 2. Terrain generation
+
+### 2.1 Where we are
+
+`planet_1.json` uses the vanilla **flat** generator, one biome (`mars:regolith_flats`), no features, no carvers, no structures. Everything on the surface is at one height, so there is no reason to dig for anything, no place to hide a base, and no "over the hill" to explore.
+
+### 2.2 Target world (what it should look like, and the real-Mars link)
+
+| Feature | In game | Real Mars link (all **SME check**) |
+|---|---|---|
+| Rolling regolith plains, rocky basalt highs | Noise-based hills 10 to 40 blocks, red sand and dust on top, basalt outcrops | Basaltic crust under iron-oxide dust |
+| **Craters** | Bowls 8 to 60 blocks wide with raised rims; rim shows layers, floor traps dust | Impact craters are everywhere on Mars |
+| **Dunes** | Wavy sand ridges in low basins | Dune fields exist (wind-formed) |
+| **Canyon / scarp** | One long cut near the map edge for a Phase 2 outpost and view | Valles Marineris is the famous example; ours is a small stand-in, labelled "stylised" |
+| **Ore veins** | Hematite (red-grey) in outcrops; silica sand in dune basins; sulfate/gypsum in canyon walls; rare meteorite iron on the surface | Hematite and sulfates have been found from orbit and by rovers; meteorite iron-nickel has been found on the surface. Amounts and places are *invented* |
+| **Caves and ice** | Small lava-tube-style caves (cosmetic, shelter); **ground-ice lenses** at 3 to 12 blocks under the surface | Buried ground ice is real at mid and high latitudes; whether it sits this close is *stylised* |
+| **Polar cap** | At the far north edge: layered ice and frozen CO2 | Real; the polar frost sink (slice 5) already models CO2 there |
+| **Dormant fauna sites** | Not terrain. Left to the fauna design (fictional, labelled) | n/a (fiction) |
+
+**Design rule:** resources that matter for a gate sit **near the dome in Phase 1** (a hematite outcrop and one ice patch within about 64 blocks) and the richer deposits sit **far** (150 to 400 blocks), so wide travel is a Phase 2 reward, not a Phase 1 chore. This is *invented* and must be tuned in the first playtest.
+
+### 2.3 Data-only versus needs mod code
+
+| Piece | Data-only (datapack JSON) | Needs mod code |
+|---|---|---|
+| Hills, plains, basins (noise settings, density functions) | Yes (`noise_settings`, the vanilla noise router; reuse and edit the vanilla pieces) | No |
+| Surface blocks by height or slope (red sand, regolith, basalt) | Yes (`surface_rule`) | No |
+| Several biomes (plains, dune basin, highlands, canyon, polar) | Yes (`worldgen/biome`, `multi_noise` biome source) | No |
+| Ore veins | Yes (`configured_feature`, `placed_feature`, ore feature) **once the ore blocks exist** | Registering the new ore blocks (simple) |
+| Caves | Yes (vanilla carvers and noise caves, tuned) | No |
+| Ground-ice lenses | Yes as an ore-style feature of `mars:ground_ice` | Registering `mars:ground_ice`. Collapse and "extractor must sit on ice" need code |
+| Craters | **Partly.** A set of structure templates (`.nbt`) placed by a structure set gives fixed shapes. A *round bowl with a rim that fits the ground* needs a custom feature | Custom feature (small, pure geometry), later |
+| Dunes | Yes with noise (wavy ridges) | No (a custom dune feature is only an upgrade) |
+| Canyon | Yes with a noise carve; a long straight cut is simpler as a custom feature | Optional |
+| Structures: starting dome, outposts, crashed probe, meteorite | Yes (`structure`, `template_pool`, `.nbt`, jigsaw). The mod already holds `structure/empty.nbt` | Only if the dome must be sealed by code |
+| Polar cap | Yes (biome plus surface rule by latitude noise) | No |
+| Biome change at runtime when seeding (Phase 3) | No | Yes: an item or machine that rewrites biome and blocks. Plan: Phase 3 only |
+
+**Open for the Technical Lead:** how the starting dome is placed today (spawn-time code or a structure), and whether the dome and boot tests assume a flat world. Both must work on noisy ground (a flat pad under the dome is the usual fix).
+
+### 2.4 Three steps
+
+| Step | Contents | Data vs code | Effort (unverified estimate) | What the owner sees |
+|---|---|---|---|---|
+| **W1: shaped world** (cheap, first) | Noise terrain with hills, basins and a few biomes; red sand and basalt surface; hematite and silica veins; ground-ice lenses; small caves; flat pad for the dome | About 85% data. Code: register 4 simple blocks (hematite ore, silica sand ore, basalt, ground ice) | 4 to 6 dev-days incl. textures and tuning | Real Minecraft terrain on Mars, ore to dig, ice under the ground |
+| **W2: landmarks** | Craters (custom feature), dune fields, a canyon, polar cap, meteorite finds, a wrecked probe structure, outposts sites | About 50% data, 50% small features | 5 to 8 dev-days | Reasons to explore, places to build outposts, screenshots |
+| **W3: living ground** | Ground collapse over melting ice; spreading biocrust and soil; biome rewrite by seed kits; meltwater pools; ground ice lenses react to temperature | Mostly mod code (random-tick blocks, chunk edits) | 8 to 12 dev-days | The planet answers your machines |
+
+Existing saves keep their flat chunks (terrain changes only apply to new chunks). It is a design exercise, so we accept that and say so in the release notes.
+
+## 3. Block and item list
+
+Legend for "Why": **G** = needed for a gate; **L** = learning purpose; **N** = nice to have (cut first). "Code" is small unless noted.
+
+### 3.1 Terrain and resource blocks
+
+| Block / item | New, reused or retextured | Phase | Why | Notes |
+|---|---|---|---|---|
+| Regolith (loose red-brown soil, shovel) | Reuse `red_sand` or new block | 1 | G, L | Shielding, Oven input, planter base once washed |
+| Basalt | Vanilla `basalt`, reused as is (textures are global, so we cannot retexture it for Mars only) | 1 | L | Shielding, crushed for soil in Phase 3 |
+| Red sandstone / red sand | Vanilla | 1 | N | Surface, already in use |
+| Hematite ore (iron) | **New** | 1 | G | Iron ingots for bearings, coils, tools |
+| Silica sand ore | **New** (or reuse vanilla sand, retinted) | 1 | G | Glass for dome and greenhouse |
+| Meteorite iron | **New**, rare surface block | 1 | N | Exploring prize; real thing (**SME check**) |
+| Ground ice | **New**, with behaviour | 1 (found), 2 (used) | G, L | Source for ice extractors; collapses when heated; follows `ice_rule.json` |
+| Sulfate / gypsum rock | **New** or reuse vanilla `calcite` | 2 | L | Tube hull and insulation |
+| Carbonate rock | **New** | 2 to 3 | L, G | Output block of the carbon scrubber; building block |
+| Perchlorate-rich regolith | **New**, marked in survey scan only | 1 | L | Hazard source; the thing you wash out (A1, B5) |
+| Frozen CO2 block | **New**, polar only | 2 | N | Visual for the polar sink |
+| Polar layered ice | Vanilla `packed_ice`, reused | 2 | N | Edge of the world |
+
+### 3.2 Building blocks and machines
+
+| Item | New or reused | Phase | Why |
+|---|---|---|---|
+| Dome glass | **New** (silica) | 1 | G (sealed hab) |
+| Airlock door and brush station | **New** | 1 | L (perchlorate tracking) |
+| Habitat hull panels, basalt brick, regolith brick | **New**, craftable | 1 to 2 | N, L (compact building) |
+| Solar panel (round array), battery, Oven, Outgasser, O2 maker, water reclaimer, dust-off station, weather mast | **Exist or planned** (DESIGN.md Content Inventory) | 1 | G |
+| Transit tube segment, tube junction, outpost airlock | **New** | 2 | G (expansion), L |
+| Ice extractor | **New** (on ground ice only) | 2 | G |
+| Atmospheric processor, super-greenhouse emitter, mirror uplink, insulation shroud, lure station, quiet-zone marker, meltwater treatment | Planned | 2 | G or L |
+| Algae vat, carbon scrubber, soil treatment | Planned | 3 | G |
+| Beacon parts (mast x7, transmitter, dish array, lamps x8, air record) | Planned | 3 | G |
+
+### 3.3 Farming
+
+| Item | New or reused | Phase | Why |
+|---|---|---|---|
+| Planter (washed regolith in a sealed bed) | Reuse vanilla `farmland` behaviour, new look | 1 | L (C1) |
+| Grow lamp | **New** | 1 | L |
+| Potato, wheat | Vanilla crops | 1 | N |
+| Lettuce, tomato | **New** crops (3 growth stages each) | 1 | L (the dead-tomato lesson) |
+| Biocrust, tundra meadow, wetland margin, cold forest seed kits | **New** items; each places a patch and (W3) spreads on treated soil | 3 | G, L (A5) |
+| Dwarf conifer, moss, sedge, reed, algae mat | New plants or retexture; keep to 6 total | 3 | N to L |
+
+### 3.4 Tools and tiers
+
+Keep the vanilla tool set so the hands know what to do. Tier by material, not by new tool types:
+
+| Tier | Material | Who needs it | Why |
+|---|---|---|---|
+| 0 | Dome-stock (starting tools, limited durability) | Landing | Teach that parts wear (C1) |
+| 1 | Basalt-headed (stone-tier) | Regolith, sand | Cheap, early |
+| 2 | Iron (from hematite) | Ore, ground ice | Needs the first outcrop trip |
+| 3 | Reinforced iron with a heater tip | Ground ice at depth | Extractors do the real work; this is a hand option |
+| Item | **Survey scanner** (new) | Finds ice lenses and perchlorate seams | L (A4, B5); cheaper than guessing; the scan is the "read the planet" tool |
+| Item | Suit with oxygen tank and shielding rating | Always | Exists in design; leave to the Technical Lead |
+
+No netherite, no diamonds, no enchanting; hide or disable them in the Mars dimension (and keep them out of recipes). The classroom preset hides Mekanism and Create already (DESIGN.md).
+
+## 4. Science and Index ties
+
+| Resource or terrain | Feeds | How (no change to Index numbers) | Source status |
+|---|---|---|---|
+| Regolith, basalt | Radiation shielding; Outgasser/Oven bake | Shielding numbers already in the balance sheet (*invented*) | Dose direction sourced (SME round 2); block value invented |
+| Ground ice | Hydrosphere, Thaw, ground collapse | Extractor must sit on it; rate stays as in the balance sheet | Real buried ice (**SME check** depth and place); the game stylises depth |
+| Hematite, silica, meteorite iron | Machine and glass cost | Build cost only | Real minerals (**SME check** abundance); amounts *invented* |
+| Carbonate rock | CO2 sink (scrubber) | Matches Phase 3 rule A "scrubbers lock CO2 into carbonate rock" | Real chemistry; Mars carbonates are small amounts (**SME check**) |
+| Perchlorate seams | Hazard; meltwater salts | Existing perchlorate exposure numbers (*invented*) | Perchlorate in Mars soil is real; levels **SME check** |
+| Polar cap | Polar-frost sink | Existing slice 5 | CO2 cap real (balance sheet cites SME round 2) |
+| Craters and dunes | Mood, exploring, shelter | Nothing | Real features; sizes stylised |
+| Biocrust and soil | Biomass, O2/CO2 swap | Existing Phase 3 numbers | Succession order accurate (SME round 3); speed is fiction and labelled |
+
+**Rule:** a block never changes a pressure or temperature number by itself. Machines do. Blocks decide **what you can build, where, and at what cost**. If the owner later wants mined resources to affect rates (for example richer ice means faster water), that is a balance change and goes to the Lead Instructional Designer and Subject Matter Expert first.
+
+**Open question (Technical Lead):** the Hydrosphere percentage must be defined by what the world shows (water blocks counted, or machine tally). Today the Index is pure simulation. Terrain only needs to *support* it (ice to melt, basins that hold water). Do not build water-in-the-world until that definition exists.
+
+## 5. Scope and cost (all unverified estimates)
+
+| Plan | Contents | Estimate | Notes |
+|---|---|---|---|
+| **Recommended first slice: W1 shaped world** | Noise terrain, 3 biomes, hematite, silica, ground ice, small caves, dome pad; scanner as a stub; Phase 1 loop: dig, glass, bearings | 4 to 6 dev-days world plus 2 dev-days for blocks and textures (about 6 to 8 total) | Fits next to Stage 3 work. Gives the owner the Minecraft feel at once. Does not need ground collapse or craters |
+| **Alternative: W1-lite plus Phase 1 greenhouse** | Same terrain but only 2 ores and no caves; build the sealed greenhouse with lettuce and tomato | About 7 to 9 dev-days | Pick this if the owner wants gardening to appear first. Delays caves and exploring |
+| Later: W2 | Craters, dunes, canyon, cap, meteorite, probe wreck | 5 to 8 dev-days | After Phase 1 slice is playtested |
+| Later: W3 | Collapse, spreading soil, biome seeds, meltwater pools | 8 to 12 dev-days | Needs the Hydrosphere definition (section 4) |
+
+**Cut if credits are short (in order):** (1) frozen CO2 and sulfate blocks (reuse vanilla); (2) meteorite iron and wreck; (3) dunes and canyon (keep craters); (4) caves (shelters become dug by hand); (5) a separate tomato and lettuce (reuse vanilla beetroot and carrot, retexture later); (6) the survey scanner becomes a Monitor map page. **Never cut:** ground ice (it is the Hydrosphere quest), hematite (it gates parts), flat dome pad.
+
+## 6. Walkthroughs
+
+- **12-year-old, never used a modpack:** wakes in the dome, the Monitor says "pressure 0.6 kPa". Digs the nearest wall (red dirt) and finds nothing special; the journal says a red outcrop lies north. At the outcrop, iron. Craft a bearing. That is a quest with no quest log (pillar 1). Risk: nothing tells them dirt is shielding; the shelter message should say "thick walls of soil stop radiation".
+- **Experienced 17-year-old:** wants caves and veins within the first hour; W1 gives both. Will try to "branch mine" for diamonds and find none: the journal should say why (invented joke line, tone check by the Artist and ID).
+
+## 7. Decisions for the owner
+
+1. **Go with W1 (shaped world) as the next world slice, or W1-lite plus greenhouse?** Recommend W1. *Ill-structured* (fun and learning compete for first place).
+2. **Resources do not change Index rates, only build cost and placement.** Recommend yes (keeps the balance sheet valid). *Well-structured* once stated.
+3. **Do we accept that new terrain applies only to new worlds?** Recommend yes. *Well-structured.*
+4. **Are new blocks allowed for ores and ground ice (not retextured vanilla)?** Recommend yes, because textures are global in a modpack. *Well-structured.*
+5. **Remove vanilla progression (diamonds, netherite, enchanting) from the Mars dimension?** Recommend yes. *Ill-structured* (hobbyist appeal versus focus).
