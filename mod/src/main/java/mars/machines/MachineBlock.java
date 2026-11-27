@@ -64,6 +64,29 @@ public class MachineBlock extends HorizontalDirectionalBlock {
     return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
   }
 
+  /** A machine casing is airtight, so placing or removing one can change a dome's seal. */
+  @Override
+  protected void onPlace(
+      BlockState state,
+      net.minecraft.world.level.Level level,
+      BlockPos pos,
+      BlockState oldState,
+      boolean movedByPiston) {
+    super.onPlace(state, level, pos, oldState, movedByPiston);
+    mars.hull.DomeEvents.changed(level, pos);
+  }
+
+  @Override
+  protected void onRemove(
+      BlockState state,
+      net.minecraft.world.level.Level level,
+      BlockPos pos,
+      BlockState newState,
+      boolean movedByPiston) {
+    super.onRemove(state, level, pos, newState, movedByPiston);
+    mars.hull.DomeEvents.changed(level, pos);
+  }
+
   @Override
   protected VoxelShape getShape(
       BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {

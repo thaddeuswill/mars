@@ -344,6 +344,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
+    domeRow(sim).ifPresent(rows::add);
     gateRows(sim, rows, net);
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
   }
@@ -431,6 +432,51 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       return all.parts().stream().mapToDouble(MonitorView::pressureMinimum).max().orElse(0);
     }
     return 0;
+  }
+
+  /**
+   * The Dome row: shows only when the planet has a registered dome (a Planetary Monitor placed).
+   * One word: Sealed, Leaking, Too big to check, or Checking. A problem is drawn large like a
+   * stalled machine; the cap is in the dome rules, not on the panel. Straw-man wording (keys in
+   * en_us.json) until the Instructional Designer's pass.
+   */
+  private static java.util.Optional<Row> domeRow(PlanetSim sim) {
+    var status = sim.domes().overall();
+    if (status == null) {
+      return java.util.Optional.empty();
+    }
+    String key =
+        switch (status) {
+          case SEALED -> "monitor.dome.sealed";
+          case LEAKING -> "monitor.dome.leaking";
+          case TOO_BIG -> "monitor.dome.too_big";
+          case UNKNOWN -> "monitor.dome.checking";
+        };
+    boolean problem =
+        status == mars.dome.DomeSeals.Status.LEAKING
+            || status == mars.dome.DomeSeals.Status.TOO_BIG;
+    Tone tone =
+        switch (status) {
+          case SEALED -> Tone.GOOD;
+          case LEAKING, TOO_BIG -> Tone.SHORT;
+          case UNKNOWN -> Tone.NORMAL;
+        };
+    return java.util.Optional.of(
+        new Row(
+            "monitor.row.dome",
+            "",
+            key,
+            null,
+            null,
+            List.of(),
+            tone,
+            problem,
+            null,
+            null,
+            List.of(),
+            null,
+            null,
+            -1));
   }
 
   /**

@@ -181,4 +181,70 @@ class MonitorLayoutTest {
         tight.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
     assertEquals(null, t.detailKey(), "the detail line is what gives way when tight");
   }
+
+  /** The same state with a registered dome in the given saved status. */
+  private static MonitorView withDome(PlanetSim s, mars.dome.DomeSeals.Status status) {
+    s.domes()
+        .restore(
+            new mars.dome.DomeSeals.State(
+                java.util.List.of(new mars.dome.DomeSeals.Dome(1L, status, 100))));
+    return MonitorView.of(s);
+  }
+
+  private static PlanetSim worstCaseSim() throws Exception {
+    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    s.addMachine(TestSims.PANEL, 1000L);
+    s.setEfficiency(1000L, 0.6);
+    s.addMachine(TestSims.BATTERY, 5000L);
+    s.addMachine(TestSims.OUTGASSER, 1L);
+    s.addMachine(TestSims.OVEN, 10L);
+    s.addMachine(TestSims.OVEN, 11L);
+    s.model().advanceSols(600);
+    return s;
+  }
+
+  @Test
+  void theDomeLineFitsTheHeightBudgetInEveryState() throws Exception {
+    // The Dome row is 12 GUI px (one row) when sealed and a large problem row when leaking. It must
+    // not push the panel past the budget: the plot gives way first, and in the busiest state the
+    // rows alone stay inside the screen.
+    int budget = MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H;
+    for (var status :
+        new mars.dome.DomeSeals.Status[] {
+          mars.dome.DomeSeals.Status.SEALED,
+          mars.dome.DomeSeals.Status.LEAKING,
+          mars.dome.DomeSeals.Status.TOO_BIG
+        }) {
+      java.util.Map<String, PlanetSim> sims = new java.util.LinkedHashMap<>();
+      sims.put("started", TestSims.sim(Pace.STANDARD));
+      sims.put("worst", worstCaseSim());
+      for (var e : sims.entrySet()) {
+        MonitorView raw = withDome(e.getValue(), status);
+        assertTrue(raw.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.dome")));
+        MonitorView v = MonitorLayout.fit(raw);
+        int total = MonitorLayout.panelHeight(v, H3);
+        System.out.println(
+            "dome "
+                + status
+                + " in "
+                + e.getKey()
+                + ": plot "
+                + MonitorLayout.plotHeight(v, H3)
+                + " -> panel "
+                + total
+                + " GUI px");
+        boolean sealed = status == mars.dome.DomeSeals.Status.SEALED;
+        // Sealed is good news: in the busiest state it gives way, so the panel stays on budget.
+        // A leaking dome is a problem line and stays (one row, 12 px, over the old worst case).
+        assertTrue(
+            total <= (sealed ? budget : budget + 12), e.getKey() + " " + status + " is " + total);
+        if (sealed && e.getKey().equals("worst")) {
+          assertTrue(v.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.dome")));
+        } else {
+          assertTrue(v.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.dome")));
+        }
+        assertTrue(total <= H3 - 2 * MonitorStyle.MARGIN, e.getKey() + " fits the screen");
+      }
+    }
+  }
 }

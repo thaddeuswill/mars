@@ -150,6 +150,16 @@ public final class PlanetData extends SavedData {
     frost.putDouble("storedKpa", s.frost().storedKpa());
     frost.putDouble("buriedReleasedKpa", s.frost().buriedReleasedKpa());
     out.put("frost", frost);
+    ListTag domes = new ListTag();
+    for (var d :
+        s.domes() == null ? java.util.List.<mars.dome.DomeSeals.Dome>of() : s.domes().domes()) {
+      CompoundTag dt = new CompoundTag();
+      dt.putLong("seed", d.seed());
+      dt.putString("status", d.status().name());
+      dt.putInt("volume", d.volume());
+      domes.add(dt);
+    }
+    out.put("domes", domes);
     return out;
   }
 
@@ -215,6 +225,24 @@ public final class PlanetData extends SavedData {
     var history =
         new mars.index.sim.PressureHistory.State(
             Math.max(1, ht.getInt("stride")), ht.getDouble("nextSol"), samples, events);
+    // Saves before schema 6 have no "domes" list: no domes registered.
+    var domeList = new ArrayList<mars.dome.DomeSeals.Dome>();
+    ListTag dl = tag.getList("domes", Tag.TAG_COMPOUND);
+    for (int i = 0; i < dl.size(); i++) {
+      CompoundTag dt = dl.getCompound(i);
+      try {
+        domeList.add(
+            new mars.dome.DomeSeals.Dome(
+                dt.getLong("seed"),
+                mars.dome.DomeSeals.Status.valueOf(dt.getString("status")),
+                dt.getInt("volume")));
+      } catch (IllegalArgumentException unknownStatus) {
+        // A status from a newer build: the dome is rechecked on the first tick anyway.
+        domeList.add(
+            new mars.dome.DomeSeals.Dome(
+                dt.getLong("seed"), mars.dome.DomeSeals.Status.UNKNOWN, dt.getInt("volume")));
+      }
+    }
     return new PlanetState(
         schema,
         vs,
@@ -228,7 +256,8 @@ public final class PlanetData extends SavedData {
         // Saves before schema 5 have no "frost" tag: the reservoir starts empty.
         new mars.index.sim.FrostSink.State(
             tag.getCompound("frost").getDouble("storedKpa"),
-            tag.getCompound("frost").getDouble("buriedReleasedKpa")));
+            tag.getCompound("frost").getDouble("buriedReleasedKpa")),
+        new mars.dome.DomeSeals.State(java.util.List.copyOf(domeList)));
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {

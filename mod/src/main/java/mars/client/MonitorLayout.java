@@ -24,7 +24,8 @@ final class MonitorLayout {
    * The view as drawn. When the rows alone would leave the plot less than {@link
    * MonitorStyle#PLOT_MIN_H} inside {@link MonitorStyle#TARGET_H}, the lowest-priority line goes
    * first: the goal's detail line (what it needs, the percent, the time estimate and the goals
-   * count; the bar stays). Problem lines (a stalled machine, a dusty panel) never drop.
+   * count; the bar stays), then, when the plot is gone anyway, the good-news "Dome Sealed" row.
+   * Problem lines (a stalled machine, a dusty panel, a leaking dome) never drop.
    */
   static MonitorView fit(MonitorView view) {
     if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
@@ -54,7 +55,19 @@ final class MonitorLayout {
                   r.noteKey(),
                   r.goal()));
     }
-    return new MonitorView(view.sols(), List.copyOf(rows), view.history());
+    MonitorView trimmed = new MonitorView(view.sols(), List.copyOf(rows), view.history());
+    if (fixedHeight(trimmed) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H + PLOT_OVERFLOW) {
+      return trimmed; // the plot still fits
+    }
+    // Still too tall: the plot is already gone, so the next line to give way is the good news
+    // "Dome Sealed". A leaking dome is a problem line and never drops.
+    List<MonitorView.Row> kept = new java.util.ArrayList<>();
+    for (MonitorView.Row r : trimmed.rows()) {
+      if (!"monitor.dome.sealed".equals(r.valueKey())) {
+        kept.add(r);
+      }
+    }
+    return new MonitorView(trimmed.sols(), List.copyOf(kept), trimmed.history());
   }
 
   /** Height of everything except the plot block, in GUI px. */

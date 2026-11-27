@@ -1,0 +1,7 @@
+{
+ "parent": "minecraft:block/door_bottom_left_open",
+ "textures": {
+  "bottom": "mars:block/hull_door_bottom",
+  "top": "mars:block/hull_door_top"
+ }
+}

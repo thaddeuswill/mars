@@ -35,6 +35,7 @@ public final class PlanetEvents {
       data.setDirty();
       PlanetManager.announceGates(level, data);
     }
+    mars.hull.DomeEvents.onPlanetTick(level, data);
     mars.sky.SkySync.onPlanetTick(level, data);
   }
 }

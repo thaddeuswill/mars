@@ -1,0 +1,32 @@
+# Stage 3 slice 1: a hull room, a hole, and the Monitor's Dome line (mars:planet_1), 1280x720.
+# Room: x 4..10, z 4..10, y 63..68 (floor and roof included), interior 5 x 4 x 5 around the Monitor.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /fill 4 63 4 10 68 10 mars:hull_plate hollow
+cmd /setblock 7 66 4 mars:hull_glass
+cmd /setblock 6 66 4 mars:hull_glass
+cmd /setblock 8 66 4 mars:hull_glass
+cmd /setblock 6 64 4 mars:hull_door[facing=south,half=lower]
+cmd /setblock 6 65 4 mars:hull_door[facing=south,half=upper]
+cmd /setblock 5 64 5 mars:planetary_monitor
+wait 60
+view 7.5 67 -3 0 25
+wait 20
+shot dome_1_sealed_room_from_outside
+cmd /setblock 9 65 4 minecraft:air
+wait 40
+shot dome_2_hole_in_the_wall
+cmd /mars monitor
+wait 40
+shot dome_3_monitor_leaking
+cmd /setblock 9 65 4 mars:hull_plate
+wait 40
+cmd /mars monitor
+wait 40
+shot dome_4_monitor_sealed_after_patch
+quit

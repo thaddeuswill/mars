@@ -1,8 +1,8 @@
-# Launch Guide: Stage 2 Playtest
+# Launch Guide: Stage 3 (slice 1) Playtest
 
 **Owner:** Technical Lead · **Build:** Mars Terraforming companion mod for Minecraft Java 1.21.1 and NeoForge 21.1.267.
 
-This build includes the Mars world, solar and battery power, Regolith Ovens and Outgassers, pressure-dependent sky and fog, and a Planetary Monitor with pressure history and next-goal progress. The packaged jar in a normal Launcher installation and the Windows and macOS steps still need verification. See [HANDOFF.md](../../HANDOFF.md) for the latest build evidence.
+This build (`0.3.0-stage3-a`) adds the **dome**: hull blocks, a sealing check and a Dome line on the Monitor (section 1d). It also includes the Mars world, solar and battery power, Regolith Ovens and Outgassers, pressure-dependent sky and fog, and a Planetary Monitor with pressure history and next-goal progress. The packaged jar in a normal Launcher installation and the Windows and macOS steps still need verification. See [HANDOFF.md](../../HANDOFF.md) for the latest build evidence.
 
 ## 1. Play it on your own computer
 
@@ -36,6 +36,17 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 ### 1b. Goals (slice 4)
 
 On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". By default, **Creative players can place the Outgasser at any time**. For a classroom playtest, stop the game or server, set `creativeGateBypass = false` in `config/mars-server.toml` for that instance, and restart. Creative placement then requires Dome stable too. Operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
+
+### 1d. Build a sealed room (Stage 3 slice 1)
+
+Three building blocks are in the **Mars Terraforming** creative tab: **Hull Plate**, **Hull Glass**, **Hull Door**. There are no recipes yet (slice 2). To try the sealing check:
+
+1. On Mars, build a closed room of Hull Plate (floor, walls and roof; Hull Glass for windows; a Hull Door is two blocks high).
+2. Stand inside and place a **Planetary Monitor** against a wall. Placing it registers the room as a dome.
+3. Right-click the Monitor. A **Dome** line reads **Sealed**, **Leaking** (a hole, an open door, a slab or fence in the wall, or no roof), **Too big to check** (more than 2,000 blocks of air) or **Checking** (first tick). It updates within a tick when you break or place a hull block or open or close a Hull Door by hand, and within 5 seconds for other changes (a vanilla block, `/setblock`, an explosion).
+4. The rule is **a full block or nothing**: slabs, stairs, fences, panes, trapdoors and open doors let air through. A message "The dome is leaking." appears when a sealed dome is breached and "The dome is sealed again." when it is repaired.
+
+Nothing in the game uses the sealed state yet: **Dome stable** still uses the stand-in (power covers use) until slice 2. The Hull Door has no airlock interlock yet (slice 6). A Monitor placed in a world saved before this build is not registered as a dome until you place it again.
 
 ### 1c. Operator controls
 

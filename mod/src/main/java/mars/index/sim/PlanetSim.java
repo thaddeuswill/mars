@@ -37,6 +37,7 @@ public final class PlanetSim {
 
   private final GateTracker gates;
   private final PressureHistory history = new PressureHistory();
+  private final mars.dome.DomeSeals domes = new mars.dome.DomeSeals();
   private final List<String> newlyLatched = new ArrayList<>();
 
   /** The polar-frost sink, or null when a planet has none (older tests; every real planet has). */
@@ -97,6 +98,11 @@ public final class PlanetSim {
           evaluateGates(dt);
           history.record(model.sols(), model.current(Ids.PRESSURE));
         });
+  }
+
+  /** The planet's registered domes and whether they are sealed (ARCHITECTURE.md 2.3). */
+  public mars.dome.DomeSeals domes() {
+    return domes;
   }
 
   /** True when this planet has a polar-frost sink. */
@@ -367,7 +373,14 @@ public final class PlanetSim {
     Map<String, Double> values = new LinkedHashMap<>();
     model.storedValues().forEach((id, v) -> values.put(id.id(), v));
     Map<String, List<Long>> ms = new LinkedHashMap<>();
-    machines.forEach((type, set) -> ms.put(type, List.copyOf(set)));
+    // A type whose last machine was removed is not saved: a save and a load of a planet must give
+    // the same state (the removed type would otherwise come back as a missing key).
+    machines.forEach(
+        (type, set) -> {
+          if (!set.isEmpty()) {
+            ms.put(type, List.copyOf(set));
+          }
+        });
     return new PlanetState(
         PlanetState.CURRENT_SCHEMA,
         values,
@@ -378,7 +391,8 @@ public final class PlanetSim {
         Map.copyOf(efficiency),
         gates.toStates(),
         history.toState(),
-        frost == null ? FrostSink.State.EMPTY : frost.toState());
+        frost == null ? FrostSink.State.EMPTY : frost.toState(),
+        domes.toState());
   }
 
   /**
@@ -441,6 +455,7 @@ public final class PlanetSim {
     sim.grid.setCharge(state.batteryCharge());
     sim.refreshPower();
     sim.history.restore(state.history() == null ? PressureHistory.State.EMPTY : state.history());
+    sim.domes.restore(state.domes()); // schema 5 and older: no domes
     return new Loaded(sim, report, unknownTypes);
   }
 

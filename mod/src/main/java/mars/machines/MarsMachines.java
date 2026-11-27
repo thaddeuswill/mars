@@ -94,6 +94,9 @@ public final class MarsMachines {
                         for (DeferredBlock<? extends Block> b : ALL) {
                           output.accept(b.get());
                         }
+                        for (DeferredBlock<? extends Block> b : mars.hull.HullBlocks.ALL) {
+                          output.accept(b.get());
+                        }
                       })
                   .build());
 

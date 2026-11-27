@@ -837,7 +837,7 @@ public final class PlanetGameTests {
           ok2 &=
               SelfTest.check(
                   "frost.reservoir_nbt_round_trip",
-                  "the reservoir (kPa the poles hold) comes back from NBT unchanged, schema 5",
+                  "the reservoir (kPa the poles hold) comes back from NBT unchanged, schema 6",
                   "stored="
                       + sim.frostStoredKpa()
                       + " back="
@@ -846,7 +846,7 @@ public final class PlanetGameTests {
                       + tag.getInt("schema"),
                   sim.frostStoredKpa() > 0
                       && Math.abs(sim.frostStoredKpa() - back.sim().frostStoredKpa()) < 1e-12
-                      && tag.getInt("schema") == 5
+                      && tag.getInt("schema") == 6
                       && back.sim().toState().equals(sim.toState()));
           h.destroyBlock(new BlockPos(0, 1, 0));
           h.destroyBlock(new BlockPos(2, 1, 0));

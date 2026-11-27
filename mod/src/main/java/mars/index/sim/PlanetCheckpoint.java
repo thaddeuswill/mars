@@ -23,6 +23,9 @@ public final class PlanetCheckpoint {
         current.efficiency(),
         snapshot.gates(),
         snapshot.history(),
-        snapshot.frost() == null ? FrostSink.State.EMPTY : snapshot.frost());
+        snapshot.frost() == null ? FrostSink.State.EMPTY : snapshot.frost(),
+        // Domes are blocks in the world, which a rollback does not roll back: keep the current
+        // ones.
+        current.domes() == null ? mars.dome.DomeSeals.State.EMPTY : current.domes());
   }
 }
