@@ -29,6 +29,8 @@ The owner is switching to Codex because Claude's usage is nearly out. Claude's b
 **Reply format to the owner:** short: what changed, recommended next steps, a screenshot for anything visual. Ask decisions as a few clear questions with a recommended option.
 
 
+**Stage 3 slice 3 (Codex):** typed action events and local JSON Lines writer are built under `mars/learning/`. Session rotation and in-memory identity allocation are built and tested. Gameplay hooks, cross-restart identity, CSV, guidance, and interruption settings remain open. See the [first learning report](docs/team/reports/2026-11-27-codex-learning-action-log.md).
+
 ## 1. What this project is, in five lines
 
 Mars terraforming Minecraft modpack (NeoForge 21.1.267, MC 1.21.1, Java 21) built as a learning-game design exercise for ages 12 to 18, NGSS-aligned. Custom Mars dimension, global progress per planet, groups of 3 to 5, classroom mode about 11 to 12 h, standard about 40 h, equilibrium pressure 75 kPa, gates lock in. The owner (not a developer) playtests personally and answers by "accept / change / add / continue". Branch: `claude/awesome-sagan-tb7mon`. Only the owner accepts the Minecraft EULA.

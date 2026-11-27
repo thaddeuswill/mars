@@ -124,7 +124,9 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 55 | "cont" | Apply the approved Stage 3 wording follow-up | Codex owns only the approved English language keys for estimates, frost, and the starting grant. | ✅ Six wording keys updated. Verified arrival, Leveling off, and “about 44 sols” at 1280×720. 176 unit tests and 82 boot checks passed. |
 
-| 56 | "accept and cont" | Accept the wording update and start Codex’s Stage 3 learning lane | Typed pseudonymous events and a local batched writer under `mars/learning/**`, with focused tests. | 🟡 Codex |
+| 56 | "accept and cont" | Accept the wording update and start Codex’s Stage 3 learning lane | Typed pseudonymous events and a local batched writer under `mars/learning/**`, with focused tests. | ✅ Event and writer foundation built. 180 unit tests, 82 boot checks, and a negative privacy test passed as expected. Live hooks and export remain in slice 3. |
+
+| 57 | "cont with reccommened" | Continue Stage 3 learning plumbing | Codex owns session-local action log rotation and in-memory pseudonym allocation under `mars/learning/**`. | ✅ Session rotation and pseudonym lifecycle built. Gameplay hooks and cross-restart identity are pending. |
 
 ## Open questions for the owner
 
