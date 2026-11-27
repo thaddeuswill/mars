@@ -22,9 +22,7 @@ class SkyTexturesTest {
 
   @Test
   void skyCodeUsesTheModSunNotTheVanillaOne() throws Exception {
-    String src =
-        Files.readString(
-            Path.of("src/main/java/mars/client/sky/MarsSkyEffects.java"));
+    String src = Files.readString(Path.of("src/main/java/mars/client/sky/MarsSkyEffects.java"));
     assertTrue(src.contains("fromNamespaceAndPath(\"mars\", \"textures/environment/sun.png\")"));
   }
 }

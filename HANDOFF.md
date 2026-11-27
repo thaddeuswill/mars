@@ -10,7 +10,7 @@ The owner is switching to Codex because Claude's usage is nearly out. Claude's b
 
 **Done and pushed:** Stage 2 slices 1 to 7 (planet values, Outgasser, Monitor with history plot and next-goal bar, session clock and pause, power grid, gates, polar-frost sink and Ovens, sky/fog keyed on pressure). 167 unit tests, 70 boot checks at slice 7.
 
-**UPDATE: the slice 8 Technical Lead agent died on the usage limit (resets 3:40pm UTC). Its half-finished work is committed as a WIP commit ('WIP: slice 8 ... unfinished'). It was NOT built or tested: run `./gradlew spotlessApply build test --rerun --offline` first and expect compile or test failures to fix. No slice 8 report exists.**
+**UPDATE (Claude, after the limit reset): slice 8 turned out to be finished on the remote by another worker (report `docs/team/reports/2026-11-27-technical-lead-slice8-admin-rollback.md`). I merged it with my WIP commit; spotlessCheck, build and test pass after a spotlessApply on one test file, and runGameTestServer printed RESULT PASS passed=82 failed=0. Check git log for what else landed.
 
 **In flight when Claude stopped (check each, finish or restart):**
 1. **Slice 8, admin commands and rollback:** shipped and verified. Checkpoints restore the planet simulation and retain placed machines and blocks. The normal Launcher install and dedicated-server restart remain pending.
