@@ -246,14 +246,18 @@ public final class BootChecks {
     var skyBuf =
         new net.minecraft.network.RegistryFriendlyByteBuf(
             io.netty.buffer.Unpooled.buffer(), server.registryAccess());
-    mars.sky.SkyPayload.CODEC.encode(skyBuf, new mars.sky.SkyPayload(12.5));
-    double back = mars.sky.SkyPayload.CODEC.decode(skyBuf).pressureKpa();
+    mars.sky.SkyPayload.CODEC.encode(skyBuf, new mars.sky.SkyPayload(12.5, 0.8f, 0.25f, 110f));
+    var backPayload = mars.sky.SkyPayload.CODEC.decode(skyBuf);
+    double back = backPayload.pressureKpa();
     ok &=
         SelfTest.check(
             "sky.payload_roundtrip",
-            "pressure 12.5 survives encode and decode",
-            "" + back,
-            back == 12.5);
+            "pressure, storm, haze and wind survive encode and decode",
+            backPayload.toString(),
+            back == 12.5
+                && backPayload.storm() == 0.8f
+                && backPayload.haze() == 0.25f
+                && backPayload.windDeg() == 110f);
 
     // Decode data/mars/dimension/planet_1.json with vanilla's own codec against the live
     // registries: proves the dimension file is valid even where the level isn't created.

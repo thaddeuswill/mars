@@ -80,4 +80,73 @@ class SkyStateTest {
     assertTrue(SkyState.shouldSend(10.0, 10.02));
     assertTrue(SkyState.shouldSend(10.0, 9.98));
   }
+
+  @Test
+  void aStormRampsInOverAMinuteAndOutOverNinetySecondsAndTheFirstValueSnaps() throws Exception {
+    SkyState s = new SkyState(kf(), 30);
+    s.setTarget(0.6);
+    s.setStorm(0, 0);
+    SkyKeyframes.Look calm = s.look();
+    assertEquals(0, s.stormShown(), 0);
+    s.setStorm(1, 0);
+    for (int i = 0; i < 30; i++) {
+      s.advance(1);
+    }
+    assertEquals(0.5, s.stormShown(), 1e-9);
+    for (int i = 0; i < 30; i++) {
+      s.advance(1);
+    }
+    assertEquals(1, s.stormShown(), 1e-9);
+    assertTrue(s.look().fogEnd() < calm.fogEnd());
+    s.setStorm(0, 0);
+    for (int i = 0; i < 45; i++) {
+      s.advance(1);
+    }
+    assertEquals(0.5, s.stormShown(), 1e-9);
+    for (int i = 0; i < 45; i++) {
+      s.advance(1);
+    }
+    assertEquals(0, s.stormShown(), 1e-9);
+    assertEquals(calm, s.look(), "after the storm the calm sky is back exactly");
+
+    SkyState joined = new SkyState(kf(), 30);
+    joined.setTarget(0.6);
+    joined.setStorm(0.8, 0);
+    assertEquals(0.8, joined.stormShown(), 0, "joining mid-storm shows the storm");
+  }
+
+  @Test
+  void stormPacketsGoOutOnlyWhenTheStormOrHazeMoves() {
+    assertFalse(SkyState.shouldSendStorm(0, 0, 0, 0));
+    assertTrue(SkyState.shouldSendStorm(0, 0, 1, 0));
+    assertTrue(SkyState.shouldSendStorm(1, 0, 0, 0));
+    assertFalse(SkyState.shouldSendStorm(0, 0.50, 0, 0.51));
+    assertTrue(SkyState.shouldSendStorm(0, 0.50, 0, 0.53));
+    assertTrue(SkyState.shouldSendStorm(0, 0.99, 0, 1));
+    assertTrue(SkyState.shouldSendStorm(0, 0.01, 0, 0));
+  }
+
+  @Test
+  void dustRatesFollowPressureStormAndTheParticleSetting() {
+    assertEquals(0.2, DustMath.motesPerTick(0.6, 0, 1), 1e-12);
+    assertEquals(0.1, DustMath.motesPerTick(75, 0, 1), 1e-12, "above 30 kPa half");
+    assertEquals(0.1, DustMath.motesPerTick(0.6, 0, 0.5), 1e-12, "decreased setting halves");
+    assertEquals(0, DustMath.motesPerTick(0.6, 1, 0), 0, "minimal setting is off");
+    assertTrue(DustMath.motesPerTick(0.6, 1, 1) > 1.0, "a full storm is dense");
+    assertTrue(DustMath.pressureFactor(20) < 1 && DustMath.pressureFactor(20) > 0.5);
+    assertEquals(0, DustMath.streaksPerTick(0.6, 1, 1), 0, "no streaks in a storm");
+    assertEquals(0.01, DustMath.streaksPerTick(0.6, 0, 1), 1e-12, "one per 5 s");
+  }
+
+  @Test
+  void windBearingIsACompassBearingBlowingToward() {
+    double[] n = DustMath.windVector(0);
+    assertEquals(0, n[0], 1e-12);
+    assertEquals(-1, n[1], 1e-12); // north is -z
+    double[] e = DustMath.windVector(90);
+    assertEquals(1, e[0], 1e-12); // east is +x
+    assertEquals(0, e[1], 1e-12);
+    double[] w = DustMath.windVector(110); // east-south-east: +x and a little +z
+    assertTrue(w[0] > 0.9 && w[1] > 0.3 && w[1] < 0.4);
+  }
 }

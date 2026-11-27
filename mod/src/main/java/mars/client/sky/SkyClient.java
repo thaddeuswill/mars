@@ -40,6 +40,9 @@ public final class SkyClient {
   private static SkyKeyframes keyframes;
   private static SkyState state;
   private static double pendingTarget = Double.NaN;
+  private static double pendingStorm = Double.NaN;
+  private static double pendingHaze;
+  private static float windDeg = -1;
   private static long lastNanos;
 
   private SkyClient() {}
@@ -56,6 +59,8 @@ public final class SkyClient {
     NeoForge.EVENT_BUS.addListener(
         (ClientPlayerNetworkEvent.LoggingOut e) -> {
           pendingTarget = Double.NaN;
+          pendingStorm = Double.NaN;
+          windDeg = -1;
           if (state != null) {
             state.reset();
           }
@@ -78,6 +83,9 @@ public final class SkyClient {
       if (!Double.isNaN(pendingTarget)) {
         state.setTarget(pendingTarget);
       }
+      if (!Double.isNaN(pendingStorm)) {
+        state.setStorm(pendingStorm, pendingHaze);
+      }
       LOG.info("Sky keyframes loaded: {} keys, smoothing {} s", kf.keys().size(), tau);
     } catch (Exception ex) {
       keyframes = null;
@@ -91,6 +99,31 @@ public final class SkyClient {
     if (state != null) {
       state.setTarget(kpa);
     }
+  }
+
+  /** Storm strength and pre-storm haze (0..1) and the planet's wind bearing from the server. */
+  public static void setStorm(double strength, double haze, float wind) {
+    pendingStorm = strength;
+    pendingHaze = haze;
+    windDeg = wind;
+    if (state != null) {
+      state.setStorm(strength, haze);
+    }
+  }
+
+  /** The planet's fixed wind bearing (compass degrees, blows toward), or -1 when unknown. */
+  public static float windDeg() {
+    return windDeg;
+  }
+
+  /** Storm strength being shown now, 0 when calm or no state. */
+  public static double stormShown() {
+    return state != null ? state.stormShown() : 0;
+  }
+
+  /** True when {@code level} is a Mars level drawing the Mars sky (not the overworld). */
+  public static boolean onMars(net.minecraft.client.multiplayer.ClientLevel level) {
+    return state != null && level.effects() instanceof MarsSkyEffects;
   }
 
   static SkyKeyframes keyframes() {
@@ -109,6 +142,9 @@ public final class SkyClient {
     double dt = lastNanos == 0 ? 0 : Math.min(1.0, (now - lastNanos) / 1e9);
     lastNanos = now;
     state.advance(dt);
+    if (state.hasValue()) {
+      mars.client.atmosphere.DustClient.setPressure(state.shownKpa());
+    }
   }
 
   /** True when the camera is in the air of a Mars level and the keyframes are loaded. */

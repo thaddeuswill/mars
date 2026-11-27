@@ -149,7 +149,9 @@ final class MarsSkyEffects extends DimensionSpecialEffects {
         GlStateManager.DestFactor.ZERO);
     pose.pushPose();
     float clear = 1.0F - level.getRainLevel(partialTick);
-    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, clear);
+    double storm = SkyClient.stormShown();
+    float sunFade = (float) kf.sunAlpha(storm);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, clear * sunFade);
     pose.mulPose(Axis.YP.rotationDegrees(-90.0F));
     pose.mulPose(Axis.XP.rotationDegrees(level.getTimeOfDay(partialTick) * 360.0F));
     Matrix4f m = pose.last().pose();
@@ -163,6 +165,7 @@ final class MarsSkyEffects extends DimensionSpecialEffects {
     bb.addVertex(m, -s, 100.0F, s).setUv(0.0F, 1.0F);
     BufferUploader.drawWithShader(bb.buildOrThrow());
     s = 20.0F;
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, clear);
     RenderSystem.setShaderTexture(0, MOON);
     int phase = level.getMoonPhase();
     int col = phase % 4;
@@ -177,7 +180,7 @@ final class MarsSkyEffects extends DimensionSpecialEffects {
     bb.addVertex(m, s, -100.0F, -s).setUv(u0, v0);
     bb.addVertex(m, -s, -100.0F, -s).setUv(u1, v0);
     BufferUploader.drawWithShader(bb.buildOrThrow());
-    float stars = level.getStarBrightness(partialTick) * clear;
+    float stars = level.getStarBrightness(partialTick) * clear * (float) kf.starFactor(storm);
     if (stars > 0.0F) {
       RenderSystem.setShaderColor(stars, stars, stars, stars);
       FogRenderer.setupNoFog();

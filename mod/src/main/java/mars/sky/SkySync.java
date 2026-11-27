@@ -20,6 +20,10 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public final class SkySync {
   static final int PERIOD_TICKS = 20;
   private static final Map<String, Double> LAST_SENT = new HashMap<>();
+  private static final Map<String, float[]> LAST_STORM = new HashMap<>();
+
+  /** The pre-storm haze starts this long before onset, in sols (plan 5.2; mirrors sky.json). */
+  static final double HAZE_WINDOW_SOLS = 0.25;
 
   private SkySync() {}
 
@@ -30,17 +34,45 @@ public final class SkySync {
     }
     double p = data.sim().model().snapshot().get(Ids.PRESSURE);
     String key = level.dimension().location().toString();
-    if (mars.visual.SkyState.shouldSend(LAST_SENT.get(key), p)) {
+    float[] st = stormNow(data);
+    float[] last = LAST_STORM.get(key);
+    boolean stormMoved =
+        last == null || mars.visual.SkyState.shouldSendStorm(last[0], last[1], st[0], st[1]);
+    if (stormMoved || mars.visual.SkyState.shouldSend(LAST_SENT.get(key), p)) {
       LAST_SENT.put(key, p);
-      PacketDistributor.sendToPlayersInDimension(level, new SkyPayload(p));
+      LAST_STORM.put(key, st);
+      PacketDistributor.sendToPlayersInDimension(level, payload(level, p, st));
     }
+  }
+
+  /** {strength, haze}: strength is the active storm's cap; haze rises over the warning's end. */
+  static float[] stormNow(PlanetData data) {
+    var storm = data.sim().storm();
+    if (storm == null) {
+      return new float[] {0, 0};
+    }
+    if (storm.active()) {
+      return new float[] {(float) storm.activeCap(), 0};
+    }
+    if (storm.phase() == mars.hazards.storm.StormSchedule.Phase.WARNING) {
+      double left = storm.solsUntilStart(data.sim().model().sols());
+      return new float[] {0, (float) Math.max(0, Math.min(1, 1 - left / HAZE_WINDOW_SOLS))};
+    }
+    return new float[] {0, 0};
+  }
+
+  private static SkyPayload payload(ServerLevel level, double p, float[] st) {
+    var terrain = mars.dimension.PlanetTerrainData.get(level.dimension().location());
+    float wind = terrain == null ? -1 : (float) terrain.windTowardDeg();
+    return new SkyPayload(p, st[0], st[1], wind);
   }
 
   public static void sendTo(ServerPlayer player) {
     ServerLevel level = player.serverLevel();
     if (PlanetManager.isPlanet(level)) {
       double p = PlanetManager.data(level).sim().model().snapshot().get(Ids.PRESSURE);
-      PacketDistributor.sendToPlayer(player, new SkyPayload(p));
+      PacketDistributor.sendToPlayer(
+          player, payload(level, p, stormNow(PlanetManager.data(level))));
     }
   }
 

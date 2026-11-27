@@ -21,5 +21,6 @@ public final class ClientPayloadHandlers {
 
   public static void onSky(mars.sky.SkyPayload payload, IPayloadContext context) {
     mars.client.sky.SkyClient.setTarget(payload.pressureKpa());
+    mars.client.sky.SkyClient.setStorm(payload.storm(), payload.haze(), payload.windDeg());
   }
 }
