@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import mars.core.ParameterId;
+import mars.power.PowerGrid;
 import mars.session.SessionClock;
 
 /**
@@ -25,11 +26,77 @@ public final class PlanetSim {
   private final Map<String, Map<Long, List<PlanetaryIndexModel.ContributionHandle>>> handles =
       new LinkedHashMap<>();
   private int pendingTicks;
+  private final PowerGrid grid = new PowerGrid();
+
+  /** Output fraction (0 to 1) of a machine by position, when not 1 (solar dust). */
+  private final Map<Long, Double> efficiency = new LinkedHashMap<>();
 
   public PlanetSim(IndexData.Loaded index, Map<String, MachineDef> machineDefs, Pace pace) {
     this.model = new PlanetaryIndexModel(index.parameters(), index.boilingPoint(), pace);
     this.pace = pace;
     this.defs = Map.copyOf(machineDefs);
+    model.setBeforeStep(
+        dt -> {
+          double sat = grid.step(dt);
+          applyPower(sat);
+        });
+  }
+
+  public PowerGrid power() {
+    return grid;
+  }
+
+  /** Length of one step in sols. */
+  public double stepSols() {
+    return (double) pace.stepTicks() / pace.solTicks();
+  }
+
+  /** Set a machine's output fraction (a dusty panel makes less). */
+  public void setEfficiency(long pos, double fraction) {
+    double f = Math.max(0, Math.min(1, fraction));
+    if (f >= 1.0) {
+      efficiency.remove(pos);
+    } else {
+      efficiency.put(pos, f);
+    }
+    refreshPower();
+  }
+
+  /** Recount supply, demand and storage, then show the effect on the machines right away. */
+  private void refreshPower() {
+    double supply = 0;
+    double demand = 0;
+    double storage = 0;
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def == null) {
+        continue;
+      }
+      MachineDef.Power pw = def.power();
+      for (long pos : e.getValue()) {
+        supply += pw.supplyPerSol() * efficiency.getOrDefault(pos, 1.0);
+        demand += pw.drawPerSol();
+        storage += pw.storage();
+      }
+    }
+    grid.setTotals(supply, demand, storage);
+    applyPower(grid.preview(stepSols()));
+  }
+
+  /** Scale every powered machine's contribution by the share of power it gets. */
+  private void applyPower(double satisfaction) {
+    for (Map.Entry<String, Map<Long, List<PlanetaryIndexModel.ContributionHandle>>> e :
+        handles.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def == null || def.power().drawPerSol() <= 0) {
+        continue;
+      }
+      for (List<PlanetaryIndexModel.ContributionHandle> hs : e.getValue().values()) {
+        for (int i = 0; i < hs.size(); i++) {
+          hs.get(i).setRate(def.contributions().get(i).ratePerSol() * satisfaction);
+        }
+      }
+    }
   }
 
   public PlanetaryIndexModel model() {
@@ -70,6 +137,7 @@ public final class PlanetSim {
       return false;
     }
     attach(def, pos);
+    refreshPower();
     return true;
   }
 
@@ -86,6 +154,8 @@ public final class PlanetSim {
         hs.forEach(PlanetaryIndexModel.ContributionHandle::remove);
       }
     }
+    efficiency.remove(pos);
+    refreshPower();
     return true;
   }
 
@@ -111,7 +181,14 @@ public final class PlanetSim {
     model.storedValues().forEach((id, v) -> values.put(id.id(), v));
     Map<String, List<Long>> ms = new LinkedHashMap<>();
     machines.forEach((type, set) -> ms.put(type, List.copyOf(set)));
-    return new PlanetState(PlanetState.CURRENT_SCHEMA, values, model.simTicks(), pendingTicks, ms);
+    return new PlanetState(
+        PlanetState.CURRENT_SCHEMA,
+        values,
+        model.simTicks(),
+        pendingTicks,
+        ms,
+        grid.charge(),
+        Map.copyOf(efficiency));
   }
 
   /**
@@ -134,6 +211,7 @@ public final class PlanetSim {
     state.values().forEach((k, v) -> saved.put(ParameterId.of(k), v));
     PlanetaryIndexModel.RestoreReport report = sim.model.restore(saved, state.simTicks());
     sim.pendingTicks = Math.max(0, Math.min(state.pendingTicks(), pace.stepTicks() - 1));
+    sim.efficiency.putAll(state.efficiency());
     List<String> unknownTypes = new ArrayList<>();
     state
         .machines()
@@ -146,6 +224,9 @@ public final class PlanetSim {
                 unknownTypes.add(type);
               }
             });
+    sim.refreshPower();
+    sim.grid.setCharge(state.batteryCharge());
+    sim.refreshPower();
     return new Loaded(sim, report, unknownTypes);
   }
 
