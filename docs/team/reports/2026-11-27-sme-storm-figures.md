@@ -32,3 +32,16 @@ Unverified numbers could reach students as facts. Mitigated by the tags above.
 
 ## 5. Shared model updates
 None. (Lesson: the sandbox allows PubMed/NCBI only; NASA pages need the network allow-list.)
+
+## Addendum (same day): sources opened after network allow-list update
+
+Access: `www.jpl.nasa.gov` still returned HTTP 403 for every page (not bypassed); `www.nasa.gov` 403. Opened instead: `www.planetary.org`, `science.nasa.gov` and `nssdc.gsfc.nasa.gov` (NASA press release text). Percentages are my arithmetic from the quoted watt-hours (Wh/sol).
+
+| Figure | Mark | Quote and URL |
+|---|---|---|
+| Opportunity 2007, about -80 % | **VERIFIED** (-82 % by arithmetic: 128 / 700 = 18 % left) | NASA release 07-162, 20 Jul 2007: "Opportunity's solar panels had been producing about 700 watt hours of electricity per day" and "Opportunity's solar-panel output dropped even lower, to 128 watt hours." https://nssdc.gsfc.nasa.gov/planetary/text/mer_pr_20070720.txt. Same release: dust "has blocked 99 percent of direct sunlight". Use "about 80 %" |
+| Opportunity 2018, about -97 % | **VERIFIED** (-96.6 %: 22 / 645 = 3.4 % left) | Planetary Society, 2018: "around 645 watt-hours ... on June 1st ... Opportunity was producing just 22 watt-hours of power." https://www.planetary.org/articles/06-mer-update-opportunity-dust-storm-sleep . Secondary report (journalist, quoting the team), not a NASA page. The 97 % wording was seen only in a search snippet, not opened |
+| InSight about -35 % | **VERIFIED** (-36 %: 275 / 430 = 64 % left) | NASA Science, InSight blog, 10 Oct 2022: "a sharp decline last week from 430 watt-hours per sol to a low of 275 watt-hours per sol. The decline was caused by a regional dust storm". https://science.nasa.gov/blogs/insight/2022/10/10/nasa-insights-power-level-as-of-oct-8-2022/ . The 425 figure (-35 %) is from a JPL page I could not open. Caveat: panels were already dusty before the storm |
+| Storm lengths | Specific cases **VERIFIED**; general rule **NOT VERIFIED** | 2007: "For nearly a month, a series of severe Martian summer dust storms" (release 07-162, URL above). 2018: "the thick cloud of dust that has blanketed the Red Planet for the last six weeks" (https://www.planetary.org/articles/08-mer-update-opportunity-sleeps); same page: 2007 storm "subsided in a matter of weeks" (https://www.planetary.org/articles/06-mer-update-opportunity-dust-storm-sleep). Jan 2022 regional storm: InSight "hunkered down for 11 days" (https://science.nasa.gov/resource/mars-report-dust-storms-on-mars/). Planetary Society: big storms "build for weeks, and become planet encircling events that last a long time, or not" |
+
+Verdict on the game values: the real cuts (-36 % regional, -82 % and -97 % at the global events) bracket the 60 % storm cut, so it remains a fair game value; keep it labelled **invented** (it is a game number, not a measurement). Real storms last about 11 days to 6+ weeks, so a 2-sol game storm is still much shorter (honest note stands). Journal text may now quote the three power figures with the sources above.
