@@ -3,15 +3,16 @@ package mars.client;
 /**
  * Every colour and size of the Planetary Monitor in one place, so the Stage 3 restyle (pixel fonts,
  * final palette) is a change to this file only. Sizes are GUI pixels. Straw-man values (ui-specs.md
- * section 9); contrast ratios of the text colours were measured in the 2026-11-27 UI review (all at
- * least 4.5 to 1 on the backing).
+ * section 9). Contrast of every colour here on the backing (over white and over black world):
+ * docs/team/reports/2026-11-27-technical-lead-monitor-option-a.md; text at least 4.5 to 1, bars and
+ * lines at least 3 to 1.
  */
 final class MonitorStyle {
   private MonitorStyle() {}
 
   // Colours (ARGB)
   static final int BACKING = 0xF0181210;
-  static final int EDGE = 0xFF6B4A36;
+  static final int EDGE = 0xFF9A6A4C;
   static final int LABEL = 0xFF9AA5B1;
   static final int VALUE = 0xFFFFFFFF;
   static final int UP = 0xFF7CD37C;
@@ -24,10 +25,21 @@ final class MonitorStyle {
 
   static final int STATE_SHORT = CAUSE;
   static final int STATE_NONE = DOWN;
-  static final int BAR_EMPTY = 0xFF3A302A;
+  static final int BAR_EMPTY = 0xFF78685E;
+
+  /** Pressure plot: the series, the axes, and the dashed event line (the event label is CAUSE). */
+  static final int PLOT_LINE = 0xFF8AD4F0;
+
+  static final int PLOT_AXIS = 0xFF9A6A4C;
 
   // Layout
   static final int PANEL_W = 250;
+
+  /**
+   * Panel height we aim for at GUI scale 3 (240 GUI px screen): the plot grows or shrinks to it.
+   */
+  static final int TARGET_H = 130;
+
   static final int MARGIN = 6;
   static final int PAD = 6;
   static final int HEADER_H = 16;
@@ -35,10 +47,16 @@ final class MonitorStyle {
   static final int LINE_H = 10;
   static final int ROW_H = 11;
   static final int ROW_H_EMPHASIS = 13;
-  static final int ROW_GAP = 3;
+  static final int ROW_GAP = 1;
   static final int CAUSE_INDENT = 12;
-  static final int BAR_W = 36;
+  static final int BAR_SEGMENTS = 10;
+  static final int BAR_SEG_W = 3;
+  static final int BAR_SEG_GAP = 1;
+  static final int BAR_W = BAR_SEGMENTS * BAR_SEG_W + (BAR_SEGMENTS - 1) * BAR_SEG_GAP;
   static final int BAR_H = 5;
+  static final int PLOT_MIN_H = 18;
+  static final int PLOT_MAX_H = 36;
+  static final int PLOT_LABEL_H = 9;
 
   // Type
   static final float VALUE_SCALE_EMPHASIS = 1.25f;

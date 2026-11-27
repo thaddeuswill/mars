@@ -196,7 +196,22 @@ public final class PlanetGameTests {
                 + back.sim().model().snapshot().get(Ids.PRESSURE)
                 + " nbtKeys="
                 + tag.getAllKeys(),
-            same && tag.getInt("schema") == 3);
+            same && tag.getInt("schema") == mars.index.sim.PlanetState.CURRENT_SCHEMA);
+    var hist = data.sim().history();
+    ok &=
+        SelfTest.check(
+            "save.history_round_trip",
+            "the pressure history and its Outgasser event come back from NBT unchanged",
+            "samples="
+                + hist.samples().size()
+                + " events="
+                + hist.events()
+                + " back="
+                + back.sim().history().events(),
+            hist.samples().size() >= 2
+                && !hist.events().isEmpty()
+                && hist.samples().equals(back.sim().history().samples())
+                && hist.events().equals(back.sim().history().events()));
     double rate = back.sim().model().netRatePerSol(Ids.PRESSURE);
     ok &=
         SelfTest.check(
@@ -267,6 +282,38 @@ public final class PlanetGameTests {
             "decoded payload equals the sent one",
             "bytes=" + bytes + " equal=" + got.equals(sent) + " leftover=" + buf.readableBytes(),
             got.equals(sent) && buf.readableBytes() == 0);
+
+    MonitorView withPlot =
+        new MonitorView(
+            view.sols(),
+            view.rows(),
+            new MonitorView.History(
+                java.util.List.of(
+                    new MonitorView.Point(0.1, 0.6),
+                    new MonitorView.Point(6.0, 0.6),
+                    new MonitorView.Point(16.0, 1.6)),
+                java.util.List.of(
+                    new MonitorView.Marker(6.0, "monitor.event.placed.regolith_outgasser", null),
+                    new MonitorView.Marker(9.0, "gate.reached", "gate.mars.dome_stable")),
+                "kPa"));
+    RegistryFriendlyByteBuf plotBuf =
+        new RegistryFriendlyByteBuf(Unpooled.buffer(), level.registryAccess());
+    MonitorPayload.CODEC.encode(plotBuf, new MonitorPayload(withPlot));
+    int plotBytes = plotBuf.readableBytes();
+    MonitorPayload gotPlot = MonitorPayload.CODEC.decode(plotBuf);
+    ok &=
+        SelfTest.check(
+            "monitor.history_payload_round_trip",
+            "plot points and markers survive the network encoding",
+            "bytes="
+                + plotBytes
+                + " equal="
+                + gotPlot.view().equals(withPlot)
+                + " leftover="
+                + plotBuf.readableBytes(),
+            gotPlot.view().equals(withPlot)
+                && plotBuf.readableBytes() == 0
+                && gotPlot.view().history().markers().size() == 2);
 
     FakePlayer player =
         FakePlayerFactory.get(
