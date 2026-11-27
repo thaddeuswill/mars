@@ -285,6 +285,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `science_claims` | Mars surface pressure about 0.6 kPa, under 1 % of Earth's 101.3 kPa; CO2 95.1 %, O2 0.145 % (SME Part A, sourced) |
 | `fiction_note` | None |
 | `status` | draft |
+| `sme_note` (2026-11-27) | Replacement "On Earth" line, SME-corrected: "Earth's air pushes on you with more than 100 times the force of Mars's air. You never notice, because the air and fluids inside your body push back with the same pressure." Correction: "about 100 times" is too low (101.3 / 0.636 is about 160); say "more than 100 times". Body claim: accurate as pressure balance, **not verified** (search summaries only, no source opened). Wording avoids "crush" and "free". See `docs/team/reports/2026-11-27-sme-on-earth-and-goal-label.md` |
 
 ---
 
