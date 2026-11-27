@@ -47,7 +47,7 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 | 17 | Lead Artist round 2 requests relayed by the coordinator: budget three pixel fonts, sound production hours, the Stage 2 face-validity review; proposed defaults: one original ending music piece, Perseverance recording only if licensed | Fold into budget, cut list, and roadmap | budget.md revision 2 (§2.1, §2.3, cut items 3 and 5); ROADMAP Stages 2–4 | 🟡 Producer drafts done |
 | 18 | "ill just wait for the launchable product" | Skip the paper playtest; build toward a launchable pack. Stage 1 first: a mod skeleton that builds, launches, and loads an empty Mars world; Stage 2 is the first playable | A built mod jar, a headless server boot test, launch instructions for the owner | 🟡 Stage 1 built and tested here (37 tests, 7/7 boot checks, real-client screenshots); jar and launch guide delivered; owner acceptance pending (jar in a normal NeoForge install, Windows/macOS, dedicated-server EULA untested) |
 | 20 | "don't run it in minecraft just use anothee program to view it so i can look at it and tell you what i want changed" | View the assets without running Minecraft | An interactive browser viewer (docs/art/viewer/, published as a private page) of the batch 1 machines; the owner looks and gives change requests | 🟡 viewer built and tested here; owner feedback pending |
-| 33 | "accept and cont with rec" | Accept the raised array, slice 2 and the smaller Monitor; do the recommended next steps | Slice 3 power (solar panel and battery); replace the stale Stage 1 chat line; pause flag stays in world save data; Monitor stays at 232 px; EULA stays the owner's call | 🟡 routed to the Technical Lead |
+| 33 | "accept and cont with rec" | Accept the raised array, slice 2 and the smaller Monitor; do the recommended next steps | Slice 3 power (solar panel and battery); replace the stale Stage 1 chat line; pause flag stays in world save data; Monitor stays at 232 px; EULA stays the owner's call | 🟡 Power routed to the Technical Lead. Arrival copy accepted (see below). |
 | 32 | "accept and cont after adding to backlogs" | Accept Stage 2 slice 1 and the raised array; continue with the recommendations | Slice 2 (session clock and pause, invariant I-3); canopy slice fix to y 15..16 px with updated footprint tests and an in-game screenshot; chunk-unload rule kept (Outgasser keeps contributing); EULA stays the owner's call | ✅ Slice 2 and raised-array shape fix complete in `5d7dbea`. Claude reported 67 unit tests and 41 boot checks passing. |
 | 31 | "make sure to run the anti ui skills" | Run the design-audit skill on the UI | The AI design audit is written for web pages, so it was applied by hand to the Monitor screen; owner to say if a different skill was meant. Re-audit the Monitor after the Stage 3 art pass | 🟡 applied once to the Monitor |
 | 30 | "the panels are to big" | Shrink the oversized panels (read as the Monitor screen; the solar panels were a second possible meaning) | Monitor narrowed to 232 px, with no world dimming. Claude verified the layout in 1280×720 real-client screenshots. | ⏸ Monitor shrink verified. Owner to confirm which panels were meant and whether the Monitor is small enough. |
@@ -62,7 +62,22 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 | 21 | "take screenshots of it because i'm not at my computer; look up what these are supposed to look like and audit it based on that use your browser" | Screenshots of the viewer; an audit of the machines against real hardware | Viewer screenshot sheets sent; `docs/art/reference-audit.md` with comparison boards; fixes after the owner's choices | 🟡 screenshots and audit delivered; owner chose the recommended fixes ("do what's recommended"): batch 2 accepted by the owner ("accept and rec"), with the veil-seam fix |
 | 19 | "is there a way to load up blender and check what you have and what it looks like and screenshot that and show me for iteraations" | A way to render the art, look at it, and show the owner pictures to iterate on | `tools/art-preview/`; renders shown to the owner; the Artist produces a first batch of placeholder assets and contact sheets for review | 🟡 (Blender works here; proof render done; batch 1 contact sheet delivered to the owner, feedback pending; owner approved the recommended plan: source review of the Blockbench MCP before running it, and real in-game screenshots via a dev-only client helper after Stage 1)|
 
-| 33 | "you can cont as coordinator"; "you are the peer coordinator right now" | Codex continues as Claude’s peer coordinator | Remove the stale `/mars go` arrival text. | ✅ Copy fix pushed in `07fba27`; translation JSON checked. Client check pending. |
+| 34 | "you can cont as coordinator"; "you are the peer coordinator right now" | Codex continues as Claude’s peer coordinator | Remove the stale `/mars go` arrival text. | ✅ Owner accepted the copy fix in `07fba27`; translation JSON checked. Client check pending. |
+
+| 35 | "accept and cont" | Accept the arrival copy and continue Stage 2 | Codex prepares slice 3 acceptance checks while the Technical Lead owns implementation. | ✅ Acceptance recorded and QA checks drafted below. |
+
+### Stage 2 slice 3 acceptance checks
+
+| Case | Expected result |
+|---|---|
+| No solar supply and no battery reserve | The Outgasser adds no pressure. |
+| Supply meets demand | The Outgasser contributes its configured full rate of 0.10 kPa per sol at standard pace. |
+| Supply covers only half of demand | The Outgasser contributes half its configured rate, 0.05 kPa per sol at standard pace. |
+| Battery covers a supply shortfall | Available battery power sustains the rate up to demand. Throughput falls when the reserve can no longer cover the shortfall. |
+| One round solar array | The centre counts as one supplier. Its eight canopy cells add no supply. |
+| Pause and chunk unload | Pausing stops battery and pressure changes. Unloading an Outgasser chunk preserves the machine’s registration and applies the same power limits. |
+
+Use a unit test for the supply-to-throughput calculation and GameTests for block registration and planet behavior. These are acceptance targets. Checks have not been run against slice 3.
 
 ## Open questions for the owner
 
