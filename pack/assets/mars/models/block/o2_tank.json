@@ -1,6 +1,7 @@
 {
- "parent": "minecraft:block/cube_all",
+ "parent": "minecraft:block/cube_column",
  "textures": {
-  "all": "mars:block/o2_tank"
+  "end": "mars:block/o2_tank_top",
+  "side": "mars:block/o2_tank"
  }
 }

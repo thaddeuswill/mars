@@ -1,0 +1,110 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/roof_vent_top",
+  "top": "mars:block/roof_vent_top",
+  "side": "mars:block/roof_vent_side"
+ },
+ "elements": [
+  {
+   "from": [
+    2,
+    0,
+    2
+   ],
+   "to": [
+    14,
+    5,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      7
+     ]
+    },
+    "south": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      7
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      7
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      7
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    },
+    "down": {
+     "texture": "#top",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    0,
+    1
+   ],
+   "to": [
+    15,
+    1,
+    15
+   ],
+   "faces": {
+    "north": {
+     "texture": "#top"
+    },
+    "south": {
+     "texture": "#top"
+    },
+    "east": {
+     "texture": "#top"
+    },
+    "west": {
+     "texture": "#top"
+    },
+    "up": {
+     "texture": "#top"
+    },
+    "down": {
+     "texture": "#top"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "parent": "minecraft:block/cube",
+ "textures": {
+  "particle": "mars:block/hull_plate_rim",
+  "down": "mars:block/hull_plate",
+  "up": "mars:block/hull_plate_rim_top",
+  "north": "mars:block/hull_plate_rim",
+  "south": "mars:block/hull_plate_rim",
+  "east": "mars:block/hull_plate_rim",
+  "west": "mars:block/hull_plate_rim"
+ }
+}

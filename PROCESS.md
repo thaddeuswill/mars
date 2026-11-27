@@ -33,6 +33,8 @@ How the team works day to day. Adapted from the lessons in `docs/team/reference/
 - Report written, backlog updated; the coordinator commits.
 - **Accept is conditional while a check runs:** if an SME review, alignment check, or consensus is still open, the item is "accepted, pending <check>" and is recorded as done only after the check passes.
 
+**For art (textures, models):** a **reference check before done**: a side-by-side board (real reference image next to our render) is in `docs/art/renders/`, the Lead Artist has looked at it, and the report states which cues were reproduced, which not, and why.
+
 **For builds (once code exists):**
 - The build and a **parse/compile gate** pass (a broken script must fail fast, never hang a test run).
 - The automated playthrough passes N times across the variants that matter: standard mode, classroom mode, group of 1 and group of 5, the "everything at once" stress case.

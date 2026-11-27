@@ -1,6 +1,7 @@
 {
- "parent": "minecraft:block/cube_all",
+ "parent": "minecraft:block/cube_column",
  "textures": {
-  "all": "mars:block/water_reclaimer"
+  "end": "mars:block/water_reclaimer_top",
+  "side": "mars:block/water_reclaimer"
  }
 }
