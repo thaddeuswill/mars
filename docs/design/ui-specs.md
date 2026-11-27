@@ -195,3 +195,30 @@ The content lists the Artist asked for (crops, biome types, maintenance parts, b
 Tabs: **Shift notes** (gate entries, Hana's notes, briefings) · **Messages** (archive, unread marked with a dot and a count) · **Forecasts** (own tally per phase: "Phase 1: 3 of 4 right") · **What caused it?** (self-check page; final name of the old "Explain it") · **Keeper's Record** (header "What the colonists will need to know"; own-evidence pages and the "Cairn team" section).
 
 Every page pairs text with a small picture or Monitor graph (DESIGN.md, Multimedia). Text budgets: story bible §6.1.
+
+---
+
+## 9. Monitor wording (Stage 2 straw man, reviewed 2026-11-27) and pause design
+
+**Status:** wording is **fluid**; the straw man is in `pack/assets/mars/lang/en_us.json` (`monitor.*`). Reading level target: grade 6-7. Units and numbers come from the one formatting helper (§ rules above), not from the lang strings. Not playtested.
+
+| Key | Straw man | Recommended final | Why |
+|---|---|---|---|
+| `monitor.title` | Planetary Monitor | Planetary Monitor | Real name in the vocabulary; keep |
+| `monitor.sol` | Sol %s | Sol %s | Short; the first-use definition ("1 sol = one Mars day") goes in the journal, not the screen. Add "(paused)" as a suffix when paused (below) |
+| `monitor.no_planet` | The Monitor has no planet to read here. | This Monitor only works on Mars. Travel there to read a planet. | Says what to do, not only what is wrong |
+| `monitor.row.pressure` | Pressure | Air pressure | "Pressure" alone is ambiguous for a 12-year-old; HS band may show "Pressure" with the unit in the line |
+| `monitor.row.temperature` | Temperature | Temperature | Keep |
+| `monitor.row.water_boils` | Water boils at | Water boils at | Keep. It is a derived value (TEAM.md "Boiling point at current pressure"); a "read more" line says why it moves with pressure (A1) |
+| `monitor.water.no_liquid` | No liquid water at this pressure | Too thin for liquid water | About half the length, so it fits the panel without shrinking. Read-more (HS default open): "Below 0.61 kPa, ice turns straight into vapor." (0.61 kPa is the water triple point; **SME to confirm the sentence**) |
+| `monitor.trend.rising` | Rising | Rising + up-arrow shape | Word stays; add the shape (colour and glyph never the only signal). Check the arrow glyph in the pixel font first |
+| `monitor.trend.steady` | Steady | Steady + flat-bar shape | Same |
+| `monitor.trend.falling` | Falling | Falling + down-arrow shape | Same |
+
+**Keys still missing (propose when slices 3 and 4 land):** `monitor.cause.outgasser` = "Outgassers: +%s per sol" (one line per source, never a bare number, B1); `monitor.cause.none` = "Nothing is changing this right now."; `monitor.trend.paused` = "Paused".
+
+**Stale arrival line (Technical Lead handoff).** I found no "The planet is empty for now" text left in `mod/src` or `pack` (grep, 2026-11-27); `docs/team/reports/2026-11-27-technical-lead-arrival-copy.md` suggests it was already replaced. If it returns, use: "You are on Mars. Place a Regolith Outgasser and a Planetary Monitor, then watch the pressure."
+
+### Pause design (one line; **not built yet**)
+
+When the colony is paused, every player sees a **"Colony paused" chip** (two vertical bars plus the words, never colour only) at the top centre of the HUD, the sky and dust stay frozen, the Monitor shows "Sol N (paused)" and still opens read-only, and any action that would change the planet (place or break a machine, switch one on, craft) is **blocked with one log line**: "The colony is paused. Your teacher will resume it." (standard play: "The server owner paused the colony."). Movement, looking, the journal and the Monitor stay available so a paused class can still discuss what is on screen. Goals: C1 (nothing to fix while paused is honest), B1 (read the Monitor while time is stopped). The Technical Lead lists the HUD line and the blocked actions as not built (slice 2 report); they are slice 9 (classroom) work unless the owner wants them earlier.
