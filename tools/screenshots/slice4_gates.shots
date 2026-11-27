@@ -1,0 +1,24 @@
+# Stage 2 slice 4: the Monitor's goal rows before and after "Dome stable" latches (mars:planet_1), 1280x720.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /mars index advance 1
+cmd /mars monitor
+wait 40
+shot slice4_dome_stable_holding_1_of_3
+cmd /mars index advance 2.5
+cmd /mars monitor
+wait 40
+shot slice4_dome_stable_reached
+cmd /mars index set pressure 5.2
+cmd /mars index advance 0.1
+cmd /mars monitor
+wait 40
+shot slice4_phase_2_reached
+quit

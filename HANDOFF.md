@@ -21,11 +21,14 @@ Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-techn
 - **Stage 2 slice 2:** `SessionClock`, `SessionData` (pause flag in world save data, not session.json), `SessionControl`, `/mars pause|resume|session`, invariant I-3 tested (100,000 paused ticks change nothing), Outgasser keeps contributing with its chunk unloaded (GameTest `outgasser.chunk_unloaded`). 67 unit tests, 41 of 41 boot checks, all run in the sandbox.
 - **Arrival message:** `/mars go` now says “You are on Mars (planet 1).” Codex pushed the English translation in `07fba27` and checked the JSON. Client check pending. Codex and Claude are peer coordinators.
 
+Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice4-gates.md`):
+- **Stage 2 slice 3 (power)** and **slice 4 (gates)**: gate files in `pack/data/mars/gates/`, pure `mars.gates`, latching (I-2), thresholds never scaled (I-1), Outgasser placement locked for survival players until Dome stable (creative and `/mars gate latch dome_stable` bypass), Monitor "Next goal" and "Goals reached" rows. 93 unit tests, 52 of 52 boot checks, screenshots in `tools/screenshots/out/20261127-113824/`.
+
 ## 3. Known gaps and honest caveats (do not claim these work)
 
 - **Not tested:** the jar loaded from a real `mods` folder; Windows and macOS; the dedicated server and a real save to disk and restart (needs the EULA, the owner's call); right-click on the Monitor block in the real client (screenshots use `/mars monitor`); explosions or pistons moving an Outgasser; frustum culling of an array whose overhang crosses a chunk border while its centre is off-screen.
 - **Not seen in Minecraft:** the raised model (only in Blender renders) until the screenshot run after the shape fix.
-- Outgasser now needs power (slice 3) but has no "Dome stable" unlock yet, so pressure is not on the balance-sheet curve. Power numbers are invented (balance sheet 2b); no night or storm on the grid yet; dust stage never changes by itself yet (only by placement or `/setblock`).
+- Dome stable uses a stand-in life-support state (power covers use), so it arrives after about 1 h and pressure is not on the balance-sheet curve; no recipes exist, so the unlock is a placement check only. Power numbers are invented (balance sheet 2b); no night or storm on the grid yet; dust stage never changes by itself yet (only by placement or `/setblock`).
 - `/reload` mid-game leaves running planets on old definitions (fine for the prototype).
 - Chat text shows faintly through the left edge of the Monitor panel (cosmetic; Stage 3 art).
 - Estimates in the docs (about 26 developer-days for Stage 2 code) are unverified.
@@ -45,7 +48,7 @@ Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-techn
 1. Sync and verify (see section 2). Make the build and tests green and the boot test print `RESULT PASS`.
 2. Check `pgrep -f runShotsClient` before any screenshot run; never overlap client runs.
 3. Small fixes remaining: pause does not yet block player actions or show a HUD line.
-4. Then, per `docs/tech/stage2-plan.md`: the "Dome stable" unlock (slice 4), the pressure machine chain, then the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
+4. Then, per `docs/tech/stage2-plan.md`: slice 5 (polar-frost sink), the pressure machine chain, then the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
 5. After each step: update `BACKLOG.md` status, add a report in `docs/team/reports/`, update the "state" in `AGENTS.md` and this file, commit, push.
 6. Reply to the owner in the standing format: **what changed, recommended next steps, screenshot if visual.** Keep it short; the owner is also credit-limited.
 

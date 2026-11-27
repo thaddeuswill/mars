@@ -29,7 +29,7 @@
   "monitor.row.goals_reached": "Goals reached",
   "gate.mars.dome_stable": "Dome stable",
   "gate.mars.phase_2_begins": "Phase 2 begins",
-  "monitor.gate.dome_stable.progress": "Life support, sols with no failures",
+  "monitor.gate.dome_stable.progress": "Life support, no failures",
   "monitor.gate.dome_stable.waiting": "Life support is not steady. The count waits.",
   "monitor.gate.phase_2_begins.progress": "Air pressure",
   "gate.reached": "Goal reached: %s",
