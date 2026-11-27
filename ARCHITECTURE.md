@@ -474,6 +474,7 @@ Feasibility check of DESIGN.md "Learning Mechanisms in Play". Both are **cheap a
 - **Machine-state gates** (Dome stable): progress = sols without a life-support failure ÷ 3 (or the classroom hold).
 - **Hold gates:** a second bar for "held X of Y sols", paused when out of band.
 - **Cost:** a few subtractions per step for one gate. Zero on the client beyond drawing.
+- **As built (slice 7, 2026-11-27):** `MonitorView.Goal(fraction, percent, etaKey, etaArg)` on the goal row, computed by pure `mars.monitor.view.GoalProgress` when the view is built (the Monitor is built on request, not per tick). Pressure progress is log10 from the parameter's start value (0.6 kPa) to the target; hold gates show held sols over the hold. The estimate is remaining distance over the **current net rate** (sources plus frost), not an average of past steps; "Not rising" below 0.005 kPa/sol. One bar, one condition only (no multi-condition gate exists yet). The bar is drawn full width, 4 GUI px; the percent, estimate and goals count are on the detail line, which gives way first when the panel is tight. "Useful now" is not built (needs gate data lists and the recipe view).
 
 ### 2.10 Fading feedback state per player
 

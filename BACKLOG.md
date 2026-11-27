@@ -106,6 +106,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 45 | "accept and cont" | Accept the CX-2 screenshot review and continue the Codex lane | Reconcile CX-3 status against the latest implementation and inspect slice 5 evidence. | ✅ CX-3 verified against the published report and capture. |
 | 46 | "accept and continue" (owner accepted slice 5 with the 144 px Monitor and no Oven recipe yet): slice 6 = one visible world response | Technical Lead: the Mars sky and fog follow pressure through keyframe data, client-side interpolation | `assets/mars/keyframes/sky.json`, pure `mars.visual`, `mars:sky` payload, `MarsSkyEffects`, fog events, tests, real-client screenshots at 0.6, 5, 15, 30, 75 kPa | ✅ built and verified (156 unit tests, 69 boot checks, screenshots `tools/screenshots/out/20261127-130736/`; report `docs/team/reports/2026-11-27-technical-lead-slice6-sky.md`); awaiting owner look |
+| 47 | "accept and continue" (owner accepted slice 6): slice 7 = next-gate bar and Monitor polish | Technical Lead: check the ui-specs next-gate spec against the build, build the delta only (bar, percent, estimate), keep the Monitor within current heights | `MonitorView.Goal`, pure `GoalProgress`, bar and detail line in `MonitorScreen`, `monitor.goal.*` lang keys, tests, `slice7.shots` | ✅ built and verified (167 unit tests, 70 boot checks, screenshots `tools/screenshots/out/20261127-132753/`; report `docs/team/reports/2026-11-27-technical-lead-slice7-gate-bar.md`); awaiting owner look |
 
 ## Open questions for the owner
 
