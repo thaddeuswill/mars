@@ -53,6 +53,15 @@ public final class IndexCommands {
                                                     "value", DoubleArgumentType.doubleArg())
                                                 .executes(IndexCommands::set)))))
                 .then(
+                    Commands.literal("gate")
+                        .requires(s -> s.hasPermission(2))
+                        .then(Commands.literal("list").executes(IndexCommands::gateList))
+                        .then(
+                            Commands.literal("latch")
+                                .then(
+                                    Commands.argument("gate", StringArgumentType.word())
+                                        .executes(IndexCommands::gateLatch))))
+                .then(
                     Commands.literal("monitor")
                         .requires(s -> s.hasPermission(2))
                         .executes(
@@ -114,6 +123,49 @@ public final class IndexCommands {
     d.setDirty();
     LOG.info("ADMIN {} set {} to {}", ctx.getSource().getTextName(), id, value);
     ctx.getSource().sendSuccess(() -> Component.literal("Set " + id + " (admin)."), true);
+    return 1;
+  }
+
+  private static int gateList(CommandContext<CommandSourceStack> ctx)
+      throws CommandSyntaxException {
+    PlanetData d = planet(ctx);
+    StringBuilder sb = new StringBuilder("Gates:");
+    for (mars.gates.GateDef g : d.sim().gates().defs()) {
+      var st = d.sim().gates().state(g.id());
+      sb.append("\n  ").append(g.id()).append(": ");
+      if (st.latched()) {
+        sb.append("reached (").append(st.cause()).append(")");
+      } else if (g.hold() != null) {
+        sb.append("held ")
+            .append(Fmt.number(st.heldSols(), 2))
+            .append(" of ")
+            .append(Fmt.number(d.sim().gates().holdSols(g), 0))
+            .append(" sols");
+      } else {
+        sb.append("not reached");
+      }
+    }
+    ctx.getSource().sendSuccess(() -> Component.literal(sb.toString()), false);
+    return 1;
+  }
+
+  /** Admin route: latch a gate now. Gates never un-latch, so there is no reverse command. */
+  private static int gateLatch(CommandContext<CommandSourceStack> ctx)
+      throws CommandSyntaxException {
+    PlanetData d = planet(ctx);
+    String name = StringArgumentType.getString(ctx, "gate");
+    String id = name.contains(":") ? name : "mars:" + name;
+    if (!d.sim()
+        .gates()
+        .latch(id, mars.gates.GateTracker.Cause.ADMIN, d.sim().model().simTicks())) {
+      throw new SimpleCommandExceptionType(
+              Component.literal("No such gate, or it is already reached: " + id))
+          .create();
+    }
+    d.sim().queueAnnouncement(id);
+    d.setDirty();
+    LOG.info("ADMIN {} latched gate {}", ctx.getSource().getTextName(), id);
+    PlanetManager.announceGates(ctx.getSource().getLevel(), d);
     return 1;
   }
 }

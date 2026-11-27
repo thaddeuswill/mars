@@ -22,6 +22,7 @@ public final class PlanetaryIndexModel {
   private final Pace pace;
   private long simTicks;
   private java.util.function.DoubleConsumer beforeStep = dt -> {};
+  private java.util.function.DoubleConsumer afterStep = dt -> {};
 
   public PlanetaryIndexModel(List<ParameterDef> parameters, BoilingPoint boilingPoint, Pace pace) {
     for (ParameterDef d : parameters) {
@@ -46,6 +47,26 @@ public final class PlanetaryIndexModel {
   /** Called at the start of every step with the step length in sols (the power grid hooks in). */
   public void setBeforeStep(java.util.function.DoubleConsumer hook) {
     this.beforeStep = hook;
+  }
+
+  /** Called at the end of every step, after values and derived values are final (gates hook in). */
+  public void setAfterStep(java.util.function.DoubleConsumer hook) {
+    this.afterStep = hook;
+  }
+
+  /** Current value of a stored or derived parameter; NaN where a derived value has no meaning. */
+  public double current(ParameterId id) {
+    Double d = derived.get(id);
+    if (d != null) {
+      return d;
+    }
+    return value(id);
+  }
+
+  /** Unit text of a stored parameter ("kPa"), or "" if it has none or is derived. */
+  public String unit(ParameterId id) {
+    ParameterDef d = defs.get(id);
+    return d == null ? "" : d.unit();
   }
 
   public void addCoupling(Coupling coupling) {
@@ -95,6 +116,7 @@ public final class PlanetaryIndexModel {
     }
     recomputeDerived();
     simTicks += pace.stepTicks();
+    afterStep.accept(dtSols);
   }
 
   private double value(ParameterId id) {

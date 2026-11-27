@@ -17,10 +17,25 @@ public record PlanetState(
     int pendingTicks,
     Map<String, List<Long>> machines,
     double batteryCharge,
-    Map<Long, Double> efficiency) {
+    Map<Long, Double> efficiency,
+    Map<String, mars.gates.GateTracker.State> gates) {
 
-  /** 2 adds the battery charge and per-machine output (solar dust). Schema 1 saves still load. */
-  public static final int CURRENT_SCHEMA = 2;
+  /**
+   * 2 adds the battery charge and per-machine output (solar dust); 3 adds gate states (latched,
+   * hold counters). Older saves still load; their gates start unlatched.
+   */
+  public static final int CURRENT_SCHEMA = 3;
+
+  public PlanetState(
+      int schema,
+      Map<String, Double> values,
+      long simTicks,
+      int pendingTicks,
+      Map<String, List<Long>> machines,
+      double batteryCharge,
+      Map<Long, Double> efficiency) {
+    this(schema, values, simTicks, pendingTicks, machines, batteryCharge, efficiency, Map.of());
+  }
 
   public PlanetState(
       int schema,

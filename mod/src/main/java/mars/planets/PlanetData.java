@@ -41,14 +41,14 @@ public final class PlanetData extends SavedData {
 
   private static PlanetData createNew() {
     IndexDefinitions.Defs d = IndexDefinitions.require();
-    return new PlanetData(new PlanetSim(d.index(), d.machines(), Pace.STANDARD));
+    return new PlanetData(new PlanetSim(d.index(), d.machines(), d.gates(), Pace.STANDARD));
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
   public static PlanetData load(CompoundTag tag, HolderLookup.Provider registries) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     PlanetSim.Loaded loaded =
-        PlanetSim.fromState(fromNbt(tag), d.index(), d.machines(), Pace.STANDARD);
+        PlanetSim.fromState(fromNbt(tag), d.index(), d.machines(), d.gates(), Pace.STANDARD);
     if (!loaded.report().ignored().isEmpty()) {
       LOG.warn(
           "Planet save has values this build doesn't know (kept out): {}",
@@ -89,6 +89,19 @@ public final class PlanetData extends SavedData {
     CompoundTag eff = new CompoundTag();
     s.efficiency().forEach((pos, f) -> eff.putDouble(Long.toString(pos), f));
     out.put("efficiency", eff);
+    CompoundTag gates = new CompoundTag();
+    s.gates()
+        .forEach(
+            (id, g) -> {
+              CompoundTag t = new CompoundTag();
+              t.putBoolean("latched", g.latched());
+              t.putString("cause", g.cause().name());
+              t.putLong("latchedSimTicks", g.latchedSimTicks());
+              t.putDouble("heldSols", g.heldSols());
+              t.putDouble("falseSols", g.falseSols());
+              gates.put(id, t);
+            });
+    out.put("gates", gates);
     return out;
   }
 
@@ -116,6 +129,19 @@ public final class PlanetData extends SavedData {
     for (String k : effTag.getAllKeys()) {
       eff.put(Long.parseLong(k), effTag.getDouble(k));
     }
+    Map<String, mars.gates.GateTracker.State> gs = new LinkedHashMap<>();
+    CompoundTag gateTag = tag.getCompound("gates");
+    for (String id : gateTag.getAllKeys()) {
+      CompoundTag t = gateTag.getCompound(id);
+      gs.put(
+          id,
+          new mars.gates.GateTracker.State(
+              t.getBoolean("latched"),
+              mars.gates.GateTracker.Cause.valueOf(t.getString("cause")),
+              t.getLong("latchedSimTicks"),
+              t.getDouble("heldSols"),
+              t.getDouble("falseSols")));
+    }
     return new PlanetState(
         schema,
         vs,
@@ -123,6 +149,7 @@ public final class PlanetData extends SavedData {
         tag.getInt("pendingTicks"),
         ms,
         tag.getDouble("batteryCharge"),
-        eff);
+        eff,
+        gs);
   }
 }

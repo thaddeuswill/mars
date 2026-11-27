@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import mars.core.ParameterId;
+import mars.gates.Condition;
+import mars.gates.GateDef;
+import mars.gates.GateTracker;
 import mars.power.PowerGrid;
 import mars.session.SessionClock;
 
@@ -31,7 +34,28 @@ public final class PlanetSim {
   /** Output fraction (0 to 1) of a machine by position, when not 1 (solar dust). */
   private final Map<Long, Double> efficiency = new LinkedHashMap<>();
 
+  private final GateTracker gates;
+  private final List<String> newlyLatched = new ArrayList<>();
+
+  /** Machine-state names a gate condition may use. {@code life_support_ok}: see lifeSupportOk. */
+  public static final Set<String> MACHINE_STATES = Set.of("life_support_ok");
+
   public PlanetSim(IndexData.Loaded index, Map<String, MachineDef> machineDefs, Pace pace) {
+    this(index, machineDefs, List.of(), pace);
+  }
+
+  public PlanetSim(
+      IndexData.Loaded index,
+      Map<String, MachineDef> machineDefs,
+      List<GateDef> gateDefs,
+      Pace pace) {
+    this.gates = new GateTracker(gateDefs, pace.classroom(), pace.holdResetSols());
+    for (String name : gates.machineStatesUsed()) {
+      if (!MACHINE_STATES.contains(name)) {
+        throw new IllegalArgumentException(
+            "A gate uses the unknown machine state '" + name + "'; known: " + MACHINE_STATES);
+      }
+    }
     this.model = new PlanetaryIndexModel(index.parameters(), index.boilingPoint(), pace);
     this.pace = pace;
     this.defs = Map.copyOf(machineDefs);
@@ -40,6 +64,50 @@ public final class PlanetSim {
           double sat = grid.step(dt);
           applyPower(sat);
         });
+    model.setAfterStep(this::evaluateGates);
+  }
+
+  public GateTracker gates() {
+    return gates;
+  }
+
+  /**
+   * Stand-in for "life support is running" until the oxygen maker and sealing exist (Stage 3): the
+   * planet has power supply and the grid covers its demand. A real life-support check replaces this
+   * one function; the gate files do not change.
+   */
+  boolean lifeSupportOk() {
+    return grid.supplyPerSol() > 0
+        && grid.state(stepSols()) != PowerGrid.State.UNPOWERED
+        && grid.state(stepSols()) != PowerGrid.State.SHORT;
+  }
+
+  private void evaluateGates(double dtSols) {
+    Condition.Context ctx =
+        new Condition.Context() {
+          @Override
+          public double value(ParameterId id) {
+            return model.current(id);
+          }
+
+          @Override
+          public boolean machineState(String name) {
+            return name.equals("life_support_ok") && lifeSupportOk();
+          }
+        };
+    newlyLatched.addAll(gates.step(ctx, dtSols, model.simTicks()));
+  }
+
+  /** Admin: have the game announce a gate that was latched by hand. */
+  public void queueAnnouncement(String gateId) {
+    newlyLatched.add(gateId);
+  }
+
+  /** Gate ids that latched since the last call (the game announces them), then clears. */
+  public List<String> drainNewlyLatched() {
+    List<String> out = List.copyOf(newlyLatched);
+    newlyLatched.clear();
+    return out;
   }
 
   public PowerGrid power() {
@@ -188,7 +256,8 @@ public final class PlanetSim {
         pendingTicks,
         ms,
         grid.charge(),
-        Map.copyOf(efficiency));
+        Map.copyOf(efficiency),
+        gates.toStates());
   }
 
   /**
@@ -198,6 +267,15 @@ public final class PlanetSim {
    */
   public static Loaded fromState(
       PlanetState state, IndexData.Loaded index, Map<String, MachineDef> defs, Pace pace) {
+    return fromState(state, index, defs, List.of(), pace);
+  }
+
+  public static Loaded fromState(
+      PlanetState state,
+      IndexData.Loaded index,
+      Map<String, MachineDef> defs,
+      List<GateDef> gateDefs,
+      Pace pace) {
     if (state.schema() > PlanetState.CURRENT_SCHEMA) {
       throw new IllegalStateException(
           "Planet save has schema "
@@ -206,7 +284,8 @@ public final class PlanetSim {
               + PlanetState.CURRENT_SCHEMA
               + "; refusing to load it (it would be overwritten).");
     }
-    PlanetSim sim = new PlanetSim(index, defs, pace);
+    PlanetSim sim = new PlanetSim(index, defs, gateDefs, pace);
+    sim.gates.restore(state.gates());
     Map<ParameterId, Double> saved = new LinkedHashMap<>();
     state.values().forEach((k, v) -> saved.put(ParameterId.of(k), v));
     PlanetaryIndexModel.RestoreReport report = sim.model.restore(saved, state.simTicks());

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:dome_stable",
+  "order": 1,
+  "condition": { "machine_state": "life_support_ok" },
+  "hold": { "standard_sols": 3, "classroom_sols": 1 },
+  "unlocks": ["mars:regolith_outgasser"],
+  "source": "DESIGN.md gate table; docs/design/balance-sheet.md section 4 (hold 3 sols standard, 1 classroom) and section 2 (Outgasser unlocked at Dome stable). Machine state 'life_support_ok' is a Stage 2 stand-in (power supply covers demand) until the oxygen maker and sealing exist."
+}

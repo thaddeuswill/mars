@@ -33,6 +33,7 @@ public final class PlanetEvents {
     PlanetData data = PlanetManager.data(level);
     if (data.sim().onServerTick(SessionData.get(level.getServer()).clock())) {
       data.setDirty();
+      PlanetManager.announceGates(level, data);
     }
   }
 }

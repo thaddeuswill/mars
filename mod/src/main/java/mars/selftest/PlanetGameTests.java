@@ -182,7 +182,7 @@ public final class PlanetGameTests {
     BlockPos at = new BlockPos(0, 1, 0);
     power(data, 1);
     h.setBlock(at, MarsMachines.REGOLITH_OUTGASSER.get());
-    data.sim().model().advanceSols(3);
+    data.sim().model().advanceSols(2); // under the 3 sol Dome stable hold, so no gate latches here
     CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
     PlanetData back = PlanetData.load(tag, level.registryAccess());
     boolean same = data.sim().toState().equals(back.sim().toState());
@@ -196,7 +196,7 @@ public final class PlanetGameTests {
                 + back.sim().model().snapshot().get(Ids.PRESSURE)
                 + " nbtKeys="
                 + tag.getAllKeys(),
-            same && tag.getInt("schema") == 2);
+            same && tag.getInt("schema") == 3);
     double rate = back.sim().model().netRatePerSol(Ids.PRESSURE);
     ok &=
         SelfTest.check(
@@ -644,5 +644,89 @@ public final class PlanetGameTests {
             Math.abs(sim.model().netRatePerSol(Ids.PRESSURE) - r0) < TOL
                 && sim.power().capacity() == 0.0);
     finish(h, ok, "outgasserNeedsPowerFromRealBlocks");
+  }
+
+  /**
+   * Slice 4 with real blocks and the real reload path: the gate files are loaded; a survival player
+   * cannot place the Regolith Outgasser before "Dome stable"; a creative player can (admin route);
+   * after the gate latches (real power for 3 sols) a survival player can; the gate stays latched
+   * when the power is removed; the latched state survives an NBT save and load.
+   */
+  @GameTest(template = "empty", batch = "mars_gate")
+  public static void domeStableUnlocksTheOutgasser(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.data(level);
+    var sim = data.sim();
+    var defs = IndexDefinitions.require().gates();
+    boolean ok =
+        SelfTest.check(
+            "gate.files_loaded",
+            "two gate files read by the reload listener: dome_stable and phase_2_begins",
+            "gates=" + defs.stream().map(mars.gates.GateDef::id).toList(),
+            defs.size() == 2 && !sim.gates().isLatched("mars:dome_stable"));
+    FakePlayer player =
+        FakePlayerFactory.get(
+            level,
+            new GameProfile(UUID.fromString("6d617273-0000-4000-8000-000000000003"), "[GateTest]"));
+    java.util.function.Supplier<Boolean> canPlace =
+        () -> {
+          var ctx =
+              new net.minecraft.world.item.context.BlockPlaceContext(
+                  player,
+                  net.minecraft.world.InteractionHand.MAIN_HAND,
+                  new net.minecraft.world.item.ItemStack(MarsMachines.REGOLITH_OUTGASSER.get()),
+                  new BlockHitResult(
+                      Vec3.atCenterOf(h.absolutePos(new BlockPos(0, 0, 0))),
+                      net.minecraft.core.Direction.UP,
+                      h.absolutePos(new BlockPos(0, 0, 0)),
+                      false));
+          return MarsMachines.REGOLITH_OUTGASSER.get().getStateForPlacement(ctx) != null;
+        };
+    boolean before = canPlace.get();
+    ok &=
+        SelfTest.check(
+            "gate.survival_refused_before",
+            "a survival player cannot place the Outgasser before Dome stable",
+            "canPlace=" + before + " creative=" + player.isCreative(),
+            !before && !player.isCreative());
+    player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+    boolean creative = canPlace.get();
+    player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+    ok &=
+        SelfTest.check(
+            "gate.creative_route",
+            "a creative player can place it (admin route)",
+            "canPlace=" + creative,
+            creative);
+    power(data, 1);
+    sim.model().advanceSols(3.2);
+    boolean after = canPlace.get();
+    ok &=
+        SelfTest.check(
+            "gate.unlocked_after_three_sols",
+            "after 3 sols of life support the gate has latched and a survival player can place it",
+            "latched=" + sim.gates().isLatched("mars:dome_stable") + " canPlace=" + after,
+            after && sim.gates().isLatched("mars:dome_stable"));
+    unpower(data, 1);
+    sim.model().advanceSols(5);
+    ok &=
+        SelfTest.check(
+            "gate.stays_latched",
+            "the gate stays latched after power is removed (gates lock in)",
+            "latched=" + sim.gates().isLatched("mars:dome_stable"),
+            sim.gates().isLatched("mars:dome_stable"));
+    PlanetData back =
+        PlanetData.load(
+            data.save(new CompoundTag(), level.registryAccess()), level.registryAccess());
+    ok &=
+        SelfTest.check(
+            "gate.nbt_round_trip",
+            "latched gate and cause survive an NBT save and load",
+            "latched=" + back.sim().gates().isLatched("mars:dome_stable"),
+            back.sim().gates().isLatched("mars:dome_stable")
+                && back.sim().gates().state("mars:dome_stable").cause()
+                    == mars.gates.GateTracker.Cause.REACHED);
+    data.sim().model().set(Ids.PRESSURE, 0.6);
+    finish(h, ok, "domeStableUnlocksTheOutgasser");
   }
 }

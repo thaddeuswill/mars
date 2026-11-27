@@ -57,6 +57,70 @@ public final class PlanetManager {
     }
   }
 
+  /**
+   * May this player place the machine here? Survival players need every gate that unlocks it to
+   * have latched. Creative players pass (the creative and admin route, logged). Not a planet: yes.
+   * On refusal the player is told why.
+   */
+  public static boolean placementAllowed(
+      net.minecraft.world.level.Level level,
+      net.minecraft.world.entity.player.Player player,
+      String type) {
+    if (!(level instanceof ServerLevel server) || !isPlanet(server)) {
+      return true;
+    }
+    mars.gates.GateDef lock = data(server).sim().gates().lockedBy(type);
+    if (lock == null) {
+      return true;
+    }
+    if (player != null && player.isCreative()) {
+      LOG.info(
+          "{} placed {} in creative before gate {} (admin route)",
+          player.getName().getString(),
+          type,
+          lock.id());
+      return true;
+    }
+    if (player != null) {
+      player.displayClientMessage(
+          net.minecraft.network.chat.Component.translatable(
+              "gate.locked.placement",
+              net.minecraft.network.chat.Component.translatable(lock.nameKey())),
+          true);
+    }
+    return false;
+  }
+
+  /** Tell every player on the planet about gates that latched since the last call. */
+  public static void announceGates(ServerLevel level, PlanetData d) {
+    for (String id : d.sim().drainNewlyLatched()) {
+      mars.gates.GateDef def =
+          d.sim().gates().defs().stream().filter(g -> g.id().equals(id)).findFirst().orElse(null);
+      if (def == null) {
+        continue;
+      }
+      LOG.info(
+          "Gate {} latched on {} at sol {} (cause {})",
+          id,
+          level.dimension().location(),
+          d.sim().model().sols(),
+          d.sim().gates().state(id).cause());
+      var name = net.minecraft.network.chat.Component.translatable(def.nameKey());
+      for (var player : level.players()) {
+        player.sendSystemMessage(
+            net.minecraft.network.chat.Component.translatable("gate.reached", name));
+        for (String m : def.unlocks()) {
+          player.sendSystemMessage(
+              net.minecraft.network.chat.Component.translatable(
+                  "gate.unlocked",
+                  net.minecraft.network.chat.Component.translatable(
+                      "block." + m.replace(':', '.'))));
+        }
+      }
+      d.setDirty();
+    }
+  }
+
   /** Tell the planet a machine's output changed (a dusty solar panel). Fraction is 0 to 1. */
   public static void machineOutput(ServerLevel level, BlockPos pos, double fraction) {
     PlanetData d = data(level);

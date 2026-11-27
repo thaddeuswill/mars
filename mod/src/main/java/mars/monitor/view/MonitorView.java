@@ -90,6 +90,7 @@ public record MonitorView(double sols, List<Row> rows) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
+    gateRows(sim, rows);
     return new MonitorView(model.sols(), List.copyOf(rows));
   }
 
@@ -131,6 +132,63 @@ public record MonitorView(double sols, List<Row> rows) {
               Fmt.number(grid.charge(), 1) + " / " + Fmt.number(grid.capacity(), 1) + " units"));
     }
     return java.util.Optional.of(new Row("monitor.row.power", "", key, null, null, lines));
+  }
+
+  /**
+   * Gate state in plain language: one "Next goal" row for the first gate not yet reached, with its
+   * progress (hold sols, or the value against its threshold), and a "Goals reached" row listing the
+   * latched ones. Gates lock in, so a reached goal never leaves the second row.
+   */
+  private static void gateRows(PlanetSim sim, List<Row> rows) {
+    var tracker = sim.gates();
+    List<CauseLine> reached = new ArrayList<>();
+    for (mars.gates.GateDef d : tracker.defs()) {
+      if (tracker.isLatched(d.id())) {
+        reached.add(new CauseLine(d.nameKey(), 0, ""));
+      }
+    }
+    for (mars.gates.GateDef d : tracker.defs()) {
+      if (tracker.isLatched(d.id())) {
+        continue;
+      }
+      String base = "monitor.gate." + d.id().substring(d.id().indexOf(':') + 1);
+      List<CauseLine> lines = new ArrayList<>();
+      var st = tracker.state(d.id());
+      if (d.hold() != null) {
+        double need = tracker.holdSols(d);
+        lines.add(
+            new CauseLine(
+                base + ".progress",
+                0,
+                Fmt.number(Math.min(st.heldSols(), need), 1)
+                    + " / "
+                    + Fmt.number(need, 0)
+                    + " sols"));
+        if (st.falseSols() > 0) {
+          lines.add(new CauseLine(base + ".waiting", 0, ""));
+        }
+      } else if (d.condition() instanceof mars.gates.Condition.Compare c) {
+        String unit = sim.model().unit(c.parameter());
+        double now = sim.model().current(c.parameter());
+        lines.add(
+            new CauseLine(
+                base + ".progress",
+                0,
+                Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit));
+      }
+      rows.add(new Row("monitor.row.next_goal", "", d.nameKey(), null, null, lines));
+      break;
+    }
+    if (!reached.isEmpty()) {
+      rows.add(
+          new Row(
+              "monitor.row.goals_reached",
+              reached.size() + " / " + tracker.defs().size(),
+              null,
+              null,
+              null,
+              reached));
+    }
   }
 
   private static String units(double v, String per, boolean signed) {

@@ -3,6 +3,7 @@ package mars.machines;
 import mars.planets.PlanetManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -17,6 +18,19 @@ public class RegolithOutgasserBlock extends MachineBlock {
 
   public RegolithOutgasserBlock(Properties properties, VoxelShape shape) {
     super(properties, shape);
+  }
+
+  /**
+   * Survival players may place it only after "Dome stable" (data/mars/gates). Creative players
+   * pass. Returning null cancels the placement before anything is registered. {@code /setblock},
+   * loot and other non-player routes do not go through here.
+   */
+  @Override
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
+    if (!PlanetManager.placementAllowed(context.getLevel(), context.getPlayer(), TYPE)) {
+      return null;
+    }
+    return super.getStateForPlacement(context);
   }
 
   @Override
