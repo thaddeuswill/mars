@@ -727,6 +727,38 @@ Design: `docs/design/journal-and-guidance-minimum.md` (owner accepted its recomm
 
 ---
 
+### 2.23 W1 terrain: the Mars chunk generator, landforms, new blocks, legacy mode (BACKLOG #49; built)
+
+Owner requirement: the ground must look like the real Mars surface, not generic hills. Source of shapes and numbers: `docs/science/mars-terrain-reference.md` (SME). Owner decisions applied: plains relief budget 3 to 6 blocks, drama from craters, dunes and mesas; large craters compressed about 25 times (labelled "stylised"); **one fixed wind direction per planet**, stored in planet data; new terrain for new worlds only; resources change build cost and placement, never Index rates; ores and ground ice are NEW blocks.
+
+**Pieces (and which are data, which are code)**
+
+| Piece | Where | Kind |
+|---|---|---|
+| Noise terrain: plains relief, mesa/butte spline, ridge spline, small caves | `pack/data/mars/worldgen/density_function/*.json`, `noise/*.json`, `noise_settings/planet.json` | Datapack (data) |
+| Surface rule: red dust (3 layers) over red sandstone, dark `mars:basaltic_sand` patches (noise threshold), terracotta bands on mesas | `noise_settings/planet.json` | Datapack |
+| Biomes `dust_plain`, `rocky_flats`, `highland_mesa` (multi-noise: rock-field noise and mesa-mask noise) | `worldgen/biome/`, `dimension/planet_1.json` | Datapack |
+| Craters (small many-few-big, large with flat floor and central peak), dunes with one wind direction, flat dome pad | pure `mars.terrain` (`Landforms`, `CraterField`, `DuneField`, `TerrainParams`); numbers in `pack/data/mars/planets/planet_1.json` | **Mod code** (small, pure, tested). A datapack feature cannot make a bowl-and-rim profile or a sawtooth dune |
+| The pass that applies them | `mars.dimension.MarsChunkGenerator` (extends the vanilla noise generator, registered as `mars:planet`): after the carver step and before any feature, it reshapes the 256 columns of the chunk it is generating | Mod code |
+| Ore veins (hematite, dark sand), ground-ice lenses, boulder patches | `worldgen/configured_feature`, `placed_feature` | Datapack |
+| Blocks `basaltic_sand`, `hematite_ore`, `dark_sand_ore`, `ground_ice` (plain blocks, placeholder textures, loot tables, one smelting recipe) | `mars.world.MarsTerrainBlocks`, `pack/assets`, `pack/data` | Mod code (registration) plus data |
+
+**Why a landform pass inside the generator and not a feature.** A feature runs after the neighbours' terrain is fixed and may write into only a small ring of chunks; a pass in the carver step sees only its own chunk and is a pure function of (world seed, x, z, natural height), so every chunk gets the same craters without asking its neighbours, and features (boulders, ice, ore) see the finished ground. Cost: about 7 to 9 ms per chunk for noise, surface and landforms on this build machine (boot check `terrain.cost`; vanilla is about 20 to 60 ms), no per-tick work at all. `mars.terrain` costs about 0.5 ms per chunk (unit test).
+
+**Wind.** `terrain.wind.blows_toward_deg` in the planet file (compass degrees, 0 = north, 90 = east, the direction the wind blows toward). `DuneField` turns it into a unit vector once. The gentle windward side takes `windward_fraction` of a wavelength and the slip face the rest. Unit tests check, at four wind directions, that the gentle side faces into the wind and the steep side points downwind, and that reversing the wind flips it. The density functions do not use the wind.
+
+**Existing saves keep the flat slab (the guarantee).** Facts, read from the Minecraft 1.21.1 source (`WorldDimensions.bake`): the datapack's `dimension/planet_1.json` takes precedence over the dimension saved in `level.dat`. So changing that file alone would have changed every old world: new, never-generated chunks would have come out as noise terrain next to old flat chunks. The mechanism instead:
+1. `MarsChunkGenerator` has a mode, `TerrainMode.LEGACY_FLAT` or `NOISE_V1`. In legacy mode it builds exactly the old slab (bedrock 1, stone 56, red sandstone 4, red sand 3 from y 0; `mars.terrain.LegacyFlat`), skips the surface rule and the features, and reports base height 64.
+2. When a world's Mars level loads (`LevelEvent.Load`), `TerrainModeData.resolve` reads the saved mode from `data/mars_terrain.dat` in the overworld's data folder. If there is none, it decides: the world already holds Mars data (any `dimensions/mars/*/region/*.mca`, any `mars_*.dat` in `data/` or in a Mars dimension's `data/`; `mars.terrain.LegacyDetect`) means legacy; otherwise `NOISE_V1`. The choice is saved at once and never changes.
+3. A generator with no mode set throws instead of guessing, so a missing hook cannot silently flip a world.
+Checked: unit tests with temp folders (`LegacyDetectTest`), boot checks (`terrain.legacy_slab`, `terrain.legacy_base_height`, `terrain.mode_required`), and a real client run that opened a save made before W1 (old flat Mars with region files), teleported 1.3 km away to never-generated chunks, and read back bedrock, stone, red sandstone, red sand and air from the old slab with `/execute if block` (`tools/screenshots/w1_legacy_save.shots`). Not checked: a dedicated server (needs the EULA), a save crash between world creation and the first save (the marker would be decided again; the same evidence is then seen, except for a brand-new world that never saved, which is still new).
+
+**Surface and relief numbers.** `base_height` 81 (`density_function/height.json`) gives a top block near y 80; the pad (`planets/planet_1.json` `pad.height_y` 80) sits at the mean ground. Plains noise is `6 x noise(scale 128) + 1 x noise(scale 16)`; a boot check measures the median relief of 64 x 64 plains windows (budget 3 to 6; measured median 4 with seed 20261127). The final density is `min(height - y, caves)` inside one `interpolated` node: the cave term is kept 16 blocks below the surface and 12 above the bottom, because cells are 8 blocks tall and a non-linear term near the surface bends the ground (found and fixed during this build: tops sat 3 to 12 blocks low until then).
+
+**Tests and what they cannot show.** Pure: `mars.terrain` unit tests and `TerrainContentTest` (every `mars:` reference in worldgen JSON resolves, amounts are data, ice depth, wind in planet data). Boot (headless GameTest server): `TerrainGameTests` run the real generator on bare chunks (`TerrainRig`: biomes, noise fill, surface rule, landforms) and the real placed features in a scratch corner of the test world. They cannot show a real world-gen region, lighting, the chunk system's neighbour rules, or how it looks. Those are the real-client screenshots. The GameTest server has no Mars level, so the full dimension is only exercised by the real client (and, later, `runSelftestServer`, which needs the EULA).
+
+**Not built in W1:** the canyon, the polar cap, the lava plain biome, delta fans and flood channels, ripples and pebbles, ground polygons, ground-ice behaviour (melt and collapse are W3), a "dune basin" biome (dunes use their own mask, so they are not tied to a biome), cluster rocks beyond the per-biome patches, and a survey scan to find the new blocks.
+
 ## 3. Coding Practices
 
 | Area | Convention |

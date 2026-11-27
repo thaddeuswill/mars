@@ -20,10 +20,19 @@ You need **Minecraft: Java Edition** (not Bedrock, not Minecraft Education) and 
    | macOS | `~/Library/Application Support/minecraft/mods` |
    | Linux | `~/.minecraft/mods` |
 4. **Start the NeoForge installation** from the Launcher. On the title screen, click **Mods**: “Mars Terraforming” should be listed.
-5. **Create a new world** (Singleplayer → Create New World; any settings). Use a **new** world: whether an old world picks up the Mars dimension is **unverified**.
-6. **Go to Mars:** press `T` and type `/mars go`. You land on flat red sand at the centre of planet 1. Type `/mars back` to return to the world spawn. (These two commands work without cheats in this build; later builds replace them with planet assignment.)
-   - Alternative with cheats on: `/execute in mars:planet_1 run tp @s 0 64 0`.
-7. **What you should see:** flat red sand to the horizon, a tan sky and tan-brown fog (the starting colors from the pressure keyframes), no mobs, no weather. If you see something else, a screenshot helps.
+5. **Create a new world** (Singleplayer → Create New World; any settings). A world made with an older build keeps its old flat Mars (see "New terrain (W1)" below); to see the new Mars, make a new world.
+6. **Go to Mars:** press `T` and type `/mars go`. You land on a flat starting pad at the centre of planet 1 (a new world; an older world lands on the old flat sand). Type `/mars back` to return to the world spawn. (These two commands work without cheats in this build; later builds replace them with planet assignment.)
+   - Alternative with cheats on (new world, pad top block at y 80): `/execute in mars:planet_1 run tp @s 0 82 0`.
+7. **What you should see (new world):** a flat red-ochre pad about 64 blocks wide, then gently uneven ground (3 to 6 blocks of relief) with darker patches, small craters with raised rims, and dark dunes and layered flat-topped buttes farther out; a tan sky and tan-brown fog (the starting colors from the pressure keyframes), no mobs, no weather. If you see something else, a screenshot helps.
+
+### 1-W1. New terrain (W1)
+
+- **Only new worlds get it.** Each world remembers which Mars it has. A world that already had Mars data (made with an older build) keeps the old flat red sand forever, also in chunks you have not visited yet, so you never see a seam. The choice is saved in the world's `data/mars_terrain.dat` and the game log says `Mars terrain mode for mars:planet_1: noise_v1` (new) or `legacy_flat` (old). To see the new Mars in an old save, make a new world.
+- **Places to look (any new world, creative, `/mars go` first).** Spawn pad: the 32 blocks around you are exactly flat. Small craters are a few dozen blocks away (the first two are hand-placed at about x 70, z -52 and x -58, z 74). Large craters with a central peak and flat floor are 120 to 300 blocks wide and come about one per 1000 blocks. Dune fields have gentle slopes on the upwind side and steep slip faces downwind (the wind blows toward compass 110 degrees, set in `pack/data/mars/planets/planet_1.json`). Layered flat-topped buttes (10 to 27 blocks high) are about 100 blocks and more from the pad. Fly with creative flight to see them from above.
+- **New blocks (creative tab "Mars Terrain").** Basaltic Sand (dark surface patches and dune sand), Hematite Ore (drops raw iron; found in veins in rock and richly in the butte country), Dark Sand Ore (smelts to glass), Ground Ice (lenses 3 to 12 blocks under the surface; plain blocks for now, melting is later). Their textures are **placeholders**. All ore amounts and places are invented numbers in `pack/data/mars/worldgen/`.
+- **Stylised.** Large craters are shrunk about 25 times and the buttes are much smaller than real ones; the journal will say so.
+- **Cost.** About 8 ms per chunk to generate on the build machine, no per-tick cost. If chunk loading feels slow on a weak computer, lower the render distance first.
+- **Not in yet.** The canyon, the polar cap, ripples and pebbles, river-channel boulder fields, and anything that melts the ice.
 
 ### 1a. Try a powered pressure setup
 

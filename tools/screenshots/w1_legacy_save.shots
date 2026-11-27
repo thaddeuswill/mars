@@ -1,0 +1,26 @@
+# W1: a world made BEFORE W1 (old flat Mars, copied to mod/run-shots/saves/legacy-flat-test) must keep its flat Mars,
+# also in chunks that were never generated. Run: MARS_SHOT_WORLD=legacy-flat-test tools/screenshots/run-shots.sh /ABS/w1_legacy_save.shots
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 200
+view 0.5 70 0.5 250 5
+wait 100
+hud on
+shot w1_legacy_01_origin
+view 1200.5 70 900.5 250 5
+wait 400
+cmd /execute if block 1200 63 900 minecraft:red_sand
+cmd /execute if block 1200 64 900 minecraft:air
+cmd /execute if block 1200 57 900 minecraft:red_sandstone
+cmd /execute if block 1200 56 900 minecraft:stone
+cmd /execute if block 1200 0 900 minecraft:bedrock
+wait 40
+hud on
+shot w1_legacy_02_new_chunks_far_away
+cmd /mars index get
+wait 40
+quit

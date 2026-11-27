@@ -124,6 +124,15 @@ public final class DevTools {
     }
     worldRequested = true;
     Minecraft mc = Minecraft.getInstance();
+    // -Dmars.shots.world=<save folder name> opens that existing save instead of creating a fresh
+    // one
+    // (used to prove that a world made before W1 keeps its flat Mars).
+    String existing = System.getProperty("mars.shots.world", "");
+    if (!existing.isEmpty()) {
+      log("title screen reached; opening existing world " + existing);
+      mc.createWorldOpenFlows().openWorld(existing, () -> log("opening " + existing + " failed"));
+      return;
+    }
     String name = "mars-shots-" + System.currentTimeMillis();
     log("title screen reached; creating test world " + name);
     LevelSettings settings =
@@ -150,8 +159,40 @@ public final class DevTools {
             event.getScreen());
   }
 
+  private static net.minecraft.client.gui.screens.Screen lastScreen;
+
+  /**
+   * Opening an existing world can stop on a confirmation (backup or experimental-settings
+   * question). A fresh world never does. Answer it so a script can run unattended.
+   */
+  private static void answerConfirmations(Minecraft mc) {
+    var screen = mc.screen;
+    if (screen == null || screen == lastScreen) {
+      return;
+    }
+    lastScreen = screen;
+    log("screen while waiting for the world: " + screen.getClass().getSimpleName());
+    java.util.List<net.minecraft.client.gui.components.Button> buttons =
+        screen.children().stream()
+            .filter(c -> c instanceof net.minecraft.client.gui.components.Button)
+            .map(c -> (net.minecraft.client.gui.components.Button) c)
+            .toList();
+    if (screen instanceof net.minecraft.client.gui.screens.BackupConfirmScreen
+        && buttons.size() >= 2) {
+      log("choosing: " + buttons.get(1).getMessage().getString());
+      buttons.get(1).onPress(); // "Load without backup"
+    } else if (screen instanceof net.minecraft.client.gui.screens.ConfirmScreen
+        && !buttons.isEmpty()) {
+      log("choosing: " + buttons.get(0).getMessage().getString());
+      buttons.get(0).onPress();
+    }
+  }
+
   private static void onTick(ClientTickEvent.Post event) {
     Minecraft mc = Minecraft.getInstance();
+    if (mc.player == null && !System.getProperty("mars.shots.world", "").isEmpty()) {
+      answerConfirmations(mc);
+    }
     if (mc.player == null || mc.level == null || SCRIPT.isEmpty()) {
       return;
     }

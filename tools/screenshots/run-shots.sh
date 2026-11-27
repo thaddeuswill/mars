@@ -18,7 +18,7 @@ cd "$repo/mod"
 start=$(date +%s)
 set +e
 timeout 1500 xvfb-run -a -s "-screen 0 1280x720x24" \
-  ./gradlew runShotsClient --console=plain -PmarsShotScript="$script" ${MARS_PACK_DIR:+-PmarsPackDir=$MARS_PACK_DIR} 2>&1 | tee "$out/client.log" \
+  ./gradlew runShotsClient --console=plain -PmarsShotScript="$script" ${MARS_PACK_DIR:+-PmarsPackDir=$MARS_PACK_DIR} ${MARS_SHOT_WORLD:+-PmarsShotWorld=$MARS_SHOT_WORLD} 2>&1 | tee "$out/client.log" \
   | grep --line-buffered -E "MARS-SHOTS|OpenGL|GL version|ERROR|Exception|BUILD"
 rc=${PIPESTATUS[0]}
 set -e

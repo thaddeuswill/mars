@@ -1,0 +1,26 @@
+# W1: the Outgasser, Oven, solar array, battery and Monitor on the REAL generated pad (no test pad). Pad top block is y 80.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /mars index get
+cmd /setblock 0 81 4 mars:planetary_monitor
+cmd /setblock 2 81 4 mars:regolith_outgasser
+cmd /setblock 4 81 4 mars:regolith_outgasser
+cmd /setblock 12 81 12 mars:solar_panel
+cmd /setblock 6 81 4 mars:battery
+wait 20
+cmd /mars index advance 10
+cmd /mars index get
+cmd /mars monitor
+wait 60
+shot w1_machines_monitor_on_terrain
+view 6 84 -6 160 12
+wait 60
+hud off
+shot w1_machines_on_pad
+wait 10
+quit

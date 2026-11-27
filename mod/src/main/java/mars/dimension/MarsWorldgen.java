@@ -20,6 +20,8 @@ public final class MarsWorldgen {
     GENERATORS.register("planet", () -> MarsChunkGenerator.CODEC);
   }
 
+  private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("mars");
+
   private MarsWorldgen() {}
 
   public static void register(IEventBus modBus) {
@@ -35,6 +37,7 @@ public final class MarsWorldgen {
         && level.getChunkSource().getGenerator() instanceof MarsChunkGenerator gen) {
       TerrainMode mode = TerrainModeData.resolve(level.getServer());
       gen.setMode(mode);
+      LOG.info("Mars terrain mode for {}: {}", level.dimension().location(), mode.id());
       mars.selftest.SelfTest.info("terrain_mode", level.dimension().location() + " " + mode.id());
     }
   }

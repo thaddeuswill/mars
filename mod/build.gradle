@@ -48,6 +48,9 @@ neoForge {
             systemProperty 'mars.devtools', 'true'
             // Sky screenshots: a 2 s time constant instead of the data's 30 s, so a shot needs seconds, not minutes.
             systemProperty 'mars.sky.smoothing_s', '2'
+            if (project.findProperty('marsShotWorld')) {
+                systemProperty 'mars.shots.world', project.findProperty('marsShotWorld')
+            }
             systemProperty 'mars.shots.script', (project.findProperty('marsShotScript') ?: file('../tools/screenshots/stage1.shots').absolutePath)
         }
         // Boot test (test-strategy L3): starts a headless GameTest server with the mod,
