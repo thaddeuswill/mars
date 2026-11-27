@@ -14,7 +14,34 @@ import mars.power.PowerGrid;
  * client only draws it and holds no planet state. Labels are language keys; numbers are already
  * formatted here by {@link Fmt}, so every reader of the log or screen sees the same text.
  */
-public record MonitorView(double sols, List<Row> rows) {
+public record MonitorView(double sols, List<Row> rows, History history) {
+
+  /** A view with no pressure history (new planet, or a test that does not need one). */
+  public MonitorView(double sols, List<Row> rows) {
+    this(sols, rows, History.EMPTY);
+  }
+
+  /** At most this many plot points are sent; the plot is about 200 px wide. */
+  public static final int MAX_PLOT_POINTS = 60;
+
+  /** One plot point: sol and pressure. */
+  public record Point(double sol, double value) {}
+
+  /**
+   * A plot marker: a vertical line at {@code sol} with a label. The label is {@code labelKey}
+   * formatted with the translation of {@code argKey} when that is not null.
+   */
+  public record Marker(double sol, String labelKey, String argKey) {}
+
+  /** The pressure plot: points in time order, markers, and the unit for the axis label. */
+  public record History(List<Point> points, List<Marker> markers, String unit) {
+    public static final History EMPTY = new History(List.of(), List.of(), "kPa");
+
+    /** True when there are at least two points spanning some time, so a line can be drawn. */
+    public boolean drawable() {
+      return points.size() >= 2 && points.get(points.size() - 1).sol() > points.get(0).sol() + 1e-6;
+    }
+  }
 
   /** A trend in one value's direction; steady below {@link #EPSILON} per sol. */
   public enum Trend {
@@ -174,7 +201,50 @@ public record MonitorView(double sols, List<Row> rows) {
     }
     powerRow(sim).ifPresent(rows::add);
     gateRows(sim, rows);
-    return new MonitorView(model.sols(), List.copyOf(rows));
+    return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
+  }
+
+  /**
+   * The plot data: the stored samples thinned to at most {@link #MAX_PLOT_POINTS} (first and last
+   * always kept), plus the current value as the last point. Markers come from the stored events.
+   */
+  static History historyOf(PlanetSim sim) {
+    var stored = sim.history().samples();
+    List<Point> pts = new ArrayList<>();
+    for (var s : stored) {
+      pts.add(new Point(s.sol(), s.value()));
+    }
+    double now = sim.model().sols();
+    double p = sim.model().snapshot().get(Ids.PRESSURE);
+    if (pts.isEmpty() || now > pts.get(pts.size() - 1).sol() + 1e-9) {
+      pts.add(new Point(now, p));
+    }
+    if (pts.size() > MAX_PLOT_POINTS) {
+      List<Point> thin = new ArrayList<>(MAX_PLOT_POINTS);
+      int n = pts.size();
+      for (int i = 0; i < MAX_PLOT_POINTS; i++) {
+        thin.add(pts.get((int) Math.round(i * (n - 1) / (double) (MAX_PLOT_POINTS - 1))));
+      }
+      pts = thin;
+    }
+    List<Marker> marks = new ArrayList<>();
+    for (var e : sim.history().events()) {
+      String path = e.id().substring(e.id().indexOf(':') + 1);
+      marks.add(
+          switch (e.kind()) {
+            case MACHINE_PLACED -> new Marker(e.sol(), "monitor.event.placed." + path, null);
+            case GATE_LATCHED ->
+                new Marker(
+                    e.sol(),
+                    "gate.reached",
+                    sim.gates().defs().stream()
+                        .filter(d -> d.id().equals(e.id()))
+                        .map(mars.gates.GateDef::nameKey)
+                        .findFirst()
+                        .orElse("gate." + e.id().replace(':', '.')));
+          });
+    }
+    return new History(List.copyOf(pts), List.copyOf(marks), sim.model().unit(Ids.PRESSURE));
   }
 
   /**

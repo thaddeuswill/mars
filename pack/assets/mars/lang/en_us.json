@@ -31,6 +31,8 @@
   "monitor.cause.dusty": "dusty, makes less",
   "monitor.goals.count": "Goals %s",
   "monitor.close_hint": "Esc to close",
+  "monitor.event.placed.regolith_outgasser": "Outgasser placed",
+  "monitor.plot.empty": "Pressure history starts after the first sol.",
   "monitor.row.next_goal": "Next goal",
   "monitor.row.goals_reached": "Goals reached",
   "gate.mars.dome_stable": "Dome stable",

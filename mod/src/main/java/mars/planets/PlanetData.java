@@ -10,7 +10,6 @@ import mars.index.sim.PlanetSim;
 import mars.index.sim.PlanetState;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.DoubleArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.Tag;
@@ -108,10 +107,14 @@ public final class PlanetData extends SavedData {
     CompoundTag ht = new CompoundTag();
     ht.putInt("stride", h.stride());
     ht.putDouble("nextSol", h.nextSol());
-    ht.put(
-        "sols", new DoubleArrayTag(h.samples().stream().mapToDouble(x -> x.sol()).toArray()));
-    ht.put(
-        "values", new DoubleArrayTag(h.samples().stream().mapToDouble(x -> x.value()).toArray()));
+    ListTag solTag = new ListTag();
+    ListTag valueTag = new ListTag();
+    for (var x : h.samples()) {
+      solTag.add(DoubleTag.valueOf(x.sol()));
+      valueTag.add(DoubleTag.valueOf(x.value()));
+    }
+    ht.put("sols", solTag);
+    ht.put("values", valueTag);
     ListTag events = new ListTag();
     for (var e : h.events()) {
       CompoundTag et = new CompoundTag();
@@ -200,6 +203,11 @@ public final class PlanetData extends SavedData {
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {
-    return t.get(key) instanceof DoubleArrayTag a ? a.getAsDoubleArray() : new double[0];
+    ListTag l = t.getList(key, Tag.TAG_DOUBLE);
+    double[] out = new double[l.size()];
+    for (int i = 0; i < out.length; i++) {
+      out[i] = l.getDouble(i);
+    }
+    return out;
   }
 }
