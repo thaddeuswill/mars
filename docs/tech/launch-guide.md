@@ -35,7 +35,7 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 
 ### 1b. Goals (slice 4)
 
-On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time**; operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
+On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time in standard pace** (in classroom pace the bypass is off; see `/mars pace`); operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
 
 ### 1c. Operator controls
 
@@ -47,6 +47,8 @@ Enable cheats for the following commands in a singleplayer test world.
 | `/mars index get` | Inspect the current planet's simulation values. |
 | `/mars index advance 3.2` | Advance the planet by 3.2 sols for a test. |
 | `/mars pause`, `/mars resume`, `/mars session` | Pause, resume, or inspect the session. |
+| `/mars pace` | Show the world's pace: standard or classroom, rate multiplier, group size, creative bypass. |
+| `/mars pace standard [1-5]`, `/mars pace classroom [1-5]` | Choose the pace for this world (saved with the world; default standard). Classroom: rates x4, group size 4 unless you give one, holds shorter (Dome stable 1 sol instead of 3), the creative gate bypass is switched off, and the teacher-only guidance rules apply. Thresholds (5 kPa and the rest) are the same in both. The planet keeps its numbers and goals when you switch. Numbers live in `pack/data/mars/pace.json`. |
 
 Slice 8 operator commands (permission level 2, all logged; they work only inside a Mars dimension):
 

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TreeMap;
-import mars.index.sim.Pace;
 import mars.index.sim.PlanetReport;
 import mars.planets.CheckpointData;
 import mars.planets.Checkpoints;
@@ -204,7 +203,7 @@ public final class AdminCommands {
     String id = level.dimension().location().toString();
     String text =
         PlanetReport.text(
-            id, d.sim().toState(), Pace.STANDARD, clock.sessionNumber(), clock.paused());
+            id, d.sim().toState(), d.sim().pace(), clock.sessionNumber(), clock.paused());
     Files.createDirectories(dir);
     String stamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
     Path file = dir.resolve(stamp + "_" + id.replace(':', '_') + ".txt");

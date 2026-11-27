@@ -62,6 +62,12 @@ public final class IndexCommands {
                                     Commands.argument("gate", StringArgumentType.word())
                                         .executes(IndexCommands::gateLatch))))
                 .then(
+                    Commands.literal("pace")
+                        .requires(s -> s.hasPermission(2))
+                        .executes(ctx -> paceShow(ctx))
+                        .then(paceMode("standard"))
+                        .then(paceMode("classroom")))
+                .then(
                     Commands.literal("monitor")
                         .requires(s -> s.hasPermission(2))
                         .executes(
@@ -69,6 +75,58 @@ public final class IndexCommands {
                               MonitorSender.open(ctx.getSource().getPlayerOrException());
                               return 1;
                             })));
+  }
+
+  private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> paceMode(
+      String name) {
+    return Commands.literal(name)
+        .executes(ctx -> paceSet(ctx, name, null))
+        .then(
+            Commands.argument(
+                    "group_size", com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, 5))
+                .executes(
+                    ctx ->
+                        paceSet(
+                            ctx,
+                            name,
+                            com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(
+                                ctx, "group_size"))));
+  }
+
+  /** {@code /mars pace}: show the world's pace. */
+  private static int paceShow(CommandContext<CommandSourceStack> ctx) {
+    mars.index.sim.Pace p = PlanetManager.pace(ctx.getSource().getLevel());
+    ctx.getSource().sendSuccess(() -> Component.literal(paceText(p)), false);
+    return 1;
+  }
+
+  static String paceText(mars.index.sim.Pace p) {
+    return "Pace: "
+        + (p.classroom() ? "classroom" : "standard")
+        + ", rates x"
+        + Fmt.number(p.rateMultiplier(), 1)
+        + ", group size "
+        + p.groupSize()
+        + ", creative gate bypass "
+        + (p.creativeGateBypass() ? "on" : "off")
+        + ". Thresholds are never scaled.";
+  }
+
+  /**
+   * {@code /mars pace standard|classroom [group_size]}: operator only, logged, saved in the world.
+   */
+  private static int paceSet(CommandContext<CommandSourceStack> ctx, String mode, Integer group)
+      throws CommandSyntaxException {
+    var server = ctx.getSource().getServer();
+    try {
+      PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.parse(mode), group);
+    } catch (IllegalArgumentException e) {
+      throw new SimpleCommandExceptionType(Component.literal(e.getMessage())).create();
+    }
+    mars.index.sim.Pace p = PlanetManager.pace(ctx.getSource().getLevel());
+    LOG.info("ADMIN {} set the pace: {}", ctx.getSource().getTextName(), paceText(p));
+    ctx.getSource().sendSuccess(() -> Component.literal("Set. " + paceText(p)), true);
+    return 1;
   }
 
   private static PlanetData planet(CommandContext<CommandSourceStack> ctx)

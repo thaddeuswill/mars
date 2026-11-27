@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * One planet's Planetary Index, saved with its dimension (ARCHITECTURE.md 1.5, 7). The pure {@link
- * PlanetSim} does the work; this class only adds saving and loading. Slice 1 always uses {@link
- * Pace#STANDARD}; pacing config is a later slice (docs/tech/stage2-plan.md).
+ * PlanetSim} does the work; this class only adds saving and loading. The pace (standard or
+ * classroom, from {@link PaceData}) is passed in; it is not saved with the planet.
  */
 public final class PlanetData extends SavedData {
   private static final Logger LOG = LoggerFactory.getLogger("mars");
@@ -38,34 +38,29 @@ public final class PlanetData extends SavedData {
   }
 
   /** {@code planetId} (the dimension, "mars:planet_1") picks the planet's frost baseline. */
-  public static SavedData.Factory<PlanetData> factory(String planetId) {
-    return new SavedData.Factory<>(() -> createNew(planetId), (t, r) -> load(planetId, t, r));
+  public static SavedData.Factory<PlanetData> factory(String planetId, Pace pace) {
+    return new SavedData.Factory<>(
+        () -> createNew(planetId, pace), (t, r) -> load(planetId, pace, t, r));
   }
 
-  private static PlanetData createNew(String planetId) {
+  private static PlanetData createNew(String planetId, Pace pace) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     return new PlanetData(
-        new PlanetSim(
-            d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), Pace.STANDARD));
+        new PlanetSim(d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), pace));
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
   public static PlanetData load(
-      String planetId, CompoundTag tag, HolderLookup.Provider registries) {
-    return fromState(planetId, fromNbt(tag));
+      String planetId, Pace pace, CompoundTag tag, HolderLookup.Provider registries) {
+    return fromState(planetId, fromNbt(tag), pace);
   }
 
   /** Build a planet from a saved state (used by load and by rollback). */
-  public static PlanetData fromState(String planetId, PlanetState state) {
+  public static PlanetData fromState(String planetId, PlanetState state, Pace pace) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     PlanetSim.Loaded loaded =
         PlanetSim.fromState(
-            state,
-            d.index(),
-            d.machines(),
-            d.gates(),
-            d.frost().forPlanet(planetId),
-            Pace.STANDARD);
+            state, d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), pace);
     if (!loaded.report().ignored().isEmpty()) {
       LOG.warn(
           "Planet save has values this build doesn't know (kept out): {}",
@@ -84,8 +79,8 @@ public final class PlanetData extends SavedData {
   }
 
   /** A brand-new planet at its start values (for rollback to the start). */
-  public static PlanetData fresh(String planetId) {
-    return createNew(planetId);
+  public static PlanetData fresh(String planetId, Pace pace) {
+    return createNew(planetId, pace);
   }
 
   @Override

@@ -9,13 +9,25 @@ package mars.index.sim;
  * @param solTicks {@code pace.solTicks}: simulation ticks per sol (24,000 = 20 minutes)
  * @param stepTicks simulation ticks per Index step (100 = 5 seconds)
  * @param classroom classroom mode: shorter holds (balance sheet 4); never changes a threshold
+ * @param creativeGateBypass may a creative player place a gated machine early (on in standard, off
+ *     in classroom; the preset comes from data/mars/pace.json, see {@link PaceConfig})
  */
 public record Pace(
-    double rateMultiplier, int groupSize, int solTicks, int stepTicks, boolean classroom) {
+    double rateMultiplier,
+    int groupSize,
+    int solTicks,
+    int stepTicks,
+    boolean classroom,
+    boolean creativeGateBypass) {
   public static final Pace STANDARD = new Pace(1.0, 1, 24_000, 100);
 
   public Pace(double rateMultiplier, int groupSize, int solTicks, int stepTicks) {
-    this(rateMultiplier, groupSize, solTicks, stepTicks, false);
+    this(rateMultiplier, groupSize, solTicks, stepTicks, false, true);
+  }
+
+  public Pace(
+      double rateMultiplier, int groupSize, int solTicks, int stepTicks, boolean classroom) {
+    this(rateMultiplier, groupSize, solTicks, stepTicks, classroom, !classroom);
   }
 
   /** Classroom preset (balance sheet 5.1): rates x4, short holds, the given group size. */

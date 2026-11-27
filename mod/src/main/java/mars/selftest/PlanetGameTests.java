@@ -196,7 +196,11 @@ public final class PlanetGameTests {
     data.sim().model().advanceSols(2); // under the 3 sol Dome stable hold, so no gate latches here
     CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
     PlanetData back =
-        PlanetData.load(level.dimension().location().toString(), tag, level.registryAccess());
+        PlanetData.load(
+            level.dimension().location().toString(),
+            PlanetManager.pace(level),
+            tag,
+            level.registryAccess());
     boolean same = data.sim().toState().equals(back.sim().toState());
     boolean ok =
         SelfTest.check(
@@ -238,7 +242,11 @@ public final class PlanetGameTests {
     future.putInt("schema", 99);
     String refused;
     try {
-      PlanetData.load(level.dimension().location().toString(), future, level.registryAccess());
+      PlanetData.load(
+          level.dimension().location().toString(),
+          PlanetManager.pace(level),
+          future,
+          level.registryAccess());
       refused = "loaded (wrong)";
     } catch (IllegalStateException e) {
       refused = "refused: " + e.getMessage();
@@ -834,7 +842,11 @@ public final class PlanetGameTests {
                       && MonitorPayload.CODEC.decode(buf2).view().equals(notePayload));
           CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
           PlanetData back =
-              PlanetData.load(level.dimension().location().toString(), tag, level.registryAccess());
+              PlanetData.load(
+                  level.dimension().location().toString(),
+                  PlanetManager.pace(level),
+                  tag,
+                  level.registryAccess());
           ok2 &=
               SelfTest.check(
                   "frost.reservoir_nbt_round_trip",
@@ -930,6 +942,121 @@ public final class PlanetGameTests {
   }
 
   /**
+   * Slice 9: {@code /mars pace} switches the world between standard and classroom. The pace file is
+   * loaded by the reload listener; the command (run as an operator) changes the pace, the group
+   * size is validated, the creative gate bypass goes off, classroom guidance rules see classroom
+   * mode, the thresholds do not move, the choice is saved, and the planet's numbers survive the
+   * switch.
+   */
+  @GameTest(template = "empty", batch = "mars_pace")
+  public static void paceCommandSwitchesClassroomMode(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    var server = level.getServer();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    boolean ok = true;
+    try {
+      var cfg = IndexDefinitions.require().pace();
+      ok &=
+          SelfTest.check(
+              "pace.file_loaded",
+              "pace.json read by the reload listener: standard x1, classroom x4",
+              "standard=" + cfg.standard() + " classroom=" + cfg.classroom(),
+              cfg.standard().rateMultiplier() == 1.0 && cfg.classroom().rateMultiplier() == 4.0);
+      var before = PlanetManager.pace(level);
+      ok &=
+          SelfTest.check(
+              "pace.default_standard",
+              "a world that never ran /mars pace is standard with the creative bypass on",
+              "pace=" + before,
+              !before.classroom()
+                  && before.creativeGateBypass()
+                  && !mars.planets.LearningService.classroom(level));
+      data.sim().model().advanceSols(1.5);
+      var valuesBefore = data.sim().toState().values();
+      var source = server.createCommandSourceStack().withLevel(level);
+      server.getCommands().performPrefixedCommand(source, "mars pace classroom 3");
+      var room = PlanetManager.pace(level);
+      PlanetData after = PlanetManager.data(level);
+      ok &=
+          SelfTest.check(
+              "pace.command_classroom",
+              "/mars pace classroom 3 sets classroom, rates x4, group 3, creative bypass off",
+              "pace=" + room,
+              room.classroom()
+                  && room.rateMultiplier() == 4.0
+                  && room.groupSize() == 3
+                  && !room.creativeGateBypass()
+                  && after.sim().pace().equals(room));
+      ok &=
+          SelfTest.check(
+              "pace.planet_kept",
+              "switching the pace keeps the planet's numbers",
+              "before="
+                  + valuesBefore.get("mars:pressure")
+                  + " after="
+                  + after.sim().toState().values().get("mars:pressure"),
+              valuesBefore.equals(after.sim().toState().values()));
+      FakePlayer player =
+          FakePlayerFactory.get(
+              level,
+              new GameProfile(
+                  UUID.fromString("6d617273-0000-4000-8000-000000000009"), "[PaceTest]"));
+      player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+      boolean creativeRoom =
+          PlanetManager.placementAllowed(level, player, "mars:regolith_outgasser");
+      ok &=
+          SelfTest.check(
+              "pace.classroom_bypass_off",
+              "in classroom a creative player is refused a gated machine",
+              "allowed=" + creativeRoom,
+              !creativeRoom);
+      ok &=
+          SelfTest.check(
+              "pace.guidance_classroom",
+              "LearningService sees classroom mode (teacher-only guidance rules apply)",
+              "classroom=" + mars.planets.LearningService.classroom(level),
+              mars.planets.LearningService.classroom(level));
+      // The saved choice reads back.
+      CompoundTag tag =
+          mars.planets.PaceData.get(server).save(new CompoundTag(), level.registryAccess());
+      var back = mars.planets.PaceData.load(tag, level.registryAccess());
+      ok &=
+          SelfTest.check(
+              "pace.saved",
+              "the pace choice survives an NBT save and load",
+              "nbt=" + tag,
+              back.pace(cfg).equals(room));
+      // A group size outside 1 to 5 is refused and changes nothing.
+      boolean refused = false;
+      try {
+        PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.CLASSROOM, 9);
+      } catch (IllegalArgumentException e) {
+        refused = true;
+      }
+      ok &=
+          SelfTest.check(
+              "pace.group_range",
+              "group size 9 is refused and the pace is unchanged",
+              "refused=" + refused,
+              refused && PlanetManager.pace(level).equals(room));
+      server.getCommands().performPrefixedCommand(source, "mars pace standard");
+      var std = PlanetManager.pace(level);
+      player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+      ok &=
+          SelfTest.check(
+              "pace.command_standard",
+              "/mars pace standard returns to standard, creative bypass on",
+              "pace=" + std,
+              !std.classroom()
+                  && std.rateMultiplier() == 1.0
+                  && PlanetManager.placementAllowed(level, player, "mars:regolith_outgasser"));
+    } finally {
+      PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.STANDARD, null);
+    }
+    finish(h, ok, "paceCommandSwitchesClassroomMode");
+  }
+
+  /**
    * Slice 4 with real blocks and the real reload path: the gate files are loaded; a survival player
    * cannot place the Regolith Outgasser before "Dome stable"; a creative player can (admin route);
    * after the gate latches (real power for 3 sols) a survival player can; the gate stays latched
@@ -1001,6 +1128,7 @@ public final class PlanetGameTests {
     PlanetData back =
         PlanetData.load(
             level.dimension().location().toString(),
+            PlanetManager.pace(level),
             data.save(new CompoundTag(), level.registryAccess()),
             level.registryAccess());
     ok &=

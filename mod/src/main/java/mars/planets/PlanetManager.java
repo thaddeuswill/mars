@@ -1,6 +1,7 @@
 package mars.planets;
 
 import mars.core.Planets;
+import mars.index.IndexDefinitions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -31,7 +32,36 @@ public final class PlanetManager {
     return level
         .getDataStorage()
         .computeIfAbsent(
-            PlanetData.factory(level.dimension().location().toString()), PlanetData.NAME);
+            PlanetData.factory(level.dimension().location().toString(), pace(level)),
+            PlanetData.NAME);
+  }
+
+  /** This world's pace (standard or classroom, chosen by an operator; default standard). */
+  public static mars.index.sim.Pace pace(ServerLevel level) {
+    return PaceData.get(level.getServer()).pace(IndexDefinitions.require().pace());
+  }
+
+  /**
+   * Switch the world's pace and rebuild every loaded planet on it. The planet's numbers, gates and
+   * machines are kept; only the rates, group size, hold lengths and bypass switch change. Never
+   * touches a threshold.
+   */
+  public static void setPace(
+      net.minecraft.server.MinecraftServer server,
+      mars.index.sim.PaceConfig.Mode mode,
+      Integer groupSize) {
+    PaceData pd = PaceData.get(server);
+    mars.index.sim.PaceConfig cfg = IndexDefinitions.require().pace();
+    mars.index.sim.Pace pace = cfg.pace(mode, groupSize); // validates the group size first
+    pd.set(mode, pace.groupSize());
+    for (ServerLevel level : server.getAllLevels()) {
+      if (isPlanet(level)) {
+        String id = level.dimension().location().toString();
+        PlanetData rebuilt = PlanetData.fromState(id, data(level).sim().toState(), pace);
+        level.getDataStorage().set(PlanetData.NAME, rebuilt);
+        rebuilt.setDirty();
+      }
+    }
   }
 
   /**
@@ -44,7 +74,9 @@ public final class PlanetManager {
       throw new IllegalStateException("resetForSelfTest is only for the GameTest server");
     }
     PlanetData fresh =
-        PlanetData.factory(level.dimension().location().toString()).constructor().get();
+        PlanetData.factory(level.dimension().location().toString(), pace(level))
+            .constructor()
+            .get();
     level.getDataStorage().set(PlanetData.NAME, fresh);
     fresh.setDirty();
     return fresh;
@@ -78,8 +110,8 @@ public final class PlanetManager {
 
   /**
    * May this player place the machine here? Survival players need every gate that unlocks it to
-   * have latched. Creative players pass (the creative and admin route, logged). Not a planet: yes.
-   * On refusal the player is told why.
+   * have latched. Creative players pass while the pace's creative bypass is on (standard; off in
+   * classroom; logged). Not a planet: yes. On refusal the player is told why.
    */
   public static boolean placementAllowed(
       net.minecraft.world.level.Level level,
@@ -92,7 +124,7 @@ public final class PlanetManager {
     if (lock == null) {
       return true;
     }
-    if (player != null && player.isCreative()) {
+    if (player != null && player.isCreative() && data(server).sim().pace().creativeGateBypass()) {
       LOG.info(
           "{} placed {} in creative before gate {} (admin route)",
           player.getName().getString(),

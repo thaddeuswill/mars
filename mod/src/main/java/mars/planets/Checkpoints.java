@@ -60,7 +60,7 @@ public final class Checkpoints {
     PlanetState snapshot;
     double sol;
     if (START.equals(name)) {
-      snapshot = PlanetData.fresh(id).sim().toState();
+      snapshot = PlanetData.fresh(id, PlanetManager.pace(level)).sim().toState();
       sol = 0;
     } else {
       Optional<CheckpointList.Entry<CompoundTag>> e =
@@ -73,7 +73,7 @@ public final class Checkpoints {
     }
     double before = current.sim().model().sols();
     PlanetState merged = PlanetCheckpoint.restoreOver(snapshot, current.sim().toState());
-    PlanetData restored = PlanetData.fromState(id, merged);
+    PlanetData restored = PlanetData.fromState(id, merged, PlanetManager.pace(level));
     level.getDataStorage().set(PlanetData.NAME, restored);
     restored.setDirty();
     for (var player : level.players()) {
