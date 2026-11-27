@@ -102,6 +102,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 41 | "accept and cont" | Accept Monitor review #40 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | ✅ Published and checked in `e1ec17f`. |
 
+| 44 | "accept and cont" | Accept the CX-2 script and continue verification | Inspect prior captures and document any remaining runtime check. | ✅ Earlier captures inspected. New frustum run pending in CX-2. |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
@@ -132,6 +134,10 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 Use pure unit tests for rates and branch boundaries, and GameTests for registration, Monitor causes and pause. These are acceptance targets. Implemented and checked in slice 5 (row 43; the cold-branch and boundary checks are `FrostSinkTest`, the Oven checks `PowerSimTest` and `PowerGridTest`, the Monitor and pause checks `MonitorFrostViewTest` and `FrostSinkTest.aPausedSession...`).
 
+### CX-2 follow-up
+
+Owner request #44: “accept and cont”. The script is accepted. The older image did not isolate the overhang. Run the new script on the next available client and inspect the rim and empty-control images from the same camera.
+
 ## Codex lane (assigned by Claude 2026-11-27, owner: "share work with chatgpt codex")
 
 Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor review, and process alignment rows moved from #36, #37, and #38 to #39, #40, and #41 respectively. The Claude rows retain #36–#38. **File scope rule:** while the Technical Lead agent is building Monitor option A (BACKLOG #38 Claude row), do not edit `mod/src/main/java/mars/client/`, `mars/monitor/`, `mars/index/sim/PlanetState*` or `MonitorStyle`. Pull before each push. Claim by changing ⬜ to 🟡 with your name.
@@ -139,7 +145,7 @@ Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor revie
 | ID | Task | Scope (files you may touch) | Done when | Status |
 |---|---|---|---|---|
 | CX-1 | Forecast JSON `resolve_source` field and the CR-F10 content test (see `docs/learning/content-rules.md`, `docs/team/reports/` forecast items, HANDOFF section 5) | `pack/data/mars/` forecast files, a new test under `mod/src/test/java/mars/` | Test fails on a forecast without a valid `resolve_source`, passes on the shipped files; `./gradlew spotlessCheck build test --rerun --offline` green, output pasted in your report | ⏸ The forecast directory contains only `.gitkeep`. Populate the forecast definitions before validating `resolve_source` on shipped data. |
-| CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | 🟡 Script pushed in `53fad12`. Static checks passed. Real-client run and image comparison pending; this workspace has no mod checkout or Xvfb. |
+| CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | 🟡 The owner accepted the script in `53fad12`. Codex inspected the [earlier off-screen candidate](tools/screenshots/out/20261127-110427/round_chunk_corner_centre_offscreen.png) and [whole-array shot](tools/screenshots/out/20261127-110427/round_chunk_corner_whole.png). The candidate still shows the legs and base, so the new matched-camera run is pending. |
 | CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | ✅ Checklist published. Implementation and runtime checks pending. |
 | CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | ✅ Renumbered and checked. |
 | CX-5 | Review pass: read `docs/art/monitor-reference-audit.md` against the images in `docs/art/references/monitor/` and flag any claim an image does not support | a new report under `docs/team/reports/` | Report lists each checked claim as supported or not | ✅ All seven images inspected. See [Codex reference review](docs/team/reports/2026-11-27-codex-monitor-reference-review.md). |
