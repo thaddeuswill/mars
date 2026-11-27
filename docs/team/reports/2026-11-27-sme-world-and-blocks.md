@@ -25,7 +25,7 @@ Replaced each "SME check" mark in `docs/design/world-and-blocks.md` with a verdi
 | 15 | Carbonate rock | Real but abundance NOT VERIFIED | R9 |
 | 16 | Lava-tube caves | NOT VERIFIED (no Mars source opened) | none |
 
-Counts: accurate 8 (1,2,3,4,7,8,9,10, plus 11 = 9 if counted as one: 9), acceptable simplification 3 (12,13,14), wrong 1 (6, as geology), not verified 3 (5,15 abundance,16). Wrecked probe: fiction by design (real landers and the Opportunity heat shield exist, but no source needed); fine if labelled.
+Counts: accurate 9 (rows 1,2,3,4,7,8,9,10,11), acceptable simplification 3 (12,13,14), wrong 1 (row 6, as geology), not verified 3 (rows 5, 15, 16). Total 16. Wrecked probe: fiction by design (real landers and the Opportunity heat shield exist, but no source needed); fine if labelled.
 
 **Sources actually opened (all fetched 2026-11-27):**
 - R1 Hecht et al. 2009, PubMed 19574385: "The solutions contained approximately 10 mM of dissolved salts with 0.4 to 0.6% perchlorate (ClO4) by mass"; "the approximately 5-centimeter-deep ice table". Also NASA Phoenix page (science.nasa.gov/mission/phoenix/): "Phoenix discovered traces of the chemical perchlorate, a possible energy source for microbes and a potentially valuable future resource".
