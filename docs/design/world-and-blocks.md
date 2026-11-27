@@ -31,6 +31,16 @@ Today Mars is a flat slab (bedrock, 56 stone, 4 red sandstone, 3 red sand; no or
 
 **Vanilla stays.** Crafting table, furnace, tools, farmland, glass, bricks, buckets, bone meal, redstone, diamonds, enchanting all work on Mars. Mars adds; it removes nothing (owner decision, section 3.4).
 
+### 0.2 The make-it-work rule (owner, 2026-11-27)
+Owner: "if somethings cant happen on mars and can happen on earth we can make them happen on mars with chemistry and other sciences but it doesnt have to be in depth we can invent a random machine to make it if it impossible to do it simply or with time."
+
+How we apply it:
+1. **If it works on Earth, it can work on Mars in the game.** When the real Mars lacks the ingredient, the temperature, the pressure or the time, a short chemistry or engineering step may supply it (for example making oxygen or water from CO2 and ice, treating soil, melting ice).
+2. **Keep the science light.** One short step a player can follow beats a deep process. Link it to a real idea when one exists (marked REAL or SIMPLIFIED).
+3. **If no simple or quick real way exists, invent a machine.** It is a black box with inputs and outputs, a power cost and a recipe in Minecraft style. Mark it INVENTED with the label "Game invention, not real". It must say what real thing it stands in for and must not claim to be real.
+4. **Honesty stays.** Invented machines and chemistry are always labelled, and invented numbers are marked invented (AGENTS.md rule). The label can be friendly ("Made up for the game") but must be present in the journal and the item tooltip.
+5. **Limits that stay.** Invented machines change what you can build, and where, and how fast. They never change a physical threshold (gates, 0 °C, 75 kPa) and never move an Index rate except through the balance sheet. Vanilla crafting stays.
+
 ## 1. What the player does, phase by phase
 
 ### Phase 1: Survival (about 8 h standard)
