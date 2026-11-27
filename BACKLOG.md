@@ -116,6 +116,18 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 | Do the three reviewers before Stage 3 replace the Stage 5 external review, or add to it? | Add to it: the early three check the riskiest verdicts; Stage 5 checks the whole journal and educator guide (16 h of SME time) | ⏸ |
 | If Stage 4 re-estimates more than ~15% over budget after the slice, which release-scope option? | Not yet: the team frames options before the Stage 3 debrief (budget.md §4.2) | Later (after Stage 3) |
 
+### Slice 5 and Regolith Oven acceptance checks
+
+| Check | Expected result |
+|---|---|
+| Cold frost sink at standard pace | At 5.00 kPa and −50 °C, the initial frost contribution is −0.088 kPa per sol: 2% of the 4.40 kPa above the 0.60 kPa baseline. Check the initial rate separately from pressure integrated over a sol as the rate changes. |
+| Cold branch boundary | At 0.60 kPa the cold sink contributes zero. Below that baseline it must never add pressure through the cold-sink formula. The 2% branch ends at −40 °C. The balance sheet’s milder branch and warm release are separate from the slice 5 cold-sink minimum. |
+| Monitor and pause | At cold, elevated pressure the Monitor lists polar frost as a negative cause. A paused session leaves pressure and any tracked frost reservoir unchanged. |
+| Regolith Oven with sufficient power | One running Oven draws its configured low power as a grid consumer and initially adds +0.01 kPa per sol at standard pace. Two running Ovens count as two loads and contribute +0.02 kPa per sol when fully supplied. |
+| Regolith Oven with an empty grid | A running Oven has no effective pressure contribution when neither solar nor battery supplies it. Supplying power restores its contribution. Verify the Oven counts toward grid demand alongside an Outgasser, using the configured prototype allocation rules. |
+
+Use pure unit tests for rates and branch boundaries, and GameTests for registration, Monitor causes and pause. These are acceptance targets. Implementation and runtime tests are pending.
+
 ## Codex lane (assigned by Claude 2026-11-27, owner: "share work with chatgpt codex")
 
 Use ids CX-n here, not row numbers (BACKLOG rows 36 to 38 were numbered twice by Claude and Codex; renumber them in one pass, CX-4). **File scope rule:** while the Technical Lead agent is building Monitor option A (BACKLOG #38 Claude row), do not edit `mod/src/main/java/mars/client/`, `mars/monitor/`, `mars/index/sim/PlanetState*` or `MonitorStyle`. Pull before each push. Claim by changing ⬜ to 🟡 with your name.
@@ -124,6 +136,6 @@ Use ids CX-n here, not row numbers (BACKLOG rows 36 to 38 were numbered twice by
 |---|---|---|---|---|
 | CX-1 | Forecast JSON `resolve_source` field and the CR-F10 content test (see `docs/learning/content-rules.md`, `docs/team/reports/` forecast items, HANDOFF section 5) | `pack/data/mars/` forecast files, a new test under `mod/src/test/java/mars/` | Test fails on a forecast without a valid `resolve_source`, passes on the shipped files; `./gradlew spotlessCheck build test --rerun --offline` green, output pasted in your report | ⬜ |
 | CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | ⬜ |
-| CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | 🟡 Codex |
+| CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | ✅ Checklist published. Implementation and runtime checks pending. |
 | CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | ⬜ |
 | CX-5 | Review pass: read `docs/art/monitor-reference-audit.md` against the images in `docs/art/references/monitor/` and flag any claim an image does not support | a new report under `docs/team/reports/` | Report lists each checked claim as supported or not | ⬜ |
