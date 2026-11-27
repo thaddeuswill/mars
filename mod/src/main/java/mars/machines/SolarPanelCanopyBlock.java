@@ -28,12 +28,12 @@ public class SolarPanelCanopyBlock extends Block {
 
   public static final IntegerProperty OFFSET_Z = IntegerProperty.create("offset_z", 0, 2);
 
-  /** Array outline in pixels relative to the centre block (model: -9..25, top at y 10..11). */
+  /** Array outline in pixels relative to the centre block (model: -9..25, disc at y 15..16). */
   static final double DISC_MIN = -9;
 
   static final double DISC_MAX = 25;
-  static final double DISC_Y0 = 10;
-  static final double DISC_Y1 = 11;
+  static final double DISC_Y0 = 15;
+  static final double DISC_Y1 = 16;
   private static final VoxelShape[][] SHAPES = new VoxelShape[3][3];
 
   static {

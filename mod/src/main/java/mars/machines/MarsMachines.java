@@ -31,12 +31,16 @@ public final class MarsMachines {
   // Simple shapes in 1/16 block, centred and symmetric so facing and model don't matter.
   private static final VoxelShape OUTGASSER = Block.box(1, 0, 1, 15, 16, 15);
   private static final VoxelShape OVEN = Block.box(2, 0, 2, 14, 14, 14);
-  // Round array centre: base, post, and the part of the array over its own cell (2.18).
+  // Round array centre (2.18): base plate, three legs, deck, and the disc's own-cell part (y
+  // 15..16).
   private static final VoxelShape PANEL =
       net.minecraft.world.phys.shapes.Shapes.or(
-          Block.box(4, 0, 4, 12, 1, 12),
-          Block.box(7, 1, 7, 9, 10, 9),
-          Block.box(0, 10, 0, 16, 11, 16));
+          Block.box(2, 0, 2, 14, 1, 14),
+          Block.box(7, 1, 3, 9, 13, 5),
+          Block.box(3, 1, 10, 5, 13, 12),
+          Block.box(11, 1, 10, 13, 13, 12),
+          Block.box(1, 13, 1, 15, 15, 15),
+          Block.box(0, 15, 0, 16, 16, 16));
   // Wall-pack battery (batch 3): thin, so its box turns with facing. Centred, 12 x 16 x 6 px.
   private static final double[] BATTERY = {2, 0, 5, 14, 16, 11};
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);

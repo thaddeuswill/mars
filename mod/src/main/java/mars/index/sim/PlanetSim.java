@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import mars.core.ParameterId;
+import mars.session.SessionClock;
 
 /**
  * One planet's running simulation: the Index model, the fixed-step counter, and the machines that
@@ -37,6 +38,14 @@ public final class PlanetSim {
 
   public Pace pace() {
     return pace;
+  }
+
+  /**
+   * Call once per server tick. Nothing advances while the session is paused (invariant I-3):
+   * counters, values and machines all stay as they were. Returns true if a step ran.
+   */
+  public boolean onServerTick(SessionClock clock) {
+    return clock.running() && onServerTick();
   }
 
   /** Call once per server tick while the planet's clock runs. Returns true if a step ran. */

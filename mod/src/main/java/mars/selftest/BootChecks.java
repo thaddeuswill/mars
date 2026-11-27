@@ -50,18 +50,18 @@ public final class BootChecks {
     ok &=
         SelfTest.check(
             "footprint.corner_shape",
-            "corner cell: x and z 0.4375..1.0, y 0.625..0.6875 (array edge only)",
+            "corner cell: x and z 0.4375..1.0, y 0.9375..1.0 (array edge only)",
             cornerShape,
             cornerShape.contains("0.4375")
-                && cornerShape.contains("0.625")
-                && cornerShape.contains("0.6875"));
+                && cornerShape.contains("0.9375")
+                && cornerShape.contains("1.0, 1.0, 1.0"));
     String centreShape = level.getBlockState(c).getCollisionShape(level, c).bounds().toString();
     ok &=
         SelfTest.check(
             "footprint.centre_shape",
-            "centre collision 0..1 wide, 0..0.6875 high (base, post, array)",
+            "centre collision 0..1 wide, 0..1 high (base, legs, deck, array)",
             centreShape,
-            centreShape.contains("0.0, 0.0, 0.0") && centreShape.contains("0.6875"));
+            centreShape.contains("0.0, 0.0, 0.0") && centreShape.contains("1.0, 1.0, 1.0"));
 
     level.setBlockAndUpdate(c, panel.setValue(SolarPanelBlock.DUST_STAGE, 3));
     ok &=

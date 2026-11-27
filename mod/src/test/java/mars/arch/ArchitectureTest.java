@@ -21,6 +21,7 @@ class ArchitectureTest {
         .resideInAnyPackage(
             "mars.core..",
             "mars.index.sim..",
+            "mars.session..",
             "mars.monitor.view..",
             "mars.dimension.ice..",
             "mars.hazards.dust..")

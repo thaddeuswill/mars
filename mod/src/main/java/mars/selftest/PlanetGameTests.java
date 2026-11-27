@@ -12,6 +12,8 @@ import mars.monitor.MonitorSender;
 import mars.monitor.view.MonitorView;
 import mars.planets.PlanetData;
 import mars.planets.PlanetManager;
+import mars.planets.SessionControl;
+import mars.planets.SessionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -357,5 +359,192 @@ public final class PlanetGameTests {
             "simTicks " + s2a.simTicks() + " -> " + s2.simTicks(),
             s2.simTicks() - s2a.simTicks() == expectedTicks);
     finish(h, ok, "frozenLevelDoesNotAdvanceThePlanet");
+  }
+
+  /**
+   * Pause (Stage 2 slice 2, invariant I-3): with the session paused the tick hook changes nothing,
+   * both with the flag alone and with the vanilla freeze that {@link SessionControl} also sets. Run
+   * by hand inside one tick for the same reason as the freeze test. Third-party machines stopping
+   * under {@code /tick freeze} is vanilla's rule and is NOT tested here (Mekanism and Create are
+   * not on the test classpath).
+   */
+  @GameTest(template = "empty", batch = "mars_session")
+  public static void pausedSessionDoesNotAdvanceThePlanet(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    var server = level.getServer();
+    PlanetData data = PlanetManager.data(level);
+    var clock = SessionData.get(server).clock();
+    var tm = server.tickRateManager();
+    var event = new net.neoforged.neoforge.event.tick.LevelTickEvent.Post(() -> true, level);
+    boolean ok = true;
+    try {
+      // 1. Flag alone (server not frozen): the planet must still stop.
+      clock.pause();
+      var a0 = data.sim().toState();
+      for (int i = 0; i < 250; i++) {
+        mars.planets.PlanetEvents.onLevelTick(event);
+      }
+      var a1 = data.sim().toState();
+      ok &=
+          SelfTest.check(
+              "session.flag_stops_clock",
+              "250 hook calls with the pause flag set change nothing",
+              "simTicks "
+                  + a0.simTicks()
+                  + " -> "
+                  + a1.simTicks()
+                  + ", pending "
+                  + a0.pendingTicks()
+                  + " -> "
+                  + a1.pendingTicks(),
+              a0.equals(a1));
+      clock.resume();
+      // 2. Through the real control: flag and freeze together, then resume.
+      int sessionBefore = clock.sessionNumber();
+      boolean paused = SessionControl.pause(server, "gametest");
+      tm.tick();
+      boolean frozen = !tm.runsNormally();
+      var b0 = data.sim().toState();
+      for (int i = 0; i < 250; i++) {
+        mars.planets.PlanetEvents.onLevelTick(event);
+      }
+      var b1 = data.sim().toState();
+      ok &=
+          SelfTest.check(
+              "session.pause_control",
+              "SessionControl.pause sets the flag and freezes the server; the planet does not move",
+              "changed="
+                  + paused
+                  + " paused="
+                  + clock.paused()
+                  + " frozen="
+                  + frozen
+                  + " simTicks "
+                  + b0.simTicks()
+                  + " -> "
+                  + b1.simTicks(),
+              paused && clock.paused() && frozen && b0.equals(b1));
+      boolean resumed = SessionControl.resume(server, "gametest");
+      tm.tick();
+      var c0 = data.sim().toState();
+      for (int i = 0; i < 250; i++) {
+        mars.planets.PlanetEvents.onLevelTick(event);
+      }
+      var c1 = data.sim().toState();
+      long expected = ((c0.pendingTicks() + 250) / 100) * 100L;
+      ok &=
+          SelfTest.check(
+              "session.resume_control",
+              "resume unfreezes, starts session "
+                  + (sessionBefore + 1)
+                  + ", and the clock runs by "
+                  + expected,
+              "changed="
+                  + resumed
+                  + " session="
+                  + clock.sessionNumber()
+                  + " running="
+                  + clock.running()
+                  + " simTicks "
+                  + c0.simTicks()
+                  + " -> "
+                  + c1.simTicks(),
+              resumed
+                  && clock.sessionNumber() == sessionBefore + 1
+                  && tm.runsNormally()
+                  && c1.simTicks() - c0.simTicks() == expected);
+      // 3. The saved form keeps the pause across a restart.
+      clock.pause();
+      var saved = SessionData.get(server).save(new CompoundTag(), level.registryAccess());
+      var back =
+          mars.session.SessionClock.restore(
+              saved.getInt("schema"), saved.getBoolean("paused"), saved.getInt("sessionNumber"));
+      ok &=
+          SelfTest.check(
+              "session.pause_survives_save",
+              "a paused session saved and restored is still paused, same session number",
+              "paused=" + back.paused() + " session=" + back.sessionNumber() + " nbt=" + saved,
+              back.paused() && back.sessionNumber() == clock.sessionNumber());
+    } finally {
+      SessionControl.resume(server, "gametest-cleanup");
+      tm.tick();
+    }
+    finish(h, ok, "pausedSessionDoesNotAdvanceThePlanet");
+  }
+
+  /**
+   * Owner-accepted rule (BACKLOG #32): an Outgasser keeps contributing while its chunk is unloaded.
+   * A real block is placed in a far chunk, the chunk is released, and after it has really unloaded
+   * the planet must still count the machine and still rise by its rate.
+   */
+  @GameTest(template = "empty", batch = "mars_unloaded", timeoutTicks = 600)
+  public static void outgasserKeepsWorkingWhileItsChunkIsUnloaded(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.data(level);
+    BlockPos far = new BlockPos(48_000, 100, 48_000);
+    int cx = far.getX() >> 4;
+    int cz = far.getZ() >> 4;
+    int before = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
+    level.setChunkForced(cx, cz, true);
+    level.getChunk(cx, cz); // load it now
+    level.setBlockAndUpdate(far, MarsMachines.REGOLITH_OUTGASSER.get().defaultBlockState());
+    boolean placed = data.sim().machineCount(RegolithOutgasserBlock.TYPE) == before + 1;
+    level.setChunkForced(cx, cz, false);
+    h.runAfterDelay(
+        150,
+        () -> {
+          boolean unloaded = !level.hasChunkAt(far);
+          int during = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
+          double rate = data.sim().model().netRatePerSol(Ids.PRESSURE);
+          long t0 = data.sim().model().simTicks();
+          double p0 = data.sim().model().snapshot().get(Ids.PRESSURE);
+          h.runAfterDelay(
+              230,
+              () -> {
+                long dTicks = data.sim().model().simTicks() - t0;
+                double dp = data.sim().model().snapshot().get(Ids.PRESSURE) - p0;
+                double expected = rate * dTicks / 24_000.0;
+                boolean ok =
+                    SelfTest.check(
+                        "outgasser.chunk_unloaded",
+                        "chunk really unloaded, machine still counted, pressure rises by "
+                            + expected
+                            + " kPa over "
+                            + dTicks
+                            + " sim ticks",
+                        "placed="
+                            + placed
+                            + " unloaded="
+                            + unloaded
+                            + " machines="
+                            + during
+                            + " (before "
+                            + before
+                            + ") rate="
+                            + rate
+                            + " rose by "
+                            + dp,
+                        placed
+                            && unloaded
+                            && during == before + 1
+                            && rate >= 0.1 - TOL
+                            && dTicks >= 200
+                            && Math.abs(dp - expected) < TOL);
+                // clean up: load the chunk, remove the block, restore pressure
+                level.setChunkForced(cx, cz, true);
+                level.getChunk(cx, cz);
+                level.setBlockAndUpdate(
+                    far, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+                level.setChunkForced(cx, cz, false);
+                ok &=
+                    SelfTest.check(
+                        "outgasser.chunk_unloaded_cleanup",
+                        "machine count back to " + before,
+                        "count=" + data.sim().machineCount(RegolithOutgasserBlock.TYPE),
+                        data.sim().machineCount(RegolithOutgasserBlock.TYPE) == before);
+                data.sim().model().set(Ids.PRESSURE, p0);
+                finish(h, ok, "outgasserKeepsWorkingWhileItsChunkIsUnloaded");
+              });
+        });
   }
 }
