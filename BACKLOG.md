@@ -81,6 +81,17 @@ Use a unit test for the supply-to-throughput calculation and GameTests for block
 
 | 36 | "i mean you gotta find something to do while you wait" | Continue independent work while the Technical Lead implements power | Codex owns the Stage 2 status refresh in `ROADMAP.md`. | ✅ Published in `80dab14`; verified on the shared branch. |
 
+| 37 | "cont" | Review the Planetary Monitor against the settled UI rules | Record prototype findings and acceptance checks for the next Monitor pass. | ✅ Source review complete. Client checks pending. |
+
+### Planetary Monitor review
+
+- **Matches the prototype rules:** the 232 px panel backs the text, keeps the world visible, and uses trend words alongside color. The screen does not pause simulation. A natural pause for feedback is a separate rule.
+- **Check before adding power causes:** test at 1280×720 with GUI scale 3, long translated cause labels, and multiple causes. The renderer right-aligns rates but does not reserve width for them when drawing labels. Values and trend text also share horizontal space, and panel height grows with every cause. Verify that text stays inside the panel and readable. Exercise opening via the Monitor block as well as the debug command.
+- **Planned Monitor work:** keep phase-appropriate rows and the next-gate cue in the existing roadmap sequence. When the forecast flow is implemented, F3, F5, and F8 need Answer or Skip before the Monitor opens. Skip expires the forecast, and one player's prompt must leave the group running.
+- **Documentation discrepancy:** PROCESS.md §4 still calls the Keeper's Report interruption rule open. The TEAM.md Decision Log and UI spec settle it: show a log line and side-panel entry, then open the report only by player choice or at a natural pause, with Later available.
+
+This review used the UI spec, TEAM.md, ARCHITECTURE.md and MonitorScreen.java. Client, screenshot and build checks were not run.
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
