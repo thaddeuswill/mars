@@ -6,6 +6,8 @@ Written by Claude because its usage limit is near and the owner asked for a comp
 
 The owner is switching to Codex because Claude's usage is nearly out. Claude's background agents may stop with Claude. Verify with `git log`, `git status`, and the newest files in `docs/team/reports/`.
 
+**Codex takeover:** The owner confirmed Claude is shut down. Slice 8 admin and checkpoint code is present on the shared branch at `a6cab96`, and the named slice 8 report is absent. Treat slice 8 as unverified until the build and GameTests run. The [Stage 2 launch guide](docs/tech/launch-guide.md) is current through slice 7. A fresh jar is pending a build-capable checkout.
+
 **Done and pushed:** Stage 2 slices 1 to 7 (planet values, Outgasser, Monitor with history plot and next-goal bar, session clock and pause, power grid, gates, polar-frost sink and Ovens, sky/fog keyed on pressure). 167 unit tests, 70 boot checks at slice 7.
 
 **In flight when Claude stopped (check each, finish or restart):**
