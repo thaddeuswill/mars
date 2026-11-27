@@ -106,9 +106,12 @@ public final class MonitorScreen extends Screen {
     g.fill(px - 1, top + h, px + pw, top + h + 1, PLOT_AXIS);
     g.drawString(font, "0", px - 3 - font.width("0"), top + h - 8, LABEL, false);
     if (!hist.drawable()) {
-      Component msg = Component.translatable("monitor.plot.empty");
-      int mw = font.width(msg);
-      g.drawString(font, msg, px + Math.max(2, (pw - mw) / 2), top + (h - 8) / 2, LABEL, false);
+      String msg = Component.translatable("monitor.plot.empty").getString();
+      if (font.width(msg) > pw - 4) {
+        msg = font.plainSubstrByWidth(msg, pw - 4 - font.width("…")) + "…";
+      }
+      g.drawString(
+          font, msg, px + Math.max(2, (pw - font.width(msg)) / 2), top + (h - 8) / 2, LABEL, false);
       return top + h + PLOT_LABEL_H;
     }
     g.drawString(font, topLabel, left, top, LABEL, false);
@@ -172,8 +175,8 @@ public final class MonitorScreen extends Screen {
       boolean topFree = yRange[0] > top + 9;
       boolean bottomFree = yRange[1] < top + h - 10;
       int band = lx > bandEnd[0] && topFree ? 0 : lx > bandEnd[1] && bottomFree ? 1 : -1;
-      if (band < 0 && lx > bandEnd[0]) {
-        band = 0; // both crossed: top, over a backing
+      if (band < 0 && lx > bandEnd[0] && h >= 24) {
+        band = 0; // both crossed on a tall plot: top, over a backing
       }
       if (band < 0) {
         continue;

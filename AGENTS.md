@@ -87,6 +87,7 @@ State as of 2026-11-27 (see HANDOFF.md for detail):
 - Monitor screen shrunk to 232 px; accepted.
 - Slice 3 (power) done: solar panel (with dust-stage output) and battery feed one grid per planet; the Regolith Outgasser only raises pressure while powered; the Monitor has a Power row. 79 unit tests, 46 boot checks. 
 - Slice 4 (gates) done: "Dome stable" (3-sol hold on a stand-in life-support state) and "Phase 2 begins" (5 kPa) are data in `pack/data/mars/gates/`, latch for good, and unlock the Regolith Outgasser for survival players (creative and `/mars gate latch` bypass). Monitor shows Next goal and Goals reached. 93 unit tests, 52 boot checks. Report `docs/team/reports/2026-11-27-technical-lead-slice4-gates.md`.
+- Monitor option A (BACKLOG #38) done: centred panel, stored pressure history (`PlanetState` schema 4), plot, battery bar. 114 unit tests, 54 boot checks. Report `docs/team/reports/2026-11-27-technical-lead-monitor-option-a.md`.
 
 Good tasks for you (check BACKLOG.md first, then claim by adding a line there):
 1. Stage 2 slice 5: the polar-frost sink, then the pressure machine chain (Regolith Oven power draw).

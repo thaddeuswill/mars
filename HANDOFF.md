@@ -27,6 +27,9 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice4
 Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monitor-ui.md`, BACKLOG #36):
 - **Monitor UI review fixes:** reason on the stalled machine line ("needs power", "low power", panel "dusty, makes less"), compact top-left panel (about 131 GUI px tall at worst, was 173), one Power summary line plus battery bar, one goal line, state colours, trend shapes, "Esc to close", all colours and sizes in `mars.client.MonitorStyle`. 96 unit tests, 52 of 52 boot checks. The panel still covers the horizontal screen centre (see report).
 
+Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monitor-option-a.md`, BACKLOG #38):
+- **Monitor option A, centred:** stored pressure history (`PressureHistory`, `PlanetState` schema 4), plot with Sol and kPa axes and event lines, 10-segment battery bar, panel about 122 to 135 GUI px, `MonitorLayout`/`PlotScale` pure and tested. 114 unit tests, 54 of 54 boot checks, screenshots in `tools/screenshots/out/20261127-123605/`. Rate-only cause line dropped; no status lights. Not verified: GUI scales 2/4, a very short window, Falling, paused.
+
 ## 3. Known gaps and honest caveats (do not claim these work)
 
 - **Not tested:** the jar loaded from a real `mods` folder; Windows and macOS; the dedicated server and a real save to disk and restart (needs the EULA, the owner's call); right-click on the Monitor block in the real client (screenshots use `/mars monitor`); explosions or pistons moving an Outgasser; frustum culling of an array whose overhang crosses a chunk border while its centre is off-screen.
