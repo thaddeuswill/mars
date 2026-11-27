@@ -28,6 +28,23 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public final class StarterDomeGameTests {
   private StarterDomeGameTests() {}
 
+  /**
+   * Clear the dome box and a margin of two blocks (and the solar pad), so blocks left by another
+   * test of this world cannot close a hole the test makes or open a wall it relies on.
+   */
+  private static void scrub(ServerLevel level, BlockPos origin) {
+    for (int x = -3; x < DomeTemplate.SIZE_X + 12; x++) {
+      for (int y = -1; y < DomeTemplate.SIZE_Y + 2; y++) {
+        for (int z = -3; z < DomeTemplate.SIZE_Z + 3; z++) {
+          BlockPos p = origin.offset(x, y, z);
+          if (y >= 0 && !level.getBlockState(p).isAir()) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
+          }
+        }
+      }
+    }
+  }
+
   private static String monitorWord(PlanetData d) {
     return MonitorView.of(d.sim()).rows().stream()
         .filter(r -> r.labelKey().equals("monitor.row.dome"))
@@ -41,6 +58,7 @@ public final class StarterDomeGameTests {
     ServerLevel level = h.getLevel();
     PlanetData fresh = PlanetManager.resetForSelfTest(level);
     BlockPos origin = h.absolutePos(new BlockPos(0, 1, 0));
+    scrub(level, origin);
     StarterDome.place(level, origin, 5);
     BlockPos crack = origin.offset(DomeTemplate.BREACH_X, 2, DomeTemplate.BREACH_Z);
     BlockPos habB = origin.offset(3, 1, 11);
@@ -137,10 +155,100 @@ public final class StarterDomeGameTests {
                   joined.status() == SealCheck.Status.SEALED && joined.volume() > 250);
           level.setBlock(door, Blocks.AIR.defaultBlockState(), 3);
           PlanetManager.resetForSelfTest(level); // leave a clean planet for the other tests
+          scrub(level, origin);
           if (ok) {
             h.succeed();
           } else {
             h.fail("starting dome checks failed; see MARS-SELFTEST lines");
+          }
+        });
+  }
+
+  @GameTest(template = "empty", batch = "mars_life_blocks", timeoutTicks = 400)
+  public static void realBlocksMakeUseAndLeakAir(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData fresh = PlanetManager.resetForSelfTest(level);
+    BlockPos origin = h.absolutePos(new BlockPos(0, 1, 0));
+    scrub(level, origin);
+    StarterDome.place(level, origin, 1); // group 1: one pre-built maker
+    BlockPos maker = origin.offset(16, 1, 1);
+    BlockPos tank = origin.offset(1, 1, 7);
+    BlockPos opsWall = origin.offset(8, 2, 0);
+    h.runAfterDelay(
+        5,
+        () -> {
+          PlanetData d = PlanetManager.data(level);
+          var sim = d.sim();
+          sim.model().advanceSols(1.2 + 1.0); // one sol after the Landing
+          double o2After1 = sim.life().o2();
+          boolean ok =
+              SelfTest.check(
+                  "life.blocks_make_air",
+                  "one maker, one player: after one sol past the Landing the tanks hold 14 + 2 = 16",
+                  "o2=" + o2After1 + " net=" + sim.life().report().o2Net(),
+                  Math.abs(o2After1 - 16.0) < 0.1 && sim.life().states().sealed());
+          level.destroyBlock(maker, false);
+          sim.model().advanceSols(0.5);
+          double o2NoMaker = sim.life().o2();
+          ok &=
+              SelfTest.check(
+                  "life.broken_maker_starves",
+                  "break the only maker: 0.5 sol of use (4 units) with nothing made",
+                  "o2=" + o2NoMaker + " makers=" + sim.machineCount("mars:oxygen_maker"),
+                  sim.machineCount("mars:oxygen_maker") == 0
+                      && Math.abs(o2NoMaker - (o2After1 - 4.0)) < 0.1);
+          level.destroyBlock(tank, false);
+          ok &=
+              SelfTest.check(
+                  "life.broken_tank_lowers_capacity",
+                  "break one of five tanks: capacity 200 -> 160",
+                  "capacity=" + sim.life().report().o2Capacity(),
+                  sim.life().report().o2Capacity() == 160);
+          level.destroyBlock(opsWall, false); // a hole in Ops north wall
+          h.runAfterDelay(
+              4,
+              () -> {
+                var sim2 = PlanetManager.data(level).sim();
+                double before = sim2.life().o2();
+                boolean leaking = !sim2.life().states().sealed();
+                sim2.model().advanceSols(0.5);
+                double lost = before - sim2.life().o2();
+                boolean ok2 =
+                    SelfTest.check(
+                        "life.breach_drains_air",
+                        "a hole in a required room: sealed turns false and 0.5 sol costs 4 (use) + 5 (leak) units",
+                        "leaking="
+                            + leaking
+                            + " lost="
+                            + lost
+                            + " overall="
+                            + sim2.domes().overall()
+                            + " domes="
+                            + sim2.domes().count()
+                            + " outside="
+                            + level.getBlockState(opsWall.north()).getBlock().getDescriptionId()
+                            + " h="
+                            + level.getHeight(
+                                net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
+                                opsWall.getX(),
+                                opsWall.getZ() - 1)
+                            + " y="
+                            + opsWall.getY()
+                            + " fills="
+                            + sim2.domes().fillsRun()
+                            + " opsWallBlock="
+                            + level.getBlockState(opsWall).getBlock().getDescriptionId(),
+                        leaking && Math.abs(lost - 9.0) < 0.2);
+                PlanetManager.resetForSelfTest(level);
+                scrub(level, origin);
+                if (ok2) {
+                  h.succeed();
+                } else {
+                  h.fail("life checks failed; see MARS-SELFTEST lines");
+                }
+              });
+          if (!ok) {
+            h.fail("life checks failed; see MARS-SELFTEST lines");
           }
         });
   }

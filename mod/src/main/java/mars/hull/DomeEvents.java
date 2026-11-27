@@ -54,6 +54,9 @@ public final class DomeEvents {
       return;
     }
     var changes = domes.tick(new WorldProbe(level));
+    if (!changes.isEmpty()) {
+      data.sim().refreshLife(); // the sealed state feeds life support at once, not at the next step
+    }
     for (var c : changes) {
       data.setDirty();
       LOG.info(
