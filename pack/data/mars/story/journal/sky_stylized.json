@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "mars:journal/sky_stylized",
+  "order": 30,
+  "unlock": { "gate": "mars:dome_stable" },
+  "title_key": "journal.sky.stylized.title",
+  "text_key": "journal.sky.stylized",
+  "goal_ids": ["A1"],
+  "reveals": [],
+  "names": ["mars:pressure"],
+  "source": "docs/design/messages/phase-1.md section 12 (journal.sky.stylized, SME-required text, both bands); ui-specs 9.2"
+}

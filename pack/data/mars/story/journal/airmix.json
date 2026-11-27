@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "mars:journal/airmix",
+  "order": 10,
+  "unlock": { "gate": "mars:dome_stable" },
+  "title_key": "journal.dome_stable.airmix.title",
+  "text_key": "journal.dome_stable.airmix",
+  "goal_ids": ["A1"],
+  "reveals": [],
+  "names": ["mars:pressure"],
+  "source": "docs/design/messages/phase-1.md section 9 (journal.dome_stable.airmix, both bands; SME Part A, sourced). Title text is invented."
+}

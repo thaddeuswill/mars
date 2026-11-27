@@ -136,6 +136,7 @@ public final class PlanetManager {
                       "block." + m.replace(':', '.'))));
         }
       }
+      LearningService.onGateLatched(level, id);
       d.setDirty();
     }
   }

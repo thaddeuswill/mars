@@ -214,6 +214,27 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           goal);
     }
 
+    /** The same row with another goal bar (null for none). */
+    public Row withGoal(Goal newGoal) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
+          newGoal);
+    }
+
     /** The same row with a wrapped note under its lines (two lines on the panel). */
     public Row withNote(String noteKey) {
       return new Row(
@@ -270,6 +291,30 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public static final double PRESSURE_STEADY = 0.005;
 
   public static final double EPSILON = 1e-9;
+
+  /**
+   * A copy without the estimate lines this player may not see (CR-T8): a row note or a goal's time
+   * estimate whose language key {@code visible} rejects is removed, not blanked, and nothing says a
+   * line is missing. Returns this view unchanged when nothing is removed. Cost: one pass over the
+   * rows.
+   */
+  public MonitorView hidingLines(java.util.function.Predicate<String> visible) {
+    List<Row> out = new ArrayList<>(rows.size());
+    boolean changed = false;
+    for (Row r : rows) {
+      Row n = r;
+      if (n.noteKey() != null && !visible.test(n.noteKey())) {
+        n = n.withNote(null);
+      }
+      if (n.goal() != null && n.goal().etaKey() != null && !visible.test(n.goal().etaKey())) {
+        Goal g = n.goal();
+        n = n.withGoal(new Goal(g.fraction(), g.percent(), null, null));
+      }
+      changed |= n != r;
+      out.add(n);
+    }
+    return changed ? new MonitorView(sols, List.copyOf(out), history) : this;
+  }
 
   public static MonitorView of(PlanetSim sim) {
     PlanetaryIndexModel model = sim.model();

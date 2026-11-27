@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "mars:journal/on_earth",
+  "order": 20,
+  "unlock": { "gate": "mars:dome_stable" },
+  "title_key": "earth.gate.dome_stable.title",
+  "text_key": "earth.gate.dome_stable",
+  "goal_ids": ["A1", "D2"],
+  "reveals": [],
+  "names": ["mars:pressure"],
+  "status": "awaiting SME confirmation of the 1 percent sentence",
+  "source": "docs/design/messages/phase-1.md section 9 (earth.gate.dome_stable). Title text is invented."
+}

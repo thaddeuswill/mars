@@ -680,6 +680,28 @@ Plan and checks: [docs/tech/stage2-plan.md](docs/tech/stage2-plan.md). Fluid; th
 
 Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after logging a failed start, so `runGameTestServer` once reported BUILD SUCCESSFUL on a server that never started. `SelfTest` now installs a shutdown hook that prints `RESULT FAIL reason=exited_without_result` and exits 6 if the JVM ends without a RESULT line (proved with a deliberately broken data file).
 
+
+### 2.20 Journal, guidance and Monitor line hiding (BACKLOG #49; built in two commits: no-screen part first, then the J-key screen)
+
+Design: `docs/design/journal-and-guidance-minimum.md` (owner accepted its recommendations). Cost: nothing per tick. Everything below runs on a gate latch, a login, a command or a Monitor open.
+
+| Piece | Package | Pure? | Notes |
+|---|---|---|---|
+| `Guidance` (GENTLE, STANDARD, EXPERT; `effective(classroom, stored)`, `allowed`) | `mars.core` | yes | Expert is never in force in classroom mode. Thresholds never read it |
+| `LineRules` (reads `data/mars/monitor/lines.json`; `visible(key, guidance, openAsked)`) | `mars.learning` | yes | `reveals` + `hidden_under` per Monitor line key (CR-T8). Undeclared line = shown; a content test fails if a `monitor.goal.eta*` or `monitor.estimate.*` key is not declared |
+| `JournalEntryDef`, `Journal.unlocked(defs, gateLatched)` | `mars.learning` | yes | Entry unlocks when its gate is latched, so no per-player journal is stored and late joiners get everything. Files in `data/mars/story/journal/` (`schema 1`, `reveals` required) |
+| `PlayerSettings` (guidance, `journal_seen`, `journal_notified`, by UUID), `OpenForecasts` (session only) | `mars.learning` | yes | No name stored. Open forecasts are set only by the debug command until real forecasts exist |
+| `LearningDefinitions` (reload listener), `PlayerSettingsData` (SavedData `mars_player_settings`, overworld), `LearningService` | `mars.planets` | no | Pointer line per gate latch (`PlanetManager.announceGates`), at login and on arrival on a planet; `guidance.changed` log line |
+| `LearningCommands` | `mars.admin` | no | `/mars guidance [level] [player]`, `/mars journal [n]`, `/mars debug forecast open\|close [value]` (op only, debug, not a learning event) |
+
+`mars.learning` is in the ArchUnit pure rule (no Minecraft imports).
+
+**Per-player Monitor.** `MonitorSender.open` already builds one `MonitorView` per recipient on every open and sends it to that player only, so no payload change was needed: `MonitorSender.viewFor(player)` calls `MonitorView.hidingLines(filter)`, which drops a row note or a goal's time estimate whose language key the filter rejects (removed, not blanked, no "hidden" text). The filter is `LineRules.visible` with the player's effective guidance and open-forecast set. Expert hides the ETA (bar and percent stay); an open pressure forecast hides the ETA and "Leveling off". The Monitor is a one-shot screen: a level change while it is open shows on the next open.
+
+**Who sets guidance.** Standard play: any player sets their own (`/mars guidance expert`); an operator may set another player's. Classroom mode: operator only; a player gets "Your teacher sets this."; expert is refused for everyone. `Pace.classroom()` is always false in this build (pacing config is a later slice), so the classroom branch is exercised by calling `LearningService.setGuidance(..., classroom=true, ...)` directly in the boot test.
+
+**Unread vs told.** `journal_notified` makes the pointer line appear once per entry per player (latch, login, arrival); `journal_seen` is set when an entry is read (`/mars journal <n>`, later the screen) and drives the "(new)" mark.
+
 ---
 
 ## 3. Coding Practices

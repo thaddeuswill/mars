@@ -58,6 +58,18 @@ Slice 8 operator commands (permission level 2, all logged; they work only inside
 | `/mars checkpoint restore <name>` | Roll the planet back to a checkpoint, or to `start` for the start values. Blocks, machines, items and inventories are **not** rolled back. |
 | `/mars index export` | Write a readable planet report (numbers only, no player data) to `mars-data/exports/` in the game folder. |
 
+Learning commands (journal and guidance; `/mars guidance` and `/mars journal` need no cheats):
+
+| Command | Use |
+|---|---|
+| `/mars guidance` | Show your guidance level (gentle, standard or expert) and what it hides. |
+| `/mars guidance <level>` | Set your own level in standard play. Expert hides the time-to-goal estimate on the Monitor. In classroom mode only the teacher can set it, and expert is refused. |
+| `/mars guidance <level> <player>` | Operator: set another player's level. |
+| `/mars journal` | List the journal entries unlocked on this planet ("(new)" marks unread). Entries unlock when their goal is reached (Dome stable gives three). A chat line "New journal entries: N" tells you once. |
+| `/mars journal <n>` | Read entry n in chat. |
+| `/mars debug forecast open\|close [value]` | Operator, debug only: pretend a forecast about a value (default `pressure`) is open for you, which hides the Monitor's time estimate and "Leveling off" for you only. Not a learning event; it is only logged. |
+
+
 For a full rollback of the world (blocks and inventories too), copy the world folder before a class; the checkpoint command only rewinds the planet's simulation.
 
 ## 2. Developer commands (from `mod/`)

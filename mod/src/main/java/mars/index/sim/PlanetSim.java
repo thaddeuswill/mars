@@ -367,7 +367,14 @@ public final class PlanetSim {
     Map<String, Double> values = new LinkedHashMap<>();
     model.storedValues().forEach((id, v) -> values.put(id.id(), v));
     Map<String, List<Long>> ms = new LinkedHashMap<>();
-    machines.forEach((type, set) -> ms.put(type, List.copyOf(set)));
+    // Types with no machines are left out, so a planet that had an Oven placed and removed has the
+    // same state as one saved and loaded (the loader never sees an empty type).
+    machines.forEach(
+        (type, set) -> {
+          if (!set.isEmpty()) {
+            ms.put(type, List.copyOf(set));
+          }
+        });
     return new PlanetState(
         PlanetState.CURRENT_SCHEMA,
         values,
