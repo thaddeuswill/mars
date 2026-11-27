@@ -152,6 +152,7 @@ public final class StarterDome {
       case HULL -> HullBlocks.HULL_PLATE.get().defaultBlockState();
       case HULL_BASE -> HullBlocks.HULL_PLATE_BASE.get().defaultBlockState();
       case HULL_RIM -> HullBlocks.HULL_PLATE_RIM.get().defaultBlockState();
+      case HULL_LIGHT -> HullBlocks.HULL_LIGHT.get().defaultBlockState();
       case GLASS_RIBBED -> HullBlocks.HULL_GLASS_RIBBED.get().defaultBlockState();
       case GLASS -> HullBlocks.HULL_GLASS.get().defaultBlockState();
       case CRACKED -> HullBlocks.HULL_PLATE_CRACKED.get().defaultBlockState();

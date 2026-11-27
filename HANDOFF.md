@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0d. UPDATE 2026-11-27 (Technical Lead): ceiling lights in the starter dome
+
+Jar `0.3.3-stage3-d` (sha256 `87ed5dfcee7d039234ab938ec491314f3cb445ded476f626fa42800253ea8359`). 254 unit tests, 113 boot checks (`RESULT PASS`). `mars:hull_light` (airtight, light 12), 18 lamps (`DomeTemplate.LAMPS`), Hab B ribbed glass now 32. Measured: shelter, Ops and bay have block light 0 without lamps; with lamps the worst floor cell is 7. Shelter and Ops are still unlamped (owner/Artist call). Report `docs/team/reports/2026-11-27-technical-lead-hull-lights.md`; screenshots `tools/screenshots/out/20261127-232753/` (hab_11 to hab_14).
+
 ## 0c. UPDATE 2026-11-27 (Technical Lead): habitat restyle wired into the dome
 
 Jar `0.3.2-stage3-c` (sha256 `1f68ea1c7a2a1dc5029faf37246759542d75b638be81a2fa36ba0e37179a576c`). 252 unit tests, 110 boot checks (`RESULT PASS`). Registered `hull_plate_base`, `hull_plate_rim`, `hull_glass_ribbed`, `roof_vent`, `roof_dish`; `DomeTemplate` uses them (layout unchanged); `StarterDome` places a dish and a vent at y 5. Screenshots `tools/screenshots/out/20261127-232021/` (script `habitat_restyle.shots`). Open: the machine bay renders almost black in the screenshots (lighting, see report). Report `docs/team/reports/2026-11-27-technical-lead-habitat-wiring.md`.

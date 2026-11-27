@@ -347,6 +347,138 @@ public final class StarterDomeGameTests {
     }
   }
 
+  /** Block light (0..15) of the air cell at template (x, y, z), or -1 if the cell is not air. */
+  private static int blockLight(ServerLevel level, BlockPos origin, int x, int y, int z) {
+    BlockPos p = origin.offset(x, y, z);
+    return level.getBlockState(p).isAir()
+        ? level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, p)
+        : -1;
+  }
+
+  /** Lowest block light over the air cells at y = {@code y} in a room box, and where it is. */
+  private static String worst(
+      ServerLevel level, BlockPos origin, int y, int x0, int x1, int z0, int z1) {
+    int min = 99;
+    String at = "none";
+    for (int x = x0; x <= x1; x++) {
+      for (int z = z0; z <= z1; z++) {
+        int l = blockLight(level, origin, x, y, z);
+        if (l >= 0 && l < min) {
+          min = l;
+          at = x + "," + z;
+        }
+      }
+    }
+    return min + "@" + at;
+  }
+
+  private static int worstValue(String w) {
+    return Integer.parseInt(w.substring(0, w.indexOf('@')));
+  }
+
+  /**
+   * Hull Light Panels (Artist handoff, ARCHITECTURE 2.20 addendum): reads the real light engine.
+   * Without lamps a window-less room is dark; with them every floor cell of the machine bay is lit.
+   * The lit rooms (shelter, Ops) are measured too, so the lamp level is set against a real number.
+   */
+  @GameTest(template = "empty", batch = "mars_dome_light", timeoutTicks = 400)
+  public static void ceilingLightsLightTheMachineBay(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetManager.resetForSelfTest(level);
+    BlockPos origin = h.absolutePos(new BlockPos(0, 1, 0));
+    scrub(level, origin);
+    StarterDome.place(level, origin, 5);
+    // Baseline: swap every lamp for a plain hull plate and let the light engine settle.
+    for (int[] l : DomeTemplate.LAMPS) {
+      level.setBlock(
+          origin.offset(l[0], 4, l[1]), HullBlocks.HULL_PLATE.get().defaultBlockState(), 3);
+    }
+    h.runAfterDelay(
+        60,
+        () -> {
+          String bayDark = worst(level, origin, 1, 16, 21, 1, 7);
+          String shelter = worst(level, origin, 1, 1, 6, 1, 7);
+          String ops = worst(level, origin, 1, 8, 14, 1, 7);
+          String opsMax =
+              String.valueOf(
+                  blockLight(level, origin, 9, 1, 1) + "/" + blockLight(level, origin, 11, 3, 4));
+          for (int[] l : DomeTemplate.LAMPS) {
+            level.setBlock(
+                origin.offset(l[0], 4, l[1]), HullBlocks.HULL_LIGHT.get().defaultBlockState(), 3);
+          }
+          h.runAfterDelay(
+              60,
+              () -> {
+                String bay = worst(level, origin, 1, 16, 21, 1, 7);
+                String bayHead = worst(level, origin, 2, 16, 21, 1, 7);
+                String habB = worst(level, origin, 1, 1, 6, 9, 14);
+                String storage = worst(level, origin, 1, 16, 21, 9, 14);
+                String suit = worst(level, origin, 1, 8, 14, 9, 10);
+                String lock = worst(level, origin, 1, 10, 12, 12, 14);
+                int under = blockLight(level, origin, 17, 3, 2);
+                boolean ok =
+                    SelfTest.check(
+                        "dome.lights_measured_lit_rooms",
+                        "measure block light (0..15) at floor cells: rooms with no lamp (baseline, lamps swapped for plates)",
+                        "bayNoLamps="
+                            + bayDark
+                            + " shelter="
+                            + shelter
+                            + " ops="
+                            + ops
+                            + " opsSample="
+                            + opsMax,
+                        true);
+                ok &=
+                    SelfTest.check(
+                        "dome.lights_machine_bay_lit",
+                        "with 18 Hull Light Panels the worst floor cell of the machine bay is at least 7, the cell under a lamp is at least 11",
+                        "bayWorst="
+                            + bay
+                            + " bayHead="
+                            + bayHead
+                            + " underLamp="
+                            + under
+                            + " habB="
+                            + habB
+                            + " storage="
+                            + storage
+                            + " suit="
+                            + suit
+                            + " airlock="
+                            + lock,
+                        worstValue(bay) >= 7
+                            && under >= 11
+                            && worstValue(habB) >= 7
+                            && worstValue(storage) >= 7
+                            && worstValue(suit) >= 7
+                            && worstValue(lock) >= 7
+                            && worstValue(bay) > worstValue(bayDark));
+                var probe = new WorldProbe(level);
+                var r =
+                    SealCheck.fill(
+                        probe, origin.getX() + 18, origin.getY() + 1, origin.getZ() + 4, 2000);
+                ok &=
+                    SelfTest.check(
+                        "dome.lights_keep_the_seal",
+                        "the machine bay with its 6 lamps still reads SEALED and the lamp block is airtight",
+                        "status=" + r.status() + " volume=" + r.volume(),
+                        r.status() == SealCheck.Status.SEALED
+                            && Airtight.test(
+                                level.getBlockState(origin.offset(17, 4, 2)),
+                                level,
+                                origin.offset(17, 4, 2)));
+                PlanetManager.resetForSelfTest(level);
+                scrub(level, origin);
+                if (ok) {
+                  h.succeed();
+                } else {
+                  h.fail("light checks failed; see MARS-SELFTEST lines");
+                }
+              });
+        });
+  }
+
   @GameTest(template = "empty", batch = "mars_legacy_dome")
   public static void aWorldSavedBeforeLifeSupportGetsNoDome(GameTestHelper h) {
     ServerLevel level = h.getLevel();

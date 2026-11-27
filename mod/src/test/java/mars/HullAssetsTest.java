@@ -25,6 +25,7 @@ class HullAssetsTest {
             "hull_plate_base",
             "hull_plate_rim",
             "hull_glass_ribbed",
+            "hull_light",
             "roof_vent",
             "roof_dish")) {
       assertTrue(Files.exists(assets().resolve("blockstates/" + id + ".json")), id + " blockstate");
@@ -41,6 +42,7 @@ class HullAssetsTest {
             "block/hull_plate_rim",
             "block/hull_plate_rim_top",
             "block/hull_glass_ribbed",
+            "block/hull_light",
             "block/roof_vent_side",
             "block/roof_vent_top",
             "block/roof_dish",
@@ -84,7 +86,8 @@ class HullAssetsTest {
   void theNewVariantsAreInTheRightTags() throws Exception {
     Path tags = TestData.pack().resolve("data/mars/tags/block");
     String airtight = Files.readString(tags.resolve("airtight.json"));
-    for (String id : List.of("hull_plate_base", "hull_plate_rim", "hull_glass_ribbed")) {
+    for (String id :
+        List.of("hull_plate_base", "hull_plate_rim", "hull_glass_ribbed", "hull_light")) {
       assertTrue(airtight.contains("mars:" + id + "\""), id + " airtight");
     }
     String not = Files.readString(tags.resolve("not_airtight.json"));
@@ -102,6 +105,7 @@ class HullAssetsTest {
             "hull_plate",
             "hull_plate_base",
             "hull_plate_rim",
+            "hull_light",
             "hull_glass",
             "hull_glass_ribbed",
             "hull_door",

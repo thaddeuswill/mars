@@ -102,15 +102,25 @@ public final class HullBlocks {
                       .noOcclusion(),
                   RoofFixtureBlock.DISH_SHAPE));
 
+  /**
+   * Hull Light Panel: an airtight roof plate that emits {@link #LIGHT_LEVEL}. Measured against the
+   * lit rooms in the dome (see ARCHITECTURE.md 2.20 addendum).
+   */
+  public static final int LIGHT_LEVEL = 12;
+
+  public static final DeferredBlock<HullPlateBlock> HULL_LIGHT =
+      plate("hull_light", BlockBehaviour.Properties.of().lightLevel(s -> LIGHT_LEVEL));
+
   private static DeferredBlock<HullPlateBlock> plate(String id) {
+    return plate(id, BlockBehaviour.Properties.of());
+  }
+
+  private static DeferredBlock<HullPlateBlock> plate(String id, BlockBehaviour.Properties base) {
     return BLOCKS.register(
         id,
         () ->
             new HullPlateBlock(
-                BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.METAL)
-                    .strength(3.0f, 12.0f)
-                    .sound(SoundType.METAL)));
+                base.mapColor(MapColor.METAL).strength(3.0f, 12.0f).sound(SoundType.METAL)));
   }
 
   private static BlockBehaviour.Properties glassProperties() {
@@ -132,6 +142,7 @@ public final class HullBlocks {
     ITEMS.registerSimpleBlockItem("hull_plate_base", HULL_PLATE_BASE, new Item.Properties());
     ITEMS.registerSimpleBlockItem("hull_plate_rim", HULL_PLATE_RIM, new Item.Properties());
     ITEMS.registerSimpleBlockItem("hull_glass_ribbed", HULL_GLASS_RIBBED, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("hull_light", HULL_LIGHT, new Item.Properties());
     ITEMS.registerSimpleBlockItem("roof_vent", ROOF_VENT, new Item.Properties());
     ITEMS.registerSimpleBlockItem("roof_dish", ROOF_DISH, new Item.Properties());
   }
@@ -142,6 +153,7 @@ public final class HullBlocks {
           HULL_PLATE,
           HULL_PLATE_BASE,
           HULL_PLATE_RIM,
+          HULL_LIGHT,
           HULL_GLASS,
           HULL_GLASS_RIBBED,
           HULL_DOOR,

@@ -1,4 +1,4 @@
-# Habitat restyle wiring (jar 0.3.2-stage3-c): dome from outside (noon, low sun), roof fixtures, hatch door,
+# Habitat restyle wiring + ceiling lights (jar 0.3.3-stage3-d): dome from outside (noon, low sun), roof fixtures, hatch door,
 # porthole bank, tank, maker and reclaimer. Dome corner (-3, 63, -4); floor y 63, walls y 64..66, roof y 67.
 wait 100
 cmd /gamerule doDaylightCycle false
@@ -34,6 +34,18 @@ shot hab_7b_reclaimer_and_makers_closer
 view 0.5 65.6 -2.4 0 14
 wait 20
 shot hab_8_shelter_tanks
+view 14.5 65.6 -0.3 140 20
+wait 40
+shot hab_11_machine_bay_wide_lamps
+view 2.5 65.6 9.6 135 25
+wait 40
+shot hab_12_habB_annex_lamps
+view 17.5 65.6 9.6 135 25
+wait 40
+shot hab_13_storage_lamps
+view 3.5 65.6 3.6 180 10
+wait 20
+shot hab_14_shelter_unlamped
 cmd /time set 12400
 view -13 70 -15 315 24
 wait 100

@@ -51,6 +51,8 @@ public final class DomeTemplate {
     GLASS,
     /** Ribbed greenhouse glass: Hab B's roof. */
     GLASS_RIBBED,
+    /** Hull Light Panel: an airtight roof cell (y 4) that lights the room cell beneath it. */
+    HULL_LIGHT,
     /** The lower half of a door (y 1). */
     DOOR,
     /** The upper half of a door (y 2). */
@@ -99,7 +101,49 @@ public final class DomeTemplate {
     "###########A###########"
   };
 
+  /**
+   * Ceiling lights: roof cells (x, z at y 4) above interior floor cells, one every 3 cells so no
+   * floor cell is more than 2 cells (Manhattan) from the cell under a lamp (Artist handoff,
+   * docs/team/reports/2026-11-27-artist-hull-light.md). 18 in all. The shelter and Ops are not
+   * listed: they are lit already (see the habitat lights report).
+   */
+  public static final int[][] LAMPS = {
+    // Machine bay x16..21, z1..7
+    {17, 2},
+    {20, 2},
+    {17, 4},
+    {20, 4},
+    {17, 6},
+    {20, 6},
+    // Hab B annex x1..6, z9..14 (these replace ribbed glass cells)
+    {2, 10},
+    {5, 10},
+    {2, 13},
+    {5, 13},
+    // Storage x16..21, z9..14
+    {17, 10},
+    {20, 10},
+    {17, 13},
+    {20, 13},
+    // Suit room x8..14, z9..10
+    {9, 10},
+    {11, 10},
+    {13, 10},
+    // Airlock chamber x10..12, z12..14
+    {11, 13}
+  };
+
   private DomeTemplate() {}
+
+  /** True when the roof cell above template column (x, z) holds a ceiling light. */
+  public static boolean isLamp(int x, int z) {
+    for (int[] l : LAMPS) {
+      if (l[0] == x && l[1] == z) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * All cells, with {@code makers} oxygen makers filled in the five maker bays (balance sheet 2d.2:
@@ -118,7 +162,11 @@ public final class DomeTemplate {
                 x,
                 SIZE_Y - 1,
                 z,
-                annexRoof(x, z) ? Kind.GLASS_RIBBED : perimeter(x, z) ? Kind.HULL_RIM : Kind.HULL,
+                isLamp(x, z)
+                    ? Kind.HULL_LIGHT
+                    : annexRoof(x, z)
+                        ? Kind.GLASS_RIBBED
+                        : perimeter(x, z) ? Kind.HULL_RIM : Kind.HULL,
                 Face.NORTH)); // the roof
         switch (c) {
           case '#' -> {

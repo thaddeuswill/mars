@@ -72,9 +72,11 @@ class DomeTemplateTest {
     assertEquals(1, n.get(DomeTemplate.Kind.BATTERY));
     assertEquals(5, n.get(DomeTemplate.Kind.BED_FOOT), "5 bunks");
     assertEquals(5, n.get(DomeTemplate.Kind.BED_HEAD));
-    // Layout sheet section 8: glass is 10 window blocks plus 36 annex roof cells (ribbed glass).
+    // Layout sheet section 8: glass is 10 window blocks plus 36 annex roof cells; 4 of those are
+    // now ceiling lights (Hab B), so 32 stay ribbed glass.
     assertEquals(10, n.get(DomeTemplate.Kind.GLASS));
-    assertEquals(36, n.get(DomeTemplate.Kind.GLASS_RIBBED));
+    assertEquals(32, n.get(DomeTemplate.Kind.GLASS_RIBBED));
+    assertEquals(18, n.get(DomeTemplate.Kind.HULL_LIGHT), "18 ceiling lights");
     // The sheet says about 728 hull plates in walls, roof and lintels, plus about 235 floor cells.
     int walls =
         n.get(DomeTemplate.Kind.HULL)
@@ -140,6 +142,56 @@ class DomeTemplateTest {
         (x, y, z) -> y == OY + DomeTemplate.ROOF_FIXTURE_Y ? Probe.Cell.OPEN : p.at(x, y, z);
     assertEquals(
         r.volume(), fill(withFixtures, seed(DomeTemplate.SPAWN_X, DomeTemplate.SPAWN_Z)).volume());
+  }
+
+  @Test
+  void lampsAreOnlyInteriorRoofCellsOverFloorAir() {
+    var cells = DomeTemplate.cells(5, false);
+    Map<Long, DomeTemplate.Kind> at = new HashMap<>();
+    cells.forEach(c -> at.put(Pos.pack(c.x(), c.y(), c.z()), c.kind()));
+    int lamps = 0;
+    for (var c : cells) {
+      if (c.kind() != DomeTemplate.Kind.HULL_LIGHT) {
+        continue;
+      }
+      lamps++;
+      assertEquals(DomeTemplate.SIZE_Y - 1, c.y(), "lamps are roof cells");
+      assertTrue(
+          c.x() > 0
+              && c.x() < DomeTemplate.SIZE_X - 1
+              && c.z() > 0
+              && c.z() < DomeTemplate.SIZE_Z - 1,
+          "never on the rim ring: " + c);
+      // The cell beneath (y 3) must be room air, and the floor cell y 1 not a wall.
+      assertEquals(
+          DomeTemplate.Kind.AIR,
+          at.getOrDefault(Pos.pack(c.x(), 3, c.z()), DomeTemplate.Kind.AIR),
+          "room air under the lamp " + c);
+      char ch = DomeTemplate.plan(c.x(), c.z());
+      assertTrue(".cgd".indexOf(ch) >= 0 || ch == 'F', "interior floor under lamp: " + ch);
+    }
+    assertEquals(18, lamps);
+    assertEquals(DomeTemplate.LAMPS.length, lamps);
+  }
+
+  @Test
+  void everyRoomStaysSealedWithLamps() {
+    var p = probe(DomeTemplate.cells(5, false));
+    int[][] starts = {{3, 4}, {11, 4}, {19, 4}, {3, 11}, {19, 11}, {11, 9}, {11, 13}};
+    for (int[] s : starts) {
+      assertEquals(
+          SealCheck.Status.SEALED,
+          fill(p, Pos.pack(OX + s[0], OY + 1, OZ + s[1])).status(),
+          "room at " + s[0] + "," + s[1] + " with lamps");
+    }
+    // Each lamp is airtight: removing one makes its room leak (the probe treats lamps as AIRTIGHT).
+    var without =
+        DomeTemplate.cells(5, false).stream()
+            .filter(c -> !(c.kind() == DomeTemplate.Kind.HULL_LIGHT && c.x() == 17 && c.z() == 2))
+            .toList();
+    assertEquals(
+        SealCheck.Status.OPEN_TO_OUTSIDE,
+        fill(probe(without), Pos.pack(OX + 18, OY + 1, OZ + 4)).status());
   }
 
   @Test
