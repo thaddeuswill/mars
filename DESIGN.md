@@ -713,7 +713,7 @@ Before Stage 3, a full-team story review: each role reviews the story bible agai
 ### How a group shares a planet
 - **One Index, one dome, one story.** All machines feed the same Index; all players face the same storms and fauna. Story beats fire once per planet and reach everyone; offline players find them in the journal archive.
 - **Personal pieces stay personal.** Journal, forecasts, Colony Record, Keeper's Reports (debriefs), and "What caused it?" answers are per player. That gives individual evidence on a shared planet (handoff to the Lead Instructional Designer, M-14).
-- **The dome fits five.** Five bunks and life support sized for up to five. O2, water, and food use scale with real player count, so a bigger group feels more Phase 1 pressure (C1). Compact before wide survives because the dome doesn't grow with the group.
+- **The dome fits five.** Five bunks and life support sized for up to five. O2, water, and food use scale with configured group size (`group.size`, not who is online), so a bigger group feels more Phase 1 pressure (C1). Compact before wide survives because the dome doesn't grow with the group.
 
 ### Colony posts (roles)
 Posts are **suggested, not enforced**. Any player can do anything. The journal offers them at the start of each phase, and players pick one at the dome's **Shift Board** (a block that lists open failure reports and who has claimed each, using in-game names only; nothing leaves the server).

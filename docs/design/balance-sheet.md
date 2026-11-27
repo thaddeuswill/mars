@@ -179,11 +179,11 @@ Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tool
 
 ---
 
-## 2d. Life support and the real Dome stable (Stage 3 slice 2; input G2; status: **proposed**, Game Designer, 2026-11-27; SME check and owner questions open)
+## 2d. Life support and the real Dome stable (Stage 3 slice 2; input G2; status: **owner-accepted** 2026-11-27 (all recommendations, BACKLOG); SME science check done, tags below; numbers changed 2026-11-27: O2 use 8, maker 10, start fill 14, reserve 24)
 
 Replaces the Dome stable stand-in (§2 build note). Tags as in §2a: **sourced**, **calc**, **invented** (game balance), **unverified**, **design choice**. All arithmetic below is **calc**: done by hand and checked with a throwaway script outside the game; **not run in the game or in the prototype**. Goals: C1 (supply and demand, survive first), C2 (failure and repair), B1 (every change visible), A1 (why the air matters). Pillars: pressure, not grind; compact before wide; every change is visible. Layout the numbers assume: [dome-layout.md](dome-layout.md).
 
-**Rules this section keeps.** Physical thresholds never scale: the 75 kPa, 5 kPa, 30 kPa, 0 C and breathability numbers are untouched here. Classroom mode and group size change **rates of terraforming, hold times and recipe cost**. The dome's survival numbers (use per player per sol, maker output, tank sizes, leak) are **per-sol physical numbers and do not scale with pace** (a sol is 20 simulation minutes in every mode; scaling them would make a classroom player breathe four times faster). They do scale with **`group.size`** (the configured group, balance-sheet §5.1), **not** with who is online. (DESIGN.md says "real player count"; §5.1 says config. This section follows §5.1; see the report, contradiction 1.)
+**Rules this section keeps.** Physical thresholds never scale: the 75 kPa, 5 kPa, 30 kPa, 0 C and breathability numbers are untouched here. Classroom mode and group size change **rates of terraforming, hold times and recipe cost**. The dome's survival numbers (use per player per sol, maker output, tank sizes, leak) are **per-sol physical numbers and do not scale with pace** (a sol is 20 simulation minutes in every mode; scaling them would make a classroom player breathe four times faster). They do scale with **`group.size`** (the configured group, balance-sheet §5.1), **not** with who is online. (DESIGN.md now says "configured group size", matching §5.1.)
 
 **Units.** 1 O2 unit = 100 g of oxygen. 1 water unit = 1 L. 1 power unit = 1 kWh (§2b). 1 ration = one player-day of food.
 
@@ -191,24 +191,24 @@ Replaces the Dome stable stand-in (§2 build note). Tags as in §2a: **sourced**
 
 | Item | Value | Tag and reasoning |
 |---|---|---|
-| Oxygen use | **7 O2 units** (0.7 kg) | **calc**: 1,000 kg for 4 people for 365 days = 0.68 kg per person per day (`docs/science/dimensions.md` §5.1; the source is **opened-secondary**, Wikipedia MOXIE citing NASA), rounded up to 0.70. SME to confirm |
-| Water use (drinking and food) | **3 water units** | **Invented.** Real drinking plus food water is roughly 2 to 3.5 L a day (**unverified**, from memory, not sourced). Hygiene and laundry water is left out on purpose (design choice) |
+| Oxygen use | **8 O2 units** (0.8 kg) | **Verified-range, rounded**: NASA planning value 0.84 kg per person per Earth day = 0.86 kg per sol (calc, x 24.6 / 24); the game is 7 % under. The NASA figure is **search-summary** (SME could not open the page; open before the journal says "verified"). The old 0.7 came from a rounded "about 1 tonne for 4 for a year" and was 19 % low (`docs/science/life-support-review.md` 2.1) |
+| Water use (drinking and food) | **3 water units** | **Verified as a range**: 2.4 to 3.5 L a day for drinking and food (NASA documents, search-summary); 3 is a game number inside it. Hygiene and laundry water is left out on purpose (**game rule**; the journal says so) |
 | Food | 1 ration per player per sol; start stock 40 per player | **Stub, invented.** Never fails inside Phase 1 slice 2 and does not take part in Dome stable. The greenhouse (asset F-08) makes food real later |
 
 ### 2d.2 Machines and tanks
 
 | Item | Value | Tag and reasoning |
 |---|---|---|
-| **Oxygen maker** output | **9 O2 units per sol** each (0.9 kg) | **calc**: DESIGN.md says "3x MOXIE"; MOXIE best 12 g/h (**opened-secondary**) x 3 x 24 h = 864 g, rounded to 9 units |
-| Oxygen maker power | **1.0 power unit per sol** each | **Invented, deliberately compressed.** If MOXIE draws about 300 W (**unverified**, from memory), the real ratio is about 7.2 kWh per 0.29 kg, so about 25 kWh per kg; the game uses 1 kWh for 0.9 kg, about 22 times cheaper. Why: one clean panel (5 units, §2b) could not run even one real-ratio maker. The journal must say so; SME to confirm the wording (question 2) |
-| Rule of thumb the player learns | **One oxygen maker per player.** 9 made against 7 used: each maker leaves 2 units per sol over | **design choice**; the Monitor's O2 line shows made, used, and net |
-| Water reclaimer | One unit serves up to 5 players. Takes back **90 %** of the water used; power **1.0** per sol | Recovery **unverified** (ISS-class systems are reported at about 90 % or better, from memory); power invented. Loss = 10 % x 3 = **0.3 per player per sol** |
-| Regolith Oven water (§2 "also gives water", §2c decision 6) | **+0.5 water unit per sol** each, at full power; scaled by power share like every machine | **Invented**; SME to check the idea (bound water in soil) and the size. Two Ovens give 1.0, which covers the loss of 3 players (0.9) |
-| O2 wall tank | **40 O2 units** each, 5 tanks, capacity **200** (one tank beside each bunk) | **Invented.** 200 units is 5.7 sols of full use for 5 players, 28 sols for one |
+| **Oxygen maker** output | **10 O2 units per sol** each (1.0 kg) | **Invented**, sized from a **calc**: MOXIE best 12 g/h (NASA, verified) x 3 x 24.6 h = 886 g = about 9 units; raised to 10 so one maker per player keeps a net of +2 against use 8. A person needs about 2.9 MOXIEs at best rate |
+| Oxygen maker power | **1.0 power unit per sol** each | **Invented, deliberately compressed (game rule: power discount).** MOXIE draws about 300 W and makes up to 12 g/h (**verified**, NASA), about 25 kWh per kg; the game uses 1 kWh for 1.0 kg, about 22 times cheaper. It is also **below the physical minimum of about 5 kWh per kg of O2** (calc, textbook enthalpies, unverified): no machine could do it, so this is a discount on energy, not better engineering. Why: one clean panel (5 units, §2b) could not run even one real-ratio maker (about 4 panels per player would swamp Phase 1). Owner-accepted as a labelled simplification; the journal wording is in `life-support-review.md` section 3 and must say "a discount for the game; real oxygen needs a lot of power" (transfer risk: "oxygen on Mars is easy") |
+| Rule of thumb the player learns | **One oxygen maker per player.** 10 made against 8 used: each maker leaves 2 units per sol over | **design choice**; the Monitor's O2 line shows made, used, and net |
+| Water reclaimer | One unit serves up to 5 players. Takes back **90 %** of the water used; power **1.0** per sol | Recovery 90 % is **invented, below ISS** (ISS 93 to 94 % before the Brine Processor, about 98 % after; NASA, search-summary); fair for a new small system and the journal says "lower than ISS". Power invented. Loss = 10 % x 3 = **0.3 per player per sol** |
+| Regolith Oven water (§2 "also gives water", §2c decision 6) | **+0.5 water unit per sol** each, at full power; scaled by power share like every machine | **Invented, plausible** (SME): Mars soil holds about 2 % water by weight (Curiosity, NASA, search-summary), so 0.5 L needs about 25 kg of soil a sol (calc); heating it is about 2.8 kWh (calc, unverified constants) against the game's 1.0. Journal: "a few percent, locked in minerals; ice is farther north", not "wet soil". Two Ovens give 1.0, which covers the loss of 3 players (0.9). **Dome water only: it is a separate dome stock and is never added to the hydrosphere index** (checked 2026-11-27: `regolith_oven.json` contributes pressure only, `hydrosphere.json` has no Oven source, and 2c decision 6 says no water is built yet; this rule stops a double count when it is) |
+| O2 wall tank | **40 O2 units** each, 5 tanks, capacity **200** (one tank beside each bunk) | **Invented.** 200 units is 5.0 sols of full use for 5 players (200 / 40), 25 sols for one (200 / 8) |
 | Water tank | **60 units** each, 2 tanks, capacity **120** | **Invented** |
-| **Start fill** | O2: **11 units per player** (1.6 sols of use). Water: **60**. Battery: **5** | **Invented** ("the storm drained the tanks"). Scales with `group.size`, so every group starts with the same time to act |
-| Suit O2 | Tier 1: **6 units** (about 17 minutes of play at 20 min per sol); tier 2 (unlocked by Dome stable): **10 units** (about 29 minutes). Refill at the suit points is **free** but needs a non-empty wall tank | **Invented**; real suits last hours, compressed so a trip outside is a short, chosen risk. Free refill is a **design choice** (does not punish exploring); revisit if trips never feel tense |
-| Leak while a required volume is unsealed | Wall tanks lose an **extra 10 O2 units per sol** | **Invented**: the makers keep refilling air that escapes. Equal to the surplus of a full group of 5 (10 per sol), so a breach erases the margin |
+| **Start fill** | O2: **14 units per player** (1.75 sols of use). Water: **60**. Battery: **5** | **Invented** ("the storm drained the tanks"). Scales with `group.size`, so every group starts with the same time to act |
+| Suit O2 | Tier 1: **6 units** (about 17 minutes of play at 20 min per sol); tier 2 (unlocked by Dome stable): **10 units** (about 29 minutes). Refill at the suit points is **free** but needs a non-empty wall tank | **Invented, time compression** (SME): real suits are certified 7 h (8 h nominal), so the game suit is about 25 times shorter in play time and about 3 times more generous against a day's air need; the journal says "17 minutes of your play time". Free refill is a **game rule** and a design choice (does not punish exploring); revisit if trips never feel tense |
+| Leak while a required volume is unsealed | Wall tanks lose an **extra 10 O2 units per sol** | **Invented, game rule** (SME): 1 kg of O2 a day is about 4.4 kg of air, 3 to 5 times the worst ISS crack, and the game ignores the air already in the room (about 190 kg of O2, calc) and the CO2 scrubber; the journal says so. Equal to the surplus of a full group of 5 (5 x 2 = 10 per sol), so a breach erases the margin |
 | Machines in the dome at start (group n) | Makers pre-built: **ceil(n/2)**; reclaimer 1; battery 1 (charged 5); panel 1 at dust stage 1 (92 %); Ovens: 2 in inventory (§2c) | **Design choice.** The shelter "was built for the whole crew but only half the makers survived the storm"; players build the rest, so a bigger group builds more |
 
 ### 2d.3 Costs of recipes (KubeJS; item names are stand-ins, the Technical Lead maps them)
@@ -254,13 +254,13 @@ Four machine states, all must be true, then the existing hold (3 sols; classroom
 | `water_ok` | The reclaimer is running and the water lasts at least 10 sols at the present net (or is not falling) | The water is looked after |
 | `power_ok` | Every tier 1 load is fully powered **and** the battery holds at least one sol of tier 1 draw | Life support has power, and a night's backup |
 
-The reserve is the part that makes the timing: the start fill is 11 units per player and the reserve needed is 21 per player, so the tank must refill by 10 per player. With every maker built the net is +2 per player per sol, so that is **5 sols whatever the group size** (calc). **Classroom:** reserveSols drops to 1 (7 units per player), which the start fill already exceeds, so the classroom reaches the condition as soon as the makers and panels are built. reserveSols is a **pacing requirement like a hold, not a physical threshold** (design choice and owner question 3): the 75 kPa, breathability and every Index threshold stay as they are.
+The reserve is the part that makes the timing: the start fill is 14 units per player and the reserve needed is 24 per player (3 sols x use 8), so the tank must refill by 10 per player. With every maker built the net is +2 per player per sol (10 made, 8 used), so that is **5 sols whatever the group size** (calc; the same as before the change, because use, maker output and start fill all moved together). **Classroom:** reserveSols drops to 1 (8 units per player), which the start fill (14) already exceeds, so the classroom reaches the condition as soon as the makers and panels are built. reserveSols is a **pacing requirement like a hold, not a physical threshold** (design choice and owner question 3): the 75 kPa, breathability and every Index threshold stay as they are.
 
-Gate JSON (proposal for the Technical Lead; the data keeps the §2c rule "balance in JSON, tests compare"): `dome_stable.json` gets `condition: { "all_of": [ {"machine_state":"sealed"}, {"machine_state":"air_ok"}, {"machine_state":"water_ok"}, {"machine_state":"power_ok"} ] }`, hold unchanged (3 / 1, reset 1.0 / 0.5). `PlanetSim.lifeSupportOk()` is retired. New data: `machines/oxygen_maker.json`, `machines/water_reclaimer.json` (`priority`, `power.drawPerSol`, `o2PerSol` 9, `recovery` 0.9), `machines/regolith_oven.json` gets `priority` 2 and `waterPerSol` 0.5, `machines/regolith_outgasser.json` gets `priority` 3, plus `life_support.json` (`o2UsePerPlayerSol` 7, `waterUsePerPlayerSol` 3, `leakO2PerSol` 10, tank sizes, start fills, `reserveSols` 3 / 1, `waterLastSols` 10, `precomposedMakers` "ceil(n/2)"). A unit test fails if any value differs from this table (CX-C).
+Gate JSON (proposal for the Technical Lead; the data keeps the §2c rule "balance in JSON, tests compare"): `dome_stable.json` gets `condition: { "all_of": [ {"machine_state":"sealed"}, {"machine_state":"air_ok"}, {"machine_state":"water_ok"}, {"machine_state":"power_ok"} ] }`, hold unchanged (3 / 1, reset 1.0 / 0.5). `PlanetSim.lifeSupportOk()` is retired. New data: `machines/oxygen_maker.json`, `machines/water_reclaimer.json` (`priority`, `power.drawPerSol`, `o2PerSol` 10, `recovery` 0.9), `machines/regolith_oven.json` gets `priority` 2 and `waterPerSol` 0.5, `machines/regolith_outgasser.json` gets `priority` 3, plus `life_support.json` (`o2UsePerPlayerSol` 8, `waterUsePerPlayerSol` 3, `leakO2PerSol` 10, tank sizes, start fills, `reserveSols` 3 / 1, `waterLastSols` 10, `precomposedMakers` "ceil(n/2)"). A unit test fails if any value differs from this table (CX-C). The exact files and keys are in [life-support-spec.md](../tech/life-support-spec.md).
 
 ### 2d.6 What the player sees at each failure state
 
-Wording is a sketch in grade 6 to 7 language and needs the Instructional Designer's reading-level pass. Full entries (DOCUMENTATION §5.1: id, trigger, feedback kind, fade rule) are written with slice 4. No state ever uses colour alone: each has an icon and a word. `L` = sols of air left = stored O2 / (use - made), when net is negative.
+**Game rules** here (journal label, see 2d.9): Blackout, "Dehydrated", free suit refill. Real low oxygen is dangerous and poorly sensed; no medical detail or numbers are used (SME, `life-support-review.md` section 4). Wording is a sketch in grade 6 to 7 language and needs the Instructional Designer's reading-level pass. Full entries (DOCUMENTATION §5.1: id, trigger, feedback kind, fade rule) are written with slice 4. No state ever uses colour alone: each has an icon and a word. `L` = sols of air left = stored O2 / (use - made), when net is negative.
 
 | State | Trigger | HUD | Monitor Dome tab | Log and report | Effect on play | Goals |
 |---|---|---|---|---|---|---|
@@ -269,11 +269,11 @@ Wording is a sketch in grade 6 to 7 language and needs the Instructional Designe
 | **Low** | L under 2 sols | Air chip with down arrow and "~{L} sols" appears | Same line, bolder | Log line; **failure report** (first time with Hana's tip: "One maker for each Keeper. Check the power.") | none | C1, C2 |
 | **Critical** | L under 0.5 sol (10 min standard) | Chip gets a bold border; countdown in minutes; one soft chime | Same | Tip level 2 (names the fix) | none | C1, C2 |
 | **Empty tank** | Stored O2 = 0 | "No tank air" icon | "Tanks empty. Suits cannot refill." | Failure report: what failed, why, what to try | "Short of breath": slower, no sprint, tunnel vignette (not red flashes) | C1, C2 |
-| **Faint** | In the "short of breath" state for 120 s, or suit empty outside or in an unsealed volume for 30 s (*invented*) | Screen fades | none | Report: "You fainted. Nothing lost." | Wake in your bunk after 10 s, suit at 3 units, **no item or health loss, no death** (proposed, owner question 2) | C1, C2 |
+| **Blackout** (**game rule**) | In the "short of breath" state for 120 s, or suit empty outside or in an unsealed volume for 30 s (*invented*) | Screen fades | none | Report: "You blacked out. In the game you wake up in your bunk and lose nothing." | Wake in your bunk after 10 s, suit at 3 units, **no item or health loss, no death** (**owner-accepted** 2026-11-27: out of air = Blackout, wake in bunk, nothing lost) | C1, C2 |
 | **Unsealed** | A required volume is not sealed | Chip "Unsealed" (icon plus word) and the suit warning | "Dome open. Air leaks 10 a sol." | Failure report with the breach place; first time: Hana's tip about seal kits | Tank leak +10 per sol; suits required in the volume | C2, A1 |
 | **Water low** | Water lasts under 10 sols | none | Amber line "Water: {n} sols left" | One log line | none | C1 |
 | **Water critical** | Under 3 sols | Chip | Same | Failure report | none | C1, C2 |
-| **No water** | Water = 0 | Chip | "No water" | Report | "Dehydrated": slower, no sprint. No fainting, no damage | C1, C2 |
+| **No water** | Water = 0 | Chip | "No water" | Report | "Dehydrated": slower, no sprint. No blackout, no damage | C1, C2 |
 | **Power short** | Tier 1 not fully powered | none | Power row: "Not enough power. Cut first: Outgassers, then Ovens" | Log line; report on repeats only | Makers run at their share, so O2 net falls | C1, B1 |
 | **Dome stable waiting** | A hold is paused | Gate chip pauses (never flashes) | "Waiting: {state}. Resets in {t} sol if not fixed" (existing ui-specs wording) | On reset: failure-report line says why | Hold counter paused, then reset after more than 1 sol out | C1 |
 
@@ -283,26 +283,28 @@ After Dome stable latches, the same failures still happen and still show; the ga
 
 **t0 = the end of Landing = sol 1.2 (0.4 h).** The life support clock starts there (Landing is safe; dome-layout §5.8).
 
-Solo, standard (1 maker pre-built, nothing to build): net = 9 - 7 = +2 per sol. Stored 11 against a reserve of 21: (21 - 11) / 2 = **5.0 sols**. `air_ok` first holds at sol 1.2 + 5.0 = 6.2. Add the 3-sol hold: **Dome stable at sol 9.2 = 3.07 h**. The §2 curve has the first Outgasser at sol 9 (3.0 h): a difference of 0.2 sol (4 minutes).
+Solo, standard (1 maker pre-built, nothing to build): net = 10 - 8 = +2 per sol. Stored 14 against a reserve of 24: (24 - 14) / 2 = **5.0 sols** (unchanged by the 2026-11-27 number change). `air_ok` first holds at sol 1.2 + 5.0 = 6.2. Add the 3-sol hold: **Dome stable at sol 9.2 = 3.07 h**. The §2 curve has the first Outgasser at sol 9 (3.0 h): a difference of 0.2 sol (4 minutes).
 
 Groups (script, outside the game). Assumptions: pre-built makers ceil(n/2); the first extra maker is built 0.6 sol after t0, each later one 0.4 sol after the previous (standard); in the classroom all extras are built 0.3 sol after t0 by parallel hands (cheaper recipes); panels and batteries in time; stored O2 never below 0 in the build window (true for every row, see the last column).
 
 | Mode | n | Makers pre-built / to build | Condition first true (sols after t0) | Dome stable (sol) | Dome stable (h) | Tank empties in (sols) if the player builds nothing |
 |---|---|---|---|---|---|---|
 | Standard | 1 | 1 / 0 | 5.0 | 9.2 | 3.07 | never (net +2) |
-| Standard | 2 | 1 / 1 | 6.35 | 10.55 | 3.52 | 4.4 |
-| Standard | 3 | 2 / 1 | 5.9 | 10.1 | 3.36 | 11.0 |
-| Standard | 4 | 2 / 2 | 6.8 | 11.0 | 3.67 | 4.4 |
-| Standard | 5 | 3 / 2 | 6.4 | 10.6 | 3.55 | 6.9 |
-| Classroom | 3 to 5 | 2 or 3 / 1 or 2 | 0.3 | 2.5 | 0.83 | 4.4 to 11.0 |
+| Standard | 2 | 1 / 1 | 6.5 | 10.7 | 3.57 | 4.7 |
+| Standard | 3 | 2 / 1 | 6.0 | 10.2 | 3.40 | 10.5 |
+| Standard | 4 | 2 / 2 | 7.0 | 11.2 | 3.73 | 4.7 |
+| Standard | 5 | 3 / 2 | 6.6 | 10.8 | 3.60 | 7.0 |
+| Classroom | 3 to 5 | 2 or 3 / 1 or 2 | 0.3 | 2.5 | 0.83 | 4.7 to 10.5 |
 
-Reading it. **Standard solo lands on the §2 curve (3.07 h against 3.0 h).** A standard group of 2 to 5 arrives at 3.4 to 3.7 h: within 25 % of 3 h (the Stage 3 exit tolerance, 2.25 to 3.75 h), at the top edge for n = 4. A fast solo player who builds a second maker at once refills in about 1 sol and gets Dome stable near sol 6 (2 h): that is the player's choice and shows B1 (a second maker is the visible fix); the typical player does not. **Classroom (group of 4):** Dome stable at sol 2.5 (0.83 h). The §5.3 check assumed sol 3 (1.0 h); this is 17 % earlier, about 10 minutes, which is inside the classroom Phase 1 budget (2.4 h): update the §5.3 check line to "sol 2.5" when this section is accepted.
+Recalculated 2026-11-27 with use 8, maker 10, start fill 14 per player, reserve 24 per player (**calc**, throwaway script outside the game; **not run in the game**). Worked example, n = 4: start 56, reserve 96. Two makers (20) against use 32 = -12 a sol until sol 0.6 (stored 56 - 7.2 = 48.8); three makers (30) = -2 a sol to sol 1.0 (48.0); four makers (40) = +8 a sol: (96 - 48.0) / 8 = 6.0 sols, so 1.0 + 6.0 = 7.0 after t0. "Tank empties in" = start fill / (use - pre-built output): n = 2: 28 / (16 - 10) = 4.7; n = 3: 42 / (24 - 20) = 10.5; n = 4: 56 / (32 - 20) = 4.7; n = 5: 70 / (40 - 30) = 7.0. The 5-player wall tank (200) with no makers lasts 200 / 40 = 5.0 sols.
+
+Reading it. **Standard solo lands on the §2 curve (3.07 h against 3.0 h).** A standard group of 2 to 5 arrives at 3.4 to 3.7 h (3.40, 3.57, 3.60, 3.73): within 25 % of 3 h (the Stage 3 exit tolerance, 2.25 to 3.75 h), **0.02 h (about 1 minute) from the top edge for n = 4**; if n = 4 measures over, the first lever is the build delay of the extra makers (cheaper recipe), not the physical numbers. A fast solo player who builds a second maker at once refills in about 1 sol and gets Dome stable near sol 6 (2 h): that is the player's choice and shows B1 (a second maker is the visible fix); the typical player does not. **Classroom (group of 4):** Dome stable at sol 2.5 (0.83 h). The §5.3 check assumed sol 3 (1.0 h); this is 17 % earlier, about 10 minutes, which is inside the classroom Phase 1 budget (2.4 h): update the §5.3 check line to "sol 2.5" when this section is accepted.
 
 **Pressure curve against §2.** Before Dome stable only the two Ovens act (§2c frost model): P(t) = 1.6 - e^(-0.02 t). The Ovens are placed at Landing (t = 1.2), so the effective time at sol 9.2 is 8.0 sols: P = 1.6 - e^(-0.16) = **0.748 kPa**, against 0.74 in §2: inside 0.01 kPa. After the first Outgasser the net source is 0.12 kPa per sol (0.10 + 0.02), so dP = 0.12 - 0.02 x (0.75 - 0.6) = 0.117 per sol, against 0.12 in the §2 cell sol 9 to 10 (0.74 to 0.86). The 0.2-sol delay leaves sol 10 at about 0.84 against 0.86 (-0.02 kPa), and later cells shift by at most that amount: **§2 curve holds within 0.03 kPa; the "5 kPa at about 8.3 h" target shifts by minutes, not hours.** What does change: (a) the Outgasser power order. Life support uses tier 1 and 2 power first, so the Outgasser needs a **second panel** for a solo player (8 units against 4.6) and a **third** for a group of 3 to 5 (§2d.4); the §2 curve's four Outgassers by sol 16 need 2 + 2 + 16 = 20 units for a solo dome, 5 panels at 91 %, which is the "second hidden gate" §2 already warns about, and now a measured prototype item (open number: panel build time per sol); (b) a group of 5 before the second panel gives the Ovens 0.6 of 2 units (30 %), so its pre-Dome-stable pressure is flatter by under 0.01 kPa (calc).
 
 **Plain-language contract with R-73:** Dome stable comes at about 3.1 h solo (3.4 to 3.7 h for a group in standard mode, about 0.8 h in the classroom), not the stand-in's 1 h. Label it "prototype timing" until the owner's play measures it.
 
-### 2d.8 Open items on this section
+### 2d.8 Open items on this section (status 2026-11-27: items 1 and 2 done by the SME; item 4 answered by [life-support-spec.md](../tech/life-support-spec.md), Technical Lead confirms; item 3 open)
 
 | # | To | Question |
 |---|---|---|
@@ -310,6 +312,21 @@ Reading it. **Standard solo lands on the §2 curve (3.07 h against 3.0 h).** A s
 | 2 | SME | Journal wording for the power compression ("the game's oxygen maker is far cheaper to run than a real one") and for the fainting and short-of-breath states so no medical claim is made |
 | 3 | Instructional Designer | Reading level of the failure wording; whether "reserve" (stored air in sols) is one idea too many for grade 6 at Landing, or belongs in the high-school read-more; the fade rule for the first Low and Unsealed reports |
 | 4 | Technical Lead | Gate `all_of`, the `priority` field, the numbers in the JSON list in §2d.5, and the Phase 1 raw-resource list for recipe costs (G4) |
+
+### 2d.9 "Game rule" labels for the journal (SME term; every item here is something the game does that real life does not)
+
+The journal entry for each of these carries the words **"Game rule"** and says what real life is like. Do not hide them in small print.
+
+| Game rule | What real life is like (one line, from the SME review) |
+|---|---|
+| Blackout (out of air: wake in your bunk, nothing lost) | Real low oxygen is dangerous, poorly sensed by the body, and a person cannot save themselves; crews use alarms and sensors |
+| Free suit refill at the suit points | Real suits last about 7 to 8 hours and their consumables are limited; the game suit is "17 minutes of your play time" |
+| Oxygen power discount (1 kWh for 1 kg) | MOXIE used about 300 W for up to 12 g an hour; real oxygen needs at least about 5 kWh per kg; the game charges about 22 times less than MOXIE |
+| Hygiene and laundry water left out | Washing uses far more water than drinking and food |
+| Leak larger than the worst ISS crack (and the room's own air ignored) | A tight station leaks a very small amount a day; a big hole empties a room in minutes; real crews must also remove the CO2 they breathe out (not in the game) |
+| Also game rules, same treatment: "Dehydrated" (slower, no sprint), Landing grace (no leak during Landing), reclaimer at 90 % (below ISS) | n/a |
+
+Learning goals: A1, C1, C2 (the label itself teaches the difference between a model and the real thing, a transfer guard for C1). The Instructional Designer owns the reading-level pass and the misconception item "oxygen is easy to make on Mars".
 
 ---
 
