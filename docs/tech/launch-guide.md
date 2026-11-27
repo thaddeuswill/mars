@@ -48,7 +48,12 @@ Enable cheats for the following commands in a singleplayer test world.
 | `/mars index advance 3.2` | Advance the planet by 3.2 sols for a test. |
 | `/mars pause`, `/mars resume`, `/mars session` | Pause, resume, or inspect the session. |
 
-Slice 8 checkpoint and export commands are still under verification. Use a disposable world for prototype testing.
+| `/mars machines` | List registered machines on this planet. |
+| `/mars index export` | Write a planet report to the server’s `mars-data/exports` folder. |
+| `/mars checkpoint save <name>`, `/mars checkpoint list` | Create a planet simulation checkpoint and list available checkpoints. |
+| `/mars checkpoint restore <name>` | Restore a simulation checkpoint. The reserved name `start` restores starting values. |
+
+Checkpoint restore affects simulation values, progress, and history. Placed blocks, machines, and player inventories stay in the world. Use a disposable world for prototype testing. See the [slice 8 verification report](../team/reports/2026-11-27-technical-lead-slice8-admin-rollback.md).
 
 ## 2. Developer commands (from `mod/`)
 
