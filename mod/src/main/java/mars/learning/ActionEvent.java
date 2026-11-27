@@ -53,9 +53,8 @@ public record ActionEvent(
     Objects.requireNonNull(kind);
     Objects.requireNonNull(band);
     Objects.requireNonNull(cause);
-    if (world == null
-        || !world.matches("w-[0-9a-f]{6}")
-        || planet < 1
+    requireWorld(world);
+    if (planet < 1
         || session < 0
         || timeline < 0
         || simulationTick < 0
@@ -69,5 +68,12 @@ public record ActionEvent(
     if (subject == null || !subject.matches("mars:[a-z0-9_]+")) {
       throw new IllegalArgumentException("Expected a Mars content identifier");
     }
+  }
+
+  static String requireWorld(String world) {
+    if (world == null || !world.matches("w-[0-9a-f]{6}")) {
+      throw new IllegalArgumentException("Invalid learning world identifier");
+    }
+    return world;
   }
 }

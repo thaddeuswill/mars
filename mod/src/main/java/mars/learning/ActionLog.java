@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +29,7 @@ public final class ActionLog implements AutoCloseable {
   private final ScheduledExecutorService worker;
   private final List<ActionEvent> pending = new ArrayList<>();
   private boolean flushQueued;
-  private boolean closed;
+  private Future<Void> finalWrite;
   private volatile IOException failure;
 
   public ActionLog(Path file) {
@@ -41,7 +42,7 @@ public final class ActionLog implements AutoCloseable {
 
   /** Called in event order from the server thread. Disk IO stays on the worker. */
   public synchronized void append(ActionEvent event) {
-    if (closed) {
+    if (finalWrite != null) {
       throw new IllegalStateException("Action log is closed");
     }
     pending.add(java.util.Objects.requireNonNull(event));
@@ -108,7 +109,7 @@ public final class ActionLog implements AutoCloseable {
     fields.put("ts", event.timestamp().toString());
     fields.put("world", event.world());
     fields.put("planet", event.planet());
-    fields.put("session", String.format(Locale.ROOT, "s-%04d", event.session()));
+    fields.put("session", sessionName(event.session()));
     fields.put("tl", event.timeline());
     fields.put("sim", event.simulationTick());
     fields.put("sol", event.sol());
@@ -122,24 +123,27 @@ public final class ActionLog implements AutoCloseable {
     return fields;
   }
 
+  static String sessionName(int session) {
+    return String.format(Locale.ROOT, "s-%04d", session);
+  }
+
   @Override
   public void close() throws IOException {
-    java.util.concurrent.Future<?> finalWrite;
+    Future<Void> completion;
     synchronized (this) {
-      if (closed) {
-        return;
+      if (finalWrite == null) {
+        finalWrite =
+            worker.submit(
+                () -> {
+                  flush();
+                  return null;
+                });
+        worker.shutdown();
       }
-      closed = true;
-      finalWrite =
-          worker.submit(
-              () -> {
-                flush();
-                return null;
-              });
-      worker.shutdown();
+      completion = finalWrite;
     }
     try {
-      finalWrite.get();
+      completion.get();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new IOException("Interrupted while closing action log", e);

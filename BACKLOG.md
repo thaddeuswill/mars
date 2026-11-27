@@ -126,7 +126,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 56 | "accept and cont" | Accept the wording update and start Codex’s Stage 3 learning lane | Typed pseudonymous events and a local batched writer under `mars/learning/**`, with focused tests. | ✅ Event and writer foundation built. 180 unit tests, 82 boot checks, and a negative privacy test passed as expected. Live hooks and export remain in slice 3. |
 
-| 57 | "cont with reccommened" | Continue Stage 3 learning plumbing | Codex owns session-local action log rotation and in-memory pseudonym allocation under `mars/learning/**`. | 🟡 Codex |
+| 57 | "cont with reccommened" | Continue Stage 3 learning plumbing | Codex owns session-local action log rotation and in-memory pseudonym allocation under `mars/learning/**`. | ✅ Session rotation and pseudonym lifecycle built. Gameplay hooks and cross-restart identity are pending. |
 
 ## Open questions for the owner
 

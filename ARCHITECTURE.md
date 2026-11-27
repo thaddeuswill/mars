@@ -197,7 +197,7 @@ Two storage areas, on purpose (consistency review M-06):
 | Pacing and group config | NeoForge server config (TOML) | World: `serverconfig/mars-server.toml` | No (teacher setting) |
 | Session state: paused flag, session ID, timeline per planet, planet assignments, planet grade-band overrides | JSON | Mars data: `session.json`, `planets.json` | **No** |
 | Pseudonym mapping (Minecraft UUID → random ID) | JSON | Mars data: `identity/players.json` | **No** |
-| Action log | JSON Lines, one event per line, pseudonymous IDs only | Mars data: `actionlog/<date>_<session>.jsonl` | **No** |
+| Action log | JSON Lines, one event per line, pseudonymous IDs only | Mars data: `actionlog/<session>.jsonl` (one stable file per session; each line carries its timestamp) | **No** |
 | Learning records per player: Colony Record, forecasts and results, Keeper's Reports, Explain-it answers, grade band choice | JSON, one file per pseudonym, written atomically | Mars data: `learning/players/<pseudonym>.json` | **No** |
 | Backups | Zip of the world folder | Mars data: `backups/` | n/a |
 | Teacher exports | CSV (UTF-8) | Mars data: `exports/` | n/a |
