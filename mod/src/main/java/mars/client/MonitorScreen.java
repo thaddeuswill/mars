@@ -311,18 +311,31 @@ public final class MonitorScreen extends Screen {
     }
     if (MonitorLayout.hasDetailLine(row)) {
       y += 1;
+      int leftEnd = x0 + PAD;
       if (row.detailKey() != null) {
         Component d = Component.translatable(row.detailKey(), row.detailArgs().toArray());
+        if (row.goal() != null && row.detailRight() != null) {
+          d =
+              d.copy()
+                  .append(Component.literal(" \u00b7 "))
+                  .append(Component.translatable(row.detailRightKey(), row.detailRight()));
+        }
         g.drawString(font, d, x0 + PAD, y, LABEL, false);
+        leftEnd = x0 + PAD + font.width(d);
       }
       if (row.goal() != null) {
         MonitorView.Goal gl = row.goal();
+        Component pct = Component.literal(gl.percent());
+        g.drawString(font, pct, right - font.width(pct), y, VALUE, false);
         if (gl.etaKey() != null) {
           Component eta =
               gl.etaArg() == null
                   ? Component.translatable(gl.etaKey())
                   : Component.translatable(gl.etaKey(), gl.etaArg());
-          g.drawString(font, eta, right - font.width(eta), y, LABEL, false);
+          int ex = right - font.width(pct) - 8 - font.width(eta);
+          if (ex > leftEnd + 8) { // never over the left text
+            g.drawString(font, eta, ex, y, LABEL, false);
+          }
         }
       } else if (row.detailRight() != null) {
         Component r =
@@ -372,33 +385,20 @@ public final class MonitorScreen extends Screen {
   }
 
   /**
-   * The next-gate bar line: the goals count in the label column, then the bar (value against the
-   * target; the fill is a continuous bar, never colour alone because the percent is written), then
-   * the percent. Returns the y below the line.
+   * The next-gate bar: value against the target, full width, no text (the percent is on the detail
+   * line, so the bar is never colour alone). Returns the y below the line.
    */
   private int drawGoalBar(GuiGraphics g, MonitorView.Row row, int x0, int right, int y) {
     MonitorView.Goal gl = row.goal();
-    int mid = y + (GOAL_BAR_LINE_H - 8) / 2;
-    if (row.detailRight() != null) {
-      Component c =
-          row.detailRightKey() != null
-              ? Component.translatable(row.detailRightKey(), row.detailRight())
-              : Component.literal(row.detailRight());
-      g.drawString(font, c, x0 + PAD, mid, LABEL, false);
+    int bx = x0 + PAD;
+    int bw = right - bx;
+    int by = y + (GOAL_BAR_LINE_H - GOAL_BAR_H);
+    int filled = (int) Math.round(gl.fraction() * bw);
+    if (gl.fraction() > 0) {
+      filled = Math.max(1, filled);
     }
-    int pw = font.width(gl.percent());
-    g.drawString(font, gl.percent(), right - pw, mid, LABEL, false);
-    int bx = x0 + PAD + LABEL_W;
-    int bw = right - pw - 4 - bx;
-    if (bw >= 10) {
-      int by = y + (GOAL_BAR_LINE_H - GOAL_BAR_H) / 2;
-      int filled = (int) Math.round(gl.fraction() * bw);
-      if (gl.fraction() > 0) {
-        filled = Math.max(1, filled);
-      }
-      g.fill(bx, by, bx + bw, by + GOAL_BAR_H, GOAL_BAR_EMPTY);
-      g.fill(bx, by, bx + Math.min(bw, filled), by + GOAL_BAR_H, GOAL_BAR_FILL);
-    }
+    g.fill(bx, by, bx + bw, by + GOAL_BAR_H, GOAL_BAR_EMPTY);
+    g.fill(bx, by, bx + Math.min(bw, filled), by + GOAL_BAR_H, GOAL_BAR_FILL);
     return y + GOAL_BAR_LINE_H;
   }
 

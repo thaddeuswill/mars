@@ -1,0 +1,35 @@
+# Slice 7: next-gate bar in three states (far, holding, reached) on mars:planet_1, 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 14 64 12 mars:solar_panel
+cmd /setblock 6 64 4 mars:battery
+cmd /mars monitor
+wait 40
+shot slice7_1_far_dome_0_of_3
+cmd /mars index advance 1.5
+cmd /mars monitor
+wait 40
+shot slice7_2_holding_dome_half
+cmd /mars index advance 2
+cmd /setblock 5 64 4 mars:regolith_outgasser
+cmd /mars index advance 2
+cmd /mars monitor
+wait 40
+shot slice7_3_pressure_goal_early_estimate
+cmd /mars index advance 8
+cmd /mars monitor
+wait 40
+shot slice7_3b_pressure_goal_busy_detail_dropped
+cmd /mars index set pressure 5.5
+cmd /mars index advance 1
+cmd /mars monitor
+wait 40
+shot slice7_4_reached_all_goals
+quit

@@ -66,10 +66,14 @@ final class MonitorStyle {
   static final int BAR_W = BAR_SEGMENTS * BAR_SEG_W + (BAR_SEGMENTS - 1) * BAR_SEG_GAP;
   static final int BAR_H = 5;
 
-  /** Next-gate bar: a continuous bar GOAL_BAR_H tall on its own line of GOAL_BAR_LINE_H. */
-  static final int GOAL_BAR_H = 4;
+  /**
+   * Next-gate bar: a continuous bar GOAL_BAR_H tall on its own line of GOAL_BAR_LINE_H, full width.
+   * It carries no text; the percent, the estimate and the goals count are on the detail line below,
+   * which is the first thing dropped when the panel is tight (the bar stays).
+   */
+  static final int GOAL_BAR_H = 3;
 
-  static final int GOAL_BAR_LINE_H = 7;
+  static final int GOAL_BAR_LINE_H = 4;
   static final int GOAL_BAR_FILL = STATE_GOOD;
   static final int GOAL_BAR_EMPTY = BAR_EMPTY;
   static final int PLOT_MIN_H = 16;

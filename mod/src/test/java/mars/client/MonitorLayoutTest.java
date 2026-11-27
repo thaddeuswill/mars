@@ -89,7 +89,9 @@ class MonitorLayoutTest {
         assertTrue(MonitorLayout.plotHeight(v, H3) >= MonitorStyle.PLOT_MIN_H, e.getKey());
       }
       assertTrue(
-          total <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW, e.getKey() + " is " + total);
+          total
+              <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+          e.getKey() + " is " + total);
     }
   }
 
@@ -105,7 +107,10 @@ class MonitorLayoutTest {
       System.out.println(
           e.getKey() + ": rows " + fixed + " + plot " + plot + " -> panel " + total + " GUI px");
       assertTrue(plot >= MonitorStyle.PLOT_MIN_H, e.getKey());
-      assertTrue(total <= MonitorStyle.TARGET_H + 6, e.getKey() + " is " + total);
+      // The goal bar costs GOAL_BAR_LINE_H (4) in every state; nothing else grew.
+      assertTrue(
+          total <= MonitorStyle.TARGET_H + 6 + MonitorStyle.GOAL_BAR_LINE_H,
+          e.getKey() + " is " + total);
       assertTrue(total <= H3 - 2 * MonitorStyle.MARGIN, e.getKey());
     }
   }
@@ -151,7 +156,9 @@ class MonitorLayoutTest {
               + " GUI px");
       assertTrue(hasBar, e.getKey());
       assertTrue(
-          total <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW, e.getKey() + " is " + total);
+          total
+              <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+          e.getKey() + " is " + total);
       // The bar line itself never drops: only the detail text and the plot give way.
       assertTrue(v.rows().stream().anyMatch(r -> r.goal() != null), e.getKey());
     }
@@ -168,6 +175,10 @@ class MonitorLayoutTest {
     MonitorView.Row f =
         fitted.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
     assertEquals(g.goal(), f.goal());
-    assertEquals(g.detailRight(), f.detailRight());
+    assertEquals(g.detailKey(), f.detailKey(), "room enough: the detail line stays");
+    MonitorView tight = MonitorLayout.fit(levellingShortAndDusty());
+    MonitorView.Row t =
+        tight.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
+    assertEquals(null, t.detailKey(), "the detail line is what gives way when tight");
   }
 }

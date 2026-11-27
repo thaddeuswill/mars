@@ -23,8 +23,8 @@ final class MonitorLayout {
   /**
    * The view as drawn. When the rows alone would leave the plot less than {@link
    * MonitorStyle#PLOT_MIN_H} inside {@link MonitorStyle#TARGET_H}, the lowest-priority line goes
-   * first: the goal's detail line (what it needs and the time estimate; the bar and the goals count
-   * stay). Problem lines (a stalled machine, a dusty panel) never drop.
+   * first: the goal's detail line (what it needs, the percent, the time estimate and the goals
+   * count; the bar stays). Problem lines (a stalled machine, a dusty panel) never drop.
    */
   static MonitorView fit(MonitorView view) {
     if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
@@ -48,8 +48,8 @@ final class MonitorLayout {
                   r.side(),
                   null,
                   List.of(),
-                  r.detailRightKey(),
-                  r.detailRight(),
+                  null,
+                  null,
                   r.bar(),
                   r.noteKey(),
                   r.goal()));
@@ -88,11 +88,12 @@ final class MonitorLayout {
     return fixedHeight(view) + (ph > 0 ? ph + PLOT_LABEL_H + 2 : 0);
   }
 
-  /** A goal row draws its goals count on the bar line, so only its detail text makes a line. */
+  /**
+   * A goal row's detail line carries the percent, the estimate and the goals count; the other rows
+   * have one when they have a detail text or a right-hand text.
+   */
   static boolean hasDetailLine(MonitorView.Row row) {
-    return row.goal() != null
-        ? row.detailKey() != null
-        : row.detailKey() != null || row.detailRight() != null;
+    return row.detailKey() != null || row.detailRight() != null;
   }
 
   static int rowHeight(MonitorView.Row row) {
