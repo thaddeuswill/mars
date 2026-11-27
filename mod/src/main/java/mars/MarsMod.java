@@ -3,7 +3,9 @@ package mars;
 import mars.planets.TravelCommands;
 import mars.selftest.SelfTest;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
@@ -18,7 +20,8 @@ public final class MarsMod {
   public static final String MOD_ID = "mars";
   private static final Logger LOG = LoggerFactory.getLogger("mars");
 
-  public MarsMod(IEventBus modBus) {
+  public MarsMod(IEventBus modBus, ModContainer container) {
+    container.registerConfig(ModConfig.Type.SERVER, MarsServerConfig.SPEC);
     SelfTest.installIfEnabled(modBus);
     SelfTest.step("mod_constructed");
     mars.machines.MarsMachines.register(modBus);

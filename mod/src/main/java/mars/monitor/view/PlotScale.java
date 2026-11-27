@@ -21,6 +21,12 @@ public final class PlotScale {
     return 10 * base;
   }
 
+  /** Hold the phase range until an actual sample would leave it. */
+  public static double topFor(double goal, double maxSample) {
+    double phaseTop = 1.2 * goal;
+    return goal > 0 && maxSample <= phaseTop ? phaseTop : niceMax(maxSample);
+  }
+
   /** Pixel offset from the left of a plot {@code width} wide for a sol in [first, last]. */
   public static int x(double sol, double first, double last, int width) {
     if (last <= first) {

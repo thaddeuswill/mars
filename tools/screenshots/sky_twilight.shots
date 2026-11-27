@@ -1,0 +1,41 @@
+# Stage 2 sky follow-up, 1280x720. Compare the same west-facing horizon at both pressures.
+# Set vanilla time after arriving on Mars. Freeze daylight and keep clear weather.
+wait 100
+cmd /mars go
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars index set pressure 0.6
+wait 200
+# At noon the sun is overhead. Level views show the terrain/fog horizon instead.
+view 0 70 0 90 -90
+wait 20
+shot twilight_p0_6_noon_sun
+view 0 66 0 90 0
+wait 20
+shot twilight_p0_6_noon_horizon
+cmd /time set 12000
+wait 40
+shot twilight_p0_6_dusk_horizon
+cmd /time set 18000
+wait 40
+shot twilight_p0_6_night_horizon
+
+cmd /mars index set pressure 75
+cmd /time set 6000
+wait 200
+view 0 70 0 90 -90
+wait 20
+shot twilight_p75_noon_sun
+view 0 66 0 90 0
+wait 20
+shot twilight_p75_noon_horizon
+cmd /time set 12000
+wait 40
+shot twilight_p75_dusk_horizon
+cmd /time set 18000
+wait 40
+shot twilight_p75_night_horizon
+quit

@@ -22,8 +22,8 @@ public class RegolithOutgasserBlock extends MachineBlock {
 
   /**
    * Survival players may place it only after "Dome stable" (data/mars/gates). Creative players
-   * pass. Returning null cancels the placement before anything is registered. {@code /setblock},
-   * loot and other non-player routes do not go through here.
+   * bypass the lock when the server allows it. Returning null cancels the placement before anything
+   * is registered. {@code /setblock}, loot and other non-player routes do not go through here.
    */
   @Override
   public BlockState getStateForPlacement(BlockPlaceContext context) {

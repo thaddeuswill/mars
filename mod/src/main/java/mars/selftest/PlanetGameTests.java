@@ -318,7 +318,8 @@ public final class PlanetGameTests {
                 java.util.List.of(
                     new MonitorView.Marker(6.0, "monitor.event.placed.regolith_outgasser", null),
                     new MonitorView.Marker(9.0, "gate.reached", "gate.mars.dome_stable")),
-                "kPa"));
+                "kPa",
+                new MonitorView.GoalLine("gate.mars.phase_2_begins", 5.0, false)));
     RegistryFriendlyByteBuf plotBuf =
         new RegistryFriendlyByteBuf(Unpooled.buffer(), level.registryAccess());
     MonitorPayload.CODEC.encode(plotBuf, new MonitorPayload(withPlot));
@@ -971,8 +972,25 @@ public final class PlanetGameTests {
             "canPlace=" + before + " creative=" + player.isCreative(),
             !before && !player.isCreative());
     player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
-    boolean creative = canPlace.get();
+    var bypass = mars.MarsServerConfig.CREATIVE_GATE_BYPASS;
+    boolean configured = bypass.get();
+    boolean creative;
+    boolean creativeWithBypassOff;
+    try {
+      bypass.set(true);
+      creative = canPlace.get();
+      bypass.set(false);
+      creativeWithBypassOff = canPlace.get();
+    } finally {
+      bypass.set(configured);
+    }
     player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+    ok &=
+        SelfTest.check(
+            "gate.classroom_creative_refused",
+            "with creativeGateBypass off, Creative placement still requires Dome stable",
+            "canPlace=" + creativeWithBypassOff,
+            !creativeWithBypassOff);
     ok &=
         SelfTest.check(
             "gate.creative_route",

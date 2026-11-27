@@ -78,7 +78,7 @@ public final class PlanetManager {
 
   /**
    * May this player place the machine here? Survival players need every gate that unlocks it to
-   * have latched. Creative players pass (the creative and admin route, logged). Not a planet: yes.
+   * have latched. Creative players may bypass the lock when the server option is enabled (logged).
    * On refusal the player is told why.
    */
   public static boolean placementAllowed(
@@ -92,7 +92,7 @@ public final class PlanetManager {
     if (lock == null) {
       return true;
     }
-    if (player != null && player.isCreative()) {
+    if (player != null && player.isCreative() && mars.MarsServerConfig.CREATIVE_GATE_BYPASS.get()) {
       LOG.info(
           "{} placed {} in creative before gate {} (admin route)",
           player.getName().getString(),
