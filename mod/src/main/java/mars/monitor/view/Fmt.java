@@ -31,4 +31,17 @@ public final class Fmt {
   public static String withUnit(double v, int decimals, String unit) {
     return number(v, decimals) + " " + unit;
   }
+
+  /**
+   * A length of time for the storm texts: "1 sol", "2 sols", "1.5 sols", or "5 min" under one sol
+   * (a sol is {@code minutesPerSol} minutes of play). Never "0 min".
+   */
+  public static String duration(double sols, double minutesPerSol) {
+    if (sols >= 0.95) {
+      double r = Math.round(sols * 10) / 10.0;
+      String n = r == Math.rint(r) ? Long.toString(Math.round(r)) : number(r, 1);
+      return n + (r == 1.0 ? " sol" : " sols");
+    }
+    return Math.max(1, Math.round(sols * minutesPerSol)) + " min";
+  }
 }

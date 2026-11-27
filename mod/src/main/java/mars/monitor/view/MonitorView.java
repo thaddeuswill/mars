@@ -214,6 +214,48 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           goal);
     }
 
+    /** The same row without its detail line. */
+    public Row withoutDetail() {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          null,
+          List.of(),
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
+          goal);
+    }
+
+    /** The same row with these cause lines. */
+    public Row withCauses(List<CauseLine> newCauses) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          newCauses,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
+          goal);
+    }
+
     /** The same row with another goal bar (null for none). */
     public Row withGoal(Goal newGoal) {
       return new Row(
@@ -306,6 +348,12 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       if (n.noteKey() != null && !visible.test(n.noteKey())) {
         n = n.withNote(null);
       }
+      if (n.detailKey() != null && !visible.test(n.detailKey())) {
+        n = n.withoutDetail();
+      }
+      if (n.causes().stream().anyMatch(c -> !causeVisible(c, visible))) {
+        n = n.withCauses(n.causes().stream().filter(c -> causeVisible(c, visible)).toList());
+      }
       if (n.goal() != null && n.goal().etaKey() != null && !visible.test(n.goal().etaKey())) {
         Goal g = n.goal();
         n = n.withGoal(new Goal(g.fraction(), g.percent(), null, null));
@@ -314,6 +362,10 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       out.add(n);
     }
     return changed ? new MonitorView(sols, List.copyOf(out), history) : this;
+  }
+
+  private static boolean causeVisible(CauseLine c, java.util.function.Predicate<String> visible) {
+    return visible.test(c.sourceKey()) && (c.reasonKey() == null || visible.test(c.reasonKey()));
   }
 
   public static MonitorView of(PlanetSim sim) {
@@ -388,6 +440,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
+    stormRow(sim).ifPresent(rows::add);
     gateRows(sim, rows, net);
     // One short tag, only in a classroom world, so a standard world adds no height.
     if (sim.pace().classroom()) {
@@ -453,6 +506,95 @@ public record MonitorView(double sols, List<Row> rows, History history) {
         List.copyOf(marks),
         sim.model().unit(Ids.PRESSURE),
         GoalLine.next(sim.gates().defs(), sim.gates()::isLatched));
+  }
+
+  /**
+   * The storm row (ui-specs.md section 10): appears at the first warning, says when the storm
+   * arrives, how long is left, that it is over (with a pointer to the panels), or that none is
+   * expected. During a storm the row carries the sunlight cause line. Nothing before the first
+   * warning (progressive disclosure), and nothing on a planet with no storm schedule. Warning and
+   * "arrives in" never name solar, power or panels (CR-F9); the cause line and the panel pointer
+   * do, and are declared in lines.json so they are held back while a forecast about solar power is
+   * open.
+   */
+  static java.util.Optional<Row> stormRow(PlanetSim sim) {
+    var storm = sim.storm();
+    if (storm == null) {
+      return java.util.Optional.empty();
+    }
+    double now = sim.model().sols();
+    double minPerSol = sim.pace().solTicks() / 1200.0;
+    var phase = storm.phase();
+    if (phase == mars.hazards.storm.StormSchedule.Phase.WARNING) {
+      return java.util.Optional.of(
+          stormRow(
+              "monitor.storm.label.warn",
+              Fmt.duration(storm.solsUntilStart(now), minPerSol),
+              "monitor.storm.value.warn",
+              Tone.SHORT));
+    }
+    if (phase == mars.hazards.storm.StormSchedule.Phase.ACTIVE) {
+      double cut = sim.stormSolarFactor() - 1.0; // negative
+      List<CauseLine> causes =
+          List.of(
+              new CauseLine(
+                  "monitor.cause.storm_sunlight",
+                  0,
+                  Fmt.signed(cut * 100, 0) + "\u00a0%",
+                  null,
+                  -1));
+      Row r =
+          stormRow(
+              "monitor.storm.label.active",
+              Fmt.duration(storm.solsLeft(now), minPerSol),
+              "monitor.storm.value.active",
+              Tone.SHORT);
+      return java.util.Optional.of(
+          new Row(
+              r.labelKey(),
+              r.value(),
+              r.valueKey(),
+              null,
+              null,
+              causes,
+              r.tone(),
+              false,
+              null,
+              null,
+              List.of(),
+              null,
+              null,
+              -1));
+    }
+    if (storm.stormsEnded() == 0) {
+      return java.util.Optional.empty(); // never shown before the first warning
+    }
+    if (now < storm.lastEndSol() + storm.warningSols()) {
+      Row r = stormRow("monitor.storm.label.over", "", "monitor.storm.value.over", Tone.GOOD);
+      return java.util.Optional.of(
+          new Row(
+              r.labelKey(),
+              r.value(),
+              r.valueKey(),
+              null,
+              null,
+              List.of(),
+              r.tone(),
+              false,
+              null,
+              "monitor.storm.over.detail",
+              List.of(),
+              null,
+              null,
+              -1));
+    }
+    return java.util.Optional.of(stormRow("monitor.storm.label.clear", "", null, Tone.NORMAL));
+  }
+
+  private static Row stormRow(String label, String value, String valueKey, Tone tone) {
+    return new Row(
+        label, value, valueKey, null, null, List.of(), tone, false, null, null, List.of(), null,
+        null, -1);
   }
 
   /**

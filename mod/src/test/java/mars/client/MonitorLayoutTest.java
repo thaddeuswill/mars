@@ -219,4 +219,48 @@ class MonitorLayoutTest {
     assertTrue(
         total <= MonitorStyle.TARGET_H + 6 + MonitorStyle.GOAL_BAR_LINE_H, "panel is " + total);
   }
+
+  /** Storm row states stay inside the same bound as the other problem lines. */
+  @Test
+  void theStormRowKeepsThePanelInBoundInEveryStormState() throws Exception {
+    java.util.Map<String, MonitorView> states = new java.util.LinkedHashMap<>();
+    PlanetSim warn = TestSims.stormSim(Pace.STANDARD, 1);
+    TestSims.withPanels(warn, 3);
+    warn.addMachine(TestSims.BATTERY, 5000L);
+    warn.addMachine(TestSims.OUTGASSER, 1L);
+    warn.model().advanceSols(13.5);
+    states.put("warning", MonitorView.of(warn));
+    warn.model().advanceSols(1.0);
+    states.put("active", MonitorView.of(warn));
+    warn.model().advanceSols(2.0);
+    states.put("over", MonitorView.of(warn));
+    PlanetSim worst = TestSims.stormSim(Pace.STANDARD, 1);
+    worst.addMachine(TestSims.PANEL, 1000L);
+    worst.setEfficiency(1000L, 0.6);
+    worst.addMachine(TestSims.BATTERY, 5000L);
+    worst.addMachine(TestSims.OUTGASSER, 1L);
+    worst.addMachine(TestSims.OVEN, 10L);
+    worst.addMachine(TestSims.OVEN, 11L);
+    worst.model().advanceSols(14.5); // storm on, levelling off, short, dusty
+    states.put("worst: storm+short+dusty+frost", MonitorView.of(worst));
+    for (var e : states.entrySet()) {
+      MonitorView v = MonitorLayout.fit(e.getValue());
+      int total = MonitorLayout.panelHeight(v, H3);
+      System.out.println(
+          e.getKey()
+              + ": plot "
+              + MonitorLayout.plotHeight(v, H3)
+              + " -> panel "
+              + total
+              + " GUI px");
+      assertTrue(
+          e.getValue().rows().stream().anyMatch(r -> r.labelKey().startsWith("monitor.storm")),
+          e.getKey() + " has a storm row");
+      assertTrue(
+          total
+              <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+          e.getKey() + " is " + total);
+      assertTrue(total <= H3 - 2 * MonitorStyle.MARGIN, e.getKey());
+    }
+  }
 }

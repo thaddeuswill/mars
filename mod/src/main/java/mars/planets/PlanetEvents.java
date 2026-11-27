@@ -35,6 +35,7 @@ public final class PlanetEvents {
     if (data.sim().onServerTick(SessionData.get(level.getServer()).clock())) {
       data.setDirty();
       PlanetManager.announceGates(level, data);
+      StormEvents.announce(level, data);
     }
     mars.sky.SkySync.onPlanetTick(level, data);
   }

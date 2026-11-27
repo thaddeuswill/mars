@@ -1,11 +1,13 @@
 {
   "schema": 1,
-  "_comment": "CR-T8: every Monitor line that states an estimate or prediction is declared here. reveals = value ids the line states or implies (hidden while a forecast about one is open for that player). hidden_under = guidance levels that never see the line. A test fails if a monitor.goal.eta* or monitor.estimate.* key in en_us.json is missing here.",
+  "_comment": "CR-T8: every Monitor line that states an estimate or prediction is declared here. reveals = value ids the line states or implies (hidden while a forecast about one is open for that player). hidden_under = guidance levels that never see the line. mars:solar_power is the value id forecast F1 (storm and solar power) will open; the storm cause line and the panel pointer are held back while it is open (CR-F9, CR-T8; ui-specs.md section 10). A test fails if a monitor.goal.eta* or monitor.estimate.* key in en_us.json is missing here.",
   "lines": {
     "monitor.goal.eta":                  { "reveals": ["mars:pressure"], "hidden_under": ["expert"] },
     "monitor.goal.eta_one":              { "reveals": ["mars:pressure"], "hidden_under": ["expert"] },
     "monitor.goal.eta_soon":             { "reveals": ["mars:pressure"], "hidden_under": ["expert"] },
     "monitor.estimate.levelling_off":    { "reveals": ["mars:pressure"] },
-    "monitor.estimate.levelling_off.hs": { "reveals": ["mars:pressure"] }
+    "monitor.estimate.levelling_off.hs": { "reveals": ["mars:pressure"] },
+    "monitor.cause.storm_sunlight":      { "reveals": ["mars:solar_power"] },
+    "monitor.storm.over.detail":         { "reveals": ["mars:solar_power"] }
   }
 }

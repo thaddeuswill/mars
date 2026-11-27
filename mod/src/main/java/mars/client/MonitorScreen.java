@@ -332,7 +332,7 @@ public final class MonitorScreen extends Screen {
 
     Component value =
         row.valueKey() != null
-            ? Component.translatable(row.valueKey())
+            ? Component.translatable(row.valueKey(), row.value())
             : Component.literal(row.value());
     int valueX = x0 + PAD + LABEL_W;
     // A long phrase shrinks to fit the space left instead of running into the trend.
