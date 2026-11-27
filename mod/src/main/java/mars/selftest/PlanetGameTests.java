@@ -972,8 +972,25 @@ public final class PlanetGameTests {
             "canPlace=" + before + " creative=" + player.isCreative(),
             !before && !player.isCreative());
     player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
-    boolean creative = canPlace.get();
+    var bypass = mars.MarsServerConfig.CREATIVE_GATE_BYPASS;
+    boolean configured = bypass.get();
+    boolean creative;
+    boolean creativeWithBypassOff;
+    try {
+      bypass.set(true);
+      creative = canPlace.get();
+      bypass.set(false);
+      creativeWithBypassOff = canPlace.get();
+    } finally {
+      bypass.set(configured);
+    }
     player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+    ok &=
+        SelfTest.check(
+            "gate.classroom_creative_refused",
+            "with creativeGateBypass off, Creative placement still requires Dome stable",
+            "canPlace=" + creativeWithBypassOff,
+            !creativeWithBypassOff);
     ok &=
         SelfTest.check(
             "gate.creative_route",

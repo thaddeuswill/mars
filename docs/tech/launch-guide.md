@@ -35,7 +35,7 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 
 ### 1b. Goals (slice 4)
 
-On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time**; operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
+On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". By default, **Creative players can place the Outgasser at any time**. For a classroom playtest, stop the game or server, set `creativeGateBypass = false` in `config/mars-server.toml` for that instance, and restart. Creative placement then requires Dome stable too. Operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
 
 ### 1c. Operator controls
 
