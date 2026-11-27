@@ -1,0 +1,31 @@
+# CX-2: isolate frustum culling of a round array at a chunk corner.
+# Use the normal 70-degree FOV at 1280x720. View Y is the player's feet.
+wait 100
+cmd /mars go
+wait 80
+cmd /gamemode creative
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /fill 14 63 14 18 63 18 minecraft:smooth_stone
+cmd /setblock 16 64 16 mars:solar_panel[facing=north,dust_stage=0]
+wait 80
+# Verify the full disc and its west rim before testing the edge camera.
+view 16.5 66.5 11 0 25
+wait 60
+shot frustum_round_whole
+wait 20
+# Camera stays west of x=16. At yaw 65 with the default FOV the center chunk
+# should be outside the view. The disc tip at x~15.4 is ahead and west of the
+# camera, so it should still appear near the right edge. Check both in the PNG.
+view 15.98 64.0 15.0 65 12
+wait 60
+shot frustum_round_west_rim
+wait 20
+# Empty control at exactly the same camera. Remove the center, never the rim.
+cmd /setblock 16 64 16 minecraft:air
+wait 60
+shot frustum_round_empty_control
+wait 20
+quit
