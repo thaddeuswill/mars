@@ -81,7 +81,7 @@ Count of planet rows on screen: 2 (Phase 1) → 4 (late Phase 2) → 6 (Phase 3)
 | Condition(s) | One chip per condition. Multi-condition gates (Phase 3: pressure **and** temperature) show one bar per condition; the gate is the **lowest** bar |
 | Progress | For pressure: progress along the **log scale** from the previous gate's value to the target (so Phase 1's 0.6 → 5 kPa doesn't sit at 0–10 % for hours). For temperature: linear from previous gate value. Hydrosphere: linear from 0 |
 | Estimate | "~N sols at this rate" from the 1-sol net trend. Shown only when the trend is up; otherwise "Not rising: check causes" (link to the value page). Rounded to whole sols; "< 1 sol" below 1 |
-| Dome stable (machine-state gate) | "Life support: {n}/{hold_sols} sols with no failures" with tick boxes; resets visibly on a failure |
+| Dome stable (machine-state gate) | "Life support: {n}/{hold_sols} sols" (tick boxes optional, cosmetic). **Same hold rule as every hold** (balance sheet §2c decision 7): on a failure it shows "Waiting: {reason}. Resets in {t} sol if not fixed" and the count keeps its value; only after more than 1 sol out (classroom 0.5) does it reset, with a failure-report line saying why |
 | Holds (Breathable, Equilibrium) | "Holding: 4/7 sols" with a ring; if a value leaves the band: "Paused: O2 out of band · resets in {t} sol if not fixed" (hold rule, balance sheet §4) |
 | After Equilibrium | "Next: build and light the beacon" with component checklist (DESIGN.md content lists) |
 | Never shown | Scores, ranks, XP, or anything about other groups |
@@ -219,9 +219,26 @@ Every page pairs text with a small picture or Monitor graph (DESIGN.md, Multimed
 
 **Stale arrival line (Technical Lead handoff).** I found no "The planet is empty for now" text left in `mod/src` or `pack` (grep, 2026-11-27); `docs/team/reports/2026-11-27-technical-lead-arrival-copy.md` suggests it was already replaced. If it returns, use: "You are on Mars. Place a Regolith Outgasser and a Planetary Monitor, then watch the pressure."
 
-**Slice 4 gate wording (new, straw-man, not reviewed by the Lead Game Designer; in `en_us.json`).** `monitor.row.next_goal` "Next goal"; `monitor.row.goals_reached` "Goals reached" (value "1 / 2"); `gate.mars.dome_stable` "Dome stable"; `gate.mars.phase_2_begins` "Phase 2 begins"; `monitor.gate.dome_stable.progress` "Life support, no failures" with "1.0 / 3 sols"; `monitor.gate.dome_stable.waiting` "Life support is not steady. The count waits."; `monitor.gate.phase_2_begins.progress` "Air pressure" with "0.60 / 5 kPa"; chat `gate.reached` "Goal reached: %s", `gate.unlocked` "You can now build: %s"; action bar `gate.locked.placement` "Not yet. Reach "%s" first." Differences from section 3: no tick boxes yet (a number, not boxes), and the hold counter pauses for a short failure and resets after 1 sol (balance sheet 4), where section 3 says a failure resets visibly. The Game Designer should pick one.
+**Slice 4 gate wording (new, straw-man, not reviewed by the Lead Game Designer; in `en_us.json`).** `monitor.row.next_goal` "Next goal"; `monitor.row.goals_reached` "Goals reached" (value "1 / 2"); `gate.mars.dome_stable` "Dome stable"; `gate.mars.phase_2_begins` "Phase 2 begins"; `monitor.gate.dome_stable.progress` "Life support, no failures" with "1.0 / 3 sols"; `monitor.gate.dome_stable.waiting` "Life support is not steady. The count waits."; `monitor.gate.phase_2_begins.progress` "Air pressure" with "0.60 / 5 kPa"; chat `gate.reached` "Goal reached: %s", `gate.unlocked` "You can now build: %s"; action bar `gate.locked.placement` "Not yet. Reach "%s" first." Differences from section 3: no tick boxes yet (a number, not boxes), and the hold counter pauses for a short failure and resets after 1 sol (balance sheet 4), where section 3 says a failure resets visibly. **Resolved 2026-11-27 (proposed, balance sheet §2c decision 7): pause, then reset after more than 1 sol (classroom 0.5), for every hold; §3 above is updated to match.**
 
 **Monitor review fixes built (2026-11-27, straw-man wording, new keys in `en_us.json`):** `monitor.cause.needs_power` "needs power", `monitor.cause.low_power` "low power", `monitor.cause.dusty` "dusty, makes less", `monitor.power.summary` "Making %s, using %s units/sol", `monitor.goals.count` "Goals %s", `monitor.close_hint` "Esc to close"; `monitor.power.short` changed to "Short on power". The trend word ("Rising") is dropped when the value needs the room; the shape and the signed rate stay. Colours and sizes: `mars.client.MonitorStyle`.
+
+### Slice 5 wording (proposed 2026-11-27, Game Designer; straw man for the grade 6-7 check by the Instructional Designer)
+
+Goals: B1, B2. Line format follows `monitor.cause.outgasser` ("Outgassers: +%s per sol"). The number comes from the formatting helper.
+
+| Key | Text | Shown when |
+|---|---|---|
+| `monitor.cause.oven` | "Regolith Ovens: +%s per sol" | At least one Oven is placed. Suffixes as for Outgassers (`needs power`, `low power`) |
+| `monitor.cause.polar_frost` | "Polar frost: %s per sol" (the number is negative, with a minus sign and a down shape, never colour only) | The sink is running (T below -20 C) and its rate, rounded by the helper, is not 0.00. Rule: **hide at baseline**. At 0.60 kPa the sink is zero, so no line; it first appears near 0.85 kPa (2 % x 0.25 = 0.005 per sol), about when the first Outgassers run: the planet pushes back after you push (pillar 5) |
+| `monitor.cause.polar_frost_release` | "Polar frost gives back: +%s per sol" | T above -20 C and the reservoir (or buried CO2) is releasing |
+| `monitor.cause.polar_frost.read_more` (HS default open, MS one click) | "On real Mars, about a quarter of the air freezes onto the poles each winter. In spring the dry ice turns back into gas, so the air pressure goes back up." (SME wording, `docs/science/frost-sink-review.md` Q4; keep "about a quarter", sources differ; it states the cycle is reversible) | With the line. **ID to check grade 6-7 and CR-F9/F10** |
+| `monitor.estimate.levelling_off` | "Levelling off: the frost takes back about as much as your machines add." | Net 1-sol trend below 0.005 kPa/sol (*invented*) and the goal not reached. Replaces "Not rising: check causes" in that case |
+| `monitor.estimate.levelling_off.hs` | "The two balance near %s. More machines move the balance up." | High-school band, read-more only |
+| `monitor.oven.tooltip` | "Bakes soil and releases a little gas. Water comes later." | Oven item tooltip (names the missing water, decision 6) |
+| `monitor.cause.polar_frost` while paused | Line stays, same value; the reservoir does not change | Session paused |
+
+The frost line is a cause line like any other (Phase 1: open by default, re-scaffold rule in §1). It never flashes and carries no warning colour: it is the planet balancing, not a failure.
 
 ### Pause design (one line; **not built yet**)
 

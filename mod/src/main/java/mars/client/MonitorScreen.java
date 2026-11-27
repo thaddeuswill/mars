@@ -115,46 +115,75 @@ public final class MonitorScreen extends Screen {
     java.util.List<MonitorView.Point> pts = hist.points();
     double first = pts.get(0).sol();
     double last = pts.get(pts.size() - 1).sol();
+    // Pixel positions of the series, used to draw it and to keep event labels off it.
+    int n = pts.size();
+    int[] sxs = new int[n];
+    int[] sys = new int[n];
+    for (int i = 0; i < n; i++) {
+      sxs[i] = px + PlotScale.x(pts.get(i).sol(), first, last, pw);
+      sys[i] = top + PlotScale.y(pts.get(i).value(), topValue, h);
+    }
     // Event lines first so the series draws over them.
-    int labelEnd = Integer.MIN_VALUE;
+    java.util.List<MonitorView.Marker> marks = new java.util.ArrayList<>();
     for (MonitorView.Marker m : hist.markers()) {
-      if (m.sol() < first - 1e-6 || m.sol() > last + 1e-6) {
-        continue;
+      if (m.sol() >= first - 1e-6 && m.sol() <= last + 1e-6) {
+        marks.add(m);
       }
+    }
+    for (MonitorView.Marker m : marks) {
       int mx = px + PlotScale.x(m.sol(), first, last, pw);
       for (int yy = top; yy < top + h; yy += 3) {
         g.fill(mx, yy, mx + 1, Math.min(yy + 2, top + h), CAUSE);
+      }
+    }
+    boolean dots = n <= 24;
+    for (int i = 0; i < n; i++) {
+      if (i > 0) {
+        drawLine(g, sxs[i - 1], sys[i - 1], sxs[i], sys[i], PLOT_LINE);
+      }
+      if (dots) {
+        g.fill(sxs[i] - 1, sys[i] - 1, sxs[i] + 2, sys[i] + 2, PLOT_LINE);
+      }
+    }
+    // Event labels after the series. A machine event ("Outgasser placed") is labelled before a
+    // goal when they sit at the same sol. A label goes on the top or bottom band, whichever the
+    // series does not cross; if both are crossed it goes on top over a backing so it stays legible.
+    java.util.List<MonitorView.Marker> order = new java.util.ArrayList<>(marks);
+    order.sort(java.util.Comparator.comparing(m -> m.argKey() != null)); // stable: machines first
+    int[] bandEnd = {Integer.MIN_VALUE, Integer.MIN_VALUE}; // top band, bottom band
+    for (MonitorView.Marker m : order) {
+      if (h < 14) {
+        break;
       }
       Component label =
           m.argKey() == null
               ? Component.translatable(m.labelKey())
               : Component.translatable(m.labelKey(), Component.translatable(m.argKey()));
       int lw = font.width(label);
+      int mx = px + PlotScale.x(m.sol(), first, last, pw);
       int lx = mx + 2;
       if (lx + lw > px + pw) {
         lx = mx - 2 - lw; // no room on the right: put the label on the left of the line
       }
-      if (lx >= px + 1 && lx > labelEnd && h >= 14) {
-        g.fill(lx - 1, top, lx + lw + 1, top + 9, BACKING);
-        g.drawString(font, label, lx, top + 1, CAUSE, false);
-        labelEnd = lx + lw + 2;
+      if (lx < px + 1) {
+        continue;
       }
-    }
-    int prevX = 0;
-    int prevY = 0;
-    boolean dots = pts.size() <= 24;
-    for (int i = 0; i < pts.size(); i++) {
-      MonitorView.Point p = pts.get(i);
-      int sx = px + PlotScale.x(p.sol(), first, last, pw);
-      int sy = top + PlotScale.y(p.value(), topValue, h);
-      if (i > 0) {
-        drawLine(g, prevX, prevY, sx, sy, PLOT_LINE);
+      int[] yRange = seriesRange(sxs, sys, lx, lx + lw);
+      boolean topFree = yRange[0] > top + 9;
+      boolean bottomFree = yRange[1] < top + h - 10;
+      int band = lx > bandEnd[0] && topFree ? 0 : lx > bandEnd[1] && bottomFree ? 1 : -1;
+      if (band < 0 && lx > bandEnd[0]) {
+        band = 0; // both crossed: top, over a backing
       }
-      if (dots) {
-        g.fill(sx - 1, sy - 1, sx + 2, sy + 2, PLOT_LINE);
+      if (band < 0) {
+        continue;
       }
-      prevX = sx;
-      prevY = sy;
+      int ty = band == 0 ? top : top + h - 9;
+      if (band == 0 && !topFree || band == 1 && !bottomFree) {
+        g.fill(lx - 1, ty, lx + lw + 1, ty + 9, BACKING);
+      }
+      g.drawString(font, label, lx, ty + 1, CAUSE, false);
+      bandEnd[band] = lx + lw + 2;
     }
     // Sol labels under the X axis: first, middle (when there is room), last.
     int ly = top + h + 2;
@@ -164,6 +193,29 @@ public final class MonitorScreen extends Screen {
     }
     drawSolLabel(g, last, px + pw, ly, 2);
     return top + h + PLOT_LABEL_H;
+  }
+
+  /** Lowest and highest pixel row the series reaches between two x positions. */
+  private static int[] seriesRange(int[] sxs, int[] sys, int x1, int x2) {
+    int min = Integer.MAX_VALUE;
+    int max = Integer.MIN_VALUE;
+    for (int i = 0; i < sxs.length; i++) {
+      int ax = i == 0 ? sxs[0] : sxs[i - 1];
+      int ay = i == 0 ? sys[0] : sys[i - 1];
+      int bx = sxs[i];
+      int by = sys[i];
+      int lo = Math.max(x1, Math.min(ax, bx));
+      int hi = Math.min(x2, Math.max(ax, bx));
+      for (int x = lo; x <= hi; x++) {
+        double f = bx == ax ? 0 : (x - ax) / (double) (bx - ax);
+        int y = (int) Math.round(ay + (by - ay) * f);
+        min = Math.min(min, y);
+        max = Math.max(max, y);
+      }
+    }
+    return min == Integer.MAX_VALUE
+        ? new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE}
+        : new int[] {min, max};
   }
 
   /** Align 0 = text starts at x, 1 = centred on x, 2 = text ends at x. */

@@ -105,6 +105,78 @@ One shared grid per planet. Unit: **1 power unit = 1 kWh**; rates are units per 
 
 Worked example (check against `PowerGridTest`): one Outgasser, one clean panel: 5 of 4 units, full rate, +0.10 kPa/sol. Two Outgassers, one clean panel: 5 of 8 units, 62.5 % of the rate, +0.125 kPa/sol in total. One Outgasser on a stage 4 panel: 3.0 of 4 units, 75 %.
 
+## 2c. Slice 5: polar-frost sink, Regolith Oven, shortfall, holds (status: **proposed**, Game Designer 2026-11-27; owner scope: all three temperature branches as data and unit tests, nothing tuned in play)
+
+Tags as in §2a: **sourced**, **calc**, **invented** (game balance), **design choice**. Science wording for the sink is the SME's (handoff in the report). Goals: B1 (causes visible), B2 (balancing feedback), C1 (survive first). Pillars: the planet is the quest log; your progress provokes the planet; pressure, not grind.
+
+### Decision 1. Regolith Oven draw and under-power behaviour
+
+| Item | Value | Tag and reasoning |
+|---|---|---|
+| Oven draw | **1 power unit per sol** each | **Invented.** "Low" in §2; one quarter of the Outgasser's 4 ("Medium"), one fifth of a clean panel. Two Ovens use 2 of 5 units, so the starting grid works with one panel and leaves 3 spare |
+| Oven pressure rate | +0.01 kPa per sol each at full power, standard pace | From §2 (existing). Scaled by pace and group like every source |
+| Under-power | Rate x share of power met, **the same rule as the Outgasser** | **Design choice.** One rule for all machines: a player learns it once (B1). Never a hard stop. The Monitor shows the existing "low power" or "needs power" suffix on the Oven line |
+| Machine JSON | `regolith_oven.json`: `ratePerSol` 0.01, `power.drawPerSol` 1.0 | Same shape as `regolith_outgasser.json`; Technical Lead builds |
+
+Effect on §2b worked examples: one Outgasser plus two Ovens needs 6 units; one clean panel makes 5, so the share is 83 % and the total is +0.10 kPa/sol (not 0.12). The slice 3 examples (Outgasser only) are unchanged; add this one to `PowerGridTest`. The player's lesson: a second panel is worth building before the second Outgasser.
+
+### Decision 2. Where the two starting Ovens come from
+
+**Both Ovens are in the player's inventory on first arrival (one grant per world, not per player), and the player places them.** Reasons: there is no dome structure to pre-place them in (dome build is later work); placing teaches "a machine needs the grid" (C1) at a time when nothing can go wrong; a pre-placed machine would be an invisible cause (breaks "every change is visible"). They are also craftable from the start (cheap recipe, KubeJS, so a lost Oven is not a dead end). The Landing checklist step 6 ("battery") becomes "battery and Ovens: place them and see the Power row" (handoff to the Instructional Designer; Landing is **stable-ish**, so it is a proposal). Dome stable does not require Ovens in slice 5; its stand-in stays "the grid covers demand".
+
+*Risk:* a player who never places them sees a flat 0.60 kPa. Mitigation: the Monitor's cause line says "Nothing is changing this right now." (existing key), and the Next goal line points at pressure.
+
+### Decision 3. Shortfall priority
+
+| Stage | Rule |
+|---|---|
+| **Slice 5 (now)** | **Equal share for every load**, as in §2b. No change to `PowerGrid`. Reason: no life-support machine draws from the grid yet, so a priority rule has nothing to rank. In survival the Outgasser cannot be placed before Dome stable, so the Dome stable stand-in cannot be starved by the Outgasser |
+| **When life support is a real load (later slice)** | Three tiers: **1 life support** (never cut while any lower tier draws), **2 Ovens**, **3 Outgassers and later terraforming machines**. Equal share inside a tier. Add a `priority` integer to machine JSON then, not now |
+
+Why: C1 and the C1/B1 order "survive first, then terraform". A shortfall that slows the Outgasser first teaches the supply and demand lesson (B1) without punishing the 12-year-old's survival. Tier 2 sits above the Outgasser because the Oven also makes dome water (Decision 6) and draws little. **Design choice**; revisit if a playtest shows players cannot tell which machine was cut (then the Monitor names it).
+
+### Decision 4. Stalling below 5 kPa is intended; what the player is told
+
+Equilibrium with only the cold branch: sink = 0.02 x (P - 0.6) per sol, so P_eq = 0.6 + 50 x S, where S is the net source in kPa/sol (**calc**, Producer's arithmetic, rechecked here; not run in the game).
+
+| Build | S (kPa/sol) | P_eq (kPa) | Reaches 5 kPa? |
+|---|---|---|---|
+| 2 Ovens only, full power | 0.02 | 1.6 | No (the flat start; expected before Dome stable) |
+| 1 Outgasser, 1 clean panel, no Ovens | 0.10 | 5.6 | Yes, slowly (margin 0.6) |
+| 1 Outgasser, 2 Ovens, 1 clean panel (share 83 %) | 0.10 | 5.6 | Yes, slowly |
+| 1 Outgasser on a stage 4 panel (60 %), no Ovens | 0.075 | 4.35 | **No** |
+| 1 Outgasser, 2 Ovens, stage 2 panel (82 %) | 0.082 | 4.7 | **No** |
+| 2 Outgassers, 2 Ovens, 2 clean panels (full) | 0.22 | 11.6 | Yes, much faster (the net source is 2.2 x) |
+
+**Decision: stalling with one machine is intended.** The sink exists to teach B2 (a balancing feedback: the more air, the more the frost takes back), and the Phase 1 curve (§2) already assumes four Outgassers by sol 16. A single weak machine cannot finish Phase 1; the fix is a second machine or a cleaner panel, both of which the player can see and do. This is "pressure needs upkeep", not grind. Guard: **the gate is never lowered** (5 kPa is physical; thresholds never scale). If a playtest shows 12-year-olds stuck, the first lever is the sink rate (2 % to 1.5 %: then one clean-panel Outgasser stalls at about 7.3 kPa; **calc**), not the gate. Not tuned in play (owner scope).
+
+**What the player is told** (Monitor, wording in ui-specs §9): when the 1-sol net trend is below 0.005 kPa/sol (*invented*) and the goal is not reached, the Next goal estimate reads "Levelling off: the frost takes back about as much as your machines add." plus the existing cause lines. No equilibrium number in the default text (grade 6-7); the high-school read-more adds "The two balance near {P_eq} kPa. More machines move the balance up." This replaces "Not rising: check causes" for this case. Goals: B1, B2.
+
+(Decision 5, the cause-line wording, is in `docs/design/ui-specs.md` §9.)
+
+### Decision 6. Oven water is out of slice 5
+
+Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tooltip and journal say "Bakes soil and releases a little gas. Water comes later." No fake water number. The Oven keeps its "also gives water" row in §2 as a Stage 3 item (dome systems, goals C1, A2).
+
+### Frost sink model (data and unit tests; Technical Lead builds, SME confirms semantics)
+
+| Item | Value | Tag |
+|---|---|---|
+| Baseline pressure | `baselineKpa` = 0.6, a **per-planet data field**, not a constant. The sink acts on total pressure above baseline in Stage 2 (SME: an acceptable approximation, over-applies up to about 40 % in Phase 2); switch to CO2 partial pressure when it is tracked | **Design choice**; planets are per dimension |
+| Cold branch | T < -40 C: takes 2 % of (P - baseline) per sol. Zero when P <= baseline; never adds air | From §2; rate **invented** |
+| Mild branch | -40 C <= T <= -20 C: takes 1 % per sol | From §2; **invented**; boundary inclusion is a design choice, unit-test both sides |
+| Release branch | T > -20 C: returns the stored amount at +0.5 kPa/sol until empty, then up to 0.5 kPa more from buried polar CO2, once | From §2; 0.5 kPa buried CO2 **calc** from [S4]; rate **invented** |
+| Reservoir | Stored kPa taken so far, saved, never latches; paused session leaves it unchanged | Needs schema bump (Technical Lead) |
+| Pace and group scaling | Sink fraction and release rate are rates, so **both scale (SME confirmed: honest and required, review Q2) with pace and group like the sources**; the buried 0.5 kPa amount does not scale. Equilibrium is then identical in all modes (P_eq above does not depend on the scale) | **Design choice**; SME wording for journal and educator guide is in the review Q2; never say "the frost reacts faster in classroom mode" |
+| Reachable in play | Cold branch only (temperature stays at -60 C until a temperature source exists). Mild and release: `/mars index set temperature` and unit tests | Owner scope |
+| Curve check | Ovens alone give P(t) = 1.6 - e^(-0.02 t): 0.77 at sol 9 (**calc**) against 0.74 in the §2 curve, within 0.03 kPa. SME recomputed sols 16 to 25 as consistent with a -2 % sink but could not reproduce sols 1 to 16 (`docs/team/reports/2026-11-27-sme-frost-sink.md`), so treat the early cells as **unverified**; the Technical Lead compares the prototype curve cell by cell. Dome stable timing already differs (slice 4 note) | **calc**, not run; early cells unverified |
+
+### Decision 7. One hold-failure rule for every hold
+
+**Pause, then reset.** Applies to Dome stable, Breathable and Equilibrium. The counter **pauses** when the condition fails. It **resets to zero** only if the failure lasts more than **1 continuous sol** (classroom: **0.5 sol**, which is 10 minutes of play). This is the §4 rule, extended to Dome stable. Reasons: ages 12-18 and "attainable, balanced goal" (DESIGN.md); a night flicker in power must not erase 2 sols of work; Dome stable is a machine-state hold where one brief shortfall is likely; it is what the Technical Lead built in slice 4. The ui-specs "failure resets at once" wording is retired. The grace timer is data (`resetAfterSols`, classroom value from the pace preset) and is a rate-like scale, not a threshold. Revisit if playtesters never lose a count (then the pause is too kind and the lesson in C1 and B2 is lost) or if classroom pace makes 0.5 sol too short to read a message.
+
+---
+
 ## 3. Required net rates per phase (standard, solo)
 
 These set the machine sizes. Each phase's machines must reach these averages with a realistic build-up.
@@ -159,7 +231,7 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 
 **Holds overlap.** Breathable is a subset of the equilibrium band, so a group that holds everything in band reaches Breathable on sol 7 of the equilibrium hold. Total hold time in Phase 3 is 14 sols (4.7 h), not 21. That is a third of Phase 3: acceptable only if it is active play.
 
-**Hold rule.** The hold counter **pauses** when a value leaves the band. It **resets to zero** only if the value stays out for more than 1 continuous sol (classroom: 0.5 sol). A quick fix keeps your progress; neglect loses it.
+**Hold rule (one rule for every hold, including Dome stable; see §2c decision 7).** The hold counter **pauses** when a value leaves the band. It **resets to zero** only if the value stays out for more than 1 continuous sol (classroom: 0.5 sol). A quick fix keeps your progress; neglect loses it.
 
 **Drift events (during any hold, and in Phase 3 from the first established flora patch).** One event every 1–1.5 sols (classroom: every 0.5–0.75 sol, so a 3-sol hold has 4–6). Storm events are announced at least 1 sol ahead. Each one pushes a value out of band in about 1 sol if nobody answers, and takes about 1–5 minutes of play to answer once diagnosed.
 

@@ -1,0 +1,31 @@
+# BACKLOG #38 option A: centred Monitor with the pressure history plot (mars:planet_1), 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /mars monitor
+wait 40
+shot monitor_hist_1_new_planet
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /mars index advance 3
+cmd /setblock 6 64 4 mars:battery
+cmd /setblock 2 64 4 mars:regolith_outgasser
+cmd /mars index advance 7
+cmd /mars monitor
+wait 40
+shot monitor_hist_2_powered_10_sols
+cmd /setblock 4 64 4 mars:regolith_outgasser
+cmd /setblock 12 64 12 mars:solar_panel[dust_stage=4]
+cmd /mars index advance 3
+cmd /mars monitor
+wait 40
+shot monitor_hist_3_short_and_dusty
+cmd /mars index advance 40
+cmd /mars monitor
+wait 40
+shot monitor_hist_4_long_game
+quit
