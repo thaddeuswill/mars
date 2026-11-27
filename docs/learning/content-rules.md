@@ -69,6 +69,8 @@ Trigger: any change to gate data (`data/mars/gates/`), Index contribution or phy
 | CR-T4 | Length budgets per medium (story bible §6.1; prompts-and-reflections §5) | Word counts |
 | CR-T5 | Feedback wording is in positive terms: no "you failed", "wrong!", "you forgot" (LEARNING.md 4.5) | Banned-phrase scan |
 | CR-T6 | Readability screen: Flesch–Kincaid grade ≤ 7 for MS main text (a screen, not proof; prompts-and-reflections §5) | Formula over language files; report, don't block, at first |
+| CR-T7 | **Monitor and HUD text** (added 2026-11-27, `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`): (a) US spelling ("Leveling", not "Levelling"); (b) no symbol where a short word fits (about, under; not "~", "<"); (c) a one-shot chat or action-bar line is at most 20 words; a plot label at most 24 characters before the number is added; (d) a line that explains a change must say what did not change when a misreading is likely (the plot rescale line). Limits in (c) are *invented* working budgets | Word and character counts over `monitor.*`, `grant.*`, `gate.*` keys; banned-symbol scan |
+| CR-T8 | **A Monitor line that states a prediction or estimate** (time to goal, "Levelling off") never names a value a forecast is asking about while that forecast is open; same rule and same `reveals` field as CR-F9. Under `guidance` = expert the time-to-goal estimate is not shown | Monitor line keys with a `reveals` field + open-forecast state | Show "about 3 sols" for pressure while a pressure forecast is open |
 
 ## 5. Stays manual (can't be automated well)
 

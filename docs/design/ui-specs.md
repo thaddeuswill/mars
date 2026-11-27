@@ -242,7 +242,7 @@ The frost line is a cause line like any other (Phase 1: open by default, re-scaf
 
 **Monitor option A keys (2026-11-27, straw-man, BACKLOG #38).** `monitor.event.placed.regolith_outgasser` "Outgasser placed" (one key per pressure-making machine; add one with each new machine); `monitor.plot.empty` "History starts after sol 1."; the plot reuses `monitor.sol` ("Sol %s") for the X axis and `gate.reached` ("Goal reached: %s") for goal markers; the Y axis shows the unit from the Index (kPa). The Instructional Designer should check "History starts after sol 1." and whether goal markers should read "Goal reached: Dome stable" or shorter. Pa appears only in the journal (not built).
 
-### 9.1 Monitor pressure plot: scale and goal line (**proposed** 2026-11-27, Game Designer; not reviewed; not built)
+### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; not built)
 
 Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and effect). Pillars: the planet is the quest log, every change is visible, compact before wide. Full comparison and reasoning: `docs/team/reports/2026-11-27-game-designer-plot-scale.md`.
 
@@ -299,6 +299,32 @@ Number-plus-shape, never colour only: the goal line is solid, event lines dashed
 **Content rules** (`docs/learning/content-rules.md`): CR-F9, the plot shows only values already public in the gate table and the Next goal row; any later landmark line (0.61 triple point, 6.3 Armstrong, 33.7 Everest) must declare `reveals` for any forecast it could answer (F4a, F7) before it is drawn. CR-F10, forecasts never resolve on the plot (it draws net pressure); they keep their own `resolve_source`. CR-T1, CR-T5, CR-T6 apply to the keys above (no banned words, positive wording, grade 6-7 screen). CR-T4 length: goal label at most 24 characters.
 
 **Revisit if** testers read the step in range as a drop or a failure; a "Show whole game" toggle (HS read-more) is the fallback. Also revisit when a second series (temperature, O2) is plotted.
+
+### 9.2 Monitor wording: Instructional Designer review (2026-11-27; final wording for the keys below, fluid)
+
+Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`. Flesch-Kincaid grade was screened with a rough script (a screen, not proof; CR-T6): every key is under grade 7. The changes below come from vocabulary, misreading risk and content rules, not from the formula. Rules added: CR-T7, CR-T8 in `docs/learning/content-rules.md`.
+
+| Key | Final text | Change and why |
+|---|---|---|
+| `monitor.plot.goal` | "%s: %s" ("Phase 2 begins: 5 kPa") | Keep, **only when pressure is the gate's only condition** (Phase 2 begins) |
+| `monitor.plot.goal.partial` (new) | "Pressure goal: %s" ("Pressure goal: 30 kPa") | For gates with other conditions (Phase 3 begins also needs 0 °C; Breathable): the plain label would say pressure alone opens the gate. When the line is above the goal and the gate is still open, the Next goal row must show the unmet condition (handoff) |
+| `monitor.plot.rescaled` | "The graph now goes up to %s. The line looks lower, but the pressure did not drop." | "squashed" reads as damage and does not say that nothing was lost; the second sentence answers the misreading directly (C3) |
+| `monitor.plot.caption` | "Air pressure over time" | Keep, if room. Matches the row label "Air pressure" (§9 table) |
+| `monitor.goal.eta` / `eta_one` / `eta_soon` | "about %s sols" / "about 1 sol" / "under 1 sol" | Words instead of "~" and "<" (CR-T7b). If the panel is too narrow, keep "~" and add a tooltip "about"; Game Designer decides |
+| `monitor.goal.not_rising` | "Not rising" | Keep. The cause lines under it say why |
+| `monitor.cause.polar_frost` | "Polar frost: %s per sol" (negative number) | Keep. Option for the Game Designer if the panel fits: "Polar CO2 frost", because "frost" alone reads as water frost on Earth (a Phase 2 water misconception). The read-more fixes it either way |
+| `monitor.cause.polar_frost_release` | "Polar frost gives back: +%s per sol" | Keep; the formatting helper must print the "+" |
+| `monitor.cause.polar_frost.read_more` | unchanged | Screen: grade 5. Sourced by the SME (`docs/science/frost-sink-review.md` Q4). No forecast resolves on the frost line (**unverified**; Technical Lead to declare `resolve_source` check, CR-F10) |
+| `monitor.estimate.levelling_off` | "Leveling off: the frost takes back about as much as your machines add." | US spelling (CR-T7a). Key id unchanged. Show only when frost really is the larger sink (CR-H3) |
+| `monitor.estimate.levelling_off.hs` | "Frost and machines balance near %s. More machines move that balance up." | "The two" had no clear referent |
+| `monitor.oven.tooltip` | "Bakes soil and releases a little gas. Water comes later." | Keep. "Water comes later" is a promise; delete it if Oven water is cut |
+| `monitor.event.placed.regolith_oven` | "Oven placed" | Keep |
+| `grant.starting` | "You have %s × %s in your inventory. Place them, then check Power on the Monitor." | "pack" is also the modpack (confusing); "inventory" is the Minecraft word; "×" as in the solar-array key; "Power row" shortened |
+| Landing step 6 (`landing.checklist`, `docs/design/messages/phase-1.md` §1) | "Place your two Ovens. Switch on the battery to power them." | Owner approved "battery and Ovens"; this order shows cause and effect (power first, then the effect). 11 words, within the 12-word limit. Detection: both Ovens placed and battery on. Game Designer owns the file |
+
+**Time-to-goal estimate and forecasts (CR-T8).** An "about N sols" line hands a player the answer to "when will the pressure reach 5 kPa?", which is what B3 asks them to work out from the slope and the goal line. It is shown under `guidance` gentle and standard, hidden under expert, and hidden for the value of any forecast that is open.
+
+**Open items from this review.** Sky label and Dome stable entry: see the report, sections 4a and 4b.
 
 ### Pause design (one line; **not built yet**)
 
