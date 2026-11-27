@@ -42,11 +42,11 @@ final class MonitorStyle {
 
   static final int MARGIN = 6;
   static final int PAD = 6;
-  static final int HEADER_H = 16;
+  static final int HEADER_H = 15;
   static final int LABEL_W = 86;
   static final int LINE_H = 10;
   static final int ROW_H = 11;
-  static final int ROW_H_EMPHASIS = 13;
+  static final int ROW_H_EMPHASIS = 12;
   static final int ROW_GAP = 1;
   static final int CAUSE_INDENT = 12;
   static final int BAR_SEGMENTS = 10;
@@ -54,7 +54,7 @@ final class MonitorStyle {
   static final int BAR_SEG_GAP = 1;
   static final int BAR_W = BAR_SEGMENTS * BAR_SEG_W + (BAR_SEGMENTS - 1) * BAR_SEG_GAP;
   static final int BAR_H = 5;
-  static final int PLOT_MIN_H = 18;
+  static final int PLOT_MIN_H = 16;
   static final int PLOT_MAX_H = 36;
   static final int PLOT_LABEL_H = 9;
 

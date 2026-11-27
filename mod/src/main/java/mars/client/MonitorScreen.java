@@ -22,7 +22,7 @@ public final class MonitorScreen extends Screen {
 
   public MonitorScreen(MonitorView view) {
     super(Component.translatable("monitor.title"));
-    this.view = view;
+    this.view = MonitorLayout.fit(view);
   }
 
   @Override

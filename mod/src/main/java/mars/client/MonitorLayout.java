@@ -17,9 +17,44 @@ final class MonitorLayout {
     return row.causes().stream().filter(c -> c.reasonKey() != null).toList();
   }
 
+  /**
+   * The view as drawn. When the rows alone would leave the plot less than {@link
+   * MonitorStyle#PLOT_MIN_H} inside {@link MonitorStyle#TARGET_H}, the lowest-priority line goes
+   * first: the goal's second line (what it needs, and the goals count). Problem lines (a stalled
+   * machine, a dusty panel) never drop.
+   */
+  static MonitorView fit(MonitorView view) {
+    if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
+      return view;
+    }
+    List<MonitorView.Row> rows = new java.util.ArrayList<>();
+    for (MonitorView.Row r : view.rows()) {
+      boolean goal = r.labelKey().equals("monitor.row.next_goal");
+      rows.add(
+          !goal
+              ? r
+              : new MonitorView.Row(
+                  r.labelKey(),
+                  r.value(),
+                  r.valueKey(),
+                  r.trend(),
+                  r.trendRate(),
+                  r.causes(),
+                  r.tone(),
+                  r.emphasis(),
+                  r.side(),
+                  null,
+                  List.of(),
+                  null,
+                  null,
+                  r.bar()));
+    }
+    return new MonitorView(view.sols(), List.copyOf(rows), view.history());
+  }
+
   /** Height of everything except the plot block, in GUI px. */
   static int fixedHeight(MonitorView view) {
-    int h = HEADER_H + 2;
+    int h = HEADER_H + 1;
     for (MonitorView.Row row : view.rows()) {
       h += rowHeight(row) + ROW_GAP;
     }

@@ -141,3 +141,11 @@ Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor revie
 | CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | ✅ Checklist published. Implementation and runtime checks pending. |
 | CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | ✅ Renumbered and checked. |
 | CX-5 | Review pass: read `docs/art/monitor-reference-audit.md` against the images in `docs/art/references/monitor/` and flag any claim an image does not support | a new report under `docs/team/reports/` | Report lists each checked claim as supported or not | ⬜ |
+
+## Owner decisions 2026-11-27 (answers to Claude's questions; propose for the Decision Log)
+
+- Panel dust remainder (storms, wear, dust-off, about 12 dev-days): **Stage 3**. Flag Stage 3 budget short by 12 to 20 h.
+- Gate creative bypass: **keep for now**; add a classroom on/off switch in Stage 3; label each playtest creative or survival.
+- Slice 5 scope: **all three temperature branches of the polar-frost sink as data and unit tests**; nothing tuned in play.
+- Monitor history plot: **pay now if the Technical Lead estimates 3 dev-days or less**, otherwise mockup C without lights first.
+- Panels meant the Monitor screen; run all UI skills (done); EULA not yet; NASA host check blocked by JPL's own CDN (403), 16 px stays.
