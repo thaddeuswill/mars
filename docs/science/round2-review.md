@@ -213,7 +213,7 @@ The game mechanic (uptake falls to 30 % in a mature patch) is fine. The words mu
 2. "Mars's sky today is pink." Low risk: the start sky is tan.
 3. "Scientists know a thickening Mars sky turns pink." **This is the real risk**, and a one-line label removes it.
 
-So the user's decision stands: **keep the rose Phase 2 sky, labeled stylized.** Required label (journal, Phase 2 gate, both bands): "More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them."
+So the user's decision stands: **keep the rose Phase 2 sky, labeled stylized.** Required label (journal, Phase 2 gate, both bands): "More air scatters more blue light, so the sky slowly turns less tan and more blue. The dust is still there. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them." (Wording updated 2026-11-27 after the Instructional Designer's tweak; SME confirmed, see `docs/team/reports/2026-11-27-sme-source-verification.md`. Original read "slowly loses its dusty tan".)
 
 ### 2.2 The 75 kPa air column
 
