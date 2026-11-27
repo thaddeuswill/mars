@@ -78,6 +78,28 @@ class PlanetCheckpointTest {
   }
 
   @Test
+  void unknownNameIsEmptyAndTheListIsACopy() {
+    CheckpointList<String> l = new CheckpointList<>(3);
+    l.save("a", 1, "A");
+    assertTrue(l.get("missing").isEmpty());
+    var copy = l.list();
+    l.save("b", 2, "B");
+    assertEquals(1, copy.size(), "a list taken earlier does not change");
+    assertThrows(UnsupportedOperationException.class, () -> copy.add(null));
+  }
+
+  @Test
+  void restoreKeepsTheCurrentMachineOutputNotTheSnapshots() throws Exception {
+    PlanetSim sim = running();
+    PlanetState snapshot = sim.toState();
+    sim.model().advanceSols(1);
+    PlanetState current = sim.toState();
+    PlanetState merged = PlanetCheckpoint.restoreOver(snapshot, current);
+    assertEquals(current.efficiency(), merged.efficiency());
+    assertEquals(current.machines(), merged.machines());
+  }
+
+  @Test
   void reportHoldsPlanetNumbersOnly() throws Exception {
     PlanetSim sim = running();
     sim.model().advanceSols(4);

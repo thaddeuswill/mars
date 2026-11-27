@@ -48,7 +48,17 @@ Enable cheats for the following commands in a singleplayer test world.
 | `/mars index advance 3.2` | Advance the planet by 3.2 sols for a test. |
 | `/mars pause`, `/mars resume`, `/mars session` | Pause, resume, or inspect the session. |
 
-Slice 8 checkpoint and export commands are still under verification. Use a disposable world for prototype testing.
+Slice 8 operator commands (permission level 2, all logged; they work only inside a Mars dimension):
+
+| Command | Use |
+|---|---|
+| `/mars machines` | List the planet's machines by type, with the first positions and how many run below full output. |
+| `/mars checkpoint save [name]` | Save the planet's numbers, goals and history (up to 8 per planet; the oldest is dropped; `start` is reserved). A checkpoint is also taken automatically at each session start. |
+| `/mars checkpoint list` | List the checkpoints with the sol each was taken at. |
+| `/mars checkpoint restore <name>` | Roll the planet back to a checkpoint, or to `start` for the start values. Blocks, machines, items and inventories are **not** rolled back. |
+| `/mars index export` | Write a readable planet report (numbers only, no player data) to `mars-data/exports/` in the game folder. |
+
+For a full rollback of the world (blocks and inventories too), copy the world folder before a class; the checkpoint command only rewinds the planet's simulation.
 
 ## 2. Developer commands (from `mod/`)
 
