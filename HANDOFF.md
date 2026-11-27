@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0e. UPDATE 2026-11-27 (Technical Lead): lamps in the shelter and Ops, level 13
+
+Jar `0.3.4-stage3-e` (sha256 `cf77314dcfe554e1647797bcd936a4fc8f58908dcc78bc46523a974b9473fb3c`). 254 unit tests, 113 boot checks (`RESULT PASS`). `HullBlocks.LIGHT_LEVEL` 13, 30 lamps (shelter 6, Ops 6), worst floor cell 8 in every room (asserted). Report `docs/team/reports/2026-11-27-technical-lead-lamps-shelter-ops.md`; screenshots `tools/screenshots/out/20261127-233344/` (lamp_1 to lamp_8, script `habitat_lamps.shots`).
+
 ## 0d. UPDATE 2026-11-27 (Technical Lead): ceiling lights in the starter dome
 
 Jar `0.3.3-stage3-d` (sha256 `87ed5dfcee7d039234ab938ec491314f3cb445ded476f626fa42800253ea8359`). 254 unit tests, 113 boot checks (`RESULT PASS`). `mars:hull_light` (airtight, light 12), 18 lamps (`DomeTemplate.LAMPS`), Hab B ribbed glass now 32. Measured: shelter, Ops and bay have block light 0 without lamps; with lamps the worst floor cell is 7. Shelter and Ops are still unlamped (owner/Artist call). Report `docs/team/reports/2026-11-27-technical-lead-hull-lights.md`; screenshots `tools/screenshots/out/20261127-232753/` (hab_11 to hab_14).
