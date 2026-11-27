@@ -178,6 +178,7 @@ public final class DevTools {
       case "hud" -> mc.options.hideGui = !"on".equals(p[1]);
       case "fps" ->
           log("fps=" + mc.getFps() + " (frames in the last second, as Minecraft counts them)");
+      case "journal" -> mars.client.JournalClient.requestOpen();
       case "shot" -> shot(p[1]);
       case "quit" -> {
         log("quitting");

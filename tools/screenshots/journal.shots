@@ -1,0 +1,14 @@
+# BACKLOG #49 commit 2: the Keeper's Journal screen (mars:planet_1), 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /mars gate latch dome_stable
+wait 40
+shot journal_1_chat_pointer
+journal
+wait 60
+shot journal_2_screen_first_open

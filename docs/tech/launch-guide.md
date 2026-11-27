@@ -65,6 +65,7 @@ Learning commands (journal and guidance; `/mars guidance` and `/mars journal` ne
 | `/mars guidance` | Show your guidance level (gentle, standard or expert) and what it hides. |
 | `/mars guidance <level>` | Set your own level in standard play. Expert hides the time-to-goal estimate on the Monitor. In classroom mode only the teacher can set it, and expert is refused. |
 | `/mars guidance <level> <player>` | Operator: set another player's level. |
+| **J key** (rebindable in Controls, category Mars) | Open the Keeper's Journal screen: titles on the left (unread ones show a dot and "new"), the text on the right. Esc or J closes. |
 | `/mars journal` | List the journal entries unlocked on this planet ("(new)" marks unread). Entries unlock when their goal is reached (Dome stable gives three). A chat line "New journal entries: N" tells you once. |
 | `/mars journal <n>` | Read entry n in chat. |
 | `/mars debug forecast open\|close [value]` | Operator, debug only: pretend a forecast about a value (default `pressure`) is open for you, which hides the Monitor's time estimate and "Leveling off" for you only. Not a learning event; it is only logged. |

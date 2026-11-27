@@ -41,6 +41,7 @@ public final class MarsMod {
     // Client-only sky and fog (slice 6). The class is only touched on a client.
     if (FMLEnvironment.dist.isClient()) {
       mars.client.sky.SkyClient.init(modBus);
+      mars.client.JournalClient.init(modBus);
     }
     // Dev-only screenshot helper: client only, and only with -Dmars.devtools=true.
     if (FMLEnvironment.dist.isClient() && Boolean.getBoolean("mars.devtools")) {

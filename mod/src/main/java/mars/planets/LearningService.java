@@ -105,7 +105,9 @@ public final class LearningService {
     PlayerSettingsData data = PlayerSettingsData.get(level.getServer());
     List<String> ids = fresh.stream().map(JournalEntryDef::id).toList();
     for (ServerPlayer p : level.players()) {
-      p.sendSystemMessage(Component.translatable("journal.pointer", fresh.size()));
+      p.sendSystemMessage(
+          Component.translatable(
+              "journal.pointer", fresh.size(), Component.keybind("key.mars.journal")));
       POINTERS.incrementAndGet();
       data.settings().markNotified(p.getUUID(), ids);
     }
@@ -124,7 +126,9 @@ public final class LearningService {
     if (fresh.isEmpty()) {
       return;
     }
-    player.sendSystemMessage(Component.translatable("journal.pointer", fresh.size()));
+    player.sendSystemMessage(
+        Component.translatable(
+            "journal.pointer", fresh.size(), Component.keybind("key.mars.journal")));
     POINTERS.incrementAndGet();
     data.settings().markNotified(player.getUUID(), fresh);
     data.setDirty();

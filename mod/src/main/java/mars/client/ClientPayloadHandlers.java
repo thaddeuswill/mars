@@ -15,6 +15,10 @@ public final class ClientPayloadHandlers {
     Minecraft.getInstance().setScreen(new MonitorScreen(payload.view()));
   }
 
+  public static void onJournal(mars.journal.JournalPayload payload, IPayloadContext context) {
+    Minecraft.getInstance().setScreen(new JournalScreen(payload.entries()));
+  }
+
   public static void onSky(mars.sky.SkyPayload payload, IPayloadContext context) {
     mars.client.sky.SkyClient.setTarget(payload.pressureKpa());
   }

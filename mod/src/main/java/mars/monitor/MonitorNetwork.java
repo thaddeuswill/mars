@@ -21,5 +21,19 @@ public final class MonitorNetwork {
         mars.sky.SkyPayload.TYPE,
         mars.sky.SkyPayload.CODEC,
         (payload, context) -> mars.client.ClientPayloadHandlers.onSky(payload, context));
+    // Keeper's Journal: the request and the "seen" note go to the server (server classes, so plain
+    // method references are fine); the list comes back to the client (lambda rule again).
+    registrar.playToServer(
+        mars.journal.JournalRequestPayload.TYPE,
+        mars.journal.JournalRequestPayload.CODEC,
+        mars.journal.JournalServer::onRequest);
+    registrar.playToServer(
+        mars.journal.JournalSeenPayload.TYPE,
+        mars.journal.JournalSeenPayload.CODEC,
+        mars.journal.JournalServer::onSeen);
+    registrar.playToClient(
+        mars.journal.JournalPayload.TYPE,
+        mars.journal.JournalPayload.CODEC,
+        (payload, context) -> mars.client.ClientPayloadHandlers.onJournal(payload, context));
   }
 }
