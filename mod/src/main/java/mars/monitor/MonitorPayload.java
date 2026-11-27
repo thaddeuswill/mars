@@ -46,7 +46,16 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
           b.writeUtf(c.sourceKey());
           b.writeVarInt(c.count());
           b.writeUtf(c.rate());
+          b.writeNullable(c.reasonKey(), FriendlyByteBuf::writeUtf);
         });
+    buf.writeEnum(r.tone());
+    buf.writeBoolean(r.emphasis());
+    buf.writeNullable(r.side(), FriendlyByteBuf::writeUtf);
+    buf.writeNullable(r.detailKey(), FriendlyByteBuf::writeUtf);
+    buf.writeCollection(r.detailArgs(), FriendlyByteBuf::writeUtf);
+    buf.writeNullable(r.detailRightKey(), FriendlyByteBuf::writeUtf);
+    buf.writeNullable(r.detailRight(), FriendlyByteBuf::writeUtf);
+    buf.writeDouble(r.bar());
   }
 
   private static MonitorView.Row readRow(FriendlyByteBuf buf) {
@@ -56,7 +65,35 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     MonitorView.Trend trend = buf.readNullable(b -> b.readEnum(MonitorView.Trend.class));
     String trendRate = buf.readNullable(FriendlyByteBuf::readUtf);
     List<MonitorView.CauseLine> causes =
-        buf.readList(b -> new MonitorView.CauseLine(b.readUtf(), b.readVarInt(), b.readUtf()));
-    return new MonitorView.Row(label, value, valueKey, trend, trendRate, causes);
+        buf.readList(
+            b ->
+                new MonitorView.CauseLine(
+                    b.readUtf(),
+                    b.readVarInt(),
+                    b.readUtf(),
+                    b.readNullable(FriendlyByteBuf::readUtf)));
+    MonitorView.Tone tone = buf.readEnum(MonitorView.Tone.class);
+    boolean emphasis = buf.readBoolean();
+    String side = buf.readNullable(FriendlyByteBuf::readUtf);
+    String detailKey = buf.readNullable(FriendlyByteBuf::readUtf);
+    List<String> detailArgs = buf.readList(FriendlyByteBuf::readUtf);
+    String detailRightKey = buf.readNullable(FriendlyByteBuf::readUtf);
+    String detailRight = buf.readNullable(FriendlyByteBuf::readUtf);
+    double bar = buf.readDouble();
+    return new MonitorView.Row(
+        label,
+        value,
+        valueKey,
+        trend,
+        trendRate,
+        causes,
+        tone,
+        emphasis,
+        side,
+        detailKey,
+        detailArgs,
+        detailRightKey,
+        detailRight,
+        bar);
   }
 }

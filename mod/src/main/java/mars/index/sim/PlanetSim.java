@@ -232,6 +232,27 @@ public final class PlanetSim {
     return set == null ? 0 : set.size();
   }
 
+  /** How many machines of this type make less than full output (dusty solar panels). */
+  public int reducedCount(String type) {
+    Set<Long> set = machines.get(type);
+    if (set == null) {
+      return 0;
+    }
+    int n = 0;
+    for (long pos : set) {
+      if (efficiency.getOrDefault(pos, 1.0) < 1.0) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+  /** True when this machine type draws power (so "needs power" can be its reason). */
+  public boolean machineDrawsPower(String type) {
+    MachineDef def = defs.get(type);
+    return def != null && def.power().drawPerSol() > 0;
+  }
+
   public boolean hasMachineDef(String type) {
     return defs.containsKey(type);
   }

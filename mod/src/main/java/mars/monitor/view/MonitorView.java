@@ -6,6 +6,7 @@ import mars.core.Ids;
 import mars.core.ParameterId;
 import mars.index.sim.PlanetSim;
 import mars.index.sim.PlanetaryIndexModel;
+import mars.power.PowerGrid;
 
 /**
  * What the Planetary Monitor shows, as plain data built on the server from the real Index
@@ -32,9 +33,21 @@ public record MonitorView(double sols, List<Row> rows) {
     }
   }
 
+  /** How a row's state is coloured (always paired with a word or a shape, never colour alone). */
+  public enum Tone {
+    NORMAL,
+    GOOD,
+    SHORT,
+    NONE
+  }
+
   /**
    * One Monitor row. {@code valueKey} replaces {@code value} when the number has no meaning (the
-   * boiling point below the triple point). {@code trend} and {@code trendRate} may be null.
+   * boiling point below the triple point). {@code trend} and {@code trendRate} may be null. {@code
+   * emphasis} marks the one goal or problem row that is drawn large. {@code side} is a
+   * right-aligned text on the value line (goal progress). The detail line is {@code detailKey} with
+   * {@code detailArgs} on the left and {@code detailRightKey} (formatted with {@code detailRight})
+   * and a battery-style bar ({@code bar} 0..1, or -1 for none) on the right.
    */
   public record Row(
       String labelKey,
@@ -42,10 +55,68 @@ public record MonitorView(double sols, List<Row> rows) {
       String valueKey,
       Trend trend,
       String trendRate,
-      List<CauseLine> causes) {}
+      List<CauseLine> causes,
+      Tone tone,
+      boolean emphasis,
+      String side,
+      String detailKey,
+      List<String> detailArgs,
+      String detailRightKey,
+      String detailRight,
+      double bar) {
 
-  /** "Regolith Outgasser ×2: +0.20 kPa/sol". {@code sourceKey} is a language key. */
-  public record CauseLine(String sourceKey, int count, String rate) {}
+    public Row(
+        String labelKey,
+        String value,
+        String valueKey,
+        Trend trend,
+        String trendRate,
+        List<CauseLine> causes) {
+      this(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          Tone.NORMAL,
+          false,
+          null,
+          null,
+          List.of(),
+          null,
+          null,
+          -1);
+    }
+
+    public Row with(Tone tone, boolean emphasis) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar);
+    }
+  }
+
+  /**
+   * "Regolith Outgasser ×2: +0.20 kPa/sol". {@code sourceKey} is a language key. {@code reasonKey}
+   * (nullable) is a plain-words reason the screen shows instead of the rate ("needs power").
+   */
+  public record CauseLine(String sourceKey, int count, String rate, String reasonKey) {
+    public CauseLine(String sourceKey, int count, String rate) {
+      this(sourceKey, count, rate, null);
+    }
+  }
 
   public static final double EPSILON = 1e-9;
 
@@ -58,17 +129,29 @@ public record MonitorView(double sols, List<Row> rows) {
     double p = snap.get(pressure);
     double net = model.netRatePerSol(pressure);
     List<CauseLine> causes = new ArrayList<>();
+    var powerState = sim.power().state(sim.stepSols());
     for (PlanetaryIndexModel.Cause c : model.causes(pressure)) {
-      causes.add(new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), "kPa")));
+      boolean needsPower = sim.machineDrawsPower(c.source());
+      String reason =
+          !needsPower
+              ? null
+              : switch (powerState) {
+                case UNPOWERED -> "monitor.cause.needs_power";
+                case SHORT -> "monitor.cause.low_power";
+                default -> null;
+              };
+      causes.add(
+          new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), "kPa"), reason));
     }
     rows.add(
         new Row(
-            "monitor.row.pressure",
-            Fmt.withUnit(p, p < 10 ? 2 : 1, "kPa"),
-            null,
-            trend(net),
-            rate(net, "kPa"),
-            causes));
+                "monitor.row.pressure",
+                Fmt.withUnit(p, p < 10 ? 2 : 1, "kPa"),
+                null,
+                trend(net),
+                rate(net, "kPa"),
+                causes)
+            .with(Tone.NORMAL, true));
 
     double t = snap.get(Ids.TEMPERATURE);
     rows.add(
@@ -112,87 +195,95 @@ public record MonitorView(double sols, List<Row> rows) {
         };
     List<CauseLine> lines = new ArrayList<>();
     int panels = sim.machineCount("mars:solar_panel");
-    if (panels > 0) {
-      lines.add(
-          new CauseLine(
-              "block.mars.solar_panel", panels, units(grid.supplyPerSol(), "/sol", true)));
+    int dusty = sim.reducedCount("mars:solar_panel");
+    if (dusty > 0) {
+      lines.add(new CauseLine("block.mars.solar_panel", dusty, "", "monitor.cause.dusty"));
     }
-    int users = sim.machineCount("mars:regolith_outgasser");
-    if (users > 0) {
-      lines.add(
-          new CauseLine(
-              "block.mars.regolith_outgasser", users, units(-grid.demandPerSol(), "/sol", true)));
-    }
-    int batteries = sim.machineCount("mars:battery");
-    if (batteries > 0) {
-      lines.add(
-          new CauseLine(
-              "block.mars.battery",
-              batteries,
-              Fmt.number(grid.charge(), 1) + " / " + Fmt.number(grid.capacity(), 1) + " units"));
-    }
-    return java.util.Optional.of(new Row("monitor.row.power", "", key, null, null, lines));
+    boolean problem =
+        grid.state(sim.stepSols()) != PowerGrid.State.IDLE
+            && grid.state(sim.stepSols()) != PowerGrid.State.POWERED;
+    Tone tone =
+        switch (grid.state(sim.stepSols())) {
+          case IDLE, POWERED -> Tone.GOOD;
+          case SHORT -> Tone.SHORT;
+          case UNPOWERED -> Tone.NONE;
+        };
+    boolean hasBattery = grid.capacity() > 0;
+    return java.util.Optional.of(
+        new Row(
+            "monitor.row.power",
+            "",
+            key,
+            null,
+            null,
+            lines,
+            tone,
+            problem,
+            null,
+            "monitor.power.summary",
+            List.of(Fmt.signed(grid.supplyPerSol(), 1), Fmt.signed(-grid.demandPerSol(), 1)),
+            null,
+            hasBattery
+                ? Fmt.number(grid.charge(), 1) + " / " + Fmt.number(grid.capacity(), 1)
+                : null,
+            hasBattery ? Math.max(0, Math.min(1, grid.charge() / grid.capacity())) : -1));
   }
 
   /**
-   * Gate state in plain language: one "Next goal" row for the first gate not yet reached, with its
-   * progress (hold sols, or the value against its threshold), and a "Goals reached" row listing the
-   * latched ones. Gates lock in, so a reached goal never leaves the second row.
+   * Gate state in plain language, one goal line: the first gate not yet reached, with its progress
+   * on the value line and what it needs on the detail line, plus "Goals 1 / 2" when some are
+   * reached. When every gate is reached the line reads "Goals reached 2 / 2". Gates lock in, so a
+   * reached goal is never lost.
    */
   private static void gateRows(PlanetSim sim, List<Row> rows) {
     var tracker = sim.gates();
-    List<CauseLine> reached = new ArrayList<>();
+    int reached = 0;
     for (mars.gates.GateDef d : tracker.defs()) {
       if (tracker.isLatched(d.id())) {
-        reached.add(new CauseLine(d.nameKey(), 0, ""));
+        reached++;
       }
     }
+    String count = reached + " / " + tracker.defs().size();
     for (mars.gates.GateDef d : tracker.defs()) {
       if (tracker.isLatched(d.id())) {
         continue;
       }
       String base = "monitor.gate." + d.id().substring(d.id().indexOf(':') + 1);
-      List<CauseLine> lines = new ArrayList<>();
+      String side = null;
+      String detailKey = base + ".progress";
       var st = tracker.state(d.id());
       if (d.hold() != null) {
         double need = tracker.holdSols(d);
-        lines.add(
-            new CauseLine(
-                base + ".progress",
-                0,
-                Fmt.number(Math.min(st.heldSols(), need), 1)
-                    + " / "
-                    + Fmt.number(need, 0)
-                    + " sols"));
+        side = Fmt.number(Math.min(st.heldSols(), need), 1) + " / " + Fmt.number(need, 0) + " sols";
         if (st.falseSols() > 0) {
-          lines.add(new CauseLine(base + ".waiting", 0, ""));
+          detailKey = base + ".waiting";
         }
       } else if (d.condition() instanceof mars.gates.Condition.Compare c) {
         String unit = sim.model().unit(c.parameter());
         double now = sim.model().current(c.parameter());
-        lines.add(
-            new CauseLine(
-                base + ".progress",
-                0,
-                Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit));
+        side = Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit;
       }
-      rows.add(new Row("monitor.row.next_goal", "", d.nameKey(), null, null, lines));
-      break;
-    }
-    if (!reached.isEmpty()) {
       rows.add(
           new Row(
-              "monitor.row.goals_reached",
-              reached.size() + " / " + tracker.defs().size(),
+              "monitor.row.next_goal",
+              "",
+              d.nameKey(),
               null,
               null,
-              null,
-              reached));
+              List.of(),
+              Tone.NORMAL,
+              true,
+              side,
+              detailKey,
+              List.of(),
+              reached > 0 ? "monitor.goals.count" : null,
+              reached > 0 ? count : null,
+              -1));
+      return;
     }
-  }
-
-  private static String units(double v, String per, boolean signed) {
-    return (signed ? Fmt.signed(v, 1) : Fmt.number(v, 1)) + " units" + per;
+    if (reached > 0) {
+      rows.add(new Row("monitor.row.goals_reached", count, null, null, null, List.of()));
+    }
   }
 
   /**

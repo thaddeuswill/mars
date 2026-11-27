@@ -24,6 +24,9 @@ Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-techn
 Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice4-gates.md`):
 - **Stage 2 slice 3 (power)** and **slice 4 (gates)**: gate files in `pack/data/mars/gates/`, pure `mars.gates`, latching (I-2), thresholds never scaled (I-1), Outgasser placement locked for survival players until Dome stable (creative and `/mars gate latch dome_stable` bypass), Monitor "Next goal" and "Goals reached" rows. 93 unit tests, 52 of 52 boot checks, screenshots in `tools/screenshots/out/20261127-113824/`.
 
+Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monitor-ui.md`, BACKLOG #36):
+- **Monitor UI review fixes:** reason on the stalled machine line ("needs power", "low power", panel "dusty, makes less"), compact top-left panel (about 131 GUI px tall at worst, was 173), one Power summary line plus battery bar, one goal line, state colours, trend shapes, "Esc to close", all colours and sizes in `mars.client.MonitorStyle`. 96 unit tests, 52 of 52 boot checks. The panel still covers the horizontal screen centre (see report).
+
 ## 3. Known gaps and honest caveats (do not claim these work)
 
 - **Not tested:** the jar loaded from a real `mods` folder; Windows and macOS; the dedicated server and a real save to disk and restart (needs the EULA, the owner's call); right-click on the Monitor block in the real client (screenshots use `/mars monitor`); explosions or pistons moving an Outgasser; frustum culling of an array whose overhang crosses a chunk border while its centre is off-screen.

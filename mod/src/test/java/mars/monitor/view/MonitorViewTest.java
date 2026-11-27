@@ -71,4 +71,51 @@ class MonitorViewTest {
     assertEquals(MonitorView.Trend.FALLING, p.trend());
     assertEquals("−0.05 kPa/sol", p.trendRate());
   }
+
+  @Test
+  void aStalledOutgasserSaysWhyOnItsOwnLine() throws Exception {
+    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    s.addMachine(TestSims.OUTGASSER, 1L);
+    MonitorView v = MonitorView.of(s);
+    MonitorView.CauseLine c = row(v, "monitor.row.pressure").causes().get(0);
+    assertEquals("monitor.cause.needs_power", c.reasonKey());
+    MonitorView.Row power = row(v, "monitor.row.power");
+    assertEquals(MonitorView.Tone.NONE, power.tone());
+    assertEquals(true, power.emphasis());
+    assertEquals(-1.0, power.bar(), 1e-12);
+  }
+
+  @Test
+  void shortPowerAndDustAreNamedAndThePowerRowIsOneSummaryLine() throws Exception {
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
+    s.addMachine(TestSims.OUTGASSER, 1L);
+    s.addMachine(TestSims.OUTGASSER, 2L);
+    s.addMachine(TestSims.BATTERY, 3000L);
+    s.setEfficiency(1000L, 0.6);
+    MonitorView v = MonitorView.of(s);
+    assertEquals(
+        "monitor.cause.low_power", row(v, "monitor.row.pressure").causes().get(0).reasonKey());
+    MonitorView.Row power = row(v, "monitor.row.power");
+    assertEquals(MonitorView.Tone.SHORT, power.tone());
+    assertEquals("monitor.power.summary", power.detailKey());
+    assertEquals(2, power.detailArgs().size());
+    assertEquals(1, power.causes().size());
+    assertEquals("monitor.cause.dusty", power.causes().get(0).reasonKey());
+    assertEquals("0.0 / 10.0", power.detailRight());
+    assertEquals(0.0, power.bar(), 1e-12);
+  }
+
+  @Test
+  void onlyTheGoalAndProblemRowsAreEmphasised() throws Exception {
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 2);
+    s.addMachine(TestSims.OUTGASSER, 1L);
+    MonitorView v = MonitorView.of(s);
+    for (MonitorView.Row r : v.rows()) {
+      boolean expected =
+          r.labelKey().equals("monitor.row.pressure")
+              || r.labelKey().equals("monitor.row.next_goal");
+      assertEquals(expected, r.emphasis(), r.labelKey());
+    }
+    assertEquals(MonitorView.Tone.GOOD, row(v, "monitor.row.power").tone());
+  }
 }

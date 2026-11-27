@@ -288,23 +288,22 @@ class GateTest {
             .orElseThrow();
     System.out.println("monitor before: " + next);
     assertEquals("gate.mars.dome_stable", next.valueKey());
-    assertEquals("1.0 / 3 sols", next.causes().get(0).rate());
+    assertEquals("1.0 / 3 sols", next.side());
+    assertEquals("monitor.gate.dome_stable.progress", next.detailKey());
     assertTrue(v.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));
     s.model().advanceSols(2.2);
     MonitorView after = MonitorView.of(s);
-    var reached =
-        after.rows().stream()
-            .filter(r -> r.labelKey().equals("monitor.row.goals_reached"))
-            .findFirst()
-            .orElseThrow();
     var next2 =
         after.rows().stream()
             .filter(r -> r.labelKey().equals("monitor.row.next_goal"))
             .findFirst()
             .orElseThrow();
-    System.out.println("monitor after: " + reached + " / " + next2);
-    assertEquals("1 / 2", reached.value());
+    System.out.println("monitor after: " + next2);
+    assertEquals("1 / 2", next2.detailRight());
+    assertEquals("monitor.goals.count", next2.detailRightKey());
+    assertTrue(
+        after.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));
     assertEquals("gate.mars.phase_2_begins", next2.valueKey());
-    assertTrue(next2.causes().get(0).rate().endsWith("/ 5 kPa"));
+    assertTrue(next2.side().endsWith("/ 5 kPa"));
   }
 }
