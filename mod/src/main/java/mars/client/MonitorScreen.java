@@ -80,10 +80,11 @@ public final class MonitorScreen extends Screen {
       }
       y += 24;
       for (MonitorView.CauseLine c : row.causes()) {
-        Component line =
-            Component.translatable(c.sourceKey())
-                .append(Component.literal(" ×" + c.count() + "   " + c.rate()));
-        g.drawString(font, line, x0 + 12, y, CAUSE, false);
+        Component left =
+            Component.translatable(c.sourceKey()).append(Component.literal(" ×" + c.count()));
+        g.drawString(font, left, x0 + 12, y, CAUSE, false);
+        // The rate is right-aligned so a long machine name can never push it off the panel.
+        g.drawString(font, c.rate(), x0 + PANEL_W - 6 - font.width(c.rate()), y, CAUSE, false);
         y += 10;
       }
       y += 2;
