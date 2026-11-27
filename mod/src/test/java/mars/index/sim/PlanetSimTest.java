@@ -28,7 +28,7 @@ class PlanetSimTest {
   }
 
   static PlanetSim sim(Pace pace) throws Exception {
-    return TestSims.sim(pace);
+    return TestSims.withPanels(TestSims.sim(pace), 3);
   }
 
   static double pressure(PlanetSim s) {

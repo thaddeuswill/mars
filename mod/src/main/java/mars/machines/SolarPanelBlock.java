@@ -21,6 +21,15 @@ public class SolarPanelBlock extends MachineBlock {
   public static final IntegerProperty DUST_STAGE = IntegerProperty.create("dust_stage", 0, 4);
   public static final BooleanProperty PARTLY_CLEANED = BooleanProperty.create("partly_cleaned");
 
+  public static final String TYPE = "mars:solar_panel";
+
+  /** Share of full output (0 to 1) for a panel in this state, from the dust tuning data. */
+  public static double outputFraction(BlockState state) {
+    return mars.index.IndexDefinitions.require()
+        .dust()
+        .outputFraction(state.getValue(DUST_STAGE), state.getValue(PARTLY_CLEANED));
+  }
+
   public SolarPanelBlock(Properties properties, VoxelShape shape) {
     super(properties, shape);
     registerDefaultState(
@@ -67,6 +76,14 @@ public class SolarPanelBlock extends MachineBlock {
   protected void onPlace(
       BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
     super.onPlace(state, level, pos, oldState, movedByPiston);
+    if (level instanceof net.minecraft.server.level.ServerLevel server
+        && mars.planets.PlanetManager.isPlanet(server)) {
+      if (!oldState.is(this)) {
+        mars.planets.PlanetManager.machinePlaced(server, TYPE, pos);
+      }
+      // Dust lowers the panel's share of the grid's supply (balance sheet 2a, 2b).
+      mars.planets.PlanetManager.machineOutput(server, pos, outputFraction(state));
+    }
     if (level.isClientSide() || oldState.is(this)) {
       return; // a dust-stage change, not a new panel
     }
@@ -90,6 +107,11 @@ public class SolarPanelBlock extends MachineBlock {
   @Override
   protected void onRemove(
       BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+    if (level instanceof net.minecraft.server.level.ServerLevel server
+        && !newState.is(this)
+        && mars.planets.PlanetManager.isPlanet(server)) {
+      mars.planets.PlanetManager.machineRemoved(server, TYPE, pos);
+    }
     if (!level.isClientSide() && !newState.is(this)) {
       for (int dx = -1; dx <= 1; dx++) {
         for (int dz = -1; dz <= 1; dz++) {

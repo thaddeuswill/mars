@@ -1,0 +1,27 @@
+# Stage 2 slice 3: the Monitor's Power row, unpowered then powered then short (mars:planet_1), 1280x720.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 2 64 4 mars:regolith_outgasser
+cmd /mars index advance 5
+cmd /mars monitor
+wait 40
+shot slice3_unpowered_5_sols
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 6 64 4 mars:battery
+cmd /mars index advance 5
+cmd /mars monitor
+wait 40
+shot slice3_powered_one_panel
+cmd /setblock 4 64 4 mars:regolith_outgasser
+cmd /setblock 12 64 12 mars:solar_panel[dust_stage=4]
+cmd /mars index advance 5
+cmd /mars monitor
+wait 40
+shot slice3_short_two_outgassers_dusty_panel
+quit

@@ -42,6 +42,22 @@ public final class PlanetGameTests {
 
   private static final double TOL = 1e-9;
 
+  private static final String PANEL = "mars:solar_panel";
+  private static final long FAKE_PANEL = 9_000_000_000_000L;
+
+  /** Give the shared test planet clean power (n panels without blocks); undo with unpower. */
+  private static void power(PlanetData data, int n) {
+    for (int i = 0; i < n; i++) {
+      data.sim().addMachine(PANEL, FAKE_PANEL + i);
+    }
+  }
+
+  private static void unpower(PlanetData data, int n) {
+    for (int i = 0; i < n; i++) {
+      data.sim().removeMachine(PANEL, FAKE_PANEL + i);
+    }
+  }
+
   private static void finish(GameTestHelper h, boolean ok, String what) {
     if (ok) {
       h.succeed();
@@ -92,6 +108,7 @@ public final class PlanetGameTests {
     double p0 = data.sim().model().snapshot().get(Ids.PRESSURE);
     long t0 = data.sim().model().simTicks();
     int before = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
+    power(data, 2); // two clean panels = 10 units per sol, enough for two Outgassers (8)
     h.setBlock(new BlockPos(0, 1, 0), MarsMachines.REGOLITH_OUTGASSER.get());
     h.setBlock(new BlockPos(2, 1, 0), MarsMachines.REGOLITH_OUTGASSER.get());
     int after = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
@@ -149,6 +166,7 @@ public final class PlanetGameTests {
                   "machine count back to " + before,
                   "count=" + data.sim().machineCount(RegolithOutgasserBlock.TYPE),
                   back);
+          unpower(data, 2);
           data.sim().model().set(Ids.PRESSURE, p0); // put the shared planet back
           finish(h, ok2, "outgasserRaisesPressureThroughRealTicks");
         });
@@ -162,6 +180,7 @@ public final class PlanetGameTests {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.data(level);
     BlockPos at = new BlockPos(0, 1, 0);
+    power(data, 1);
     h.setBlock(at, MarsMachines.REGOLITH_OUTGASSER.get());
     data.sim().model().advanceSols(3);
     CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
@@ -177,7 +196,7 @@ public final class PlanetGameTests {
                 + back.sim().model().snapshot().get(Ids.PRESSURE)
                 + " nbtKeys="
                 + tag.getAllKeys(),
-            same && tag.getInt("schema") == 1);
+            same && tag.getInt("schema") == 2);
     double rate = back.sim().model().netRatePerSol(Ids.PRESSURE);
     ok &=
         SelfTest.check(
@@ -204,6 +223,7 @@ public final class PlanetGameTests {
             refused,
             refused.startsWith("refused"));
     h.destroyBlock(at);
+    unpower(data, 1);
     data.sim().model().set(Ids.PRESSURE, 0.6);
     finish(h, ok, "planetSavesAndReloads");
   }
@@ -212,6 +232,7 @@ public final class PlanetGameTests {
   public static void monitorShowsRealValuesAndPayloadSurvivesTheWire(GameTestHelper h) {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.data(level);
+    power(data, 2);
     h.setBlock(new BlockPos(0, 1, 0), MarsMachines.REGOLITH_OUTGASSER.get());
     h.setBlock(new BlockPos(2, 1, 0), MarsMachines.REGOLITH_OUTGASSER.get());
     double p0 = data.sim().model().snapshot().get(Ids.PRESSURE);
@@ -300,6 +321,7 @@ public final class PlanetGameTests {
     h.destroyBlock(new BlockPos(0, 1, 0));
     h.destroyBlock(new BlockPos(2, 1, 0));
     h.destroyBlock(new BlockPos(4, 1, 0));
+    unpower(data, 2);
     data.sim().model().set(Ids.PRESSURE, p0);
     finish(h, ok, "monitor");
   }
@@ -485,6 +507,7 @@ public final class PlanetGameTests {
     int cx = far.getX() >> 4;
     int cz = far.getZ() >> 4;
     int before = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
+    power(data, 1);
     level.setChunkForced(cx, cz, true);
     level.getChunk(cx, cz); // load it now
     level.setBlockAndUpdate(far, MarsMachines.REGOLITH_OUTGASSER.get().defaultBlockState());
@@ -542,9 +565,84 @@ public final class PlanetGameTests {
                         "machine count back to " + before,
                         "count=" + data.sim().machineCount(RegolithOutgasserBlock.TYPE),
                         data.sim().machineCount(RegolithOutgasserBlock.TYPE) == before);
+                unpower(data, 1);
                 data.sim().model().set(Ids.PRESSURE, p0);
                 finish(h, ok, "outgasserKeepsWorkingWhileItsChunkIsUnloaded");
               });
         });
+  }
+
+  /**
+   * Slice 3 with real blocks: an Outgasser alone does nothing; a real solar panel (3 x 3 array)
+   * powers it; dust cuts the rate; a battery adds capacity; the Monitor's Power row says which.
+   */
+  @GameTest(template = "empty", batch = "mars_power")
+  public static void outgasserNeedsPowerFromRealBlocks(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.data(level);
+    var sim = data.sim();
+    double r0 = sim.model().netRatePerSol(Ids.PRESSURE);
+    BlockPos outPos = new BlockPos(0, 1, 0);
+    BlockPos panelPos = new BlockPos(6, 1, 6);
+    h.setBlock(outPos, MarsMachines.REGOLITH_OUTGASSER.get());
+    double alone = sim.model().netRatePerSol(Ids.PRESSURE) - r0;
+    String state1 =
+        MonitorSender.viewFor(level).rows().stream()
+            .filter(r -> r.labelKey().equals("monitor.row.power"))
+            .map(r -> String.valueOf(r.valueKey()))
+            .findFirst()
+            .orElse("none");
+    boolean ok =
+        SelfTest.check(
+            "power.outgasser_alone_unpowered",
+            "an Outgasser with no panel adds 0 kPa/sol and the Power row says unpowered",
+            "added " + alone + " row=" + state1,
+            Math.abs(alone) < TOL && state1.equals("monitor.power.unpowered"));
+    h.setBlock(panelPos, MarsMachines.SOLAR_PANEL.get());
+    double clean = sim.model().netRatePerSol(Ids.PRESSURE) - r0;
+    ok &=
+        SelfTest.check(
+            "power.real_panel_powers_it",
+            "a real clean solar panel gives the Outgasser its full 0.10 kPa/sol",
+            "added " + clean + " supply=" + sim.power().supplyPerSol(),
+            Math.abs(clean - 0.10) < TOL && Math.abs(sim.power().supplyPerSol() - 5.0) < TOL);
+    var dusty =
+        MarsMachines.SOLAR_PANEL
+            .get()
+            .defaultBlockState()
+            .setValue(mars.machines.SolarPanelBlock.DUST_STAGE, 4);
+    level.setBlock(h.absolutePos(panelPos), dusty, 3);
+    double dust4 = sim.model().netRatePerSol(Ids.PRESSURE) - r0;
+    ok &=
+        SelfTest.check(
+            "power.dust_stage_cuts_output",
+            "a stage 4 panel (60 %) gives 3.0 of 4 units, so 0.075 kPa/sol",
+            "added " + dust4 + " supply=" + sim.power().supplyPerSol(),
+            Math.abs(dust4 - 0.075) < TOL && Math.abs(sim.power().supplyPerSol() - 3.0) < TOL);
+    h.setBlock(new BlockPos(2, 1, 0), MarsMachines.BATTERY_BLOCK.get());
+    ok &=
+        SelfTest.check(
+            "power.battery_adds_capacity",
+            "a placed battery adds 10 units of capacity",
+            "capacity=" + sim.power().capacity(),
+            Math.abs(sim.power().capacity() - 10.0) < TOL);
+    h.destroyBlock(new BlockPos(2, 1, 0));
+    h.destroyBlock(panelPos);
+    h.destroyBlock(outPos);
+    ok &=
+        SelfTest.check(
+            "power.cleanup",
+            "rate and supply are back to the start",
+            "rate "
+                + sim.model().netRatePerSol(Ids.PRESSURE)
+                + " (was "
+                + r0
+                + ") supply="
+                + sim.power().supplyPerSol()
+                + " capacity="
+                + sim.power().capacity(),
+            Math.abs(sim.model().netRatePerSol(Ids.PRESSURE) - r0) < TOL
+                && sim.power().capacity() == 0.0);
+    finish(h, ok, "outgasserNeedsPowerFromRealBlocks");
   }
 }

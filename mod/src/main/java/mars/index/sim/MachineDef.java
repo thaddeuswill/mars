@@ -26,7 +26,6 @@ public record MachineDef(String id, List<Contribution> contributions, Power powe
     this(id, contributions, Power.NONE);
   }
 
-
   /** One contribution: {@code ratePerSol} added to {@code parameter} (negative = a sink). */
   public record Contribution(ParameterId parameter, double ratePerSol) {}
 

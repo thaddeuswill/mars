@@ -52,8 +52,8 @@ public final class MarsMachines {
       machine("regolith_oven", OVEN, MachineBlock::new);
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
-  public static final DeferredBlock<MachineBlock> BATTERY_BLOCK =
-      BLOCKS.register("battery", () -> new MachineBlock(machineProperties(), BATTERY));
+  public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
+      BLOCKS.register("battery", () -> new BatteryBlock(machineProperties(), BATTERY));
   public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
       machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
   public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =

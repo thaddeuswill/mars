@@ -85,6 +85,10 @@ public final class PlanetData extends SavedData {
                 machines.put(
                     type, new LongArrayTag(positions.stream().mapToLong(l -> l).toArray())));
     out.put("machines", machines);
+    out.putDouble("batteryCharge", s.batteryCharge());
+    CompoundTag eff = new CompoundTag();
+    s.efficiency().forEach((pos, f) -> eff.putDouble(Long.toString(pos), f));
+    out.put("efficiency", eff);
     return out;
   }
 
@@ -107,6 +111,18 @@ public final class PlanetData extends SavedData {
       }
       ms.put(type, list);
     }
-    return new PlanetState(schema, vs, tag.getLong("simTicks"), tag.getInt("pendingTicks"), ms);
+    Map<Long, Double> eff = new LinkedHashMap<>();
+    CompoundTag effTag = tag.getCompound("efficiency");
+    for (String k : effTag.getAllKeys()) {
+      eff.put(Long.parseLong(k), effTag.getDouble(k));
+    }
+    return new PlanetState(
+        schema,
+        vs,
+        tag.getLong("simTicks"),
+        tag.getInt("pendingTicks"),
+        ms,
+        tag.getDouble("batteryCharge"),
+        eff);
   }
 }

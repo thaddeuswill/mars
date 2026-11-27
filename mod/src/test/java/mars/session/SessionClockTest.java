@@ -19,7 +19,7 @@ class SessionClockTest {
   }
 
   private static PlanetSim running() throws Exception {
-    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 3);
     s.addMachine(TestSims.OUTGASSER, 1L);
     return s;
   }

@@ -56,4 +56,11 @@ public final class PlanetManager {
           d.sim().machineCount(type));
     }
   }
+
+  /** Tell the planet a machine's output changed (a dusty solar panel). Fraction is 0 to 1. */
+  public static void machineOutput(ServerLevel level, BlockPos pos, double fraction) {
+    PlanetData d = data(level);
+    d.sim().setEfficiency(pos.asLong(), fraction);
+    d.setDirty();
+  }
 }

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:battery",
+  "contributions": [],
+  "power": {
+    "storage": 10.0
+  },
+  "source": "docs/design/balance-sheet.md §2b: one battery holds 10 power units (kWh), invented: 2.5 sols of one Outgasser, so a storm sol is survivable."
+}

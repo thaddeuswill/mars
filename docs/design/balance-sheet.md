@@ -88,6 +88,21 @@ Tags: **sourced** (opened), **searched** (search summary, not opened), **calc** 
 | Panel wiper (from Phase 2) | Keeps a row at ≤ stage 1; 1 power unit per sol per panel; one bearing every 10 sols | **Invented**; fiction |
 | Phase 1 curve assumption | Panels cleaned about every 6 sols (average output ≈ 91 %) | **Calc** from the stage table; §2 curve holds only if power stays above Outgasser demand; measure in the prototype |
 
+## 2b. Power: solar panel, battery, Outgasser draw (Stage 2 slice 3)
+
+One shared grid per planet. Unit: **1 power unit = 1 kWh**; rates are units per sol. Power is physical, so pace never scales it (only the machines' planet effect is scaled). Not modelled yet: night, per-block wiring, storms on the grid (slice 5 and later).
+
+| Item | Value | Tag and reasoning |
+|---|---|---|
+| Clean solar panel supply | 5 power units per sol | **Sourced** anchor: InSight's array made about 5,000 Wh per sol at landing (PIA25284, see §2a); the game panel is sized like it |
+| Panel output by dust stage | stage factor from §2a (100, 92, 82, 70, 60 %) | Same table as §2a; a stage 4 panel makes 3.0 units per sol |
+| Regolith Outgasser draw | 4 power units per sol | **Invented.** "Medium" in §2. One clean panel runs one Outgasser with 1 unit per sol spare |
+| Battery capacity | 10 power units per battery | **Invented.** 2.5 sols of one Outgasser, so a dust-storm sol is survivable |
+| Sharing rule | Supply first, then battery; a shortfall cuts every powered machine by the same share | **Design choice.** Surplus charges batteries |
+| Effect when short | Outgasser pressure rate x share of power met | Simple and visible: the Monitor's Power row says "No power" or "Not enough power" |
+
+Worked example (check against `PowerGridTest`): one Outgasser, one clean panel: 5 of 4 units, full rate, +0.10 kPa/sol. Two Outgassers, one clean panel: 5 of 8 units, 62.5 % of the rate, +0.125 kPa/sol in total. One Outgasser on a stage 4 panel: 3.0 of 4 units, 75 %.
+
 ## 3. Required net rates per phase (standard, solo)
 
 These set the machine sizes. Each phase's machines must reach these averages with a realistic build-up.

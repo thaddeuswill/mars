@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:solar_panel",
+  "contributions": [],
+  "power": {
+    "supplyPerSol": 5.0
+  },
+  "source": "docs/design/balance-sheet.md §2b: a clean array makes 5 power units (kWh) per sol, set from InSight's ~5,000 Wh per sol at landing (sourced, PIA25284, via §2a). Output is multiplied by the dust stage factor (data/mars/hazards/panel_dust.json)."
+}

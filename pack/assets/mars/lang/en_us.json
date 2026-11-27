@@ -20,5 +20,9 @@
   "monitor.water.no_liquid": "No liquid water at this pressure",
   "monitor.trend.rising": "Rising",
   "monitor.trend.steady": "Steady",
-  "monitor.trend.falling": "Falling"
+  "monitor.trend.falling": "Falling",
+  "monitor.row.power": "Power",
+  "monitor.power.powered": "Enough power",
+  "monitor.power.short": "Not enough power",
+  "monitor.power.unpowered": "No power"
 }

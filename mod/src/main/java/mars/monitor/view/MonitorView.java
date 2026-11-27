@@ -89,7 +89,52 @@ public record MonitorView(double sols, List<Row> rows) {
           new Row(
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
+    powerRow(sim).ifPresent(rows::add);
     return new MonitorView(model.sols(), List.copyOf(rows));
+  }
+
+  /**
+   * The Power row: shows only when the planet has any power machine. The state word is the answer
+   * to "why is my Outgasser slow?"; the cause lines give supply, demand and battery in power units
+   * (1 unit = 1 kWh, balance sheet 2b).
+   */
+  private static java.util.Optional<Row> powerRow(PlanetSim sim) {
+    var grid = sim.power();
+    if (grid.supplyPerSol() <= 0 && grid.demandPerSol() <= 0 && grid.capacity() <= 0) {
+      return java.util.Optional.empty();
+    }
+    String key =
+        switch (grid.state(sim.stepSols())) {
+          case IDLE, POWERED -> "monitor.power.powered";
+          case SHORT -> "monitor.power.short";
+          case UNPOWERED -> "monitor.power.unpowered";
+        };
+    List<CauseLine> lines = new ArrayList<>();
+    int panels = sim.machineCount("mars:solar_panel");
+    if (panels > 0) {
+      lines.add(
+          new CauseLine(
+              "block.mars.solar_panel", panels, units(grid.supplyPerSol(), "/sol", true)));
+    }
+    int users = sim.machineCount("mars:regolith_outgasser");
+    if (users > 0) {
+      lines.add(
+          new CauseLine(
+              "block.mars.regolith_outgasser", users, units(-grid.demandPerSol(), "/sol", true)));
+    }
+    int batteries = sim.machineCount("mars:battery");
+    if (batteries > 0) {
+      lines.add(
+          new CauseLine(
+              "block.mars.battery",
+              batteries,
+              Fmt.number(grid.charge(), 1) + " / " + Fmt.number(grid.capacity(), 1) + " units"));
+    }
+    return java.util.Optional.of(new Row("monitor.row.power", "", key, null, null, lines));
+  }
+
+  private static String units(double v, String per, boolean signed) {
+    return (signed ? Fmt.signed(v, 1) : Fmt.number(v, 1)) + " units" + per;
   }
 
   /**

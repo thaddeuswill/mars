@@ -23,12 +23,28 @@ public final class TestSims {
   }
 
   public static Map<String, MachineDef> defs() throws Exception {
-    Path f = TestData.data("machines/regolith_outgasser.json");
-    try (Reader r = Files.newBufferedReader(f, StandardCharsets.UTF_8)) {
-      JsonObject o = JsonParser.parseReader(r).getAsJsonObject();
-      MachineDef d = MachineDef.parse(o, f.getFileName().toString());
-      return Map.of(d.id(), d);
+    Map<String, MachineDef> out = new java.util.HashMap<>();
+    try (var files = Files.list(TestData.data("machines"))) {
+      for (Path f : files.filter(x -> x.toString().endsWith(".json")).toList()) {
+        try (Reader r = Files.newBufferedReader(f, StandardCharsets.UTF_8)) {
+          JsonObject o = JsonParser.parseReader(r).getAsJsonObject();
+          MachineDef d = MachineDef.parse(o, f.getFileName().toString());
+          out.put(d.id(), d);
+        }
+      }
     }
+    return out;
+  }
+
+  public static final String PANEL = "mars:solar_panel";
+  public static final String BATTERY = "mars:battery";
+
+  /** Add {@code n} clean solar panels (positions 1000 up) so powered machines run at full rate. */
+  public static PlanetSim withPanels(PlanetSim sim, int n) {
+    for (int i = 0; i < n; i++) {
+      sim.addMachine(PANEL, 1000L + i);
+    }
+    return sim;
   }
 
   public static PlanetSim sim(Pace pace) throws Exception {

@@ -21,7 +21,10 @@ import net.minecraft.util.profiling.ProfilerFiller;
  */
 public final class IndexDefinitions {
   /** Everything the pure simulation needs from data. */
-  public record Defs(IndexData.Loaded index, Map<String, MachineDef> machines) {}
+  public record Defs(
+      IndexData.Loaded index,
+      Map<String, MachineDef> machines,
+      mars.hazards.dust.PanelDustTuning dust) {}
 
   private static volatile Defs current;
 
@@ -55,7 +58,15 @@ public final class IndexDefinitions {
             MachineDef d = MachineDef.parse(json, file);
             machines.put(d.id(), d);
           });
-      return new Defs(index, Map.copyOf(machines));
+      mars.hazards.dust.PanelDustTuning dust;
+      ResourceLocation dustFile =
+          ResourceLocation.fromNamespaceAndPath("mars", "hazards/panel_dust.json");
+      try (java.io.Reader r = manager.openAsReader(dustFile)) {
+        dust = mars.hazards.dust.PanelDustTuning.parse(r, "data/mars/hazards/panel_dust.json");
+      } catch (java.io.IOException e) {
+        throw new IllegalStateException("Cannot read data/mars/hazards/panel_dust.json", e);
+      }
+      return new Defs(index, Map.copyOf(machines), dust);
     }
 
     @Override

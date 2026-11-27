@@ -85,11 +85,11 @@ State as of 2026-11-27 (see HANDOFF.md for detail):
 - Stage 1 done. Stage 2 slice 1 (planet values, Outgasser, Monitor, `/mars index`) and slice 2 (session clock, pause, invariant I-3, chunk-unload rule) done and accepted by the owner. 67 unit tests, 41 boot checks.
 - Round solar array done: 3 x 3 footprint, raised models, shape code matches (canopy slice y 15..16 px).
 - Monitor screen shrunk to 232 px; accepted.
-- In progress (Claude Technical Lead): slice 3, power (solar panel and battery). Check `git log` and `BACKLOG.md` before touching `machines/`.
+- Slice 3 (power) done: solar panel (with dust-stage output) and battery feed one grid per planet; the Regolith Outgasser only raises pressure while powered; the Monitor has a Power row. 79 unit tests, 46 boot checks. Next: the pressure machine chain and "Dome stable".
 
 Good tasks for you (check BACKLOG.md first, then claim by adding a line there):
-1. (Claimed by Claude) Stage 2 slice 3: power (solar panel and battery).
-2. After that: the pressure machine chain and the "Dome stable" unlock.
+1. Stage 2 slice 4: "Dome stable" gate and unlock; then the pressure machine chain (Regolith Oven power draw).
+2. (Open) forecast and Monitor items below.
 3. Technical Lead leftovers: forecast JSON `resolve_source` and the CR-F10 test; Monitor minimum view; a frustum-culling test for an array crossing a chunk border.
 4. Pure-Java unit tests and ArchUnit rules for any new simulation code.
 Do **not** pick: art direction, story, learning objectives, EULA, external reviewers. Those are the owner's or other roles'.
