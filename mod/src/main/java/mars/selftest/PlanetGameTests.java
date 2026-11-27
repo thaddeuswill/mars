@@ -1047,6 +1047,26 @@ public final class PlanetGameTests {
               "group size 9 is refused and the pace is unchanged",
               "refused=" + refused,
               refused && PlanetManager.pace(level).equals(room));
+      // Classroom needs 3 to 5: the command refuses 1 and 2, changes nothing, takes no checkpoint.
+      String planetId = level.dimension().location().toString();
+      int cpBefore = mars.planets.CheckpointData.get(server).of(planetId).list().size();
+      refused = false;
+      try {
+        PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.CLASSROOM, 2);
+      } catch (IllegalArgumentException e) {
+        refused = e.getMessage().contains("3 to 5");
+      }
+      server.getCommands().performPrefixedCommand(source, "mars pace classroom 1");
+      ok &=
+          SelfTest.check(
+              "pace.classroom_group_range",
+              "classroom group size 1 or 2 is refused with a clear message, nothing changes, no"
+                  + " checkpoint",
+              "refused=" + refused,
+              refused
+                  && PlanetManager.pace(level).equals(room)
+                  && mars.planets.CheckpointData.get(server).of(planetId).list().size()
+                      == cpBefore);
       server.getCommands().performPrefixedCommand(source, "mars pace standard");
       var std = PlanetManager.pace(level);
       player.setGameMode(net.minecraft.world.level.GameType.CREATIVE);

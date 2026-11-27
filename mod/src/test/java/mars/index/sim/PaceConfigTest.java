@@ -42,7 +42,11 @@ class PaceConfigTest {
     assertEquals(20 * 60 * 20, c.solTicks());
     assertEquals(100, c.stepTicks());
     assertEquals(1, c.standard().groupSize(), "standard default is solo");
-    assertTrue(c.groupAllowed(3) && c.groupAllowed(5), "teacher range 3 to 5 is allowed");
+    assertEquals(1, c.standard().groupMin());
+    assertEquals(5, c.standard().groupMax());
+    assertEquals(3, c.classroom().groupMin());
+    assertEquals(5, c.classroom().groupMax());
+    assertEquals(4, c.classroom().groupSize(), "classroom default is 4");
   }
 
   @Test
@@ -80,6 +84,13 @@ class PaceConfigTest {
     assertEquals(3, c.pace(PaceConfig.Mode.CLASSROOM, 3).groupSize());
     assertEquals(5, c.pace(PaceConfig.Mode.STANDARD, 5).groupSize());
     assertThrows(IllegalArgumentException.class, () -> c.pace(PaceConfig.Mode.CLASSROOM, 6));
+    for (int n : new int[] {0, 1, 2}) {
+      var e =
+          assertThrows(IllegalArgumentException.class, () -> c.pace(PaceConfig.Mode.CLASSROOM, n));
+      assertTrue(e.getMessage().contains("3 to 5"), e.getMessage());
+    }
+    assertEquals(1, c.pace(PaceConfig.Mode.STANDARD, 1).groupSize());
+    assertEquals(2, c.pace(PaceConfig.Mode.STANDARD, 2).groupSize());
     assertThrows(IllegalArgumentException.class, () -> c.pace(PaceConfig.Mode.STANDARD, 0));
     // The hand-built presets used by older tests agree with the file.
     assertEquals(Pace.classroom(4), room);
@@ -91,7 +102,7 @@ class PaceConfigTest {
     PaceConfig c = config();
     var reference = TestSims.gates();
     for (PaceConfig.Mode mode : PaceConfig.Mode.values()) {
-      for (int n = 1; n <= 5; n++) {
+      for (int n = mode == PaceConfig.Mode.CLASSROOM ? 3 : 1; n <= 5; n++) {
         Pace pace = c.pace(mode, n);
         PlanetSim s = TestSims.sim(pace);
         for (GateDef g : reference) {
@@ -124,7 +135,7 @@ class PaceConfigTest {
     PaceConfig c = config();
     double std = gain(c.pace(PaceConfig.Mode.STANDARD, 1));
     assertTrue(std > 0);
-    for (int n = 1; n <= 5; n++) {
+    for (int n = 3; n <= 5; n++) {
       Pace room = c.pace(PaceConfig.Mode.CLASSROOM, n);
       double expected = std * 4.0 * room.groupRateScale();
       assertEquals(expected, gain(room), expected * 0.01, "classroom group " + n);
@@ -153,6 +164,26 @@ class PaceConfigTest {
                     + "\"group_size_range\":{\"min\":1,\"max\":5}}")
             .getAsJsonObject();
     assertThrows(IllegalArgumentException.class, () -> PaceConfig.parse(noMode, "x.json"));
+    // A preset with no range, an inverted range, or a default outside its own range is refused.
+    String good = "{\"rate_multiplier\":1,\"group_size\":%d,%s\"creative_gate_bypass\":true}";
+    String ok = "\"group_size_range\":{\"min\":3,\"max\":5},";
+    String[][] bad = {
+      {String.format(good, 4, ""), "no range"},
+      {String.format(good, 4, "\"group_size_range\":{\"min\":5,\"max\":3},"), "inverted"},
+      {String.format(good, 2, ok), "default outside range"},
+      {String.format(good, 4, "\"group_size_range\":{\"min\":0,\"max\":5},"), "min below 1"},
+      {String.format(good, 4, "\"group_size_range\":{\"min\":3},"), "no max"},
+    };
+    for (String[] b : bad) {
+      String text =
+          "{\"schema\":1,\"sol_ticks\":1,\"step_ticks\":1,\"standard\":"
+              + String.format(good, 4, ok)
+              + ",\"classroom\":"
+              + b[0]
+              + "}";
+      JsonObject o2 = JsonParser.parseString(text).getAsJsonObject();
+      assertThrows(IllegalArgumentException.class, () -> PaceConfig.parse(o2, "x.json"), b[1]);
+    }
   }
 
   @Test

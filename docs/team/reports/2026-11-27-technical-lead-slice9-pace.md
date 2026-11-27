@@ -53,3 +53,11 @@ Producer, `2026-11-27-producer-stage3-first-slice.md` and `docs/tech/stage3-plan
 - Real results: `./gradlew build --offline` BUILD SUCCESSFUL; 207 unit tests, 0 failed; `runGameTestServer` `RESULT PASS passed=97 failed=0`.
 - Screenshot: `tools/screenshots/slice9_classroom.shots` run via absolute path, no other client running; `tools/screenshots/out/20261127-192411/slice9_1_classroom_monitor.png` viewed: "Classroom pace" sits at the bottom line, plot and rows intact, nothing clipped. In that run Dome stable latched in under 1 sol (classroom hold 1 sol at x4 rate with 1.5 sols advanced), as expected.
 - Unverified: standard-world screenshot not retaken (no row is added, covered by the unit test); the real chat output of the pre-change checkpoint; multi-planet worlds; whether the tag label should be styled differently (kept plain).
+
+## Follow-up 2: classroom group range 3 to 5 (owner away; recommendation accepted)
+- `pack/data/mars/pace.json`: the top-level `group_size_range` is gone; each preset carries its own (standard 1..5, classroom 3..5, default 4). `source` text says the 3 to 5 range is a design choice aligned with the Decision Log group of 3 to 5.
+- `PaceConfig.Preset` gained `groupMin`/`groupMax`/`groupAllowed`; `parse` refuses a preset with no range, an inverted or sub-1 range, a missing max, or a default outside its range. `pace()` message: "Group size for classroom must be 3 to 5 (you gave 1). Nothing was changed." The check runs before the checkpoint, so a refusal changes nothing and takes no checkpoint. Standard path unchanged.
+- Tests: `PaceConfigTest` asserts both ranges, refusal of classroom 0/1/2 (message names "3 to 5"), standard 1 and 2 still fine, five bad-file cases; group loops now 3..5 for classroom. New boot check `pace.classroom_group_range` (command `classroom 1` and setPace 2: refused, pace unchanged, checkpoint count unchanged).
+- Docs: ARCHITECTURE 2.21, launch guide, educator guide 2.4 (group size line only), BACKLOG #49.
+- Real results: `./gradlew spotlessApply build runGameTestServer`: BUILD SUCCESSFUL; 207 unit tests, 0 failed (no new test methods; assertions added); `RESULT PASS passed=98 failed=0`.
+- Unverified: real chat text of the refusal in a client; educator-guide lines 96-100 and 120 still say "group size" without the range (left as instructed).

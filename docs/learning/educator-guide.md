@@ -77,7 +77,7 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 ### 2.3 Before the first class
 
 1. Install and start the server, then switch it to classroom pace (§2.4). It starts **paused**.
-2. Open one planet per group; set each planet's **group size** (3–5) and **grade band** (middle or high school). Leave **guidance** on **gentle** (the classroom default: the game points at problems and explains what's locked). You may choose **standard** for a confident group; it gives fewer hints but still names every cause. Guidance never changes the science or the numbers.
+2. Open one planet per group; set each planet's **group size** (3–5; classroom pace refuses 1 or 2) and **grade band** (middle or high school). Leave **guidance** on **gentle** (the classroom default: the game points at problems and explains what's locked). You may choose **standard** for a confident group; it gives fewer hints but still names every cause. Guidance never changes the science or the numbers.
    **Subtitles are on by default** in the classroom pack (useful in noisy rooms and for students who can't use sound). Every important sound also has a visual cue.
 3. Assign students to planets (or give out join codes).
 4. Print the **player ID slips** (one per student) from the class overview. The slips carry **IDs only**; the game never prints names (it doesn't store them anywhere it could print from). Hand them out yourself, writing a name on a slip by hand if that helps you, and keep them in the classroom. Students write their ID, never their name, on pre/post tests.

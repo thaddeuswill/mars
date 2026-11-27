@@ -7,11 +7,19 @@ import com.google.gson.JsonObject;
  * The file holds rates, group size and the creative-bypass switch only: it has no threshold, so no
  * mode can scale one (invariant I-1). Hold lengths stay in the gate files.
  */
-public record PaceConfig(
-    int solTicks, int stepTicks, int groupMin, int groupMax, Preset standard, Preset classroom) {
+public record PaceConfig(int solTicks, int stepTicks, Preset standard, Preset classroom) {
 
-  /** One mode's numbers. */
-  public record Preset(double rateMultiplier, int groupSize, boolean creativeGateBypass) {}
+  /** One mode's numbers, including the group sizes that mode allows. */
+  public record Preset(
+      double rateMultiplier,
+      int groupSize,
+      int groupMin,
+      int groupMax,
+      boolean creativeGateBypass) {
+    public boolean groupAllowed(int n) {
+      return n >= groupMin && n <= groupMax;
+    }
+  }
 
   /** The two modes an operator can choose. */
   public enum Mode {
@@ -28,20 +36,20 @@ public record PaceConfig(
     if (schema != 1) {
       throw new IllegalArgumentException(file + ": unsupported schema " + schema);
     }
-    JsonObject range = obj(o, "group_size_range", file);
     PaceConfig c =
         new PaceConfig(
             o.get("sol_ticks").getAsInt(),
             o.get("step_ticks").getAsInt(),
-            range.get("min").getAsInt(),
-            range.get("max").getAsInt(),
             preset(obj(o, "standard", file), file),
             preset(obj(o, "classroom", file), file));
-    if (c.solTicks <= 0 || c.stepTicks <= 0 || c.groupMin < 1 || c.groupMax < c.groupMin) {
-      throw new IllegalArgumentException(file + ": invalid ticks or group size range");
+    if (c.solTicks <= 0 || c.stepTicks <= 0) {
+      throw new IllegalArgumentException(file + ": invalid ticks");
     }
     for (Preset p : new Preset[] {c.standard, c.classroom}) {
-      if (p.rateMultiplier() <= 0 || !c.groupAllowed(p.groupSize())) {
+      if (p.groupMin() < 1 || p.groupMax() < p.groupMin()) {
+        throw new IllegalArgumentException(file + ": invalid group size range " + p);
+      }
+      if (p.rateMultiplier() <= 0 || !p.groupAllowed(p.groupSize())) {
         throw new IllegalArgumentException(file + ": invalid preset " + p);
       }
     }
@@ -56,27 +64,41 @@ public record PaceConfig(
   }
 
   private static Preset preset(JsonObject p, String file) {
-    for (String k : new String[] {"rate_multiplier", "group_size", "creative_gate_bypass"}) {
+    for (String k :
+        new String[] {
+          "rate_multiplier", "group_size", "group_size_range", "creative_gate_bypass"
+        }) {
       if (!p.has(k)) {
         throw new IllegalArgumentException(file + ": preset lacks '" + k + "'");
       }
     }
+    JsonObject range = obj(p, "group_size_range", file);
+    if (!range.has("min") || !range.has("max")) {
+      throw new IllegalArgumentException(file + ": group_size_range needs min and max");
+    }
     return new Preset(
         p.get("rate_multiplier").getAsDouble(),
         p.get("group_size").getAsInt(),
+        range.get("min").getAsInt(),
+        range.get("max").getAsInt(),
         p.get("creative_gate_bypass").getAsBoolean());
-  }
-
-  public boolean groupAllowed(int n) {
-    return n >= groupMin && n <= groupMax;
   }
 
   /** The pace for a mode; {@code groupSize} null means the preset's own. */
   public Pace pace(Mode mode, Integer groupSize) {
     Preset p = mode == Mode.CLASSROOM ? classroom : standard;
     int n = groupSize == null ? p.groupSize() : groupSize;
-    if (!groupAllowed(n)) {
-      throw new IllegalArgumentException("Group size must be " + groupMin + " to " + groupMax);
+    if (!p.groupAllowed(n)) {
+      throw new IllegalArgumentException(
+          "Group size for "
+              + mode.name().toLowerCase(java.util.Locale.ROOT)
+              + " must be "
+              + p.groupMin()
+              + " to "
+              + p.groupMax()
+              + " (you gave "
+              + n
+              + "). Nothing was changed.");
     }
     return new Pace(
         p.rateMultiplier(), n, solTicks, stepTicks, mode == Mode.CLASSROOM, p.creativeGateBypass());
