@@ -770,7 +770,7 @@ The rules that keep components clean and free of hidden side effects:
 5. **Content is data.** Code defines *how* gates, conditions, and messages work; data defines *which* exist.
 6. **Immutable snapshots for readers.** Readers get a copy (`IndexSnapshot`), so nothing can change state by accident while reading it.
 7. **Game state and evidence live apart.** Rolling back the game never erases what students showed (section 7).
-8. **Identity stops at one boundary.** Minecraft UUIDs exist in memory and in one mapping file. Everything learning writes uses pseudonyms (section 8).
+8. **Identity stops at one boundary.** The identity component receives Minecraft UUIDs in memory. Its private mapping stores keyed lookup tokens. Learning records and exports use only pseudonyms (section 8).
 9. **Build just what the learning experience needs** (Chapter 9). Each back-end piece is first built as the smallest prototype that tells us whether it is feasible, then as end-to-end plumbing; the staging is in [docs/tech/test-strategy.md](docs/tech/test-strategy.md) §9.
 10. **Identify things by ID, never by display name.** Registry IDs, machine IDs, and data IDs only; an ArchUnit rule forbids reading translated text in game logic (test-strategy §5).
 
@@ -951,10 +951,10 @@ Closes consistency review M-07, M-08, M-09, M-11, and implements the decision "t
 
 - **Format:** `P-` plus 5 characters from a 31-character alphabet without look-alikes (no 0/O, 1/I/L), e.g. `P-7K3QX`. Easy to read aloud in class, about 28 million possibilities. Unique per world; regenerated on collision.
 - **Random, per world.** Created the first time a player joins the world. **Never derived from the Minecraft UUID** (no hashing), so the ID alone reveals nothing.
-- **Mapping file:** `mars-data/<worldId>/identity/players.json`: `{ "<minecraft uuid>": { "id": "P-7K3QX", "created": "<date>" } }`. No usernames are stored; names are looked up live from the server when the teacher asks.
+- **Mapping file:** `mars-data/<worldId>/identity/players.json` stores a private world key, keyed SHA-256 account lookup tokens and randomly allocated pseudonyms. The file also reserves previously issued pseudonyms. Raw account UUIDs and usernames stay out of this file. One server owns the file per world.
 - **Rules:** the export code never reads this file; it's excluded from backups; it's never synced to any client. The teacher sees ID ↔ name only in the teacher overview or with `/mars who <id>`, on the server.
 - **Deletion:** `/mars forget <player>` removes one entry (that player gets a new ID if they join again); `/mars forget-all` ends the unit.
-- **Considered and rejected:** a keyed hash of the UUID (no mapping file). The secret key is just as sensitive as the file, and the teacher can't look up a student who is offline.
+- **Lookup boundary:** the keyed account token is used only to find a randomly assigned pseudonym. The private key and mapping must stay on the server. Linking a pseudonym to a name requires candidate profiles from the game’s server cache. Offline lookup is a separate integration task.
 
 ### 8.3 Action log
 

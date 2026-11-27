@@ -33,7 +33,7 @@ The owner is switching to Codex because Claude's usage is nearly out. Claude's b
 **Reply format to the owner:** short: what changed, recommended next steps, a screenshot for anything visual. Ask decisions as a few clear questions with a recommended option.
 
 
-**Stage 3 slice 3 (Codex):** typed action events and local JSON Lines writer are built under `mars/learning/`. Session rotation and in-memory identity allocation are built and tested. Gameplay hooks, cross-restart identity, CSV, guidance, and interruption settings remain open. See the [first learning report](docs/team/reports/2026-11-27-codex-learning-action-log.md).
+**Stage 3 slice 3 (Codex):** typed action events and local JSON Lines writer are built under `mars/learning/`. Session rotation and in-memory identity allocation are built and tested. The private identity store now preserves random pseudonyms across restarts without writing raw account UUIDs. Gameplay hooks, CSV, guidance, and interruption settings remain open. See the [first learning report](docs/team/reports/2026-11-27-codex-learning-action-log.md).
 
 ## 1. What this project is, in five lines
 
