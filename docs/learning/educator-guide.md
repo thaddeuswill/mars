@@ -76,13 +76,53 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 
 ### 2.3 Before the first class
 
-1. Install and start the server in classroom mode. It starts **paused**.
+1. Install and start the server, then switch it to classroom pace (§2.4). It starts **paused**.
 2. Open one planet per group; set each planet's **group size** (3–5) and **grade band** (middle or high school). Leave **guidance** on **gentle** (the classroom default: the game points at problems and explains what's locked). You may choose **standard** for a confident group; it gives fewer hints but still names every cause. Guidance never changes the science or the numbers.
    **Subtitles are on by default** in the classroom pack (useful in noisy rooms and for students who can't use sound). Every important sound also has a visual cue.
 3. Assign students to planets (or give out join codes).
 4. Print the **player ID slips** (one per student) from the class overview. The slips carry **IDs only**; the game never prints names (it doesn't store them anywhere it could print from). Hand them out yourself, writing a name on a slip by hand if that helps you, and keep them in the classroom. Students write their ID, never their name, on pre/post tests.
 5. Print the pre-test, the paper reflection worksheet (§6) as a backup, and the Mars/Earth data table for debrief 1.
 6. Test one student PC joining the server.
+
+### 2.4 Choosing the pace (classroom mode)
+
+**Status: the command is built and passed automated server tests. It has not been typed in a real client or on a dedicated server, so its chat text is untested.** The class overview buttons in §2.2 are planned; until they exist, you set the pace with a command. You need operator rights (permission level 2).
+
+**Switch the world to classroom pace** (once, before the first class):
+
+| Command | What it does |
+|---|---|
+| `/mars pace` | Shows the current pace: standard or classroom, the rate multiplier, the group size, and whether the creative gate bypass is on. |
+| `/mars pace classroom` | Classroom pace with the default group size (4). |
+| `/mars pace classroom 3` (or 4, 5) | Classroom pace for groups of that size. |
+| `/mars pace standard` | Back to home pace (the default for a new world). |
+
+The choice is saved with the world. It applies to the whole world, so **every planet on the server shares one group size**. If your groups differ (say 3, 4 and 5), pick the most common size.
+
+**What changes in classroom pace**
+
+| Change | Plain meaning |
+|---|---|
+| Rates x4 (with a group-size adjustment) | Machines move the planet about four times faster than in standard pace. A bigger group sets a smaller adjustment, because more students build more machines. A group of 4 ends up near the speed of one solo player, while building goes faster. |
+| Shorter holds | A hold is how long a condition must stay true before a gate counts. "Dome stable" is 1 sol instead of 3. |
+| Creative gate bypass is off | In standard pace a creative-mode player can place blocks that survival players have not unlocked yet. In classroom pace they can't. This keeps a teacher's test account from skipping what students must earn. |
+| Guidance is teacher-only | Only the operator can change a student's guidance level (`/mars guidance <level> <player>`). The **expert** level is refused in classroom worlds. |
+
+**What does not change.** Physical thresholds are the same in every pace and every group size: 5 kPa for Phase 2, the triple point, 0 °C, the breathable-air condition, and the equilibrium band. Faster pace makes the planet reach them sooner; it never moves them. A group that finishes in classroom pace has met the same science targets as a home player. The planet also keeps its numbers, goals, machines, and history when you switch.
+
+**Check the mode.** Type `/mars pace`. The Monitor will also show a "Classroom pace" row once that row is built (**pending: not yet in the game**). Until then, the Monitor does not tell students or you which pace is on.
+
+**If you forget.** The world runs in standard pace, and nothing on screen warns you. Run `/mars pace classroom` as soon as you notice. It works at any time and the planet keeps its numbers. From that moment, rates and holds follow classroom pace. Time already played at the slower pace is not made up, so a group that began in standard pace is behind the unit plan: use a higher pace for that planet, or shorten debriefs (§11). You can also switch back with `/mars pace standard` if you chose wrong.
+
+**Pre-class checklist** (about 5 minutes; all untested in a real class)
+
+1. Server started; a test join works (§2.3, step 6).
+2. `/mars pace classroom <group size>` run, and `/mars pace` shows classroom, the right group size, and creative bypass off.
+3. Your own test account is not in creative mode. (In classroom pace it can't skip gates, but a creative account still isn't a fair test of a student's experience.)
+4. Each student's guidance is set the way you want. Gentle is the classroom suggestion (§2.3). Remember that students can't change it themselves.
+5. Planets paused until class starts (§2.3, step 1); resume when students are seated.
+6. Player ID slips, pre-test, and paper worksheet printed (§2.3, steps 4 and 5).
+7. After the first 10 minutes of play, ask a group what the Monitor says about its goal. If the estimate looks far too slow for a 40-minute period, re-check step 2.
 
 ## 3. Groups, colony posts, and fairness
 
