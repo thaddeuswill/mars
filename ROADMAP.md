@@ -207,15 +207,15 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 - ⬜ **Stage 2a (scheduled first, owner decision):** paper and spreadsheet prototypes for the alternatives above, plus the `guidance` levels and the orbital mirror route as a B4 choice; findings filed by the Lead Game Designer before any Stage 2b code [GD, ID, A]
 - ⬜ **Face-validity review** of concept sketches (Monitor wireframe, sky strip, weather mast, thawling silhouettes, Outgasser; `docs/art/concepts/`): owner and SME, one sitting, during Stage 2a [A runs; owner, SME]
-- ⬜ Planetary Index stored in world save data and readable by command [TL]
-- ⬜ Simulation clock and sols (simulation time; sleeping never advances it) [TL]
-- ⬜ Pause and resume; **GameTests confirming that pause stops third-party machines** (Mekanism, Create); fallback "pause = stop the server" [TL]
-- ⬜ One machine that raises one parameter (pressure): placeholder Regolith Outgasser [TL, A]
-- ⬜ One visible world response to that parameter (sky tint or fog) [TL, A]
-- ⬜ One regression source (machine wear or a storm) [TL]
-- ⬜ Admin API and debug commands to set and inspect every Index value [TL]
-- ⬜ Rollback restore approach chosen (start script is the safe default) [TL]
-- ⬜ Invariant tests I-1 to I-3 (qa-plan.md §4) [TL]
+- ✅ Planetary Index stored in world save data and readable by command [TL]
+- ✅ Simulation clock and sols (simulation time; sleeping never advances it) [TL]
+- 🟡 Pause and resume built and tested (slice 2); **GameTests confirming that pause stops third-party machines** (Mekanism, Create) still open; fallback "pause = stop the server" [TL]
+- ✅ One machine that raises one parameter (pressure): placeholder Regolith Outgasser [TL, A]
+- ✅ One visible world response to that parameter (sky tint or fog) [TL, A]
+- ✅ One regression source: polar-frost sink (slice 5) [TL]
+- ✅ Admin API and debug commands to set and inspect every Index value (slice 8) [TL]
+- ✅ Rollback restore approach chosen: in-game checkpoint plus world backup script (ARCHITECTURE.md 7.4a) [TL]
+- ✅ Invariant tests I-1 to I-3 (qa-plan.md §4) [TL]
 - ⬜ Prototype art minimum: E-01, E-02, T-01, M-08, U-01 (placeholders allowed) [A]
 - ⬜ User playtests P1 (standard) and P2 (classroom config) and reports [user, GD]
 
@@ -437,7 +437,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 ## Where We Are Now
 
-**Stage 2 (Prototype), in progress.** The Stage 1 mod skeleton builds and opens a custom Mars dimension. Stage 2 slices 1 and 2 added per-planet simulation, the Regolith Outgasser, the Planetary Monitor, and pause/resume. The latest verified report records 67 unit tests and 41 boot checks passing. See [HANDOFF.md](HANDOFF.md) for the current build and verification gaps.
+**Stage 2 (Prototype), code slices 1 to 8 built.** Per-planet simulation, Regolith Outgasser and Oven, power, gates, polar-frost sink, sky response, Planetary Monitor with history plot and next-goal bar, pause and resume, operator commands and rollback. Latest verified run: 171 unit tests and 81 boot checks (slice 8 report). Slice 9 (pack config and classroom pacing), the paper prototype, art minimum and the owner's playtests P1 and P2 are still open. See [HANDOFF.md](HANDOFF.md) for the build and verification gaps.
 
 1. **Finish slice 3** ([build plan](docs/tech/stage2-plan.md), [backlog](BACKLOG.md)). The Technical Lead owns solar and battery power and Outgasser throughput. The next planned slice adds the “Dome stable” unlock.
 2. **Before Stage 3**, hold the full-team story review and review the [UI specs](docs/design/ui-specs.md) against the settled interruption rules and [process](PROCESS.md). Apply any remaining consensus document or config updates.

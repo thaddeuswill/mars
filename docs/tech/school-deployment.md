@@ -50,6 +50,17 @@ For the educator guide (Lead Instructional Designer owns that document; this is 
 | Local network | Students reach the server on the school LAN. Default Java server port is TCP 25565 (**unverified** in this check; standard Minecraft server default). No internet traffic is needed for play once accounts have signed in. | School firewalls often block game ports (**unverified**) |
 | Storage | World, backups, and the local data folder on the server machine | Backups and the action log (ARCHITECTURE.md §7) |
 
+## Undoing a bad session (slice 8)
+
+Two tools, for different damage (ARCHITECTURE.md 7.4a):
+
+| Damage | Tool | How | Covers |
+|---|---|---|---|
+| Wrong numbers or a goal latched by mistake | In-game checkpoint | `/mars checkpoint list`, then `/mars checkpoint restore session-N` (one is saved at every `/mars resume`); `restore start` for the start values | Planet numbers, goals, history, battery. **Not** blocks, items, inventories, other mods |
+| Griefing, destroyed machines, a crash | World-folder backup | With the server **stopped**: `tools/world-backup.sh backup <world> <backups>` before class; after a bad session `tools/world-backup.sh restore <world> <backup file>` (the current world is moved aside, never deleted) | Everything in the world folder; all or nothing (no per-planet restore yet) |
+
+Cost: a checkpoint is a few KB. A world backup is one archive of the world folder per class (size not yet measured on a real class world). The script needs a shell (Linux, macOS, or Git Bash on Windows; not tested on Windows or macOS) and does nothing automatically: schedule it from your start script. Student learning data is stored outside the world and is never touched by either tool.
+
 ## Consequences for the design
 
 1. **Club and home play are first-class audiences**, not a fallback. Singleplayer must work fully (one planet, no teacher tools needed).

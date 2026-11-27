@@ -37,7 +37,7 @@ import org.joml.Vector3f;
  */
 final class MarsSkyEffects extends DimensionSpecialEffects {
   private static final ResourceLocation SUN =
-      ResourceLocation.withDefaultNamespace("textures/environment/sun.png");
+      ResourceLocation.fromNamespaceAndPath("mars", "textures/environment/sun.png");
   private static final ResourceLocation MOON =
       ResourceLocation.withDefaultNamespace("textures/environment/moon_phases.png");
   // Elevation rings of the dome in degrees, from the zenith down to the horizon (invented layout).

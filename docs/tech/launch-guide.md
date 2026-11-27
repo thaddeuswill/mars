@@ -41,6 +41,23 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 
 On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time**; operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
 
+### 1c. Operator commands (slice 8)
+
+All need operator rights (cheats on in singleplayer) and are written to the log. Run them while standing on Mars.
+
+| Command | Does |
+|---|---|
+| `/mars index get` | Print every Index value |
+| `/mars index advance <sols>` | Skip simulation time (up to 200 sols) |
+| `/mars index set <parameter> <value>` | Set one value, e.g. `set pressure 30` to look at the sky at 30 kPa, or `set temperature -10` for the warm branch |
+| `/mars index export` | Write a readable text report of the planet (values, goals, machine counts) to `mars-data/exports/` next to the server or game folder. No player data |
+| `/mars machines` | Count machines by type, with the first positions |
+| `/mars gate list`, `/mars gate latch <id>` | Show goals; latch one (there is no way to un-latch a single goal) |
+| `/mars checkpoint save [name]`, `list`, `restore <name>` | Save, list and restore the planet's numbers. A checkpoint `session-N` is saved automatically each time you `/mars resume`. `restore start` returns the planet to its start values |
+| `/mars pause`, `/mars resume`, `/mars session` | Freeze, unfreeze, show the session |
+
+A restore puts back the planet's numbers, goals, history and battery only. **Blocks, items, inventories and other mods' machines stay as they are.** For those, use the world backup script (`tools/world-backup.sh`, see `school-deployment.md`).
+
 ## 2. Developer commands (from `mod/`)
 
 All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.267, and Minecraft 1.21.1 on first use. Java 21 must be installed.

@@ -1,0 +1,38 @@
+# Slice 8 follow-up: our sun texture, dusk and night at the two ends of the pressure range, 1280x720 (mars:planet_1).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /mars go
+wait 100
+hud off
+wait 20
+cmd /time set 6000
+wait 20
+view 0 70 0 0 -90
+wait 10
+shot sun_p0.6_noon_up
+cmd /time set 12700
+view 0 66 0 90 0
+wait 10
+shot sun_p0.6_dusk_west
+cmd /time set 18000
+view 0 70 0 0 -90
+wait 10
+shot sun_p0.6_night_up
+cmd /mars index set pressure 75
+wait 200
+cmd /time set 6000
+wait 20
+view 0 70 0 0 -90
+wait 10
+shot sun_p75_noon_up
+cmd /time set 12700
+view 0 66 0 90 0
+wait 10
+shot sun_p75_dusk_west
+cmd /time set 18000
+view 0 70 0 0 -90
+wait 10
+shot sun_p75_night_up
+cmd /mars index set pressure 0.6
