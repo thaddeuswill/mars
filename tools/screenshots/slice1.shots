@@ -7,6 +7,10 @@ cmd /weather clear
 cmd /time set 6000
 cmd /mars go
 wait 80
+# Test pad (BACKLOG #49): this script builds on its own flat pad (y 63 top, air above), so it does not depend on the dimension generator.
+cmd /fill -24 63 -24 24 63 24 minecraft:red_sand
+cmd /fill -24 64 -24 24 72 24 minecraft:air
+wait 10
 cmd /setblock 0 64 4 mars:planetary_monitor
 cmd /mars monitor
 wait 40

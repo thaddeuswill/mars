@@ -328,11 +328,18 @@ public final class BootChecks {
       ok &=
           SelfTest.check(
               "travel.go",
-              "player in mars:planet_1 at 0.5 64.0 0.5",
+              "player in mars:planet_1 at 0.5, standing height of the column, 0.5",
               "sent=" + sent + ", " + where,
               sent
                   && fake.level().dimension().equals(MarsDimensions.PLANET_1)
-                  && Math.abs(fake.getY() - 64.0) < 0.01);
+                  && Math.abs(
+                          fake.getY()
+                              - mars.getHeight(
+                                  net.minecraft.world.level.levelgen.Heightmap.Types
+                                      .MOTION_BLOCKING,
+                                  0,
+                                  0))
+                      < 0.01);
 
       String type =
           mars.dimensionTypeRegistration()
