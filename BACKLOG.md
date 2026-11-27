@@ -94,7 +94,7 @@ Use a unit test for the supply-to-throughput calculation and GameTests for block
 
 This review used the UI spec, TEAM.md, ARCHITECTURE.md and MonitorScreen.java. Client, screenshot and build checks were not run.
 
-| 38 | "accept and cont" | Accept Monitor review #37 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | 🟡 claimed by Codex |
+| 38 | "accept and cont" | Accept Monitor review #37 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | ✅ Published and checked in `e1ec17f`. |
 
 ## Open questions for the owner
 
