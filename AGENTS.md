@@ -6,7 +6,7 @@ Claude and Codex coordinate as peers. Claim tasks and file scope in `BACKLOG.md`
 
 ## 1. Read these first (in this order, stop when you have enough)
 
-**`HANDOFF.md` has the current state, the in-flight work, open owner questions and the ordered next steps. Read it right after this file.**
+**`HANDOFF.md` section 0 is Claude's final handoff (in-flight work and exact next steps). Read it first. `HANDOFF.md` has the current state, the in-flight work, open owner questions and the ordered next steps. Read it right after this file.**
 
 | File | Why |
 |---|---|

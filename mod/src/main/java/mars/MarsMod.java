@@ -28,6 +28,7 @@ public final class MarsMod {
     NeoForge.EVENT_BUS.addListener(mars.planets.PlanetEvents::onLevelTick);
     NeoForge.EVENT_BUS.addListener(mars.planets.PlanetEvents::onServerStarted);
     NeoForge.EVENT_BUS.addListener(mars.admin.SessionCommands::register);
+    NeoForge.EVENT_BUS.addListener(mars.admin.AdminCommands::register);
     NeoForge.EVENT_BUS.addListener(mars.planets.GrantEvents::onChangedDimension);
     NeoForge.EVENT_BUS.addListener(mars.planets.GrantEvents::onLoggedIn);
     modBus.addListener(mars.monitor.MonitorNetwork::register);

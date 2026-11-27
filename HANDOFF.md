@@ -2,6 +2,27 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0. READ FIRST: state at Claude's final handoff (2026-11-27, owner switching to Codex)
+
+The owner is switching to Codex because Claude's usage is nearly out. Claude's background agents may stop with Claude. Verify with `git log`, `git status`, and the newest files in `docs/team/reports/`.
+
+**Done and pushed:** Stage 2 slices 1 to 7 (planet values, Outgasser, Monitor with history plot and next-goal bar, session clock and pause, power grid, gates, polar-frost sink and Ovens, sky/fog keyed on pressure). 167 unit tests, 70 boot checks at slice 7.
+
+**In flight when Claude stopped (check each, finish or restart):**
+1. **Slice 8, admin commands and rollback (Technical Lead agent, started this hour).** Uncommitted WIP in the working tree: `mod/src/main/java/mars/admin/AdminCommands.java` (new), `mars/index/sim/CheckpointList.java` (new), edits to `MarsMod.java`, `planets/PlanetData.java`, `planets/SessionControl.java`. If a report `docs/team/reports/2026-11-27-technical-lead-slice8-admin-rollback.md` exists, slice 8 is done: verify with `./gradlew spotlessCheck build test --rerun --offline` and `runGameTestServer`. If not, finish it: plan row 8 in `docs/tech/stage2-plan.md` (full debug command set; choose rollback approach, start-script world backup by default, or an in-game checkpoint snapshot command; document what is not covered: placed blocks, inventories, third-party machines). No dedicated-server run (EULA is the owner's).
+2. **Queued for the Technical Lead after slice 8** (BACKLOG.md, "Queued"): switch `MarsSkyEffects` SUN to `mars:textures/environment/sun.png` (the Artist's placeholder is already in `pack/assets/mars/textures/environment/sun.png`), a check that the texture exists and is 32x32, night and dusk frames and the dashed-horizon-line question in the next screenshot run, and send the 0.6 and 75 kPa shots to the Artist.
+3. **Monitor plot scale option D (owner ADOPTED):** phase-stepped range with a goal line from sol 0 (axis top 1.2 x next goal: 6, 36, 90 kPa; zero baseline; goal line from the gate JSON; rescale note). Spec: `docs/design/ui-specs.md` section 9.1 and `docs/team/reports/2026-11-27-game-designer-plot-scale.md`. Build `PlotScale.topFor`, a `goalLine` in `MonitorView.History`, screen drawing, tests (plotted goal equals gate value in both pace presets). Wording is being checked by the Instructional Designer agent (report `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`, may or may not exist); use its final wording if present.
+4. **After Stage 2 is complete:** the owner chose Stage 3 as the next focus (ROADMAP). Panel dust remainder (storms, wear, dust-off) is Stage 3. Gate creative bypass stays; a classroom switch is a Stage 3 item.
+
+**Owner decisions already made (do not re-ask):** panels meant the Monitor screen; run all UI skills (done); EULA not yet; clouds stay vanilla until E-10, aureole and sunset band deferred; pause flag stays in world save data; sky keyframes stay in `pack/assets/mars/keyframes/`; slice 5 calls accepted (Oven draw 1.0 invented, two starting Ovens in inventory, equal power share, stall below 5 kPa intended, hold rule, Landing step 6 "battery and Ovens"); Monitor busy-state trade-off accepted; percent on the detail line; plot option D adopted; creative gate bypass kept; panel dust in Stage 3; slice 8 then Stage 3.
+
+**Still open for the owner (not blockers):** EULA for the dedicated-server self-test; three external reviewers; testing the jar from a real `mods` folder and on Windows/macOS; the rose-sky (5 kPa) journal label and the Dome stable "On Earth" trigger (Instructional Designer / Game Designer).
+
+**Next owner-facing step:** a clean jar plus refreshed `docs/tech/launch-guide.md` so the owner can playtest. Build with `./gradlew build` in `mod/`; jar is `mod/build/libs/` (gitignored). Check the launch guide still describes the current commands.
+
+**Reply format to the owner:** short: what changed, recommended next steps, a screenshot for anything visual. Ask decisions as a few clear questions with a recommended option.
+
+
 ## 1. What this project is, in five lines
 
 Mars terraforming Minecraft modpack (NeoForge 21.1.267, MC 1.21.1, Java 21) built as a learning-game design exercise for ages 12 to 18, NGSS-aligned. Custom Mars dimension, global progress per planet, groups of 3 to 5, classroom mode about 11 to 12 h, standard about 40 h, equilibrium pressure 75 kPa, gates lock in. The owner (not a developer) playtests personally and answers by "accept / change / add / continue". Branch: `claude/awesome-sagan-tb7mon`. Only the owner accepts the Minecraft EULA.

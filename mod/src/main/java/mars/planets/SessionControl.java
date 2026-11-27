@@ -35,6 +35,8 @@ public final class SessionControl {
     server.tickRateManager().setFrozen(false);
     if (changed) {
       d.setDirty();
+      // Session start: a checkpoint of every planet, so a bad session can be undone (7.4a).
+      Checkpoints.takeAll(server, "session-" + d.clock().sessionNumber(), actor);
       LOG.info("session.resumed by {} (session {})", actor, d.clock().sessionNumber());
     }
     return changed;

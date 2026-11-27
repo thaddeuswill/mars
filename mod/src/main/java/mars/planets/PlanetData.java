@@ -52,10 +52,15 @@ public final class PlanetData extends SavedData {
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
   public static PlanetData load(
       String planetId, CompoundTag tag, HolderLookup.Provider registries) {
+    return fromState(planetId, fromNbt(tag));
+  }
+
+  /** Build a planet from a saved state (used by load and by rollback). */
+  public static PlanetData fromState(String planetId, PlanetState state) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     PlanetSim.Loaded loaded =
         PlanetSim.fromState(
-            fromNbt(tag),
+            state,
             d.index(),
             d.machines(),
             d.gates(),
@@ -76,6 +81,11 @@ public final class PlanetData extends SavedData {
           loaded.unknownMachineTypes());
     }
     return new PlanetData(loaded.sim());
+  }
+
+  /** A brand-new planet at its start values (for rollback to the start). */
+  public static PlanetData fresh(String planetId) {
+    return createNew(planetId);
   }
 
   @Override
