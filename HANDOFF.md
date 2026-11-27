@@ -6,6 +6,8 @@ Written by Claude because its usage limit is near and the owner asked for a comp
 
 The owner is switching to Codex because Claude's usage is nearly out. Claude's background agents may stop with Claude. Verify with `git log`, `git status`, and the newest files in `docs/team/reports/`.
 
+**Update 2026-11-27 (Claude coordinator):** items 2 (sun texture), 3 (plot option D) and 3b (wording keys) below are DONE (commits dbf07a3..6b29797, 1de7712); journal and guidance minimum built (ba3154a, 709deef, dadfc0f); 199 unit tests, 87 boot checks. Still open: CR-T8 for forecasts that do not exist yet, rescale line, later gate files. Stage 3 first slice proposal: `docs/tech/stage3-plan.md`.
+
 **Slice 8 verified (Claude, 2026-11-27):** 171 unit tests, 81 boot checks, RESULT PASS; report `docs/team/reports/2026-11-27-coordinator-slice8-verification.md`.
 
 **Codex takeover:** The owner confirmed Claude is shut down. Slice 8 admin and checkpoint code is present on the shared branch at `a6cab96`, and the named slice 8 report is absent. Treat slice 8 as unverified until the build and GameTests run. The [Stage 2 launch guide](docs/tech/launch-guide.md) is current through slice 7. A fresh jar is pending a build-capable checkout.
