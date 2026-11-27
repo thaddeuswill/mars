@@ -76,10 +76,11 @@ class MonitorLifeViewTest {
     assertEquals("+2/sol", air.trendRate().replace("−", "-"));
     assertTrue(air.value().endsWith(" / 200"), air.value());
     assertTrue(lines(air).isEmpty(), "no failure line while the net is positive");
-    var water = row(v, "monitor.row.water");
-    assertNotNull(water);
-    assertTrue(water.value().endsWith(" / 120"), water.value());
+    assertEquals(null, row(v, "monitor.row.water"), "water is quiet while it lasts");
     report("normal", v);
+    assertTrue(
+        MonitorLayout.plotHeight(MonitorLayout.fit(v), 270) > 0,
+        "the history plot still fits in the normal state");
   }
 
   @Test
@@ -93,6 +94,21 @@ class MonitorLifeViewTest {
     var empty = row(MonitorView.of(s), "monitor.row.air");
     assertEquals(List.of("monitor.air.empty", "monitor.air.blackout"), lines(empty));
     report("air empty", MonitorView.of(s));
+  }
+
+  @Test
+  void waterSpeaksUpWhenItWillNotLastTenSols() throws Exception {
+    PlanetSim s = TestSims.lifeSim(new Pace(1.0, 4, 24_000, 100)); // 4 players, no reclaimer
+    s.addMachine("mars:oxygen_maker", 100L);
+    s.addMachine("mars:o2_tank", 300L);
+    s.addMachine(TestSims.PANEL, 1000L);
+    s.startLifeSupport();
+    s.model().advanceSols(1.2 + 1.0); // water 60 - 12 = 48, falling 12 a sol: 4 sols left
+    var water = row(MonitorView.of(s), "monitor.row.water");
+    assertNotNull(water);
+    assertEquals(List.of("monitor.water.low"), lines(water));
+    s.model().advanceSols(6.0);
+    assertEquals(List.of("monitor.water.none"), lines(row(MonitorView.of(s), "monitor.row.water")));
   }
 
   @Test

@@ -479,7 +479,12 @@ public record MonitorView(double sols, List<Row> rows, History history) {
             .with(tone, empty || low));
   }
 
-  /** The Water row: stored water and the net a sol; a line when it will not last 10 sols. */
+  /**
+   * The Water row (balance sheet 2d.6: water speaks up only when it is a problem). Quiet while the
+   * water lasts at least {@code waterLastSols} (or is not falling); then the stored water, the net
+   * a sol and one line ("Water low: about N sols left" or "No water"). Keeping it quiet is also
+   * what leaves room for the history plot in the normal state (see the slice 2 report).
+   */
   private static java.util.Optional<Row> waterRow(PlanetSim sim) {
     var life = sim.life();
     if (life == null || life.report() == null) {
@@ -490,6 +495,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     boolean none = r.waterStored() <= EPSILON && r.started();
     boolean lasting = r.waterNetPerSol() >= -EPSILON;
     boolean low = r.started() && !lasting && r.waterSolsLeft() < life.params().waterLastSols();
+    if (!none && !low) {
+      return java.util.Optional.empty();
+    }
     if (none) {
       lines.add(new CauseLine("monitor.water.none", 0, "", null, -1));
     } else if (low) {

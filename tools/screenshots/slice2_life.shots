@@ -1,0 +1,39 @@
+# Stage 3 slice 2: the starting dome (placed by /mars go), the Monitor's Air, Water and Dome lines,
+# a breach, and empty tanks (mars:planet_1), 1280x720. Dome corner (-3, 63, -4); floor y 63, walls y 64..66.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 120
+view -13 70 -15 315 24
+wait 40
+shot life_1_starting_dome_from_outside
+view -9 66.5 8.5 270 5
+wait 20
+shot life_2_cracked_plate_in_hab_b_wall
+view 0.5 65.6 -2.4 0 14
+wait 20
+shot life_3_shelter_five_tanks_and_bunks
+view 8.5 65.6 2.4 180 4
+wait 20
+shot life_4_ops_monitor_on_the_north_wall
+cmd /mars index advance 3.2
+wait 40
+cmd /mars monitor
+wait 40
+shot life_5_monitor_air_water_dome_sealed
+cmd /setblock 5 65 -4 minecraft:air
+wait 60
+cmd /mars index advance 1.0
+wait 20
+cmd /mars monitor
+wait 40
+shot life_6_monitor_breach_air_falling
+cmd /mars index advance 3.0
+wait 20
+cmd /mars monitor
+wait 40
+shot life_7_monitor_tanks_empty_game_rule_line
+quit

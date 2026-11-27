@@ -252,4 +252,64 @@ public final class StarterDomeGameTests {
           }
         });
   }
+
+  @GameTest(template = "empty", batch = "mars_blackout", timeoutTicks = 200)
+  public static void emptyTanksBlackOutAPlayerAndNothingIsLost(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetManager.resetForSelfTest(level);
+    var player =
+        net.neoforged.neoforge.common.util.FakePlayerFactory.get(
+            level,
+            new com.mojang.authlib.GameProfile(
+                java.util.UUID.fromString("6d617273-0000-4000-8000-0000000000b1"), "[Blackout]"));
+    player.getInventory().add(new net.minecraft.world.item.ItemStack(Blocks.DIRT.asItem(), 5));
+    float healthBefore = player.getHealth();
+    boolean blacked = false;
+    int secondsToBlackout = 0;
+    for (int s = 1; s <= 130 && !blacked; s++) {
+      blacked = mars.planets.BlackoutEvents.secondFor(player, level, true);
+      secondsToBlackout = s;
+    }
+    boolean ok =
+        SelfTest.check(
+            "life.blackout_after_120_seconds",
+            "a survival player short of breath blacks out on the 120th second, is blinded, and loses no item or health",
+            "blacked="
+                + blacked
+                + " after="
+                + secondsToBlackout
+                + " blind="
+                + player.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS)
+                + " dirt="
+                + player.getInventory().countItem(Blocks.DIRT.asItem())
+                + " health="
+                + player.getHealth()
+                + "/"
+                + healthBefore,
+            blacked
+                && secondsToBlackout == 120
+                && player.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS)
+                && player.getInventory().countItem(Blocks.DIRT.asItem()) == 5
+                && player.getHealth() == healthBefore);
+    // Breathing again resets: 100 s short, then fine, then 100 s short does not black out.
+    boolean again = false;
+    for (int s = 0; s < 100; s++) {
+      again |= mars.planets.BlackoutEvents.secondFor(player, level, true);
+    }
+    mars.planets.BlackoutEvents.secondFor(player, level, false);
+    for (int s = 0; s < 100; s++) {
+      again |= mars.planets.BlackoutEvents.secondFor(player, level, true);
+    }
+    ok &=
+        SelfTest.check(
+            "life.blackout_count_resets",
+            "100 s short of breath, one second of air, 100 s short again: no blackout",
+            "blackedOut=" + again,
+            !again);
+    if (ok) {
+      h.succeed();
+    } else {
+      h.fail("blackout checks failed; see MARS-SELFTEST lines");
+    }
+  }
 }

@@ -33,7 +33,11 @@ final class MonitorLayout {
     }
     List<MonitorView.Row> rows = new java.util.ArrayList<>();
     for (MonitorView.Row r : view.rows()) {
-      boolean goal = r.labelKey().equals("monitor.row.next_goal");
+      // A "Waiting: ..." line names the failing life-support state (goal C2); it outranks the
+      // plot, so only the other goal detail (percent, estimate, count) gives way here.
+      boolean goal =
+          r.labelKey().equals("monitor.row.next_goal")
+              && !(r.detailKey() != null && r.detailKey().contains(".waiting."));
       rows.add(
           !goal
               ? r
