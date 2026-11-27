@@ -3,7 +3,7 @@
 **Owner:** Producer (planning); each slice is owned by the role named in its row · **Written:** 2026-11-27, docs only, before any Stage 3 code · **Stage:** 3 Vertical Slice (ROADMAP.md) · **Mirrors:** [stage2-plan.md](stage2-plan.md) · **Follows:** PROCESS.md §1 (plan, risk gate, build, verify, report, retro)
 **Related:** ROADMAP.md Stage 3 (scope list, exit criteria, "What we want to learn"), LEARNING.md §3.5, DESIGN.md Phase 1, [balance-sheet.md](../design/balance-sheet.md) §2, §2b, §5.3, [budget.md](../production/budget.md) §2.1, §6, [risk-register.md](../production/risk-register.md), [test-strategy.md](test-strategy.md), [Stage 2 checkpoint](../team/reports/2026-11-27-producer-stage2-checkpoint.md)
 
-**Status of this file:** the plan. Nothing here is built. Every estimate is **unverified**. The plan is the Producer's view; the Technical Lead should re-estimate each slice before starting it (the Stage 2 lesson, checkpoint section 6.4).
+**Status of this file:** the plan. **Update 2026-11-27 (Technical Lead): slice 0 closed and slice 1 built in part**, see the status block at the end of section 3. The rest is not built. Every estimate is **unverified**. The plan is the Producer's view; the Technical Lead should re-estimate each slice before starting it (the Stage 2 lesson, checkpoint section 6.4).
 
 ## 1. What Stage 3 must prove
 
@@ -70,6 +70,13 @@ Order rule: each slice is **shippable** (the build passes its checks, `./gradlew
 **Art and audio run alongside slices 1 to 9**, not after: the Artist delivers each slice's rows in the table above and the rest of the Stage 3 asset-list rows in slice 10. If the Artist's rows are late, the slice ships on straw-man assets (fidelity plan SM) and the gap is recorded, because "compact before wide" and the owner's playtest do not need final art to judge the loop.
 
 **Total (Technical Lead only): about 40 to 66 sessions, unverified, from a 3-slice rate applied to bigger slices.** The honest reading: Stage 3 is roughly **5 to 8 times the size of Stage 2** in Technical Lead slices (Stage 2 had 8), and Stage 2 was thin by design. The budget row (590 h vs. 180 h for Stage 2, 3.3 times) is therefore the lower bound. If slices 5 and 6 come in at the top of their ranges, the Stage 3 Technical Lead row is short (section 7, R-69).
+
+**Slice status (2026-11-27, Technical Lead).**
+
+| Slice | Status |
+|---|---|
+| 0 | Done: sun texture (Codex #50, #51), night and dusk shots (#49) and wording keys (#55) were already in; version bumped to `0.3.0-stage3-a`; launch guide section 1d added; jar built (`mod/build/libs/mars-0.3.0-stage3-a.jar`). Still owner-side: real `mods` folder test. The dashed-horizon question stays open (no dome horizon reference yet: the starting dome is not built). |
+| 1 | **Built:** sealing flood fill (cap 2,000), hull plate, glass and door, dome registry per planet saved in `PlanetState` schema 6, Monitor Dome line, seal-change event, 31 unit tests and 13 boot checks, `tools/screenshots/slice_dome.shots`. **Not built:** spawn site and terrain, the starting dome structure from `docs/design/dome-layout.md` (a 728-block template; the sealing rule is proven on small rooms), breach air vents, a synced "sealed" flag for the suit O2 HUD (slice 2 needs the per-player inside test), recipes. Report: `docs/team/reports/2026-11-27-technical-lead-stage3-slice1-dome.md`. |
 
 ### 3.1 Per-slice reporting line (carried from Stage 2 lesson)
 

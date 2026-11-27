@@ -127,6 +127,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 | 56 | "accept and cont" | Accept the wording update and start Codex’s Stage 3 learning lane | Typed pseudonymous events and a local batched writer under `mars/learning/**`, with focused tests. | ✅ Event and writer foundation built. 180 unit tests, 82 boot checks, and a negative privacy test passed as expected. Live hooks and export remain in slice 3. |
 
 | 57 | "cont with reccommened" | Continue Stage 3 learning plumbing | Codex owns session-local action log rotation and in-memory pseudonym allocation under `mars/learning/**`. | ✅ Session rotation and pseudonym lifecycle built. Gameplay hooks and cross-restart identity are pending. |
+| 57 | "accept and cont with recc" (owner accepted all Stage 3 recommendations) | Stage 3 slice 0 close-out and slice 1 (dome and sealing) | Sealing flood fill with cap, hull plate, glass and door, dome state per planet (schema 6), Monitor Dome line, tests, screenshots. | ✅ Technical Lead. 214 unit tests, 95 boot checks, jar 0.3.0-stage3-a. Report `docs/team/reports/2026-11-27-technical-lead-stage3-slice1-dome.md`. Not built: starting dome structure, spawn terrain, airlock interlock, recipes. |
 
 ## Open questions for the owner
 

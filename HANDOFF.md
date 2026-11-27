@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0a. UPDATE 2026-11-27 (Technical Lead): Stage 3 slice 0 closed, slice 1 (dome and sealing) built
+
+Jar `0.3.0-stage3-a`. 214 unit tests, 95 boot checks (`RESULT PASS`). New: `mars.dome` (pure: `SealCheck` flood fill with cap 2,000, `DomeSeals` registry and cache, `Pos`), `mars.hull` (Hull Plate, Hull Glass, Hull Door, `Airtight` rule, `WorldProbe`, `DomeEvents`, `SealChangedEvent`), `PlanetState` schema 6 (`domes`), Monitor Dome row, `tools/screenshots/slice_dome.shots`. A Planetary Monitor placed on Mars registers a dome; `lifeSupportOk()` is **unchanged** (slice 2 replaces it). Codex's `SealChangedEvent` hook: subscribe on `NeoForge.EVENT_BUS` for the seal-breach action. Next: slice 2 (life support, recipes, priority tiers) and the starting dome template. Report `docs/team/reports/2026-11-27-technical-lead-stage3-slice1-dome.md`; design in ARCHITECTURE.md 2.3.
+
 ## 0. READ FIRST: state at Claude's final handoff (2026-11-27, owner switching to Codex)
 
 The owner is switching to Codex because Claude's usage is nearly out. Claude's background agents may stop with Claude. Verify with `git log`, `git status`, and the newest files in `docs/team/reports/`.

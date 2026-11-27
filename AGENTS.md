@@ -92,6 +92,8 @@ State as of 2026-11-27 (see HANDOFF.md for detail):
 - Slice 5 done (BACKLOG #43): polar-frost sink (cold, mild, release; data in `pack/data/mars/sinks/`), Regolith Oven on the power grid, two starting Ovens once per world, hold reset as data, schema 5, Monitor frost line and Levelling off. 142 unit tests, 66 boot checks. Report `docs/team/reports/2026-11-27-technical-lead-slice5-frost.md`.
 - Monitor option A (BACKLOG #38) done: centred panel, stored pressure history (`PlanetState` schema 4), plot, battery bar. 114 unit tests, 54 boot checks. Report `docs/team/reports/2026-11-27-technical-lead-monitor-option-a.md`.
 
+- **Stage 3 slice 1 done (BACKLOG #57):** dome sealing (`mars.dome`, `mars.hull`), hull plate/glass/door, Monitor Dome line, PlanetState schema 6; 214 unit tests, 95 boot checks, jar 0.3.0-stage3-a. Slice 2 (life support) is next; Codex owns `mars/learning/**`.
+
 Good tasks for you (check BACKLOG.md first, then claim by adding a line there):
 1. Stage 2 slice 6: one visible world response (sky tint keyed on pressure); then the Monitor minimum view.
 2. (Open) forecast and Monitor items below.
