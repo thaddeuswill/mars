@@ -328,7 +328,7 @@ public final class BootChecks {
       ok &=
           SelfTest.check(
               "travel.go",
-              "player in mars:planet_1 at 0.5 64.0 0.5",
+              "player in mars:planet_1 at 0.5 64.0 0.5 (the shelter of the starting dome)",
               "sent=" + sent + ", " + where,
               sent
                   && fake.level().dimension().equals(MarsDimensions.PLANET_1)

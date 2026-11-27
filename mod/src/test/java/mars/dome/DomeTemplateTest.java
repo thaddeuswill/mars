@@ -1,0 +1,151 @@
+package mars.dome;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+
+/** The starting dome (dome-layout.md): shape, counts, and the seal rule on the real layout. */
+class DomeTemplateTest {
+  private static final int OX = 10;
+  private static final int OY = 10;
+  private static final int OZ = 10;
+
+  private static Probe probe(List<DomeTemplate.Cell> cells) {
+    Map<Long, DomeTemplate.Kind> by = new HashMap<>();
+    for (var c : cells) {
+      by.put(Pos.pack(OX + c.x(), OY + c.y(), OZ + c.z()), c.kind());
+    }
+    return (x, y, z) -> {
+      int rx = x - OX;
+      int ry = y - OY;
+      int rz = z - OZ;
+      if (ry < 0) {
+        return Probe.Cell.AIRTIGHT; // the ground
+      }
+      boolean in =
+          rx >= 0
+              && rx < DomeTemplate.SIZE_X
+              && rz >= 0
+              && rz < DomeTemplate.SIZE_Z
+              && ry < DomeTemplate.SIZE_Y;
+      if (!in) {
+        return Probe.Cell.OUTSIDE; // open ground and sky around the dome
+      }
+      DomeTemplate.Kind k = by.getOrDefault(Pos.pack(x, y, z), DomeTemplate.Kind.AIR);
+      return switch (k) {
+        case AIR, CRACKED -> Probe.Cell.OPEN;
+        default -> Probe.Cell.AIRTIGHT;
+      };
+    };
+  }
+
+  private static long seed(int x, int z) {
+    return Pos.pack(OX + x, OY + 1, OZ + z);
+  }
+
+  @Test
+  void everyPlanRowIs23ColumnsAnd16Rows() {
+    for (int z = 0; z < DomeTemplate.SIZE_Z; z++) {
+      for (int x = 0; x < DomeTemplate.SIZE_X; x++) {
+        DomeTemplate.plan(x, z); // throws if a row is short
+      }
+    }
+  }
+
+  @Test
+  void countsMatchTheLayoutSheet() {
+    var cells = DomeTemplate.cells(3, true);
+    Map<DomeTemplate.Kind, Integer> n = new EnumMap<>(DomeTemplate.Kind.class);
+    cells.forEach(c -> n.merge(c.kind(), 1, Integer::sum));
+    System.out.println("DomeTemplate counts (3 makers, breached): " + n);
+    assertEquals(7, n.get(DomeTemplate.Kind.DOOR), "7 doors");
+    assertEquals(1, n.get(DomeTemplate.Kind.CRACKED), "one cracked plate");
+    assertEquals(5, n.get(DomeTemplate.Kind.TANK), "5 tanks");
+    assertEquals(1, n.get(DomeTemplate.Kind.MONITOR));
+    assertEquals(1, n.get(DomeTemplate.Kind.RECLAIMER));
+    assertEquals(3, n.get(DomeTemplate.Kind.MAKER));
+    assertEquals(1, n.get(DomeTemplate.Kind.BATTERY));
+    assertEquals(5, n.get(DomeTemplate.Kind.BED_FOOT), "5 bunks");
+    assertEquals(5, n.get(DomeTemplate.Kind.BED_HEAD));
+    // Layout sheet section 8: glass is 10 window blocks plus 36 annex roof cells.
+    assertEquals(46, n.get(DomeTemplate.Kind.GLASS));
+    // The sheet says about 728 hull plates in walls, roof and lintels, plus about 235 floor cells.
+    int walls = n.get(DomeTemplate.Kind.HULL);
+    assertTrue(walls > 700 && walls < 1200, "hull plates incl. floor: " + walls);
+  }
+
+  @Test
+  void makersAreCappedAtFiveBays() {
+    long m =
+        DomeTemplate.cells(9, true).stream()
+            .filter(c -> c.kind() == DomeTemplate.Kind.MAKER)
+            .count();
+    assertEquals(5, m);
+    assertEquals(
+        0,
+        DomeTemplate.cells(0, true).stream()
+            .filter(c -> c.kind() == DomeTemplate.Kind.MAKER)
+            .count());
+  }
+
+  @Test
+  void breachedDomeLeaksOnlyInHabBAndPatchedIsSealed() {
+    var breached = probe(DomeTemplate.cells(3, true));
+    var patched = probe(DomeTemplate.cells(3, false));
+    // Required rooms: Ops (Monitor), shelter (tank), machine bay (maker), all closed by doors.
+    long[] required = {seed(11, 4), seed(3, 4), seed(18, 4)};
+    for (long s : required) {
+      assertEquals(SealCheck.Status.SEALED, fill(breached, s).status(), "required room, breached");
+    }
+    // Hab B itself leaks, and nothing else does.
+    var hab = fill(breached, Pos.pack(OX + 3, OY + 1, OZ + 11));
+    assertEquals(SealCheck.Status.OPEN_TO_OUTSIDE, hab.status());
+    assertEquals(
+        Pos.pack(OX + DomeTemplate.BREACH_X - 1, OY + 2, OZ + DomeTemplate.BREACH_Z), hab.leakAt());
+    var habPatched = fill(patched, Pos.pack(OX + 3, OY + 1, OZ + 11));
+    assertEquals(SealCheck.Status.SEALED, habPatched.status());
+    System.out.println(
+        "Hab B volume "
+            + habPatched.volume()
+            + " blocks; Ops "
+            + fill(patched, seed(11, 4)).volume()
+            + "; shelter "
+            + fill(patched, seed(3, 4)).volume());
+  }
+
+  @Test
+  void everyRoomIsSealedWhenPatchedAndTheWholeDomeIsUnderTheCap() {
+    var p = probe(DomeTemplate.cells(5, false));
+    int[][] starts = {{3, 4}, {11, 4}, {19, 4}, {3, 11}, {19, 11}, {11, 9}, {11, 13}};
+    int total = 0;
+    for (int[] s : starts) {
+      var r = fill(p, Pos.pack(OX + s[0], OY + 1, OZ + s[1]));
+      assertEquals(SealCheck.Status.SEALED, r.status(), "room at " + s[0] + "," + s[1]);
+      total += r.volume();
+    }
+    System.out.println("Starting dome air volume (rooms, doors closed): " + total + " blocks");
+    assertTrue(total < DomeSeals.DEFAULT_CAP);
+  }
+
+  @Test
+  void anOpenDoorJoinsTwoRooms() {
+    // Replace the Ops/shelter door by air: shelter and Ops become one volume.
+    var cells =
+        DomeTemplate.cells(3, false).stream()
+            .filter(c -> !(c.x() == 7 && c.z() == 4 && c.y() <= 2))
+            .toList();
+    var p = probe(cells);
+    var ops = fill(p, seed(11, 4));
+    var closed = fill(probe(DomeTemplate.cells(3, false)), seed(11, 4));
+    assertTrue(ops.volume() > closed.volume(), "open door joins the shelter to Ops");
+  }
+
+  private static SealCheck.Result fill(Probe p, long start) {
+    return SealCheck.fill(p, Pos.x(start), Pos.y(start), Pos.z(start), DomeSeals.DEFAULT_CAP);
+  }
+}

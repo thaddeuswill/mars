@@ -1,0 +1,7 @@
+{
+ "schema": 1,
+ "id": "mars:o2_tank",
+ "contributions": [],
+ "capacity": 40.0,
+ "source": "docs/design/balance-sheet.md 2d.2: each wall tank holds 40 O2 units (INVENTED); 5 tanks make the dome capacity of 200. No power. A lost tank lowers the capacity until it is replaced."
+}

@@ -10,5 +10,6 @@
   "source": "docs/design/balance-sheet.md §2 and §2b: Regolith Outgasser +0.10 kPa per sol each at standard pace, at full power; the effect scales with the share of power it gets. Draw 4 power units (kWh) per sol is invented (\"Medium\" in §2). Survival placement is unlocked by the Dome stable gate (data/mars/gates/dome_stable.json); creative players and /setblock are not gated.",
   "power": {
     "drawPerSol": 4.0
-  }
+  },
+  "priority": 3
 }

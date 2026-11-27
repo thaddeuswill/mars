@@ -44,6 +44,8 @@ public final class MarsMachines {
   // Wall-pack battery (batch 3): thin, so its box turns with facing. Centred, 12 x 16 x 6 px.
   private static final double[] BATTERY = {2, 0, 5, 14, 16, 11};
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
+  private static final VoxelShape RECLAIMER = Block.box(1, 0, 1, 15, 15, 15);
+  private static final VoxelShape TANK = Block.box(2, 0, 2, 14, 16, 14);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
 
   public static final DeferredBlock<RegolithOutgasserBlock> REGOLITH_OUTGASSER =
@@ -54,8 +56,18 @@ public final class MarsMachines {
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
       BLOCKS.register("battery", () -> new BatteryBlock(machineProperties(), BATTERY));
-  public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
-      machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
+  public static final DeferredBlock<RegisteredMachineBlock> OXYGEN_MAKER_BLOCK =
+      machine(
+          "oxygen_maker",
+          OXYGEN_MAKER,
+          (p, s) -> new RegisteredMachineBlock(p, s, "mars:oxygen_maker"));
+  public static final DeferredBlock<RegisteredMachineBlock> WATER_RECLAIMER =
+      machine(
+          "water_reclaimer",
+          RECLAIMER,
+          (p, s) -> new RegisteredMachineBlock(p, s, "mars:water_reclaimer"));
+  public static final DeferredBlock<RegisteredMachineBlock> O2_TANK =
+      machine("o2_tank", TANK, (p, s) -> new RegisteredMachineBlock(p, s, "mars:o2_tank"));
   public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =
       machine("planetary_monitor", MONITOR, PlanetaryMonitorBlock::new);
 
@@ -80,6 +92,8 @@ public final class MarsMachines {
           SOLAR_PANEL,
           BATTERY_BLOCK,
           OXYGEN_MAKER_BLOCK,
+          WATER_RECLAIMER,
+          O2_TANK,
           PLANETARY_MONITOR);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =

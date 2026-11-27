@@ -11,5 +11,7 @@
   "power": {
     "drawPerSol": 1.0
   },
-  "startingGrant": 2
+  "startingGrant": 2,
+  "priority": 2,
+  "waterPerSol": 0.5
 }

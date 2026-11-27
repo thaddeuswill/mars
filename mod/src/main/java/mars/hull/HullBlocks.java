@@ -43,6 +43,22 @@ public final class HullBlocks {
                       .isRedstoneConductor((s, l, p) -> false)
                       .isSuffocating((s, l, p) -> false)
                       .isViewBlocking((s, l, p) -> false)));
+
+  /**
+   * The cracked plate of the starting dome (Landing step 5). Not in {@code mars:airtight}, so air
+   * leaks through it; the player breaks it and puts a hull plate there. No loot, not in the tab.
+   */
+  public static final DeferredBlock<Block> HULL_PLATE_CRACKED =
+      BLOCKS.register(
+          "hull_plate_cracked",
+          () ->
+              new HullPlateBlock(
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .strength(1.0f, 6.0f)
+                      .sound(SoundType.METAL)
+                      .noLootTable()));
+
   public static final DeferredBlock<HullDoorBlock> HULL_DOOR =
       BLOCKS.register(
           "hull_door",

@@ -12,10 +12,34 @@ import mars.core.ParameterId;
  * contributes to which Index parameter, per sol, at standard pace (ARCHITECTURE.md 2.1, 2.16).
  */
 public record MachineDef(
-    String id, List<Contribution> contributions, Power power, int startingGrant) {
+    String id, List<Contribution> contributions, Power power, int startingGrant, Life life) {
+
+  public MachineDef(String id, List<Contribution> contributions, Power power, int startingGrant) {
+    this(id, contributions, power, startingGrant, Life.NONE);
+  }
 
   public MachineDef(String id, List<Contribution> contributions, Power power) {
     this(id, contributions, power, 0);
+  }
+
+  /**
+   * Life-support and priority fields (balance sheet 2d, life-support-spec 2.2), all optional.
+   *
+   * @param priority power tier: 1 life support, 2 Ovens, 3 terraforming; 0 = none (supply, storage)
+   * @param o2PerSol O2 units made per sol at full power
+   * @param waterPerSol water units made per sol at full power (dome stock only)
+   * @param recovery share of water used that a reclaimer takes back (0 to 1)
+   * @param servesPlayers how many players one reclaimer serves
+   * @param capacity storage units this machine adds (an oxygen tank)
+   */
+  public record Life(
+      int priority,
+      double o2PerSol,
+      double waterPerSol,
+      double recovery,
+      int servesPlayers,
+      double capacity) {
+    public static final Life NONE = new Life(0, 0, 0, 0, 0, 0);
   }
 
   /**
@@ -72,7 +96,16 @@ public record MachineDef(
       }
       grant = g.getAsInt();
     }
-    return new MachineDef(id, List.copyOf(list), power, grant);
+    int priority = (int) optNumber(o, "priority", file);
+    Life life =
+        new Life(
+            priority,
+            optNumber(o, "o2PerSol", file),
+            optNumber(o, "waterPerSol", file),
+            optNumber(o, "recovery", file),
+            (int) optNumber(o, "servesPlayers", file),
+            optNumber(o, "capacity", file));
+    return new MachineDef(id, List.copyOf(list), power, grant, life);
   }
 
   private static double optNumber(JsonObject o, String field, String file) {

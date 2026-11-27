@@ -1,0 +1,11 @@
+{
+ "schema": 1,
+ "id": "mars:oxygen_maker",
+ "contributions": [],
+ "priority": 1,
+ "o2PerSol": 10.0,
+ "power": {
+  "drawPerSol": 1.0
+ },
+ "source": "docs/design/balance-sheet.md 2d.2 and docs/tech/life-support-spec.md 2.2: 10 O2 units (1.0 kg) per sol at full power (INVENTED, sized from MOXIE best 12 g/h); draw 1.0 power unit per sol (INVENTED, a deliberate discount, game rule: real oxygen needs far more power). Priority tier 1 (life support)."
+}

@@ -1,7 +1,10 @@
 package mars.planets;
 
 import com.mojang.brigadier.CommandDispatcher;
+import mars.MarsServerConfig;
 import mars.dimension.MarsDimensions;
+import mars.hull.StarterDome;
+import mars.index.IndexDefinitions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -48,6 +51,19 @@ public final class TravelCommands {
     // for an unloaded chunk, which dropped players into the void (found by the Stage 1
     // screenshots).
     mars.getChunk(0, 0);
+    // The first arrival on a planet places its starting dome (once per world) and lands in the
+    // shelter; the dome needs the pack data (the solar panel reads the dust tuning).
+    if (StarterDome.enabled() && IndexDefinitions.isLoaded()) {
+      BlockPos spot = StarterDome.ensure(mars, MarsServerConfig.pace().groupSize());
+      player.teleportTo(
+          mars,
+          spot.getX() + 0.5,
+          spot.getY(),
+          spot.getZ() + 0.5,
+          player.getYRot(),
+          player.getXRot());
+      return true;
+    }
     int y = mars.getHeight(Heightmap.Types.MOTION_BLOCKING, 0, 0);
     player.teleportTo(mars, 0.5, y, 0.5, player.getYRot(), player.getXRot());
     return true;

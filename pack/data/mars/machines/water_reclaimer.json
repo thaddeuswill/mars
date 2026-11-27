@@ -1,0 +1,12 @@
+{
+ "schema": 1,
+ "id": "mars:water_reclaimer",
+ "contributions": [],
+ "priority": 1,
+ "recovery": 0.9,
+ "servesPlayers": 5,
+ "power": {
+  "drawPerSol": 1.0
+ },
+ "source": "docs/design/balance-sheet.md 2d.2: takes back 90 percent of the water used (INVENTED, below ISS); one unit serves up to 5 players; draw 1.0 power unit per sol (INVENTED). Priority tier 1."
+}

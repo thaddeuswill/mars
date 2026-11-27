@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import mars.index.IndexDefinitions;
-import mars.index.sim.Pace;
 import mars.index.sim.PlanetSim;
 import mars.index.sim.PlanetState;
 import net.minecraft.core.HolderLookup;
@@ -20,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * One planet's Planetary Index, saved with its dimension (ARCHITECTURE.md 1.5, 7). The pure {@link
- * PlanetSim} does the work; this class only adds saving and loading. Slice 1 always uses {@link
- * Pace#STANDARD}; pacing config is a later slice (docs/tech/stage2-plan.md).
+ * PlanetSim} does the work; this class only adds saving and loading. The pace comes from the server
+ * config ({@code group.size}, {@code pace.classroom}), standard solo when it is not loaded.
  */
 public final class PlanetData extends SavedData {
   private static final Logger LOG = LoggerFactory.getLogger("mars");
@@ -46,7 +45,11 @@ public final class PlanetData extends SavedData {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     return new PlanetData(
         new PlanetSim(
-            d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), Pace.STANDARD));
+            d.index(),
+            d.machines(),
+            d.gates(),
+            d.frost().forPlanet(planetId),
+            mars.MarsServerConfig.pace()));
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
@@ -65,7 +68,7 @@ public final class PlanetData extends SavedData {
             d.machines(),
             d.gates(),
             d.frost().forPlanet(planetId),
-            Pace.STANDARD);
+            mars.MarsServerConfig.pace());
     if (!loaded.report().ignored().isEmpty()) {
       LOG.warn(
           "Planet save has values this build doesn't know (kept out): {}",
