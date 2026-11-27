@@ -16,10 +16,10 @@ Done and pushed:
 - **Monitor screen shrink:** `mod/src/main/java/mars/client/MonitorScreen.java`, 232 px wide, no world dimming, warm palette, rates right-aligned. Verified in a real-client screenshot: `tools/screenshots/out/20261127-110408/`.
 - `AGENTS.md` and this file.
 
-In flight (a Claude Technical Lead agent was running; it may or may not have finished or been cut off by the limit):
-- (1) Java shape fix for the raised array: canopy slice to y 15..16 px (0.9375..1.0), centre-block shape to match, `footprint.*` GameTest expectations (`footprint.corner_shape` becomes `[0.4375,0.9375,0.4375]->[1,1,1]`), ARCHITECTURE.md §2.18, and a screenshot run with `tools/screenshots/round.shots`.
-- (2) Stage 2 slice 2: session clock and pause (invariant I-3) and "Outgasser keeps contributing while its chunk is unloaded" with a test.
-- Uncommitted or WIP edits may exist in `mod/src/main/java/mars/index/sim/PlanetSim.java`. **Before doing anything, run `git pull`, `git status`, `git log --oneline -15`, and look for `docs/team/reports/2026-11-27-technical-lead-slice2.md`.** If that report exists, (1) and (2) are done; verify by running the commands in AGENTS.md section 3. If it does not exist, check what is in the working tree, run the build and tests, and finish what is incomplete. Do not redo finished work.
+Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-technical-lead-slice2.md`):
+- **Raised-array shape fix:** canopy slice y 15..16 px, centre shape [0,0,0]->[1,1,1], `footprint.*` tests and ARCHITECTURE.md 2.18 updated; seen in real-client screenshots (`tools/screenshots/out/20261127-110427/`, `20261127-110853/`). Collision is proven by GameTest bounds only.
+- **Stage 2 slice 2:** `SessionClock`, `SessionData` (pause flag in world save data, not session.json), `SessionControl`, `/mars pause|resume|session`, invariant I-3 tested (100,000 paused ticks change nothing), Outgasser keeps contributing with its chunk unloaded (GameTest `outgasser.chunk_unloaded`). 67 unit tests, 41 of 41 boot checks, all run in the sandbox.
+- Nothing is in flight now. Check `git log` anyway.
 
 ## 3. Known gaps and honest caveats (do not claim these work)
 
@@ -43,8 +43,8 @@ In flight (a Claude Technical Lead agent was running; it may or may not have fin
 ## 5. What to do next, in order
 
 1. Sync and verify (see section 2). Make the build and tests green and the boot test print `RESULT PASS`.
-2. If the shape fix is not done: do it, run the footprint GameTests, run `tools/screenshots/run-shots.sh /home/user/mars/tools/screenshots/round.shots` (absolute path!), look at the new PNGs, send the owner the front and from-above shots.
-3. Finish **Stage 2 slice 2** (session clock, pause, I-3, chunk-unload behaviour), tests first.
+2. Check `pgrep -f runShotsClient` before any screenshot run; never overlap client runs.
+3. Small fixes: replace the stale chat line in `TravelCommands` ("The planet is empty for now; this is the Stage 1 build"); pause does not yet block player actions or show a HUD line.
 4. Then, per `docs/tech/stage2-plan.md`: power (solar panel and battery), the pressure machine chain, the "Dome stable" unlock, then the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
 5. After each step: update `BACKLOG.md` status, add a report in `docs/team/reports/`, update the "state" in `AGENTS.md` and this file, commit, push.
 6. Reply to the owner in the standing format: **what changed, recommended next steps, screenshot if visual.** Keep it short; the owner is also credit-limited.
