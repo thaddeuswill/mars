@@ -339,3 +339,27 @@ Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`
 ### Pause design (one line; **not built yet**)
 
 When the colony is paused, every player sees a **"Colony paused" chip** (two vertical bars plus the words, never colour only) at the top centre of the HUD, the sky and dust stay frozen, the Monitor shows "Sol N (paused)" and still opens read-only, and any action that would change the planet (place or break a machine, switch one on, craft) is **blocked with one log line**: "The colony is paused. Your teacher will resume it." (standard play: "The server owner paused the colony."). Movement, looking, the journal and the Monitor stay available so a paused class can still discuss what is on screen. Goals: C1 (nothing to fix while paused is honest), B1 (read the Monitor while time is stopped). The Technical Lead lists the HUD line and the blocked actions as not built (slice 2 report); they are slice 9 (classroom) work unless the owner wants them earlier.
+
+---
+
+## 10. Storm line wording (first dust storm; 2026-11-27, proposed, grade 6-7 screen not run)
+
+**Owner:** Lead Game Designer · **Goals:** C1 (plan for a power cut), B3 (F1 stays a real prediction), C3 (read the Monitor) · **Numbers** (all *invented*, `balance-sheet.md` §2): first storm sol 14 (classroom sol 4); warning lead 1 sol (classroom 0.25 sol); length 2 sols (classroom 0.5 sol). Tokens: `%s` / `{lead}` / `{len}` come from one formatting helper: "1 sol", "a quarter sol", "about 5 min" under 1 sol (same switch to minutes as the solar HUD, §4). The row appears at the first warning (progressive disclosure, §2). Rules checked: CR-T7 (US spelling, no "~" or "<", plot and row labels 24 characters or fewer), CR-T5 (positive wording), CR-T1 (no banned words), CR-F9 and CR-T8 (see below).
+
+| Key | Text | Chars | Stage / note |
+|---|---|---|---|
+| `monitor.storm.label.warn` | "Storm arrives in" | 16 | Row label, warning. Value on the right: `monitor.storm.value.warn` "about %s" (for example "about 1 sol") |
+| `monitor.storm.label.active` | "Storm in progress" | 17 | Row label, active. Value: `monitor.storm.value.active` "about %s left" |
+| `monitor.storm.label.over` | "Storm is over" | 13 | Row label, over; stays until the next warning. Value: `monitor.storm.value.over` "Sky is clearing" |
+| `monitor.storm.label.clear` | "No storm expected" | 17 | After the first storm only, between storms. Never shown before the first warning |
+| `monitor.storm.warn.tip` | "A dust storm is building. Use the time to get ready." | tooltip | Hint level 1 (C1). Says nothing about power, sunlight, or panels |
+| `monitor.storm.over.detail` | "Check your panels for dust." | detail line | Shown only after the storm ends (after F1 locked); points to the panel dust cause line (§1, row 61) |
+| `hud.storm.warn` | "Storm in %s" | 14 | HUD countdown next to the storm icon (icon shape distinct from the sun-burst hexagon: Lead Artist) |
+| `hud.storm.active` | "Storm: %s left" | 15 | HUD countdown while active |
+| `log.storm.warn` | "Dust storm forming. It reaches the dome in about {lead}. It should last about {len}." | 17 words | At T-`{lead}`; same line as `beat.04.storm_warning` (`story-beats.md`). Length stated so the player can size a battery plan (C1) |
+| `log.storm.onset` | "The dust storm has reached the dome." | 7 words | After F1 locks. Neutral; the sunlight cause line carries the science |
+| `log.storm.end` | "The dust storm is over. The sky is clearing." | 9 words | End. The panel dust change shows on the Power row, not in this line |
+
+**What must not reveal the F1 answer (CR-F9, CR-T8).** Until F1 locks at onset, none of these may name power, solar, sunlight, panels, dimming, or "less": every key above that is delivered before onset (`*.warn`, `*.warn.tip`, `hud.storm.warn`, `log.storm.warn`, the hazy sky, the HUD icon) declares `reveals: none`. These keys declare `reveals: forecast.f1.storm_power` and must not be delivered while F1 is open: the cause line "Storm: less sunlight -{n} %" (`ui-specs.md` §1, row 61), `monitor.storm.over.detail`, and the F1 result. The row's time estimate is the storm's arrival, not a value F1 asks about, so CR-T8 does not hide it; it is still hidden under `guidance` expert like other estimates. A hazy sky is fog only: solar output stays unchanged until onset (paper prototype lock check).
+
+**Open points.** (1) Classroom lead 0.25 sol is about 5 minutes of play, so a first storm could arrive before a class reaches a natural pause for F1; it then expires unanswered (never wrong). Playtest to see how often. (2) "Sky is clearing" and "Check your panels for dust" are *invented* wording; Instructional Designer to run the readability screen. (3) Whether the first storm's panel dust can read as unfair at +1 stage (or +2 if cap 0.8 or more) is covered by `journal.dust.storm_timing`.

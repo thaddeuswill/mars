@@ -44,9 +44,9 @@ Ten essential beats not covered in the phase files. Each is ≤ 60 words of mess
 | `id` | `beat.04.storm_warning` (log line `log.storm.warn`) |
 | `type` | colony log + HUD storm icon; F1 queued (phase-1.md §5) |
 | `trigger` | First dust storm scheduled, T−1 sol |
-| `asserts` | storm scheduled within 0.8–1.2 sol |
+| `asserts` | storm scheduled within 0.8–1.2 sol (standard; classroom 0.2–0.3 sol); first storm sol 14 standard, sol 4 classroom |
 | `delivery` | Top line; HUD icon with countdown; Monitor "Storm forecast" row |
-| `text.ms` | Dust storm forming. Arrival in about 1 sol. Expected length: half a sol to a full sol. |
+| `text.ms` | Dust storm forming. Arrival in about 1 sol. Expected length: about {len}. |
 | `goal_ids` | C1, B3 |
 | `instructional_purpose` | Warning time for planning (C1). **Does not mention solar power**, so F1 isn't answered by the warning (lock-point rule) |
 | `motivational_purpose` | Tension with time to act |

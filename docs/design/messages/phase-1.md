@@ -2,7 +2,7 @@
 
 **Owner:** Lead Game Designer · **Status of every entry:** draft: SME check and ID review pending · Conventions: [README.md](README.md)
 
-Order of first play (revised 2026-11-27 to match the balance curve: first storm on sol 14, after Dome stable on sol 9; the landing storm in the intro is backstory): opening card → Landing checklist → Shift Briefing 1 → ice near a heater (F4a, any time) → Dome stable → Hana's worked example → first Outgasser (F3) → first storm (F1, sol 14 standard, sol 4 classroom) → first solar event (warnings, F2) → Phase 2 begins (Keeper's Report 1, Mensah's reply). Proposed; Game Designer to confirm trigger text for F1 and F2 still fits.
+Order of first play (revised 2026-11-27 to match the balance curve: first storm on sol 14, after Dome stable on sol 9; the landing storm in the intro is backstory): opening card → Landing checklist → Shift Briefing 1 → ice near a heater (F4a, any time) → Dome stable → Hana's worked example → first Outgasser (F3) → first storm (F1, sol 14 standard, sol 4 classroom) → first solar event (warnings, F2) → Phase 2 begins (Keeper's Report 1, Mensah's reply). Order and F1/F2 trigger text checked against the storm schedule on 2026-11-27 (`docs/team/reports/2026-11-27-game-designer-storm-messages.md`). Storm numbers are in `docs/design/balance-sheet.md` §2 (all *invented*); text uses tokens `{lead}` and `{len}` so classroom mode reads correctly (standard: 1 sol and 2 sols; classroom: a quarter sol and half a sol).
 
 ---
 
@@ -56,13 +56,13 @@ Length: 8 steps, ≤ 12 words each. Expected time 15–25 minutes with exploring
 | `type` | Shift Briefing |
 | `trigger` | Landing checklist done or skipped |
 | `delivery` | BELL briefing card in the side panel (non-modal, ui-specs §0); copy kept in the journal under "Briefings" |
-| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms cut solar power. Run life support {hold_sols} sols with no failures, and the relay link comes back. Notice what almost fails, and why. |
+| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms will come. Plan your power. Run life support {hold_sols} sols with no failures, and the relay link comes back. Notice what almost fails, and why. |
 | `text.hs` | Same as MS |
 | `goal_ids` | C1, A1 |
 | `instructional_purpose` | Advance organizer: names the job, the values to watch, the main threat, and the next goal before play starts |
 | `motivational_purpose` | Clear goal; a reason to want the relay (people) |
 | `hint_level` | — |
-| `science_claims` | "Dust storms cut solar power" (see F1) |
+| `science_claims` | None. The Briefing names storms but never states their effect, so F1 (sol 14) is still a real first prediction (checked 2026-11-27; the old text "Dust storms cut solar power" gave F1's answer 13 sols early) |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -76,7 +76,7 @@ Log lines and HUD only, never a pop-up (except the first-ever exposure warning, 
 |---|---|
 | `id` | `log.solar.*` |
 | `type` | colony log lines + HUD warning |
-| `trigger` | Solar event scheduled; lines fire at T−1 sol, T−0.25 sol, onset, and end |
+| `trigger` | Solar event scheduled; lines fire at T−1 sol, T−0.25 sol, onset, and end. The first solar event is scheduled after the first dust storm's F1 result has been shown (proposed, **invented** ordering rule), so two forecast cards never queue together. Solar-event warnings keep 1 sol of lead in both modes (`ui-specs.md` §4); the dust-storm lead is shorter in classroom mode |
 | `delivery` | Colony log; HUD sun-burst icon with countdown; Monitor "Space weather" line |
 | `goal_ids` | A4, C1 |
 | `instructional_purpose` | Gives time to predict (F2/F7) before the shelter advice reveals the answer; then a clear safety action |
@@ -146,10 +146,10 @@ The note never states the result (it would give away F3). It shows where to look
 |---|---|
 | `id` | `forecast.f1.storm_power` |
 | `type` | forecast |
-| `trigger` | First dust storm scheduled; issued with `log.storm.warn` at T−1 sol |
-| `lock` | Storm onset (solar output starts falling) |
+| `trigger` | First dust storm scheduled (sol 14 standard, sol 4 classroom; after Dome stable and the first Outgasser); issued with `log.storm.warn` at T−`{lead}` (1 sol standard, 0.25 sol classroom) |
+| `lock` | Storm onset (solar output starts falling). No natural pause before onset: the forecast expires unanswered (logged as unanswered, never wrong). `reveals`: `log.storm.onset` cause line "Storm: less sunlight" and the F1 result; neither is delivered before lock. The warning (`log.storm.warn`, Monitor storm row, HUD icon, hazy sky) never mentions power, sunlight, or panels (`ui-specs.md` §10) |
 | `delivery` | BELL forecast card at the next natural pause; result first in the queue at the next natural pause after onset + 0.25 sol |
-| `prompt.ms` | A dust storm reaches the dome in about 1 sol. What will happen to your solar power? |
+| `prompt.ms` | A dust storm reaches the dome in about {lead}. What will happen to your solar power? |
 | `prompt.hs` | Same as MS |
 | `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: solar power on the Monitor's Dome tab. |
 | `choices` | It drops · It rises · It stays the same |
