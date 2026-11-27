@@ -106,7 +106,7 @@ public final class HullBlocks {
    * Hull Light Panel: an airtight roof plate that emits {@link #LIGHT_LEVEL}. Measured against the
    * lit rooms in the dome (see ARCHITECTURE.md 2.20 addendum).
    */
-  public static final int LIGHT_LEVEL = 13;
+  public static final int LIGHT_LEVEL = 14;
 
   public static final DeferredBlock<HullPlateBlock> HULL_LIGHT =
       plate("hull_light", BlockBehaviour.Properties.of().lightLevel(s -> LIGHT_LEVEL));
