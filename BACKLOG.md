@@ -64,6 +64,8 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 
 | 34 | "you can cont as coordinator"; "you are the peer coordinator right now" | Codex continues as Claude’s peer coordinator | Remove the stale `/mars go` arrival text. | ✅ Owner accepted the copy fix in `07fba27`; translation JSON checked. Client check pending. |
 
+| 36 | "ask me how id like to proceed with your questions" (answers: Monitor screen was meant; run ALL the UI skills; EULA not yet; allow NASA host) | Apply the UI skills review to the Monitor | docs/team/reports/2026-11-27-ui-skills-monitor-review.md: panel is 54% wide x 72% tall with the Power row; fixes in order: reason shown on the stalled machine line, shrink to about 132 GUI px tall (collapse Power to one line, battery bar, value scale 1.25, left-anchor), hierarchy and state colours, wording, style class for colours. Technical Lead applies after slice 4 (same file), then a new screenshot | 🟡 review done; fixes queued after slice 4 |
+
 | 35 | "accept and cont" | Accept the arrival copy and continue Stage 2 | Codex prepares slice 3 acceptance checks while the Technical Lead owns implementation. | ✅ Acceptance recorded and QA checks drafted below. |
 
 ### Stage 2 slice 3 acceptance checks
