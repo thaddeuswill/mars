@@ -363,7 +363,7 @@ Scale: **1 block = 1 m = 16 px, so 1 px = 6.25 cm** (owner decision: size-accura
 | Solar array cut-outs | A few cm (photo) | 1 px squares | About 1–2× | PIA25286 (photo) |
 | Solar array rim frame | A few cm (photo) | 1 px ring | Probably 2× or more | PIA22876 (photo) |
 | Oxygen maker as a whole | MOXIE 0.24 × 0.24 × 0.31 m | 0.75 × 0.625 × 0.75 m box | **About 3× MOXIE** (owner option (a): one block; a crew unit would be about 0.3–0.55 m, so 1.4–2.5× that) | §3, §5.1 |
-| Oxygen maker tubes | Diameter **missing**, well under 6 cm | 1 × 1 px tubes (6.25 cm) | Several times thicker | §3 |
+| Oxygen maker tubes | Diameter **missing**, well under 6 cm | 2 × 2 px tubes (12.5 cm, v2; was 1 px and vanished in dim light) | Several times thicker | §3 |
 | Oxygen maker fittings, ribs, X ribs, panel frames | A few cm | 1–2 px | About 2× | §3 (PIA24201) |
 | Status lamps on every machine | Indicator LEDs, under 1 cm (**invented** real equivalent) | 1×2 to 2×2 px (6–12 cm) | Many times larger: a readability device | — |
 | Battery charge segments | (no real counterpart; the real pack has none) | 3×1 px bars | Invented readout | §5.3 |

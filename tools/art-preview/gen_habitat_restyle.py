@@ -1,4 +1,5 @@
-"""Habitat restyle (2026-11-27): dome shell, hatch, tank, reclaimer and oxygen maker textures and the
+"""NOTE: the maker and reclaimer textures/models in this file are v1; v2 is gen_maker_reclaimer_v2.py (not run from here any more).
+Habitat restyle (2026-11-27): dome shell, hatch, tank, reclaimer and oxygen maker textures and the
 model files for the new variant blocks. Owner: Lead Artist. Reference images: docs/art/references/habitat/
 (NASA ISS hatch, NORS tank, MOXIE PIA24201, ISS rack, MDRS Hab). Colours are read BY EYE from those
 photos, snapped to the style guide ramps where one exists (not measured).
@@ -394,7 +395,7 @@ def box(x0, y0, z0, x1, y1, z1, tex, uvs=None):
 
 def models():
     write("o2_tank", {"parent": "minecraft:block/cube_column", "textures": {"end": "mars:block/o2_tank_top", "side": "mars:block/o2_tank"}})
-    write("water_reclaimer", {"parent": "minecraft:block/cube_column", "textures": {"end": "mars:block/water_reclaimer_top", "side": "mars:block/water_reclaimer"}})
+    # water_reclaimer and o2_generator (v2) now come from gen_maker_reclaimer_v2.py
     p, pb, pr, prt = "mars:block/hull_plate", "mars:block/hull_plate_base", "mars:block/hull_plate_rim", "mars:block/hull_plate_rim_top"
     write("hull_plate_base", cube6(p, p, pb, pb, pb, pb))
     write("hull_plate_rim", cube6(p, prt, pr, pr, pr, pr))
@@ -473,8 +474,7 @@ def checks():
 
 if __name__ == "__main__":
     for f in (hull_plate, hull_plate_base, hull_plate_rim, hull_plate_rim_top, hull_plate_cracked, hull_glass, hull_glass_ribbed,
-              hull_door_top, hull_door_bottom, o2_tank, o2_tank_top, water_reclaimer, water_reclaimer_top, water_reclaimer_open,
-              o2_generator_face, o2_generator_back, o2_generator_end, o2_generator_side, o2_generator_top, o2_generator_tube,
+              hull_door_top, hull_door_bottom, o2_tank, o2_tank_top, water_reclaimer_open,
               roof_vent_textures, roof_dish_texture):
         f()
     models()
