@@ -2,6 +2,7 @@
 
 **Owner:** Lead Game Designer (numbers) · **Reader:** Technical Lead · **Written:** 2026-11-27 · **Docs only; nothing built or run.**
 **Source of numbers:** [balance-sheet.md](../design/balance-sheet.md) section 2d (**owner-accepted** 2026-11-27: O2 use 8, maker 10, start fill 14, reserve 24). **If this file and the balance sheet differ, the balance sheet wins; report the difference.** Layout: [dome-layout.md](../design/dome-layout.md). Science tags: [life-support-review.md](../science/life-support-review.md).
+**Status (Technical Lead, 2026-11-27): CONFIRMED and built in slice 2.** S1 cap 2,000 kept. S2 full block or nothing kept (`mars.hull.Airtight`). Differences from this file: the gate key is the existing `all` (not `all_of`); water tank capacity is a fixed 120 (no water tank blocks); O2 tank capacity is tanks x 40 capped at 200; `life_support.json` also holds `landingEndSol` 1.2 and `blackoutWakeSuitO2`; recipes are in `data/mars/recipe_costs.json` and only hull plate, tank and door are crafting-table recipes (grid limit 9). See the slice 2 report.
 **Status of file formats:** the key names below are **proposals** that follow the existing files in `pack/data/mars/machines/` (`schema`, `id`, `contributions`, `power`, `source`). The Technical Lead may rename keys; keep the values and the "a unit test compares data to the sheet" rule.
 
 Units: 1 O2 unit = 100 g; 1 water unit = 1 L; 1 power unit = 1 kWh; per sol = per simulated sol (20 simulation minutes). All values **invented** (game balance) unless the balance sheet tags them otherwise.

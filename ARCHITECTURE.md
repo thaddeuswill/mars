@@ -689,6 +689,19 @@ Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after 
 
 ---
 
+### 2.20 Starting dome, life support and power tiers (Stage 3 slice 2, built)
+
+*Pure logic in `mars.life` (ArchUnit: no Minecraft), `mars.dome.DomeTemplate` (pure plan), `mars.power`; Minecraft side in `mars.hull` (`StarterDome`), `mars.planets` (`BlackoutEvents`). Numbers: `pack/data/mars/life_support.json`, `machines/*.json`, balance sheet 2d.*
+- **Starting dome.** `DomeTemplate` is the 23 x 16 plan of `docs/design/dome-layout.md` as a list of cells (about 727 hull plates, 46 glass, 7 doors, 5 tanks, bunks, Monitor, makers, reclaimer, battery). `StarterDome.ensure` places it once per planet on the first `/mars go` (record in the planet level's saved data `mars_start_dome`, `StarterDomeData`), floor on the top ground layer, arrival in the shelter, one solar array at dust stage 1 on the east apron, then `PlanetSim.startLifeSupport()` fills the tanks. A cracked hull plate (`mars:hull_plate_cracked`, tag `mars:not_airtight`) leaves Hab B leaking by design. Flat ground is assumed (planet 1 is flat); a bumpy planet needs a site check first (not built). A planet saved before schema 7 (`life == null`) gets no dome: `ensure` returns null and `/mars go` behaves as in Stage 2, so nothing built at the arrival point is overwritten.
+- **Seeds.** Every Planetary Monitor, oxygen maker, water reclaimer, oxygen tank and battery registers as a dome seed (`RegisteredMachineBlock`, `DomeEvents.register`), so every room holding life support is checked (layout 5.4). Cost: one fill per seed per dirty tick; the starting dome has 10 seeds in 4 rooms.
+- **Life support** (`LifeSupport`, `LifeParams`): per step, oxygen = made (makers x 10 x tier-1 power share) - use (8 x group.size) - leak (10 if any required room is unsealed); water = Oven water (0.5 each x tier-2 share) - use (3 x n) x (1 - 0.9 x share served by reclaimers). Capacity: tanks placed x 40, at most 200 (water: fixed 120, no water tank blocks). Landing grace: nothing happens before sol 1.2. Nothing scales with the pace multiplier; only `group.size` (config `group.size`, `MarsServerConfig.pace()`) and the classroom reserve (1 sol instead of 3).
+- **Gate states** `sealed`, `air_ok`, `water_ok`, `power_ok` (balance sheet 2d.5) are read by `dome_stable.json` through the existing `all` condition. All four are false before the Landing ends. The stand-in `life_support_ok` stays only for planets with no life model (see below).
+- **Power tiers** (`PowerGrid.setTierTotals`): tier 1 life support, 2 Ovens, 3 everything else, from `priority` in machine JSON (none = tier 3). A tier gets what the tiers above left (supply, then battery); equal share inside a tier.
+- **Saved:** `PlanetState` schema 7 adds `life` (oxygen, water). A schema 6 or older save loads with `life == null` and keeps the legacy stand-in (a world mid-way through Dome stable behaves as before; a latched gate stays latched). `PlanetSim.useLegacyLifeSupport()` exists for gate-mechanics tests only.
+- **Blackout** (`BlackoutTimer` pure, `BlackoutEvents`): stored oxygen 0 slows survival players; after 120 s they black out: blindness 10 s, teleport to the shelter, nothing lost. Game rule. Suits do not exist, so the 30 s empty-suit case and suit refills are not built.
+- **Monitor:** Air row (stored / capacity, net a sol, one "Air falling" or "Tanks empty" line), Water row only when it will not last 10 sols, "Waiting: ..." on the Dome stable goal naming the first failing state; the Waiting line outranks the history plot in `MonitorLayout.fit`. Normal state about 149 GUI px with the plot, busiest about 156 without it (target 130; fits a 270 px screen).
+- **Cost:** `LifeSupport.step` is a few multiplications per 5 s step; `lifeInputs` loops over machine types; Blackout is one loop over the planet's players once a second.
+
 ## 3. Coding Practices
 
 | Area | Convention |

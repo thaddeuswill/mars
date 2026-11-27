@@ -37,6 +37,16 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 
 On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". By default, **Creative players can place the Outgasser at any time**. For a classroom playtest, stop the game or server, set `creativeGateBypass = false` in `config/mars-server.toml` for that instance, and restart. Creative placement then requires Dome stable too. Operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
 
+### 1e. The starting dome and life support (Stage 3 slice 2, jar 0.3.1-stage3-b)
+
+1. On Mars type `/mars go`. The first time, a 23 x 16 dome is built around the arrival point and you stand in the shelter (five bunks, five oxygen tanks). It is the same dome for every group size.
+2. Read the Planetary Monitor in Ops (north wall). It now has an **Air** row (stored out of 200 and the net a sol), a **Water** row only when water will not last, a **Dome** row, and under the Dome stable goal a **Waiting:** line that names the one thing missing.
+3. Life support starts at the end of the Landing (sol 1.2). Standard, one player: Dome stable arrives about sol 9.2 (about 3.1 h at 20 min a sol), if you keep the dome sealed and powered. `/mars index advance 3` skips time for a test.
+4. Hab B (south-west annex) leaks on purpose through a **Cracked Hull Plate** in its west wall: break it and put a Hull Plate in. Hab B holds nothing required, so the leak costs no air.
+5. Break a wall plate in Ops (or any room with a tank, maker, reclaimer, battery or Monitor) and the air drains 10 units a sol faster. With empty tanks a survival player is slowed and after 2 minutes **blacks out** and wakes in the shelter, nothing lost (game rule).
+6. Config (server config file): `group.size` (1 to 5) and `pace.classroom`. Recipes: Hull Plate, Oxygen Tank and Hull Door can be crafted with iron, copper and glass stand-ins; the six machines cannot yet (they cost 10 to 24 items, the grid holds 9; see the slice 2 report). Lost machines come from the creative tab or `/give`.
+7. Worlds saved before 0.3.1 keep the old stand-in for Dome stable (no air or water, no Air row) and are **not** given a starting dome: `/mars go` takes you to the old arrival point as before, so nothing you built is overwritten. To see the new loop, start a new world.
+
 ### 1d. Build a sealed room (Stage 3 slice 1)
 
 Three building blocks are in the **Mars Terraforming** creative tab: **Hull Plate**, **Hull Glass**, **Hull Door**. There are no recipes yet (slice 2). To try the sealing check:
@@ -46,7 +56,7 @@ Three building blocks are in the **Mars Terraforming** creative tab: **Hull Plat
 3. Right-click the Monitor. A **Dome** line reads **Sealed**, **Leaking** (a hole, an open door, a slab or fence in the wall, or no roof), **Too big to check** (more than 2,000 blocks of air) or **Checking** (first tick). It updates within a tick when you break or place a hull block or open or close a Hull Door by hand, and within 5 seconds for other changes (a vanilla block, `/setblock`, an explosion).
 4. The rule is **a full block or nothing**: slabs, stairs, fences, panes, trapdoors and open doors let air through. A message "The dome is leaking." appears when a sealed dome is breached and "The dome is sealed again." when it is repaired.
 
-Nothing in the game uses the sealed state yet: **Dome stable** still uses the stand-in (power covers use) until slice 2. The Hull Door has no airlock interlock yet (slice 6). A Monitor placed in a world saved before this build is not registered as a dome until you place it again.
+Since slice 2 the sealed state feeds life support and **Dome stable** (section 1e). The Hull Door has no airlock interlock yet (slice 6). A Monitor placed in a world saved before this build is not registered as a dome until you place it again.
 
 ### 1c. Operator controls
 

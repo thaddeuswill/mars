@@ -49,10 +49,15 @@ public final class StarterDome {
 
   /**
    * Make sure this planet has its starting dome and return where a new arrival should stand (the
-   * shelter, just inside its door). Places the dome the first time.
+   * shelter, just inside its door). Places the dome the first time. Returns null for a planet saved
+   * before life support existed (schema 6 and older, no life model): that world keeps its own base
+   * and gets no dome, so nothing the players built at the arrival point is overwritten.
    */
   public static BlockPos ensure(ServerLevel level, int groupSize) {
     StarterDomeData d = data(level);
+    if (d.origin() == null && mars.planets.PlanetManager.data(level).sim().life() == null) {
+      return null;
+    }
     if (d.origin() == null) {
       level.getChunk(ARRIVAL_X >> 4, ARRIVAL_Z >> 4);
       int floorY =

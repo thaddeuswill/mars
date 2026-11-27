@@ -312,4 +312,24 @@ public final class StarterDomeGameTests {
       h.fail("blackout checks failed; see MARS-SELFTEST lines");
     }
   }
+
+  @GameTest(template = "empty", batch = "mars_legacy_dome")
+  public static void aWorldSavedBeforeLifeSupportGetsNoDome(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData d = PlanetManager.resetForSelfTest(level);
+    d.sim().useLegacyLifeSupport(); // what a schema 6 save loads as
+    BlockPos spot = StarterDome.ensure(level, 1);
+    boolean ok =
+        SelfTest.check(
+            "dome.legacy_world_gets_no_dome",
+            "a planet loaded from a schema 6 save: ensure() returns null, places nothing and records nothing",
+            "spot=" + spot + " recorded=" + StarterDome.data(level).origin(),
+            spot == null && StarterDome.data(level).origin() == null);
+    PlanetManager.resetForSelfTest(level);
+    if (ok) {
+      h.succeed();
+    } else {
+      h.fail("legacy dome check failed; see MARS-SELFTEST lines");
+    }
+  }
 }
