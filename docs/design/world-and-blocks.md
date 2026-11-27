@@ -152,7 +152,7 @@ Keep the vanilla tool set so the hands know what to do. Tier by material, not by
 | Item | **Survey scanner** (new) | Finds ice lenses and perchlorate seams | L (A4, B5); cheaper than guessing; the scan is the "read the planet" tool |
 | Item | Suit with oxygen tank and shielding rating | Always | Exists in design; leave to the Technical Lead |
 
-No netherite, no diamonds, no enchanting; hide or disable them in the Mars dimension (and keep them out of recipes). The classroom preset hides Mekanism and Create already (DESIGN.md).
+**Owner decision 2026-11-27: keep vanilla Minecraft crafting and progression.** Diamonds, netherite, enchanting and normal crafting stay in the Mars dimension; Mars adds blocks and tools, it does not take vanilla ones away. "I just don't want to take the beauty of minecraft and the actual crafting and everything." Where a vanilla item would skip a gate (for example a vanilla tool replacing a Mars machine), gate it by recipe or placement, not by removal. The classroom preset still hides Mekanism and Create (DESIGN.md). (Supersedes the earlier proposal to remove them.)
 
 ## 4. Science and Index ties
 
@@ -193,4 +193,4 @@ No netherite, no diamonds, no enchanting; hide or disable them in the Mars dimen
 2. **Resources do not change Index rates, only build cost and placement.** Recommend yes (keeps the balance sheet valid). *Well-structured* once stated.
 3. **Do we accept that new terrain applies only to new worlds?** Recommend yes. *Well-structured.*
 4. **Are new blocks allowed for ores and ground ice (not retextured vanilla)?** Recommend yes, because textures are global in a modpack. *Well-structured.*
-5. **Remove vanilla progression (diamonds, netherite, enchanting) from the Mars dimension?** Recommend yes. *Ill-structured* (hobbyist appeal versus focus).
+5. ~~Remove vanilla progression from the Mars dimension?~~ **Decided by the owner 2026-11-27: no, keep it.**
