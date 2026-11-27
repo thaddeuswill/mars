@@ -94,7 +94,7 @@ Use a unit test for the supply-to-throughput calculation and GameTests for block
 - **Planned Monitor work:** keep phase-appropriate rows and the next-gate cue in the existing roadmap sequence. When the forecast flow is implemented, F3, F5, and F8 need Answer or Skip before the Monitor opens. Skip expires the forecast, and one player's prompt must leave the group running.
 - **Documentation discrepancy:** PROCESS.md §4 still calls the Keeper's Report interruption rule open. The TEAM.md Decision Log and UI spec settle it: show a log line and side-panel entry, then open the report only by player choice or at a natural pause, with Later available.
 
-This review used the UI spec, TEAM.md, ARCHITECTURE.md and MonitorScreen.java. Client, screenshot and build checks were not run.
+Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earlier scrolling version. Codex inspected the committed 1280×720 [low-power screenshot](tools/screenshots/out/20261127-114819/slice3_short_two_outgassers_dusty_panel.png): the visible English labels and rates fit, and both the power shortfall and dusty panel are explained on their own lines. The current renderer has no scroll path or independent width bounds for cause label and reason, so long translations and extra rows remain unverified. The Technical Lead reported 96 unit tests and 52 boot checks passing in the [UI report](docs/team/reports/2026-11-27-technical-lead-monitor-ui.md). Codex did not rerun those checks.
 
 | 38 | "accept and cont" | Accept Monitor review #37 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | ✅ Published and checked in `e1ec17f`. |
 
