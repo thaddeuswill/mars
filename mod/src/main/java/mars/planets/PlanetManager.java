@@ -31,6 +31,21 @@ public final class PlanetManager {
     return level.getDataStorage().computeIfAbsent(PlanetData.factory(), PlanetData.NAME);
   }
 
+  /**
+   * Self-test only: replace the level's planet with a fresh one, because the GameTest world keeps
+   * its saved planet between runs and a latched gate cannot be undone. Refuses to run unless the
+   * test seam property is on, so it can never reset a real planet.
+   */
+  public static PlanetData resetForSelfTest(ServerLevel level) {
+    if (!ANY_LEVEL_IS_PLANET) {
+      throw new IllegalStateException("resetForSelfTest is only for the GameTest server");
+    }
+    PlanetData fresh = PlanetData.factory().constructor().get();
+    level.getDataStorage().set(PlanetData.NAME, fresh);
+    fresh.setDirty();
+    return fresh;
+  }
+
   public static void machinePlaced(ServerLevel level, String type, BlockPos pos) {
     PlanetData d = data(level);
     if (d.sim().addMachine(type, pos.asLong())) {

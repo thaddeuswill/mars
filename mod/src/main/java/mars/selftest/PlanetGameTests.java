@@ -655,7 +655,7 @@ public final class PlanetGameTests {
   @GameTest(template = "empty", batch = "mars_gate")
   public static void domeStableUnlocksTheOutgasser(GameTestHelper h) {
     ServerLevel level = h.getLevel();
-    PlanetData data = PlanetManager.data(level);
+    PlanetData data = PlanetManager.resetForSelfTest(level); // gates cannot be un-latched
     var sim = data.sim();
     var defs = IndexDefinitions.require().gates();
     boolean ok =
