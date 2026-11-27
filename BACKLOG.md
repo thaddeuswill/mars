@@ -131,7 +131,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 58 | "accept and cont with recc" | Accept session rotation and continue with cross-restart learner identity | Codex owns identity persistence under `mars/learning/identity/**` and its tests. | ✅ Private cross-restart store built. 216 unit tests and 95 clean-world boot checks passed. Gameplay adapters remain open. |
 
-| 59 | "there’s some other handoffs for you" | Pick up the Technical Lead’s seal-breach handoff | Codex owns the learning subscriber, world log lifecycle, and event test in `mars/learning/**`. | 🟡 Codex |
+| 59 | "there’s some other handoffs for you" | Pick up the Technical Lead’s seal-breach handoff | Codex owns the learning subscriber, world log lifecycle, and event test in `mars/learning/**`. | ✅ Breach subscriber verified. 248 unit tests and 108 boot checks passed. CX-C balance tests passed on shipped files and rejected a scratch change from 8 to 9 O₂ per player per sol. |
 
 ## Open questions for the owner
 
