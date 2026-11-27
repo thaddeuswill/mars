@@ -61,6 +61,8 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 | 21 | "take screenshots of it because i'm not at my computer; look up what these are supposed to look like and audit it based on that use your browser" | Screenshots of the viewer; an audit of the machines against real hardware | Viewer screenshot sheets sent; `docs/art/reference-audit.md` with comparison boards; fixes after the owner's choices | 🟡 screenshots and audit delivered; owner chose the recommended fixes ("do what's recommended"): batch 2 accepted by the owner ("accept and rec"), with the veil-seam fix |
 | 19 | "is there a way to load up blender and check what you have and what it looks like and screenshot that and show me for iteraations" | A way to render the art, look at it, and show the owner pictures to iterate on | `tools/art-preview/`; renders shown to the owner; the Artist produces a first batch of placeholder assets and contact sheets for review | 🟡 (Blender works here; proof render done; batch 1 contact sheet delivered to the owner, feedback pending; owner approved the recommended plan: source review of the Blockbench MCP before running it, and real in-game screenshots via a dev-only client helper after Stage 1)|
 
+| 33 | "you can cont as coordinator" | Codex takes over coordination and continues the Stage 2 handoff | Remove the stale `/mars go` arrival text. Codex owns the English translation entry for this change. | 🟡 in progress |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
