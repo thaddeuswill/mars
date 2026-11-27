@@ -181,7 +181,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 ---
 
-## Stage 2 — Prototype ⬜
+## Stage 2 — Prototype 🟡
 
 *Goal: prove the core loop is fun with placeholder art.* Usability and low extraneous load come first here, not polish (DESIGN.md, Open risk).
 
@@ -437,13 +437,11 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 ## Where We Are Now
 
-**Stage 1 (Pre-production), in progress (Round 3).** Design documents are drafted, both Stage 1 blockers are closed on paper, and the owner has decided every pending recommendation (TEAM.md Decision Log, Round 3). The folder layout exists; nothing builds yet. Budget revision 2: 6,179 team-hours and ~89 owner-hours. The plan through Stage 3 is achievable; Stage 4 is at the edge, with about a 15% buffer in the cut list (budget.md §4).
+**Stage 2 (Prototype), in progress.** The Stage 1 mod skeleton builds and opens a custom Mars dimension. Stage 2 slices 1 and 2 added per-planet simulation, the Regolith Outgasser, the Planetary Monitor, and pause/resume. The latest verified report records 67 unit tests and 41 boot checks passing. See [HANDOFF.md](HANDOFF.md) for the current build and verification gaps.
 
-Next actions:
-1. **Apply the decided consensus** (owner: goal tiers T-C, interruption rules I-C; [consensus-round2.md](docs/production/consensus-round2.md)): LEARNING.md §1 and §4.6 marked decided; config keys for the caps. [ID, GD, TL]
-2. **Hold the full-team story review** of the story bible before Stage 3. [P, all]
-3. **Build the foundation:** companion-mod skeleton with an empty Mars dimension (build-plan.md), packwiz, Spotless, unit tests, and basic CI for L0–L2. [TL]
-4. **Cost the in-house machine list and the mirror route**, and decide the oxygen/sealing approach. [TL]
-5. **Review the UI specs draft** ([docs/design/ui-specs.md](docs/design/ui-specs.md)) against PROCESS.md §4 UI rules and the decided interruption rules (I-C). [GD, A, ID]
-6. **Owner actions** ([owner-actions.md](docs/production/owner-actions.md)): find three external reviewers; plan who tests on Windows, macOS, and weak hardware.
-7. **Phase 3 CO2 budget** (open, ill-structured; Game Designer with the SME): where the CO2 from Outgassers and processors goes, so Phase 3 isn't a grind or a false climb (risk R-52).
+1. **Finish slice 3** ([build plan](docs/tech/stage2-plan.md), [backlog](BACKLOG.md)). The Technical Lead owns solar and battery power and Outgasser throughput. The next planned slice adds the “Dome stable” unlock.
+2. **Before Stage 3**, hold the full-team story review and review the [UI specs](docs/design/ui-specs.md) against the settled interruption rules and [process](PROCESS.md). Apply any remaining consensus document or config updates.
+3. **Track release and platform work** using the Stage 1 checklist above and [owner actions](docs/production/owner-actions.md). Pack packaging, CI, platform checks, and external reviews have their own exit criteria.
+4. **Track the Phase 3 CO₂ budget** with Game Design and the SME (risk R-52), along with the remaining machine costing and sealing work.
+
+Budget revision 2 remains the planning baseline (6,179 team-hours and about 89 owner-hours). See [budget.md](docs/production/budget.md) §4 for the Stage 4 cut list and buffer.
