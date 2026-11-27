@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import mars.core.Ids;
 import mars.core.ParameterId;
 import mars.gates.Condition;
 import mars.gates.GateDef;
@@ -35,6 +36,7 @@ public final class PlanetSim {
   private final Map<Long, Double> efficiency = new LinkedHashMap<>();
 
   private final GateTracker gates;
+  private final PressureHistory history = new PressureHistory();
   private final List<String> newlyLatched = new ArrayList<>();
 
   /** Machine-state names a gate condition may use. {@code life_support_ok}: see lifeSupportOk. */
@@ -64,7 +66,16 @@ public final class PlanetSim {
           double sat = grid.step(dt);
           applyPower(sat);
         });
-    model.setAfterStep(this::evaluateGates);
+    model.setAfterStep(
+        dt -> {
+          evaluateGates(dt);
+          history.record(model.sols(), model.current(Ids.PRESSURE));
+        });
+  }
+
+  /** The air-pressure history and events the Monitor plots. */
+  public PressureHistory history() {
+    return history;
   }
 
   public GateTracker gates() {
@@ -95,11 +106,16 @@ public final class PlanetSim {
             return name.equals("life_support_ok") && lifeSupportOk();
           }
         };
-    newlyLatched.addAll(gates.step(ctx, dtSols, model.simTicks()));
+    List<String> now = gates.step(ctx, dtSols, model.simTicks());
+    for (String id : now) {
+      history.addEventOnce(model.sols(), PressureHistory.Kind.GATE_LATCHED, id);
+    }
+    newlyLatched.addAll(now);
   }
 
   /** Admin: have the game announce a gate that was latched by hand. */
   public void queueAnnouncement(String gateId) {
+    history.addEventOnce(model.sols(), PressureHistory.Kind.GATE_LATCHED, gateId);
     newlyLatched.add(gateId);
   }
 
@@ -196,6 +212,18 @@ public final class PlanetSim {
 
   /** Register a machine. Returns false if one is already registered at that position. */
   public boolean addMachine(String type, long pos) {
+    boolean added = addMachineQuietly(type, pos);
+    MachineDef placed = defs.get(type);
+    if (added
+        && placed != null
+        && placed.contributions().stream().anyMatch(c -> c.parameter().equals(Ids.PRESSURE))) {
+      history.addEventOnce(model.sols(), PressureHistory.Kind.MACHINE_PLACED, type);
+    }
+    return added;
+  }
+
+  /** Same as {@link #addMachine} but records no history event (used when loading a save). */
+  private boolean addMachineQuietly(String type, long pos) {
     MachineDef def = defs.get(type);
     if (def == null) {
       throw new IllegalArgumentException(
@@ -278,7 +306,8 @@ public final class PlanetSim {
         ms,
         grid.charge(),
         Map.copyOf(efficiency),
-        gates.toStates());
+        gates.toStates(),
+        history.toState());
   }
 
   /**
@@ -318,7 +347,7 @@ public final class PlanetSim {
         .forEach(
             (type, positions) -> {
               if (sim.defs.containsKey(type)) {
-                positions.forEach(p -> sim.addMachine(type, p));
+                positions.forEach(p -> sim.addMachineQuietly(type, p));
               } else {
                 sim.machines.computeIfAbsent(type, k -> new LinkedHashSet<>()).addAll(positions);
                 unknownTypes.add(type);
@@ -327,6 +356,7 @@ public final class PlanetSim {
     sim.refreshPower();
     sim.grid.setCharge(state.batteryCharge());
     sim.refreshPower();
+    sim.history.restore(state.history() == null ? PressureHistory.State.EMPTY : state.history());
     return new Loaded(sim, report, unknownTypes);
   }
 

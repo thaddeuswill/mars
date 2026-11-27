@@ -18,13 +18,36 @@ public record PlanetState(
     Map<String, List<Long>> machines,
     double batteryCharge,
     Map<Long, Double> efficiency,
-    Map<String, mars.gates.GateTracker.State> gates) {
+    Map<String, mars.gates.GateTracker.State> gates,
+    PressureHistory.State history) {
 
   /**
    * 2 adds the battery charge and per-machine output (solar dust); 3 adds gate states (latched,
-   * hold counters). Older saves still load; their gates start unlatched.
+   * hold counters); 4 adds the pressure history for the Monitor plot. Older saves still load; their
+   * gates start unlatched and their history starts empty.
    */
-  public static final int CURRENT_SCHEMA = 3;
+  public static final int CURRENT_SCHEMA = 4;
+
+  public PlanetState(
+      int schema,
+      Map<String, Double> values,
+      long simTicks,
+      int pendingTicks,
+      Map<String, List<Long>> machines,
+      double batteryCharge,
+      Map<Long, Double> efficiency,
+      Map<String, mars.gates.GateTracker.State> gates) {
+    this(
+        schema,
+        values,
+        simTicks,
+        pendingTicks,
+        machines,
+        batteryCharge,
+        efficiency,
+        gates,
+        PressureHistory.State.EMPTY);
+  }
 
   public PlanetState(
       int schema,

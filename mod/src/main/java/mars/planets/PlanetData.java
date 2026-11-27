@@ -10,6 +10,8 @@ import mars.index.sim.PlanetSim;
 import mars.index.sim.PlanetState;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleArrayTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -102,6 +104,24 @@ public final class PlanetData extends SavedData {
               gates.put(id, t);
             });
     out.put("gates", gates);
+    var h = s.history();
+    CompoundTag ht = new CompoundTag();
+    ht.putInt("stride", h.stride());
+    ht.putDouble("nextSol", h.nextSol());
+    ht.put(
+        "sols", new DoubleArrayTag(h.samples().stream().mapToDouble(x -> x.sol()).toArray()));
+    ht.put(
+        "values", new DoubleArrayTag(h.samples().stream().mapToDouble(x -> x.value()).toArray()));
+    ListTag events = new ListTag();
+    for (var e : h.events()) {
+      CompoundTag et = new CompoundTag();
+      et.putDouble("sol", e.sol());
+      et.putString("kind", e.kind().name());
+      et.putString("id", e.id());
+      events.add(et);
+    }
+    ht.put("events", events);
+    out.put("history", ht);
     return out;
   }
 
@@ -142,6 +162,31 @@ public final class PlanetData extends SavedData {
               t.getDouble("heldSols"),
               t.getDouble("falseSols")));
     }
+    // Saves before schema 4 have no history: it starts empty.
+    var samples = new ArrayList<mars.index.sim.PressureHistory.Sample>();
+    var events = new ArrayList<mars.index.sim.PressureHistory.Event>();
+    CompoundTag ht = tag.getCompound("history");
+    double[] sols = readDoubles(ht, "sols");
+    double[] vals = readDoubles(ht, "values");
+    for (int i = 0; i < Math.min(sols.length, vals.length); i++) {
+      samples.add(new mars.index.sim.PressureHistory.Sample(sols[i], vals[i]));
+    }
+    ListTag et = ht.getList("events", Tag.TAG_COMPOUND);
+    for (int i = 0; i < et.size(); i++) {
+      CompoundTag e = et.getCompound(i);
+      try {
+        events.add(
+            new mars.index.sim.PressureHistory.Event(
+                e.getDouble("sol"),
+                mars.index.sim.PressureHistory.Kind.valueOf(e.getString("kind")),
+                e.getString("id")));
+      } catch (IllegalArgumentException unknownKind) {
+        // An event kind from a newer build: skip it rather than refuse the save.
+      }
+    }
+    var history =
+        new mars.index.sim.PressureHistory.State(
+            Math.max(1, ht.getInt("stride")), ht.getDouble("nextSol"), samples, events);
     return new PlanetState(
         schema,
         vs,
@@ -150,6 +195,11 @@ public final class PlanetData extends SavedData {
         ms,
         tag.getDouble("batteryCharge"),
         eff,
-        gs);
+        gs,
+        history);
+  }
+
+  private static double[] readDoubles(CompoundTag t, String key) {
+    return t.get(key) instanceof DoubleArrayTag a ? a.getAsDoubleArray() : new double[0];
   }
 }
