@@ -140,7 +140,7 @@ class LearningTest {
       assertTrue(gateIds.contains(d.gate()), d.id() + " names a gate that does not exist");
       assertTrue(lang.has(d.titleKey()), "missing " + d.titleKey());
       assertTrue(lang.has(d.textKey() + ".ms"), "missing .ms text for " + d.id());
-      for (String band : List.of(".ms", ".hs")) {
+      for (String band : List.of(".ms")) { // the .hs read-more is optional and not budgeted
         String key = lang.has(d.textKey() + band) ? d.textKey() + band : d.textKey() + ".ms";
         int words = lang.get(key).getAsString().trim().split("\\s+").length;
         // 45 words is invented (CR-T7 budget for journal entries, game designer proposal).

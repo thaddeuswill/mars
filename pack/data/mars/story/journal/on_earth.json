@@ -8,6 +8,6 @@
   "goal_ids": ["A1", "D2"],
   "reveals": [],
   "names": ["mars:pressure"],
-  "status": "awaiting SME confirmation of the 1 percent sentence",
+  "status": "SME-corrected wording applied 2026-11-27; body pressure-balance claim not verified (awaiting SME confirmation)",
   "source": "docs/design/messages/phase-1.md section 9 (earth.gate.dome_stable). Title text is invented."
 }

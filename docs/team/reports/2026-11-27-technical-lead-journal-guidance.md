@@ -17,7 +17,7 @@ Commit 1 (`ba3154a`, no screen) and commit 2 (J-key screen).
 - Docs: ARCHITECTURE.md 2.20, launch-guide commands, BACKLOG #49.
 - **Fixed on the way:** `PlanetSim.toState` kept empty machine types, so a fresh planet with an Oven placed and removed differed from the same planet after save and load. That made `save.round_trip` fail once my GameTest left a fresh planet (order-dependent, hidden before). Empty types are now left out.
 
-Journal texts: final text from `phase-1.md` sections 9 and 12. The "On Earth" sentence is marked `"status": "awaiting SME confirmation of the 1 percent sentence"` in `on_earth.json` (a test checks the mark). Titles ("The air outside", "On Earth", "The sky") are **invented**. The Phase 2 repeat entry of the sky text was not built (not requested).
+Journal texts: final text from `phase-1.md` sections 9 and 12. The "On Earth" line was replaced mid-task by the SME-corrected wording (commit a1dd82f, "more than 100 times"); `on_earth.json` carries `"status": "SME-corrected wording applied ...; body pressure-balance claim not verified (awaiting SME confirmation)"` (a test checks the mark). The 45-word budget now applies to the `.ms` text only (the `.hs` read-more would exceed it). Titles ("The air outside", "On Earth", "The sky") are **invented**. The Phase 2 repeat entry of the sky text was not built (not requested).
 
 ## Real output
 - `./gradlew build`: BUILD SUCCESSFUL, **199 unit tests, 0 failures** (baseline 184; +15: Guidance 3, learning/content 10, view hiding 2).
@@ -37,7 +37,7 @@ None blocking. Optional (well-structured): build the Phase 2 repeat of the sky e
 
 ## 3. Handoffs
 > **To:** Subject Matter Expert · **Problem type:** well-structured
-> **Needed from them:** confirm the "less than 1 % of the force" sentence in `pack/data/mars/story/journal/on_earth.json`. **Done when:** the `status` field is removed.
+> **Needed from them:** confirm the corrected "more than 100 times" / body pressure-balance sentence in `pack/data/mars/story/journal/on_earth.json`. **Done when:** the `status` field is removed.
 
 > **To:** Lead Instructional Designer · **Problem type:** well-structured
 > **Needed from them:** check the invented titles and "New journal entries: N. Press J." wording; confirm journal text may stay `.ms` until a grade band exists. **Done when:** wording approved or changed in `en_us.json`.
