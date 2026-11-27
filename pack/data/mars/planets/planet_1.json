@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "mars:planet_1",
+  "about": "Planet data for terrain (W1, docs/design/world-and-blocks.md section 2). One file per planet dimension: the file name is the dimension path. Sizes follow docs/science/mars-terrain-reference.md (SME). Every number here is INVENTED game scale unless a note says otherwise; compressed sizes are labelled 'stylised' in the journal. Block ids are data so the Artist or SME can change a colour without code.",
+  "terrain": {
+    "wind": {
+      "blows_toward_deg": 110,
+      "note": "ONE fixed wind direction for the whole planet (owner decision). Compass degrees, 0 = north (-z), 90 = east (+x), clockwise; the direction the wind blows TOWARD. Dune slip faces face this way; the gentle windward slopes face the opposite way. INVENTED value. The density functions do not use it (dunes are shaped by mars.terrain.DuneField)."
+    },
+    "pad": {
+      "flat_radius": 32,
+      "ramp_radius": 60,
+      "height_y": 80,
+      "note": "Flat starting pad around x=0, z=0 (the /mars go arrival). Inside flat_radius the top block is exactly height_y; it blends to the natural ground by ramp_radius. INVENTED. height_y matches the base ground of the noise settings (base_height in worldgen/noise_settings/mars_planet.json)."
+    },
+    "craters": {
+      "shape": {
+        "depth_ratio_min": 0.10,
+        "depth_ratio_max": 0.20,
+        "rim_ratio": 0.05,
+        "min_rim_blocks": 1,
+        "rim_width_fraction": 0.15,
+        "reach_radii": 2.5,
+        "note": "Small craters: depth = ratio x diameter, ratio 0.10 (old, filled) to 0.20 (fresh) (SME row 3; the 0.2 is NOT VERIFIED). rim_ratio 0.05 x diameter (SME 0.04 to 0.05, NOT VERIFIED). min_rim_blocks raises tiny rims to one block so they show at 1 m resolution (INVENTED aid). Profile: bowl z = -d(1-(r/R)^2), rim d exp(-((r-R)/(0.15R))^2), ejecta h (R/r)^3 out to reach_radii x R (SME note 5.2; shape INVENTED, real profiles NOT VERIFIED)."
+      },
+      "small_levels": [
+        { "cell": 16,  "chance": 0.26, "diameter_min": 4,  "diameter_max": 8 },
+        { "cell": 32,  "chance": 0.22, "diameter_min": 8,  "diameter_max": 16 },
+        { "cell": 64,  "chance": 0.25, "diameter_min": 16, "diameter_max": 32 },
+        { "cell": 128, "chance": 0.20, "diameter_min": 32, "diameter_max": 64 }
+      ],
+      "small_levels_note": "One level per diameter octave; roughly 5 times more craters each time the diameter halves (SME row 3, INVENTED shape of a real many-small-few-big trend). The two smallest levels were thinned after the first screenshots (0.38 and 0.30 looked like noise). Expected about 0.6 craters of 16 to 32 blocks per 100 x 100 blocks. A level places at most one crater per cell, so cells are at least 3.5 times the largest radius. All INVENTED.",
+      "large": {
+        "cell": 512,
+        "chance": 0.35,
+        "diameter_min": 120,
+        "diameter_max": 300,
+        "depth_ratio_min": 0.08,
+        "depth_ratio_max": 0.10,
+        "floor_fraction_min": 0.4,
+        "floor_fraction_max": 0.6,
+        "peak_ratio_min": 0.05,
+        "peak_ratio_max": 0.10,
+        "note": "Large complex craters: flat floor, central peak, shallower (SME row 4: depth 0.08 to 0.10, floor 40 to 60 percent of the width, peak 5 to 10 percent of the diameter; the percentages are NOT VERIFIED). GAME CHOICE (stylised): real change-over is at 3 to 8 km (Pike 1980, verified); compressed about 25 times, so 120 to 300 blocks stand for 3 to 7.5 km. Label 'stylised' in the journal."
+      },
+      "fixed": [
+        { "x": 70,  "z": -52, "diameter": 14, "note": "Two small craters in view of the dome pad (SME note 5.3). Coordinates INVENTED." },
+        { "x": -58, "z": 74,  "diameter": 22 }
+      ]
+    },
+    "dunes": {
+      "field_scale": 150,
+      "field_octaves": 2,
+      "field_threshold_low": 0.58,
+      "field_threshold_high": 0.68,
+      "wavelength": 34,
+      "height_min": 3,
+      "height_max": 8,
+      "windward_fraction": 0.78,
+      "crest_warp": 14,
+      "crest_length": 70,
+      "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). One wavelength for the planet (a varying one shears the crests); crest warp and height noise supply the variety. windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
+    },
+    "surface": {
+      "rim_block": "minecraft:smooth_basalt",
+      "rim_block_min_diameter": 16,
+      "ejecta_block": "minecraft:sandstone",
+      "ejecta_block_chance": 0.25,
+      "dune_sand": "mars:basaltic_sand",
+      "note": "Top block overrides. Dust and plains patches come from the noise settings' surface rule. Rim and ejecta colours are a first guess for the Artist and SME: 'lighter or rockier material' (SME row 3). Dune sand is dark (Curiosity report, VERIFIED in the SME reference)."
+    },
+    "rocks": {
+      "rim_chance": 0.08,
+      "ejecta_chance": 0.03,
+      "blocks": ["minecraft:basalt", "minecraft:smooth_basalt", "minecraft:tuff", "minecraft:blackstone"],
+      "note": "Chance per column of a one-block rock on crater rims and ejecta, 10 to 100 times the plain's cover (SME section 2; numbers INVENTED). Plain and flat rock fields are datapack features (worldgen/placed_feature/boulders_*.json)."
+    }
+  }
+}
