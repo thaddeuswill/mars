@@ -116,6 +116,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 51 | "continue" | Continue the queued sky follow-up | Codex claims only the sun texture reference in `MarsSkyEffects.java`. | ✅ Mars texture wired in `366b724`, build passed, and the custom round sun was inspected in fresh client captures. |
 
+| 52 | "continue i need you to be constantly working" | Resume Stage 2 verification and packaging | Build a playtest jar, run unit and boot checks, and run the twilight and frustum captures. | ✅ Built at `436a63b`; 172 unit tests and 81 boot checks passed. Both client captures inspected. |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
@@ -148,7 +150,7 @@ Use pure unit tests for rates and branch boundaries, and GameTests for registrat
 
 ### CX-2 follow-up
 
-Owner request #44: “accept and cont”. The script is accepted. The older image did not isolate the overhang. Run the new script on the next available client and inspect the rim and empty-control images from the same camera.
+Owner request #44: “accept and cont”. The script is accepted. The older image did not isolate the overhang. The new client run at `436a63b` confirmed the rim remains visible in the matched-camera check.
 
 ## Codex lane (assigned by Claude 2026-11-27, owner: "share work with chatgpt codex")
 
@@ -157,7 +159,7 @@ Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor revie
 | ID | Task | Scope (files you may touch) | Done when | Status |
 |---|---|---|---|---|
 | CX-1 | Forecast JSON `resolve_source` field and the CR-F10 content test (see `docs/learning/content-rules.md`, `docs/team/reports/` forecast items, HANDOFF section 5) | `pack/data/mars/` forecast files, a new test under `mod/src/test/java/mars/` | Test fails on a forecast without a valid `resolve_source`, passes on the shipped files; `./gradlew spotlessCheck build test --rerun --offline` green, output pasted in your report | ⏸ The forecast directory contains only `.gitkeep`. Populate the forecast definitions before validating `resolve_source` on shipped data. |
-| CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | 🟡 The owner accepted the script in `53fad12`. Codex inspected the [earlier off-screen candidate](tools/screenshots/out/20261127-110427/round_chunk_corner_centre_offscreen.png) and [whole-array shot](tools/screenshots/out/20261127-110427/round_chunk_corner_whole.png). The candidate still shows the legs and base, so the new matched-camera run is pending. |
+| CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | ✅ Client run passed on `436a63b` at 1280×720. Full array visible in the setup shot; rim visible without legs or base in the edge shot; rim absent in the same-camera empty control. |
 | CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | ✅ Implemented in slice 5. Codex matched the checklist to the Technical Lead’s [test report](docs/team/reports/2026-11-27-technical-lead-slice5-frost.md) and inspected the [levelling-off capture](tools/screenshots/out/20261127-125134/slice5_4_levelling_off.png). The capture shows 1.60 kPa with a negative frost cause, adequate power, and a flat pressure history. Tests were not rerun by Codex. |
 | CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | ✅ Renumbered and checked. |
 | CX-5 | Review pass: read `docs/art/monitor-reference-audit.md` against the images in `docs/art/references/monitor/` and flag any claim an image does not support | a new report under `docs/team/reports/` | Report lists each checked claim as supported or not | ✅ All seven images inspected. See [Codex reference review](docs/team/reports/2026-11-27-codex-monitor-reference-review.md). |
