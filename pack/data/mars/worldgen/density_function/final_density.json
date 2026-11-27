@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:interpolated",
+  "argument": {
+    "type": "minecraft:min",
+    "argument1": { "type": "minecraft:add", "argument1": "mars:height", "argument2": { "type": "minecraft:mul", "argument1": -1.0, "argument2": "mars:y" } },
+    "argument2": "mars:caves"
+  }
+}

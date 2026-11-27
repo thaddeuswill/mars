@@ -1,18 +1,102 @@
 {
   "type": "mars:mars",
   "generator": {
-    "type": "minecraft:flat",
-    "settings": {
-      "biome": "mars:regolith_flats",
-      "lakes": false,
-      "features": false,
-      "layers": [
-        { "block": "minecraft:bedrock", "height": 1 },
-        { "block": "minecraft:stone", "height": 56 },
-        { "block": "minecraft:red_sandstone", "height": 4 },
-        { "block": "minecraft:red_sand", "height": 3 }
-      ],
-      "structure_overrides": []
-    }
+    "type": "mars:planet",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "mars:dust_plain",
+          "parameters": {
+            "temperature": [
+              -2,
+              2
+            ],
+            "humidity": [
+              -2,
+              0.3
+            ],
+            "continentalness": [
+              -2,
+              0.46
+            ],
+            "erosion": [
+              -2,
+              2
+            ],
+            "weirdness": [
+              -2,
+              2
+            ],
+            "depth": [
+              -2,
+              2
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "mars:rocky_flats",
+          "parameters": {
+            "temperature": [
+              -2,
+              2
+            ],
+            "humidity": [
+              0.3,
+              2
+            ],
+            "continentalness": [
+              -2,
+              0.46
+            ],
+            "erosion": [
+              -2,
+              2
+            ],
+            "weirdness": [
+              -2,
+              2
+            ],
+            "depth": [
+              -2,
+              2
+            ],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "mars:highland_mesa",
+          "parameters": {
+            "temperature": [
+              -2,
+              2
+            ],
+            "humidity": [
+              -2,
+              2
+            ],
+            "continentalness": [
+              0.46,
+              2
+            ],
+            "erosion": [
+              -2,
+              2
+            ],
+            "weirdness": [
+              -2,
+              2
+            ],
+            "depth": [
+              -2,
+              2
+            ],
+            "offset": 0
+          }
+        }
+      ]
+    },
+    "settings": "mars:planet"
   }
 }

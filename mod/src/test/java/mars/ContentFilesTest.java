@@ -36,19 +36,26 @@ class ContentFilesTest {
   }
 
   @Test
-  void planetOneUsesTheMarsTypeAndBiome() throws Exception {
+  void planetOneUsesTheMarsTypeAndGenerator() throws Exception {
     JsonObject dim = read(TestData.data("dimension/planet_1.json"));
     String type = dim.get("type").getAsString();
-    String biome =
-        dim.getAsJsonObject("generator").getAsJsonObject("settings").get("biome").getAsString();
-    System.out.println("planet_1: type " + type + ", biome " + biome);
+    JsonObject gen = dim.getAsJsonObject("generator");
+    System.out.println("planet_1: type " + type + ", generator " + gen.get("type"));
     assertEquals("mars:mars", type);
     assertTrue(
         Files.exists(TestData.data("dimension_type/mars.json")),
         "dimension_type/mars.json missing");
-    assertEquals("mars:regolith_flats", biome);
+    // W1: the Mars generator (vanilla noise plus the landform pass); the old flat slab is kept only
+    // inside that generator as the legacy mode for existing saves.
+    assertEquals("mars:planet", gen.get("type").getAsString());
+    assertEquals("mars:planet", gen.get("settings").getAsString());
     assertTrue(
-        Files.exists(TestData.data("worldgen/biome/regolith_flats.json")), "biome file missing");
+        Files.exists(TestData.data("worldgen/noise_settings/planet.json")),
+        "noise settings missing");
+    // The legacy biome file stays: old saves still reference mars:regolith_flats in their chunks.
+    assertTrue(
+        Files.exists(TestData.data("worldgen/biome/regolith_flats.json")),
+        "legacy biome file missing");
   }
 
   @Test

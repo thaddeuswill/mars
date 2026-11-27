@@ -102,5 +102,10 @@
   "guidance.set.other": "Guidance for %s is now %s.",
   "guidance.teacher_sets": "Your teacher sets this.",
   "guidance.expert_refused": "Expert is not offered in classroom mode.",
-  "guidance.unknown": "Unknown level. Use gentle, standard or expert."
+  "guidance.unknown": "Unknown level. Use gentle, standard or expert.",
+  "itemGroup.mars.terrain": "Mars Terrain",
+  "block.mars.basaltic_sand": "Basaltic Sand",
+  "block.mars.hematite_ore": "Hematite Ore",
+  "block.mars.dark_sand_ore": "Dark Sand Ore",
+  "block.mars.ground_ice": "Ground Ice"
 }

@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": {
+      "type": "minecraft:noise",
+      "noise": "mars:mesa_mask",
+      "xz_scale": 1.0,
+      "y_scale": 0.0
+    },
+    "points": [
+      {
+        "location": 0.46,
+        "value": 0.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.48,
+        "value": 14.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.64,
+        "value": 15.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.66,
+        "value": 26.0,
+        "derivative": 0.0
+      },
+      {
+        "location": 0.85,
+        "value": 27.0,
+        "derivative": 0.0
+      }
+    ]
+  }
+}
