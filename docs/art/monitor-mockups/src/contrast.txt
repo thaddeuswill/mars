@@ -1,0 +1,25 @@
+A/C dark  label   #9AA5B1 over sky     7.13 OK
+A/C dark  label   #9AA5B1 over white   6.94 OK
+A/C dark  value   #FFFFFF over sky     17.85 OK
+A/C dark  value   #FFFFFF over white   17.36 OK
+A/C dark  up      #7CD37C over sky     9.75 OK
+A/C dark  up      #7CD37C over white   9.48 OK
+A/C dark  down    #FF8A80 over sky     7.82 OK
+A/C dark  down    #FF8A80 over white   7.60 OK
+A/C dark  steady  #C8D0D8 over sky     11.45 OK
+A/C dark  steady  #C8D0D8 over white   11.13 OK
+A/C dark  cause   #E6D7A3 over sky     12.42 OK
+A/C dark  cause   #E6D7A3 over white   12.08 OK
+A/C dark  series  #8AD0E8 over sky     10.43 OK
+A/C dark  series  #8AD0E8 over white   10.14 OK
+A/C dark  hint    #9AA5B1 over sky     7.13 OK
+A/C dark  hint    #9AA5B1 over white   6.94 OK
+B paper   ink     #1A1A1A on paper     15.17 OK
+B paper   grey    #4A4A4A on paper     7.72 OK
+B paper   blue    #1F5FA8 on paper     5.61 OK
+B paper   orange  #A84300 on paper     5.28 OK
+B header  white   #FFFFFF on header bar 16.04 OK
+B grid on paper #8C8574 3.20
+B blue series on paper #1F5FA8 5.61
+A bar fill vs empty #7CD37C vs #3A302A 7.01
+A/C edge #9A6A4C vs backing #181210 3.86
