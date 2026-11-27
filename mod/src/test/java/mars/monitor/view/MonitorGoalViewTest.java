@@ -1,17 +1,13 @@
 package mars.monitor.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.netty.buffer.Unpooled;
 import mars.TestSims;
 import mars.gates.GateTracker;
 import mars.index.sim.Pace;
 import mars.index.sim.PlanetSim;
-import mars.monitor.MonitorPayload;
-import net.minecraft.network.FriendlyByteBuf;
 import org.junit.jupiter.api.Test;
 
 /** The next-gate bar in the three states the player meets: far, holding, reached. */
@@ -78,19 +74,5 @@ class MonitorGoalViewTest {
     MonitorView v = MonitorView.of(s);
     assertTrue(v.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));
     assertTrue(v.rows().stream().noneMatch(r -> r.goal() != null));
-  }
-
-  @Test
-  void theGoalSurvivesTheNetworkRoundTrip() throws Exception {
-    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 3);
-    s.model().advanceSols(4);
-    s.addMachine(TestSims.OUTGASSER, 1L);
-    s.model().advanceSols(10);
-    MonitorView v = MonitorView.of(s);
-    FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-    MonitorPayload.write(buf, v);
-    MonitorView back = MonitorPayload.read(buf);
-    assertNotNull(goal(back).goal());
-    assertEquals(v, back);
   }
 }

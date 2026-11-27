@@ -294,6 +294,17 @@ public final class PlanetGameTests {
             "decoded payload equals the sent one",
             "bytes=" + bytes + " equal=" + got.equals(sent) + " leftover=" + buf.readableBytes(),
             got.equals(sent) && buf.readableBytes() == 0);
+    MonitorView.Row goalRow =
+        got.view().rows().stream().filter(r -> r.goal() != null).findFirst().orElse(null);
+    ok &=
+        SelfTest.check(
+            "monitor.goal_bar_on_the_wire",
+            "the next-gate bar (fraction, percent) arrives with the payload",
+            "goal=" + (goalRow == null ? "none" : goalRow.goal()),
+            goalRow != null
+                && goalRow.goal().fraction() >= 0
+                && goalRow.goal().fraction() <= 1
+                && goalRow.goal().percent().endsWith("%"));
 
     MonitorView withPlot =
         new MonitorView(
