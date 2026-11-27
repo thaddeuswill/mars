@@ -21,6 +21,7 @@ public final class PlanetaryIndexModel {
   private final BoilingPoint boilingPoint;
   private final Pace pace;
   private long simTicks;
+  private java.util.function.DoubleConsumer beforeStep = dt -> {};
 
   public PlanetaryIndexModel(List<ParameterDef> parameters, BoilingPoint boilingPoint, Pace pace) {
     for (ParameterDef d : parameters) {
@@ -42,6 +43,11 @@ public final class PlanetaryIndexModel {
     return h;
   }
 
+  /** Called at the start of every step with the step length in sols (the power grid hooks in). */
+  public void setBeforeStep(java.util.function.DoubleConsumer hook) {
+    this.beforeStep = hook;
+  }
+
   public void addCoupling(Coupling coupling) {
     couplings.add(coupling);
   }
@@ -61,6 +67,7 @@ public final class PlanetaryIndexModel {
   /** One fixed step of {@code pace.stepTicks} simulation ticks. */
   public void step() {
     double dtSols = (double) pace.stepTicks() / pace.solTicks();
+    beforeStep.accept(dtSols);
     double machineScale = pace.rateMultiplier() * pace.groupRateScale() * dtSols;
     for (Handle h : contributions) {
       if (!h.removed) {
