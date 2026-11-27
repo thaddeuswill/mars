@@ -3,6 +3,7 @@
 A total-conversion Minecraft modpack about turning a dead Mars into a living world, one atmospheric kilopascal at a time. Built for Minecraft: Java Edition with NeoForge 1.21.1 (it does not run in Minecraft Education). An educational design exercise for ages 12–18, aligned to NGSS.
 
 ## Start here
+- [AGENTS.md](AGENTS.md): start here if you are Codex/ChatGPT or another coding agent joining the project
 - [TEAM.md](TEAM.md): team shared mental model (read first)
 - [DOCUMENTATION.md](DOCUMENTATION.md): document map, traceability, and shared formats
 - [ROADMAP.md](ROADMAP.md): development stages, iteration model, and "Where We Are Now"
