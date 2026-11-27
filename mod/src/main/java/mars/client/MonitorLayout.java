@@ -27,7 +27,7 @@ final class MonitorLayout {
    * count; the bar stays). Problem lines (a stalled machine, a dusty panel) never drop.
    */
   static MonitorView fit(MonitorView view) {
-    if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
+    if (fixedHeight(view) + PLOT_MIN_H + PLOT_EXTRA_H <= TARGET_H) {
       return view;
     }
     List<MonitorView.Row> rows = new java.util.ArrayList<>();
@@ -74,18 +74,18 @@ final class MonitorLayout {
    */
   static int plotHeight(MonitorView view, int screenHeight) {
     int fixed = fixedHeight(view);
-    if (fixed + PLOT_MIN_H + PLOT_LABEL_H + 2 > TARGET_H + PLOT_OVERFLOW) {
+    if (fixed + PLOT_MIN_H + PLOT_EXTRA_H > TARGET_H + PLOT_OVERFLOW) {
       return 0; // many problem lines: rows only, no history
     }
-    int wanted = Math.max(PLOT_MIN_H, Math.min(PLOT_MAX_H, TARGET_H - fixed - PLOT_LABEL_H - 2));
-    int room = screenHeight - 2 * MARGIN - fixed - PLOT_LABEL_H - 2;
+    int wanted = Math.max(PLOT_MIN_H, Math.min(PLOT_MAX_H, TARGET_H - fixed - PLOT_EXTRA_H));
+    int room = screenHeight - 2 * MARGIN - fixed - PLOT_EXTRA_H;
     return room < PLOT_MIN_H ? 0 : Math.min(wanted, room);
   }
 
   /** Total height in GUI px; also used by the layout so the two never disagree. */
   static int panelHeight(MonitorView view, int screenHeight) {
     int ph = plotHeight(view, screenHeight);
-    return fixedHeight(view) + (ph > 0 ? ph + PLOT_LABEL_H + 2 : 0);
+    return fixedHeight(view) + (ph > 0 ? ph + PLOT_EXTRA_H : 0);
   }
 
   /**

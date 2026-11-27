@@ -244,6 +244,8 @@ The frost line is a cause line like any other (Phase 1: open by default, re-scaf
 
 ### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; built 2026-11-27 except the one-shot rescale line)
 
+**Update 2026-11-27 (owner approved, BACKLOG #49):** the plot is about 8 px taller (25 px in the powered state, from 17) and the goal label now sits in a 9 px strip above the plot, right-aligned over the goal line, so it never touches the data line. Event labels that cross the goal line get a backing. Panel 155 GUI px in the powered state (test bound at most 158; fits 240 px at scale 3 and 360 px at 720p scale 2). `MonitorStyle.TARGET_H` 155, `PLOT_HEAD_H` 9.
+
 Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and effect). Pillars: the planet is the quest log, every change is visible, compact before wide. Full comparison and reasoning: `docs/team/reports/2026-11-27-game-designer-plot-scale.md`.
 
 **Problem with the built plot** (`PlotScale.niceMax`, top = next 1, 2, 5 or 10 above 1.1 x the largest value). (1) Between 4.55 and 5 kPa the top jumps from 5 to 10, so the whole line halves in height just before the Phase 2 gate. A rising game looks like it fell. (2) Nothing on the plot says where the goal is. (3) In Phase 3 (5 to 75 kPa) the top keeps stepping, so the shape never builds up.

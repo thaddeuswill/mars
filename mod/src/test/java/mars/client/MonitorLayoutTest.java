@@ -115,6 +115,23 @@ class MonitorLayoutTest {
     }
   }
 
+  /** The plot is about 8 px taller than the old 17 px, the panel stays at most 158 GUI px. */
+  @Test
+  void thePlotIsTallEnoughForTheGoalLabelStripAndThePanelStaysUnderTheBound() throws Exception {
+    final int h720Scale2 = 360;
+    for (MonitorView raw : new MonitorView[] {started(), powered()}) {
+      MonitorView v = MonitorLayout.fit(raw);
+      for (int screen : new int[] {H3, h720Scale2}) {
+        int plot = MonitorLayout.plotHeight(v, screen);
+        int total = MonitorLayout.panelHeight(v, screen);
+        System.out.println("screen " + screen + ": plot " + plot + " panel " + total);
+        assertTrue(plot >= 25, "plot " + plot);
+        assertTrue(total <= 158, "panel " + total);
+        assertTrue(total <= screen - 2 * MonitorStyle.MARGIN);
+      }
+    }
+  }
+
   @Test
   void aShortScreenDropsThePlotInsteadOfOverflowing() throws Exception {
     for (MonitorView raw : new MonitorView[] {started(), powered(), shortAndDusty()}) {

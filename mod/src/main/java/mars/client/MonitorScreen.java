@@ -85,6 +85,8 @@ public final class MonitorScreen extends Screen {
   /** The pressure plot. Returns the y below it (after the Sol labels). */
   private int drawPlot(GuiGraphics g, int left, int right, int top, int h) {
     MonitorView.History hist = view.history();
+    int headY = top; // the goal label's strip, above the plot area
+    top += PLOT_HEAD_H;
     String topLabel = "";
     double topValue = 1;
     if (!hist.points().isEmpty()) {
@@ -165,9 +167,8 @@ public final class MonitorScreen extends Screen {
                     "monitor.plot.goal", Component.translatable(goalLine.nameKey()), num);
         gw = font.width(goalText);
         gx = px + pw - gw - 1;
-        // Below the line when there is room under it, else above.
-        gty = gy + 2 + 9 <= top + h ? gy + 2 : gy - 9;
-        if (gx <= px || gty < top) {
+        gty = headY; // in the strip above the plot, right-aligned over the goal line
+        if (gx <= px) {
           goalText = null;
         }
       }
@@ -204,9 +205,6 @@ public final class MonitorScreen extends Screen {
       if (lx < px + 1) {
         continue;
       }
-      if (goalText != null && lx < gx + gw + 1 && lx + lw > gx - 1) {
-        continue; // keep clear of the goal label
-      }
       int[] yRange = seriesRange(sxs, sys, lx, lx + lw);
       boolean topFree = yRange[0] > top + 9;
       boolean bottomFree = yRange[1] < top + h - 10;
@@ -218,14 +216,14 @@ public final class MonitorScreen extends Screen {
         continue;
       }
       int ty = band == 0 ? top : top + h - 9;
-      if (band == 0 && !topFree || band == 1 && !bottomFree) {
+      boolean onGoalLine = gy >= ty && gy < ty + 9; // the label sits over the goal line
+      if (band == 0 && !topFree || band == 1 && !bottomFree || onGoalLine) {
         g.fill(lx - 1, ty, lx + lw + 1, ty + 9, BACKING);
       }
       g.drawString(font, label, lx, ty + 1, CAUSE, false);
       bandEnd[band] = lx + lw + 2;
     }
     if (goalText != null) {
-      g.fill(gx - 1, gty, gx + gw + 1, gty + 9, BACKING);
       g.drawString(font, goalText, gx, gty + 1, CAUSE, false);
     }
     // Sol labels under the X axis: first, middle (when there is room), last.

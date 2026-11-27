@@ -36,9 +36,10 @@ final class MonitorStyle {
   static final int PANEL_W = 250;
 
   /**
-   * Panel height we aim for at GUI scale 3 (240 GUI px screen): the plot grows or shrinks to it.
+   * Panel height we aim for (fits GUI scale 3, a 240 GUI px screen, and scale 2 at 720p): the plot
+   * grows or shrinks to it.
    */
-  static final int TARGET_H = 130;
+  static final int TARGET_H = 155;
 
   /**
    * The plot is dropped (rows only) when keeping its minimum would push the panel past {@link
@@ -79,6 +80,12 @@ final class MonitorStyle {
   static final int PLOT_MIN_H = 16;
   static final int PLOT_MAX_H = 36;
   static final int PLOT_LABEL_H = 9;
+
+  /** Strip above the plot that carries the goal label, clear of the data line and event labels. */
+  static final int PLOT_HEAD_H = 9;
+
+  /** Everything around the plot area: head strip, Sol labels and the gap. */
+  static final int PLOT_EXTRA_H = PLOT_HEAD_H + PLOT_LABEL_H + 2;
 
   // Type
   static final float VALUE_SCALE_EMPHASIS = 1.25f;
