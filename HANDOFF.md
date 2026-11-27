@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0f. UPDATE 2026-11-27 (Technical Lead): maker and reclaimer v2 checked in game
+
+Jar `0.3.5-stage3-f` (sha256 `9f72d2808e8ca88a83515fb4d0f8394402d05a70b521a05c24dae728cfcc59ed`). 113 boot checks `RESULT PASS`, build and tests green. v2 models load. Maker reads as a gold-framed box on a copper plate but still as a dark lattice at 2 to 4 m; reclaimer as a labelled box, not an ISS rack. Light 15 trial: maker face +23 %, tests still pass; reverted to 13, owner/Artist call. Reclaimer already has FACING in Java; blockstate variants wait for a one-sided model (Artist). Report `docs/team/reports/2026-11-27-technical-lead-maker-reclaimer-check.md`; screenshots `tools/screenshots/out/20261127-233726/` and `20261127-233906/` (script `habitat_makers.shots`).
+
 ## 0e. UPDATE 2026-11-27 (Technical Lead): lamps in the shelter and Ops, level 13
 
 Jar `0.3.4-stage3-e` (sha256 `cf77314dcfe554e1647797bcd936a4fc8f58908dcc78bc46523a974b9473fb3c`). 254 unit tests, 113 boot checks (`RESULT PASS`). `HullBlocks.LIGHT_LEVEL` 13, 30 lamps (shelter 6, Ops 6), worst floor cell 8 in every room (asserted). Report `docs/team/reports/2026-11-27-technical-lead-lamps-shelter-ops.md`; screenshots `tools/screenshots/out/20261127-233344/` (lamp_1 to lamp_8, script `habitat_lamps.shots`).

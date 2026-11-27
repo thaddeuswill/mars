@@ -1,0 +1,42 @@
+# Maker and reclaimer check (jar 0.3.5-stage3-f). Dome corner (-3,63,-4): world = template - (3,4).
+# Makers at template x16..20,z1 (world 13..17,-3); reclaimer template x21 (world 18,-3); all face south.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 120
+view 15.5 65.6 1.5 180 15
+wait 40
+shot mk_1_bay_wide_day
+view 15.5 65.6 -0.5 180 15
+wait 40
+shot mk_1b_bay_closer_day
+view 13.5 65.6 -0.5 180 25
+wait 40
+shot mk_2_maker_2m_day
+view 13.5 65.6 1.5 180 15
+wait 40
+shot mk_3_maker_4m_day
+view 18.5 65.6 -0.5 180 25
+wait 40
+shot mk_4_reclaimer_2m_day
+view 18.5 65.6 1.5 180 15
+wait 40
+shot mk_5_reclaimer_4m_day
+cmd /time set 18000
+wait 60
+view 15.5 65.6 1.5 180 15
+wait 40
+shot mk_6_bay_wide_night
+view 15.5 65.6 -0.5 180 15
+wait 40
+shot mk_6b_bay_closer_night
+view 13.5 65.6 -0.5 180 25
+wait 40
+shot mk_7_maker_2m_night
+view 18.5 65.6 -0.5 180 25
+wait 40
+shot mk_8_reclaimer_2m_night
+quit
