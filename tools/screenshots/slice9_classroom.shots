@@ -1,0 +1,18 @@
+# Slice 9: Monitor in a classroom-pace world shows the "Classroom pace" tag. 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /mars pace classroom 4
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 14 64 12 mars:solar_panel
+cmd /setblock 6 64 4 mars:battery
+cmd /mars index advance 1.5
+cmd /mars monitor
+wait 40
+shot slice9_1_classroom_monitor
+quit

@@ -23,7 +23,7 @@ All effort numbers are **unverified estimates**. No measured rate exists (R-68).
 | # | Task | Owner (role) | Depends on | Done when (acceptance check) | Effort (unverified) |
 |---|---|---|---|---|---|
 | 1 | Pace and group config: NeoForge server config for `pace.*`, `group.size`, classroom preset; replace `Pace.STANDARD` in `PlanetData` and `AdminCommands`; creative gate bypass becomes a config switch, default on in standard, off in classroom | Technical Lead | none (stage2-plan slice 9) | Unit: `Pace` presets; GameTest reads config and a classroom planet advances 4x; thresholds unchanged (I-1) in both presets; prove-it-can-fail run | 2 dev-days (plan figure) |
-| 2 | Storm numbers confirmed: duration (balance sheet 0.5 to 1 sol; paper prototype 2 sols is the curve's assumption), gap between storms in Phase 1, first storm not before sol 14, storm cap Phase 1 = 1.0; resolve the two durations | Lead Game Designer | none | One row set in balance sheet §2a/§4 tagged invented; plan and curve agree | 0.5 dev-day |
+| 2 | Storm numbers confirmed: duration (settled per the balance sheet storm schedule table: Phase 1 storm 2 sols standard / 0.5 classroom; hold-event storms 1 sol / 0.25 sol; invented), gap between storms in Phase 1, first storm not before sol 14, storm cap Phase 1 = 1.0; confirm, no conflict left to resolve | Lead Game Designer | none | One row set in balance sheet §2a/§4 tagged invented; plan and curve agree | 0.5 dev-day |
 | 3 | Storm facts and journal line: real storm figures (Opportunity -80% 2007 and -97% 2018, InSight about -35%) marked verified or not; "faster than real" note | Subject Matter Expert | none | Source and verified/not-verified mark per figure | 0.5 dev-day |
 | 4 | Storm model (pure, no Minecraft): schedule from planet seed, state saved (schema bump, old saves load), paused with the session clock, scaled by pace; data in `pack/data/mars/hazards/dust_storm.json`; Monitor cause line "Dust storm: solar -X%" | Technical Lead | 1, 2 | Unit: schedule is deterministic and identical after save/restore; 100,000 paused ticks change nothing (I-3); content test equals balance sheet; classroom shortens timing only | 3 dev-days |
 | 5 | Grid and panel hook: solar output x (1 - 0.6 x cap); stage +1/+2 at storm end through `panel_dust.json`; battery ride-through | Technical Lead | 4 | Unit: output table incl. stage x storm; GameTest: 2-sol storm drains a full battery as in balance sheet §2b ("2.5 sols of one Outgasser" is survivable), Outgasser slows, panel stage rises at end only | 2 dev-days |
@@ -50,7 +50,7 @@ Pace and group config (task 1), the pseudonymous action log with actor IDs, and 
 ## 4. Risks for this slice
 
 - Storm numbers are invented; the real-world figures are only sources for a ceiling. Label them in the journal line.
-- A 2-sol storm in the curve vs a 0.5 to 1 sol storm in the drift table: task 2 must pick one or the curve moves (R-61 related).
+- Storm length is settled (balance sheet storm schedule table, 2026-11-27; all invented): Phase 1 storm 2 sols standard, 0.5 sol classroom; hold-event storms 1 sol, 0.25 sol classroom. The curve and the drift table agree; task 2 only confirms the numbers (R-61 related).
 - New saved state: schema bump must keep old saves loading (tested).
 - Creative bypass switch changes playtest conditions: say which mode each playtest used (R-63).
 - Estimates are guesses; do not shrink Stage 4 from them (R-68).

@@ -44,3 +44,12 @@ Producer, `2026-11-27-producer-stage3-first-slice.md` and `docs/tech/stage3-plan
 ## Shared model updates
 - Decision (owner, slice 9): pace is data in `pack/data/mars/pace.json` plus a per-world operator command; no NeoForge server config. Owning doc: `ARCHITECTURE.md` 2.21.
 - Decision: creative gate bypass is on in standard, off in classroom.
+
+## Follow-up (owner away; recommendations accepted)
+- Automatic checkpoint: `PlanetManager.setPace` calls `Checkpoints.takeAll(server, "before_pace_<HHmmss>", "pace-change")` after validating the group size and before changing anything. Bounded by the existing `CheckpointList` (oldest dropped). Boot check `pace.auto_checkpoint` (list seen: `..., before_pace_192407`).
+- Monitor tag: `MonitorView.of` adds row `monitor.row.pace` ("Classroom pace", label only, US spelling, grade 6-7) only when the world is classroom. Lang key added; `LangWordingTest` green. New unit test `MonitorLayoutTest.theClassroomPaceTagAddsOneShortRowOnlyInClassroomAndStaysInBound`: standard has no such row, classroom has exactly one more row, plot 36 (min 16), panel 147 GUI px, within the bound.
+- `docs/tech/stage3-plan.md` risk list and task 2 now read storm length as settled per the balance sheet storm schedule table (2 sols / 0.5 sol Phase 1; 1 sol / 0.25 sol hold events; invented).
+- Docs: ARCHITECTURE 2.21, launch guide 1c, BACKLOG #49.
+- Real results: `./gradlew build --offline` BUILD SUCCESSFUL; 207 unit tests, 0 failed; `runGameTestServer` `RESULT PASS passed=97 failed=0`.
+- Screenshot: `tools/screenshots/slice9_classroom.shots` run via absolute path, no other client running; `tools/screenshots/out/20261127-192411/slice9_1_classroom_monitor.png` viewed: "Classroom pace" sits at the bottom line, plot and rows intact, nothing clipped. In that run Dome stable latched in under 1 sol (classroom hold 1 sol at x4 rate with 1.5 sols advanced), as expected.
+- Unverified: standard-world screenshot not retaken (no row is added, covered by the unit test); the real chat output of the pre-change checkpoint; multi-planet worlds; whether the tag label should be styled differently (kept plain).

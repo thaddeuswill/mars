@@ -46,6 +46,9 @@ public final class PlanetManager {
    * machines are kept; only the rates, group size, hold lengths and bypass switch change. Never
    * touches a threshold.
    */
+  private static final java.time.format.DateTimeFormatter PACE_STAMP =
+      java.time.format.DateTimeFormatter.ofPattern("HHmmss");
+
   public static void setPace(
       net.minecraft.server.MinecraftServer server,
       mars.index.sim.PaceConfig.Mode mode,
@@ -53,6 +56,10 @@ public final class PlanetManager {
     PaceData pd = PaceData.get(server);
     mars.index.sim.PaceConfig cfg = IndexDefinitions.require().pace();
     mars.index.sim.Pace pace = cfg.pace(mode, groupSize); // validates the group size first
+    // Safety net (slice 9): a checkpoint of every planet before the pace changes, so a teacher who
+    // picks the wrong mode can go back. Bounded by the normal checkpoint list (oldest dropped).
+    Checkpoints.takeAll(
+        server, "before_pace_" + java.time.LocalTime.now().format(PACE_STAMP), "pace-change");
     pd.set(mode, pace.groupSize());
     for (ServerLevel level : server.getAllLevels()) {
       if (isPlanet(level)) {

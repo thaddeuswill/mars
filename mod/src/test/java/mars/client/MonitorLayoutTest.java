@@ -198,4 +198,25 @@ class MonitorLayoutTest {
         tight.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
     assertEquals(null, t.detailKey(), "the detail line is what gives way when tight");
   }
+
+  /**
+   * The pace tag shows only in a classroom world; standard adds no row; the panel stays in bound.
+   */
+  @Test
+  void theClassroomPaceTagAddsOneShortRowOnlyInClassroomAndStaysInBound() throws Exception {
+    MonitorView standard = started();
+    assertTrue(standard.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.pace")));
+    PlanetSim cs = TestSims.sim(Pace.classroom(4));
+    MonitorView room = MonitorView.of(cs);
+    assertEquals(
+        1, room.rows().stream().filter(r -> r.labelKey().equals("monitor.row.pace")).count());
+    assertEquals(standard.rows().size() + 1, room.rows().size());
+    MonitorView v = MonitorLayout.fit(room);
+    int total = MonitorLayout.panelHeight(v, H3);
+    int plot = MonitorLayout.plotHeight(v, H3);
+    System.out.println("classroom: plot " + plot + " -> panel " + total + " GUI px");
+    assertTrue(plot >= MonitorStyle.PLOT_MIN_H, "the plot survives the extra row");
+    assertTrue(
+        total <= MonitorStyle.TARGET_H + 6 + MonitorStyle.GOAL_BAR_LINE_H, "panel is " + total);
+  }
 }

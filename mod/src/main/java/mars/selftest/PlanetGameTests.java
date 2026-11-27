@@ -976,6 +976,14 @@ public final class PlanetGameTests {
       var source = server.createCommandSourceStack().withLevel(level);
       server.getCommands().performPrefixedCommand(source, "mars pace classroom 3");
       var room = PlanetManager.pace(level);
+      var saved =
+          mars.planets.CheckpointData.get(server).of(level.dimension().location().toString());
+      ok &=
+          SelfTest.check(
+              "pace.auto_checkpoint",
+              "changing the pace first takes a before_pace_<time> checkpoint of the planet",
+              "list=" + saved.list().stream().map(e -> e.name()).toList(),
+              saved.list().stream().anyMatch(e -> e.name().startsWith("before_pace_")));
       PlanetData after = PlanetManager.data(level);
       ok &=
           SelfTest.check(

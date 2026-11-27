@@ -43,6 +43,7 @@
   "monitor.plot.empty": "History starts after sol 1.",
   "monitor.row.next_goal": "Next goal",
   "monitor.row.goals_reached": "Goals reached",
+  "monitor.row.pace": "Classroom pace",
   "gate.mars.dome_stable": "Dome stable",
   "gate.mars.phase_2_begins": "Phase 2 begins",
   "monitor.gate.dome_stable.progress": "Life support, no failures",
