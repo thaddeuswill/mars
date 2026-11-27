@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
  * (ui-specs.md §1). Draws only what the server sent and keeps no planet state.
  */
 public final class MonitorScreen extends Screen {
-  private static final int PANEL_W = 196;
+  private static final int PANEL_W = 232;
   private static final int BACKING = 0xF0181210;
   private static final int EDGE = 0xFF6B4A36;
   private static final int LABEL = 0xFF9AA5B1;
