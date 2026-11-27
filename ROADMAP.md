@@ -207,15 +207,15 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 - ⬜ **Stage 2a (scheduled first, owner decision):** paper and spreadsheet prototypes for the alternatives above, plus the `guidance` levels and the orbital mirror route as a B4 choice; findings filed by the Lead Game Designer before any Stage 2b code [GD, ID, A]
 - ⬜ **Face-validity review** of concept sketches (Monitor wireframe, sky strip, weather mast, thawling silhouettes, Outgasser; `docs/art/concepts/`): owner and SME, one sitting, during Stage 2a [A runs; owner, SME]
-- ⬜ Planetary Index stored in world save data and readable by command [TL]
-- ⬜ Simulation clock and sols (simulation time; sleeping never advances it) [TL]
-- ⬜ Pause and resume; **GameTests confirming that pause stops third-party machines** (Mekanism, Create); fallback "pause = stop the server" [TL]
-- ⬜ One machine that raises one parameter (pressure): placeholder Regolith Outgasser [TL, A]
-- ⬜ One visible world response to that parameter (sky tint or fog) [TL, A]
-- ⬜ One regression source (machine wear or a storm) [TL]
-- ⬜ Admin API and debug commands to set and inspect every Index value [TL]
-- ⬜ Rollback restore approach chosen (start script is the safe default) [TL]
-- ⬜ Invariant tests I-1 to I-3 (qa-plan.md §4) [TL]
+- ✅ Planetary Index stored in world save data and readable by command (`PlanetData`, `/mars index`; slice 1) [TL]
+- ✅ Simulation clock and sols (`SessionClock`, slice 2; unit tested) [TL]
+- 🟡 Pause and resume built and tested with a fake machine (slice 2). **Still open:** GameTest with Mekanism and Create (not on the build classpath: no match in `mod/build.gradle`); fallback "pause = stop the server" [TL]
+- ✅ One machine that raises one parameter (pressure): Regolith Outgasser, with power, Oven and gates (slices 1 to 5) [TL, A]
+- ✅ One visible world response: sky and fog follow pressure (slice 6, screenshots looked at) [TL, A]
+- 🟡 One regression source: polar-frost sink built (slice 5). **No storm or machine wear yet; moved to Stage 3** (first slice, `docs/tech/stage3-plan.md`) [TL]
+- ✅ Admin API and debug commands (`/mars index|gate|machines|checkpoint|pause`; slice 8) [TL]
+- ✅ Rollback approach chosen: world backup by start script is the default; in-game planet checkpoints for values only (slice 8 report) [TL]
+- ✅ Invariant tests I-1 to I-3 exist (slice 2 and 4 reports; not re-run by the Producer) [TL]
 - ⬜ Prototype art minimum: E-01, E-02, T-01, M-08, U-01 (placeholders allowed) [A]
 - ⬜ User playtests P1 (standard) and P2 (classroom config) and reports [user, GD]
 
@@ -437,11 +437,11 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 
 ## Where We Are Now
 
-**Stage 2 (Prototype), in progress.** The Stage 1 mod skeleton builds and opens a custom Mars dimension. Stage 2 slices 1 and 2 added per-planet simulation, the Regolith Outgasser, the Planetary Monitor, and pause/resume. The latest verified report records 67 unit tests and 41 boot checks passing. See [HANDOFF.md](HANDOFF.md) for the current build and verification gaps.
+**Stage 2 (Prototype), nearly done; Stage 3 is the owner's next focus.** Slices 1 to 8 are built (planet values, Outgasser, Monitor with plot and next-goal bar, pause, power, gates, frost sink and Ovens, sky and fog, admin and checkpoints), plus the journal and guidance minimum. Latest reports: 199 unit tests and 87 boot checks (`RESULT PASS`) at the journal and guidance commit; not re-run by the Producer. What is left before Stage 2 counts as done, and the first Stage 3 slice, are in [docs/team/reports/2026-11-27-producer-stage3-first-slice.md](docs/team/reports/2026-11-27-producer-stage3-first-slice.md) and [docs/tech/stage3-plan.md](docs/tech/stage3-plan.md).
 
-1. **Finish slice 3** ([build plan](docs/tech/stage2-plan.md), [backlog](BACKLOG.md)). The Technical Lead owns solar and battery power and Outgasser throughput. The next planned slice adds the “Dome stable” unlock.
-2. **Before Stage 3**, hold the full-team story review and review the [UI specs](docs/design/ui-specs.md) against the settled interruption rules and [process](PROCESS.md). Apply any remaining consensus document or config updates.
-3. **Track release and platform work** using the Stage 1 checklist above and [owner actions](docs/production/owner-actions.md). Pack packaging, CI, platform checks, and external reviews have their own exit criteria.
-4. **Track the Phase 3 CO₂ budget** with Game Design and the SME (risk R-52), along with the remaining machine costing and sealing work.
+1. **Close Stage 2:** the owner playtests P1 once (about 1 h), the paper-prototype findings are filed or waived, the Mekanism/Create pause test is accepted as moved or built, and slice 9 (pace config, classroom switch) is built.
+2. **Stage 3 first slice:** dust storm on the power grid, after slice 9 (see the plan).
+3. **Track release and platform work** using the Stage 1 checklist above and [owner actions](docs/production/owner-actions.md): EULA, three external reviewers, real `mods` folder and Windows/macOS jar test remain open.
+4. **Track the Phase 3 CO₂ budget** with Game Design and the SME (risk R-52).
 
 Budget revision 2 remains the planning baseline (6,179 team-hours and about 89 owner-hours). See [budget.md](docs/production/budget.md) §4 for the Stage 4 cut list and buffer.
