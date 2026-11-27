@@ -2,7 +2,7 @@
 
 You are joining a small team building **Mars Terraforming**: a Minecraft (Java 1.21.1, NeoForge 21.1.267) mod and datapack/pack for a learning game. It is a **design exercise**: design it as if learners aged 12 to 18 would play it (NGSS-aligned), but there are no real students. The owner playtests personally and decides. The owner is short on credits, so **be efficient: do small, verified pieces of work, commit often, and do not re-read the whole repo for every task.**
 
-Claude (Anthropic) has been the lead so far, running six role agents. You are an additional worker. Pick up tasks from `BACKLOG.md`, do them, and report. Do not redesign things that are already decided.
+Claude and Codex coordinate as peers. Claim tasks and file scope in `BACKLOG.md`, check for overlap, then do the work and report. Do not redesign things that are already decided.
 
 ## 1. Read these first (in this order, stop when you have enough)
 

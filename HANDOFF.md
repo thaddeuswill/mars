@@ -19,7 +19,7 @@ Done and pushed:
 Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-technical-lead-slice2.md`):
 - **Raised-array shape fix:** canopy slice y 15..16 px, centre shape [0,0,0]->[1,1,1], `footprint.*` tests and ARCHITECTURE.md 2.18 updated; seen in real-client screenshots (`tools/screenshots/out/20261127-110427/`, `20261127-110853/`). Collision is proven by GameTest bounds only.
 - **Stage 2 slice 2:** `SessionClock`, `SessionData` (pause flag in world save data, not session.json), `SessionControl`, `/mars pause|resume|session`, invariant I-3 tested (100,000 paused ticks change nothing), Outgasser keeps contributing with its chunk unloaded (GameTest `outgasser.chunk_unloaded`). 67 unit tests, 41 of 41 boot checks, all run in the sandbox.
-- Nothing is in flight now. Check `git log` anyway.
+- **Arrival message:** `/mars go` now says “You are on Mars (planet 1).” Codex pushed the English translation in `07fba27` and checked the JSON. Client check pending. Codex and Claude are peer coordinators.
 
 ## 3. Known gaps and honest caveats (do not claim these work)
 
@@ -44,7 +44,7 @@ Also done 2026-11-27 (commit 5d7dbea, report `docs/team/reports/2026-11-27-techn
 
 1. Sync and verify (see section 2). Make the build and tests green and the boot test print `RESULT PASS`.
 2. Check `pgrep -f runShotsClient` before any screenshot run; never overlap client runs.
-3. Small fixes: replace the stale chat line in `TravelCommands` ("The planet is empty for now; this is the Stage 1 build"); pause does not yet block player actions or show a HUD line.
+3. Small fixes remaining: pause does not yet block player actions or show a HUD line.
 4. Then, per `docs/tech/stage2-plan.md`: power (solar panel and battery), the pressure machine chain, the "Dome stable" unlock, then the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
 5. After each step: update `BACKLOG.md` status, add a report in `docs/team/reports/`, update the "state" in `AGENTS.md` and this file, commit, push.
 6. Reply to the owner in the standing format: **what changed, recommended next steps, screenshot if visual.** Keep it short; the owner is also credit-limited.
