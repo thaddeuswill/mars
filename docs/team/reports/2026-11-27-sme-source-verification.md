@@ -42,3 +42,7 @@ Wording note for the Instructional Designer (optional, no change needed): the tw
 
 ## 5. Shared model updates
 None. Lesson: an allowlist change may apply only to new sessions; test one host first.
+
+## Addendum (coordinator, 2026-11-27): pressure now verified
+The SME's fetch tool could not reach the allowed hosts, but the shell could. The coordinator fetched `https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html` (page "Last Updated: 19 May 2025") and read: "Surface pressure: 6.36 mb at mean radius (variable from 4.0 to 8.7 mb depending on season)". 6.36 mb = 0.636 kPa. **Mars mean surface pressure 0.636 kPa: VERIFIED** (read in full by the coordinator, not the SME). So 101.3 / 0.636 is about 159, and "more than 100 times" holds.
+**Body-fluid claim (Armstrong limit): still NOT VERIFIED.** No physiology page was opened; one extra NCBI host (eutils) was not on the allowlist and was not bypassed.
