@@ -58,7 +58,7 @@ When the mod exists, the automated checks are the regression gate. They run loca
 ## 4. UI rules that apply to us
 
 - **One message at a time at the top.** Close or hide banners and pinned notes when a screen opens.
-- **No modal pop-ups for progress.** Progress lives in a side panel (next-gate display, Keeper's Record). Keep the "just finished" note there until the player starts the next real action. *Open point:* TEAM.md 8.6 rule 3 allows a phase debrief (Keeper's Report) as a blocking, deferrable interruption. That conflicts with this rule; it is raised in `docs/production/consensus-round2.md` §2.
+- **No modal pop-ups for progress.** Progress lives in a side panel (next-gate display, Keeper's Record). Keep the "just finished" note there until the player starts the next real action. The Keeper’s Report adds one log line and a side-panel entry. It opens full screen by player choice or at the next natural pause, with a **Later** option. See the TEAM.md Decision Log and [UI specs §0](docs/design/ui-specs.md).
 - **Hide HUD panels over every full-screen sheet**, and measure that they fit at 1280×720.
 - **Values bigger than labels** on stat rows.
 - **Mark the next step** clearly.
