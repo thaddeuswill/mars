@@ -106,6 +106,89 @@ public final class PlanetaryIndexModel {
     }
   }
 
+  /** Total simulation ticks this model has been stepped through. */
+  public long simTicks() {
+    return simTicks;
+  }
+
+  /**
+   * Effective rate per sol of every live contribution to {@code parameter}, grouped by source
+   * (after {@code pace.rateMultiplier} and the group scale), for the Monitor's cause lines.
+   */
+  public List<Cause> causes(ParameterId parameter) {
+    double scale = pace.rateMultiplier() * pace.groupRateScale();
+    Map<String, double[]> bySource = new LinkedHashMap<>();
+    for (Handle h : contributions) {
+      if (!h.removed && h.parameter.equals(parameter)) {
+        double[] acc = bySource.computeIfAbsent(h.source, k -> new double[2]);
+        acc[0] += 1;
+        acc[1] += h.rate * scale;
+      }
+    }
+    List<Cause> out = new ArrayList<>();
+    bySource.forEach((src, acc) -> out.add(new Cause(src, (int) acc[0], acc[1])));
+    return out;
+  }
+
+  /** Sum of the cause rates for {@code parameter}, per sol. */
+  public double netRatePerSol(ParameterId parameter) {
+    double sum = 0;
+    for (Cause c : causes(parameter)) {
+      sum += c.ratePerSol();
+    }
+    return sum;
+  }
+
+  /** Debug and admin: set a stored value (clamped to its limits). */
+  public void set(ParameterId parameter, double value) {
+    ParameterDef d = defs.get(parameter);
+    if (d == null) {
+      throw new IllegalArgumentException("Unknown or derived parameter " + parameter);
+    }
+    values.put(parameter, d.clamp(value));
+    recomputeDerived();
+  }
+
+  /** Copy of the stored (not derived) values, for saving. */
+  public Map<ParameterId, Double> storedValues() {
+    return new LinkedHashMap<>(values);
+  }
+
+  /**
+   * Put saved values back. Stored ids this build doesn't know are ignored and listed in the report
+   * (never silently dropped from the log); parameters missing from the save take their start value.
+   */
+  public RestoreReport restore(Map<ParameterId, Double> saved, long savedSimTicks) {
+    List<ParameterId> ignored = new ArrayList<>();
+    List<ParameterId> defaulted = new ArrayList<>();
+    for (ParameterId id : saved.keySet()) {
+      if (!defs.containsKey(id)) {
+        ignored.add(id);
+      }
+    }
+    for (ParameterDef d : defs.values()) {
+      Double v = saved.get(d.id());
+      if (v == null || v.isNaN()) {
+        values.put(d.id(), d.start());
+        defaulted.add(d.id());
+      } else {
+        values.put(d.id(), d.clamp(v));
+      }
+    }
+    this.simTicks = savedSimTicks;
+    recomputeDerived();
+    return new RestoreReport(ignored, defaulted);
+  }
+
+  /** What {@link #restore} did with ids that didn't match this build's parameters. */
+  public record RestoreReport(List<ParameterId> ignored, List<ParameterId> defaulted) {}
+
+  /**
+   * One line of a cause breakdown: {@code count} machines of one source, {@code ratePerSol} in
+   * total.
+   */
+  public record Cause(String source, int count, double ratePerSol) {}
+
   public IndexSnapshot snapshot() {
     Map<ParameterId, Double> all = new LinkedHashMap<>(values);
     all.putAll(derived);

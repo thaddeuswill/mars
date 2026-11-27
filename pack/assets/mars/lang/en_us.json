@@ -10,5 +10,15 @@
   "block.mars.oxygen_maker": "Oxygen Maker (CO2)",
   "block.mars.planetary_monitor": "Planetary Monitor",
   "block.mars.solar_panel.needs_space": "The solar array needs a clear 3 × 3 space around it.",
-  "block.mars.solar_panel_canopy": "Solar Panel"
+  "block.mars.solar_panel_canopy": "Solar Panel",
+  "monitor.title": "Planetary Monitor",
+  "monitor.sol": "Sol %s",
+  "monitor.no_planet": "The Monitor has no planet to read here.",
+  "monitor.row.pressure": "Pressure",
+  "monitor.row.temperature": "Temperature",
+  "monitor.row.water_boils": "Water boils at",
+  "monitor.water.no_liquid": "No liquid water at this pressure",
+  "monitor.trend.rising": "Rising",
+  "monitor.trend.steady": "Steady",
+  "monitor.trend.falling": "Falling"
 }

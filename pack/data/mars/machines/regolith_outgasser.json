@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "id": "mars:regolith_outgasser",
+  "contributions": [
+    { "parameter": "mars:pressure", "ratePerSol": 0.10 }
+  ],
+  "source": "docs/design/balance-sheet.md §2: Regolith Outgasser +0.10 kPa per sol each at standard pace. Balance number (invented, untested starting value). Power use and the Dome stable unlock are not modelled yet (docs/tech/stage2-plan.md slices 3 and 4)."
+}

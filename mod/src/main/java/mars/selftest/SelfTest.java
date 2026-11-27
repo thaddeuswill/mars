@@ -27,6 +27,7 @@ public final class SelfTest {
   private static final AtomicInteger FAILED = new AtomicInteger();
   private static final AtomicReference<String> FIRST_FAIL = new AtomicReference<>();
   private static volatile boolean serverStarted;
+  private static volatile boolean resultPrinted;
 
   private SelfTest() {}
 
@@ -83,6 +84,26 @@ public final class SelfTest {
     guard.start();
     out("boot guard on: boot timeout " + bootTimeout + " s, stall timeout " + stallTimeout + " s");
 
+    // Gradle reported BUILD SUCCESSFUL while the server had failed to start (Minecraft's Main logs
+    // the error and exits 0). If the JVM ends without a RESULT line, that is a failure.
+    Runtime.getRuntime()
+        .addShutdownHook(
+            new Thread(
+                () -> {
+                  if (!resultPrinted) {
+                    out(
+                        "RESULT FAIL reason=exited_without_result last_step="
+                            + LAST_STEP.get()
+                            + " passed="
+                            + PASSED.get()
+                            + " failed="
+                            + FAILED.get());
+                    System.out.flush();
+                    Runtime.getRuntime().halt(6);
+                  }
+                },
+                "mars-selftest-exit-check"));
+
     modBus.addListener((FMLCommonSetupEvent e) -> step("common_setup"));
     NeoForge.EVENT_BUS.addListener((ServerStartingEvent e) -> step("server_starting"));
     NeoForge.EVENT_BUS.addListener(
@@ -111,6 +132,7 @@ public final class SelfTest {
     int p = PASSED.get();
     int f = FAILED.get();
     String first = FIRST_FAIL.get();
+    resultPrinted = true;
     if (f == 0 && p > 0) {
       out("RESULT PASS passed=" + p + " failed=0");
     } else {

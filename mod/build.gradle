@@ -55,6 +55,8 @@ neoForge {
             gameDirectory = project.file('run-gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
             systemProperty 'mars.selftest', 'true'
+            // Test seam: this server has no Mars level, so any level counts as a planet here only.
+            systemProperty 'mars.selftest.anyLevelIsPlanet', 'true'
             systemProperty 'mars.selftest.bootTimeoutSec', (project.findProperty('marsBootTimeout') ?: '240')
             systemProperty 'mars.selftest.stallTimeoutSec', '120'
         }

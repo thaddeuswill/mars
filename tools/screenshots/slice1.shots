@@ -1,0 +1,26 @@
+# Stage 2 slice 1: the Planetary Monitor on the real Mars level (mars:planet_1), at 1280x720.
+# One step per line: cmd <command> | wait <ticks> | view x y z yaw pitch | hud on|off | fps | shot <name> | quit
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /mars monitor
+wait 40
+shot slice1_monitor_start
+cmd /setblock 2 64 4 mars:regolith_outgasser
+cmd /setblock 4 64 4 mars:regolith_outgasser
+cmd /mars index advance 10
+cmd /mars monitor
+wait 40
+shot slice1_monitor_two_outgassers_10_sols
+cmd /mars index advance 30
+cmd /mars monitor
+wait 40
+shot slice1_monitor_40_sols
+cmd /mars index get
+wait 20
+quit

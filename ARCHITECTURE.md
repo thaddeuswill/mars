@@ -632,6 +632,23 @@ Same footprint rule applies whatever the model approach, so switching later touc
 
 The **battery** (batch 3 wall pack, 16 px tall and 6 px deep) now uses one plain box that turns with facing (`{2,0,5,14,16,11}` north); GameTest `machines.battery_shape_turns`.
 
+### 2.19 Planet values, Outgasser, and Monitor: Stage 2 slice 1 (built)
+
+Plan and checks: [docs/tech/stage2-plan.md](docs/tech/stage2-plan.md). Fluid; the first slice is allowed to be thrown away except the pure core and its tests.
+
+| Piece | Design | Cost |
+|---|---|---|
+| **`PlanetSim`** (pure, `mars.index.sim`) | The Index model plus the step counter (one step per `pace.stepTicks` = 100) and a machine registry (type, packed block position) to contribution handles. `PlanetState` is its saved form: schema version, stored values, sim ticks, pending ticks, machine positions by type. A newer schema is refused; unknown ids and machine types are reported and kept out of the values (machine positions are kept so a later build loses nothing) | Per tick: one increment and compare. Per step: one add per contribution |
+| **Data** | `data/mars/parameters/*.json` and `data/mars/machines/*.json`, loaded by one reload listener (`IndexDefinitions`), so definitions are datapack data and reloadable. A machine file lists contributions (`parameter`, `ratePerSol`); a test checks the Outgasser rate against balance sheet §2 | Once per reload |
+| **Saving** | `PlanetData extends SavedData`, one per planet dimension (name `mars_planet`, in that dimension's data folder). A planet is any dimension in the `mars` namespace (`mars.core.Planets`) | A dirty flag set every step; written by the normal level save |
+| **Clock** | `LevelTickEvent.Post` calls `onServerTick()` for planet levels only, and not while the level's tick-rate manager is frozen (`/tick freeze` is the pause mechanism, §7.2). Note: `runsNormally()` is refreshed by the manager's own tick, so a freeze takes effect on the next tick; `/tick step` also advances the planet | One string compare per level per tick |
+| **Machines** | `RegolithOutgasserBlock`: `onPlace` and `onRemove` register and unregister the position. No block entity, no ticking. Chunk unload does **not** remove the contribution (planet-scale simulation does not depend on loaded chunks); this is a design call to confirm with the Game Designer | Zero per tick |
+| **Monitor** | `MonitorView` (pure) is built on the server from the real Index: rows for pressure, temperature, and the water line, each with a trend (steady below 1e-9 per sol) and cause lines. `MonitorPayload` carries it to the client (already formatted by `Fmt`); `MonitorScreen` only draws it. The client handler is registered through a lambda, never a method reference (a method reference loads the client class on a dedicated server and crashes the load) | One snapshot per open |
+| **Debug** | `/mars index get / advance <sols> / set <parameter> <value>` and `/mars monitor`, operators only, logged | — |
+| **Test seam** | System property `mars.selftest.anyLevelIsPlanet` (set only in the `gameTestServer` run configuration) makes any level a planet, because the GameTest server has no Mars level | — |
+
+Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after logging a failed start, so `runGameTestServer` once reported BUILD SUCCESSFUL on a server that never started. `SelfTest` now installs a shutdown hook that prints `RESULT FAIL reason=exited_without_result` and exits 6 if the JVM ends without a RESULT line (proved with a deliberately broken data file).
+
 ---
 
 ## 3. Coding Practices

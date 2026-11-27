@@ -42,8 +42,8 @@ public final class MarsMachines {
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
 
-  public static final DeferredBlock<MachineBlock> REGOLITH_OUTGASSER =
-      machine("regolith_outgasser", OUTGASSER, MachineBlock::new);
+  public static final DeferredBlock<RegolithOutgasserBlock> REGOLITH_OUTGASSER =
+      machine("regolith_outgasser", OUTGASSER, RegolithOutgasserBlock::new);
   public static final DeferredBlock<MachineBlock> REGOLITH_OVEN =
       machine("regolith_oven", OVEN, MachineBlock::new);
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
@@ -52,8 +52,8 @@ public final class MarsMachines {
       BLOCKS.register("battery", () -> new MachineBlock(machineProperties(), BATTERY));
   public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
       machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
-  public static final DeferredBlock<MachineBlock> PLANETARY_MONITOR =
-      machine("planetary_monitor", MONITOR, MachineBlock::new);
+  public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =
+      machine("planetary_monitor", MONITOR, PlanetaryMonitorBlock::new);
 
   /** Invisible filler under the round array's overhang; no item, not in the tab. */
   public static final DeferredBlock<SolarPanelCanopyBlock> SOLAR_PANEL_CANOPY =

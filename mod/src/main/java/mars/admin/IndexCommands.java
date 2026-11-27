@@ -1,0 +1,119 @@
+package mars.admin;
+
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import mars.core.ParameterId;
+import mars.monitor.MonitorSender;
+import mars.monitor.view.Fmt;
+import mars.planets.PlanetData;
+import mars.planets.PlanetManager;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Debug and admin commands for the Index (ARCHITECTURE.md 10), operators only (permission level 2).
+ * Every use is written to the server log with who ran it; once the learning layer exists these
+ * become {@code Cause.ADMIN} events.
+ */
+public final class IndexCommands {
+  private static final Logger LOG = LoggerFactory.getLogger("mars");
+  private static final SimpleCommandExceptionType NOT_A_PLANET =
+      new SimpleCommandExceptionType(Component.literal("This dimension is not a Mars planet."));
+
+  private IndexCommands() {}
+
+  public static void register(RegisterCommandsEvent event) {
+    event
+        .getDispatcher()
+        .register(
+            Commands.literal("mars")
+                .then(
+                    Commands.literal("index")
+                        .requires(s -> s.hasPermission(2))
+                        .then(Commands.literal("get").executes(IndexCommands::get))
+                        .then(
+                            Commands.literal("advance")
+                                .then(
+                                    Commands.argument("sols", DoubleArgumentType.doubleArg(0, 200))
+                                        .executes(IndexCommands::advance)))
+                        .then(
+                            Commands.literal("set")
+                                .then(
+                                    Commands.argument("parameter", StringArgumentType.word())
+                                        .then(
+                                            Commands.argument(
+                                                    "value", DoubleArgumentType.doubleArg())
+                                                .executes(IndexCommands::set)))))
+                .then(
+                    Commands.literal("monitor")
+                        .requires(s -> s.hasPermission(2))
+                        .executes(
+                            ctx -> {
+                              MonitorSender.open(ctx.getSource().getPlayerOrException());
+                              return 1;
+                            })));
+  }
+
+  private static PlanetData planet(CommandContext<CommandSourceStack> ctx)
+      throws CommandSyntaxException {
+    ServerLevel level = ctx.getSource().getLevel();
+    if (!PlanetManager.isPlanet(level)) {
+      throw NOT_A_PLANET.create();
+    }
+    return PlanetManager.data(level);
+  }
+
+  private static int get(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    PlanetData d = planet(ctx);
+    StringBuilder sb =
+        new StringBuilder("Index at sol " + Fmt.number(d.sim().model().sols(), 2) + ":");
+    d.sim()
+        .model()
+        .snapshot()
+        .asMap()
+        .forEach(
+            (id, v) ->
+                sb.append("\n  ")
+                    .append(id)
+                    .append(" = ")
+                    .append(Double.isNaN(v) ? "n/a" : Fmt.number(v, 3)));
+    ctx.getSource().sendSuccess(() -> Component.literal(sb.toString()), false);
+    return 1;
+  }
+
+  private static int advance(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    PlanetData d = planet(ctx);
+    double sols = DoubleArgumentType.getDouble(ctx, "sols");
+    d.sim().model().advanceSols(sols);
+    d.setDirty();
+    LOG.info("ADMIN {} advanced the planet by {} sols", ctx.getSource().getTextName(), sols);
+    ctx.getSource()
+        .sendSuccess(
+            () -> Component.literal("Advanced " + Fmt.number(sols, 2) + " sols (admin)."), true);
+    return 1;
+  }
+
+  private static int set(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    PlanetData d = planet(ctx);
+    String name = StringArgumentType.getString(ctx, "parameter");
+    ParameterId id = ParameterId.of(name.contains(":") ? name : "mars:" + name);
+    double value = DoubleArgumentType.getDouble(ctx, "value");
+    try {
+      d.sim().model().set(id, value);
+    } catch (IllegalArgumentException e) {
+      throw new SimpleCommandExceptionType(Component.literal(e.getMessage())).create();
+    }
+    d.setDirty();
+    LOG.info("ADMIN {} set {} to {}", ctx.getSource().getTextName(), id, value);
+    ctx.getSource().sendSuccess(() -> Component.literal("Set " + id + " (admin)."), true);
+    return 1;
+  }
+}

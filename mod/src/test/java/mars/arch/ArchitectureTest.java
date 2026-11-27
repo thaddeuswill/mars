@@ -19,7 +19,11 @@ class ArchitectureTest {
     noClasses()
         .that()
         .resideInAnyPackage(
-            "mars.core..", "mars.index.sim..", "mars.dimension.ice..", "mars.hazards.dust..")
+            "mars.core..",
+            "mars.index.sim..",
+            "mars.monitor.view..",
+            "mars.dimension.ice..",
+            "mars.hazards.dust..")
         .should()
         .dependOnClassesThat()
         .resideInAnyPackage("net.minecraft..", "net.neoforged..", "com.mojang..")

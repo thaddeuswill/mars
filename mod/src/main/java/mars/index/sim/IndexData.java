@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 import mars.core.ParameterId;
 
@@ -24,23 +26,35 @@ public final class IndexData {
 
   /** Load every {@code *.json} in {@code data/mars/parameters/}. */
   public static Loaded loadDirectory(Path parametersDir) throws IOException {
-    List<ParameterDef> defs = new ArrayList<>();
-    BoilingPoint bp = null;
-    try (Stream<Path> files = Files.list(parametersDir)) {
-      for (Path f : files.filter(p -> p.toString().endsWith(".json")).sorted().toList()) {
+    Map<String, JsonObject> files = new TreeMap<>();
+    try (Stream<Path> list = Files.list(parametersDir)) {
+      for (Path f : list.filter(p -> p.toString().endsWith(".json")).sorted().toList()) {
         try (Reader r = Files.newBufferedReader(f, StandardCharsets.UTF_8)) {
-          JsonObject o = JsonParser.parseReader(r).getAsJsonObject();
-          String kind = str(o, "kind", f);
-          if (kind.equals("stored")) {
-            defs.add(parameter(o, f.getFileName().toString()));
-          } else if (kind.equals("derived") && "antoine".equals(str(o, "formula", f))) {
-            bp = boilingPoint(o, f.getFileName().toString());
-          }
+          files.put(f.getFileName().toString(), JsonParser.parseReader(r).getAsJsonObject());
         }
       }
     }
+    return load(files, parametersDir.toString());
+  }
+
+  /**
+   * Build the definitions from parsed files (file name to content). Used by the directory loader
+   * and by the game's reload listener, so tests and the running game read data the same way.
+   */
+  public static Loaded load(Map<String, JsonObject> files, String where) {
+    List<ParameterDef> defs = new ArrayList<>();
+    BoilingPoint bp = null;
+    for (Map.Entry<String, JsonObject> e : new TreeMap<>(files).entrySet()) {
+      JsonObject o = e.getValue();
+      String kind = str(o, "kind", e.getKey());
+      if (kind.equals("stored")) {
+        defs.add(parameter(o, e.getKey()));
+      } else if (kind.equals("derived") && "antoine".equals(str(o, "formula", e.getKey()))) {
+        bp = boilingPoint(o, e.getKey());
+      }
+    }
     if (bp == null) {
-      throw new IllegalStateException("No Antoine boiling-point definition in " + parametersDir);
+      throw new IllegalStateException("No Antoine boiling-point definition in " + where);
     }
     return new Loaded(defs, bp);
   }

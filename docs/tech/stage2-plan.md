@@ -5,6 +5,8 @@
 
 **Status of this file:** the plan. Slice 1 is built the same day; its results are in `docs/team/reports/2026-11-27-technical-lead-stage2-slice1.md`. Later slices are plan only.
 
+**Changes made while building slice 1 (recorded, not hidden):** the freeze test had to call the tick hook by hand (freezing the whole test server stops the GameTest runner); a test-harness hole was found and closed (a failed server start exited 0; now exit 6, see ARCHITECTURE.md 2.19); the Monitor's long water phrase overflowed its panel in the first screenshot and now shrinks to fit. Risk rows R1 to R10 are answered in the report.
+
 ## 1. What Stage 2 must prove (from ROADMAP.md)
 
 The user can raise pressure, see the sky change, feel pressure to maintain it, and say why each change happened. The prototype may be thrown away; only the simulation core, its tests, and the session clock are meant to survive. Timebox in ROADMAP: about 300 team hours for the whole stage (Producer's budget 311), two build-and-play iterations at most.
