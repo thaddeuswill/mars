@@ -118,6 +118,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 52 | "continue i need you to be constantly working" | Resume Stage 2 verification and packaging | Build a playtest jar, run unit and boot checks, and run the twilight and frustum captures. | ✅ Built at `436a63b`; 172 unit tests and 81 boot checks passed. Both client captures inspected. |
 
+| 53 | "accept and cont with rec" | Accept the Stage 2 verification and continue the adopted Monitor plot recommendation | Codex owns option D plot scaling, goal line payload and rendering, wording and tests. | 🟡 Codex |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
