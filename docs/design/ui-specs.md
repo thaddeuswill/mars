@@ -326,6 +326,12 @@ Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`
 
 **Open items from this review.** Sky label and Dome stable entry: see the report, sections 4a and 4b.
 
+**Game Designer answers (coordinator, 2026-11-27, proposed, owner may change; no code touched).**
+1. `monitor.plot.goal.partial` "Pressure goal: %s": approved for every gate with a condition besides pressure (Phase 3 begins, Breathable). Not testable yet: only the two Phase 2 gates exist in `pack/data/mars/gates/`.
+2. "Polar CO2 frost" against "Polar frost": keep "Polar frost" until the panel width is measured in a screenshot; switch to "Polar CO2 frost" if the label plus number fit inside the 232 px panel. Needs a real-client check (not run).
+3. Next goal row with an unmet condition (new keys, wording invented, grade 6-7 screen not run): when pressure is at or above the gate's pressure condition but another condition is open, the row keeps the gate name and the detail line names the open condition with its number, for example `monitor.gate.phase_3_begins.waiting` "Pressure is high enough. Temperature: %s of 0 °C needed." The bar shows the open condition, not 100 %. The gate stays unlatched (gates latch only when all conditions hold). Do not show a time-to-goal estimate on this line (CR-T8: temperature never changes by itself yet, so any estimate would be a guess).
+4. Landing step 6 and the sky-label trigger: applied in `docs/design/messages/phase-1.md` (commit `ef25f0e`).
+
 ### Pause design (one line; **not built yet**)
 
 When the colony is paused, every player sees a **"Colony paused" chip** (two vertical bars plus the words, never colour only) at the top centre of the HUD, the sky and dust stay frozen, the Monitor shows "Sol N (paused)" and still opens read-only, and any action that would change the planet (place or break a machine, switch one on, craft) is **blocked with one log line**: "The colony is paused. Your teacher will resume it." (standard play: "The server owner paused the colony."). Movement, looking, the journal and the Monitor stay available so a paused class can still discuss what is on screen. Goals: C1 (nothing to fix while paused is honest), B1 (read the Monitor while time is stopped). The Technical Lead lists the HUD line and the blocked actions as not built (slice 2 report); they are slice 9 (classroom) work unless the owner wants them earlier.
