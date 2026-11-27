@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0g. UPDATE 2026-11-27 (Technical Lead): maker and reclaimer v3 checked in game, lamp level 14
+
+Jar `0.3.6-stage3-g` (sha256 `533a4140867be64730725ded210f382a12fe2536d6737c0bb032f40f415114e3`). Build and tests green, 113 boot checks `RESULT PASS`. v3 loads. Maker face 87 of 255 vs wall 87 to 117 (v2 was 30): reads as a gold box now; reclaimer label faces the room (no Java fix needed). Remaining gap to references: maker is a cross pattern not a 4x4 plate grid, short tubes; reclaimer has no rack clutter. Report `docs/team/reports/2026-11-27-technical-lead-maker-reclaimer-v3-check.md`; screenshots `tools/screenshots/out/20261127-234533/` (`mk_*`).
+
 ## 0f. UPDATE 2026-11-27 (Technical Lead): maker and reclaimer v2 checked in game
 
 Jar `0.3.5-stage3-f` (sha256 `9f72d2808e8ca88a83515fb4d0f8394402d05a70b521a05c24dae728cfcc59ed`). 113 boot checks `RESULT PASS`, build and tests green. v2 models load. Maker reads as a gold-framed box on a copper plate but still as a dark lattice at 2 to 4 m; reclaimer as a labelled box, not an ISS rack. Light 15 trial: maker face +23 %, tests still pass; reverted to 13, owner/Artist call. Reclaimer already has FACING in Java; blockstate variants wait for a one-sided model (Artist). Report `docs/team/reports/2026-11-27-technical-lead-maker-reclaimer-check.md`; screenshots `tools/screenshots/out/20261127-233726/` and `20261127-233906/` (script `habitat_makers.shots`).
