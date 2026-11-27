@@ -122,6 +122,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 54 | "looks beautiful for a beta test run thank you i accept and cont with your recommendations" | Accept the Monitor plot and start the Stage 3 classroom gate switch | Codex owns server config, placement guard, and its GameTest. | ✅ Built and verified. Default Creative bypass preserved. Setting `creativeGateBypass = false` enforces Dome stable for Creative placement. 174 unit tests and 82 boot checks passed. |
 
+| 55 | "cont" | Apply the approved Stage 3 wording follow-up | Codex owns only the approved English language keys for estimates, frost, and the starting grant. | 🟡 Codex |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
