@@ -34,8 +34,13 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public record Marker(double sol, String labelKey, String argKey) {}
 
   /** The pressure plot: points in time order, markers, and the unit for the axis label. */
-  public record History(List<Point> points, List<Marker> markers, String unit) {
-    public static final History EMPTY = new History(List.of(), List.of(), "kPa");
+  public record History(List<Point> points, List<Marker> markers, String unit, GoalLine goalLine) {
+    public static final History EMPTY = new History(List.of(), List.of(), "kPa", null);
+
+    /** History without a goal line. */
+    public History(List<Point> points, List<Marker> markers, String unit) {
+      this(points, markers, unit, null);
+    }
 
     /** True when there are at least two points and they span a sol or more (else it says so). */
     public boolean drawable() {
@@ -394,7 +399,11 @@ public record MonitorView(double sols, List<Row> rows, History history) {
                         .orElse("gate." + e.id().replace(':', '.')));
           });
     }
-    return new History(List.copyOf(pts), List.copyOf(marks), sim.model().unit(Ids.PRESSURE));
+    return new History(
+        List.copyOf(pts),
+        List.copyOf(marks),
+        sim.model().unit(Ids.PRESSURE),
+        GoalLine.next(sim.gates().defs(), sim.gates()::isLatched));
   }
 
   /**

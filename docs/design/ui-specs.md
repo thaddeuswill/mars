@@ -242,7 +242,7 @@ The frost line is a cause line like any other (Phase 1: open by default, re-scaf
 
 **Monitor option A keys (2026-11-27, straw-man, BACKLOG #38).** `monitor.event.placed.regolith_outgasser` "Outgasser placed" (one key per pressure-making machine; add one with each new machine); `monitor.plot.empty` "History starts after sol 1."; the plot reuses `monitor.sol` ("Sol %s") for the X axis and `gate.reached` ("Goal reached: %s") for goal markers; the Y axis shows the unit from the Index (kPa). The Instructional Designer should check "History starts after sol 1." and whether goal markers should read "Goal reached: Dome stable" or shorter. Pa appears only in the journal (not built).
 
-### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; not built)
+### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; built 2026-11-27 except the one-shot rescale line)
 
 Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and effect). Pillars: the planet is the quest log, every change is visible, compact before wide. Full comparison and reasoning: `docs/team/reports/2026-11-27-game-designer-plot-scale.md`.
 

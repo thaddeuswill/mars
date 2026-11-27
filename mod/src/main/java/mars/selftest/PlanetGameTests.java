@@ -318,7 +318,8 @@ public final class PlanetGameTests {
                 java.util.List.of(
                     new MonitorView.Marker(6.0, "monitor.event.placed.regolith_outgasser", null),
                     new MonitorView.Marker(9.0, "gate.reached", "gate.mars.dome_stable")),
-                "kPa"));
+                "kPa",
+                new mars.monitor.view.GoalLine("gate.mars.phase_2_begins", 5.0, false)));
     RegistryFriendlyByteBuf plotBuf =
         new RegistryFriendlyByteBuf(Unpooled.buffer(), level.registryAccess());
     MonitorPayload.CODEC.encode(plotBuf, new MonitorPayload(withPlot));
@@ -336,7 +337,8 @@ public final class PlanetGameTests {
                 + plotBuf.readableBytes(),
             gotPlot.view().equals(withPlot)
                 && plotBuf.readableBytes() == 0
-                && gotPlot.view().history().markers().size() == 2);
+                && gotPlot.view().history().markers().size() == 2
+                && gotPlot.view().history().goalLine().value() == 5.0);
 
     FakePlayer player =
         FakePlayerFactory.get(

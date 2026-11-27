@@ -1,6 +1,7 @@
 package mars.monitor.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,5 +24,22 @@ class PlotScaleTest {
     assertEquals(0, PlotScale.y(10, 10, 30));
     assertEquals(29, PlotScale.y(0, 10, 30));
     assertEquals(29, PlotScale.y(-3, 10, 30));
+  }
+
+  @Test
+  void goalTopsAreSixThirtySixAndNinetyWithNoJumpNearTheGoal() {
+    assertEquals(6, PlotScale.topFor(5.0, 0.6), 1e-9);
+    assertEquals(36, PlotScale.topFor(30.0, 12), 1e-9);
+    assertEquals(90, PlotScale.topFor(75.0, 40), 1e-9);
+    for (double v = 4.4; v <= 5.0; v += 0.05) {
+      assertEquals(6, PlotScale.topFor(5.0, v), 1e-9, "no step between 4.4 and 5 kPa: " + v);
+    }
+  }
+
+  @Test
+  void aValuePastTheGoalNeverLeavesThePlot() {
+    double top = PlotScale.topFor(30.0, 31.0);
+    assertTrue(top >= 31.0 * 1.1, "top " + top);
+    assertEquals(PlotScale.niceMax(0.6), PlotScale.topFor(null, 0.6), 0);
   }
 }

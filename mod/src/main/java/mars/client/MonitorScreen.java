@@ -92,10 +92,16 @@ public final class MonitorScreen extends Screen {
       for (MonitorView.Point p : hist.points()) {
         max = Math.max(max, p.value());
       }
-      topValue = PlotScale.niceMax(max);
-      topLabel = Fmt.number(topValue, 0) + " " + hist.unit();
+      mars.monitor.view.GoalLine gl = hist.goalLine();
+      topValue = PlotScale.topFor(gl == null ? null : gl.value(), max);
+      // With a goal line the top is the unlabelled frame; the goal tick and its label carry the
+      // number and the unit (ui-specs 9.1).
+      topLabel = gl == null ? Fmt.number(topValue, 0) + " " + hist.unit() : "";
     }
-    int gutter = Math.max(font.width("0"), font.width(topLabel)) + 4;
+    mars.monitor.view.GoalLine goalLine = hist.goalLine();
+    String goalTick = goalLine == null ? "" : Fmt.number(goalLine.value(), 0);
+    int gutter =
+        Math.max(font.width("0"), Math.max(font.width(topLabel), font.width(goalTick))) + 4;
     int px = left + gutter;
     int pw = right - px;
     if (pw < 20) {
@@ -139,6 +145,33 @@ public final class MonitorScreen extends Screen {
         g.fill(mx, yy, mx + 1, Math.min(yy + 2, top + h), CAUSE);
       }
     }
+    // Goal line (solid; event lines are dashed). Its label is drawn last, over a backing, and the
+    // event labels keep out of its span.
+    int gy = -1;
+    Component goalText = null;
+    int gx = 0;
+    int gw = 0;
+    int gty = 0;
+    if (goalLine != null && goalLine.value() <= topValue) {
+      gy = top + PlotScale.y(goalLine.value(), topValue, h);
+      g.fill(px, gy, px + pw, gy + 1, CAUSE);
+      g.drawString(font, goalTick, px - 3 - font.width(goalTick), gy - 4, CAUSE, false);
+      if (h >= 14) {
+        String num = goalTick + " " + hist.unit();
+        goalText =
+            goalLine.partial()
+                ? Component.translatable("monitor.plot.goal.partial", num)
+                : Component.translatable(
+                    "monitor.plot.goal", Component.translatable(goalLine.nameKey()), num);
+        gw = font.width(goalText);
+        gx = px + pw - gw - 1;
+        // Below the line when there is room under it, else above.
+        gty = gy + 2 + 9 <= top + h ? gy + 2 : gy - 9;
+        if (gx <= px || gty < top) {
+          goalText = null;
+        }
+      }
+    }
     boolean dots = n <= 24;
     for (int i = 0; i < n; i++) {
       if (i > 0) {
@@ -171,6 +204,9 @@ public final class MonitorScreen extends Screen {
       if (lx < px + 1) {
         continue;
       }
+      if (goalText != null && lx < gx + gw + 1 && lx + lw > gx - 1) {
+        continue; // keep clear of the goal label
+      }
       int[] yRange = seriesRange(sxs, sys, lx, lx + lw);
       boolean topFree = yRange[0] > top + 9;
       boolean bottomFree = yRange[1] < top + h - 10;
@@ -187,6 +223,10 @@ public final class MonitorScreen extends Screen {
       }
       g.drawString(font, label, lx, ty + 1, CAUSE, false);
       bandEnd[band] = lx + lw + 2;
+    }
+    if (goalText != null) {
+      g.fill(gx - 1, gty, gx + gw + 1, gty + 9, BACKING);
+      g.drawString(font, goalText, gx, gty + 1, CAUSE, false);
     }
     // Sol labels under the X axis: first, middle (when there is room), last.
     int ly = top + h + 2;

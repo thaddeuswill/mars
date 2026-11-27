@@ -42,6 +42,13 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
           b.writeUtf(m.labelKey());
           b.writeNullable(m.argKey(), FriendlyByteBuf::writeUtf);
         });
+    buf.writeNullable(
+        h.goalLine(),
+        (b, g) -> {
+          b.writeUtf(g.nameKey());
+          b.writeDouble(g.value());
+          b.writeBoolean(g.partial());
+        });
   }
 
   static MonitorView read(FriendlyByteBuf buf) {
@@ -55,7 +62,10 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
             b ->
                 new MonitorView.Marker(
                     b.readDouble(), b.readUtf(), b.readNullable(FriendlyByteBuf::readUtf)));
-    return new MonitorView(sols, rows, new MonitorView.History(points, markers, unit));
+    mars.monitor.view.GoalLine goal =
+        buf.readNullable(
+            b -> new mars.monitor.view.GoalLine(b.readUtf(), b.readDouble(), b.readBoolean()));
+    return new MonitorView(sols, rows, new MonitorView.History(points, markers, unit, goal));
   }
 
   private static void writeRow(FriendlyByteBuf buf, MonitorView.Row r) {

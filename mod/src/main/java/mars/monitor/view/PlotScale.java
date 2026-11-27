@@ -35,4 +35,18 @@ public final class PlotScale {
     double f = Math.max(0, Math.min(1, value / top));
     return (int) Math.round((1 - f) * (height - 1));
   }
+
+  /**
+   * Top of the plot (ui-specs 9.1): {@link GoalLine#TOP_FACTOR} times the goal. Only when the data
+   * would not fit under that (1.1 times the largest sample is higher) does it grow to the nice top
+   * for the data, so a value past the goal never leaves the plot. With no goal line the top is the
+   * nice top for the data.
+   */
+  public static double topFor(Double goal, double maxSample) {
+    if (goal == null) {
+      return niceMax(maxSample);
+    }
+    double top = GoalLine.TOP_FACTOR * goal;
+    return maxSample * 1.1 > top ? Math.max(top, niceMax(maxSample)) : top;
+  }
 }
