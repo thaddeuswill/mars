@@ -8,7 +8,7 @@
   "sun_scale": 0.66,
   "dome_gradient_exponent": 0.6,
   "_invented": "dome_gradient_exponent (how fast the sky goes from horizon to zenith colour) and the use of one night colour for the whole dome are the implementer's choices; the Lead Artist reviewed both on 2026-11-27 and CONFIRMED them (docs/team/reports/2026-11-27-artist-sky-review.md), still invented values, not sourced; smoothing_s 30 is the artist's value (section 1.3).",
-  "_storm": "AT-1 storm look and pre-storm haze, docs/art/atmosphere-plan.md 5.2 (Lead Artist). All values INVENTED estimates. mix: share of the target colour at full strength (OKLab); dim: linear-light loss at full strength; fog_end_target and fog_end_floor_blocks: the fog end (fraction of render distance, and a floor in blocks) at full strength; sun_alpha_min: sun alpha at full strength; star_fade: share of star alpha lost at full strength; haze_*: the pre-storm haze (fog end cut and fog colour mix at haze 1); ramp_in_s and ramp_out_s: how fast the shown strength rises and falls (60 s in, 90 s out, planetary-keyframes 3.7); haze_window_sols: the haze rises over this long before onset (the server mirrors it in SkySync).",
+  "_storm": "AT-1 storm look and pre-storm haze, docs/art/atmosphere-plan.md 5.2 (Lead Artist). All values INVENTED estimates. mix: share of the target colour at full strength (OKLab); dim: linear-light loss at full strength; fog_end_target and fog_end_floor_blocks: the fog end (fraction of render distance, and a floor in blocks) at full strength; sun_alpha_min: sun alpha at full strength (plan 0.30; lowered to 0.10 because the SME note says the real 2018 storm sun was a pinprick, INVENTED); star_fade: share of star alpha lost at full strength; haze_*: the pre-storm haze (fog end cut and fog colour mix at haze 1); ramp_in_s and ramp_out_s: how fast the shown strength rises and falls (60 s in, 90 s out, planetary-keyframes 3.7); haze_window_sols: the haze rises over this long before onset (the server mirrors it in SkySync).",
   "storm": {
     "sky_target": "#9A6A48",
     "fog_target": "#A8744E",
@@ -16,7 +16,7 @@
     "dim": 0.18,
     "fog_end_target": 0.18,
     "fog_end_floor_blocks": 16,
-    "sun_alpha_min": 0.30,
+    "sun_alpha_min": 0.10,
     "star_fade": 0.9,
     "haze_fog_end_cut": 0.10,
     "haze_fog_mix": 0.06,

@@ -201,10 +201,10 @@ class SkyKeyframesTest {
     SkyKeyframes kf = real();
     SkyKeyframes.Look calm = kf.sample(0.6);
     SkyKeyframes.Look full = kf.withStorm(calm, 1, 0);
-    // fog end 0.18, start 0, sun alpha 0.30, stars 0.1 (plan 5.2)
+    // fog end 0.18, start 0, sun alpha 0.10 (plan 0.30, lowered per SME), stars 0.1
     assertEquals(0.18, full.fogEnd(), 1e-12);
     assertEquals(0, full.fogStart(), 1e-12);
-    assertEquals(0.30, kf.sunAlpha(1), 1e-12);
+    assertEquals(0.10, kf.sunAlpha(1), 1e-12);
     assertEquals(0.1, kf.starFactor(1), 1e-12);
     // sky: 85 % toward #9A6A48 and 18 % darker in linear light, so darker than the calm sky
     assertTrue(Oklab.fromRgb(full.horizon())[0] < Oklab.fromRgb(calm.horizon())[0]);

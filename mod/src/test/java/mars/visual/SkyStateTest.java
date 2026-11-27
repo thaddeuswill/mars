@@ -135,7 +135,7 @@ class SkyStateTest {
     assertTrue(DustMath.motesPerTick(0.6, 1, 1) > 1.0, "a full storm is dense");
     assertTrue(DustMath.pressureFactor(20) < 1 && DustMath.pressureFactor(20) > 0.5);
     assertEquals(0, DustMath.streaksPerTick(0.6, 1, 1), 0, "no streaks in a storm");
-    assertEquals(0.01, DustMath.streaksPerTick(0.6, 0, 1), 1e-12, "one per 5 s");
+    assertEquals(0.05, DustMath.streaksPerTick(0.6, 0, 1), 1e-12, "about one a second in a gust");
   }
 
   @Test
@@ -148,5 +148,28 @@ class SkyStateTest {
     assertEquals(0, e[1], 1e-12);
     double[] w = DustMath.windVector(110); // east-south-east: +x and a little +z
     assertTrue(w[0] > 0.9 && w[1] > 0.3 && w[1] < 0.4);
+  }
+
+  @Test
+  void streaksComeInRareGustsWithLongCalmsBetween() {
+    java.util.Random r = new java.util.Random(7);
+    DustMath.Gusts g = new DustMath.Gusts(r.nextDouble());
+    int gustTicks = 0;
+    int total = 20 * 3600; // an hour of play
+    int gusts = 0;
+    boolean was = false;
+    for (int i = 0; i < total; i++) {
+      boolean now = g.tick(r.nextDouble());
+      if (now) {
+        gustTicks++;
+      }
+      if (now && !was) {
+        gusts++;
+      }
+      was = now;
+    }
+    double share = gustTicks / (double) total;
+    assertTrue(share > 0.02 && share < 0.12, "gusts fill a small share of time: " + share);
+    assertTrue(gusts >= 20 && gusts <= 80, "gusts per hour " + gusts);
   }
 }

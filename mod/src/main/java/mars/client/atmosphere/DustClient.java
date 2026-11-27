@@ -20,8 +20,9 @@ import org.joml.Vector3f;
  * MarsMod} with a lambda (dedicated-server safe). Follows the player's Particles setting (all,
  * decreased = half, minimal = none).
  *
- * <p>Cost per client tick: a few random numbers, and per spawned particle one block-state and one
- * sky check; about 0.2 motes per tick on a clear day, at most about 1.4 in a full storm.
+ * <p>Cost per client tick: a few random numbers (and a gust clock tick), and per spawned particle
+ * one block-state and one sky check; about 0.2 motes per tick on a clear day, at most about 1.4 in
+ * a full storm.
  */
 public final class DustClient {
   private static final DustParticleOptions LIGHT =
@@ -41,6 +42,7 @@ public final class DustClient {
   private static final double STORM_SPEED = 0.35;
 
   private static double pressure = 0.6;
+  private static final DustMath.Gusts GUSTS = new DustMath.Gusts(Math.random());
 
   private DustClient() {}
 
@@ -99,7 +101,10 @@ public final class DustClient {
           wz + (rnd.nextDouble() - 0.5) * 0.05);
     }
 
-    if (wind != null && rnd.nextDouble() < 2 * DustMath.streaksPerTick(pressure, storm, factor)) {
+    boolean gust = GUSTS.tick(rnd.nextDouble());
+    if (gust
+        && wind != null
+        && rnd.nextDouble() < 2 * DustMath.streaksPerTick(pressure, storm, factor)) {
       streak(level, rnd, wind, px, pz);
     }
   }

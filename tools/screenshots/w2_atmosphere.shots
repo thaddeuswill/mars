@@ -1,0 +1,31 @@
+# W2 atmosphere: far haze retune (AT-2), dust motes and streaks (AT-3), storm look (AT-1).
+# Same places as w1_terrain.shots so the haze can be compared with the old pictures.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+view 120 120 -110 225 22
+wait 300
+shot w2_01_calm_large_crater
+view -520 110 150 115 5
+wait 400
+shot w2_02_calm_mesa
+view 40 96 90 321 12
+wait 300
+shot w2_03_calm_dunes_dust
+view 0.5 81 0.5 250 2
+wait 200
+shot w2_04_calm_pad_east
+cmd /mars storm start
+wait 1500
+shot w2_05_storm_pad_east
+view 0.5 81 0.5 135 2
+wait 40
+shot w2_06_storm_pad_south_east
+cmd /mars storm end
+wait 1800
+shot w2_07_after_storm
+quit

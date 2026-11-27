@@ -13,8 +13,48 @@ public final class DustMath {
   /** Storm motes at full strength: with a life of about 1.5 s this keeps about 40 alive. */
   public static final double STORM_MOTES_PER_TICK = 1.2;
 
-  /** One wind streak per 5 s on plain ground at 0.6 kPa. */
-  public static final double STREAKS_PER_TICK = 0.01;
+  /**
+   * Streak attempts per tick during a gust (about one per second; half are dropped off dune sand).
+   * Between gusts there are none: streaks are rare and bursty (SME atmosphere pass, 2026-11-27).
+   * INVENTED.
+   */
+  public static final double STREAKS_PER_TICK = 0.05;
+
+  /** A gust lasts 5 to 8 s and the calm before the next one 45 to 120 s. INVENTED. */
+  public static final int GUST_MIN_TICKS = 100;
+
+  public static final int GUST_MAX_TICKS = 160;
+  public static final int CALM_MIN_TICKS = 900;
+  public static final int CALM_MAX_TICKS = 2400;
+
+  /**
+   * The gust clock: calm, then a gust, then calm again. Pure and driven by a unit random number so
+   * a test can run it.
+   */
+  public static final class Gusts {
+    private int ticksLeft;
+    private boolean gusting;
+
+    public Gusts(double firstUnit) {
+      ticksLeft = span(CALM_MIN_TICKS, CALM_MAX_TICKS, firstUnit);
+    }
+
+    /** One client tick; {@code unit} is a fresh random number in 0..1. Returns true in a gust. */
+    public boolean tick(double unit) {
+      if (--ticksLeft <= 0) {
+        gusting = !gusting;
+        ticksLeft =
+            gusting
+                ? span(GUST_MIN_TICKS, GUST_MAX_TICKS, unit)
+                : span(CALM_MIN_TICKS, CALM_MAX_TICKS, unit);
+      }
+      return gusting;
+    }
+
+    private static int span(int min, int max, double unit) {
+      return min + (int) Math.round(unit * (max - min));
+    }
+  }
 
   private DustMath() {}
 
@@ -38,7 +78,10 @@ public final class DustMath {
     return (MOTES_PER_TICK * pressureFactor(kpa) + STORM_MOTES_PER_TICK * s) * particleFactor;
   }
 
-  /** Streak attempts per tick; a storm hides streaks in its own dust, so they stop. */
+  /**
+   * Streak attempts per tick; a storm hides streaks in its own dust, so they stop. Only counted
+   * while a gust runs.
+   */
   public static double streaksPerTick(double kpa, double storm, double particleFactor) {
     double s = Math.max(0, Math.min(1, storm));
     return STREAKS_PER_TICK * pressureFactor(kpa) * (1 - s) * particleFactor;
