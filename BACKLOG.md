@@ -79,6 +79,8 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 
 Use a unit test for the supply-to-throughput calculation and GameTests for block registration and planet behavior. These are acceptance targets. Checks have not been run against slice 3.
 
+| 36 | "i mean you gotta find something to do while you wait" | Continue independent work while the Technical Lead implements power | Codex owns the Stage 2 status refresh in `ROADMAP.md`. | 🟡 claimed by Codex |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
