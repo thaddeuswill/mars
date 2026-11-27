@@ -81,15 +81,15 @@ docs/                       team reports, design, learning, science, tech, art, 
 
 ## 6. Current state and next tasks (full detail in `HANDOFF.md`; update both when it changes)
 
-State as of 2026-11-27:
-- Stage 1 (mod skeleton, empty Mars world) done.
-- Stage 2 slice 1 done and accepted: planet values saved per dimension, Regolith Outgasser raises pressure by 0.10 kPa per sol (data file), Planetary Monitor screen, `/mars index get|advance|set`, `/mars monitor`. 61 unit tests and 35 boot checks passed when last run.
-- Round solar array: 3 x 3 footprint (centre block plus 8 invisible canopy cells), loot tables, 6 dust-stage models. Models were raised to put the disc top at 16 px; **the Java shape code is being updated to match** (canopy slice y 15 to 16 px). Check `git log` and `BACKLOG.md` #28 and #32 before touching this; the Technical Lead agent may have it in progress.
-- Monitor screen was shrunk (owner said panels too big); new screenshots pending.
+State as of 2026-11-27 (see HANDOFF.md for detail):
+- Stage 1 done. Stage 2 slice 1 (planet values, Outgasser, Monitor, `/mars index`) and slice 2 (session clock, pause, invariant I-3, chunk-unload rule) done and accepted by the owner. 67 unit tests, 41 boot checks.
+- Round solar array done: 3 x 3 footprint, raised models, shape code matches (canopy slice y 15..16 px).
+- Monitor screen shrunk to 232 px; accepted.
+- In progress (Claude Technical Lead): slice 3, power (solar panel and battery). Check `git log` and `BACKLOG.md` before touching `machines/`.
 
 Good tasks for you (check BACKLOG.md first, then claim by adding a line there):
-1. Stage 2 slice 2 per `docs/tech/stage2-plan.md`: session clock and pause (invariant I-3), Outgasser keeps contributing while its chunk is unloaded (decided). Tests first.
-2. Remaining Stage 2 slices: power (solar panel and battery), the pressure machine chain, "Dome stable" unlock.
+1. (Claimed by Claude) Stage 2 slice 3: power (solar panel and battery).
+2. After that: the pressure machine chain and the "Dome stable" unlock.
 3. Technical Lead leftovers: forecast JSON `resolve_source` and the CR-F10 test; Monitor minimum view; a frustum-culling test for an array crossing a chunk border.
 4. Pure-Java unit tests and ArchUnit rules for any new simulation code.
 Do **not** pick: art direction, story, learning objectives, EULA, external reviewers. Those are the owner's or other roles'.
