@@ -197,5 +197,37 @@ def main():
            "Missing in the composite: the roof dish and vent (models exist, roof_dish.json and roof_vent.json), the entry steps (layout change, not made)."])
 
 
+def board09():
+    """09 hull light: real lamp crops | flat texture | ceiling seen from below (Blender) | lit-room mock-up (Pillow)."""
+    els = []
+    for gx in range(3):
+        for gy in range(3):
+            tx = "hull_light" if (gx, gy) == (1, 1) else "hull_plate"
+            els.append({"from": [gx * 16 - 16, 0, gy * 16 - 16], "to": [gx * 16, 16, gy * 16],
+                        "faces": {"down": {"texture": "#" + tx}, "up": {"texture": "#hull_plate"}}})
+    m = {"textures": {"hull_light": "mars:block/hull_light", "hull_plate": "mars:block/hull_plate"}, "elements": els}
+    up = blender(m, "bottom", "ceiling", ["--transparent", "--size", "700"])
+    flat_t = flat([tex("hull_light"), tex("hull_light_off")], 12)
+    row = Image.new("RGBA", (6 * 16, 3 * 16), (0, 0, 0, 255))
+    for r in range(3):
+        for c in range(6):
+            lamp = (c, r) in ((1, 1), (4, 1))
+            t = tex("hull_light" if lamp else "hull_plate")
+            if not lamp:
+                t = shade(t, 0.7).convert("RGBA")  # plates in room light; lamps stay at full brightness
+            row.alpha_composite(t, (c * 16, r * 16))
+    row = row.resize((6 * 16 * 5, 3 * 16 * 5), Image.NEAREST)
+    board("09_hull_light", "HULL LIGHT: ISS lab light box (ref #8/#9 upper right) | CHAPEA lamps (ref chapea_sandbox_360) | our ceiling panel",
+          [("REF: ISS rack-open photo, lit light box (blurred, top right)", crop("iss_wrs_rack_open_fincke.jpg", (660, 140, 900, 280))),
+           ("REF: CHAPEA dome: even white shell, small wall lamps", crop("chapea_sandbox_360.jpg", (0, 120, 240, 260))),
+           ("NEW lit | off (spare), flat 12x", flat_t),
+           ("NEW ceiling from below (Blender): 1 light in 3x3 plates", up.convert("RGB")),
+           ("NEW two lights in a plate ceiling (flat, 70 % shade)", row.convert("RGB"))],
+          ["Reproduced: a flat cream-white diffuser in an aluminium bezel with a dark seam and corner screws, same seam and palette as hull_plate; reads as a lit rectangle in the ceiling.",
+           "Not reproduced: the references show NO flat ceiling panel: ISS light is a blurred lit box edge, CHAPEA lights are small round spot lamps on an evenly white shell. The panel is a stylised stand-in.",
+           "Not reproduced: real emission (the texture is only bright; the block light level does the work), LED strips, wiring, the lamp body depth (full cube, flush ceiling). Blender uses flat shading, not Minecraft lighting."])
+
+
 if __name__ == "__main__":
     main()
+    board09()

@@ -3,7 +3,7 @@
 Usage:
   blender -b -P render_model.py -- <model.json> <texture_dir> <out.png> [view] [options]
 
-  view     iso (default) | front | top | side | back
+  view     iso (default) | front | top | bottom | side | back
   options  --shading mc|lit   mc (default): flat, unlit faces with Minecraft's fixed per-face
                               brightness (up 1.0, north/south 0.8, east/west 0.6, down 0.5);
                               lit: Blender sun light (soft shadows, not like the game)
@@ -149,7 +149,7 @@ sc.collection.objects.link(cam); sc.camera = cam
 d = 4
 # Blender +y = Minecraft north. iso looks at the north (front) and east faces from above.
 pos = {"iso": (d * 0.8, d, d * 0.8), "front": (0, d, 0.5), "back": (0, -d, 0.5),
-       "side": (d, 0, 0.5), "top": (0, 0.001, d)}[view]
+       "side": (d, 0, 0.5), "top": (0, 0.001, d), "bottom": (0, 0.001, -d)}[view]
 target = mathutils.Vector((0.25 if opts["ref"] else 0, 0, 0.5 if view != "top" else 0))
 if LARGE:
     right = (rx + 9.6) if opts["ref"] else MAXX
@@ -157,6 +157,8 @@ if LARGE:
     target = mathutils.Vector((((MINX + right) / 2 - 8) / 16, 0, (top_y / 2) / 16 if view != "top" else 0))
 cam.location = mathutils.Vector(pos) + mathutils.Vector((target.x, 0, 0))
 cam.rotation_euler = (target - cam.location).to_track_quat("-Z", "Y").to_euler()
+if view == "bottom":  # looking up at a ceiling; the camera sits under the model (use --transparent: no ground)
+    cam.location = (target.x, 0, -d); cam.rotation_euler = (math.pi, 0, 0)
 if view == "top":
     cam.location = (target.x, 0, d); cam.rotation_euler = (0, 0, 0)  # north at the top of the image
 sc.render.engine = "CYCLES"; sc.cycles.samples = 16 if opts["shading"] == "mc" else 32
