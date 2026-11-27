@@ -1,0 +1,37 @@
+# Raised round array: does the selection outline sit on the model? (disc y 15..16 px)
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock -2 64 6 mars:solar_panel[facing=north,dust_stage=2]
+wait 60
+cmd /gamemode creative
+# NOTE: view y is the player's feet; the eye is 1.62 higher.
+# 1. aim at the disc over a canopy cell (the rim)
+view -2.3 64.88 2.0 0 23.6
+hud on
+wait 60
+shot outline_disc_rim_canopy_cell
+wait 20
+# 2. aim at the disc over the centre block
+view -1.5 64.88 2.5 0 21
+hud on
+wait 60
+shot outline_disc_centre
+wait 20
+# 3. aim low, under the overhang edge, at a leg
+view -1.5 64.0 2.0 0 13.5
+hud on
+wait 60
+shot outline_leg
+wait 20
+# 4. side view of the whole array at disc height for the model vs. the outline
+view -1.5 64.0 0.5 0 6
+hud on
+wait 60
+shot outline_side_view
+wait 20
+quit
