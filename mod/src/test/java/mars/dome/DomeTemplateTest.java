@@ -72,11 +72,74 @@ class DomeTemplateTest {
     assertEquals(1, n.get(DomeTemplate.Kind.BATTERY));
     assertEquals(5, n.get(DomeTemplate.Kind.BED_FOOT), "5 bunks");
     assertEquals(5, n.get(DomeTemplate.Kind.BED_HEAD));
-    // Layout sheet section 8: glass is 10 window blocks plus 36 annex roof cells.
-    assertEquals(46, n.get(DomeTemplate.Kind.GLASS));
+    // Layout sheet section 8: glass is 10 window blocks plus 36 annex roof cells (ribbed glass).
+    assertEquals(10, n.get(DomeTemplate.Kind.GLASS));
+    assertEquals(36, n.get(DomeTemplate.Kind.GLASS_RIBBED));
     // The sheet says about 728 hull plates in walls, roof and lintels, plus about 235 floor cells.
-    int walls = n.get(DomeTemplate.Kind.HULL);
+    int walls =
+        n.get(DomeTemplate.Kind.HULL)
+            + n.get(DomeTemplate.Kind.HULL_BASE)
+            + n.get(DomeTemplate.Kind.HULL_RIM);
     assertTrue(walls > 700 && walls < 1200, "hull plates incl. floor: " + walls);
+  }
+
+  @Test
+  void trimCoursesAreOnThePerimeterOnly() {
+    var cells = DomeTemplate.cells(3, true);
+    int base = 0;
+    int rim = 0;
+    for (var c : cells) {
+      boolean edge =
+          c.x() == 0
+              || c.x() == DomeTemplate.SIZE_X - 1
+              || c.z() == 0
+              || c.z() == DomeTemplate.SIZE_Z - 1;
+      switch (c.kind()) {
+        case HULL_BASE -> {
+          base++;
+          assertEquals(1, c.y(), "base course is y 1");
+          assertTrue(edge, "base course on the perimeter: " + c);
+          char ch = DomeTemplate.plan(c.x(), c.z());
+          assertTrue("#*E".indexOf(ch) >= 0, "never under a door or glass cell: " + ch);
+        }
+        case HULL_RIM -> {
+          rim++;
+          assertEquals(DomeTemplate.SIZE_Y - 1, c.y(), "roof rim is y 4");
+          assertTrue(edge, "rim on the perimeter: " + c);
+        }
+        case GLASS_RIBBED -> assertEquals(DomeTemplate.SIZE_Y - 1, c.y(), "ribbed glass is roof");
+        default -> {}
+      }
+      if (edge && c.y() == 1 && DomeTemplate.plan(c.x(), c.z()) == '#') {
+        assertEquals(DomeTemplate.Kind.HULL_BASE, c.kind(), "perimeter wall at y1 " + c);
+      }
+    }
+    // Roof perimeter: 2 * (23 + 16) - 4 cells.
+    assertEquals(2 * (DomeTemplate.SIZE_X + DomeTemplate.SIZE_Z) - 4, rim);
+    assertTrue(base > 30, "base course count " + base);
+    // The cracked plate keeps its own kind and the roof fixtures are outside the template.
+    assertEquals(1, cells.stream().filter(c -> c.kind() == DomeTemplate.Kind.CRACKED).count());
+    assertTrue(cells.stream().allMatch(c -> c.y() < DomeTemplate.SIZE_Y));
+    assertEquals(5, DomeTemplate.ROOF_FIXTURE_Y);
+    // Fixtures stand above the shelter's roof, not above Hab B or Ops.
+    for (int[] f :
+        new int[][] {
+          {DomeTemplate.DISH_X, DomeTemplate.DISH_Z}, {DomeTemplate.VENT_X, DomeTemplate.VENT_Z}
+        }) {
+      assertTrue(f[0] >= 1 && f[0] <= 6 && f[1] >= 1 && f[1] <= 7, "above the shelter");
+    }
+  }
+
+  @Test
+  void roofFixturesAboveASealedRoofDoNotChangeTheSeal() {
+    // A fixture at y 5 is outside the template box, so the probe calls it outside, as air is.
+    var p = probe(DomeTemplate.cells(5, false));
+    var r = fill(p, seed(DomeTemplate.SPAWN_X, DomeTemplate.SPAWN_Z));
+    assertEquals(SealCheck.Status.SEALED, r.status());
+    Probe withFixtures =
+        (x, y, z) -> y == OY + DomeTemplate.ROOF_FIXTURE_Y ? Probe.Cell.OPEN : p.at(x, y, z);
+    assertEquals(
+        r.volume(), fill(withFixtures, seed(DomeTemplate.SPAWN_X, DomeTemplate.SPAWN_Z)).volume());
   }
 
   @Test

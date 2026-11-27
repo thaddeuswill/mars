@@ -102,11 +102,24 @@ public final class StarterDome {
         level.setBlock(origin.offset(c.x(), c.y(), c.z()), s, Block.UPDATE_CLIENTS);
       }
     }
+    placeRoofFixtures(level, origin);
     placeSolarPad(level, origin);
     // The storm drained the tanks: start fills (balance sheet 2d.2), once, after every tank exists.
     var planet = mars.planets.PlanetManager.data(level);
     planet.sim().startLifeSupport();
     planet.setDirty();
+  }
+
+  /** One dish and one vent on the shelter roof (y 5, above the sealed roof; no sealing role). */
+  private static void placeRoofFixtures(ServerLevel level, BlockPos origin) {
+    level.setBlock(
+        origin.offset(DomeTemplate.DISH_X, DomeTemplate.ROOF_FIXTURE_Y, DomeTemplate.DISH_Z),
+        HullBlocks.ROOF_DISH.get().defaultBlockState(),
+        Block.UPDATE_CLIENTS);
+    level.setBlock(
+        origin.offset(DomeTemplate.VENT_X, DomeTemplate.ROOF_FIXTURE_Y, DomeTemplate.VENT_Z),
+        HullBlocks.ROOF_VENT.get().defaultBlockState(),
+        Block.UPDATE_CLIENTS);
   }
 
   /** Pad 1 of the east apron: one array at dust stage 1 (balance sheet 2d.2). */
@@ -137,6 +150,9 @@ public final class StarterDome {
     return switch (c.kind()) {
       case AIR -> null;
       case HULL -> HullBlocks.HULL_PLATE.get().defaultBlockState();
+      case HULL_BASE -> HullBlocks.HULL_PLATE_BASE.get().defaultBlockState();
+      case HULL_RIM -> HullBlocks.HULL_PLATE_RIM.get().defaultBlockState();
+      case GLASS_RIBBED -> HullBlocks.HULL_GLASS_RIBBED.get().defaultBlockState();
       case GLASS -> HullBlocks.HULL_GLASS.get().defaultBlockState();
       case CRACKED -> HullBlocks.HULL_PLATE_CRACKED.get().defaultBlockState();
       case DOOR ->

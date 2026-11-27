@@ -70,15 +70,83 @@ public final class HullBlocks {
                       .sound(SoundType.METAL)
                       .noOcclusion()));
 
+  public static final DeferredBlock<HullPlateBlock> HULL_PLATE_BASE = plate("hull_plate_base");
+  public static final DeferredBlock<HullPlateBlock> HULL_PLATE_RIM = plate("hull_plate_rim");
+
+  /** Hab B roof glass: ribbed greenhouse panes (Artist, habitat restyle). Airtight like glass. */
+  public static final DeferredBlock<HullGlassBlock> HULL_GLASS_RIBBED =
+      BLOCKS.register("hull_glass_ribbed", () -> new HullGlassBlock(glassProperties()));
+
+  /** Roof fixtures: decoration only, not airtight, no sealing role. */
+  public static final DeferredBlock<RoofFixtureBlock> ROOF_VENT =
+      BLOCKS.register(
+          "roof_vent",
+          () ->
+              new RoofFixtureBlock(
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .strength(2.0f, 6.0f)
+                      .sound(SoundType.METAL)
+                      .noOcclusion(),
+                  RoofFixtureBlock.VENT_SHAPE));
+
+  public static final DeferredBlock<RoofFixtureBlock> ROOF_DISH =
+      BLOCKS.register(
+          "roof_dish",
+          () ->
+              new RoofFixtureBlock(
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .strength(2.0f, 6.0f)
+                      .sound(SoundType.METAL)
+                      .noOcclusion(),
+                  RoofFixtureBlock.DISH_SHAPE));
+
+  private static DeferredBlock<HullPlateBlock> plate(String id) {
+    return BLOCKS.register(
+        id,
+        () ->
+            new HullPlateBlock(
+                BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(3.0f, 12.0f)
+                    .sound(SoundType.METAL)));
+  }
+
+  private static BlockBehaviour.Properties glassProperties() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(MapColor.NONE)
+        .strength(1.5f, 12.0f)
+        .sound(SoundType.GLASS)
+        .noOcclusion()
+        .isValidSpawn((s, l, p, e) -> false)
+        .isRedstoneConductor((s, l, p) -> false)
+        .isSuffocating((s, l, p) -> false)
+        .isViewBlocking((s, l, p) -> false);
+  }
+
   static {
     ITEMS.registerSimpleBlockItem("hull_plate", HULL_PLATE, new Item.Properties());
     ITEMS.registerSimpleBlockItem("hull_glass", HULL_GLASS, new Item.Properties());
     ITEMS.registerSimpleBlockItem("hull_door", HULL_DOOR, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("hull_plate_base", HULL_PLATE_BASE, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("hull_plate_rim", HULL_PLATE_RIM, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("hull_glass_ribbed", HULL_GLASS_RIBBED, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("roof_vent", ROOF_VENT, new Item.Properties());
+    ITEMS.registerSimpleBlockItem("roof_dish", ROOF_DISH, new Item.Properties());
   }
 
   /** In creative-tab order. */
   public static final List<DeferredBlock<? extends Block>> ALL =
-      List.of(HULL_PLATE, HULL_GLASS, HULL_DOOR);
+      List.of(
+          HULL_PLATE,
+          HULL_PLATE_BASE,
+          HULL_PLATE_RIM,
+          HULL_GLASS,
+          HULL_GLASS_RIBBED,
+          HULL_DOOR,
+          ROOF_VENT,
+          ROOF_DISH);
 
   private HullBlocks() {}
 

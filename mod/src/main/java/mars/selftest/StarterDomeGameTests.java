@@ -3,6 +3,7 @@ package mars.selftest;
 import mars.dome.DomeSeals;
 import mars.dome.DomeTemplate;
 import mars.dome.SealCheck;
+import mars.hull.Airtight;
 import mars.hull.HullBlocks;
 import mars.hull.StarterDome;
 import mars.hull.WorldProbe;
@@ -90,6 +91,39 @@ public final class StarterDomeGameTests {
                       && d.sim().machineCount("mars:battery") == 1
                       && d.sim().machineCount("mars:solar_panel") == 1
                       && level.getBlockState(crack).is(HullBlocks.HULL_PLATE_CRACKED.get()));
+          BlockPos dish =
+              origin.offset(DomeTemplate.DISH_X, DomeTemplate.ROOF_FIXTURE_Y, DomeTemplate.DISH_Z);
+          BlockPos vent =
+              origin.offset(DomeTemplate.VENT_X, DomeTemplate.ROOF_FIXTURE_Y, DomeTemplate.VENT_Z);
+          BlockPos rim = origin.offset(0, 4, 5);
+          BlockPos base = origin.offset(0, 1, 5);
+          BlockPos ribbed = origin.offset(3, 4, 11);
+          ok &=
+              SelfTest.check(
+                  "dome.habitat_variants_placed_and_airtight",
+                  "base course, roof rim and ribbed glass are airtight; roof dish and vent stand on the roof and are not",
+                  "base="
+                      + level.getBlockState(base).getBlock().getDescriptionId()
+                      + " rim="
+                      + level.getBlockState(rim).getBlock().getDescriptionId()
+                      + " ribbed="
+                      + level.getBlockState(ribbed).getBlock().getDescriptionId()
+                      + " dish="
+                      + level.getBlockState(dish).getBlock().getDescriptionId()
+                      + " vent="
+                      + level.getBlockState(vent).getBlock().getDescriptionId(),
+                  level.getBlockState(base).is(HullBlocks.HULL_PLATE_BASE.get())
+                      && level.getBlockState(rim).is(HullBlocks.HULL_PLATE_RIM.get())
+                      && level.getBlockState(ribbed).is(HullBlocks.HULL_GLASS_RIBBED.get())
+                      && level.getBlockState(dish).is(HullBlocks.ROOF_DISH.get())
+                      && level.getBlockState(vent).is(HullBlocks.ROOF_VENT.get())
+                      && Airtight.test(level.getBlockState(base), level, base)
+                      && Airtight.test(level.getBlockState(rim), level, rim)
+                      && Airtight.test(level.getBlockState(ribbed), level, ribbed)
+                      && !Airtight.test(level.getBlockState(dish), level, dish)
+                      && !Airtight.test(level.getBlockState(vent), level, vent)
+                      && !level.getBlockState(dish).isCollisionShapeFullBlock(level, dish)
+                      && !level.getBlockState(vent).isCollisionShapeFullBlock(level, vent));
           ok &=
               SelfTest.check(
                   "dome.template_required_rooms_sealed",

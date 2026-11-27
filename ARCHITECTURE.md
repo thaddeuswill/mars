@@ -725,6 +725,8 @@ Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after 
 | Docs | Every public API type has a short Javadoc. Design decisions go in DESIGN.md, not code comments. |
 | Sounds | Every `mars:` sound event has a subtitle key present in `en_us.json`; a unit test enforces it (2.12) |
 
+**Habitat variants (2026-11-27).** `hull_plate_base` (perimeter wall at y 1, not under glass or doors) and `hull_plate_rim` (perimeter roof at y 4) are `HullPlateBlock`s in `mars:airtight`; `hull_glass_ribbed` is a `HullGlassBlock` in `mars:airtight` and is Hab B's roof. `roof_vent` and `roof_dish` are `RoofFixtureBlock`s (non-full shapes from the model boxes, in `mars:not_airtight`, no sealing role). `StarterDome` places one dish and one vent at y 5 above the shelter roof (`DomeTemplate.DISH_*`, `VENT_*`); they are outside the template box, so `SIZE_Y` stays 5 and the flood fill never sees them. Cost: 2 extra block placements once per world.
+
 ### 3.1 Decision: stay on Minecraft 1.21.1
 
 - **Decision (user, 2026-11-26, on Technical Lead recommendation):** Minecraft 1.21.1, NeoForge 21.1.x, Java 21. Pin one NeoForge build per roadmap stage; update within 21.1.x only at stage boundaries.

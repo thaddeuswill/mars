@@ -1,4 +1,4 @@
 {
   "replace": false,
-  "values": ["mars:hull_plate_cracked"]
+  "values": ["mars:hull_plate_cracked", "mars:roof_vent", "mars:roof_dish"]
 }

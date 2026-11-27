@@ -1,4 +1,10 @@
 {
   "replace": false,
-  "values": ["mars:hull_plate", "mars:hull_glass"]
+  "values": [
+    "mars:hull_plate",
+    "mars:hull_plate_base",
+    "mars:hull_plate_rim",
+    "mars:hull_glass",
+    "mars:hull_glass_ribbed"
+  ]
 }

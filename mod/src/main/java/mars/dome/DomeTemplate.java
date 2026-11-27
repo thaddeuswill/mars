@@ -28,11 +28,29 @@ public final class DomeTemplate {
 
   public static final int BREACH_Z = 12;
 
+  /**
+   * Roof fixtures stand on the roof at y 5, above the shelter (x 1..6, z 1..7). They are placed by
+   * {@code StarterDome}, are not part of {@link #cells} and never take part in sealing: SIZE_Y
+   * stays 5.
+   */
+  public static final int ROOF_FIXTURE_Y = SIZE_Y;
+
+  public static final int DISH_X = 4;
+  public static final int DISH_Z = 3;
+  public static final int VENT_X = 3;
+  public static final int VENT_Z = 6;
+
   /** What a cell holds. */
   public enum Kind {
     AIR,
     HULL,
+    /** Hull plate, base course: the perimeter wall at y 1 (cream band). */
+    HULL_BASE,
+    /** Hull plate, roof rim: the perimeter roof at y 4 (cream band). */
+    HULL_RIM,
     GLASS,
+    /** Ribbed greenhouse glass: Hab B's roof. */
+    GLASS_RIBBED,
     /** The lower half of a door (y 1). */
     DOOR,
     /** The upper half of a door (y 2). */
@@ -100,12 +118,14 @@ public final class DomeTemplate {
                 x,
                 SIZE_Y - 1,
                 z,
-                annexRoof(x, z) ? Kind.GLASS : Kind.HULL,
+                annexRoof(x, z) ? Kind.GLASS_RIBBED : perimeter(x, z) ? Kind.HULL_RIM : Kind.HULL,
                 Face.NORTH)); // the roof
         switch (c) {
           case '#' -> {
             for (int y = 1; y <= 3; y++) {
-              out.add(new Cell(x, y, z, Kind.HULL, Face.NORTH));
+              out.add(
+                  new Cell(
+                      x, y, z, y == 1 && perimeter(x, z) ? Kind.HULL_BASE : Kind.HULL, Face.NORTH));
             }
           }
           case '=' -> {
@@ -115,12 +135,19 @@ public final class DomeTemplate {
           }
           case '*' -> {
             for (int y = 1; y <= 3; y++) {
-              out.add(new Cell(x, y, z, breached && y == 2 ? Kind.CRACKED : Kind.HULL, Face.NORTH));
+              Kind k = breached && y == 2 ? Kind.CRACKED : y == 1 ? Kind.HULL_BASE : Kind.HULL;
+              out.add(new Cell(x, y, z, k, Face.NORTH));
             }
           }
           case 'E' -> {
             for (int y = 1; y <= 3; y++) {
-              out.add(new Cell(x, y, z, Kind.HULL, Face.NORTH)); // sealed hatch stub
+              out.add(
+                  new Cell(
+                      x,
+                      y,
+                      z,
+                      y == 1 ? Kind.HULL_BASE : Kind.HULL,
+                      Face.NORTH)); // sealed hatch stub
             }
           }
           case 'D', 'A' -> {
@@ -163,6 +190,11 @@ public final class DomeTemplate {
       }
     }
     return out;
+  }
+
+  /** Cells on the outer wall of the 23 x 16 shell. */
+  private static boolean perimeter(int x, int z) {
+    return x == 0 || x == SIZE_X - 1 || z == 0 || z == SIZE_Z - 1;
   }
 
   private static boolean annexRoof(int x, int z) {
