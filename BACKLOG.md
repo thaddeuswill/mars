@@ -114,7 +114,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 50 | "use the subagents to complete work" | Parallel implementation and review | Codex owns a standalone Mars sun asset test. Producer and Instructional Designer review slice 8 status and Monitor wording. | 🟡 Asset test pushed in `1e1bec2`; the PNG decoded as 32×32 in Java 21. Gradle and client checks pending. Slice 8 and Option D reviews complete. |
 
-| 51 | "continue" | Continue the queued sky follow-up | Codex claims only the sun texture reference in `MarsSkyEffects.java`. | 🟡 claimed by Codex |
+| 51 | "continue" | Continue the queued sky follow-up | Codex claims only the sun texture reference in `MarsSkyEffects.java`. | 🟡 Mars texture wired in `366b724`. Source and asset path checked; build and in-game captures pending. |
 
 ## Open questions for the owner
 
