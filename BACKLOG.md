@@ -112,6 +112,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 49 | "cont working i have another claude account working with you" | Continue parallel work with Claude | Codex owns a new dusk/night screenshot script. Renderer and slice 8 files are outside this claim. | 🟡 Script published in `695aaf9`; eight shot names verified. Client run pending. |
 
+| 50 | "use the subagents to complete work" | Parallel implementation and review | Codex owns a standalone Mars sun asset test. Producer and Instructional Designer review slice 8 status and Monitor wording. | 🟡 claimed by Codex |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
