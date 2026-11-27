@@ -105,6 +105,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 | 44 | "accept and cont" | Accept the CX-2 script and continue verification | Inspect prior captures and document any remaining runtime check. | ✅ Earlier captures inspected. New frustum run pending in CX-2. |
 
 | 45 | "accept and cont" | Accept the CX-2 screenshot review and continue the Codex lane | Reconcile CX-3 status against the latest implementation and inspect slice 5 evidence. | ✅ CX-3 verified against the published report and capture. |
+| 46 | "accept and continue" (owner accepted slice 5 with the 144 px Monitor and no Oven recipe yet): slice 6 = one visible world response | Technical Lead: the Mars sky and fog follow pressure through keyframe data, client-side interpolation | `assets/mars/keyframes/sky.json`, pure `mars.visual`, `mars:sky` payload, `MarsSkyEffects`, fog events, tests, real-client screenshots at 0.6, 5, 15, 30, 75 kPa | ✅ built and verified (156 unit tests, 69 boot checks, screenshots `tools/screenshots/out/20261127-130736/`; report `docs/team/reports/2026-11-27-technical-lead-slice6-sky.md`); awaiting owner look |
 
 ## Open questions for the owner
 

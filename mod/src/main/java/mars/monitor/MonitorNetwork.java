@@ -16,5 +16,10 @@ public final class MonitorNetwork {
         MonitorPayload.TYPE,
         MonitorPayload.CODEC,
         (payload, context) -> mars.client.ClientPayloadHandlers.onMonitor(payload, context));
+    // Sky: pressure only, for the client-side sky and fog (slice 6). Same lambda rule.
+    registrar.playToClient(
+        mars.sky.SkyPayload.TYPE,
+        mars.sky.SkyPayload.CODEC,
+        (payload, context) -> mars.client.ClientPayloadHandlers.onSky(payload, context));
   }
 }

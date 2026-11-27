@@ -202,6 +202,59 @@ public final class BootChecks {
             "present=" + biomeReg,
             biomeReg);
 
+    // Slice 6: the sky keyframes ship in the mod, parse, and are in order; the Mars dimension type
+    // names the Mars sky effects; the sky payload survives a round trip.
+    String skyRead;
+    boolean skyOk;
+    try (java.io.InputStream in =
+        BootChecks.class.getResourceAsStream("/assets/mars/keyframes/sky.json")) {
+      if (in == null) {
+        skyRead = "file missing from the mod resources";
+        skyOk = false;
+      } else {
+        var kf =
+            mars.visual.SkyKeyframes.parse(
+                com.google.gson.JsonParser.parseReader(
+                        new InputStreamReader(in, StandardCharsets.UTF_8))
+                    .getAsJsonObject());
+        boolean ordered = true;
+        for (int i = 1; i < kf.keys().size(); i++) {
+          ordered &= kf.keys().get(i).at() > kf.keys().get(i - 1).at();
+        }
+        skyRead = kf.keys().size() + " keys, ordered=" + ordered;
+        skyOk = kf.keys().size() >= 2 && ordered;
+      }
+    } catch (Exception e) {
+      skyRead = e.toString();
+      skyOk = false;
+    }
+    ok &=
+        SelfTest.check(
+            "sky.keyframes_load",
+            "assets/mars/keyframes/sky.json parses with ordered keys",
+            skyRead,
+            skyOk);
+    ResourceLocation marsType = ResourceLocation.fromNamespaceAndPath("mars", "mars");
+    var dimType = server.registryAccess().registryOrThrow(Registries.DIMENSION_TYPE).get(marsType);
+    String effects = dimType == null ? "null" : dimType.effectsLocation().toString();
+    ok &=
+        SelfTest.check(
+            "sky.effects_id",
+            "dimension type mars:mars uses the effects mars:mars",
+            effects,
+            effects.equals("mars:mars"));
+    var skyBuf =
+        new net.minecraft.network.RegistryFriendlyByteBuf(
+            io.netty.buffer.Unpooled.buffer(), server.registryAccess());
+    mars.sky.SkyPayload.CODEC.encode(skyBuf, new mars.sky.SkyPayload(12.5));
+    double back = mars.sky.SkyPayload.CODEC.decode(skyBuf).pressureKpa();
+    ok &=
+        SelfTest.check(
+            "sky.payload_roundtrip",
+            "pressure 12.5 survives encode and decode",
+            "" + back,
+            back == 12.5);
+
     // Decode data/mars/dimension/planet_1.json with vanilla's own codec against the live
     // registries: proves the dimension file is valid even where the level isn't created.
     ResourceLocation dimFile =

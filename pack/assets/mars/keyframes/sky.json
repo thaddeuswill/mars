@@ -1,0 +1,18 @@
+{
+  "_comment": "Sky and fog keyframes keyed on planet pressure (Stage 2 slice 6). Source of every colour, fog fraction and the 0.66 sun scale: docs/art/planetary-keyframes.md 3.1 and 2.1 (Draft 2, Lead Artist; fluid). The hex values are the artist's ESTIMATES, not pixel samples of rover images (open item in that document). Schema: ARCHITECTURE.md 2.5.5. Colours are mixed in OKLab; pressure is interpolated on log10; outside the range the end keyframe holds. Fog start and end are fractions of the render distance (the end never drops below fog_end_floor_blocks).",
+  "input": "mars:pressure",
+  "axis": "log10",
+  "space": "oklab",
+  "smoothing_s": 30,
+  "fog_end_floor_blocks": 48,
+  "sun_scale": 0.66,
+  "dome_gradient_exponent": 0.6,
+  "_invented": "dome_gradient_exponent (how fast the sky goes from horizon to zenith colour) and the use of one night colour for the whole dome are the implementer's choices, not the artist's; smoothing_s 30 is the artist's value (section 1.3).",
+  "keys": [
+    { "at": 0.6,  "sky_zenith": "#A87B5A", "sky_horizon": "#D2AE86", "fog": "#C49A73", "sunset_halo": "#7E9CC4", "sunset_band": "#8A6A55", "night": "#0D0B0E", "fog_start": 0.70, "fog_end": 1.00 },
+    { "at": 5.0,  "sky_zenith": "#A0736C", "sky_horizon": "#CDA696", "fog": "#BD9384", "sunset_halo": "#8A98BE", "sunset_band": "#8C6660", "night": "#0D0B10", "fog_start": 0.62, "fog_end": 1.00 },
+    { "at": 15.0, "sky_zenith": "#927489", "sky_horizon": "#C8ABAA", "fog": "#B39A9C", "sunset_halo": "#A29CAE", "sunset_band": "#8E6670", "night": "#0C0C14", "fog_start": 0.50, "fog_end": 0.95 },
+    { "at": 30.0, "sky_zenith": "#727EAC", "sky_horizon": "#C0BAC3", "fog": "#A9AAB9", "sunset_halo": "#CCA388", "sunset_band": "#B07466", "night": "#0B0D18", "fog_start": 0.38, "fog_end": 0.90 },
+    { "at": 75.0, "sky_zenith": "#6A93CF", "sky_horizon": "#B8CDE2", "fog": "#B4C6D8", "sunset_halo": "#F2A35E", "sunset_band": "#D9714F", "night": "#0A0F20", "fog_start": 0.30, "fog_end": 0.85 }
+  ]
+}

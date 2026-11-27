@@ -1,0 +1,57 @@
+# Slice 6: sky and fog follow pressure (mars:planet_1), 1280x720. Per keyframe: one view straight up (zenith) and one level view (horizon + fog).
+# The client uses a 2 s smoothing constant in this run (build.gradle, dev only), so 200 ticks (10 s) is five time constants.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 4500
+cmd /mars go
+wait 100
+hud off
+wait 20
+view 0 70 0 0 -90
+wait 10
+shot slice6_a_p0.6_sol0_up
+view 0 66 0 0 0
+wait 10
+shot slice6_a_p0.6_sol0_level
+cmd /mars index set pressure 5
+wait 200
+view 0 70 0 0 -90
+wait 10
+shot slice6_b_p5_up
+view 0 66 0 0 0
+wait 10
+shot slice6_b_p5_level
+cmd /mars index set pressure 15
+wait 200
+view 0 70 0 0 -90
+wait 10
+shot slice6_c_p15_up
+view 0 66 0 0 0
+wait 10
+shot slice6_c_p15_level
+cmd /mars index set pressure 30
+wait 200
+view 0 70 0 0 -90
+wait 10
+shot slice6_d_p30_up
+view 0 66 0 0 0
+wait 10
+shot slice6_d_p30_level
+cmd /mars index set pressure 75
+wait 200
+view 0 70 0 0 -90
+wait 10
+shot slice6_e_p75_up
+view 0 66 0 0 0
+wait 10
+shot slice6_e_p75_level
+cmd /mars index set pressure 5
+wait 20
+view 0 66 0 0 0
+wait 5
+shot slice6_f_falling_1s_after_75_to_5
+wait 200
+shot slice6_g_back_at_5
+quit

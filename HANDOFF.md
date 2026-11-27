@@ -33,6 +33,9 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monito
 Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice5-frost.md`, BACKLOG #43):
 - **Stage 2 slice 5:** polar-frost sink with all three temperature branches (pure `FrostSink`, data in `pack/data/mars/sinks/polar_frost.json`, baseline per planet), Regolith Oven on the power grid (`regolith_oven.json`), two starting Ovens once per world, hold rule `reset_after_sols` as data, `PlanetState` schema 5, Monitor frost line and "Levelling off" note. 142 unit tests, 66 boot checks, screenshots in `tools/screenshots/out/20261127-125134/`. Pressure numbers moved (one Outgasser for 10 sols reads 1.51 kPa, not 1.60); the report lists every moved test.
 
+Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice6-sky.md`, BACKLOG #46):
+- **Stage 2 slice 6 (sky response):** the Mars sky and terrain fog follow pressure from `pack/assets/mars/keyframes/sky.json` (values from `docs/art/planetary-keyframes.md`). Pure `mars.visual` (interpolation, OKLab, smoothing, state), server sends only pressure (`mars:sky`), client `mars.client.sky` (dimension effects `mars:mars` draws the sky; fog events). 156 unit tests, 69 boot checks, screenshots `tools/screenshots/out/20261127-130736/` with measured pixel colours matching the keyframes within 2 per channel. Not verified: shaders or other renderers, a real multiplayer client join, GUI scales, the 30 s smoothing in a real client (the shot run uses 2 s).
+
 ## 3. Known gaps and honest caveats (do not claim these work)
 
 - **Not tested:** the jar loaded from a real `mods` folder; Windows and macOS; the dedicated server and a real save to disk and restart (needs the EULA, the owner's call); right-click on the Monitor block in the real client (screenshots use `/mars monitor`); explosions or pistons moving an Outgasser; frustum culling of an array whose overhang crosses a chunk border while its centre is off-screen.
@@ -59,7 +62,7 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice5
 1. Sync and verify (see section 2). Make the build and tests green and the boot test print `RESULT PASS`.
 2. Check `pgrep -f runShotsClient` before any screenshot run; never overlap client runs.
 3. Small fixes remaining: pause does not yet block player actions or show a HUD line.
-4. Then, per `docs/tech/stage2-plan.md`: slice 6 (sky response), the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
+4. Then, per `docs/tech/stage2-plan.md`: slice 7 onward, the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
 5. After each step: update `BACKLOG.md` status, add a report in `docs/team/reports/`, update the "state" in `AGENTS.md` and this file, commit, push.
 6. Reply to the owner in the standing format: **what changed, recommended next steps, screenshot if visual.** Keep it short; the owner is also credit-limited.
 
