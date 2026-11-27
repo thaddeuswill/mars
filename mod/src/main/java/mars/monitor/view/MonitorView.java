@@ -37,9 +37,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public record History(List<Point> points, List<Marker> markers, String unit) {
     public static final History EMPTY = new History(List.of(), List.of(), "kPa");
 
-    /** True when there are at least two points spanning some time, so a line can be drawn. */
+    /** True when there are at least two points and they span a sol or more (else it says so). */
     public boolean drawable() {
-      return points.size() >= 2 && points.get(points.size() - 1).sol() > points.get(0).sol() + 1e-6;
+      return points.size() >= 2 && points.get(points.size() - 1).sol() >= points.get(0).sol() + 1.0;
     }
   }
 

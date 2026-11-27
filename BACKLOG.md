@@ -149,3 +149,4 @@ Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor revie
 - Slice 5 scope: **all three temperature branches of the polar-frost sink as data and unit tests**; nothing tuned in play.
 - Monitor history plot: **pay now if the Technical Lead estimates 3 dev-days or less**, otherwise mockup C without lights first.
 - Panels meant the Monitor screen; run all UI skills (done); EULA not yet; NASA host check blocked by JPL's own CDN (403), 16 px stays.
+- Slice 5 calls (docs/design/balance-sheet.md 2c; Oven draw 1 unit/sol invented, starting Ovens in inventory, equal power share now, stalling below 5 kPa intended with a "Levelling off" Monitor line, frost line hidden until about 0.85 kPa, Oven water out, one hold rule: pause, reset after more than 1 sol out): **owner accepted all**. Landing step 6 now reads "battery and Ovens": **owner approved**.

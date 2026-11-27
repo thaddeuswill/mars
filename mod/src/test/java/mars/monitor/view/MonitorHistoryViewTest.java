@@ -22,6 +22,17 @@ class MonitorHistoryViewTest {
   }
 
   @Test
+  void lessThanOneSolOfHistoryIsNotDrawn() throws Exception {
+    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    s.model().advanceSols(0.5);
+    MonitorView.History h = MonitorView.of(s).history();
+    assertEquals(2, h.points().size(), "first step sample plus now");
+    assertFalse(h.drawable());
+    s.model().advanceSols(1);
+    assertTrue(MonitorView.of(s).history().drawable());
+  }
+
+  @Test
   void risingPlanetHasAClimbingLineAndAnOutgasserMarker() throws Exception {
     PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 3);
     s.model().advanceSols(6);

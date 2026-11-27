@@ -105,7 +105,7 @@ One shared grid per planet. Unit: **1 power unit = 1 kWh**; rates are units per 
 
 Worked example (check against `PowerGridTest`): one Outgasser, one clean panel: 5 of 4 units, full rate, +0.10 kPa/sol. Two Outgassers, one clean panel: 5 of 8 units, 62.5 % of the rate, +0.125 kPa/sol in total. One Outgasser on a stage 4 panel: 3.0 of 4 units, 75 %.
 
-## 2c. Slice 5: polar-frost sink, Regolith Oven, shortfall, holds (status: **proposed**, Game Designer 2026-11-27; owner scope: all three temperature branches as data and unit tests, nothing tuned in play)
+## 2c. Slice 5: polar-frost sink, Regolith Oven, shortfall, holds (status: **owner-accepted 2026-11-27**, proposed by the Game Designer; owner scope: all three temperature branches as data and unit tests, nothing tuned in play)
 
 Tags as in §2a: **sourced**, **calc**, **invented** (game balance), **design choice**. Science wording for the sink is the SME's (handoff in the report). Goals: B1 (causes visible), B2 (balancing feedback), C1 (survive first). Pillars: the planet is the quest log; your progress provokes the planet; pressure, not grind.
 
