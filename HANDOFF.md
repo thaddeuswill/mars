@@ -69,4 +69,6 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monito
 
 ## 7. Where the history is
 
+Backlog references #36–#38 here and in the Technical Lead reports refer to Claude’s Monitor tasks. The formerly duplicated Codex rows moved to #39 (roadmap), #40 (Monitor review), and #41 (process alignment).
+
 `TEAM.md` (Decision Log, lessons), `BACKLOG.md` (every owner request in their words), `docs/team/reports/` (one report per task), `git log`. The full Claude conversation transcript is not in the repo.
