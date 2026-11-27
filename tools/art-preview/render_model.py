@@ -45,8 +45,8 @@ sc = bpy.context.scene
 SHADE = {"up": 1.0, "down": 0.5, "north": 0.8, "south": 0.8, "east": 0.6, "west": 0.6}
 mats = {}
 
-def material(texname, face):
-    key = (texname, face if opts["shading"] == "mc" else "")
+def material(texname, face, flat=False):
+    key = (texname, face if opts["shading"] == "mc" else "", flat)
     if key in mats: return mats[key]
     m = bpy.data.materials.new(f"{texname}_{face}"); m.use_nodes = True
     nt = m.node_tree; nt.nodes.clear()
@@ -55,7 +55,7 @@ def material(texname, face):
     path = texname if texname.endswith(".png") else os.path.join(texdir, texname + ".png")
     t.image = bpy.data.images.load(path, check_existing=True); t.interpolation = "Closest"
     if opts["shading"] == "mc":
-        em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = SHADE[face]
+        em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = 1.0 if flat else SHADE[face]
         nt.links.new(t.outputs["Color"], em.inputs["Color"]); shader = em
     else:
         b = nt.nodes.new("ShaderNodeBsdfPrincipled"); b.inputs["Roughness"].default_value = 1.0
@@ -115,7 +115,7 @@ for i, el in enumerate(model["elements"]):
         pts = [rotate(p, el.get("rotation")) for p in FACES[fname](a, b)]
         tex = model["textures"][fd["texture"].lstrip("#")]
         tex = tex.split("/")[-1]
-        add_quad(f"e{i}{fname}", pts, uvs, material(tex, fname))
+        add_quad(f"e{i}{fname}", pts, uvs, material(tex, fname, el.get("shade", True) is False))
 
 if opts["ground"] and not opts["transparent"]:
     G = 3 if LARGE else 1

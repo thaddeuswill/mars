@@ -1,7 +1,19 @@
 {
  "variants": {
-  "": {
+  "facing=north": {
    "model": "mars:block/water_reclaimer"
+  },
+  "facing=east": {
+   "model": "mars:block/water_reclaimer",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/water_reclaimer",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/water_reclaimer",
+   "y": 270
   }
  }
 }

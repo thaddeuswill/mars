@@ -30,7 +30,7 @@
      ]
     },
     "south": {
-     "texture": "#front",
+     "texture": "#side",
      "uv": [
       2,
       3,
@@ -146,12 +146,12 @@
   },
   {
    "from": [
-    10,
-    3,
-    1
-   ],
-   "to": [
     11,
+    2,
+    1
+   ],
+   "to": [
+    12,
     9,
     2
    ],
@@ -215,7 +215,7 @@
   {
    "from": [
     13,
-    3,
+    2,
     1
    ],
    "to": [
@@ -282,7 +282,7 @@
   },
   {
    "from": [
-    10,
+    11,
     8,
     1
    ],
@@ -350,13 +350,13 @@
   },
   {
    "from": [
-    10,
-    3,
+    11,
+    2,
     1
    ],
    "to": [
     14,
-    4,
+    3,
     2
    ],
    "faces": {
@@ -418,680 +418,68 @@
   },
   {
    "from": [
-    5,
-    3,
-    14
-   ],
-   "to": [
-    6,
-    9,
-    15
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    2,
-    3,
-    14
-   ],
-   "to": [
-    3,
-    9,
-    15
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    2,
-    8,
-    14
-   ],
-   "to": [
-    6,
-    9,
-    15
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    2,
-    3,
-    14
-   ],
-   "to": [
-    6,
-    4,
-    15
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    14,
-    1,
-    5
-   ],
-   "to": [
-    15,
     12,
-    6
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      0,
-      0,
-      2,
-      2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    1,
-    1,
-    9
+    0,
+    1
    ],
    "to": [
+    13,
     2,
-    12,
-    10
+    2
    ],
    "faces": {
     "north": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
      ]
     },
     "south": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
      ]
     },
     "east": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
      ]
     },
     "west": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
      ]
     },
     "up": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
      ]
     },
     "down": {
      "texture": "#hose",
      "uv": [
-      4,
       0,
-      6,
+      0,
+      2,
       2
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    14,
-    5,
-    5
-   ],
-   "to": [
-    15,
-    6,
-    6
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    14,
-    9,
-    5
-   ],
-   "to": [
-    15,
-    10,
-    6
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    1,
-    5,
-    9
-   ],
-   "to": [
-    2,
-    6,
-    10
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    }
-   }
-  },
-  {
-   "from": [
-    1,
-    9,
-    9
-   ],
-   "to": [
-    2,
-    10,
-    10
-   ],
-   "faces": {
-    "north": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "south": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "east": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "west": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "up": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
-     ]
-    },
-    "down": {
-     "texture": "#hose",
-     "uv": [
-      8,
-      0,
-      9,
-      1
      ]
     }
    }

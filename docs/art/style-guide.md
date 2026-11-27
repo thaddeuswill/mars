@@ -363,7 +363,7 @@ Scale: **1 block = 1 m = 16 px, so 1 px = 6.25 cm** (owner decision: size-accura
 | Solar array cut-outs | A few cm (photo) | 1 px squares | About 1–2× | PIA25286 (photo) |
 | Solar array rim frame | A few cm (photo) | 1 px ring | Probably 2× or more | PIA22876 (photo) |
 | Oxygen maker as a whole | MOXIE 0.24 × 0.24 × 0.31 m | 0.75 × 0.625 × 0.75 m box | **About 3× MOXIE** (owner option (a): one block; a crew unit would be about 0.3–0.55 m, so 1.4–2.5× that) | §3, §5.1 |
-| Oxygen maker tubes | Diameter **missing**, well under 6 cm | 2 × 2 px tubes (12.5 cm, v2; was 1 px and vanished in dim light) | Several times thicker | §3 |
+| Oxygen maker tubes (v3: plus a front loop) | Diameter **missing**, well under 6 cm | 2 × 2 px tubes (12.5 cm, v2; was 1 px and vanished in dim light) | Several times thicker | §3 |
 | Oxygen maker fittings, ribs, X ribs, panel frames | A few cm | 1–2 px | About 2× | §3 (PIA24201) |
 | Status lamps on every machine | Indicator LEDs, under 1 cm (**invented** real equivalent) | 1×2 to 2×2 px (6–12 cm) | Many times larger: a readability device | — |
 | Battery charge segments | (no real counterpart; the real pack has none) | 3×1 px bars | Invented readout | §5.3 |
@@ -765,3 +765,7 @@ Goals: whichever goal the entry teaches (gate entries: A1–A5, B1, D2).
 | Process (new situation) | Full failure report: What failed · Likely cause · Hint (§7.1), with Hana's slip the first time |
 | Repeat of the same failure (fading) | **Compact report:** one line on the log panel: octagon + machine name + "again: likely cause" + a "details" disclosure. Failure tone at −3 dB (audio direction §7.2) |
 | Outcome (familiar situation) | Trend arrows, next-gate bars, sol pips. No card |
+
+
+### 5.5b Machines in dim lamp light (v3 rule, 2026-11-27)
+Measured in game: lamp light multiplies a gold face by about (0.35, 0.32, 0.27), so a face with texture mean luminance 93 shows 30 of 255 while the hull wall shows 98. Rules: design machine faces for the dim case; light colours near the top of the palette, only seams dark and no darker than a 1 px line of `#70511A`; use `"shade": false` on bright machine elements; check with `tools/art-preview/make_maker_reclaimer_boards_v3.py` before claiming readability. One-sided machines carry all labels on the model's north face and get four `facing` variants.
