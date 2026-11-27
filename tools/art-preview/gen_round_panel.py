@@ -108,9 +108,9 @@ for j in range(N):
 # Raised array (2026-11-27, owner decision; SME docs/team/reports/2026-11-27-sme-deck-height.md): the array sits on a lander
 # deck 16 px (1.0 m) above the base. InSight deck 0.83-1.08 m (13-17 px), NASA/JPL InSight press kit "Spacecraft" page (SME
 # could not open it; from search summaries, NOT directly verified). DECK_Y = underside of the array. To use the
-# alternative "top of the disc at 16 px" set DECK_Y = 15 (keeps everything inside the centre block's height).
-DECK_Y = 16
-Y0, Y1 = DECK_Y, DECK_Y + 1           # disc 1 px thick: y 16..17, i.e. in the block ABOVE the centre block
+# Producer decision: top of the disc at 16 px, so DECK_Y = 15 (underside-at-16 alternative: DECK_Y = 16, canopy one block up).
+DECK_Y = 15
+Y0, Y1 = DECK_Y, DECK_Y + 1           # disc 1 px thick: y 15..16, inside the centre block height (Producer chose this reading 2026-11-27)
 def uv(i0, j0, i1, j1): return [round(i0 / 3, 4), round(j0 / 3, 4), round(i1 / 3, 4), round(j1 / 3, 4)]
 def model_for(tex):
     els = []

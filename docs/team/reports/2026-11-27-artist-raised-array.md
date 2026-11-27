@@ -55,3 +55,19 @@ Known 2.18 look issue "low round tables from the front" is now smaller (deck and
 
 ## 5. Shared model updates
 None. (If the Technical Lead adopts the underside reading, update `ARCHITECTURE.md` 2.18 with the new canopy height.)
+
+---
+## Update after the Producer's decision (same day): use disc top at 16 px (`DECK_Y = 15`)
+The six models are regenerated with the disc at **y 15..16**, deck plate y 13..15, legs y 1..13, base y 0..1. Bounds: **x/z -9..25 px, y 0..16**. Checks pass. I looked at the new Blender contact sheet (`renders/raised-array/after_contact_sheet.png`): same read as before, the disc is 1 px lower. The viewer was rebuilt (not opened in a browser). The earlier variant is kept as `after_deck16_underside_contact_sheet.png`. The tables above describe the rejected underside variant; **the table below replaces them.** No Java edited.
+
+**Exact constants for the Technical Lead (`ARCHITECTURE.md` 2.18):** canopy cells stay at the same height (no move up a block, no ninth cell).
+| Item | Old | New |
+|---|---|---|
+| Canopy slice y range | 10..11 px (0.625..0.6875) | **15..16 px (0.9375..1.0)** |
+| Corner cell shape (`footprint.corner_shape`) | `[0.4375,0.625,0.4375]->[1,0.6875,1]` | `[0.4375,0.9375,0.4375]->[1,1.0,1]` |
+| Centre block shape (array over its own cell) | top at 11 px (0.6875), `[0,0,0]->[1,0.6875,1]` | top at **16 px (1.0)**: the disc's own-cell part is `y 15..16`; the post part is now three legs and a deck (about `[0.0625,0,0.0625]->[0.9375,1,0.9375]` for a bounding box, or keep a post box `[3,0,3]->[13,15,13]` px plus the slice). `footprint.centre_shape` read `[0,0,0]->[1,1.0,1]` if the whole own-cell part is kept |
+| Placement, break, loot | unchanged | unchanged |
+
+The slice only touches the top 1 px of each cell, so those canopy blocks have a thin top slab at the block-top boundary; the "can a player walk under it" answer is still no (0.94 m clearance).
+
+Decision 2 above is closed (Producer chose `DECK_Y = 15`). Handoff to the Technical Lead: update the slice constants and the `footprint.*` expected values only; done when the in-game selection box and collision sit on the disc. The commit is the second one for this task.
