@@ -52,6 +52,20 @@ Dust storms cut solar output by 60 % × storm cap (*invented* balance number; re
 
 **Storm caps scale gameplay and look (decided, answers the Technical Lead).** The storm cap (Phase 1: 1.0, Phase 2: 0.8, Phase 3: 0.5, Equilibrium: 0.25; Artist's values, ARCHITECTURE.md §2.5) multiplies the solar cut and the dust wear as well as the visuals, so "storms weaken as the air thickens" is true in the mechanics (B2). At cap 0.25 a storm cuts solar by 15 %. *Invented.* Revisit if late storms stop mattering as drift events (then raise the Phase 3 floor). Unmaintained Outgassers lose output (mechanical wear).
 
+**Storm schedule (settled 2026-11-27; all numbers *invented* except the direction; SME to confirm the science rows in the report).** One length rule per kind of storm, so the curve and the drift table agree.
+
+| Item | Standard | Classroom | Tag and reasoning |
+|---|---|---|---|
+| Phase 1 storm (the scheduled one; F1) | **2 sols** (about 40 min of play) | **0.5 sol** (÷4, same as dust interval) | **Invented.** Long enough to drain a battery and be seen on the Monitor graph (battery 10 units = 2.5 sols of one Outgasser, so 2 sols is survivable but only if prepared: C1). Real regional storms last days to weeks and global ones months (**searched, not verified**), so even 2 sols is short |
+| Hold drift-event storm (Phase 2 on; §4 drift table) | **1 sol** | **0.25 sol** | **Invented.** Drift events arrive every 1–1.5 sols and must be answerable in 1–5 min, so these are shorter than the Phase 1 storm |
+| Warning lead | 1 sol before onset (0.25 sol classroom) | | Matches story beat 4 (0.8–1.2 sol) and F1 (T−1 sol) |
+| First Phase 1 storm | Not before sol 14; curve uses sols 14–15 | Not before sol 4 | **Invented.** After the first Outgassers exist, so there is a pressure rate to lose |
+| Gap to the next storm | 12–20 sols, seeded random | 3–5 sols | **Invented.** Standard Phase 1 ends near sol 25, so normally one storm per Phase 1 |
+| Solar cut | 60 % × storm cap (Phase 1 cap 1.0 = 60 %) | same | **Invented**; unchanged. Physical, never scaled by pace |
+| Dust stage at storm end | +1 stage; +2 if cap ≥ 0.8 (applies to both storm kinds; Phase 1 and 2 caps are ≥ 0.8) | same | **Invented**; unchanged. Physical, never scaled |
+
+Only the storm's length, gap and warning scale with pace; the cut and the dust never do.
+
 **Standard solo curve** (assumed build order: first Outgasser at Dome stable on sol 9, then 2 by sol 11, 3 by sol 13, 4 by sol 16; one 2-sol storm on sols 14–15):
 
 | Sol | 1 | 5 | 9 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 25 |
@@ -237,7 +251,7 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 
 | Event | What happens | Effect if ignored | Answer | Goals |
 |---|---|---|---|---|
-| Dust storm | Solar −60 % for 0.5–1 sol | Algae vats and scrubbers slow: CO2 +0.15 kPa/sol | Battery reserve, temporary vat shutdown plan | C1, B1 |
+| Dust storm | Solar −60 % × storm cap for 1 sol (classroom 0.25 sol). The Phase 1 storm is 2 sols: see the storm schedule in §2 | Algae vats and scrubbers slow: CO2 +0.15 kPa/sol | Battery reserve, temporary vat shutdown plan | C1, B1 |
 | Flora bloom | A biome grows fast | O2 +0.6 %/sol → fire band | Prune, add CO2 source, slow vats | A5, B4 |
 | Fauna grazing | Settled thawlings graze a patch | Biomass −5 %; O2 output dips | Move or widen the quiet zone, reseed | B2, D1 |
 | Emitter wear | One emitter fails | Temperature −1 °C/sol | Repair (failure report names it) | C2 |

@@ -27,12 +27,12 @@
 | Step | Paper time | Facilitator does | Tester sees | Lock-point check |
 |---|---|---|---|---|
 | 0. Baseline | 0:00 | Tester runs the dome for 2 minutes | Clear sky card, Monitor | — |
-| 1. Warning | 2:00 (T−1 sol) | Place the storm icon (countdown "~1 sol"); top-line note "Dust storm forming. Arrival in about 1 sol. Expected length: half a sol to a full sol."; swap to the **hazy** sky card (fog only; sun as bright as before) | Warning, haze | Haze is fog only; **solar output unchanged**. Warning doesn't mention solar |
+| 1. Warning | 2:00 (T−1 sol) | Place the storm icon (countdown "~1 sol"); top-line note "Dust storm forming. Arrival in about 1 sol. Expected length: about 2 sols."; swap to the **hazy** sky card (fog only; sun as bright as before) | Warning, haze | Haze is fog only; **solar output unchanged**. Warning doesn't mention solar |
 | 2. Forecast | Next natural pause (tester opens the Monitor or "enters the dome") | Show the F1 card **before** the Monitor if they open it (look-first rule) | F1 with "Check: solar power on the Monitor's Dome tab." | Unanswered at onset = expired, not wrong |
 | 3. Preparation | 2:00–6:00 | Let the tester play action cards; note each with time | Costs lines | Record whether any life-critical action came first (C1 criterion) |
 | 4. Onset | 6:00 | F1 locks. Swap to the **storm** sky card. Set solar to 40 % (60 % cut × cap 1.0) | Storm | Lock happens before solar drops |
-| 5. Power drop | 6:00–9:00 | Move the battery bars down by the tester's demand; if it hits 0, show the `power_shortfall` failure card (+ Hana's tip, first time) | Battery falling; cause line "Dust on panels −60 %" | — |
-| 6. Clearing | 9:00 | Swap to clear sky; panels stay "dusty" until cleaned | Clear sky | — |
+| 5. Power drop | 6:00–14:00 (2 sols) | Move the battery bars down by the tester's demand; if it hits 0, show the `power_shortfall` failure card (+ Hana's tip, first time) | Battery falling; cause line "Dust on panels −60 %" | — |
+| 6. Clearing | 14:00 | Swap to clear sky; panels stay "dusty" until cleaned | Clear sky | — |
 | 7. Result | Next natural pause | F1 result first in the queue; Monitor graph with the dip | Result and graph | — |
 | 8. Debrief | After | Questions below | — | — |
 
