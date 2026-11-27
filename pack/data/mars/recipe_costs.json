@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "materials": {
+    "Fe": "minecraft:iron_ingot",
+    "W": "minecraft:copper_ingot",
+    "G": "minecraft:glass",
+    "B": "minecraft:brick"
+  },
+  "items": {
+    "mars:oxygen_maker": {
+      "standard": {
+        "Fe": 6,
+        "W": 3,
+        "G": 2,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 5,
+        "W": 3,
+        "G": 2,
+        "B": 0
+      },
+      "gateTier": 1
+    },
+    "mars:water_reclaimer": {
+      "standard": {
+        "Fe": 6,
+        "W": 2,
+        "G": 4,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 5,
+        "W": 2,
+        "G": 4,
+        "B": 0
+      },
+      "gateTier": 1
+    },
+    "mars:solar_panel": {
+      "standard": {
+        "Fe": 6,
+        "W": 4,
+        "G": 8,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 5,
+        "W": 4,
+        "G": 7,
+        "B": 0
+      },
+      "gateTier": 0
+    },
+    "mars:battery": {
+      "standard": {
+        "Fe": 4,
+        "W": 6,
+        "G": 0,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 4,
+        "W": 5,
+        "G": 0,
+        "B": 0
+      },
+      "gateTier": 0
+    },
+    "mars:regolith_oven": {
+      "standard": {
+        "Fe": 3,
+        "W": 2,
+        "G": 0,
+        "B": 5
+      },
+      "classroom": {
+        "Fe": 3,
+        "W": 2,
+        "G": 0,
+        "B": 4
+      },
+      "gateTier": 2
+    },
+    "mars:regolith_outgasser": {
+      "standard": {
+        "Fe": 10,
+        "W": 6,
+        "G": 2,
+        "B": 6
+      },
+      "classroom": {
+        "Fe": 8,
+        "W": 5,
+        "G": 2,
+        "B": 5
+      },
+      "gateTier": 3
+    },
+    "mars:seal_kit": {
+      "standard": {
+        "Fe": 1,
+        "W": 0,
+        "G": 0,
+        "B": 1
+      },
+      "classroom": {
+        "Fe": 1,
+        "W": 0,
+        "G": 0,
+        "B": 1
+      },
+      "gateTier": 0
+    },
+    "mars:hull_plate": {
+      "standard": {
+        "Fe": 2,
+        "W": 0,
+        "G": 0,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 2,
+        "W": 0,
+        "G": 0,
+        "B": 0
+      },
+      "gateTier": 0,
+      "status": "proposed, invented (life-support-spec 2.3); not in the balance sheet"
+    },
+    "mars:o2_tank": {
+      "standard": {
+        "Fe": 4,
+        "W": 0,
+        "G": 2,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 4,
+        "W": 0,
+        "G": 2,
+        "B": 0
+      },
+      "gateTier": 0,
+      "status": "proposed, invented (life-support-spec 2.3); not in the balance sheet"
+    },
+    "mars:hull_door": {
+      "standard": {
+        "Fe": 4,
+        "W": 2,
+        "G": 2,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 3,
+        "W": 2,
+        "G": 2,
+        "B": 0
+      },
+      "gateTier": 0,
+      "status": "proposed, invented (life-support-spec 2.3); not in the balance sheet"
+    }
+  },
+  "classroomRule": "standard cost divided by 1.3, rounded up (balance sheet 5.3); the Airlock door row follows the spec table (3 Fe), which the rule would make 4",
+  "playableRecipes": [
+    "mars:hull_plate",
+    "mars:o2_tank",
+    "mars:hull_door"
+  ],
+  "source": "docs/design/balance-sheet.md 2d.3 and docs/tech/life-support-spec.md 2.3. ALL COUNTS INVENTED. Materials are vanilla stand-ins until the Phase 1 resource list exists (open item G4). Only the items in playableRecipes have a crafting-table recipe in data/mars/recipe/: the 3 x 3 grid holds at most 9 items and the machines cost 10 to 24, so machine recipes need a design call (see the slice 2 report). Classroom costs are data only: a datapack recipe cannot switch on a config value."
+}

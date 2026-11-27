@@ -344,6 +344,8 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
+    airRow(sim).ifPresent(rows::add);
+    waterRow(sim).ifPresent(rows::add);
     domeRow(sim).ifPresent(rows::add);
     gateRows(sim, rows, net);
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
@@ -432,6 +434,96 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       return all.parts().stream().mapToDouble(MonitorView::pressureMinimum).max().orElse(0);
     }
     return 0;
+  }
+
+  /** Sols of air left under which the Air row asks for attention (balance sheet 2d.6, Low). */
+  static final double AIR_LOW_SOLS = 2.0;
+
+  /** Sols of air left under which the state is Critical (10 minutes at standard pace). */
+  static final double AIR_CRITICAL_SOLS = 0.5;
+
+  /**
+   * The Air row (balance sheet 2d.6): stored oxygen out of the tank capacity, with the net a sol as
+   * the trend. A falling net adds one planet-side line ("Air falling: about N sols left"); empty
+   * tanks add the Blackout line. Shows only on a planet with the life-support model that has a
+   * report. Text is straw-man wording (keys in en_us.json) for the Instructional Designer.
+   */
+  private static java.util.Optional<Row> airRow(PlanetSim sim) {
+    var life = sim.life();
+    if (life == null || life.report() == null) {
+      return java.util.Optional.empty();
+    }
+    var r = life.report();
+    List<CauseLine> lines = new ArrayList<>();
+    boolean empty = r.o2Stored() <= EPSILON && r.started();
+    boolean falling = r.started() && r.o2Net() < -EPSILON;
+    boolean low = falling && r.solsOfAirLeft() < AIR_LOW_SOLS;
+    if (empty) {
+      lines.add(new CauseLine("monitor.air.empty", 0, "", null, -1));
+      lines.add(new CauseLine("monitor.air.blackout", 0, "", null, -1));
+    } else if (falling) {
+      lines.add(
+          new CauseLine(
+              "monitor.air.falling", 0, Fmt.number(Math.max(0.1, r.solsOfAirLeft()), 1), null, -1));
+    }
+    Tone tone = empty || low ? Tone.SHORT : falling ? Tone.NORMAL : Tone.GOOD;
+    Trend trend = r.started() ? trend(r.o2Net()) : Trend.STEADY;
+    return java.util.Optional.of(
+        new Row(
+                "monitor.row.air",
+                Fmt.number(r.o2Stored(), 0) + " / " + Fmt.number(r.o2Capacity(), 0),
+                null,
+                trend,
+                Fmt.signed(r.o2Net(), 0) + "/sol",
+                lines)
+            .with(tone, empty || low));
+  }
+
+  /** The Water row: stored water and the net a sol; a line when it will not last 10 sols. */
+  private static java.util.Optional<Row> waterRow(PlanetSim sim) {
+    var life = sim.life();
+    if (life == null || life.report() == null) {
+      return java.util.Optional.empty();
+    }
+    var r = life.report();
+    List<CauseLine> lines = new ArrayList<>();
+    boolean none = r.waterStored() <= EPSILON && r.started();
+    boolean lasting = r.waterNetPerSol() >= -EPSILON;
+    boolean low = r.started() && !lasting && r.waterSolsLeft() < life.params().waterLastSols();
+    if (none) {
+      lines.add(new CauseLine("monitor.water.none", 0, "", null, -1));
+    } else if (low) {
+      lines.add(new CauseLine("monitor.water.low", 0, Fmt.number(r.waterSolsLeft(), 1), null, -1));
+    }
+    return java.util.Optional.of(
+        new Row(
+                "monitor.row.water",
+                Fmt.number(r.waterStored(), 0)
+                    + " / "
+                    + Fmt.number(life.params().waterTankCapacity(), 0),
+                null,
+                r.started() ? trend(r.waterNetPerSol()) : Trend.STEADY,
+                Fmt.signed(r.waterNetPerSol(), 1) + "/sol",
+                lines)
+            .with(none || low ? Tone.SHORT : Tone.GOOD, none));
+  }
+
+  /**
+   * The first life-support state that is not true, as a key suffix for "Waiting: ..." on the Dome
+   * stable goal; null when all four are true or the planet has no life-support model.
+   */
+  private static String failingState(PlanetSim sim) {
+    var life = sim.life();
+    if (life == null || life.report() == null) {
+      return null;
+    }
+    if (!life.report().started()) {
+      return "landing";
+    }
+    var st = life.states();
+    return !st.sealed()
+        ? "sealed"
+        : !st.airOk() ? "air_ok" : !st.waterOk() ? "water_ok" : !st.powerOk() ? "power_ok" : null;
   }
 
   /**
@@ -560,6 +652,10 @@ public record MonitorView(double sols, List<Row> rows, History history) {
         side = Fmt.number(Math.min(st.heldSols(), need), 1) + " / " + Fmt.number(need, 0) + " sols";
         if (st.falseSols() > 0) {
           detailKey = base + ".waiting";
+        }
+        String failing = d.id().equals("mars:dome_stable") ? failingState(sim) : null;
+        if (failing != null) {
+          detailKey = base + ".waiting." + failing; // names the state that is not true yet
         }
         double held = Math.min(st.heldSols(), need);
         goal = new Goal(held / need, GoalProgress.percent(held / need, false), null, null);
