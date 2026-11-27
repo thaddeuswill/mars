@@ -217,6 +217,14 @@ The owner is the only human playtester and the only approver (risks R-17, R-27).
 ### 6.4 What would make the estimates real
 A measured rate needs a unit the team can count. Proposal: from slice 5 on, each Technical Lead report adds one line, "elapsed working time and number of build-and-test cycles" (agent time is the real cost here), and the Producer keeps a running table of cycles per slice. This replaces dev-days with a number we can compare across slices. Re-estimate Stage 3 from it, as section 1 already requires.
 
+### 6.5 Stage 3 plan check (2026-11-27)
+
+Source: [stage3-plan.md](../tech/stage3-plan.md). **No hours were changed.** What the plan adds to the budget picture, all **unverified**:
+- **Measured rate so far (Technical Lead, thin slices):** slice 5 about 15 min wall and about 30 Gradle runs; slice 6 about 35 min and 12 runs; slice 7 about 8 min and about 13 runs; slices 1 to 4 and 8 not recorded. Three data points. Stage 3 slices are bigger and depend on design, art and review inputs, so this rate is not converted to hours and the Stage 3 and 4 rows stay as issued.
+- **Size ratio:** the Technical Lead plan is 11 slices (0 to 10) of about 40 to 66 sessions against 8 for Stage 2 (a "session" is one Stage 2 slice-sized report). The budget row ratio is 590 h to 180 h (3.3 times). If the plan ratio holds, the Stage 3 Technical Lead row is short; first check is after slices 2 and 5.
+- **Panel dust (6.2):** now scheduled in slice 5 (Stage 3), as recommended. The Stage 3 row "storms, radiation, wear, perchlorate dust-off 80 h" remains short by about 12 to 20 h; the Technical Lead re-cut (input T1) decides.
+- **Owner time:** unchanged (about 17.5 h for Stage 3). The plan adds one short owner session per slice (15 to 30 min), which fits inside the S1, S2 and re-run budget only if sessions 1 to 9 are counted as the re-runs. Flag if the owner wants fewer.
+
 ## 7. Change log
 
 | Date | Change |
@@ -225,3 +233,4 @@ A measured rate needs a unit the team can count. Proposal: from slice 5 on, each
 | 2026-11-26 | Cut order rewritten to option T-C (owner decision): tier orders learning content, quadrant orders features; subset decisions go to the owner. Licensing plan noted (no budget effect). |
 | 2026-11-26 | Revision 2 (Round 3): owner decisions and Round 2 reports (guidance, mirror route, ice–albedo, CI, external reviews, LMS converter, server-setup, platform checklists, face-validity review, fonts, sound production, ending music). Total 5,820 → 6,179 h; owner time 75 → 89 h; cut list re-ordered (13 items, ~435 h); scope verdict: Stage 4 buffer is now ~15%. |
 | 2026-11-27 | Stage 2 checkpoint: new section 6 (slices 1 to 4 output vs plan estimates, no measured effort; plan 208 h vs budget 180 h mismatch; panel-dust remainder 11.5 to 12.5 dev-days and Monitor history placeholder added as unscheduled items; cut recommendation). Section numbers: change log is now 7. Section 2 totals unchanged (not re-estimated: no measured rate). |
+| 2026-11-27 | Section 6.5 added (Stage 3 plan check). No hours changed. |
