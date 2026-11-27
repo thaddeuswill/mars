@@ -32,7 +32,7 @@ Controls first, content second (DESIGN.md, Landing). No forecast fires until the
 | 3 | Open the Planetary Monitor. Read today's pressure and air mix. | Monitor opened, pressure line and "Air mix" line shown (Air mix: about 95 % CO2, almost no oxygen; A1) |
 | 4 | Take a seal kit from the locker. | Seal kit in inventory |
 | 5 | Hab B is leaking. Patch the cracked panel. | Breach sealed |
-| 6 | Power is low. Switch on the backup battery. | Battery on |
+| 6 | Place your two Ovens. Switch on the battery to power them. | Both Ovens placed and the battery switched on (proposed, Instructional Designer report 4c; owner accepted "battery and Ovens"). Whether the Landing backup battery is the grid Battery block is **unverified** |
 | 7 | Step out through the airlock. Use the dust-off station coming back. | Airlock cycled out and in, dust-off used |
 | 8 | Open your journal. Your shift notes live here. | Journal opened |
 | done | Checklist done. Logging. | — |
@@ -332,7 +332,7 @@ Mensah's first message. Voice: kind teacher, curious about the data, never quizz
 | `journal.outgasser.puff` | First Outgasser running | The white puff is water vapor freezing into tiny ice crystals, like your breath on a cold day. The CO2 coming out is invisible. | §2.5, accurate |
 | `journal.sound.thin_air` | First trip outside after Landing | Thin air carries sound poorly. Sounds are quiet, and high pitches fade fast. As the air thickens, sound gets louder and fuller. | §4, accurate |
 | `journal.mast.balloon` | First look at the weather mast (or Landing step 7) | The lift balloon floats higher as the air gets thicker, because thicker air pushes up on it harder. | §2.7, acceptable simplification |
-| `journal.sky.stylized` | Phase 2 begins (first rose sky) | Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them. | §6 note 8 |
+| `journal.sky.stylized` | Gate `mars:dome_stable` latches (before any Outgasser pressure, so before the sky moves; sky tint starts at 0.6 kPa). Chat pointer: "New journal entry: the sky." Repeat in the Phase 2 begins gate entry (proposed, Instructional Designer 4a) | More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them. | §6 note 8 (SME-required text, both bands) |
 
 ## 13. Shift log (optional end-of-session mini-review, classroom)
 
