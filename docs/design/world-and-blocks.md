@@ -22,7 +22,7 @@ Today Mars is a flat slab (bedrock, 56 stone, 4 red sandstone, 3 red sand; no or
 |---|---|---|---|---|
 | **Mine** | Dig regolith and rock around the dome. Dig *down* and pile regolith *up* to shield the shelter and living quarters | Regolith and basalt are the shielding blocks already in the balance sheet (each block x0.5 dose; 3 blocks = about x0.13). **Hematite** (iron) for bearings and heater coils. **Silica sand** for dome glass and greenhouse panes. Rare **meteorite iron** as an exploring prize | Parts keep machines alive (C1). Shielding answers forecast F2. Heater coils build Outgassers and Ovens, which move pressure to the 5 kPa gate | A1, C1, C2, B1 |
 | **Build** | Compact hab: stack stories upward inside a sealed footprint. Airlock with a brush station. Solar panel arrays (3x3), batteries, Ovens, first Outgassers | Scarcity is real: a limited footprint of sealed, pressurised space; glass and parts cost ore | Power grid and Outgasser rate (existing slices 3 to 5) | B1, C1, C2 |
-| **Garden** | **Sealed dome greenhouse.** Wash perchlorate out of regolith, fill planters, grow potato, lettuce, dwarf wheat, tomato under lamps and warmth. Water from the dome reclaimer | Food is the pressure that keeps people away from the machines. Perchlorate washing is a real constraint (**SME check**: perchlorate in Mars soil is real; amounts and washing method to be verified) | Food and the dead-tomato lesson (C1). Does **not** change a Planetary Index row | C1, A1 |
+| **Garden** | **Sealed dome greenhouse.** Wash perchlorate out of regolith, fill planters, grow potato, lettuce, dwarf wheat, tomato under lamps and warmth. Water from the dome reclaimer | Food is the pressure that keeps people away from the machines. Perchlorate washing is a real constraint (**SME checked 2026-11-27, accurate**: perchlorate in Mars soil is real, about 0.4 to 0.6% by mass of leachate at Phoenix [R1]; it kills plants at high dose in analog soil [R10]. **Washing method NOT VERIFIED**: no source opened; label the washing step *game design*) | Food and the dead-tomato lesson (C1). Does **not** change a Planetary Index row | C1, A1 |
 | **Explore** | Short trips (radius about 64 blocks) in a suit: find a hematite outcrop, a crater rim, the first ground-ice patch (a *survey scan* shows it, you do not guess) | Exploring sets up Phase 2: you learn where the ice is before you need it | Nothing yet; it plants B5 and A2 | A2, A4 |
 
 ### Phase 2: Industrial Geo-Engineering (about 18 h standard)
@@ -31,7 +31,7 @@ Today Mars is a flat slab (bedrock, 56 stone, 4 red sandstone, 3 red sand; no or
 |---|---|---|---|---|
 | **Mine** | Locate and drill **ground ice** (lenses a few blocks under regolith, thicker at higher "latitude" toward the polar cap). Quarry **sulfate/gypsum** and **carbonate rock** for tube hulls and insulation. Mine more iron for processors | **Ground ice must be under the ice extractor** to place it. Dry ground: it will not run | Hydrosphere gate (ice extractors), Thaw. The extractor's rate is the same number as today; terrain decides *where*, not *how fast* | A2, A3, B1 |
 | **Build** | Airlocks, **pressurised transit tubes** to outposts, outposts with their own panels, atmospheric processors, emitters, insulation shrouds | Tubes are the "expansion is earned" step: wide building is allowed only after Phase 2 begins. Build on rock, not on ice lenses | Temperature gate (emitters, mirror uplink). Ground collapse is a cost of putting heat on ice (B5) | B2, B5, C2 |
-| **Garden** | Not a Phase 2 theme. Greenhouse continues for food; meltwater needs treatment before it reaches planters (perchlorate dissolves in meltwater, real effect, **SME check**) | Keeps the farming verb alive and ties it to the salty-meltwater hazard | None (food, safety) | C1, B5 |
+| **Garden** | Not a Phase 2 theme. Greenhouse continues for food; meltwater needs treatment before it reaches planters (perchlorate is a soluble salt, measured in water extracts of Phoenix soil [R1]: **accurate**; the treatment machine is *invented*) | Keeps the farming verb alive and ties it to the salty-meltwater hazard | None (food, safety) | C1, B5 |
 | **Explore** | Survey for ice lenses, outposts, canyon walls, polar cap edge. Quiet zones and lure stations are placed on terrain you scouted | The map is the second quest log: every outpost sits on ground you read | Fauna signature (existing) | A4, B5, D1 |
 
 ### Phase 3: Biome Seeding and Equilibrium (about 14 h standard)
@@ -51,15 +51,15 @@ Today Mars is a flat slab (bedrock, 56 stone, 4 red sandstone, 3 red sand; no or
 
 ### 2.2 Target world (what it should look like, and the real-Mars link)
 
-| Feature | In game | Real Mars link (all **SME check**) |
+| Feature | In game | Real Mars link (SME checked 2026-11-27; verdict in brackets, sources R1 to R10 in `docs/team/reports/2026-11-27-sme-world-and-blocks.md`) |
 |---|---|---|
-| Rolling regolith plains, rocky basalt highs | Noise-based hills 10 to 40 blocks, red sand and dust on top, basalt outcrops | Basaltic crust under iron-oxide dust |
-| **Craters** | Bowls 8 to 60 blocks wide with raised rims; rim shows layers, floor traps dust | Impact craters are everywhere on Mars |
-| **Dunes** | Wavy sand ridges in low basins | Dune fields exist (wind-formed) |
-| **Canyon / scarp** | One long cut near the map edge for a Phase 2 outpost and view | Valles Marineris is the famous example; ours is a small stand-in, labelled "stylised" |
-| **Ore veins** | Hematite (red-grey) in outcrops; silica sand in dune basins; sulfate/gypsum in canyon walls; rare meteorite iron on the surface | Hematite and sulfates have been found from orbit and by rovers; meteorite iron-nickel has been found on the surface. Amounts and places are *invented* |
-| **Caves and ice** | Small lava-tube-style caves (cosmetic, shelter); **ground-ice lenses** at 3 to 12 blocks under the surface | Buried ground ice is real at mid and high latitudes; whether it sits this close is *stylised* |
-| **Polar cap** | At the far north edge: layered ice and frozen CO2 | Real; the polar frost sink (slice 5) already models CO2 there |
+| Rolling regolith plains, rocky basalt highs | Noise-based hills 10 to 40 blocks, red sand and dust on top, basalt outcrops | Basaltic crust under iron-oxide dust [**accurate**: red from iron oxide, R3; basaltic sand, R8] |
+| **Craters** | Bowls 8 to 60 blocks wide with raised rims; rim shows layers, floor traps dust | Impact craters are everywhere on Mars [**accurate**: R3 lists impact craters among the shapers of the surface; "everywhere" is a simplification, density varies] |
+| **Dunes** | Wavy sand ridges in low basins | Dune fields exist (wind-formed) [**accurate**: active Bagnold dunes, R8]. Sand there is dark basaltic (olivine, pyroxene), not white quartz; keep dunes dark or red-brown |
+| **Canyon / scarp** | One long cut near the map edge for a Phase 2 outpost and view | Valles Marineris is the famous example; ours is a small stand-in, labelled "stylised" [**accurate**: about 3,870 km long, 600 km wide, up to 9.3 km deep, R3; a 1 m per block canyon cannot be real size, so the "stylised" label is required] |
+| **Ore veins** | Hematite (red-grey) in outcrops; silica sand in dune basins; sulfate/gypsum in canyon walls; rare meteorite iron on the surface | Hematite and sulfates have been found from orbit and by rovers; meteorite iron-nickel has been found on the surface. Amounts and places are *invented* [hematite: **accurate**, 350 by 750 km region at Meridiani, R5; sulfates: **accurate**, calcium sulfate veins at Gale, R6; meteorite iron: **accurate**, four found by Opportunity, R7. **Silica sand ore: acceptable simplification**, Mars sand is basaltic and the glass-quality silica source is NOT VERIFIED; call it "sand" not "quartz"] |
+| **Caves and ice** | Small lava-tube-style caves (cosmetic, shelter); **ground-ice lenses** at 3 to 12 blocks under the surface | Buried ground ice is real at mid and high latitudes; whether it sits this close is *stylised* [ground ice: **acceptable simplification**, models say ice is stable within 1 to 2 m at high latitude and deeper toward the equator, R2; Phoenix hit an ice table about 5 cm down, R1. 3 to 12 blocks near the dome is deeper than the polar truth and shallower than the equatorial truth; say so on the survey scan. Lava tubes: **NOT VERIFIED** (no Mars source opened); label caves "cosmetic, invented"] |
+| **Polar cap** | At the far north edge: layered ice and frozen CO2 | Real [**acceptable simplification**: the north residual cap is water ice and the south residual cap has CO2 ice, with seasonal CO2 frost on both, R4; the game's "layered ice and frozen CO2" at one edge merges the two] ; the polar frost sink (slice 5) already models CO2 there |
 | **Dormant fauna sites** | Not terrain. Left to the fauna design (fictional, labelled) | n/a (fiction) |
 
 **Design rule:** resources that matter for a gate sit **near the dome in Phase 1** (a hematite outcrop and one ice patch within about 64 blocks) and the richer deposits sit **far** (150 to 400 blocks), so wide travel is a Phase 2 reward, not a Phase 1 chore. This is *invented* and must be tuned in the first playtest.
@@ -106,7 +106,7 @@ Legend for "Why": **G** = needed for a gate; **L** = learning purpose; **N** = n
 | Red sandstone / red sand | Vanilla | 1 | N | Surface, already in use |
 | Hematite ore (iron) | **New** | 1 | G | Iron ingots for bearings, coils, tools |
 | Silica sand ore | **New** (or reuse vanilla sand, retinted) | 1 | G | Glass for dome and greenhouse |
-| Meteorite iron | **New**, rare surface block | 1 | N | Exploring prize; real thing (**SME check**) |
+| Meteorite iron | **New**, rare surface block | 1 | N | Exploring prize; real thing (**SME checked: accurate**, R7) |
 | Ground ice | **New**, with behaviour | 1 (found), 2 (used) | G, L | Source for ice extractors; collapses when heated; follows `ice_rule.json` |
 | Sulfate / gypsum rock | **New** or reuse vanilla `calcite` | 2 | L | Tube hull and insulation |
 | Carbonate rock | **New** | 2 to 3 | L, G | Output block of the carbon scrubber; building block |
@@ -159,10 +159,10 @@ Keep the vanilla tool set so the hands know what to do. Tier by material, not by
 | Resource or terrain | Feeds | How (no change to Index numbers) | Source status |
 |---|---|---|---|
 | Regolith, basalt | Radiation shielding; Outgasser/Oven bake | Shielding numbers already in the balance sheet (*invented*) | Dose direction sourced (SME round 2); block value invented |
-| Ground ice | Hydrosphere, Thaw, ground collapse | Extractor must sit on it; rate stays as in the balance sheet | Real buried ice (**SME check** depth and place); the game stylises depth |
-| Hematite, silica, meteorite iron | Machine and glass cost | Build cost only | Real minerals (**SME check** abundance); amounts *invented* |
-| Carbonate rock | CO2 sink (scrubber) | Matches Phase 3 rule A "scrubbers lock CO2 into carbonate rock" | Real chemistry; Mars carbonates are small amounts (**SME check**) |
-| Perchlorate seams | Hazard; meltwater salts | Existing perchlorate exposure numbers (*invented*) | Perchlorate in Mars soil is real; levels **SME check** |
+| Ground ice | Hydrosphere, Thaw, ground collapse | Extractor must sit on it; rate stays as in the balance sheet | Real buried ice (**SME checked: acceptable simplification** on depth and place, R1 R2); the game stylises depth |
+| Hematite, silica, meteorite iron | Machine and glass cost | Build cost only | Real minerals (**SME checked: accurate** for hematite, sulfate, meteorite iron; silica sand ore **acceptable simplification**, see 2.2); amounts *invented* |
+| Carbonate rock | CO2 sink (scrubber) | Matches Phase 3 rule A "scrubbers lock CO2 into carbonate rock" | Real chemistry; Mars carbonates exist (Jezero, R9) but **abundance NOT VERIFIED**; keep carbonate rock rare and label the scrubber output as game-scale |
+| Perchlorate seams | Hazard; meltwater salts | Existing perchlorate exposure numbers (*invented*) | Perchlorate in Mars soil is real; levels 0.4 to 0.6% by mass in Phoenix leachate (R1), **accurate**; "seams" and a scan that finds them are **invented** (perchlorate is spread through the soil, not in veins) |
 | Polar cap | Polar-frost sink | Existing slice 5 | CO2 cap real (balance sheet cites SME round 2) |
 | Craters and dunes | Mood, exploring, shelter | Nothing | Real features; sizes stylised |
 | Biocrust and soil | Biomass, O2/CO2 swap | Existing Phase 3 numbers | Succession order accurate (SME round 3); speed is fiction and labelled |
