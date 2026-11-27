@@ -2,7 +2,7 @@
 
 **Owner:** Lead Game Designer · **Status of every entry:** draft: SME check and ID review pending · Conventions: [README.md](README.md)
 
-Order of first play: opening card → Landing checklist → Shift Briefing 1 → first storm (F1) → first solar event (warnings, F2) → ice near a heater (F4a, any time) → Dome stable → Hana's worked example → first Outgasser (F3) → Phase 2 begins (Keeper's Report 1, Mensah's reply).
+Order of first play (revised 2026-11-27 to match the balance curve: first storm on sol 14, after Dome stable on sol 9; the landing storm in the intro is backstory): opening card → Landing checklist → Shift Briefing 1 → ice near a heater (F4a, any time) → Dome stable → Hana's worked example → first Outgasser (F3) → first storm (F1, sol 14 standard, sol 4 classroom) → first solar event (warnings, F2) → Phase 2 begins (Keeper's Report 1, Mensah's reply). Proposed; Game Designer to confirm trigger text for F1 and F2 still fits.
 
 ---
 
