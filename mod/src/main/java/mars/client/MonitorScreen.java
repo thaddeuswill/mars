@@ -306,13 +306,25 @@ public final class MonitorScreen extends Screen {
     g.pose().popPose();
     y += mainH;
 
-    if (row.detailKey() != null || row.detailRight() != null) {
+    if (row.goal() != null) {
+      y = drawGoalBar(g, row, x0, right, y);
+    }
+    if (MonitorLayout.hasDetailLine(row)) {
       y += 1;
       if (row.detailKey() != null) {
         Component d = Component.translatable(row.detailKey(), row.detailArgs().toArray());
         g.drawString(font, d, x0 + PAD, y, LABEL, false);
       }
-      if (row.detailRight() != null) {
+      if (row.goal() != null) {
+        MonitorView.Goal gl = row.goal();
+        if (gl.etaKey() != null) {
+          Component eta =
+              gl.etaArg() == null
+                  ? Component.translatable(gl.etaKey())
+                  : Component.translatable(gl.etaKey(), gl.etaArg());
+          g.drawString(font, eta, right - font.width(eta), y, LABEL, false);
+        }
+      } else if (row.detailRight() != null) {
         Component r =
             row.detailRightKey() != null
                 ? Component.translatable(row.detailRightKey(), row.detailRight())
@@ -357,6 +369,37 @@ public final class MonitorScreen extends Screen {
       y += NOTE_LINES * LINE_H;
     }
     return y;
+  }
+
+  /**
+   * The next-gate bar line: the goals count in the label column, then the bar (value against the
+   * target; the fill is a continuous bar, never colour alone because the percent is written), then
+   * the percent. Returns the y below the line.
+   */
+  private int drawGoalBar(GuiGraphics g, MonitorView.Row row, int x0, int right, int y) {
+    MonitorView.Goal gl = row.goal();
+    int mid = y + (GOAL_BAR_LINE_H - 8) / 2;
+    if (row.detailRight() != null) {
+      Component c =
+          row.detailRightKey() != null
+              ? Component.translatable(row.detailRightKey(), row.detailRight())
+              : Component.literal(row.detailRight());
+      g.drawString(font, c, x0 + PAD, mid, LABEL, false);
+    }
+    int pw = font.width(gl.percent());
+    g.drawString(font, gl.percent(), right - pw, mid, LABEL, false);
+    int bx = x0 + PAD + LABEL_W;
+    int bw = right - pw - 4 - bx;
+    if (bw >= 10) {
+      int by = y + (GOAL_BAR_LINE_H - GOAL_BAR_H) / 2;
+      int filled = (int) Math.round(gl.fraction() * bw);
+      if (gl.fraction() > 0) {
+        filled = Math.max(1, filled);
+      }
+      g.fill(bx, by, bx + bw, by + GOAL_BAR_H, GOAL_BAR_EMPTY);
+      g.fill(bx, by, bx + Math.min(bw, filled), by + GOAL_BAR_H, GOAL_BAR_FILL);
+    }
+    return y + GOAL_BAR_LINE_H;
   }
 
   /** Up triangle, flat bar or down triangle, so the trend is never colour alone. */

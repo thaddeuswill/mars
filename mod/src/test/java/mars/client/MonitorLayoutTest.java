@@ -126,4 +126,48 @@ class MonitorLayoutTest {
       }
     }
   }
+
+  @Test
+  void theGoalBarFitsTheSameHeightsInEveryState() throws Exception {
+    java.util.Map<String, MonitorView> states = new java.util.LinkedHashMap<>();
+    states.put("far", started());
+    states.put("powered", powered());
+    states.put("short+dusty", shortAndDusty());
+    states.put("levelling", levellingOff());
+    states.put("levelling+short+dusty", levellingShortAndDusty());
+    for (var e : states.entrySet()) {
+      MonitorView raw = e.getValue();
+      boolean hasBar = raw.rows().stream().anyMatch(r -> r.goal() != null);
+      MonitorView v = MonitorLayout.fit(raw);
+      int total = MonitorLayout.panelHeight(v, H3);
+      System.out.println(
+          e.getKey()
+              + ": bar="
+              + hasBar
+              + " plot "
+              + MonitorLayout.plotHeight(v, H3)
+              + " -> panel "
+              + total
+              + " GUI px");
+      assertTrue(hasBar, e.getKey());
+      assertTrue(
+          total <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW, e.getKey() + " is " + total);
+      // The bar line itself never drops: only the detail text and the plot give way.
+      assertTrue(v.rows().stream().anyMatch(r -> r.goal() != null), e.getKey());
+    }
+  }
+
+  @Test
+  void aGoalRowCountsOneBarLineAndKeepsItsCountOffTheDetailLine() throws Exception {
+    MonitorView v = started();
+    MonitorView.Row g = v.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
+    int expected =
+        MonitorStyle.ROW_H_EMPHASIS + MonitorStyle.GOAL_BAR_LINE_H + MonitorStyle.LINE_H - 1;
+    assertEquals(expected, MonitorLayout.rowHeight(g));
+    MonitorView fitted = MonitorLayout.fit(v);
+    MonitorView.Row f =
+        fitted.rows().stream().filter(r -> r.goal() != null).findFirst().orElseThrow();
+    assertEquals(g.goal(), f.goal());
+    assertEquals(g.detailRight(), f.detailRight());
+  }
 }

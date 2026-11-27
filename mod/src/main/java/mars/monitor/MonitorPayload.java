@@ -82,6 +82,14 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     buf.writeNullable(r.detailRight(), FriendlyByteBuf::writeUtf);
     buf.writeDouble(r.bar());
     buf.writeNullable(r.noteKey(), FriendlyByteBuf::writeUtf);
+    buf.writeNullable(
+        r.goal(),
+        (b, g) -> {
+          b.writeDouble(g.fraction());
+          b.writeUtf(g.percent());
+          b.writeNullable(g.etaKey(), FriendlyByteBuf::writeUtf);
+          b.writeNullable(g.etaArg(), FriendlyByteBuf::writeUtf);
+        });
   }
 
   private static MonitorView.Row readRow(FriendlyByteBuf buf) {
@@ -108,6 +116,14 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     String detailRight = buf.readNullable(FriendlyByteBuf::readUtf);
     double bar = buf.readDouble();
     String noteKey = buf.readNullable(FriendlyByteBuf::readUtf);
+    MonitorView.Goal goal =
+        buf.readNullable(
+            b ->
+                new MonitorView.Goal(
+                    b.readDouble(),
+                    b.readUtf(),
+                    b.readNullable(FriendlyByteBuf::readUtf),
+                    b.readNullable(FriendlyByteBuf::readUtf)));
     return new MonitorView.Row(
         label,
         value,
@@ -123,6 +139,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
         detailRightKey,
         detailRight,
         bar,
-        noteKey);
+        noteKey,
+        goal);
   }
 }

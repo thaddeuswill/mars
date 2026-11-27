@@ -63,6 +63,12 @@ public final class PlanetaryIndexModel {
     return value(id);
   }
 
+  /** Start value of a stored parameter (the left end of a goal bar), or 0 if it has none. */
+  public double start(ParameterId id) {
+    ParameterDef d = defs.get(id);
+    return d == null ? 0 : d.start();
+  }
+
   /** Unit text of a stored parameter ("kPa"), or "" if it has none or is derived. */
   public String unit(ParameterId id) {
     ParameterDef d = defs.get(id);

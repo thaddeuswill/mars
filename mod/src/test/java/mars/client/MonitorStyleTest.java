@@ -74,10 +74,19 @@ class MonitorStyleTest {
           world, axis, edge, line, empty);
       assertTrue(axis >= 3 && edge >= 3 && line >= 3, "axis, edge and series");
       assertTrue(empty >= 2.9, "empty battery segment " + empty);
+      double goalFill = ratio(MonitorStyle.GOAL_BAR_FILL & 0xFFFFFF, bg);
+      double goalEmpty = ratio(MonitorStyle.GOAL_BAR_EMPTY & 0xFFFFFF, bg);
+      System.out.printf("goal bar over %06X: fill %.2f empty %.2f%n", world, goalFill, goalEmpty);
+      assertTrue(goalFill >= 3, "goal bar fill " + goalFill);
+      assertTrue(goalEmpty >= 2.9, "goal bar empty " + goalEmpty);
     }
     double fillVsEmpty =
         ratio(MonitorStyle.STATE_GOOD & 0xFFFFFF, MonitorStyle.BAR_EMPTY & 0xFFFFFF);
     System.out.printf("battery full vs empty segment: %.2f%n", fillVsEmpty);
     assertTrue(fillVsEmpty >= 2.9, "" + fillVsEmpty);
+    // The goal bar uses the same two colours; the percent text carries the value as well.
+    assertTrue(
+        ratio(MonitorStyle.GOAL_BAR_FILL & 0xFFFFFF, MonitorStyle.GOAL_BAR_EMPTY & 0xFFFFFF)
+            >= 2.9);
   }
 }

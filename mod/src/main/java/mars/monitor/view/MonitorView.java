@@ -91,9 +91,10 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       String detailRightKey,
       String detailRight,
       double bar,
-      String noteKey) {
+      String noteKey,
+      Goal goal) {
 
-    /** Without a note. */
+    /** Without a note or goal bar. */
     public Row(
         String labelKey,
         String value,
@@ -124,6 +125,43 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           detailRightKey,
           detailRight,
           bar,
+          null,
+          null);
+    }
+
+    /** Without a goal bar. */
+    public Row(
+        String labelKey,
+        String value,
+        String valueKey,
+        Trend trend,
+        String trendRate,
+        List<CauseLine> causes,
+        Tone tone,
+        boolean emphasis,
+        String side,
+        String detailKey,
+        List<String> detailArgs,
+        String detailRightKey,
+        String detailRight,
+        double bar,
+        String noteKey) {
+      this(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
           null);
     }
 
@@ -167,7 +205,8 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           detailRightKey,
           detailRight,
           bar,
-          noteKey);
+          noteKey,
+          goal);
     }
 
     /** The same row with a wrapped note under its lines (two lines on the panel). */
@@ -187,9 +226,17 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           detailRightKey,
           detailRight,
           bar,
-          noteKey);
+          noteKey,
+          goal);
     }
   }
+
+  /**
+   * The next-gate bar under the goal line: {@code fraction} 0..1 (log scale for pressure, see
+   * {@link GoalProgress}), its {@code percent} text, and the optional time estimate: {@code etaKey}
+   * is a language key formatted with {@code etaArg} ("~%s sols at this rate"), or null for none.
+   */
+  public record Goal(double fraction, String percent, String etaKey, String etaArg) {}
 
   /**
    * "Regolith Outgasser ×2: +0.20 kPa/sol". {@code sourceKey} is a language key. {@code reasonKey}
@@ -291,7 +338,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
-    gateRows(sim, rows);
+    gateRows(sim, rows, net);
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
   }
 
@@ -408,7 +455,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
    * reached. When every gate is reached the line reads "Goals reached 2 / 2". Gates lock in, so a
    * reached goal is never lost.
    */
-  private static void gateRows(PlanetSim sim, List<Row> rows) {
+  private static void gateRows(PlanetSim sim, List<Row> rows, double pressureNet) {
     var tracker = sim.gates();
     int reached = 0;
     for (mars.gates.GateDef d : tracker.defs()) {
@@ -424,6 +471,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       String base = "monitor.gate." + d.id().substring(d.id().indexOf(':') + 1);
       String side = null;
       String detailKey = base + ".progress";
+      Goal goal = null;
       var st = tracker.state(d.id());
       if (d.hold() != null) {
         double need = tracker.holdSols(d);
@@ -431,10 +479,28 @@ public record MonitorView(double sols, List<Row> rows, History history) {
         if (st.falseSols() > 0) {
           detailKey = base + ".waiting";
         }
+        double held = Math.min(st.heldSols(), need);
+        goal = new Goal(held / need, GoalProgress.percent(held / need, false), null, null);
       } else if (d.condition() instanceof mars.gates.Condition.Compare c) {
         String unit = sim.model().unit(c.parameter());
         double now = sim.model().current(c.parameter());
         side = Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit;
+        boolean isPressure = c.parameter().equals(Ids.PRESSURE);
+        double f =
+            GoalProgress.fraction(now, sim.model().start(c.parameter()), c.value(), isPressure);
+        String etaKey = null;
+        String etaArg = null;
+        if (isPressure) {
+          long eta = GoalProgress.etaSols(now, c.value(), pressureNet, PRESSURE_STEADY);
+          etaKey =
+              eta < 0
+                  ? "monitor.goal.not_rising"
+                  : eta == 0
+                      ? "monitor.goal.eta_soon"
+                      : eta == 1 ? "monitor.goal.eta_one" : "monitor.goal.eta";
+          etaArg = eta > 1 ? Long.toString(eta) : null;
+        }
+        goal = new Goal(f, GoalProgress.percent(f, false), etaKey, etaArg);
       }
       rows.add(
           new Row(
@@ -451,7 +517,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               List.of(),
               reached > 0 ? "monitor.goals.count" : null,
               reached > 0 ? count : null,
-              -1));
+              -1,
+              null,
+              goal));
       return;
     }
     if (reached > 0) {
