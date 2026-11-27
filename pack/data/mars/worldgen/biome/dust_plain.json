@@ -21,7 +21,9 @@
     [
       "mars:hematite_vein",
       "mars:dark_sand_vein",
-      "mars:ground_ice_lens"
+      "mars:ground_ice_lens",
+      "mars:vesicular_patch_rare",
+      "mars:spherule_patch"
     ],
     [],
     [],

@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "mars:hematite_ore",
-    "mars:ground_ice"
+    "mars:ground_ice",
+    "mars:duricrust",
+    "mars:vesicular_basalt",
+    "mars:impact_breccia",
+    "mars:gypsum_vein"
   ]
 }

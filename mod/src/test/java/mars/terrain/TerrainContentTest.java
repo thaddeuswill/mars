@@ -21,7 +21,16 @@ import org.junit.jupiter.api.Test;
 /** W1 terrain content: JSON is valid, every reference resolves, amounts live in data. */
 class TerrainContentTest {
   private static final Set<String> TERRAIN_BLOCKS =
-      Set.of("basaltic_sand", "hematite_ore", "dark_sand_ore", "ground_ice");
+      Set.of(
+          "basaltic_sand",
+          "hematite_ore",
+          "dark_sand_ore",
+          "ground_ice",
+          "duricrust",
+          "vesicular_basalt",
+          "spherule_sand",
+          "impact_breccia",
+          "gypsum_vein");
 
   /** Registry ids of the machines, the other mars blocks a terrain file could name. */
   private static final Set<String> OTHER_IDS = Set.of("mars", "planet");

@@ -62,12 +62,12 @@
       "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). One wavelength for the planet (a varying one shears the crests); crest warp and height noise supply the variety. windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
     },
     "surface": {
-      "rim_block": "minecraft:smooth_basalt",
+      "rim_block": "mars:impact_breccia",
       "rim_block_min_diameter": 16,
-      "ejecta_block": "minecraft:sandstone",
+      "ejecta_block": "mars:impact_breccia",
       "ejecta_block_chance": 0.25,
       "dune_sand": "mars:basaltic_sand",
-      "note": "Top block overrides. Dust and plains patches come from the noise settings' surface rule. Rim and ejecta colours are a first guess for the Artist and SME: 'lighter or rockier material' (SME row 3). Dune sand is dark (Curiosity report, VERIFIED in the SME reference)."
+      "note": "Top block overrides. Dust and plains patches come from the noise settings' surface rule. Rim and ejecta are impact breccia (W2, SME materials row 19, REAL: NTRS 20170006943); colours are a first guess for the Artist and SME: 'lighter or rockier material' (SME row 3). Dune sand is dark (Curiosity report, VERIFIED in the SME reference)."
     },
     "rocks": {
       "rim_chance": 0.08,

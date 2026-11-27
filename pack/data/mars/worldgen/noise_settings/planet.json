@@ -712,7 +712,7 @@
         "type": "minecraft:condition",
         "if_true": {
           "type": "minecraft:stone_depth",
-          "offset": 2,
+          "offset": 1,
           "surface_type": "floor",
           "add_surface_depth": false,
           "secondary_depth_range": 0
@@ -742,6 +742,22 @@
               }
             }
           ]
+        }
+      },
+      {
+        "type": "minecraft:condition",
+        "if_true": {
+          "type": "minecraft:stone_depth",
+          "offset": 2,
+          "surface_type": "floor",
+          "add_surface_depth": false,
+          "secondary_depth_range": 0
+        },
+        "then_run": {
+          "type": "minecraft:block",
+          "result_state": {
+            "Name": "mars:duricrust"
+          }
         }
       },
       {

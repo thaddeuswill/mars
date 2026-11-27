@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mars:hematite_ore"
+    "mars:hematite_ore",
+    "mars:vesicular_basalt",
+    "mars:impact_breccia",
+    "mars:gypsum_vein"
   ]
 }

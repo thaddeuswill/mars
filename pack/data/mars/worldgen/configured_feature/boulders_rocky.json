@@ -34,6 +34,12 @@
                 "data": {
                   "Name": "minecraft:blackstone"
                 }
+              },
+              {
+                "weight": 4,
+                "data": {
+                  "Name": "mars:vesicular_basalt"
+                }
               }
             ]
           }
@@ -61,7 +67,8 @@
                   "mars:basaltic_sand",
                   "minecraft:sandstone",
                   "minecraft:smooth_basalt",
-                  "minecraft:red_sandstone"
+                  "minecraft:red_sandstone",
+                  "mars:duricrust"
                 ]
               }
             ]

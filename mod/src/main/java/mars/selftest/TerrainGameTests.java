@@ -6,6 +6,7 @@ import java.util.Map;
 import mars.dimension.MarsChunkGenerator;
 import mars.terrain.Landforms;
 import mars.terrain.TerrainMode;
+import mars.world.MarsTerrainBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -272,7 +273,11 @@ public final class TerrainGameTests {
             "minecraft:smooth_basalt",
             "minecraft:basalt",
             "minecraft:tuff",
-            "minecraft:blackstone");
+            "minecraft:blackstone",
+            "mars:impact_breccia",
+            "mars:vesicular_basalt",
+            "mars:spherule_sand",
+            "mars:duricrust");
     List<String> odd = new java.util.ArrayList<>();
     for (String k : tops.keySet()) {
       if (allowedPrefixes.stream().noneMatch(k::equals) && !k.endsWith("terracotta")) {
@@ -407,7 +412,17 @@ public final class TerrainGameTests {
     ServerLevel level = helper.getLevel();
     MinecraftServer server = level.getServer();
     boolean ok = true;
-    List<String> blockIds = List.of("basaltic_sand", "hematite_ore", "dark_sand_ore", "ground_ice");
+    List<String> blockIds =
+        List.of(
+            "basaltic_sand",
+            "hematite_ore",
+            "dark_sand_ore",
+            "ground_ice",
+            "duricrust",
+            "vesicular_basalt",
+            "spherule_sand",
+            "impact_breccia",
+            "gypsum_vein");
     StringBuilder missing = new StringBuilder();
     for (String b : blockIds) {
       ResourceLocation rl = ResourceLocation.fromNamespaceAndPath("mars", b);
@@ -430,7 +445,7 @@ public final class TerrainGameTests {
     ok &=
         SelfTest.check(
             "terrain.blocks",
-            "4 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
+            "9 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
             missing.length() == 0 ? "all present, recipe " + recipe : "missing " + missing,
             missing.length() == 0 && recipe);
 
@@ -457,7 +472,10 @@ public final class TerrainGameTests {
             "hematite_vein_rich",
             "dark_sand_vein",
             "boulders_plain",
-            "boulders_rocky")) {
+            "boulders_rocky",
+            "vesicular_patch",
+            "vesicular_patch_rare",
+            "spherule_patch")) {
       var real = placed.get(ResourceLocation.fromNamespaceAndPath("mars", name));
       // The biome filter would test the GameTest world's biome, not Mars: leave it out here.
       var pf =
@@ -472,6 +490,43 @@ public final class TerrainGameTests {
         pf.place(
             level, gen, rand, new BlockPos(ox + 16 + (i % 2) * 16, 60, oz + 16 + (i / 2 % 2) * 16));
       }
+    }
+    // Gypsum veins go in layered rock: a scratch wall of terracotta bands far from the rest.
+    int gx = 41000;
+    for (int x = gx; x < gx + 64; x++) {
+      for (int z = oz; z < oz + 64; z++) {
+        for (int y = 30; y <= 100; y++) {
+          level.setBlock(new BlockPos(x, y, z), Blocks.TERRACOTTA.defaultBlockState(), 2);
+        }
+      }
+    }
+    {
+      var real = placed.get(ResourceLocation.fromNamespaceAndPath("mars", "gypsum_vein"));
+      var pf =
+          new net.minecraft.world.level.levelgen.placement.PlacedFeature(
+              real.feature(),
+              real.placement().stream()
+                  .filter(
+                      m -> !(m instanceof net.minecraft.world.level.levelgen.placement.BiomeFilter))
+                  .toList());
+      var rand = net.minecraft.util.RandomSource.create(78);
+      for (int i = 0; i < 40; i++) {
+        pf.place(
+            level, gen, rand, new BlockPos(gx + 16 + (i % 2) * 16, 60, oz + 16 + (i / 2 % 2) * 16));
+      }
+      int gypsum = 0;
+      for (int x = gx; x < gx + 64; x++) {
+        for (int z = oz; z < oz + 64; z++) {
+          for (int y = 30; y <= 100; y++) {
+            if (level
+                .getBlockState(new BlockPos(x, y, z))
+                .is(MarsTerrainBlocks.GYPSUM_VEIN.get())) {
+              gypsum++;
+            }
+          }
+        }
+      }
+      counts.put("gypsum_scratch", gypsum);
     }
     int rocksOnGround = 0;
     int rocksFloating = 0;
@@ -525,6 +580,14 @@ public final class TerrainGameTests {
                 && counts.getOrDefault("mars:ground_ice", 0) > 0
                 && iceYs[1] <= surface - 3
                 && iceYs[0] >= surface - 15);
+    ok &=
+        SelfTest.check(
+            "terrain.w2_surface_patches",
+            "vesicular basalt and spherule sand patches on the surface, gypsum veins in layered rock",
+            counts.toString(),
+            counts.getOrDefault("mars:vesicular_basalt", 0) > 0
+                && counts.getOrDefault("mars:spherule_sand", 0) > 0
+                && counts.getOrDefault("gypsum_scratch", 0) > 0);
     ok &=
         SelfTest.check(
             "terrain.boulders",

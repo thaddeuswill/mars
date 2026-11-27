@@ -107,5 +107,10 @@
   "block.mars.basaltic_sand": "Basaltic Sand",
   "block.mars.hematite_ore": "Hematite Ore",
   "block.mars.dark_sand_ore": "Dark Sand Ore",
-  "block.mars.ground_ice": "Ground Ice"
+  "block.mars.ground_ice": "Ground Ice",
+  "block.mars.duricrust": "Duricrust",
+  "block.mars.vesicular_basalt": "Vesicular Basalt",
+  "block.mars.spherule_sand": "Spherule Sand",
+  "block.mars.impact_breccia": "Impact Breccia",
+  "block.mars.gypsum_vein": "Gypsum Vein"
 }

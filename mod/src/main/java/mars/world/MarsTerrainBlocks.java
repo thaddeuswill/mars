@@ -66,9 +66,69 @@ public final class MarsTerrainBlocks {
               .strength(0.8f)
               .sound(SoundType.GLASS));
 
+  // ---- W2 Tier A surface blocks (docs/science/mars-surface-materials.md). Plain cubes; hardness
+  // values are INVENTED game numbers. co2_frost is deferred (needs a polar biome and a rule).
+
+  /** Thin salt-cemented crust under the dust (NTRS 20050203800). Breaks into red sand. */
+  public static final DeferredBlock<Block> DURICRUST =
+      block(
+          "duricrust",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_ORANGE)
+              .strength(1.0f)
+              .sound(SoundType.GRAVEL));
+
+  /** Lava rock with gas holes: dark grey-brown, never glowing. */
+  public static final DeferredBlock<Block> VESICULAR_BASALT =
+      block(
+          "vesicular_basalt",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_GRAY)
+              .strength(1.5f, 6.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
+  /** Dark sand with grey hematite spherules ("blueberries" are grey). Drops iron nuggets. */
+  public static final DeferredBlock<Block> SPHERULE_SAND =
+      block(
+          "spherule_sand",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_BROWN)
+              .strength(0.6f)
+              .sound(SoundType.SAND));
+
+  /** Angular rock fragments in a dark matrix: crater rims and ejecta. */
+  public static final DeferredBlock<Block> IMPACT_BRECCIA =
+      block(
+          "impact_breccia",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_GRAY)
+              .strength(2.0f, 6.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
+  /** Bright white gypsum veins in layered rock (water once moved through cracks). */
+  public static final DeferredBlock<Block> GYPSUM_VEIN =
+      block(
+          "gypsum_vein",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_WHITE)
+              .strength(1.5f, 3.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
   /** Every terrain block, in creative-tab order. */
   public static final List<DeferredBlock<Block>> ALL =
-      List.of(BASALTIC_SAND, HEMATITE_ORE, DARK_SAND_ORE, GROUND_ICE);
+      List.of(
+          BASALTIC_SAND,
+          HEMATITE_ORE,
+          DARK_SAND_ORE,
+          GROUND_ICE,
+          DURICRUST,
+          VESICULAR_BASALT,
+          SPHERULE_SAND,
+          IMPACT_BRECCIA,
+          GYPSUM_VEIN);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =
       TABS.register(
