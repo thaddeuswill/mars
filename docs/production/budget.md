@@ -173,10 +173,55 @@ The owner is the only human playtester and the only approver (risks R-17, R-27).
 | LMS file export (opt-in) | ~60–100 h | Post-release; the Stage 5 offline converter reduces the unknowns; privacy review first (R-22) |
 | "Veteran" setting | ~20–30 h | Deferred until after Stage 3; only if Lens B playtests ask for it |
 
-## 6. Change log
+## 6. Stage 2 actuals vs estimates (checkpoint 2026-11-27)
+
+**Sources:** the Technical Lead's reports of 2026-11-27 (`stage2-slice1`, `slice2`, `slice3-power`, `slice4-gates`, `monitor-ui`), the Artist's `monitor-mockups`, [stage2-plan.md](../tech/stage2-plan.md) §2. **Everything here is unverified as a cost.** The Technical Lead says in the slice 1, 2 and 3 reports that effort was "about one working session of agent time" and cannot be turned into developer-days. So there is **no measured effort rate**. What the reports do give is output (tests and boot checks), and that is all this table can show. This is risk R-01's "no historical data" still true after four slices.
+
+### 6.1 Slices 1 to 4
+
+| Slice | Plan estimate (dev-days, unverified) | Actual effort | Output delivered (from reports; all ran in the sandbox) |
+|---|---|---|---|
+| 1 Values, Outgasser, Monitor | 4 | Not measured ("about one session") | 61 unit tests (15 new), 35 boot checks (16 new); 3 real-client screenshots; found and fixed a boot-gate hole (a failed server start exited 0) |
+| 2 Session clock and pause (+ raised-array shape fix) | 3 | Not measured | 67 tests (+6), 41 boot checks (+6); I-3 proven; chunk-unload rule tested. **Not built:** the third-party machines GameTest, start-paused config, blocking actions while paused, HUD line |
+| 3 Power (solar panel, battery) | 3 | Not measured | 79 tests (+12), 46 boot checks (+5); dust stage feeds output; Monitor Power row |
+| 4 Gates ("Dome stable", "Phase 2 begins") | 4 | Not measured | 93 tests (+14), 52 boot checks (+6); I-1, I-2 proven; gates are data |
+| Monitor UI fixes (BACKLOG #36, unplanned) | 0 (not in plan) | Not measured | 96 tests (+3), 52 boot checks; panel 173 to about 131 GUI px; `MonitorStyle` |
+| **Slices 1 to 4** | **14 of the plan's 26** | Not measured | 96 tests, 52 boot checks; every slice ran a "prove it can fail" check |
+
+**What this says**
+- **Schedule:** four slices and an unplanned UI pass landed in one day. If the estimates were right, that is 14 developer-days of work, so either the estimates are far too high for this kind of work (likely: slices were thin and the Technical Lead is an agent) or the numbers do not transfer to the human-team "as if" model. **Do not use the 4:1 ratio to shrink Stage 3 or 4.** Re-estimate from a measured rate only (see 6.4).
+- **Quality gate held:** no slice was reported as passing without a run; two real defects were found by the checks themselves (the silent boot exit; a GameTest saved-state carry-over).
+- **Plan versus budget mismatch (new, Producer finding):** stage2-plan.md totals about 26 dev-days (about 208 h) of code, but this budget gives the Technical Lead **180 h** in Stage 2 (section 2). The plan is 28 h (16%) over the budget row before the items below. Slices 1 to 4 are 112 h of the 208.
+
+### 6.2 Work not in the Stage 2 slice list (added since)
+
+| Item | Estimate | Where it sits | Note |
+|---|---|---|---|
+| **Panel-dust remainder** (accumulation, storm end and rain, dust-devil roll, dust cause line, brush, wiper, tests; ARCHITECTURE.md 2.17) | **about 11.5 to 12.5 dev-days (about 92 to 100 h), unverified** | Already inside the Stage 3 row "storms, radiation, wear, perchlorate dust-off 80 h" only in part; the row is **short by about 12 to 20 h** if this is added whole | Pending since 2026-11-26 (Technical Lead machines report). Slice 3 built the stage-to-output link and a "dusty, makes less" Monitor line, which overlaps the "dust cause line" row by an unknown amount (**not measured**). The Technical Lead should re-cut the remainder against slice 3 before it is scheduled. |
+| **Monitor option A history** (BACKLOG #38: stored per-sol pressure series, "Outgasser placed" event marker, sparkline, battery bar, save-format bump, packet change, tests) | The Artist calls it "one slice". **No Technical Lead estimate yet.** Producer placeholder **2 to 3 dev-days (16 to 24 h), unverified** | Not in the stage2-plan. Slice 7 ("Next-gate bar and Monitor polish", 2 dev-days) is the nearest row | Costs scope inside Stage 2 (Monitor is a Stage 2 deliverable), so no new stage. If the Technical Lead's number is above 3 dev-days, fall back to the Artist's "C without lights" (no new stored state) and add the sparkline in Stage 3. The series is the first new per-sol stored state, so it also needs a schema bump (R-10 mitigation applies). |
+| Slice 5 (polar-frost sink) and Oven power | 2 (plan) | Plan row 5 | The plan row covers less than the balance sheet needs; see the checkpoint report (docs/team/reports/2026-11-27-producer-stage2-checkpoint.md). Likely 3 to 4 dev-days, **Producer guess, unverified**. |
+| Third-party pause GameTest (Mekanism, Create on the test classpath) | not estimated | Slice 2 leftover | Part of the 16 h "Pause GameTests" line in section 2.2. Unspent. |
+
+### 6.3 Stage 2 forecast (Producer view, unverified)
+
+| | Dev-days |
+|---|---|
+| Plan total (slices 1 to 9) | 26 |
+| + panel-dust remainder (if pulled into Stage 2) | 11.5 to 12.5 |
+| + Monitor history | 2 to 3 |
+| + slice 5 growth | 1 to 2 |
+| **If all pulled in** | **about 41 to 44 (about 330 to 350 h)** against a 180 h Technical Lead row and a 300 h whole-stage timebox |
+
+**Recommendation (cut, not stretch):** keep panel dust out of Stage 2. It is Stage 3 content (the Stage 3 row already carries it) and the prototype only needs dust to move the output, which slice 3 already shows. Keep Monitor history, since the owner chose it (#38). Defer slice 9 items that are not needed for the owner's playtest (pace config UI beyond the classroom preset) if Stage 2 passes 30 dev-days. Trade-off: players see dust only when the owner sets it by hand until Stage 3, so the "dust is a risk" feel is not prototyped; that costs learning evidence for C1 in Stage 2 (C1 is a Stage 3 focus anyway, ROADMAP).
+
+### 6.4 What would make the estimates real
+A measured rate needs a unit the team can count. Proposal: from slice 5 on, each Technical Lead report adds one line, "elapsed working time and number of build-and-test cycles" (agent time is the real cost here), and the Producer keeps a running table of cycles per slice. This replaces dev-days with a number we can compare across slices. Re-estimate Stage 3 from it, as section 1 already requires.
+
+## 7. Change log
 
 | Date | Change |
 |---|---|
 | 2026-11-26 | First issue (Round 2): effort budget, user-time budget, scope check, cut list ordered by proposed goal tiers. |
 | 2026-11-26 | Cut order rewritten to option T-C (owner decision): tier orders learning content, quadrant orders features; subset decisions go to the owner. Licensing plan noted (no budget effect). |
 | 2026-11-26 | Revision 2 (Round 3): owner decisions and Round 2 reports (guidance, mirror route, ice–albedo, CI, external reviews, LMS converter, server-setup, platform checklists, face-validity review, fonts, sound production, ending music). Total 5,820 → 6,179 h; owner time 75 → 89 h; cut list re-ordered (13 items, ~435 h); scope verdict: Stage 4 buffer is now ~15%. |
+| 2026-11-27 | Stage 2 checkpoint: new section 6 (slices 1 to 4 output vs plan estimates, no measured effort; plan 208 h vs budget 180 h mismatch; panel-dust remainder 11.5 to 12.5 dev-days and Monitor history placeholder added as unscheduled items; cut recommendation). Section numbers: change log is now 7. Section 2 totals unchanged (not re-estimated: no measured rate). |
