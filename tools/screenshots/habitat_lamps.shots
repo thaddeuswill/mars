@@ -1,0 +1,34 @@
+# Lamps in shelter and Ops (jar 0.3.4-stage3-e, light level 13, 30 lamps). Dome corner (-3,63,-4): world = template - (3,4).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 120
+view 2.5 65.6 2.2 135 22
+wait 40
+shot lamp_1_shelter_day
+view 10.5 65.6 2.2 135 22
+wait 40
+shot lamp_2_ops_day
+view 14.5 65.6 -0.3 140 20
+wait 40
+shot lamp_3_machine_bay_day
+view 2.5 65.6 9.6 135 25
+wait 40
+shot lamp_4_habB_day
+cmd /time set 18000
+view 2.5 65.6 2.2 135 22
+wait 60
+shot lamp_5_shelter_night
+view 10.5 65.6 2.2 135 22
+wait 40
+shot lamp_6_ops_night
+view 14.5 65.6 -0.3 140 20
+wait 40
+shot lamp_7_machine_bay_night
+view 2.5 65.6 9.6 135 25
+wait 40
+shot lamp_8_habB_night
+quit

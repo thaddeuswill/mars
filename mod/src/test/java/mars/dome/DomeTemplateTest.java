@@ -76,7 +76,7 @@ class DomeTemplateTest {
     // now ceiling lights (Hab B), so 32 stay ribbed glass.
     assertEquals(10, n.get(DomeTemplate.Kind.GLASS));
     assertEquals(32, n.get(DomeTemplate.Kind.GLASS_RIBBED));
-    assertEquals(18, n.get(DomeTemplate.Kind.HULL_LIGHT), "18 ceiling lights");
+    assertEquals(30, n.get(DomeTemplate.Kind.HULL_LIGHT), "30 ceiling lights");
     // The sheet says about 728 hull plates in walls, roof and lintels, plus about 235 floor cells.
     int walls =
         n.get(DomeTemplate.Kind.HULL)
@@ -170,8 +170,19 @@ class DomeTemplateTest {
       char ch = DomeTemplate.plan(c.x(), c.z());
       assertTrue(".cgd".indexOf(ch) >= 0 || ch == 'F', "interior floor under lamp: " + ch);
     }
-    assertEquals(18, lamps);
+    assertEquals(30, lamps);
     assertEquals(DomeTemplate.LAMPS.length, lamps);
+    int shelter = 0;
+    int ops = 0;
+    for (int[] l : DomeTemplate.LAMPS) {
+      if (l[1] <= 7 && l[0] <= 6) {
+        shelter++;
+      } else if (l[1] <= 7 && l[0] >= 8 && l[0] <= 14) {
+        ops++;
+      }
+    }
+    assertEquals(6, shelter, "shelter lamps");
+    assertEquals(6, ops, "Ops lamps");
   }
 
   @Test

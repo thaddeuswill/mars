@@ -104,10 +104,26 @@ public final class DomeTemplate {
   /**
    * Ceiling lights: roof cells (x, z at y 4) above interior floor cells, one every 3 cells so no
    * floor cell is more than 2 cells (Manhattan) from the cell under a lamp (Artist handoff,
-   * docs/team/reports/2026-11-27-artist-hull-light.md). 18 in all. The shelter and Ops are not
-   * listed: they are lit already (see the habitat lights report).
+   * docs/team/reports/2026-11-27-artist-hull-light.md). 30 in all (6 per big room). The shelter and
+   * Ops carry 6 each (owner direction: real habitats are evenly lit); they sit over x2/x5 (rows z2,
+   * z4, z6) and a 3-2-1 stagger (x9, x13 at z3 and z6; x11 at z2 and z5; found by exhaustive
+   * search), never on the perimeter rim.
    */
   public static final int[][] LAMPS = {
+    // Shelter x1..6, z1..7
+    {2, 2},
+    {5, 2},
+    {2, 4},
+    {5, 4},
+    {2, 6},
+    {5, 6},
+    // Ops x8..14, z1..7
+    {8, 2},
+    {14, 2},
+    {11, 2},
+    {9, 6},
+    {13, 6},
+    {11, 5},
     // Machine bay x16..21, z1..7
     {17, 2},
     {20, 2},

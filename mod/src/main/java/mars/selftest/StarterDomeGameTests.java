@@ -410,6 +410,8 @@ public final class StarterDomeGameTests {
               60,
               () -> {
                 String bay = worst(level, origin, 1, 16, 21, 1, 7);
+                String shelterLit = worst(level, origin, 1, 1, 6, 1, 7);
+                String opsLit = worst(level, origin, 1, 8, 14, 1, 7);
                 String bayHead = worst(level, origin, 2, 16, 21, 1, 7);
                 String habB = worst(level, origin, 1, 1, 6, 9, 14);
                 String storage = worst(level, origin, 1, 16, 21, 9, 14);
@@ -432,9 +434,13 @@ public final class StarterDomeGameTests {
                 ok &=
                     SelfTest.check(
                         "dome.lights_machine_bay_lit",
-                        "with 18 Hull Light Panels the worst floor cell of the machine bay is at least 7, the cell under a lamp is at least 11",
+                        "with 30 Hull Light Panels (level 13) the worst floor cell of every room is at least 8, the cell under a lamp is at least 12",
                         "bayWorst="
                             + bay
+                            + " shelter="
+                            + shelterLit
+                            + " ops="
+                            + opsLit
                             + " bayHead="
                             + bayHead
                             + " underLamp="
@@ -447,12 +453,14 @@ public final class StarterDomeGameTests {
                             + suit
                             + " airlock="
                             + lock,
-                        worstValue(bay) >= 7
-                            && under >= 11
-                            && worstValue(habB) >= 7
-                            && worstValue(storage) >= 7
-                            && worstValue(suit) >= 7
-                            && worstValue(lock) >= 7
+                        worstValue(bay) >= 8
+                            && worstValue(shelterLit) >= 8
+                            && worstValue(opsLit) >= 8
+                            && under >= 12
+                            && worstValue(habB) >= 8
+                            && worstValue(storage) >= 8
+                            && worstValue(suit) >= 8
+                            && worstValue(lock) >= 8
                             && worstValue(bay) > worstValue(bayDark));
                 var probe = new WorldProbe(level);
                 var r =
@@ -461,7 +469,7 @@ public final class StarterDomeGameTests {
                 ok &=
                     SelfTest.check(
                         "dome.lights_keep_the_seal",
-                        "the machine bay with its 6 lamps still reads SEALED and the lamp block is airtight",
+                        "the machine bay with its lamps still reads SEALED and the lamp block is airtight",
                         "status=" + r.status() + " volume=" + r.volume(),
                         r.status() == SealCheck.Status.SEALED
                             && Airtight.test(
