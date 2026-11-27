@@ -2,7 +2,7 @@
 
 You are joining a small team building **Mars Terraforming**: a Minecraft (Java 1.21.1, NeoForge 21.1.267) mod and datapack/pack for a learning game. It is a **design exercise**: design it as if learners aged 12 to 18 would play it (NGSS-aligned), but there are no real students. The owner playtests personally and decides. The owner is short on credits, so **be efficient: do small, verified pieces of work, commit often, and do not re-read the whole repo for every task.**
 
-Claude (Anthropic) has been the lead so far, running six role agents. You are an additional worker. Pick up tasks from `BACKLOG.md`, do them, and report. Do not redesign things that are already decided.
+Claude and Codex coordinate as peers. Claim tasks and file scope in `BACKLOG.md`, check for overlap, then do the work and report. Do not redesign things that are already decided.
 
 ## 1. Read these first (in this order, stop when you have enough)
 
@@ -84,14 +84,13 @@ docs/                       team reports, design, learning, science, tech, art, 
 State as of 2026-11-27:
 - Stage 1 (mod skeleton, empty Mars world) done.
 - Stage 2 slice 1 done and accepted: planet values saved per dimension, Regolith Outgasser raises pressure by 0.10 kPa per sol (data file), Planetary Monitor screen, `/mars index get|advance|set`, `/mars monitor`. 61 unit tests and 35 boot checks passed when last run.
-- Round solar array: 3 x 3 footprint (centre block plus 8 invisible canopy cells), loot tables, 6 dust-stage models. Models were raised to put the disc top at 16 px; **the Java shape code is being updated to match** (canopy slice y 15 to 16 px). Check `git log` and `BACKLOG.md` #28 and #32 before touching this; the Technical Lead agent may have it in progress.
-- Monitor screen was shrunk (owner said panels too big); new screenshots pending.
+- Round solar array: 3 x 3 footprint (centre block plus 8 invisible canopy cells), loot tables, 6 dust-stage models. Models were raised to put the disc top at 16 px; the canopy shape now matches the 15–16 px disc. See `BACKLOG.md` #28 and #32.
+- Monitor screen narrowed to 232 px and Claude checked the client screenshots. Stage 2 slice 2 and the raised-array shape fix are complete (see `HANDOFF.md`). The stale arrival message was removed in `07fba27`.
 
 Good tasks for you (check BACKLOG.md first, then claim by adding a line there):
-1. Stage 2 slice 2 per `docs/tech/stage2-plan.md`: session clock and pause (invariant I-3), Outgasser keeps contributing while its chunk is unloaded (decided). Tests first.
-2. Remaining Stage 2 slices: power (solar panel and battery), the pressure machine chain, "Dome stable" unlock.
-3. Technical Lead leftovers: forecast JSON `resolve_source` and the CR-F10 test; Monitor minimum view; a frustum-culling test for an array crossing a chunk border.
-4. Pure-Java unit tests and ArchUnit rules for any new simulation code.
+1. Remaining Stage 2 slices: power (solar panel and battery), the pressure machine chain, "Dome stable" unlock.
+2. Technical Lead leftovers: forecast JSON `resolve_source` and the CR-F10 test; Monitor minimum view; a frustum-culling test for an array crossing a chunk border.
+3. Pure-Java unit tests and ArchUnit rules for any new simulation code.
 Do **not** pick: art direction, story, learning objectives, EULA, external reviewers. Those are the owner's or other roles'.
 
 ## 7. How to report to the owner
