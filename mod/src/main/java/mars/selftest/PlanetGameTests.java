@@ -837,7 +837,7 @@ public final class PlanetGameTests {
           ok2 &=
               SelfTest.check(
                   "frost.reservoir_nbt_round_trip",
-                  "the reservoir (kPa the poles hold) comes back from NBT unchanged, schema 6",
+                  "the reservoir (kPa the poles hold) comes back from NBT unchanged, schema 7",
                   "stored="
                       + sim.frostStoredKpa()
                       + " back="
@@ -846,7 +846,7 @@ public final class PlanetGameTests {
                       + tag.getInt("schema"),
                   sim.frostStoredKpa() > 0
                       && Math.abs(sim.frostStoredKpa() - back.sim().frostStoredKpa()) < 1e-12
-                      && tag.getInt("schema") == 6
+                      && tag.getInt("schema") == 7
                       && back.sim().toState().equals(sim.toState()));
           h.destroyBlock(new BlockPos(0, 1, 0));
           h.destroyBlock(new BlockPos(2, 1, 0));
@@ -939,6 +939,9 @@ public final class PlanetGameTests {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.resetForSelfTest(level); // gates cannot be un-latched
     var sim = data.sim();
+    // This test is about the gate mechanics (hold, latch, unlock), not life support: run it on the
+    // legacy stand-in. The real four-state condition is tested in LifeSupportGameTests.
+    sim.useLegacyLifeSupport();
     var defs = IndexDefinitions.require().gates();
     boolean ok =
         SelfTest.check(

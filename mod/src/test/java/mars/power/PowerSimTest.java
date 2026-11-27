@@ -74,7 +74,7 @@ class PowerSimTest {
   }
 
   @Test
-  void anOutgasserAndTwoOvensShareOneCleanPanelEqually() throws Exception {
+  void anOutgasserAndTwoOvensShareOneCleanPanelByTier() throws Exception {
     PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
     s.addMachine(OUT, 1L);
     s.addMachine(TestSims.OVEN, 10L);
@@ -83,12 +83,13 @@ class PowerSimTest {
     assertEquals(5.0, s.power().supplyPerSol(), 1e-12);
     double sources = s.model().netRatePerSol(Ids.PRESSURE);
     System.out.println("Outgasser + 2 Ovens + 1 panel: source " + sources + " kPa/sol");
-    assertEquals(0.100, sources, 1e-12); // (0.10 + 0.02) x 83.3 %
-    // Each machine gets the same share: the Outgasser 0.0833, each Oven 0.00833.
+    // Tiers (balance sheet 2d.4): the Ovens (tier 2) are served first and run full (0.02), the
+    // Outgasser (tier 3) gets what is left, 3 of its 4 units (75 %): 0.02 + 0.075.
+    assertEquals(0.095, sources, 1e-12);
     var causes = s.model().causes(Ids.PRESSURE);
     for (var c : causes) {
-      double full = c.source().equals(OUT) ? 0.10 : 0.02;
-      assertEquals(full * 5.0 / 6.0, c.ratePerSol(), 1e-12, c.source());
+      double expected = c.source().equals(OUT) ? 0.10 * 0.75 : 0.02;
+      assertEquals(expected, c.ratePerSol(), 1e-12, c.source());
     }
     assertEquals("monitor.power.short", power(s).valueKey());
     // Two Ovens alone on the clean panel: full rate, 3 units spare.

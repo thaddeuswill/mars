@@ -284,12 +284,12 @@ public final class DomeGameTests {
     boolean ok =
         SelfTest.check(
             "dome.save_round_trip",
-            "a registered dome comes back from NBT with the same state; schema 6",
+            "a registered dome comes back from NBT with the same state; schema 7",
             "domes=" + back.sim().domes().count() + " schema=" + tag.getInt("schema"),
             back.sim().domes().count() == 1
                 && back.sim().domes().status(seed) == DomeSeals.Status.UNKNOWN
                 && data.sim().toState().equals(back.sim().toState())
-                && tag.getInt("schema") == 6);
+                && tag.getInt("schema") == 7);
     CompoundTag old = tag.copy();
     old.remove("domes");
     old.putInt("schema", 5);

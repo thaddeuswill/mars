@@ -85,6 +85,26 @@ public final class StarterDomeGameTests {
                   d.sim().domes().count() >= 10
                       && d.sim().domes().overall() == DomeSeals.Status.SEALED
                       && monitorWord(d).equals("monitor.dome.sealed"));
+          var life = d.sim().life();
+          ok &=
+              SelfTest.check(
+                  "life.template_start_fill",
+                  "the template fills the tanks: O2 14 per player (group.size 1 in the test world), water 60, battery 5, capacity 200 from 5 tanks",
+                  life == null
+                      ? "no life support"
+                      : "o2="
+                          + life.o2()
+                          + " water="
+                          + life.water()
+                          + " battery="
+                          + d.sim().power().charge()
+                          + " capacity="
+                          + life.report().o2Capacity(),
+                  life != null
+                      && Math.abs(life.o2() - 14.0 * d.sim().pace().groupSize()) < 1e-9
+                      && life.water() == 60
+                      && Math.abs(d.sim().power().charge() - 5.0) < 1e-9
+                      && life.report().o2Capacity() == 200);
           ok &=
               SelfTest.check(
                   "dome.template_habb_leaks_at_the_crack",

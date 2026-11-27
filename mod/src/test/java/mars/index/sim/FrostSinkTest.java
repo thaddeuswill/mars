@@ -159,15 +159,21 @@ class FrostSinkTest {
   void equilibriumIsBaselinePlusFiftyTimesTheNetSourceAndMatchesTheSheetTable() throws Exception {
     double k = TestSims.frost().coldFractionPerSol();
     assertEquals(0.02, k, 1e-12);
-    // Balance sheet 2c decision 4 table: build, S (kPa/sol), P_eq, reaches 5 kPa.
+    // Balance sheet 2c decision 4 table: build, S (kPa/sol), P_eq, reaches 5 kPa. Rows 3 and 5 are
+    // recomputed for the power tiers of balance sheet 2d.4 (Ovens before the Outgasser, replacing
+    // the 2c equal share): see the slice 2 report.
     record Row(String name, double panel, int panels, int og, int ov, double s, double eq) {}
     List<Row> rows =
         List.of(
             new Row("2 Ovens only", 1.0, 1, 0, 2, 0.02, 1.6),
             new Row("1 Outgasser, 1 clean panel", 1.0, 1, 1, 0, 0.10, 5.6),
-            new Row("1 Outgasser + 2 Ovens, 1 clean panel (83 %)", 1.0, 1, 1, 2, 0.10, 5.6),
+            new Row(
+                "1 Outgasser + 2 Ovens, 1 clean panel (tiers: Ovens first, Outgasser 75 %)",
+                1.0, 1, 1, 2, 0.095, 5.35),
             new Row("1 Outgasser, stage 4 panel (60 %)", 0.6, 1, 1, 0, 0.075, 4.35),
-            new Row("1 Outgasser + 2 Ovens, stage 2 panel (82 %)", 0.82, 1, 1, 2, 0.082, 4.7),
+            new Row(
+                "1 Outgasser + 2 Ovens, stage 2 panel (tiers: Outgasser 52.5 %)",
+                0.82, 1, 1, 2, 0.0725, 4.225),
             new Row("2 Outgassers + 2 Ovens, 2 clean panels", 1.0, 2, 2, 2, 0.22, 11.6));
     for (Row r : rows) {
       double got = settle(Pace.STANDARD, r.panel, r.panels, r.og, r.ov);
@@ -229,7 +235,7 @@ class FrostSinkTest {
     s.model().advanceSols(30);
     PlanetState st = s.toState();
     assertEquals(PlanetState.CURRENT_SCHEMA, st.schema());
-    assertEquals(6, st.schema());
+    assertEquals(7, st.schema());
     assertEquals(s.frostStoredKpa(), st.frost().storedKpa(), 0.0);
     PlanetSim back =
         PlanetSim.fromState(
@@ -277,12 +283,12 @@ class FrostSinkTest {
     assertEquals(0.0, s.frostStoredKpa(), 0.0);
     assertEquals(0.5, s.frostBuriedRemainingKpa(), 0.0);
     assertEquals(PlanetState.CURRENT_SCHEMA, s.toState().schema());
-    // A save from a newer build (schema 7) is still refused.
+    // A save from a newer build (schema 8) is still refused.
     assertThrows(
         IllegalStateException.class,
         () ->
             PlanetSim.fromState(
-                new PlanetState(7, Map.of(), 0, 0, Map.of()),
+                new PlanetState(8, Map.of(), 0, 0, Map.of()),
                 TestSims.index(),
                 TestSims.defs(),
                 TestSims.gates(),

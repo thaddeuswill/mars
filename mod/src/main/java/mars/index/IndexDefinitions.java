@@ -26,7 +26,8 @@ public final class IndexDefinitions {
       Map<String, MachineDef> machines,
       mars.hazards.dust.PanelDustTuning dust,
       java.util.List<mars.gates.GateDef> gates,
-      mars.index.sim.FrostSink.Def frost) {}
+      mars.index.sim.FrostSink.Def frost,
+      mars.life.LifeParams life) {}
 
   private static volatile Defs current;
 
@@ -81,7 +82,17 @@ public final class IndexDefinitions {
       } catch (java.io.IOException e) {
         throw new IllegalStateException("Cannot read data/mars/sinks/polar_frost.json", e);
       }
-      return new Defs(index, Map.copyOf(machines), dust, java.util.List.copyOf(gates), frost);
+      mars.life.LifeParams life;
+      ResourceLocation lifeFile =
+          ResourceLocation.fromNamespaceAndPath("mars", "life_support.json");
+      try (java.io.Reader r = manager.openAsReader(lifeFile)) {
+        life =
+            mars.life.LifeParams.parse(
+                GSON.fromJson(r, JsonObject.class), "data/mars/life_support.json");
+      } catch (java.io.IOException e) {
+        throw new IllegalStateException("Cannot read data/mars/life_support.json", e);
+      }
+      return new Defs(index, Map.copyOf(machines), dust, java.util.List.copyOf(gates), frost, life);
     }
 
     @Override

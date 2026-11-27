@@ -17,7 +17,7 @@ class DomeStateTest {
     long seed = Pos.pack(10, 64, -3);
     s.domes().register(seed);
     PlanetState st = s.toState();
-    assertEquals(6, st.schema());
+    assertEquals(7, st.schema());
     assertEquals(1, st.domes().domes().size());
     PlanetSim back =
         PlanetSim.fromState(
@@ -59,7 +59,7 @@ class DomeStateTest {
             .sim();
     assertEquals(0, s.domes().count());
     assertTrue(s.toState().domes().domes().isEmpty());
-    assertEquals(6, s.toState().schema(), "a re-save writes the current schema");
+    assertEquals(7, s.toState().schema(), "a re-save writes the current schema");
   }
 
   @Test

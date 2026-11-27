@@ -25,6 +25,7 @@ public class BatteryBlock extends MachineBlock {
         && !oldState.is(state.getBlock())
         && PlanetManager.isPlanet(server)) {
       PlanetManager.machinePlaced(server, TYPE, pos);
+      mars.hull.DomeEvents.register(server, pos); // its room must be sealed (layout 5.4)
     }
   }
 
@@ -35,6 +36,7 @@ public class BatteryBlock extends MachineBlock {
         && !state.is(newState.getBlock())
         && PlanetManager.isPlanet(server)) {
       PlanetManager.machineRemoved(server, TYPE, pos);
+      mars.hull.DomeEvents.unregister(server, pos);
     }
     super.onRemove(state, level, pos, newState, movedByPiston);
   }

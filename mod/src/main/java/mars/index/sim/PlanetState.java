@@ -21,16 +21,47 @@ public record PlanetState(
     Map<String, mars.gates.GateTracker.State> gates,
     PressureHistory.State history,
     FrostSink.State frost,
-    mars.dome.DomeSeals.State domes) {
+    mars.dome.DomeSeals.State domes,
+    mars.life.LifeSupport.State life) {
 
   /**
    * 2 adds the battery charge and per-machine output (solar dust); 3 adds gate states (latched,
    * hold counters); 4 adds the pressure history for the Monitor plot; 5 adds the polar-frost
    * reservoir (kPa stored, buried kPa released); 6 adds the registered domes and their sealed
-   * state. Older saves still load; their gates start unlatched, their history starts empty, their
-   * reservoir starts empty and they have no domes.
+   * state; 7 adds the life-support stores (oxygen and water). Older saves still load; their gates
+   * start unlatched, their history starts empty, their reservoir starts empty, they have no domes,
+   * and a save without life support (schema 6 and older) keeps running on the legacy stand-in
+   * ({@code life == null}; see PlanetSim.lifeSupportOk).
    */
-  public static final int CURRENT_SCHEMA = 6;
+  public static final int CURRENT_SCHEMA = 7;
+
+  /** Without life support (schema 6 and older). */
+  public PlanetState(
+      int schema,
+      Map<String, Double> values,
+      long simTicks,
+      int pendingTicks,
+      Map<String, List<Long>> machines,
+      double batteryCharge,
+      Map<Long, Double> efficiency,
+      Map<String, mars.gates.GateTracker.State> gates,
+      PressureHistory.State history,
+      FrostSink.State frost,
+      mars.dome.DomeSeals.State domes) {
+    this(
+        schema,
+        values,
+        simTicks,
+        pendingTicks,
+        machines,
+        batteryCharge,
+        efficiency,
+        gates,
+        history,
+        frost,
+        domes,
+        null);
+  }
 
   /** Without domes (schema 5 and older). */
   public PlanetState(

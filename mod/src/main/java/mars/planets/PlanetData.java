@@ -49,6 +49,7 @@ public final class PlanetData extends SavedData {
             d.machines(),
             d.gates(),
             d.frost().forPlanet(planetId),
+            d.life(),
             mars.MarsServerConfig.pace()));
   }
 
@@ -68,6 +69,7 @@ public final class PlanetData extends SavedData {
             d.machines(),
             d.gates(),
             d.frost().forPlanet(planetId),
+            d.life(),
             mars.MarsServerConfig.pace());
     if (!loaded.report().ignored().isEmpty()) {
       LOG.warn(
@@ -163,6 +165,12 @@ public final class PlanetData extends SavedData {
       domes.add(dt);
     }
     out.put("domes", domes);
+    if (s.life() != null) { // schema 7; absent in older saves, which stay on the legacy stand-in
+      CompoundTag life = new CompoundTag();
+      life.putDouble("o2", s.life().o2());
+      life.putDouble("water", s.life().water());
+      out.put("life", life);
+    }
     return out;
   }
 
@@ -260,7 +268,11 @@ public final class PlanetData extends SavedData {
         new mars.index.sim.FrostSink.State(
             tag.getCompound("frost").getDouble("storedKpa"),
             tag.getCompound("frost").getDouble("buriedReleasedKpa")),
-        new mars.dome.DomeSeals.State(java.util.List.copyOf(domeList)));
+        new mars.dome.DomeSeals.State(java.util.List.copyOf(domeList)),
+        tag.contains("life", Tag.TAG_COMPOUND)
+            ? new mars.life.LifeSupport.State(
+                tag.getCompound("life").getDouble("o2"), tag.getCompound("life").getDouble("water"))
+            : null);
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {

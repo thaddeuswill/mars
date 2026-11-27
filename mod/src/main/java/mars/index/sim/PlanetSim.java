@@ -43,8 +43,19 @@ public final class PlanetSim {
   /** The polar-frost sink, or null when a planet has none (older tests; every real planet has). */
   private final FrostSink frost;
 
-  /** Machine-state names a gate condition may use. {@code life_support_ok}: see lifeSupportOk. */
-  public static final Set<String> MACHINE_STATES = Set.of("life_support_ok");
+  /**
+   * Machine-state names a gate condition may use. The four life-support states are real (balance
+   * sheet 2d.5). {@code life_support_ok} is the Stage 2 stand-in, kept only for planets without a
+   * life-support model (saves from schema 6 and older, unit tests that build a bare planet); see
+   * {@link #lifeSupportOk}.
+   */
+  public static final Set<String> MACHINE_STATES =
+      Set.of("life_support_ok", "sealed", "air_ok", "water_ok", "power_ok");
+
+  /** Life support, or null on a planet that runs on the legacy stand-in. */
+  private mars.life.LifeSupport life;
+
+  private final mars.life.LifeParams lifeParams;
 
   public PlanetSim(IndexData.Loaded index, Map<String, MachineDef> machineDefs, Pace pace) {
     this(index, machineDefs, List.of(), pace);
@@ -65,6 +76,19 @@ public final class PlanetSim {
       List<GateDef> gateDefs,
       FrostSink.Params frostParams,
       Pace pace) {
+    this(index, machineDefs, gateDefs, frostParams, null, pace);
+  }
+
+  /** With life support ({@code lifeParams} null: the legacy stand-in, no model). */
+  public PlanetSim(
+      IndexData.Loaded index,
+      Map<String, MachineDef> machineDefs,
+      List<GateDef> gateDefs,
+      FrostSink.Params frostParams,
+      mars.life.LifeParams lifeParams,
+      Pace pace) {
+    this.lifeParams = lifeParams;
+    this.life = lifeParams == null ? null : new mars.life.LifeSupport(lifeParams);
     this.frost = frostParams == null ? null : new FrostSink(frostParams);
     this.gates = new GateTracker(gateDefs, pace.classroom());
     for (String name : gates.machineStatesUsed()) {
@@ -90,8 +114,9 @@ public final class PlanetSim {
     }
     model.setBeforeStep(
         dt -> {
-          double sat = grid.step(dt);
-          applyPower(sat);
+          grid.step(dt);
+          applyPower(tierSat(false, dt));
+          stepLife(dt);
         });
     model.setAfterStep(
         dt -> {
@@ -159,9 +184,11 @@ public final class PlanetSim {
   }
 
   /**
-   * Stand-in for "life support is running" until the oxygen maker and sealing exist (Stage 3): the
-   * planet has power supply and the grid covers its demand. A real life-support check replaces this
-   * one function; the gate files do not change.
+   * The legacy stand-in for "life support is running": the planet has power supply and the grid
+   * covers its demand. Since Stage 3 slice 2 the gate reads the four real states; this stays only
+   * for a planet with no life-support model ({@code life == null}: a world saved before schema 7,
+   * or a bare test planet), so a world mid-way through Dome stable keeps its old behaviour and a
+   * latched gate stays latched.
    */
   boolean lifeSupportOk() {
     return grid.supplyPerSol() > 0
@@ -179,7 +206,17 @@ public final class PlanetSim {
 
           @Override
           public boolean machineState(String name) {
-            return name.equals("life_support_ok") && lifeSupportOk();
+            if (name.equals("life_support_ok") || life == null) {
+              return lifeSupportOk(); // legacy planet: all four states read the stand-in
+            }
+            mars.life.LifeSupport.States st = life.states();
+            return switch (name) {
+              case "sealed" -> st.sealed();
+              case "air_ok" -> st.airOk();
+              case "water_ok" -> st.waterOk();
+              case "power_ok" -> st.powerOk();
+              default -> false;
+            };
           }
         };
     List<String> now = gates.step(ctx, dtSols, model.simTicks());
@@ -222,10 +259,16 @@ public final class PlanetSim {
     refreshPower();
   }
 
+  /** The power tier of a machine type: its {@code priority}, or the lowest tier if none is set. */
+  private static int tierOf(MachineDef def) {
+    int p = def.life().priority();
+    return p >= 1 && p <= PowerGrid.TIERS ? p : PowerGrid.TIERS;
+  }
+
   /** Recount supply, demand and storage, then show the effect on the machines right away. */
   private void refreshPower() {
     double supply = 0;
-    double demand = 0;
+    double[] demand = new double[PowerGrid.TIERS];
     double storage = 0;
     for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
       MachineDef def = defs.get(e.getKey());
@@ -235,27 +278,138 @@ public final class PlanetSim {
       MachineDef.Power pw = def.power();
       for (long pos : e.getValue()) {
         supply += pw.supplyPerSol() * efficiency.getOrDefault(pos, 1.0);
-        demand += pw.drawPerSol();
+        demand[tierOf(def) - 1] += pw.drawPerSol();
         storage += pw.storage();
       }
     }
-    grid.setTotals(supply, demand, storage);
-    applyPower(grid.preview(stepSols()));
+    grid.setTierTotals(supply, demand, storage);
+    applyPower(tierSat(true, stepSols()));
+    refreshLife();
   }
 
-  /** Scale every powered machine's contribution by the share of power it gets. */
-  private void applyPower(double satisfaction) {
+  /** Share of each tier's demand met: the last step's, or a preview of the next one. */
+  private double[] tierSat(boolean preview, double dt) {
+    double[] sat = new double[PowerGrid.TIERS + 1];
+    for (int t = 1; t <= PowerGrid.TIERS; t++) {
+      sat[t] = preview ? grid.tierPreview(t, dt) : grid.tierSatisfaction(t);
+    }
+    return sat;
+  }
+
+  /** Scale every powered machine's contribution by the share its tier gets. */
+  private void applyPower(double[] tierSat) {
     for (Map.Entry<String, Map<Long, List<PlanetaryIndexModel.ContributionHandle>>> e :
         handles.entrySet()) {
       MachineDef def = defs.get(e.getKey());
       if (def == null || def.power().drawPerSol() <= 0) {
         continue;
       }
+      double satisfaction = tierSat[tierOf(def)];
       for (List<PlanetaryIndexModel.ContributionHandle> hs : e.getValue().values()) {
         for (int i = 0; i < hs.size(); i++) {
           hs.get(i).setRate(def.contributions().get(i).ratePerSol() * satisfaction);
         }
       }
+    }
+  }
+
+  /**
+   * Switch this planet to the legacy stand-in ({@link #lifeSupportOk}), as a world saved before
+   * schema 7 does. For tests of the gate mechanics that do not want life support in the way; never
+   * called by the game.
+   */
+  public void useLegacyLifeSupport() {
+    life = null;
+  }
+
+  /** The life-support model, or null on a legacy planet. */
+  public mars.life.LifeSupport life() {
+    return life;
+  }
+
+  /**
+   * Fill the tanks and the battery for the start of a game (balance sheet 2d.2: O2 14 per player,
+   * water 60, battery 5). The starting dome's placer calls this once, after its machines exist.
+   */
+  public void startLifeSupport() {
+    if (life == null) {
+      return;
+    }
+    life.startFill(pace.groupSize(), o2Capacity());
+    grid.setCharge(lifeParams.batteryStartCharge());
+    refreshLife();
+  }
+
+  /** O2 tank capacity: the tanks placed, at most the dome's design capacity (200). */
+  private double o2Capacity() {
+    double sum = 0;
+    boolean any = false;
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def != null && def.life().capacity() > 0) {
+        any = true;
+        sum += def.life().capacity() * e.getValue().size();
+      }
+    }
+    // A planet whose data has no tank at all (bare test planets) uses the design capacity.
+    return any ? Math.min(sum, lifeParams.o2TankCapacity()) : lifeParams.o2TankCapacity();
+  }
+
+  private mars.life.LifeSupport.Inputs lifeInputs() {
+    double o2Made = 0;
+    int makers = 0;
+    double ovenWater = 0;
+    int reclaimers = 0;
+    double recovery = 0;
+    int serves = 0;
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def == null) {
+        continue;
+      }
+      int n = e.getValue().size();
+      MachineDef.Life l = def.life();
+      if (l.o2PerSol() > 0) {
+        o2Made += l.o2PerSol() * n;
+        makers += n;
+      }
+      ovenWater += l.waterPerSol() * n;
+      if (l.recovery() > 0) {
+        reclaimers += n;
+        recovery = Math.max(recovery, l.recovery());
+        serves = Math.max(serves, l.servesPlayers());
+      }
+    }
+    mars.dome.DomeSeals.Status dome = domes.overall();
+    return new mars.life.LifeSupport.Inputs(
+        model.sols(),
+        pace.groupSize(),
+        pace.classroom(),
+        dome == mars.dome.DomeSeals.Status.SEALED,
+        o2Made,
+        makers,
+        ovenWater,
+        reclaimers,
+        recovery,
+        serves,
+        o2Capacity(),
+        grid.tierSatisfaction(1),
+        grid.tierSatisfaction(2),
+        grid.tierDemandPerSol(1),
+        grid.charge(),
+        grid.tierDemandPerSol(1) > 0);
+  }
+
+  private void stepLife(double dtSols) {
+    if (life != null) {
+      life.step(dtSols, lifeInputs());
+    }
+  }
+
+  /** Recompute the life-support report without moving the stores (after a machine change). */
+  public void refreshLife() {
+    if (life != null) {
+      life.step(0, lifeInputs());
     }
   }
 
@@ -392,7 +546,8 @@ public final class PlanetSim {
         gates.toStates(),
         history.toState(),
         frost == null ? FrostSink.State.EMPTY : frost.toState(),
-        domes.toState());
+        domes.toState(),
+        life == null ? null : life.toState());
   }
 
   /**
@@ -421,6 +576,17 @@ public final class PlanetSim {
       List<GateDef> gateDefs,
       FrostSink.Params frostParams,
       Pace pace) {
+    return fromState(state, index, defs, gateDefs, frostParams, null, pace);
+  }
+
+  public static Loaded fromState(
+      PlanetState state,
+      IndexData.Loaded index,
+      Map<String, MachineDef> defs,
+      List<GateDef> gateDefs,
+      FrostSink.Params frostParams,
+      mars.life.LifeParams lifeParams,
+      Pace pace) {
     if (state.schema() > PlanetState.CURRENT_SCHEMA) {
       throw new IllegalStateException(
           "Planet save has schema "
@@ -429,7 +595,10 @@ public final class PlanetSim {
               + PlanetState.CURRENT_SCHEMA
               + "; refusing to load it (it would be overwritten).");
     }
-    PlanetSim sim = new PlanetSim(index, defs, gateDefs, frostParams, pace);
+    PlanetSim sim = new PlanetSim(index, defs, gateDefs, frostParams, lifeParams, pace);
+    if (state.life() == null) {
+      sim.life = null; // schema 6 and older: no life support in that world (legacy stand-in)
+    }
     if (sim.frost != null && state.frost() != null) {
       sim.frost.restore(state.frost()); // schema 4 and older saves: empty reservoir
     }
@@ -456,6 +625,12 @@ public final class PlanetSim {
     sim.refreshPower();
     sim.history.restore(state.history() == null ? PressureHistory.State.EMPTY : state.history());
     sim.domes.restore(state.domes()); // schema 5 and older: no domes
+    if (sim.life != null && state.life() != null) {
+      // After the machines are added: adding one at a time would clamp the stores to a half-built
+      // tank capacity.
+      sim.life.restore(state.life());
+    }
+    sim.refreshLife();
     return new Loaded(sim, report, unknownTypes);
   }
 

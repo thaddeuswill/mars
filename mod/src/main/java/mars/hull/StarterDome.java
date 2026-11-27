@@ -98,6 +98,10 @@ public final class StarterDome {
       }
     }
     placeSolarPad(level, origin);
+    // The storm drained the tanks: start fills (balance sheet 2d.2), once, after every tank exists.
+    var planet = mars.planets.PlanetManager.data(level);
+    planet.sim().startLifeSupport();
+    planet.setDirty();
   }
 
   /** Pad 1 of the east apron: one array at dust stage 1 (balance sheet 2d.2). */

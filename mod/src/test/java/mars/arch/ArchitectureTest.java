@@ -28,7 +28,8 @@ class ArchitectureTest {
             "mars.power..",
             "mars.gates..",
             "mars.visual..",
-            "mars.dome..")
+            "mars.dome..",
+            "mars.life..")
         .should()
         .dependOnClassesThat()
         .resideInAnyPackage("net.minecraft..", "net.neoforged..", "com.mojang..")

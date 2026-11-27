@@ -73,10 +73,12 @@ class SoloCurveComparisonTest {
     assertTrue(noStorm[SOLS.length - 1] > 5.0, "the 5 kPa gate is reached by sol 25");
     // With the storm modelled as 40 % panel output on sols 14 and 15 and panels sized exactly to
     // demand (both are this test's reading of the sheet, which states neither), every cell is
-    // within 0.06 kPa of the sheet. That shows the sheet is consistent with the -2 % sink under
+    // within 0.08 kPa of the sheet (0.06 before the power tiers: the Ovens now come first in a
+    // storm, so the Outgasser gets less and the curve sits slightly lower, balance sheet 2d.4).
+    // That shows the sheet is consistent with the -2 % sink under
     // these assumptions; it does not prove the assumptions.
     for (int i = 0; i < SOLS.length; i++) {
-      assertTrue(Math.abs(storm[i] - SHEET[i]) <= 0.06, "storm run, cell sol " + SOLS[i]);
+      assertTrue(Math.abs(storm[i] - SHEET[i]) <= 0.08, "storm run, cell sol " + SOLS[i]);
     }
   }
 }

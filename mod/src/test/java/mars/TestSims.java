@@ -89,4 +89,18 @@ public final class TestSims {
   public static PlanetSim sim(Pace pace) throws Exception {
     return new PlanetSim(index(), defs(), gates(), frost(), pace);
   }
+
+  /** The real life-support numbers from pack/data/mars/life_support.json. */
+  public static mars.life.LifeParams life() throws Exception {
+    try (Reader r =
+        Files.newBufferedReader(TestData.data("life_support.json"), StandardCharsets.UTF_8)) {
+      return mars.life.LifeParams.parse(
+          JsonParser.parseReader(r).getAsJsonObject(), "life_support.json");
+    }
+  }
+
+  /** A planet with the real life-support model (the game's default since schema 7). */
+  public static PlanetSim lifeSim(Pace pace) throws Exception {
+    return new PlanetSim(index(), defs(), gates(), frost(), life(), pace);
+  }
 }
