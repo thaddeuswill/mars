@@ -2,7 +2,7 @@
 built from vanilla-compatible cuboids. STRAW-MAN. Run: python3 -I tools/art-preview/gen_round_panel.py
 
 Scale: 1 block = 1 m = 16 px (1 px = 6.25 cm). PROVISIONAL dimensions until the SME's docs/science/dimensions.md:
-array diameter about 2.2 m = 35 px, 12 segments, disc 1 px (6 cm) thick, 0.625 m above the ground on a post.
+array diameter about 2.2 m = 35 px, 12 segments, disc 1 px (6 cm) thick, 16 px (1 m) above the ground on a lander-deck mount (see DECK_Y).
 
 Geometry: a "pixel-circle disc": one flat 1 px tall cuboid per run of texture rows with the same chord, no rotated
 elements, no overlaps (so no z-fighting). The disc spans x and z from -9.5 to 25.5 px, inside Minecraft's allowed
@@ -105,7 +105,12 @@ for j in range(N):
     span = (min(xs), max(xs) + 1)
     if runs and runs[-1][0] == span and runs[-1][2] == j: runs[-1][2] = j + 1
     else: runs.append([span, j, j + 1])
-Y0, Y1 = 10, 11                      # disc 1 px thick, top at 0.69 m (provisional)
+# Raised array (2026-11-27, owner decision; SME docs/team/reports/2026-11-27-sme-deck-height.md): the array sits on a lander
+# deck 16 px (1.0 m) above the base. InSight deck 0.83-1.08 m (13-17 px), NASA/JPL InSight press kit "Spacecraft" page (SME
+# could not open it; from search summaries, NOT directly verified). DECK_Y = underside of the array. To use the
+# alternative "top of the disc at 16 px" set DECK_Y = 15 (keeps everything inside the centre block's height).
+DECK_Y = 16
+Y0, Y1 = DECK_Y, DECK_Y + 1           # disc 1 px thick: y 16..17, i.e. in the block ABOVE the centre block
 def uv(i0, j0, i1, j1): return [round(i0 / 3, 4), round(j0 / 3, 4), round(i1 / 3, 4), round(j1 / 3, 4)]
 def model_for(tex):
     els = []
@@ -116,9 +121,19 @@ def model_for(tex):
             "down": {"texture": "#frame", "uv": [0, 0, 1, 1]},
             "north": {"texture": "#frame", "uv": [0, 0, 1, 1]}, "south": {"texture": "#frame", "uv": [0, 0, 1, 1]},
             "east": {"texture": "#frame", "uv": [0, 0, 1, 1]}, "west": {"texture": "#frame", "uv": [0, 0, 1, 1]}}})
-    # post and base (inside the block, so the hitbox and lighting behave)
-    els.append({"from": [7, 1, 7], "to": [9, 10, 9], "faces": {k: {"texture": "#post", "uv": [7, 0, 9, 9]} for k in ("north", "south", "east", "west")}})
-    els.append({"from": [4, 0, 4], "to": [12, 1, 12], "faces": {k: {"texture": "#post", "uv": [4, 0, 12, 1]} for k in ("north", "south", "east", "west")} | {"up": {"texture": "#frame", "uv": [4, 4, 12, 12]}}})
+    # lander deck mount (inside the centre block's footprint x/z 0..16 so the hitbox and neighbours stay unchanged):
+    # base plate, three vertical legs at 120 degrees, and an octagonal deck plate 2 px thick under the array (y 14..16).
+    # Deliberate stylization: real deck is 1.56 m (25 px); drawn 16 px (1 m) so it stays inside one block.
+    fr = lambda a, b, c, d: {"north": {"texture": "#frame", "uv": [0, 0, 1, 1]}, "south": {"texture": "#frame", "uv": [0, 0, 1, 1]},
+                             "east": {"texture": "#frame", "uv": [0, 0, 1, 1]}, "west": {"texture": "#frame", "uv": [0, 0, 1, 1]},
+                             "up": {"texture": "#frame", "uv": [a, b, c, d]}, "down": {"texture": "#frame", "uv": [a, b, c, d]}}
+    # octagon deck: centre box plus four side strips (no overlaps, no z-fighting)
+    for (fx, fz, tx, tz) in ((3, 3, 13, 13), (1, 3, 3, 13), (13, 3, 15, 13), (3, 1, 13, 3), (3, 13, 13, 15)):
+        els.append({"from": [fx, DECK_Y - 2, fz], "to": [tx, DECK_Y, tz], "faces": fr(fx, fz, tx, tz)})
+    for (lx, lz) in ((7, 3), (3, 10), (11, 10)):                       # three legs, 2 x 2 px, y 1..14
+        els.append({"from": [lx, 1, lz], "to": [lx + 2, DECK_Y - 2, lz + 2],
+                    "faces": {k: {"texture": "#post", "uv": [lx % 14, 0, lx % 14 + 2, DECK_Y - 3]} for k in ("north", "south", "east", "west")}})
+    els.append({"from": [2, 0, 2], "to": [14, 1, 14], "faces": {k: {"texture": "#post", "uv": [4, 0, 12, 1]} for k in ("north", "south", "east", "west")} | {"up": {"texture": "#frame", "uv": [2, 2, 14, 14]}}})
     return {"parent": "block/block", "textures": {"particle": "mars:block/" + tex, "cells": "mars:block/" + tex,
             "frame": "mars:block/solar_panel_frame", "post": "mars:block/solar_panel_post"}, "elements": els}
 for name, px in STAGES.items():
@@ -177,7 +192,7 @@ for name, px in STAGES.items():
     print(f"  {name:34s} cells {dom}  seam {seam}  {best:.1f}  {'ok' if best >= 2 else 'WEAK'}")
     if best < 2: fails.append(f"{name} structure weak")
 print(f"Softened veil seam S {P['S']} on veil D: {cr(P['S'], P['D']):.1f}:1 (target 2:1); cut-out p on veil D: {cr(P['p'], P['D']):.1f}:1")
-print(f"Geometry: disc {len(runs)} cuboids + post + base = {len(runs) + 2} elements per model; "
+print(f"Geometry: disc {len(runs)} cuboids + deck/legs/base = {len(runs) + 9} elements per model; "
       f"x/z extent {-16 + min(r[0][0] for r in runs)} to {-16 + max(r[0][1] for r in runs)} px (allowed -16..32)")
 # partly cleaned must differ from stage 4 at a distance: mean cell colour dE >= 0.10 and a large contiguous clean area
 pc, d4 = STAGES["solar_panel_round_partly_cleaned"], STAGES[names[4]]
