@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import mars.hazards.storm.StormSchedule;
 import mars.index.IndexDefinitions;
 import mars.index.sim.Pace;
 import mars.index.sim.PlanetSim;
@@ -38,25 +39,33 @@ public final class PlanetData extends SavedData {
   }
 
   /** {@code planetId} (the dimension, "mars:planet_1") picks the planet's frost baseline. */
-  public static SavedData.Factory<PlanetData> factory(String planetId, Pace pace) {
+  public static SavedData.Factory<PlanetData> factory(String planetId, Pace pace, long worldSeed) {
     return new SavedData.Factory<>(
-        () -> createNew(planetId, pace), (t, r) -> load(planetId, pace, t, r));
+        () -> createNew(planetId, pace, worldSeed),
+        (t, r) -> load(planetId, pace, worldSeed, t, r));
   }
 
-  private static PlanetData createNew(String planetId, Pace pace) {
+  private static PlanetData createNew(String planetId, Pace pace, long worldSeed) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
-    return new PlanetData(
-        new PlanetSim(d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), pace));
+    PlanetSim sim =
+        new PlanetSim(d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), pace);
+    sim.attachStorms(d.storm(), d.dust(), StormSchedule.seedFor(worldSeed, planetId));
+    return new PlanetData(sim);
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
   public static PlanetData load(
-      String planetId, Pace pace, CompoundTag tag, HolderLookup.Provider registries) {
-    return fromState(planetId, fromNbt(tag), pace);
+      String planetId,
+      Pace pace,
+      long worldSeed,
+      CompoundTag tag,
+      HolderLookup.Provider registries) {
+    return fromState(planetId, fromNbt(tag), pace, worldSeed);
   }
 
   /** Build a planet from a saved state (used by load and by rollback). */
-  public static PlanetData fromState(String planetId, PlanetState state, Pace pace) {
+  public static PlanetData fromState(
+      String planetId, PlanetState state, Pace pace, long worldSeed) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     PlanetSim.Loaded loaded =
         PlanetSim.fromState(
@@ -75,12 +84,14 @@ public final class PlanetData extends SavedData {
           "Planet save has machines this build has no data for (kept, no effect): {}",
           loaded.unknownMachineTypes());
     }
+    // A save from before schema 6 has no storm schedule: attachStorms starts a fresh one.
+    loaded.sim().attachStorms(d.storm(), d.dust(), StormSchedule.seedFor(worldSeed, planetId));
     return new PlanetData(loaded.sim());
   }
 
   /** A brand-new planet at its start values (for rollback to the start). */
-  public static PlanetData fresh(String planetId, Pace pace) {
-    return createNew(planetId, pace);
+  public static PlanetData fresh(String planetId, Pace pace, long worldSeed) {
+    return createNew(planetId, pace, worldSeed);
   }
 
   @Override
@@ -145,6 +156,19 @@ public final class PlanetData extends SavedData {
     frost.putDouble("storedKpa", s.frost().storedKpa());
     frost.putDouble("buriedReleasedKpa", s.frost().buriedReleasedKpa());
     out.put("frost", frost);
+    var st = s.storm();
+    if (st != null) {
+      CompoundTag storm = new CompoundTag();
+      storm.putLong("rng", st.rng());
+      storm.putString("phase", st.phase().name());
+      storm.putString("kind", st.kind().name());
+      storm.putDouble("startSol", st.startSol());
+      storm.putDouble("endSol", st.endSol());
+      storm.putDouble("lastEndSol", st.lastEndSol());
+      storm.putInt("stormsEnded", st.stormsEnded());
+      storm.putDouble("cap", st.cap());
+      out.put("storm", storm);
+    }
     return out;
   }
 
@@ -210,6 +234,25 @@ public final class PlanetData extends SavedData {
     var history =
         new mars.index.sim.PressureHistory.State(
             Math.max(1, ht.getInt("stride")), ht.getDouble("nextSol"), samples, events);
+    // Saves before schema 6 have no "storm" tag: the sim starts a fresh schedule.
+    mars.hazards.storm.StormSchedule.State storm = null;
+    if (tag.contains("storm", Tag.TAG_COMPOUND)) {
+      CompoundTag st = tag.getCompound("storm");
+      try {
+        storm =
+            new mars.hazards.storm.StormSchedule.State(
+                st.getLong("rng"),
+                mars.hazards.storm.StormSchedule.Phase.valueOf(st.getString("phase")),
+                mars.hazards.storm.StormSchedule.Kind.valueOf(st.getString("kind")),
+                st.getDouble("startSol"),
+                st.getDouble("endSol"),
+                st.getDouble("lastEndSol"),
+                st.getInt("stormsEnded"),
+                st.getDouble("cap"));
+      } catch (IllegalArgumentException unknownName) {
+        // A phase or kind from a newer build: start a fresh schedule rather than refuse the save.
+      }
+    }
     return new PlanetState(
         schema,
         vs,
@@ -223,7 +266,8 @@ public final class PlanetData extends SavedData {
         // Saves before schema 5 have no "frost" tag: the reservoir starts empty.
         new mars.index.sim.FrostSink.State(
             tag.getCompound("frost").getDouble("storedKpa"),
-            tag.getCompound("frost").getDouble("buriedReleasedKpa")));
+            tag.getCompound("frost").getDouble("buriedReleasedKpa")),
+        storm);
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {

@@ -199,6 +199,7 @@ public final class PlanetGameTests {
         PlanetData.load(
             level.dimension().location().toString(),
             PlanetManager.pace(level),
+            PlanetManager.seed(level),
             tag,
             level.registryAccess());
     boolean same = data.sim().toState().equals(back.sim().toState());
@@ -245,6 +246,7 @@ public final class PlanetGameTests {
       PlanetData.load(
           level.dimension().location().toString(),
           PlanetManager.pace(level),
+          PlanetManager.seed(level),
           future,
           level.registryAccess());
       refused = "loaded (wrong)";
@@ -845,6 +847,7 @@ public final class PlanetGameTests {
               PlanetData.load(
                   level.dimension().location().toString(),
                   PlanetManager.pace(level),
+                  PlanetManager.seed(level),
                   tag,
                   level.registryAccess());
           ok2 &=
@@ -1157,6 +1160,7 @@ public final class PlanetGameTests {
         PlanetData.load(
             level.dimension().location().toString(),
             PlanetManager.pace(level),
+            PlanetManager.seed(level),
             data.save(new CompoundTag(), level.registryAccess()),
             level.registryAccess());
     ok &=

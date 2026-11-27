@@ -20,15 +20,44 @@ public record PlanetState(
     Map<Long, Double> efficiency,
     Map<String, mars.gates.GateTracker.State> gates,
     PressureHistory.State history,
-    FrostSink.State frost) {
+    FrostSink.State frost,
+    mars.hazards.storm.StormSchedule.State storm) {
 
   /**
    * 2 adds the battery charge and per-machine output (solar dust); 3 adds gate states (latched,
    * hold counters); 4 adds the pressure history for the Monitor plot; 5 adds the polar-frost
-   * reservoir (kPa stored, buried kPa released). Older saves still load; their gates start
-   * unlatched, their history starts empty and their reservoir starts empty.
+   * reservoir (kPa stored, buried kPa released); 6 adds the dust-storm schedule (seeded generator
+   * state, phase, start and end sols). Older saves still load; their gates start unlatched, their
+   * history starts empty, their reservoir starts empty, and a schema 5 or older save gets a fresh
+   * storm schedule (first storm not before its floor sol, and never sooner than the warning lead
+   * from the sol the save is loaded at).
    */
-  public static final int CURRENT_SCHEMA = 5;
+  public static final int CURRENT_SCHEMA = 6;
+
+  public PlanetState(
+      int schema,
+      Map<String, Double> values,
+      long simTicks,
+      int pendingTicks,
+      Map<String, List<Long>> machines,
+      double batteryCharge,
+      Map<Long, Double> efficiency,
+      Map<String, mars.gates.GateTracker.State> gates,
+      PressureHistory.State history,
+      FrostSink.State frost) {
+    this(
+        schema,
+        values,
+        simTicks,
+        pendingTicks,
+        machines,
+        batteryCharge,
+        efficiency,
+        gates,
+        history,
+        frost,
+        null);
+  }
 
   public PlanetState(
       int schema,

@@ -32,8 +32,13 @@ public final class PlanetManager {
     return level
         .getDataStorage()
         .computeIfAbsent(
-            PlanetData.factory(level.dimension().location().toString(), pace(level)),
+            PlanetData.factory(level.dimension().location().toString(), pace(level), seed(level)),
             PlanetData.NAME);
+  }
+
+  /** The world seed, which seeds each planet's storm schedule (with the planet's name). */
+  public static long seed(ServerLevel level) {
+    return level.getSeed();
   }
 
   /** This world's pace (standard or classroom, chosen by an operator; default standard). */
@@ -64,7 +69,8 @@ public final class PlanetManager {
     for (ServerLevel level : server.getAllLevels()) {
       if (isPlanet(level)) {
         String id = level.dimension().location().toString();
-        PlanetData rebuilt = PlanetData.fromState(id, data(level).sim().toState(), pace);
+        PlanetData rebuilt =
+            PlanetData.fromState(id, data(level).sim().toState(), pace, seed(level));
         level.getDataStorage().set(PlanetData.NAME, rebuilt);
         rebuilt.setDirty();
       }
@@ -81,7 +87,7 @@ public final class PlanetManager {
       throw new IllegalStateException("resetForSelfTest is only for the GameTest server");
     }
     PlanetData fresh =
-        PlanetData.factory(level.dimension().location().toString(), pace(level))
+        PlanetData.factory(level.dimension().location().toString(), pace(level), seed(level))
             .constructor()
             .get();
     level.getDataStorage().set(PlanetData.NAME, fresh);

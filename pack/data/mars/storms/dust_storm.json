@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "about": "Dust storm schedule (docs/design/balance-sheet.md section 2, 'Storm schedule', settled 2026-11-27). Every number here is an INVENTED game-balance number. Only length, gap and warning scale with pace; the solar cut and the dust at storm end are physical and live in hazards/panel_dust.json (storm_output, storm_end) so pace can never touch them. Times are in sols of simulation time (a sol is 20 minutes of play). Phase 1 storm = the scheduled one; hold storm = the shorter drift-event storm (Phase 2 on, not scheduled yet; the operator command can start one).",
+  "source": "docs/design/balance-sheet.md section 2 (Storm schedule table), docs/team/reports/2026-11-27-game-designer-storm-length.md",
+  "tag": "invented",
+  "storm_cap": { "phase_1": 1.0, "tag": "invented", "note": "Phase 1 storm cap (ARCHITECTURE.md 2.5). Later phases get their own caps when their storms are scheduled." },
+  "standard": {
+    "phase_1_length_sols": 2,
+    "hold_length_sols": 1,
+    "first_not_before_sol": 14,
+    "gap_sols": { "min": 12, "max": 20 },
+    "warning_sols": 1
+  },
+  "classroom": {
+    "phase_1_length_sols": 0.5,
+    "hold_length_sols": 0.25,
+    "first_not_before_sol": 4,
+    "gap_sols": { "min": 3, "max": 5 },
+    "warning_sols": 0.25
+  }
+}

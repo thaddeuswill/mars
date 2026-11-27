@@ -25,6 +25,7 @@ class ArchitectureTest {
             "mars.monitor.view..",
             "mars.dimension.ice..",
             "mars.hazards.dust..",
+            "mars.hazards.storm..",
             "mars.power..",
             "mars.gates..",
             "mars.visual..",

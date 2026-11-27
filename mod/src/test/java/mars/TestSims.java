@@ -89,4 +89,28 @@ public final class TestSims {
   public static PlanetSim sim(Pace pace) throws Exception {
     return new PlanetSim(index(), defs(), gates(), frost(), pace);
   }
+
+  /** The real storm tuning file. */
+  public static mars.hazards.storm.StormTuning stormTuning() throws Exception {
+    try (Reader r =
+        Files.newBufferedReader(TestData.data("storms/dust_storm.json"), StandardCharsets.UTF_8)) {
+      return mars.hazards.storm.StormTuning.parse(
+          JsonParser.parseReader(r).getAsJsonObject(), "dust_storm.json");
+    }
+  }
+
+  /** The real panel dust file. */
+  public static mars.hazards.dust.PanelDustTuning dustTuning() throws Exception {
+    try (Reader r =
+        Files.newBufferedReader(TestData.data("hazards/panel_dust.json"), StandardCharsets.UTF_8)) {
+      return mars.hazards.dust.PanelDustTuning.parse(r, "panel_dust.json");
+    }
+  }
+
+  /** A planet with the real storm schedule attached, seeded with {@code seed}. */
+  public static PlanetSim stormSim(Pace pace, long seed) throws Exception {
+    PlanetSim s = sim(pace);
+    s.attachStorms(stormTuning(), dustTuning(), seed);
+    return s;
+  }
 }

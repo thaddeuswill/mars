@@ -11,6 +11,9 @@ import mars.core.ParameterId;
 import mars.gates.Condition;
 import mars.gates.GateDef;
 import mars.gates.GateTracker;
+import mars.hazards.dust.PanelDustTuning;
+import mars.hazards.storm.StormSchedule;
+import mars.hazards.storm.StormTuning;
 import mars.power.PowerGrid;
 import mars.session.SessionClock;
 
@@ -41,6 +44,22 @@ public final class PlanetSim {
 
   /** The polar-frost sink, or null when a planet has none (older tests; every real planet has). */
   private final FrostSink frost;
+
+  /**
+   * The dust-storm schedule, or null when this planet has none (older tests; every real planet
+   * has).
+   */
+  private StormSchedule storm;
+
+  private PanelDustTuning dust;
+  private StormSchedule.State restoredStorm;
+  private final List<StormNotice> stormNotices = new ArrayList<>();
+
+  /**
+   * What the game layer must announce or apply after a storm change. {@code stagesToAdd} is the
+   * dust every panel gains (set on ENDED only).
+   */
+  public record StormNotice(StormSchedule.Event event, int stagesToAdd) {}
 
   /** Machine-state names a gate condition may use. {@code life_support_ok}: see lifeSupportOk. */
   public static final Set<String> MACHINE_STATES = Set.of("life_support_ok");
@@ -89,6 +108,7 @@ public final class PlanetSim {
     }
     model.setBeforeStep(
         dt -> {
+          stepStorm(dt);
           double sat = grid.step(dt);
           applyPower(sat);
         });
@@ -97,6 +117,92 @@ public final class PlanetSim {
           evaluateGates(dt);
           history.record(model.sols(), model.current(Ids.PRESSURE));
         });
+  }
+
+  /**
+   * Give this planet its dust-storm schedule (ARCHITECTURE.md 2.22). Uses the state a save carried,
+   * or starts a new schedule from {@code seed}. The cut and the dust come from {@code dust} (never
+   * scaled by pace); only the timing comes from the pace's storm mode.
+   */
+  public void attachStorms(StormTuning tuning, PanelDustTuning dust, long seed) {
+    this.dust = dust;
+    StormTuning.Mode mode = tuning.mode(pace.classroom());
+    this.storm =
+        restoredStorm != null
+            ? new StormSchedule(mode, tuning.capPhase1(), restoredStorm)
+            : StormSchedule.initial(mode, tuning.capPhase1(), seed, model.sols());
+    restoredStorm = null;
+    refreshPower();
+  }
+
+  /** The storm schedule, or null when this planet has none. */
+  public StormSchedule storm() {
+    return storm;
+  }
+
+  /** Fraction of sunlight left by the storm now (1 when none): 1 - cut x storm cap. */
+  public double stormSolarFactor() {
+    if (storm == null || dust == null || !storm.active()) {
+      return 1.0;
+    }
+    return 1.0 - dust.stormSunlightCutPerCap() * storm.activeCap();
+  }
+
+  /** Operator: start a storm now. Returns false if one is already on or there is no schedule. */
+  public boolean stormStart(StormSchedule.Kind kind) {
+    if (storm == null || !storm.forceStart(model.sols(), kind)) {
+      return false;
+    }
+    stormNotices.add(new StormNotice(StormSchedule.Event.STARTED, 0));
+    refreshPower();
+    return true;
+  }
+
+  /** Operator: end the storm now (the panels still get their dust). */
+  public boolean stormEnd() {
+    if (storm == null) {
+      return false;
+    }
+    double cap = storm.activeCap();
+    if (!storm.forceEnd(model.sols())) {
+      return false;
+    }
+    stormNotices.add(new StormNotice(StormSchedule.Event.ENDED, dust.stagesAtStormEnd(cap)));
+    refreshPower();
+    return true;
+  }
+
+  /**
+   * Storm changes since the last call (the game announces them and dusts the panels), then clears.
+   */
+  public List<StormNotice> drainStormNotices() {
+    List<StormNotice> out = List.copyOf(stormNotices);
+    stormNotices.clear();
+    return out;
+  }
+
+  /** Positions of the machines of one type (a copy), for the game layer to update their blocks. */
+  public List<Long> machinePositions(String type) {
+    Set<Long> set = machines.get(type);
+    return set == null ? List.of() : List.copyOf(set);
+  }
+
+  /** Advance the schedule to the end of this step. Never called while the session is paused. */
+  private void stepStorm(double dtSols) {
+    if (storm == null) {
+      return;
+    }
+    double capBefore = storm.activeCap();
+    List<StormSchedule.Event> events = storm.step(model.sols() + dtSols);
+    for (StormSchedule.Event e : events) {
+      stormNotices.add(
+          new StormNotice(
+              e, e == StormSchedule.Event.ENDED ? dust.stagesAtStormEnd(capBefore) : 0));
+    }
+    if (events.contains(StormSchedule.Event.STARTED)
+        || events.contains(StormSchedule.Event.ENDED)) {
+      refreshPower();
+    }
   }
 
   /** True when this planet has a polar-frost sink. */
@@ -221,6 +327,9 @@ public final class PlanetSim {
     double supply = 0;
     double demand = 0;
     double storage = 0;
+    // All supply is solar so far; a storm cuts it (balance sheet 2: 60 % x storm cap). When a
+    // non-solar source exists, make this per machine type.
+    double sunlight = stormSolarFactor();
     for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
       MachineDef def = defs.get(e.getKey());
       if (def == null) {
@@ -228,7 +337,7 @@ public final class PlanetSim {
       }
       MachineDef.Power pw = def.power();
       for (long pos : e.getValue()) {
-        supply += pw.supplyPerSol() * efficiency.getOrDefault(pos, 1.0);
+        supply += pw.supplyPerSol() * efficiency.getOrDefault(pos, 1.0) * sunlight;
         demand += pw.drawPerSol();
         storage += pw.storage();
       }
@@ -385,7 +494,8 @@ public final class PlanetSim {
         Map.copyOf(efficiency),
         gates.toStates(),
         history.toState(),
-        frost == null ? FrostSink.State.EMPTY : frost.toState());
+        frost == null ? FrostSink.State.EMPTY : frost.toState(),
+        storm != null ? storm.toState() : restoredStorm);
   }
 
   /**
@@ -448,6 +558,7 @@ public final class PlanetSim {
     sim.grid.setCharge(state.batteryCharge());
     sim.refreshPower();
     sim.history.restore(state.history() == null ? PressureHistory.State.EMPTY : state.history());
+    sim.restoredStorm = state.storm(); // null for schema 5 and older: attachStorms starts afresh
     return new Loaded(sim, report, unknownTypes);
   }
 

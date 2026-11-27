@@ -39,6 +39,11 @@ public record PanelDustTuning(
     return outputFraction(stage, partlyCleaned) * (1.0 - stormSunlightCutPerCap * stormCap);
   }
 
+  /** Dust stages every panel gains when a storm of this cap ends (+1, or +2 at cap 0.8 or more). */
+  public int stagesAtStormEnd(double stormCap) {
+    return stormCap >= stormCapForExtra ? stormEndStagesHeavy : stormEndStages;
+  }
+
   /** Stage interval in sols for a storm cap and rate multiplier (interval / cap / multiplier). */
   public double intervalSols(double stormCap, double rateMultiplier) {
     return stageIntervalSols / stormCap / rateMultiplier;
