@@ -242,7 +242,7 @@ The frost line is a cause line like any other (Phase 1: open by default, re-scaf
 
 **Monitor option A keys (2026-11-27, straw-man, BACKLOG #38).** `monitor.event.placed.regolith_outgasser` "Outgasser placed" (one key per pressure-making machine; add one with each new machine); `monitor.plot.empty` "History starts after sol 1."; the plot reuses `monitor.sol` ("Sol %s") for the X axis and `gate.reached` ("Goal reached: %s") for goal markers; the Y axis shows the unit from the Index (kPa). The Instructional Designer should check "History starts after sol 1." and whether goal markers should read "Goal reached: Dome stable" or shorter. Pa appears only in the journal (not built).
 
-### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; not built)
+### 9.1 Monitor pressure plot: scale and goal line (**option D adopted by the owner**, goal line from sol 0, no taller plot; wording reviewed in §9.2; first pass built)
 
 Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and effect). Pillars: the planet is the quest log, every change is visible, compact before wide. Full comparison and reasoning: `docs/team/reports/2026-11-27-game-designer-plot-scale.md`.
 
@@ -255,7 +255,7 @@ Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and ef
 | Baseline | Always 0 (proportions stay honest; no truncated axis) |
 | Goal line | The next **pressure threshold not yet reached**, read from the gate data: 5, then 30, then 75 kPa. Solid thin line across the plot (event markers stay dashed, so the shape tells them apart) |
 | Top of the plot | 1.2 x the goal: 6, 36, 90 kPa. The goal line sits at 83 % of the height, so the line can be seen to arrive |
-| Overshoot guard | Top = the larger of 1.2 x goal and `niceMax(largest sample)`. A value above the goal (for example 31 kPa while the temperature half of "Phase 3 begins" is still short) never leaves the plot |
+| Overshoot guard | Keep 1.2 × goal until a sample exceeds that top. Then use `niceMax(largest sample)` to keep the full series visible. For example, 31 kPa fits under a 36 kPa top while the temperature condition is still short. |
 | After the last threshold | Goal line stays at 75 kPa (the Breathable pressure); top stays 90 |
 | When the range steps | The moment the gate latches, the whole history is redrawn on the new range (old part is squashed low). The "Goal reached" marker is on the same sol |
 
