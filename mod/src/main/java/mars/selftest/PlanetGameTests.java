@@ -42,6 +42,15 @@ public final class PlanetGameTests {
 
   private static final double TOL = 1e-9;
 
+  /**
+   * Largest amount the polar frost can take over {@code dTicks} at the higher of two pressures
+   * (slice 5: cold branch, 2 % of the pressure above 0.6 kPa per sol), so a check on the machines'
+   * contribution stays exact to {@link #TOL} plus what the frost may remove.
+   */
+  private static double frostAllowance(double p0, double p1, long dTicks) {
+    return 0.02 * Math.max(0, Math.max(p0, p1) - 0.6) * dTicks / 24_000.0;
+  }
+
   private static final String PANEL = "mars:solar_panel";
   private static final long FAKE_PANEL = 9_000_000_000_000L;
 
@@ -145,7 +154,9 @@ public final class PlanetGameTests {
                       + " sim ticks (steps="
                       + dTicks / 100
                       + ")",
-                  dTicks >= 200 && dTicks % 100 == 0 && Math.abs(dp - expected) < TOL);
+                  dTicks >= 200
+                      && dTicks % 100 == 0
+                      && Math.abs(dp - expected) <= TOL + frostAllowance(p0, p0 + dp, dTicks));
           h.destroyBlock(new BlockPos(0, 1, 0));
           double rateOne = data.sim().model().netRatePerSol(Ids.PRESSURE);
           ok2 &=
@@ -184,7 +195,8 @@ public final class PlanetGameTests {
     h.setBlock(at, MarsMachines.REGOLITH_OUTGASSER.get());
     data.sim().model().advanceSols(2); // under the 3 sol Dome stable hold, so no gate latches here
     CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
-    PlanetData back = PlanetData.load(tag, level.registryAccess());
+    PlanetData back =
+        PlanetData.load(level.dimension().location().toString(), tag, level.registryAccess());
     boolean same = data.sim().toState().equals(back.sim().toState());
     boolean ok =
         SelfTest.check(
@@ -226,7 +238,7 @@ public final class PlanetGameTests {
     future.putInt("schema", 99);
     String refused;
     try {
-      PlanetData.load(future, level.registryAccess());
+      PlanetData.load(level.dimension().location().toString(), future, level.registryAccess());
       refused = "loaded (wrong)";
     } catch (IllegalStateException e) {
       refused = "refused: " + e.getMessage();
@@ -599,7 +611,8 @@ public final class PlanetGameTests {
                             && during == before + 1
                             && rate >= 0.1 - TOL
                             && dTicks >= 200
-                            && Math.abs(dp - expected) < TOL);
+                            && Math.abs(dp - expected)
+                                <= TOL + frostAllowance(p0, p0 + dp, dTicks));
                 // clean up: load the chunk, remove the block, restore pressure
                 level.setChunkForced(cx, cz, true);
                 level.getChunk(cx, cz);
@@ -694,6 +707,216 @@ public final class PlanetGameTests {
   }
 
   /**
+   * Slice 5 with real blocks: two Regolith Ovens and a panel on the grid, the frost sink acting on
+   * real ticks, the Monitor's frost line and "Levelling off" note surviving the wire, and the
+   * reservoir surviving an NBT save and load.
+   */
+  @GameTest(template = "empty", batch = "mars_frost", timeoutTicks = 600)
+  public static void ovensAndPolarFrostFromRealBlocks(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    var sim = data.sim();
+    h.setBlock(new BlockPos(0, 1, 0), MarsMachines.REGOLITH_OVEN.get());
+    h.setBlock(new BlockPos(2, 1, 0), MarsMachines.REGOLITH_OVEN.get());
+    boolean ok =
+        SelfTest.check(
+            "frost.ovens_registered_unpowered",
+            "two placed Ovens register and, with no panel, add 0 kPa/sol and draw 2 units",
+            "ovens="
+                + sim.machineCount("mars:regolith_oven")
+                + " rate="
+                + sim.model().netRatePerSol(Ids.PRESSURE)
+                + " demand="
+                + sim.power().demandPerSol(),
+            sim.machineCount("mars:regolith_oven") == 2
+                && Math.abs(sim.model().netRatePerSol(Ids.PRESSURE)) < TOL
+                && Math.abs(sim.power().demandPerSol() - 2.0) < TOL);
+    h.setBlock(new BlockPos(4, 1, 0), MarsMachines.SOLAR_PANEL.get());
+    ok &=
+        SelfTest.check(
+            "frost.ovens_powered",
+            "a real clean panel powers both Ovens: +0.02 kPa/sol, 3 units spare",
+            "rate="
+                + sim.model().netRatePerSol(Ids.PRESSURE)
+                + " supply="
+                + sim.power().supplyPerSol(),
+            Math.abs(sim.model().netRatePerSol(Ids.PRESSURE) - 0.02) < TOL
+                && Math.abs(sim.power().supplyPerSol() - 5.0) < TOL);
+    sim.model().set(Ids.PRESSURE, 3.0);
+    long t0 = sim.model().simTicks();
+    h.runAfterDelay(
+        230,
+        () -> {
+          long dTicks = sim.model().simTicks() - t0;
+          double p = sim.model().snapshot().get(Ids.PRESSURE);
+          // Over dTicks the Ovens add 0.02/sol and the frost takes 2 % of (P - 0.6) per sol.
+          double dSols = dTicks / 24_000.0;
+          double upper = 3.0 + 0.02 * dSols; // no frost
+          double lower = 3.0 + 0.02 * dSols - 0.02 * 2.4 * dSols - 1e-6; // frost at the start P
+          boolean ok2 =
+              SelfTest.check(
+                  "frost.sink_runs_on_real_ticks",
+                  "at 3.0 kPa and -60 C the pressure falls: frost takes about 0.048 kPa/sol, the"
+                      + " Ovens add 0.02",
+                  "p=" + p + " after " + dTicks + " ticks (stored " + sim.frostStoredKpa() + ")",
+                  dTicks >= 200
+                      && p < 3.0
+                      && p > lower
+                      && p < upper
+                      && sim.frostStoredKpa() > 0
+                      && sim.frostRatePerSol() < 0);
+          var view = MonitorSender.viewFor(level);
+          var pressureRow =
+              view.rows().stream()
+                  .filter(r -> r.labelKey().equals("monitor.row.pressure"))
+                  .findFirst()
+                  .orElseThrow();
+          var frostLine =
+              pressureRow.causes().stream()
+                  .filter(MonitorView.CauseLine::isPlanetSide)
+                  .findFirst()
+                  .orElse(null);
+          ok2 &=
+              SelfTest.check(
+                  "frost.monitor_line",
+                  "the Monitor lists polar frost as a negative cause with a down direction",
+                  "line=" + frostLine + " trend=" + pressureRow.trend(),
+                  frostLine != null
+                      && frostLine.direction() < 0
+                      && frostLine.rate().startsWith("\u2212")
+                      && pressureRow.trend() == MonitorView.Trend.FALLING);
+          RegistryFriendlyByteBuf buf =
+              new RegistryFriendlyByteBuf(Unpooled.buffer(), level.registryAccess());
+          MonitorPayload.CODEC.encode(buf, new MonitorPayload(view));
+          MonitorPayload got = MonitorPayload.CODEC.decode(buf);
+          ok2 &=
+              SelfTest.check(
+                  "frost.payload_round_trip",
+                  "the view with the frost line survives the wire unchanged",
+                  "same=" + got.view().equals(view),
+                  got.view().equals(view));
+          sim.model().set(Ids.PRESSURE, 1.55);
+          sim.model().advanceSols(0.5);
+          var notePayload = MonitorSender.viewFor(level);
+          var noteRow =
+              notePayload.rows().stream()
+                  .filter(r -> r.labelKey().equals("monitor.row.pressure"))
+                  .findFirst()
+                  .orElseThrow();
+          RegistryFriendlyByteBuf buf2 =
+              new RegistryFriendlyByteBuf(Unpooled.buffer(), level.registryAccess());
+          MonitorPayload.CODEC.encode(buf2, new MonitorPayload(notePayload));
+          ok2 &=
+              SelfTest.check(
+                  "frost.levelling_off_note",
+                  "near the 1.6 kPa balance of two Ovens the pressure row carries the Levelling"
+                      + " off note, and it survives the wire",
+                  "p="
+                      + noteRow.value()
+                      + " note="
+                      + noteRow.noteKey()
+                      + " trend="
+                      + noteRow.trend(),
+                  "monitor.estimate.levelling_off".equals(noteRow.noteKey())
+                      && MonitorPayload.CODEC.decode(buf2).view().equals(notePayload));
+          CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
+          PlanetData back =
+              PlanetData.load(level.dimension().location().toString(), tag, level.registryAccess());
+          ok2 &=
+              SelfTest.check(
+                  "frost.reservoir_nbt_round_trip",
+                  "the reservoir (kPa the poles hold) comes back from NBT unchanged, schema 5",
+                  "stored="
+                      + sim.frostStoredKpa()
+                      + " back="
+                      + back.sim().frostStoredKpa()
+                      + " schema="
+                      + tag.getInt("schema"),
+                  sim.frostStoredKpa() > 0
+                      && Math.abs(sim.frostStoredKpa() - back.sim().frostStoredKpa()) < 1e-12
+                      && tag.getInt("schema") == 5
+                      && back.sim().toState().equals(sim.toState()));
+          h.destroyBlock(new BlockPos(0, 1, 0));
+          h.destroyBlock(new BlockPos(2, 1, 0));
+          h.destroyBlock(new BlockPos(4, 1, 0));
+          ok2 &=
+              SelfTest.check(
+                  "frost.ovens_cleanup",
+                  "breaking the blocks removes the Ovens and the panel",
+                  "ovens="
+                      + sim.machineCount("mars:regolith_oven")
+                      + " panels="
+                      + sim.machineCount(PANEL),
+                  sim.machineCount("mars:regolith_oven") == 0 && sim.machineCount(PANEL) == 0);
+          finish(h, ok2, "ovensAndPolarFrostFromRealBlocks");
+        });
+  }
+
+  /**
+   * The starting Ovens: given to the first player on a planet, once per world. A second player, a
+   * second arrival (relog) and an arrival after a save and load all get nothing.
+   */
+  @GameTest(template = "empty", batch = "mars_grant")
+  public static void startingOvensAreGrantedOncePerWorld(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    var server = level.getServer();
+    mars.planets.GrantData.resetForSelfTest(server);
+    FakePlayer first =
+        FakePlayerFactory.get(
+            level,
+            new GameProfile(UUID.fromString("6d617273-0000-4000-8000-000000000004"), "[GrantOne]"));
+    FakePlayer second =
+        FakePlayerFactory.get(
+            level,
+            new GameProfile(UUID.fromString("6d617273-0000-4000-8000-000000000005"), "[GrantTwo]"));
+    var oven = MarsMachines.REGOLITH_OVEN.get().asItem();
+    boolean g1 = mars.planets.GrantEvents.maybeGrant(first);
+    int count1 = first.getInventory().countItem(oven);
+    boolean ok =
+        SelfTest.check(
+            "grant.first_arrival",
+            "the first player on a planet gets exactly two Regolith Ovens",
+            "granted=" + g1 + " ovens=" + count1,
+            g1 && count1 == 2);
+    boolean again = mars.planets.GrantEvents.maybeGrant(first);
+    boolean g2 = mars.planets.GrantEvents.maybeGrant(second);
+    ok &=
+        SelfTest.check(
+            "grant.once_per_world",
+            "arriving again (relog or death) and a second player get nothing",
+            "again="
+                + again
+                + " second="
+                + g2
+                + " second ovens="
+                + second.getInventory().countItem(oven),
+            !again
+                && !g2
+                && second.getInventory().countItem(oven) == 0
+                && first.getInventory().countItem(oven) == 2);
+    // Dying: the player loses the items, the world flag stays set, nothing is handed out again.
+    first.getInventory().clearContent();
+    boolean afterDeath = mars.planets.GrantEvents.maybeGrant(first);
+    ok &=
+        SelfTest.check(
+            "grant.death_does_not_repeat",
+            "after losing the Ovens the grant is not given again",
+            "granted=" + afterDeath + " ovens=" + first.getInventory().countItem(oven),
+            !afterDeath && first.getInventory().countItem(oven) == 0);
+    // The flag survives a save and load of the world's grant data.
+    CompoundTag tag =
+        mars.planets.GrantData.get(server).save(new CompoundTag(), level.registryAccess());
+    ok &=
+        SelfTest.check(
+            "grant.flag_saved",
+            "the saved grant data says granted=true",
+            "nbt=" + tag,
+            tag.getBoolean("granted"));
+    mars.planets.GrantData.resetForSelfTest(server);
+    finish(h, ok, "startingOvensAreGrantedOncePerWorld");
+  }
+
+  /**
    * Slice 4 with real blocks and the real reload path: the gate files are loaded; a survival player
    * cannot place the Regolith Outgasser before "Dome stable"; a creative player can (admin route);
    * after the gate latches (real power for 3 sols) a survival player can; the gate stays latched
@@ -764,7 +987,9 @@ public final class PlanetGameTests {
             sim.gates().isLatched("mars:dome_stable"));
     PlanetData back =
         PlanetData.load(
-            data.save(new CompoundTag(), level.registryAccess()), level.registryAccess());
+            level.dimension().location().toString(),
+            data.save(new CompoundTag(), level.registryAccess()),
+            level.registryAccess());
     ok &=
         SelfTest.check(
             "gate.nbt_round_trip",

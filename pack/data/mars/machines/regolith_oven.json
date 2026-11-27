@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "mars:regolith_oven",
+  "contributions": [
+    {
+      "parameter": "mars:pressure",
+      "ratePerSol": 0.01
+    }
+  ],
+  "source": "docs/design/balance-sheet.md section 2 and 2c decision 1: Regolith Oven +0.01 kPa per sol each at standard pace and full power; the effect scales with the share of power it gets (same rule as the Outgasser). Draw 1 power unit (kWh) per sol is INVENTED (\"Low\" in section 2: a quarter of the Outgasser's 4). startingGrant 2: the first player to arrive on a planet gets two Ovens in the inventory, once per world (2c decision 2). Oven water is not built (2c decision 6).",
+  "power": {
+    "drawPerSol": 1.0
+  },
+  "startingGrant": 2
+}

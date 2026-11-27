@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "id": "mars:polar_frost",
+  "baselineKpa": {
+    "default": 0.6,
+    "planets": { "mars:planet_1": 0.6 }
+  },
+  "coldBelowC": -40,
+  "releaseAboveC": -20,
+  "coldFractionPerSol": 0.02,
+  "mildFractionPerSol": 0.01,
+  "releaseRateKpaPerSol": 0.5,
+  "buriedKpa": 0.5,
+  "source": "docs/design/balance-sheet.md section 2 and 2c. Cold (T below -40 C) takes 2 percent of (P - baseline) per sol; mild (-40 to -20 C, both ends included) takes 1 percent; above -20 C the stored amount returns at 0.5 kPa per sol, then up to 0.5 kPa more from buried polar CO2, once. Rates and temperature thresholds are INVENTED game balance (direction sourced: docs/science/frost-sink-review.md); the 0.5 kPa buried amount is a calc from Phillips et al. 2011 and not settled. The fractions and the release rate scale with pace and group like machine rates; the baseline, the thresholds and the buried amount never scale. baselineKpa is the planet's start pressure, per planet."
+}

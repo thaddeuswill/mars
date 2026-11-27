@@ -12,9 +12,12 @@ import mars.monitor.view.MonitorView;
 final class MonitorLayout {
   private MonitorLayout() {}
 
-  /** Cause lines shown on the panel: only reasons (a stalled machine); rates live in the trend. */
+  /**
+   * Cause lines shown on the panel: reasons (a stalled machine) and planet-side lines (the polar
+   * frost); a machine's rate lives in the trend.
+   */
   static List<MonitorView.CauseLine> shownCauses(MonitorView.Row row) {
-    return row.causes().stream().filter(c -> c.reasonKey() != null).toList();
+    return row.causes().stream().filter(c -> c.reasonKey() != null || c.isPlanetSide()).toList();
   }
 
   /**
@@ -47,7 +50,8 @@ final class MonitorLayout {
                   List.of(),
                   null,
                   null,
-                  r.bar()));
+                  r.bar(),
+                  r.noteKey()));
     }
     return new MonitorView(view.sols(), List.copyOf(rows), view.history());
   }
@@ -69,6 +73,9 @@ final class MonitorLayout {
    */
   static int plotHeight(MonitorView view, int screenHeight) {
     int fixed = fixedHeight(view);
+    if (fixed + PLOT_MIN_H + PLOT_LABEL_H + 2 > TARGET_H + PLOT_OVERFLOW) {
+      return 0; // many problem lines: rows only, no history
+    }
     int wanted = Math.max(PLOT_MIN_H, Math.min(PLOT_MAX_H, TARGET_H - fixed - PLOT_LABEL_H - 2));
     int room = screenHeight - 2 * MARGIN - fixed - PLOT_LABEL_H - 2;
     return room < PLOT_MIN_H ? 0 : Math.min(wanted, room);
@@ -85,6 +92,6 @@ final class MonitorLayout {
     if (row.detailKey() != null || row.detailRight() != null) {
       h += LINE_H - 1;
     }
-    return h + shownCauses(row).size() * LINE_H;
+    return h + shownCauses(row).size() * LINE_H + (row.noteKey() != null ? NOTE_LINES * LINE_H : 0);
   }
 }

@@ -15,8 +15,24 @@ import java.util.List;
 public record GateDef(
     String id, int order, Condition condition, Hold hold, List<String> unlocks, String nameKey) {
 
-  /** Hold lengths in simulation sols (balance sheet 4). */
-  public record Hold(double standardSols, double classroomSols) {}
+  /**
+   * Hold lengths in simulation sols (balance sheet 4) and the hold rule's grace: the counter pauses
+   * when the condition fails and resets only after more than {@code resetAfter*Sols} of continuous
+   * failure (balance sheet 2c decision 7: 1 sol standard, 0.5 classroom). A rate-like scale, never
+   * a threshold.
+   */
+  public record Hold(
+      double standardSols,
+      double classroomSols,
+      double resetAfterStandardSols,
+      double resetAfterClassroomSols) {
+    public static final double DEFAULT_RESET_STANDARD = 1.0;
+    public static final double DEFAULT_RESET_CLASSROOM = 0.5;
+
+    public Hold(double standardSols, double classroomSols) {
+      this(standardSols, classroomSols, DEFAULT_RESET_STANDARD, DEFAULT_RESET_CLASSROOM);
+    }
+  }
 
   public static GateDef parse(JsonObject o, String file) {
     String id = text(o, "id", file);
@@ -25,9 +41,21 @@ public record GateDef(
     Hold hold = null;
     if (o.has("hold")) {
       JsonObject h = o.getAsJsonObject("hold");
-      hold = new Hold(num(h, "standard_sols", file), num(h, "classroom_sols", file));
+      double resetStd = Hold.DEFAULT_RESET_STANDARD;
+      double resetRoom = Hold.DEFAULT_RESET_CLASSROOM;
+      if (h.has("reset_after_sols")) {
+        JsonObject r = h.getAsJsonObject("reset_after_sols");
+        resetStd = num(r, "standard", file);
+        resetRoom = num(r, "classroom", file);
+      }
+      hold =
+          new Hold(
+              num(h, "standard_sols", file), num(h, "classroom_sols", file), resetStd, resetRoom);
       if (hold.standardSols() <= 0 || hold.classroomSols() <= 0) {
         throw new IllegalArgumentException(file + ": hold lengths must be above 0");
+      }
+      if (resetStd < 0 || resetRoom < 0) {
+        throw new IllegalArgumentException(file + ": reset_after_sols must be 0 or more");
       }
     }
     List<String> unlocks = new ArrayList<>();

@@ -31,12 +31,11 @@ public final class GateTracker {
   private final List<GateDef> defs;
   private final Map<String, State> states = new LinkedHashMap<>();
   private final boolean classroom;
-  private final double resetSols;
 
-  public GateTracker(List<GateDef> defs, boolean classroom, double resetSols) {
+  /** The reset grace of each hold comes from its gate file ({@code reset_after_sols}). */
+  public GateTracker(List<GateDef> defs, boolean classroom) {
     this.defs = defs.stream().sorted(Comparator.comparingInt(GateDef::order)).toList();
     this.classroom = classroom;
-    this.resetSols = resetSols;
     for (GateDef d : this.defs) {
       states.put(d.id(), State.FRESH);
     }
@@ -80,6 +79,8 @@ public final class GateTracker {
         falseFor = 0;
       } else {
         falseFor += dtSols;
+        double resetSols =
+            classroom ? d.hold().resetAfterClassroomSols() : d.hold().resetAfterStandardSols();
         if (falseFor > resetSols) {
           held = 0;
         }

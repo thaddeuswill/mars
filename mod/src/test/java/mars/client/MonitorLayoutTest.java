@@ -39,6 +39,60 @@ class MonitorLayoutTest {
     return MonitorView.of(s);
   }
 
+  /** Two Ovens settled at their balance point (1.6 kPa) with a panel and a battery. */
+  private static MonitorView levellingOff() throws Exception {
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
+    s.addMachine(TestSims.BATTERY, 5000L);
+    s.addMachine(TestSims.OVEN, 10L);
+    s.addMachine(TestSims.OVEN, 11L);
+    s.model().advanceSols(300);
+    return MonitorView.of(s);
+  }
+
+  /** The worst case: levelling off, short on power, a dusty panel, the frost line, a battery. */
+  private static MonitorView levellingShortAndDusty() throws Exception {
+    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    s.addMachine(TestSims.PANEL, 1000L);
+    s.setEfficiency(1000L, 0.6);
+    s.addMachine(TestSims.BATTERY, 5000L);
+    s.addMachine(TestSims.OUTGASSER, 1L);
+    s.addMachine(TestSims.OVEN, 10L);
+    s.addMachine(TestSims.OVEN, 11L);
+    s.model().advanceSols(600);
+    return MonitorView.of(s);
+  }
+
+  @Test
+  void theFrostLineAndTheLevellingNoteKeepThePanelNearTheTarget() throws Exception {
+    for (var e :
+        java.util.Map.of(
+                "levelling", levellingOff(), "levelling+short+dusty", levellingShortAndDusty())
+            .entrySet()) {
+      MonitorView raw = e.getValue();
+      boolean note = raw.rows().stream().anyMatch(r -> r.noteKey() != null);
+      MonitorView v = MonitorLayout.fit(raw);
+      int total = MonitorLayout.panelHeight(v, H3);
+      System.out.println(
+          e.getKey()
+              + ": note="
+              + note
+              + " plot "
+              + MonitorLayout.plotHeight(v, H3)
+              + " -> panel "
+              + total
+              + " GUI px");
+      assertTrue(note, e.getKey());
+      boolean worst = e.getKey().contains("short");
+      if (worst) {
+        assertEquals(0, MonitorLayout.plotHeight(v, H3), "rows only when problem lines crowd it");
+      } else {
+        assertTrue(MonitorLayout.plotHeight(v, H3) >= MonitorStyle.PLOT_MIN_H, e.getKey());
+      }
+      assertTrue(
+          total <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW, e.getKey() + " is " + total);
+    }
+  }
+
   @Test
   void panelFitsTheTargetHeightInEveryState() throws Exception {
     for (var e :

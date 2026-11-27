@@ -66,7 +66,8 @@ class PlanetSimTest {
     System.out.printf(
         "250 ticks: %d steps, expected %.6f kPa, read %.6f kPa%n", steps, expected, pressure(s));
     assertEquals(2, steps);
-    assertEquals(expected, pressure(s), 1e-12);
+    // The frost takes about 3.5e-8 kPa in these two steps; compare to 1e-6.
+    assertEquals(expected, pressure(s), 1e-6);
     assertEquals(200, s.model().simTicks());
   }
 
@@ -75,8 +76,12 @@ class PlanetSimTest {
     PlanetSim s = sim(Pace.STANDARD);
     s.addMachine(OUTGASSER, 1L);
     s.model().advanceSols(10);
-    System.out.printf("1 Outgasser, 10 sols: expected 1.600, read %.4f%n", pressure(s));
-    assertEquals(1.6, pressure(s), 1e-6);
+    double expected = TestSims.coldPressure(0.6, 0.10, 10);
+    System.out.printf(
+        "1 Outgasser, 10 sols with the frost sink: expected %.4f (was 1.600 before slice 5), read"
+            + " %.4f%n",
+        expected, pressure(s));
+    assertEquals(expected, pressure(s), 1e-3);
   }
 
   @Test
@@ -92,7 +97,7 @@ class PlanetSimTest {
     assertFalse(s.removeMachine(OUTGASSER, 1L));
     assertEquals(0.10, s.model().netRatePerSol(Ids.PRESSURE), 1e-12);
     s.model().advanceSols(10);
-    assertEquals(1.6, pressure(s), 1e-6);
+    assertEquals(TestSims.coldPressure(0.6, 0.10, 10), pressure(s), 1e-3);
   }
 
   @Test
@@ -124,7 +129,9 @@ class PlanetSimTest {
     }
     s.model().set(Ids.TEMPERATURE, -55.5);
     PlanetState state = s.toState();
-    PlanetSim.Loaded back = PlanetSim.fromState(state, index(), defs(), Pace.STANDARD);
+    PlanetSim.Loaded back =
+        PlanetSim.fromState(
+            state, index(), defs(), TestSims.gates(), TestSims.frost(), Pace.STANDARD);
     System.out.println("saved " + state + "\nrestored " + back.sim().toState());
     assertEquals(state, back.sim().toState());
     assertEquals(2, back.sim().machineCount(OUTGASSER));

@@ -47,10 +47,15 @@ class MonitorViewTest {
     MonitorView v = MonitorView.of(s);
     MonitorView.Row p = row(v, "monitor.row.pressure");
     System.out.println("after 10 sols with two Outgassers: " + p);
-    assertEquals("2.60 kPa", p.value());
+    // With the frost sink (slice 5) ten sols of two Outgassers read 2.41 kPa, not 2.60.
+    assertEquals("2.41\u00a0kPa", p.value());
     assertEquals(MonitorView.Trend.RISING, p.trend());
-    assertEquals("+0.20 kPa/sol", p.trendRate());
-    assertEquals(1, p.causes().size());
+    assertEquals("+0.16\u00a0kPa/sol", p.trendRate()); // +0.20 machines, -0.04 frost
+    assertEquals(2, p.causes().size());
+    MonitorView.CauseLine frost = p.causes().get(1);
+    assertEquals("monitor.cause.polar_frost", frost.sourceKey());
+    assertEquals(-1, frost.direction());
+    assertEquals("−0.04\u00a0kPa", frost.rate());
     assertEquals("block.mars.regolith_outgasser", p.causes().get(0).sourceKey());
     assertEquals(2, p.causes().get(0).count());
     assertEquals("+0.20 kPa/sol", p.causes().get(0).rate());
@@ -59,8 +64,8 @@ class MonitorViewTest {
     MonitorView.Row w = row(v, "monitor.row.water_boils");
     assertNull(w.valueKey());
     assertNotNull(w.value());
-    System.out.println("water row at 2.60 kPa: " + w.value());
-    assertEquals("22 °C", w.value());
+    System.out.println("water row at 2.41 kPa: " + w.value());
+    assertEquals("21\u00a0°C", w.value()); // boiling point at 2.41 kPa (was 22 at 2.60)
   }
 
   @Test

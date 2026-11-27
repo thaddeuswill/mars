@@ -30,6 +30,9 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monito
 Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monitor-option-a.md`, BACKLOG #38):
 - **Monitor option A, centred:** stored pressure history (`PressureHistory`, `PlanetState` schema 4), plot with Sol and kPa axes and event lines, 10-segment battery bar, panel about 122 to 135 GUI px, `MonitorLayout`/`PlotScale` pure and tested. 114 unit tests, 54 of 54 boot checks, screenshots in `tools/screenshots/out/20261127-123605/`. Rate-only cause line dropped; no status lights. Not verified: GUI scales 2/4, a very short window, Falling, paused.
 
+Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-slice5-frost.md`, BACKLOG #43):
+- **Stage 2 slice 5:** polar-frost sink with all three temperature branches (pure `FrostSink`, data in `pack/data/mars/sinks/polar_frost.json`, baseline per planet), Regolith Oven on the power grid (`regolith_oven.json`), two starting Ovens once per world, hold rule `reset_after_sols` as data, `PlanetState` schema 5, Monitor frost line and "Levelling off" note. 142 unit tests, 66 boot checks, screenshots in `tools/screenshots/out/20261127-125134/`. Pressure numbers moved (one Outgasser for 10 sols reads 1.51 kPa, not 1.60); the report lists every moved test.
+
 ## 3. Known gaps and honest caveats (do not claim these work)
 
 - **Not tested:** the jar loaded from a real `mods` folder; Windows and macOS; the dedicated server and a real save to disk and restart (needs the EULA, the owner's call); right-click on the Monitor block in the real client (screenshots use `/mars monitor`); explosions or pistons moving an Outgasser; frustum culling of an array whose overhang crosses a chunk border while its centre is off-screen.
@@ -39,6 +42,8 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monito
 - Chat text shows faintly through the left edge of the Monitor panel (cosmetic; Stage 3 art).
 - Estimates in the docs (about 26 developer-days for Stage 2 code) are unverified.
 - The AI-design-audit skill in Claude's environment is written for web pages; it was applied by hand to the Monitor only.
+
+- **Slice 5 not tested:** the grant through a real dedicated server and a real second player (GameTest uses fake players and calls `GrantEvents.maybeGrant`; the real `/mars go` path was seen once in a screenshot); no recipe for a lost Oven; the Levelling off state makes the Monitor about 144 GUI px (target 130), see the report; temperature never changes by itself, so only the cold branch is reachable in play (the other two via `/mars index set temperature`).
 
 ## 4. Owner questions waiting for an answer (do not decide these yourself)
 
@@ -54,7 +59,7 @@ Also done 2026-11-27 (report `docs/team/reports/2026-11-27-technical-lead-monito
 1. Sync and verify (see section 2). Make the build and tests green and the boot test print `RESULT PASS`.
 2. Check `pgrep -f runShotsClient` before any screenshot run; never overlap client runs.
 3. Small fixes remaining: pause does not yet block player actions or show a HUD line.
-4. Then, per `docs/tech/stage2-plan.md`: slice 5 (polar-frost sink), the pressure machine chain, then the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
+4. Then, per `docs/tech/stage2-plan.md`: slice 6 (sky response), the Monitor minimum view and the forecast `resolve_source` JSON plus the CR-F10 test.
 5. After each step: update `BACKLOG.md` status, add a report in `docs/team/reports/`, update the "state" in `AGENTS.md` and this file, commit, push.
 6. Reply to the owner in the standing format: **what changed, recommended next steps, screenshot if visual.** Keep it short; the owner is also credit-limited.
 

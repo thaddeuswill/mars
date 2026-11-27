@@ -11,12 +11,18 @@ import mars.core.ParameterId;
  * A machine type's effect on the planet, read from {@code data/mars/machines/<name>.json}: what it
  * contributes to which Index parameter, per sol, at standard pace (ARCHITECTURE.md 2.1, 2.16).
  */
-public record MachineDef(String id, List<Contribution> contributions, Power power) {
+public record MachineDef(
+    String id, List<Contribution> contributions, Power power, int startingGrant) {
+
+  public MachineDef(String id, List<Contribution> contributions, Power power) {
+    this(id, contributions, power, 0);
+  }
 
   /**
    * Power use (balance sheet §2b), all optional in the file. {@code drawPerSol}: units per sol a
    * machine needs (its contributions scale with the share of power it gets). {@code supplyPerSol}:
-   * units per sol it makes at full output. {@code storage}: units it can hold.
+   * units per sol it makes at full output. {@code storage}: units it can hold. {@code
+   * startingGrant} (file field, outside power): how many the first player to arrive gets, once.
    */
   public record Power(double drawPerSol, double supplyPerSol, double storage) {
     public static final Power NONE = new Power(0, 0, 0);
@@ -58,7 +64,15 @@ public record MachineDef(String id, List<Contribution> contributions, Power powe
               optNumber(po, "supplyPerSol", file),
               optNumber(po, "storage", file));
     }
-    return new MachineDef(id, List.copyOf(list), power);
+    int grant = 0;
+    JsonElement g = o.get("startingGrant");
+    if (g != null) {
+      if (!g.isJsonPrimitive() || !g.getAsJsonPrimitive().isNumber() || g.getAsInt() < 0) {
+        throw new IllegalArgumentException(file + ": 'startingGrant' must be a whole number >= 0");
+      }
+      grant = g.getAsInt();
+    }
+    return new MachineDef(id, List.copyOf(list), power, grant);
   }
 
   private static double optNumber(JsonObject o, String field, String file) {

@@ -37,20 +37,30 @@ public final class PlanetData extends SavedData {
     return sim;
   }
 
-  public static SavedData.Factory<PlanetData> factory() {
-    return new SavedData.Factory<>(PlanetData::createNew, PlanetData::load);
+  /** {@code planetId} (the dimension, "mars:planet_1") picks the planet's frost baseline. */
+  public static SavedData.Factory<PlanetData> factory(String planetId) {
+    return new SavedData.Factory<>(() -> createNew(planetId), (t, r) -> load(planetId, t, r));
   }
 
-  private static PlanetData createNew() {
+  private static PlanetData createNew(String planetId) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
-    return new PlanetData(new PlanetSim(d.index(), d.machines(), d.gates(), Pace.STANDARD));
+    return new PlanetData(
+        new PlanetSim(
+            d.index(), d.machines(), d.gates(), d.frost().forPlanet(planetId), Pace.STANDARD));
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
-  public static PlanetData load(CompoundTag tag, HolderLookup.Provider registries) {
+  public static PlanetData load(
+      String planetId, CompoundTag tag, HolderLookup.Provider registries) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
     PlanetSim.Loaded loaded =
-        PlanetSim.fromState(fromNbt(tag), d.index(), d.machines(), d.gates(), Pace.STANDARD);
+        PlanetSim.fromState(
+            fromNbt(tag),
+            d.index(),
+            d.machines(),
+            d.gates(),
+            d.frost().forPlanet(planetId),
+            Pace.STANDARD);
     if (!loaded.report().ignored().isEmpty()) {
       LOG.warn(
           "Planet save has values this build doesn't know (kept out): {}",
@@ -126,6 +136,10 @@ public final class PlanetData extends SavedData {
     }
     ht.put("events", events);
     out.put("history", ht);
+    CompoundTag frost = new CompoundTag();
+    frost.putDouble("storedKpa", s.frost().storedKpa());
+    frost.putDouble("buriedReleasedKpa", s.frost().buriedReleasedKpa());
+    out.put("frost", frost);
     return out;
   }
 
@@ -200,7 +214,11 @@ public final class PlanetData extends SavedData {
         tag.getDouble("batteryCharge"),
         eff,
         gs,
-        history);
+        history,
+        // Saves before schema 5 have no "frost" tag: the reservoir starts empty.
+        new mars.index.sim.FrostSink.State(
+            tag.getCompound("frost").getDouble("storedKpa"),
+            tag.getCompound("frost").getDouble("buriedReleasedKpa")));
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {

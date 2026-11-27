@@ -39,6 +39,9 @@ public final class PlanetSim {
   private final PressureHistory history = new PressureHistory();
   private final List<String> newlyLatched = new ArrayList<>();
 
+  /** The polar-frost sink, or null when a planet has none (older tests; every real planet has). */
+  private final FrostSink frost;
+
   /** Machine-state names a gate condition may use. {@code life_support_ok}: see lifeSupportOk. */
   public static final Set<String> MACHINE_STATES = Set.of("life_support_ok");
 
@@ -51,7 +54,18 @@ public final class PlanetSim {
       Map<String, MachineDef> machineDefs,
       List<GateDef> gateDefs,
       Pace pace) {
-    this.gates = new GateTracker(gateDefs, pace.classroom(), pace.holdResetSols());
+    this(index, machineDefs, gateDefs, null, pace);
+  }
+
+  /** With the planet's polar-frost numbers ({@code frostParams} null: no sink). */
+  public PlanetSim(
+      IndexData.Loaded index,
+      Map<String, MachineDef> machineDefs,
+      List<GateDef> gateDefs,
+      FrostSink.Params frostParams,
+      Pace pace) {
+    this.frost = frostParams == null ? null : new FrostSink(frostParams);
+    this.gates = new GateTracker(gateDefs, pace.classroom());
     for (String name : gates.machineStatesUsed()) {
       if (!MACHINE_STATES.contains(name)) {
         throw new IllegalArgumentException(
@@ -61,6 +75,18 @@ public final class PlanetSim {
     this.model = new PlanetaryIndexModel(index.parameters(), index.boilingPoint(), pace);
     this.pace = pace;
     this.defs = Map.copyOf(machineDefs);
+    if (frost != null) {
+      // The sink is a rate like any machine: it gets the pace multiplier (already in dt) and the
+      // group scale, so the balance point does not move with the mode (SME review Q2).
+      model.addCoupling(
+          (values, naturalDt) ->
+              values.add(
+                  Ids.PRESSURE,
+                  frost.step(
+                      values.get(Ids.PRESSURE),
+                      values.get(Ids.TEMPERATURE),
+                      naturalDt * pace.groupRateScale())));
+    }
     model.setBeforeStep(
         dt -> {
           double sat = grid.step(dt);
@@ -71,6 +97,50 @@ public final class PlanetSim {
           evaluateGates(dt);
           history.record(model.sols(), model.current(Ids.PRESSURE));
         });
+  }
+
+  /** True when this planet has a polar-frost sink. */
+  public boolean hasFrost() {
+    return frost != null;
+  }
+
+  /** The frost's rate right now in kPa per sol, signed (minus: takes air). 0 with no sink. */
+  public double frostRatePerSol() {
+    if (frost == null) {
+      return 0;
+    }
+    return frost.ratePerSol(
+        model.current(Ids.PRESSURE),
+        model.current(Ids.TEMPERATURE),
+        pace.rateMultiplier() * pace.groupRateScale());
+  }
+
+  /** kPa the poles hold now (taken so far, not yet given back). */
+  public double frostStoredKpa() {
+    return frost == null ? 0 : frost.storedKpa();
+  }
+
+  public double frostBuriedRemainingKpa() {
+    return frost == null ? 0 : frost.buriedRemainingKpa();
+  }
+
+  public FrostSink.Branch frostBranch() {
+    return frost == null ? null : frost.branch(model.current(Ids.TEMPERATURE));
+  }
+
+  /**
+   * Pressure at which the frost balances the sources now (baseline plus net source over the sink
+   * fraction); NaN with no sink, in the release branch, or with no source. Same in every pace mode.
+   */
+  public double frostEquilibriumKpa() {
+    if (frost == null) {
+      return Double.NaN;
+    }
+    double s = model.netRatePerSol(Ids.PRESSURE);
+    return s <= 0
+        ? Double.NaN
+        : frost.equilibriumKpa(
+            s, model.current(Ids.TEMPERATURE), pace.rateMultiplier() * pace.groupRateScale());
   }
 
   /** The air-pressure history and events the Monitor plots. */
@@ -307,7 +377,8 @@ public final class PlanetSim {
         grid.charge(),
         Map.copyOf(efficiency),
         gates.toStates(),
-        history.toState());
+        history.toState(),
+        frost == null ? FrostSink.State.EMPTY : frost.toState());
   }
 
   /**
@@ -326,6 +397,16 @@ public final class PlanetSim {
       Map<String, MachineDef> defs,
       List<GateDef> gateDefs,
       Pace pace) {
+    return fromState(state, index, defs, gateDefs, null, pace);
+  }
+
+  public static Loaded fromState(
+      PlanetState state,
+      IndexData.Loaded index,
+      Map<String, MachineDef> defs,
+      List<GateDef> gateDefs,
+      FrostSink.Params frostParams,
+      Pace pace) {
     if (state.schema() > PlanetState.CURRENT_SCHEMA) {
       throw new IllegalStateException(
           "Planet save has schema "
@@ -334,7 +415,10 @@ public final class PlanetSim {
               + PlanetState.CURRENT_SCHEMA
               + "; refusing to load it (it would be overwritten).");
     }
-    PlanetSim sim = new PlanetSim(index, defs, gateDefs, pace);
+    PlanetSim sim = new PlanetSim(index, defs, gateDefs, frostParams, pace);
+    if (sim.frost != null && state.frost() != null) {
+      sim.frost.restore(state.frost()); // schema 4 and older saves: empty reservoir
+    }
     sim.gates.restore(state.gates());
     Map<ParameterId, Double> saved = new LinkedHashMap<>();
     state.values().forEach((k, v) -> saved.put(ParameterId.of(k), v));

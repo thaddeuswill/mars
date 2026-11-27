@@ -105,7 +105,13 @@ class PressureHistoryTest {
     PlanetState st = s.toState();
     assertEquals(PlanetState.CURRENT_SCHEMA, st.schema());
     PlanetSim back =
-        PlanetSim.fromState(st, TestSims.index(), TestSims.defs(), TestSims.gates(), Pace.STANDARD)
+        PlanetSim.fromState(
+                st,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
             .sim();
     assertEquals(s.history().samples(), back.history().samples());
     assertEquals(s.history().events(), back.history().events());
@@ -124,7 +130,13 @@ class PressureHistoryTest {
             0,
             java.util.Map.of(TestSims.OUTGASSER, List.of(1L)));
     PlanetSim s =
-        PlanetSim.fromState(old, TestSims.index(), TestSims.defs(), TestSims.gates(), Pace.STANDARD)
+        PlanetSim.fromState(
+                old,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
             .sim();
     assertEquals(0, s.history().samples().size());
     assertEquals(0, s.history().events().size(), "loading a machine must not invent an event");

@@ -31,7 +31,7 @@ You need **Minecraft: Java Edition** (not Bedrock, not Minecraft Education) and 
 
 ## 1a. The machines (batch 2 build)
 
-Six machine blocks are in the creative inventory under the **Mars Terraforming** tab: Regolith Outgasser, Regolith Oven, Solar Panel, Battery, Oxygen Maker (CO2), Planetary Monitor. They **do nothing yet** (behaviour is Stage 2); you can place them, and their front faces you when placed. The art is placeholder: the small magenta squares are the deliberate "not final" marker, not missing textures.
+Six machine blocks are in the creative inventory under the **Mars Terraforming** tab: Regolith Outgasser, Regolith Oven, Solar Panel, Battery, Oxygen Maker (CO2), Planetary Monitor. Most **do nothing yet** (the Outgasser, Regolith Oven, Solar Panel, Battery and Monitor work; the Oxygen Maker does not); you can place them, and their front faces you when placed. The art is placeholder: the small magenta squares are the deliberate "not final" marker, not missing textures.
 
 The solar panel is the round InSight-style array: it takes a **3 × 3 area** (the array overhangs about 1 m on each side); if any of the 8 surrounding spots is taken, nothing is placed and a message says so. Breaking any part breaks the whole array.
 
@@ -60,3 +60,5 @@ All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.26
 ## 3. Screenshots
 
 `tools/screenshots/run-shots.sh [script]` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. `tools/screenshots/batch2.shots` places every machine and the panel at dust stages 0, 2, 4 and partly cleaned; `round.shots` checks the round array's footprint, outline, and lighting under the overhang. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Results and limits are in the Stage 1 report.
+
+**Starting Ovens and the polar frost (slice 5).** The first player to arrive on Mars (`/mars go`) gets **two Regolith Ovens** in the inventory, once per world (not per player; dying or logging in again does not repeat it). Place them and a Solar Panel: each Oven draws 1 power unit per sol and adds +0.01 kPa per sol. While Mars is cold the polar frost takes back 2 % of the pressure above 0.60 kPa each sol, so pressure levels off: two Ovens settle at 1.6 kPa; one Outgasser on a clean panel settles near 5.6 kPa. The Monitor shows "Polar frost" as a cause line once it passes about 0.85 kPa, and "Levelling off" when the frost balances your machines. Temperature does not change by itself yet; to see the other two branches use `/mars index set temperature -30` (mild, 1 %) or `-10` (warm: the frost gives the air back). Dome stable and Phase 2 begins are unchanged.

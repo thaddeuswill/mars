@@ -40,6 +40,13 @@ final class MonitorStyle {
    */
   static final int TARGET_H = 130;
 
+  /**
+   * The plot is dropped (rows only) when keeping its minimum would push the panel past {@link
+   * #TARGET_H} plus this: a stalled, dusty, levelling-off planet has many problem lines and the
+   * history is the lowest priority.
+   */
+  static final int PLOT_OVERFLOW = 20;
+
   static final int MARGIN = 6;
   static final int PAD = 6;
   static final int HEADER_H = 15;
@@ -49,6 +56,10 @@ final class MonitorStyle {
   static final int ROW_H_EMPHASIS = 12;
   static final int ROW_GAP = 1;
   static final int CAUSE_INDENT = 12;
+
+  /** A row's wrapped note ("Levelling off ...") is always drawn in this many lines. */
+  static final int NOTE_LINES = 2;
+
   static final int BAR_SEGMENTS = 10;
   static final int BAR_SEG_W = 3;
   static final int BAR_SEG_GAP = 1;

@@ -51,6 +51,30 @@ public final class TestSims {
     return out;
   }
 
+  /** The real polar-frost file, for planet 1 (baseline 0.6 kPa). */
+  public static mars.index.sim.FrostSink.Params frost() throws Exception {
+    try (Reader r =
+        Files.newBufferedReader(TestData.data("sinks/polar_frost.json"), StandardCharsets.UTF_8)) {
+      return mars.index.sim.FrostSink.Def.parse(
+              JsonParser.parseReader(r).getAsJsonObject(), "polar_frost.json")
+          .forPlanet("mars:planet_1");
+    }
+  }
+
+  /**
+   * Pressure after {@code sols} in the cold branch from {@code start}, with a net source of {@code
+   * sourcePerSol} (kPa per sol) and the real frost numbers: baseline + (P0 - baseline) e^(-kt) + (S
+   * / k)(1 - e^(-kt)). The sim steps in 1/240 sol, so compare with about 1e-3.
+   */
+  public static double coldPressure(double start, double sourcePerSol, double sols)
+      throws Exception {
+    var f = frost();
+    double k = f.coldFractionPerSol();
+    double decay = Math.exp(-k * sols);
+    return f.baselineKpa() + (start - f.baselineKpa()) * decay + sourcePerSol / k * (1 - decay);
+  }
+
+  public static final String OVEN = "mars:regolith_oven";
   public static final String PANEL = "mars:solar_panel";
   public static final String BATTERY = "mars:battery";
 
@@ -63,6 +87,6 @@ public final class TestSims {
   }
 
   public static PlanetSim sim(Pace pace) throws Exception {
-    return new PlanetSim(index(), defs(), gates(), pace);
+    return new PlanetSim(index(), defs(), gates(), frost(), pace);
   }
 }

@@ -322,6 +322,19 @@ public final class MonitorScreen extends Screen {
       y += LINE_H - 1;
     }
     for (MonitorView.CauseLine c : MonitorLayout.shownCauses(row)) {
+      if (c.isPlanetSide()) {
+        // The planet pushing back (or giving back): a shape, a sign in the number, one sentence.
+        drawTrendShape(
+            g,
+            c.direction() < 0 ? MonitorView.Trend.FALLING : MonitorView.Trend.RISING,
+            x0 + CAUSE_INDENT - 2,
+            y + 4,
+            c.direction() < 0 ? DOWN : UP);
+        Component line = Component.translatable(c.sourceKey(), c.rate());
+        g.drawString(font, line, x0 + CAUSE_INDENT + 10, y, CAUSE, false);
+        y += LINE_H;
+        continue;
+      }
       Component left =
           Component.translatable(c.sourceKey())
               .append(Component.literal(c.count() > 0 ? " ×" + c.count() : ""));
@@ -335,6 +348,13 @@ public final class MonitorScreen extends Screen {
         g.drawString(font, c.rate(), right - font.width(c.rate()), y, CAUSE, false);
       }
       y += LINE_H;
+    }
+    if (row.noteKey() != null) {
+      var lines = font.split(Component.translatable(row.noteKey()), right - (x0 + CAUSE_INDENT));
+      for (int i = 0; i < NOTE_LINES && i < lines.size(); i++) {
+        g.drawString(font, lines.get(i), x0 + CAUSE_INDENT, y + i * LINE_H, LABEL, false);
+      }
+      y += NOTE_LINES * LINE_H;
     }
     return y;
   }

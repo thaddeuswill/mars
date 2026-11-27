@@ -23,11 +23,6 @@ public record Pace(
     return new Pace(4.0, groupSize, 24_000, 100, true);
   }
 
-  /** Sols a hold's counter may stay broken before it resets: 1 standard, 0.5 classroom. */
-  public double holdResetSols() {
-    return classroom ? 0.5 : 1.0;
-  }
-
   public Pace {
     if (rateMultiplier <= 0 || groupSize < 1 || solTicks <= 0 || stepTicks <= 0) {
       throw new IllegalArgumentException("Invalid pace: " + this);

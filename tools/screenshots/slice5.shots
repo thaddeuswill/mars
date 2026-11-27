@@ -1,0 +1,39 @@
+# Slice 5: starting Ovens grant, polar-frost cause line, "Levelling off", warm "gives back" (mars:planet_1), 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+shot slice5_1_arrival_and_oven_grant
+cmd /clear @s mars:regolith_oven
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 2 64 4 mars:regolith_oven
+cmd /setblock 3 64 4 mars:regolith_oven
+cmd /mars monitor
+wait 40
+shot slice5_2_two_ovens_start_no_frost_line
+cmd /mars index advance 40
+cmd /mars monitor
+wait 40
+shot slice5_3_ovens_40_sols_frost_line_appears
+cmd /mars index advance 200
+cmd /mars index advance 200
+cmd /mars monitor
+wait 40
+shot slice5_4_levelling_off
+cmd /setblock 6 64 4 mars:battery
+cmd /setblock 5 64 4 mars:regolith_outgasser
+cmd /setblock 14 64 12 mars:solar_panel
+cmd /mars index advance 60
+cmd /mars monitor
+wait 40
+shot slice5_5_outgasser_added_frost_deeper
+cmd /mars index set temperature -10
+cmd /mars index advance 1
+cmd /mars monitor
+wait 40
+shot slice5_6_warm_gives_back
+quit

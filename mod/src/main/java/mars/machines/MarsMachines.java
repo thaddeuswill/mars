@@ -48,8 +48,8 @@ public final class MarsMachines {
 
   public static final DeferredBlock<RegolithOutgasserBlock> REGOLITH_OUTGASSER =
       machine("regolith_outgasser", OUTGASSER, RegolithOutgasserBlock::new);
-  public static final DeferredBlock<MachineBlock> REGOLITH_OVEN =
-      machine("regolith_oven", OVEN, MachineBlock::new);
+  public static final DeferredBlock<RegolithOvenBlock> REGOLITH_OVEN =
+      BLOCKS.register("regolith_oven", () -> new RegolithOvenBlock(machineProperties(), OVEN));
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
@@ -115,6 +115,20 @@ public final class MarsMachines {
   }
 
   static {
+    // The Oven's tooltip names the missing water (balance sheet 2c decision 6).
+    ITEMS.register(
+        "regolith_oven",
+        () ->
+            new net.minecraft.world.item.BlockItem(REGOLITH_OVEN.get(), new Item.Properties()) {
+              @Override
+              public void appendHoverText(
+                  ItemStack stack,
+                  Item.TooltipContext context,
+                  List<Component> tooltip,
+                  net.minecraft.world.item.TooltipFlag flag) {
+                tooltip.add(Component.translatable("monitor.oven.tooltip"));
+              }
+            });
     ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
   }
 

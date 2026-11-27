@@ -124,7 +124,14 @@ class GateTest {
     assertFalse(latched(s, DOME));
     s.model().advanceSols(0.2);
     assertTrue(latched(s, DOME));
-    assertEquals(0.5, Pace.classroom(4).holdResetSols());
+    assertEquals(
+        0.5,
+        TestSims.gates().stream()
+            .filter(g -> g.id().equals(DOME))
+            .findFirst()
+            .orElseThrow()
+            .hold()
+            .resetAfterClassroomSols());
   }
 
   @Test
@@ -137,10 +144,12 @@ class GateTest {
       Pace.classroom(5)
     };
     for (Pace pace : paces) {
-      PlanetSim below = sim(pace);
+      // The threshold is checked on its own, without the frost sink: with it, a planet set to
+      // exactly 5.0 and no machines would sink below 5.0 before the gate is read.
+      PlanetSim below = new PlanetSim(TestSims.index(), TestSims.defs(), TestSims.gates(), pace);
       below.model().set(Ids.PRESSURE, 4.999);
       below.model().advanceSols(0.01);
-      PlanetSim at = sim(pace);
+      PlanetSim at = new PlanetSim(TestSims.index(), TestSims.defs(), TestSims.gates(), pace);
       at.model().set(Ids.PRESSURE, 5.0);
       at.model().advanceSols(0.01);
       System.out.println(
@@ -195,7 +204,13 @@ class GateTest {
     s.model().advanceSols(1.5);
     var mid = s.toState();
     PlanetSim half =
-        PlanetSim.fromState(mid, TestSims.index(), TestSims.defs(), TestSims.gates(), Pace.STANDARD)
+        PlanetSim.fromState(
+                mid,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
             .sim();
     assertEquals(s.gates().state(DOME).heldSols(), half.gates().state(DOME).heldSols(), 1e-9);
     half.model().advanceSols(1.6);
@@ -203,7 +218,12 @@ class GateTest {
     var done = half.toState();
     PlanetSim again =
         PlanetSim.fromState(
-                done, TestSims.index(), TestSims.defs(), TestSims.gates(), Pace.STANDARD)
+                done,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
             .sim();
     assertTrue(latched(again, DOME));
     assertTrue(again.gates().isUnlocked(TestSims.OUTGASSER));
@@ -305,5 +325,31 @@ class GateTest {
         after.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));
     assertEquals("gate.mars.phase_2_begins", next2.valueKey());
     assertTrue(next2.side().endsWith("/ 5 kPa"));
+  }
+
+  @Test
+  void holdRulePausesThenResetsAfterMoreThanTheDataGrace() throws Exception {
+    var dome = TestSims.gates().stream().filter(g -> g.id().equals(DOME)).findFirst().orElseThrow();
+    assertEquals(1.0, dome.hold().resetAfterStandardSols(), 0.0);
+    assertEquals(0.5, dome.hold().resetAfterClassroomSols(), 0.0);
+    for (Pace pace : new Pace[] {Pace.STANDARD, Pace.classroom(4)}) {
+      double grace = pace.classroom() ? 0.5 : 1.0;
+      // Out for less than the grace: the count pauses and keeps its value.
+      PlanetSim s = sim(pace);
+      panel(s);
+      s.model().advanceSols(0.3);
+      double held = s.gates().state(DOME).heldSols();
+      s.removeMachine(TestSims.PANEL, 1000L);
+      s.model().advanceSols(grace * 0.8);
+      assertEquals(held, s.gates().state(DOME).heldSols(), 1e-9, pace + ": paused, not reset");
+      s.addMachine(TestSims.PANEL, 1000L);
+      s.model().advanceSols(0.05);
+      assertTrue(s.gates().state(DOME).heldSols() > held, pace + ": counts again");
+      // Out for more than the grace: it resets to zero.
+      s.removeMachine(TestSims.PANEL, 1000L);
+      s.model().advanceSols(grace + 0.05);
+      assertEquals(0.0, s.gates().state(DOME).heldSols(), 1e-9, pace + ": reset after the grace");
+      System.out.println(pace + ": paused inside " + grace + " sol, reset after it");
+    }
   }
 }

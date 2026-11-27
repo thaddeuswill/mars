@@ -90,7 +90,42 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       List<String> detailArgs,
       String detailRightKey,
       String detailRight,
-      double bar) {
+      double bar,
+      String noteKey) {
+
+    /** Without a note. */
+    public Row(
+        String labelKey,
+        String value,
+        String valueKey,
+        Trend trend,
+        String trendRate,
+        List<CauseLine> causes,
+        Tone tone,
+        boolean emphasis,
+        String side,
+        String detailKey,
+        List<String> detailArgs,
+        String detailRightKey,
+        String detailRight,
+        double bar) {
+      this(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          null);
+    }
 
     public Row(
         String labelKey,
@@ -131,7 +166,28 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           detailArgs,
           detailRightKey,
           detailRight,
-          bar);
+          bar,
+          noteKey);
+    }
+
+    /** The same row with a wrapped note under its lines (two lines on the panel). */
+    public Row withNote(String noteKey) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey);
     }
   }
 
@@ -139,11 +195,27 @@ public record MonitorView(double sols, List<Row> rows, History history) {
    * "Regolith Outgasser ×2: +0.20 kPa/sol". {@code sourceKey} is a language key. {@code reasonKey}
    * (nullable) is a plain-words reason the screen shows instead of the rate ("needs power").
    */
-  public record CauseLine(String sourceKey, int count, String rate, String reasonKey) {
+  public record CauseLine(
+      String sourceKey, int count, String rate, String reasonKey, int direction) {
+    public CauseLine(String sourceKey, int count, String rate, String reasonKey) {
+      this(sourceKey, count, rate, reasonKey, 0);
+    }
+
     public CauseLine(String sourceKey, int count, String rate) {
-      this(sourceKey, count, rate, null);
+      this(sourceKey, count, rate, null, 0);
+    }
+
+    /**
+     * A planet-side line (the polar frost): {@code sourceKey} is a sentence with the rate in it,
+     * drawn with a shape (down for a loss, up for a gain) and a sign, never colour alone.
+     */
+    public boolean isPlanetSide() {
+      return direction != 0;
     }
   }
+
+  /** Below this net rate (kPa per sol) a pressure reads steady: it rounds to 0.00 on screen. */
+  public static final double PRESSURE_STEADY = 0.005;
 
   public static final double EPSILON = 1e-9;
 
@@ -154,7 +226,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
 
     ParameterId pressure = Ids.PRESSURE;
     double p = snap.get(pressure);
-    double net = model.netRatePerSol(pressure);
+    double sources = model.netRatePerSol(pressure);
+    double frostRate = sim.frostRatePerSol();
+    double net = sources + frostRate;
     List<CauseLine> causes = new ArrayList<>();
     var powerState = sim.power().state(sim.stepSols());
     for (PlanetaryIndexModel.Cause c : model.causes(pressure)) {
@@ -170,15 +244,32 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       causes.add(
           new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), "kPa"), reason));
     }
-    rows.add(
+    // The polar frost is a cause line like any machine, but it is the planet pushing back: a sign
+    // and a shape, no warning colour. Hidden while its rate rounds to 0.00 (at the baseline, and
+    // until about 0.85 kPa).
+    if (Math.round(Math.abs(frostRate) * 100) != 0) {
+      boolean gives = frostRate > 0;
+      causes.add(
+          new CauseLine(
+              gives ? "monitor.cause.polar_frost_release" : "monitor.cause.polar_frost",
+              0,
+              Fmt.signed(frostRate, 2) + "\u00a0kPa",
+              null,
+              gives ? 1 : -1));
+    }
+    boolean levelling =
+        frostRate < 0 && sources > 0 && Math.abs(net) < PRESSURE_STEADY && pressureGoalOpen(sim);
+    Row pressureRow =
         new Row(
                 "monitor.row.pressure",
                 Fmt.withUnit(p, p < 10 ? 2 : 1, "kPa"),
                 null,
-                trend(net),
+                Math.abs(net) < PRESSURE_STEADY ? Trend.STEADY : trend(net),
                 rate(net, "kPa"),
                 causes)
-            .with(Tone.NORMAL, true));
+            .with(Tone.NORMAL, true);
+    // "Levelling off": the sink balances the sources and the pressure goal is still ahead.
+    rows.add(levelling ? pressureRow.withNote("monitor.estimate.levelling_off") : pressureRow);
 
     double t = snap.get(Ids.TEMPERATURE);
     rows.add(
@@ -202,6 +293,18 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     powerRow(sim).ifPresent(rows::add);
     gateRows(sim, rows);
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
+  }
+
+  /** True while a pressure goal (a gate that compares pressure) has not latched yet. */
+  private static boolean pressureGoalOpen(PlanetSim sim) {
+    for (mars.gates.GateDef d : sim.gates().defs()) {
+      if (!sim.gates().isLatched(d.id())
+          && d.condition() instanceof mars.gates.Condition.Compare c
+          && c.parameter().equals(Ids.PRESSURE)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

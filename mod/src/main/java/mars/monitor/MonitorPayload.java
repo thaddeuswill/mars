@@ -71,6 +71,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
           b.writeVarInt(c.count());
           b.writeUtf(c.rate());
           b.writeNullable(c.reasonKey(), FriendlyByteBuf::writeUtf);
+          b.writeVarInt(c.direction() + 1);
         });
     buf.writeEnum(r.tone());
     buf.writeBoolean(r.emphasis());
@@ -80,6 +81,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     buf.writeNullable(r.detailRightKey(), FriendlyByteBuf::writeUtf);
     buf.writeNullable(r.detailRight(), FriendlyByteBuf::writeUtf);
     buf.writeDouble(r.bar());
+    buf.writeNullable(r.noteKey(), FriendlyByteBuf::writeUtf);
   }
 
   private static MonitorView.Row readRow(FriendlyByteBuf buf) {
@@ -95,7 +97,8 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
                     b.readUtf(),
                     b.readVarInt(),
                     b.readUtf(),
-                    b.readNullable(FriendlyByteBuf::readUtf)));
+                    b.readNullable(FriendlyByteBuf::readUtf),
+                    b.readVarInt() - 1));
     MonitorView.Tone tone = buf.readEnum(MonitorView.Tone.class);
     boolean emphasis = buf.readBoolean();
     String side = buf.readNullable(FriendlyByteBuf::readUtf);
@@ -104,6 +107,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
     String detailRightKey = buf.readNullable(FriendlyByteBuf::readUtf);
     String detailRight = buf.readNullable(FriendlyByteBuf::readUtf);
     double bar = buf.readDouble();
+    String noteKey = buf.readNullable(FriendlyByteBuf::readUtf);
     return new MonitorView.Row(
         label,
         value,
@@ -118,6 +122,7 @@ public record MonitorPayload(MonitorView view) implements CustomPacketPayload {
         detailArgs,
         detailRightKey,
         detailRight,
-        bar);
+        bar,
+        noteKey);
   }
 }

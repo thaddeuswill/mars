@@ -101,7 +101,14 @@ class SessionClockTest {
     // The restore reads no clock of any kind: a restored planet equals the saved one, however long
     // the server stayed off.
     PlanetSim back =
-        PlanetSim.fromState(saved, TestSims.index(), TestSims.defs(), Pace.STANDARD).sim();
+        PlanetSim.fromState(
+                saved,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
+            .sim();
     assertEquals(saved, back.toState());
   }
 

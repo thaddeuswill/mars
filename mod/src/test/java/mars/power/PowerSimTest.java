@@ -57,7 +57,7 @@ class PowerSimTest {
     double p0 = pressure(s);
     s.model().advanceSols(10);
     System.out.println("1 panel, 1 Outgasser, 10 sols: " + p0 + " -> " + pressure(s));
-    assertEquals(p0 + 1.0, pressure(s), 1e-9);
+    assertEquals(TestSims.coldPressure(p0, 0.1, 10), pressure(s), 1e-3);
     assertEquals("monitor.power.powered", power(s).valueKey());
   }
 
@@ -69,8 +69,59 @@ class PowerSimTest {
     double p0 = pressure(s);
     s.model().advanceSols(10);
     System.out.println("1 panel, 2 Outgassers, 10 sols: " + p0 + " -> " + pressure(s));
-    assertEquals(p0 + 2.0 * 0.625 * 0.1 * 10, pressure(s), 1e-9);
+    assertEquals(TestSims.coldPressure(p0, 2.0 * 0.625 * 0.1, 10), pressure(s), 1e-3);
     assertEquals("monitor.power.short", power(s).valueKey());
+  }
+
+  @Test
+  void anOutgasserAndTwoOvensShareOneCleanPanelEqually() throws Exception {
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
+    s.addMachine(OUT, 1L);
+    s.addMachine(TestSims.OVEN, 10L);
+    s.addMachine(TestSims.OVEN, 11L);
+    assertEquals(6.0, s.power().demandPerSol(), 1e-12);
+    assertEquals(5.0, s.power().supplyPerSol(), 1e-12);
+    double sources = s.model().netRatePerSol(Ids.PRESSURE);
+    System.out.println("Outgasser + 2 Ovens + 1 panel: source " + sources + " kPa/sol");
+    assertEquals(0.100, sources, 1e-12); // (0.10 + 0.02) x 83.3 %
+    // Each machine gets the same share: the Outgasser 0.0833, each Oven 0.00833.
+    var causes = s.model().causes(Ids.PRESSURE);
+    for (var c : causes) {
+      double full = c.source().equals(OUT) ? 0.10 : 0.02;
+      assertEquals(full * 5.0 / 6.0, c.ratePerSol(), 1e-12, c.source());
+    }
+    assertEquals("monitor.power.short", power(s).valueKey());
+    // Two Ovens alone on the clean panel: full rate, 3 units spare.
+    PlanetSim o = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
+    o.addMachine(TestSims.OVEN, 10L);
+    o.addMachine(TestSims.OVEN, 11L);
+    assertEquals(0.02, o.model().netRatePerSol(Ids.PRESSURE), 1e-12);
+    // An Oven with an empty grid contributes nothing; a panel restores it.
+    PlanetSim e = TestSims.sim(Pace.STANDARD);
+    e.addMachine(TestSims.OVEN, 10L);
+    assertEquals(0.0, e.model().netRatePerSol(Ids.PRESSURE), 1e-12);
+    e.addMachine(TestSims.PANEL, 1000L);
+    assertEquals(0.01, e.model().netRatePerSol(Ids.PRESSURE), 1e-12);
+  }
+
+  @Test
+  void ovenDataMatchesBalanceSheet2c() throws Exception {
+    String all =
+        Files.readString(
+            TestData.pack().resolve("../docs/design/balance-sheet.md").normalize(),
+            StandardCharsets.UTF_8);
+    int a = all.indexOf("### Decision 1.");
+    int b = all.indexOf("### Decision 2.", a);
+    assertTrue(a >= 0 && b > a, "2c decision 1 not found");
+    String sheet = all.substring(a, b);
+    var oven = TestSims.defs().get(TestSims.OVEN);
+    assertEquals(
+        sheetNumber(sheet, "Oven draw \\| \\*\\*(\\d+(?:\\.\\d+)?) power unit per sol"),
+        oven.power().drawPerSol());
+    assertEquals(
+        sheetNumber(sheet, "Oven pressure rate \\| \\+(\\d+(?:\\.\\d+)?) kPa per sol"),
+        oven.contributions().get(0).ratePerSol());
+    assertEquals(2, oven.startingGrant(), "two starting Ovens (decision 2)");
   }
 
   @Test
@@ -87,12 +138,12 @@ class PowerSimTest {
     double p0 = pressure(s);
     s.model().advanceSols(10);
     System.out.println("stage 4 panel, 1 Outgasser, 10 sols: " + p0 + " -> " + pressure(s));
-    assertEquals(p0 + 0.75, pressure(s), 1e-9);
+    assertEquals(TestSims.coldPressure(p0, 0.075, 10), pressure(s), 1e-3);
     // Cleaning the panel (back to stage 0) restores the full rate.
     s.setEfficiency(1000L, dust.outputFraction(0, false));
     double p1 = pressure(s);
     s.model().advanceSols(10);
-    assertEquals(p1 + 1.0, pressure(s), 1e-9);
+    assertEquals(TestSims.coldPressure(p1, 0.1, 10), pressure(s), 1e-3);
   }
 
   @Test
@@ -107,7 +158,9 @@ class PowerSimTest {
     double p0 = pressure(s);
     s.model().advanceSols(5); // 10 units last 2.5 sols at 4 per sol
     System.out.println("panel removed, 5 sols on the battery: " + p0 + " -> " + pressure(s));
-    assertEquals(p0 + 0.1 * 2.5, pressure(s), 1e-3);
+    // 2.5 sols powered, then 2.5 sols with the frost only.
+    double powered = TestSims.coldPressure(p0, 0.1, 2.5);
+    assertEquals(TestSims.coldPressure(powered, 0.0, 2.5), pressure(s), 5e-3);
     assertEquals("monitor.power.unpowered", power(s).valueKey());
   }
 
@@ -136,7 +189,14 @@ class PowerSimTest {
     s.model().advanceSols(4); // 3 units/sol charge: 12 -> capped at 10
     var state = s.toState();
     PlanetSim back =
-        PlanetSim.fromState(state, TestSims.index(), TestSims.defs(), Pace.STANDARD).sim();
+        PlanetSim.fromState(
+                state,
+                TestSims.index(),
+                TestSims.defs(),
+                TestSims.gates(),
+                TestSims.frost(),
+                Pace.STANDARD)
+            .sim();
     System.out.println(
         "saved charge " + state.batteryCharge() + " restored " + back.power().charge());
     assertEquals(s.power().charge(), back.power().charge(), 1e-12);

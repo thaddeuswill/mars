@@ -28,7 +28,10 @@ public final class PlanetManager {
 
   /** The planet's data, created from the start values on first use. Only call for planet levels. */
   public static PlanetData data(ServerLevel level) {
-    return level.getDataStorage().computeIfAbsent(PlanetData.factory(), PlanetData.NAME);
+    return level
+        .getDataStorage()
+        .computeIfAbsent(
+            PlanetData.factory(level.dimension().location().toString()), PlanetData.NAME);
   }
 
   /**
@@ -40,7 +43,8 @@ public final class PlanetManager {
     if (!ANY_LEVEL_IS_PLANET) {
       throw new IllegalStateException("resetForSelfTest is only for the GameTest server");
     }
-    PlanetData fresh = PlanetData.factory().constructor().get();
+    PlanetData fresh =
+        PlanetData.factory(level.dimension().location().toString()).constructor().get();
     level.getDataStorage().set(PlanetData.NAME, fresh);
     fresh.setDirty();
     return fresh;
