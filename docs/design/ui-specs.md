@@ -242,6 +242,64 @@ The frost line is a cause line like any other (Phase 1: open by default, re-scaf
 
 **Monitor option A keys (2026-11-27, straw-man, BACKLOG #38).** `monitor.event.placed.regolith_outgasser` "Outgasser placed" (one key per pressure-making machine; add one with each new machine); `monitor.plot.empty` "History starts after sol 1."; the plot reuses `monitor.sol` ("Sol %s") for the X axis and `gate.reached` ("Goal reached: %s") for goal markers; the Y axis shows the unit from the Index (kPa). The Instructional Designer should check "History starts after sol 1." and whether goal markers should read "Goal reached: Dome stable" or shorter. Pa appears only in the journal (not built).
 
+### 9.1 Monitor pressure plot: scale and goal line (**proposed** 2026-11-27, Game Designer; not reviewed; not built)
+
+Goals: C3 (read data to decide), B3 (predict from a trend), B1 (see cause and effect). Pillars: the planet is the quest log, every change is visible, compact before wide. Full comparison and reasoning: `docs/team/reports/2026-11-27-game-designer-plot-scale.md`.
+
+**Problem with the built plot** (`PlotScale.niceMax`, top = next 1, 2, 5 or 10 above 1.1 x the largest value). (1) Between 4.55 and 5 kPa the top jumps from 5 to 10, so the whole line halves in height just before the Phase 2 gate. A rising game looks like it fell. (2) Nothing on the plot says where the goal is. (3) In Phase 3 (5 to 75 kPa) the top keeps stepping, so the shape never builds up.
+
+**Proposal: phase-stepped fixed range with a labelled goal line.**
+
+| Rule | Value |
+|---|---|
+| Baseline | Always 0 (proportions stay honest; no truncated axis) |
+| Goal line | The next **pressure threshold not yet reached**, read from the gate data: 5, then 30, then 75 kPa. Solid thin line across the plot (event markers stay dashed, so the shape tells them apart) |
+| Top of the plot | 1.2 x the goal: 6, 36, 90 kPa. The goal line sits at 83 % of the height, so the line can be seen to arrive |
+| Overshoot guard | Top = the larger of 1.2 x goal and `niceMax(largest sample)`. A value above the goal (for example 31 kPa while the temperature half of "Phase 3 begins" is still short) never leaves the plot |
+| After the last threshold | Goal line stays at 75 kPa (the Breathable pressure); top stays 90 |
+| When the range steps | The moment the gate latches, the whole history is redrawn on the new range (old part is squashed low). The "Goal reached" marker is on the same sol |
+
+**What the player sees** (plot about 17 px tall):
+
+| Moment | Pressure (kPa) | Line height now (axis top) | Proposed (axis top) |
+|---|---|---|---|
+| Sol 0 | 0.6 | 10 px (1) | 2 px (6) |
+| Early Phase 1 | 1.6 | 13 px (2) | 4 px (6) |
+| Just under the gate | 4.5 | 14 px (5) | 12 px (6) |
+| Just over | 4.7 | 8 px (10): **the line halves** | 13 px (6) |
+| Phase 2 gate latched | 5.0 | 8 px (10) | 2 px (36): the range steps, with a note |
+| Just before Phase 3 | 30 | 10 px (50) | 13 px (36) |
+| Phase 3 gate latched | 30 | 10 px (50) | 5 px (90): the range steps, with a note |
+| Breathable | 75 | 12 px (100) | 13 px (90) |
+
+(Heights are computed from the formulas for a 17 px plot (16 px of rise), not measured in game.) The honest cost: early Phase 1 looks flatter than today (4 px instead of 13 px at 1.6 kPa), and the line starts nearly on the baseline. The signed rate in the Pressure row carries that small movement.
+
+**Wording (straw man, grade 6-7 check by the Instructional Designer):**
+
+| Key | Text | Where |
+|---|---|---|
+| `monitor.plot.goal` | "%s: %s" giving "Phase 2 begins: 5 kPa" (gate name, then the value from the formatting helper) | Right end of the goal line, above it; on the other band if the series crosses it |
+| Axis, baseline | "0" | Left, at the baseline (as built) |
+| Axis, goal tick | "5" in the left margin at the goal line (unit stays in the existing "kPa" top label) | Left margin, level with the goal line |
+| Axis, top | no number; the top is the unlabelled frame. Two labelled anchors (0 and the goal) are enough to read a linear scale | none |
+| `monitor.plot.rescaled` | "The graph now goes up to %s. Your old readings are squashed." | One chat or action-bar line, once per range step. HS default also in the plot's read-more |
+| `monitor.plot.caption` | "Air pressure over time" (Instructional Designer to confirm; option raised in the option A report) | Under the plot, only if room |
+
+Number-plus-shape, never colour only: the goal line is solid, event lines dashed, and the label always carries the number.
+
+**What the Technical Lead builds (cost: small to medium, estimate **unverified**, no Minecraft-version risk):**
+1. `PlotScale.topFor(goal, maxSample)` (pure) and tests: tops 6, 36, 90; overshoot guard; no jump between 4.5 and 5 kPa. Replaces `niceMax` use in the screen (keep `niceMax` for the overshoot guard).
+2. `MonitorView.History` gains `goalLine {name, value}` (next unlatched gate that has a pressure condition, read from `pack/data/mars/gates/`). Payload change: extend the boot round-trip check. **No save schema change** (the range derives from gates, not from stored history).
+3. `MonitorScreen` draws the solid line, its label and the left tick, using the existing "label on the band the series does not cross" rule. Heights in `MonitorLayout` do not change.
+4. One-shot rescale line on the client when the goal line changes (optional in the first slice).
+5. Tests: goal values equal the gate JSON; identical in the standard and classroom presets.
+
+**Physical thresholds never scale.** The goal line value is read from the same gate JSON as the gate itself (invariant I-1, DESIGN.md "Physical thresholds never scale"). Classroom mode changes how many sols the line takes to arrive, never where the line is. A test compares the plotted value with the gate value under both presets. The 1.2 factor is a drawing choice, not a threshold, and is *invented*.
+
+**Content rules** (`docs/learning/content-rules.md`): CR-F9, the plot shows only values already public in the gate table and the Next goal row; any later landmark line (0.61 triple point, 6.3 Armstrong, 33.7 Everest) must declare `reveals` for any forecast it could answer (F4a, F7) before it is drawn. CR-F10, forecasts never resolve on the plot (it draws net pressure); they keep their own `resolve_source`. CR-T1, CR-T5, CR-T6 apply to the keys above (no banned words, positive wording, grade 6-7 screen). CR-T4 length: goal label at most 24 characters.
+
+**Revisit if** testers read the step in range as a drop or a failure; a "Show whole game" toggle (HS read-more) is the fallback. Also revisit when a second series (temperature, O2) is plotted.
+
 ### Pause design (one line; **not built yet**)
 
 When the colony is paused, every player sees a **"Colony paused" chip** (two vertical bars plus the words, never colour only) at the top centre of the HUD, the sky and dust stay frozen, the Monitor shows "Sol N (paused)" and still opens read-only, and any action that would change the planet (place or break a machine, switch one on, craft) is **blocked with one log line**: "The colony is paused. Your teacher will resume it." (standard play: "The server owner paused the colony."). Movement, looking, the journal and the Monitor stay available so a paused class can still discuss what is on screen. Goals: C1 (nothing to fix while paused is honest), B1 (read the Monitor while time is stopped). The Technical Lead lists the HUD line and the blocked actions as not built (slice 2 report); they are slice 9 (classroom) work unless the owner wants them earlier.
