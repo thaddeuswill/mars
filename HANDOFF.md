@@ -10,6 +10,8 @@ The owner is switching to Codex because Claude's usage is nearly out. Claude's b
 
 **Update 2026-11-27 (later, Claude coordinator):** slice 9 done (pace.json, `/mars pace`, classroom 3 to 5 default 4, bypass switch, auto checkpoint, Monitor 'Classroom pace' tag); 207 unit tests, 98 boot checks. Storm length settled (balance-sheet storm table); storm power figures verified by the SME. Next: owner plays P1, then Stage 3 slice S3-1 (`docs/tech/stage3-plan.md`). Owner answers still open: two storm kinds, EULA, external reviewers, real mods-folder and Windows/macOS jar test.
 
+**Update 2026-11-27 (Technical Lead, S3-1):** dust storm built (seeded saved schedule, schema 6, solar cut, dust at storm end, Monitor storm row, `/mars storm`); 233 unit tests, 106 boot checks RESULT PASS; report `docs/team/reports/2026-11-27-technical-lead-s3-1-storm.md`. Not built: sky dim, HUD icon, forecast F1 (S3-2). Owner playtest of S3-1 is next.
+
 **Slice 8 verified (Claude, 2026-11-27):** 171 unit tests, 81 boot checks, RESULT PASS; report `docs/team/reports/2026-11-27-coordinator-slice8-verification.md`.
 
 **Codex takeover:** The owner confirmed Claude is shut down. Slice 8 admin and checkpoint code is present on the shared branch at `a6cab96`, and the named slice 8 report is absent. Treat slice 8 as unverified until the build and GameTests run. The [Stage 2 launch guide](docs/tech/launch-guide.md) is current through slice 7. A fresh jar is pending a build-capable checkout.

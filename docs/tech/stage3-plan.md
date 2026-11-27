@@ -1,6 +1,6 @@
 # Stage 3 Plan: first slice (dust storm on the power grid)
 
-**Owner:** Producer (proposal) · **Written:** 2026-11-27 · **Status:** PROPOSAL, not yet accepted by the owner · **Stage:** 3 Vertical Slice (ROADMAP.md)
+**Owner:** Producer (proposal) · **Written:** 2026-11-27 · **Status:** S3-1 ACCEPTED by the owner and BUILT 2026-11-27 (tasks 4, 5 and 6 except the sky dim; see Build status below) · **Stage:** 3 Vertical Slice (ROADMAP.md)
 **Inputs:** `docs/design/balance-sheet.md` §2a, §2b, §4 (storm rows), `pack/data/mars/hazards/panel_dust.json`, `docs/design/prototypes/first-dust-storm.md`, `docs/tech/stage2-plan.md`.
 All effort numbers are **unverified estimates**. No measured rate exists (R-68). Reports from the next slice on should state elapsed time and build-and-test cycles.
 
@@ -35,6 +35,8 @@ All effort numbers are **unverified estimates**. No measured rate exists (R-68).
 **Total (unverified):** about 10 to 11 dev-days plus 1 owner hour. Producer view: could be 30% either way; first measured data point for Stage 3.
 
 **Dependencies in one line:** 1 and 2 first (parallel), then 4, then 5 and 6, then 7, then 8.
+
+**Build status (2026-11-27, Technical Lead; report `docs/team/reports/2026-11-27-technical-lead-s3-1-storm.md`).** Task 1 done earlier (slice 9). Task 2 done (Game Designer). Task 4 done: pure schedule, saved (schema 6), pausable, pace-scaled timing, 233 unit tests. Task 5 done: grid cut and dust at storm end, boot checks `storm.*` (106 boot checks RESULT PASS). Task 6: `/mars storm start|end|status` done; the sky dim is **not built** (needs a payload field and Artist tint values). Task 7: storm lines and Monitor wording applied from `ui-specs.md` section 10 (two row labels shortened to fit the 86 px label column; grade 6 to 7 screen not run). Task 8 (owner playtest) open. Screenshots: `tools/screenshots/out/20261127-194615/`.
 
 ## 3. Alternative S3-1b (measurement base first)
 

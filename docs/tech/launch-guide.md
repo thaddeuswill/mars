@@ -72,6 +72,15 @@ Learning commands (journal and guidance; `/mars guidance` and `/mars journal` ne
 | `/mars journal <n>` | Read entry n in chat. |
 | `/mars debug forecast open\|close [value]` | Operator, debug only: pretend a forecast about a value (default `pressure`) is open for you, which hides the Monitor's time estimate and "Leveling off" for you only. Not a learning event; it is only logged. |
 
+Dust storm (Stage 3 slice S3-1; permission level 2, logged, Mars dimension only):
+
+| Command | Use |
+|---|---|
+| `/mars storm status` | Say whether the planet is calm (and when the next storm is), warned (arrives in), or storming (time left, sunlight factor). |
+| `/mars storm start [hold]` | Start a storm now: solar supply falls by 60 % x the storm cap (Phase 1 cap 1.0 = 60 %), the Monitor shows a storm row and the cause line "Storm: less sunlight". `hold` starts the shorter 1-sol drift-event storm. |
+| `/mars storm end` | End the storm now. The panels still gain their dust (+2 stages at cap 1.0) and the next scheduled storm is drawn again. |
+
+Without commands: the first storm is warned at sol 13 (classroom 3.75), starts at sol 14 (classroom 4), lasts 2 sols (classroom 0.5), and the next comes 12 to 20 sols later (classroom 3 to 5). All of these are invented balance numbers in `pack/data/mars/storms/dust_storm.json`. A chat line warns, one marks onset, one marks the end. The sky does not change during a storm yet. Panels are cleaned only by replacing them (the brush and dust-off station are not built), so each storm leaves them dustier.
 
 For a full rollback of the world (blocks and inventories too), copy the world folder before a class; the checkpoint command only rewinds the planet's simulation.
 

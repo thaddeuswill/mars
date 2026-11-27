@@ -1,0 +1,33 @@
+# S3-1: dust storm on the power grid. Monitor at the warning, during the storm, and after it. 1280x720, GUI scale 3.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 6 64 4 mars:battery
+cmd /setblock 5 64 4 mars:regolith_outgasser
+cmd /mars index advance 13.5
+cmd /mars storm status
+cmd /mars monitor
+wait 40
+shot s3_1_1_warning
+cmd /mars storm start
+cmd /mars index advance 0.5
+cmd /mars storm status
+cmd /mars monitor
+wait 40
+shot s3_1_2_storm_on
+cmd /mars storm end
+cmd /mars storm status
+cmd /mars monitor
+wait 40
+shot s3_1_3_storm_over
+cmd /mars index advance 2
+cmd /mars monitor
+wait 40
+shot s3_1_4_between_storms_no_storm_due
+quit
