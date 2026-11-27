@@ -85,9 +85,9 @@ Status: ⬜ not started · 🟡 in progress · ✅ done · ⏸ waiting on the ow
 
 Use a unit test for the supply-to-throughput calculation and GameTests for block registration and planet behavior. These are acceptance targets. Checks have not been run against slice 3.
 
-| 36 | "i mean you gotta find something to do while you wait" | Continue independent work while the Technical Lead implements power | Codex owns the Stage 2 status refresh in `ROADMAP.md`. | ✅ Published in `80dab14`; verified on the shared branch. |
+| 39 | "i mean you gotta find something to do while you wait" | Continue independent work while the Technical Lead implements power | Codex owns the Stage 2 status refresh in `ROADMAP.md`. | ✅ Published in `80dab14`; verified on the shared branch. |
 
-| 37 | "cont" | Review the Planetary Monitor against the settled UI rules | Record prototype findings and acceptance checks for the next Monitor pass. | ✅ Source review complete. Client checks pending. |
+| 40 | "cont" | Review the Planetary Monitor against the settled UI rules | Record prototype findings and acceptance checks for the next Monitor pass. | ✅ Source review complete. Client checks pending. |
 
 ### Planetary Monitor review
 
@@ -98,7 +98,7 @@ Use a unit test for the supply-to-throughput calculation and GameTests for block
 
 Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earlier scrolling version. Codex inspected the committed 1280×720 [low-power screenshot](tools/screenshots/out/20261127-114819/slice3_short_two_outgassers_dusty_panel.png): the visible English labels and rates fit, and both the power shortfall and dusty panel are explained on their own lines. The current renderer has no scroll path or independent width bounds for cause label and reason, so long translations and extra rows remain unverified. The Technical Lead reported 96 unit tests and 52 boot checks passing in the [UI report](docs/team/reports/2026-11-27-technical-lead-monitor-ui.md). Codex did not rerun those checks.
 
-| 38 | "accept and cont" | Accept Monitor review #37 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | ✅ Published and checked in `e1ec17f`. |
+| 41 | "accept and cont" | Accept Monitor review #40 and continue the independent UI documentation work | Codex aligns `PROCESS.md` §4 with the Keeper’s Report rule in TEAM.md and the UI spec. | ✅ Published and checked in `e1ec17f`. |
 
 ## Open questions for the owner
 
@@ -116,6 +116,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 | Do the three reviewers before Stage 3 replace the Stage 5 external review, or add to it? | Add to it: the early three check the riskiest verdicts; Stage 5 checks the whole journal and educator guide (16 h of SME time) | ⏸ |
 | If Stage 4 re-estimates more than ~15% over budget after the slice, which release-scope option? | Not yet: the team frames options before the Stage 3 debrief (budget.md §4.2) | Later (after Stage 3) |
 
+| 42 | "accept and cont" | Accept CX-3 and continue the Codex lane | Record the forecast source dependency and reconcile duplicate backlog IDs (CX-4). | ✅ CX-3 accepted; CX-4 completed below. |
+
 ### Slice 5 and Regolith Oven acceptance checks
 
 | Check | Expected result |
@@ -130,12 +132,12 @@ Use pure unit tests for rates and branch boundaries, and GameTests for registrat
 
 ## Codex lane (assigned by Claude 2026-11-27, owner: "share work with chatgpt codex")
 
-Use ids CX-n here, not row numbers (BACKLOG rows 36 to 38 were numbered twice by Claude and Codex; renumber them in one pass, CX-4). **File scope rule:** while the Technical Lead agent is building Monitor option A (BACKLOG #38 Claude row), do not edit `mod/src/main/java/mars/client/`, `mars/monitor/`, `mars/index/sim/PlanetState*` or `MonitorStyle`. Pull before each push. Claim by changing ⬜ to 🟡 with your name.
+Use CX-n IDs for this lane. Renumbering record: the Codex roadmap, Monitor review, and process alignment rows moved from #36, #37, and #38 to #39, #40, and #41 respectively. The Claude rows retain #36–#38. **File scope rule:** while the Technical Lead agent is building Monitor option A (BACKLOG #38 Claude row), do not edit `mod/src/main/java/mars/client/`, `mars/monitor/`, `mars/index/sim/PlanetState*` or `MonitorStyle`. Pull before each push. Claim by changing ⬜ to 🟡 with your name.
 
 | ID | Task | Scope (files you may touch) | Done when | Status |
 |---|---|---|---|---|
-| CX-1 | Forecast JSON `resolve_source` field and the CR-F10 content test (see `docs/learning/content-rules.md`, `docs/team/reports/` forecast items, HANDOFF section 5) | `pack/data/mars/` forecast files, a new test under `mod/src/test/java/mars/` | Test fails on a forecast without a valid `resolve_source`, passes on the shipped files; `./gradlew spotlessCheck build test --rerun --offline` green, output pasted in your report | ⬜ |
+| CX-1 | Forecast JSON `resolve_source` field and the CR-F10 content test (see `docs/learning/content-rules.md`, `docs/team/reports/` forecast items, HANDOFF section 5) | `pack/data/mars/` forecast files, a new test under `mod/src/test/java/mars/` | Test fails on a forecast without a valid `resolve_source`, passes on the shipped files; `./gradlew spotlessCheck build test --rerun --offline` green, output pasted in your report | ⏸ The forecast directory contains only `.gitkeep`. Populate the forecast definitions before validating `resolve_source` on shipped data. |
 | CX-2 | Frustum-culling GameTest or screenshot script for a round array whose overhang crosses a chunk border while its centre is off-screen (ARCHITECTURE.md 2.18 risk) | new file under `mod/src/main/java/mars/selftest/`, a new `tools/screenshots/*.shots` | Check or shot exists and runs; report what ran and what you saw (absolute script path, `pgrep -f runShotsClient` first) | ⬜ |
 | CX-3 | Slice 5 acceptance checks, docs only: polar-frost sink and Regolith Oven power draw, from `docs/design/balance-sheet.md` and `docs/tech/stage2-plan.md`, same style as the slice 3 checks above | this file and `docs/tech/stage2-plan.md` slice 5 row | A checklist the Technical Lead can implement and the owner can verify | ✅ Checklist published. Implementation and runtime checks pending. |
-| CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | 🟡 Codex |
+| CX-4 | Renumber the duplicated BACKLOG rows 36 to 38 (keep owner quotes; add a note of old to new numbers) and update references in `HANDOFF.md` and reports | BACKLOG.md, HANDOFF.md | No duplicate row numbers; links still make sense | ✅ Renumbered and checked. |
 | CX-5 | Review pass: read `docs/art/monitor-reference-audit.md` against the images in `docs/art/references/monitor/` and flag any claim an image does not support | a new report under `docs/team/reports/` | Report lists each checked claim as supported or not | ⬜ |
