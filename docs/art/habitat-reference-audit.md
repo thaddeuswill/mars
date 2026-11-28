@@ -178,3 +178,60 @@ All from #1 and #2 [V], plus the 2026-11-26 audit boards.
 | Lead Artist | Use sections 4.1 to 4.6 as the brief for hull plate, door, tank, maker, reclaimer textures; keep the "no new 3D outside the 16 px rules" limit |
 | Lead Game Designer | Decide on roof rim, airlock stub with steps and a regolith berm (outside accepted layout), see section 3 |
 | Lead Instructional Designer | Radiation-shielding link (regolith berm / ice shell) for the Phase 1 story and goal check |
+
+## 9. Addendum 2026-11-28: bunk, crew quarters and stowage (SME)
+
+Ten new images in `docs/art/references/habitat/` (list and credits in that folder's README). All were opened and looked at. [V] = seen in a photo or stated in a NASA caption I read. [NV] = my estimate by eye, or a secondary source I could not open. Sizes by eye are scaled from a person and are rough. `ntrs.nasa.gov` is blocked in this session, so no NASA technical paper dimensions were opened.
+
+### 9.1 Bunk and sleeping area cues
+
+| # | Cue | Real thing (file) | Mark | Minecraft block idea (1 m, 16 px) |
+|---|---|---|---|---|
+| B1 | Sleeping bag is a **quilted zip bag** in a muted colour: light green (CQ), olive-grey with navy bands (Harmony), tan with white piping (Skylab). Never blue in the photos | `iss_cq_cristoforetti...`, `iss_sleeping_bag_tethered...`, `skylab_sleep...` | [V] | Bag top texture: 3 to 4 tones of one muted green or olive, 1 px zip line down the middle, 2 px quilt grid |
+| B2 | The bag is **tied to the wall** (white cords to blue handrails; NASA caption: "strap the bag to the wall to prevent free floating") | `iss_sleeping_bag_tethered...`; caption of Commons file for CQ | [V] | A 1 px white cord and a small loop on the wall-side face. This is a microgravity cue; a bunk on Mars with gravity does not need it. Use only as flavour |
+| B3 | The CQ is a **small closed compartment**: off-white quilted padded walls with beige Velcro squares, a cloth door with beige tie loops, a small light | `iss_cq_cristoforetti...` | [V] | Wall panel texture: off-white with a 4 px quilt grid and a few 3 x 3 px beige squares. Optional curtain block |
+| B4 | Compartment width is about one body plus a hand: roughly 0.8 to 1 m wide, 2 m long | same photo | [NV] (by eye) | Matches a 1 x 2 block bunk |
+| B5 | **Personal items stuck on the wall** with Velcro: tablet, pouch, small cards, nuts in a pouch | `iss_cq_cristoforetti...` | [V] | 2 to 3 small coloured pixel clusters on the wall panel; this is the "personal touches" cue |
+| B6 | **CHAPEA** (a ground habitat, with gravity): single bed with **black frame and grey quilted duvet**, navy chair, white door with steel lever handle, **white linear LED strip** on the ceiling, **layered 3D-printed walls in terracotta/peach**, grey speckled floor | `chapea_crew_quarters_rooms` | [V] (NASA caption: 1,700 sq ft habitat, four individual living quarters) | The closest real match to our case. Bed: dark frame, light grey top, 1 px pillow. Wall: horizontal 2 px ridge lines in peach |
+| B7 | Zvezda sleep station: **cream walls**, a door panel with silver hinge and black strap latches, blue stowage bags at the side | `zvezda_sleep_station_budarin` | [V] | Cream, not white, is a valid hull colour for the Russian side |
+| B8 | Skylab bunk: **aluminium tube frame**, taut bag, mesh wall panel, light under a ceiling lip, a map on the wall | `skylab_sleep_compartment_bean` | [V] | 1 px light grey tube along the bed edge; a small map pixel patch on the wall |
+| B9 | Colour summary by eye: bag green or olive or tan; walls off-white or cream; accents blue (handrails), white (cords), navy (bands) | all of the above | [V] by eye | Palette for bunk: off-white `#E6E2D6`, muted green `#8FA878`, olive `#6B7157`, navy `#2E3A55`. Hex values are my eye estimates, [NV] |
+
+### 9.2 Stowage cues
+
+| # | Cue | Real thing (file) | Mark | Minecraft block idea |
+|---|---|---|---|---|
+| S1 | **Soft cargo transfer bag (CTB)**: off-white woven cloth, a long zipper edge, white Velcro tabs, a **yellow label card** with a barcode, a printed black serial number | `iss_cargo_transfer_bag_ohara` | [V] (NASA caption says "cargo transfer bag") | A soft-looking pale beige block with a 1 px zip line, two white tabs and a 4 x 3 px yellow card |
+| S2 | CTB size: one source says a single CTB is about 0.50 x 0.42 x 0.25 m, with half, double and triple sizes (JSC paper, found by web search, **not opened**). The bag in the photo looks larger (about 1 m by 0.6 m), so it is probably a multiple | same photo | [NV] | One block (1 m) is bigger than a single CTB; show as a stack of 2 to 3 bags, or a half-height slab |
+| S3 | **Hard lockers and racks in the MPLM**: grey aluminium boxes in a grid, each with a small orange or yellow label tag and open cut-outs; soft white bags on top held by **tan straps with metal buckles** | `mplm_leonardo_stowage_racks` | [V] | Grey door, 3 x 2 px orange tag, two tan 1 px straps over a pale top with a 2 px silver buckle |
+| S4 | **Stacked boxes with coloured tape bands** (green, yellow, red) and blue-white labels, held by criss-cross white cords against blue rails. NASA caption calls the grey stacks **food canisters** (Unity, not CTBs) | `iss_unity_stowage_food_canisters` | [V] caption | Good "supply stack" decoration: 1 px colour band round the box, 1 px diagonal cord |
+| S5 | Rack-door texture seen in the Artist's reference (`iss_wpa_rack_peake.jpg`): off-white doors with latches and cut-outs | existing image | [V] | already used |
+| S6 | Clear plastic pocket bags with paper labels stuck on walls | `iss_sleeping_bag_tethered...` | [V] | 1 px light-blue outline with a white 3 x 2 px card |
+| S7 | Real racks have **no skids or wooden feet**. Skids belong to ground shipping | all stowage photos | [V] (none visible) | If kept, the skid is a design choice and should not be called ISS |
+
+### 9.3 Compared with the Artist's boards (14 and 15)
+
+I looked at the two boards at reduced size (the PNGs are very wide), so fine pixel detail is [NV].
+
+| Item | Matches the real thing | Does not match | Change |
+|---|---|---|---|
+| Bunk shape (14) | Low 1 x 2 bunk, mattress about 0.56 m, like CHAPEA's low single beds (B6). Drawers under the bed: **not seen** in any photo | Real bunks have no "drawers with latches" in the photos; the real CQ is enclosed | Shape is acceptable. Either keep the drawers as "under-bed storage" (plausible but [NV]) or use a dark plain frame like CHAPEA. Optional: add a wall-side quilted off-white panel (B3) |
+| Bunk colour (14) | Off-white frame, white pillow, strap and cord ideas are real (B2) | The bag is **blue**; no photo shows a blue bag. The strap is **orange**; real straps are white or navy | Change the bag to muted green or olive (B1). Use a white or navy strap. Keep a small orange accent only on a label |
+| Bunk labels | Not shown | Real compartments carry small cards and Velcro items (B5) | Add 2 or 3 small pixel items on the head board |
+| Crate shape (15) | Off-white door with a latch and a label card matches rack doors (S3, S5) | A cube with a skid looks like a shipping crate, not a rack door or soft bag (S7) | Drop the skid or lower it to a 1 px edge. Make it read as a locker: 2 by 2 door grid |
+| Crate colour (15) | Off-white and grey are right | Blue label band: real tags are **yellow or orange** on white (S1, S3). Blue is for handrails | Make the label card yellow or orange; use blue only as a 1 px rail |
+| Crate variety | One kind of box | Real stowage is a mix of hard lockers and soft strapped bags (S3) | Add a second variant: a soft pale bag with two tan straps and buckle (S3), for visual variety. This is the most "real" cue we have |
+
+What to tell players honestly (journal note): "The bunk is a ground version. On the real ISS, crew sleep in small closed rooms and tie their sleeping bags to the wall so they do not float. On Mars there is gravity, so a bed works."
+
+### 9.4 Suitport and buried habitat (earlier gaps)
+
+| Gap | Result |
+|---|---|
+| Suitport | Two photos kept. Z-1 suit at a suitport (`suitport_z1_bresnik`): a **white rectangular frame, steel hull plate with a ring of bolts, red rubber seal**, a quilted white back pad as the suit's hatch [V]. Field photo: **white rover with rivet lines, an orange hand lever, copper-coloured handrail**; the suits are backed against it [V]. Use: a hull door variant with a red seal line and bolt ring [V] |
+| Buried or regolith-covered habitat | **Still not found as a real photo.** Only concept art exists (already in the folder). Mark any berm cue as concept, not photo [NV] |
+
+### 9.5 Remaining gaps
+1. Exact CQ dimensions and CTB sizes from a NASA paper (NTRS blocked; ask the owner to allow `ntrs.nasa.gov`, or the Artist may use the by-eye sizes above).
+2. A clear straight-on photo of a closed MPLM or ISS stowage locker door with a label card.
+3. Real buried habitat imagery.
