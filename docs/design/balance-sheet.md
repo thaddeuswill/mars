@@ -199,6 +199,9 @@ Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tool
 | Super-greenhouse emitter | temperature +0.275 C/sol each (was 0.25 before the loss term) | 3 | **INVENTED** |
 | Temperature loss term (all temperature) | temperature falls 0.4 % of its distance above -60 C per sol (k = 0.004/sol); about -0.24 C/sol at 0 C | none | **INVENTED** k; direction real physics; SME `docs/science/temperature-loss-term.md` |
 
+| Ice extractor (proposal) | hydrosphere +0.30 %/sol each, only when temperature ≥ −20 °C | 2 | **INVENTED** rate and draw; 0.15 % per unit |
+| Hydrosphere loss term | hydrosphere falls 1 % of itself per sol (k = 0.01/sol, `form: restore`, baseline 0); one extractor settles at 30 % | none | **INVENTED** k; direction real (SME to source). See [phase3-hydrosphere-and-drift.md](phase3-hydrosphere-and-drift.md) |
+
 Standard build (INVENTED): processors 1 / 2 / 3 at Phase 2 sols 0 / 14 / 34; emitters 2 / 3 / 4 / 5 / 6 at sols 0 / 6 / 14 / 24 / 34. Result (calc, scratch model, not run in game; with the loss term and 0.275 per emitter): 30 kPa at sol 44, Thaw at about sol 38, 0 C at about sol 52. Emitters set the Phase 2 clock. Power peaks at 45 units/sol (10 panels, 3 batteries) in Phase 2 and 54 (12 panels) in Phase 3 with 10 processors. Tune: processor and emitter rate first, then panel supply.
 
 ---
@@ -228,8 +231,8 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 | CO2 partial pressure (kPa) | 4.9 | 5.6 | 6.7 | 8.1 | 9.7 | 11.6 | 13.5 | 15.2 | 16.5 | **18.0** |
 | Filler gas (kPa, untracked in play; shown here for the budget) | 0.1 | 0.8 | 1.8 | 3.1 | 4.6 | 6.2 | 8.1 | 9.7 | 10.8 | 12.0 |
 | Temperature (°C) | −60 | −56 | −50 | −42 | −35 | −27 | **−20** | −13 | −6 | **0** |
-| Hydrosphere (%) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 12 | 16 |
-| Events | Phase 2; F5 | Armstrong line (6.3) | | Frost slows (−40 °C) | | | **Thaw**; F4b; polar release starts (+0.5 kPa/sol bump) | **Hydrosphere** (~sol 46); F6 | Ground collapse risk peaks | **Phase 3** |
+| Hydrosphere (%) (proposal 2026-11-28, calc, [phase3-hydrosphere-and-drift.md](phase3-hydrosphere-and-drift.md) 2.3) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2.5 | 7.1 | 12.8 |
+| Events | Phase 2; F5 | Armstrong line (6.3) | | Frost slows (−40 °C) | | | **Thaw**; F4b; polar release starts (+0.5 kPa/sol bump) | **Hydrosphere** (~sol 51); F6 | Ground collapse risk peaks | **Phase 3** |
 | Real hours | 8.3 | 10.3 | 12.3 | 14.3 | 16.3 | 18.3 | 20.3 | 22.3 | 24.3 | 26.3 |
 
 **Phase 3** (42 sols)
@@ -241,6 +244,7 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 | O2 partial pressure (kPa) | 0.2 | 2.2 | 5.4 | 9.2 | 13.1 | **16.1** | 16.6 | 16.7 | 16.8 |
 | O2 fraction (%) | 0.7 | 5.6 | 11 | 16 | 20 | 21.5 | 22.1 | 22.3 (drift ±) | 22.1 |
 | CO2 + O2 (kPa; falls only by scrubbing) | 18.2 | 18.2 | 18.2 | 18.2 | 18.1 | 17.7 | 17.1 | 17.1 | 17.2 |
+| Hydrosphere (%) (4 extractors kept running; surplus is margin; calc) | 12.8 | 18.0 | 22.9 | 27.6 | 32.2 | 36.4 | 38.8 | 44.3 | 49.3 |
 | Biomass (BU) | 0 | 100 | 300 | 600 | 900 | 1,200 | 1,500 | 1,700 | 1,800 |
 | Events | Phase 3; F8 | Everest (33.7) passed | | | O2 window opens (69.6 kPa) | O2 push ≥ 16 kPa; CO2 still 1.6 (not yet breathable) | CO2 ≤ 0.5: holds start (all in band) | **Breathable** (7 sols) | **Equilibrium** (14 sols) → beacon |
 | Real hours | 26.3 | 28.0 | 29.6 | 31.3 | 33.0 | 34.6 | 35.6 | 38.0 | 40.3 |
@@ -266,7 +270,7 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 | Dust storm | Solar −60 % × storm cap for 1 sol (classroom 0.25 sol). The Phase 1 storm is 2 sols: see the storm schedule in §2 | Algae vats and scrubbers slow: CO2 +0.15 kPa/sol | Battery reserve, temporary vat shutdown plan | C1, B1 |
 | Flora bloom | A biome grows fast | O2 +0.6 %/sol → fire band | Prune, add CO2 source, slow vats | A5, B4 |
 | Fauna grazing | Settled thawlings graze a patch | Biomass −5 %; O2 output dips | Move or widen the quiet zone, reseed | B2, D1 |
-| Emitter wear | One emitter fails | Temperature −1 °C/sol | Repair (failure report names it) | C2 |
+| Emitter wear (rewritten 2026-11-28; slow by design) | Half of the running emitters (rounded up) burn out their heater coil; guaranteed once per Equilibrium hold, in sols 2–10 | Temperature falls up to −0.26 °C/sol only if no emitter is left (leak k = 0.004); out of the 5 °C line in about 2 / 4 / 8 sols from 5.5 / 6 / 7 °C. **Exception to the 1-sol rule: heat has inertia.** All numbers *invented* | Fit a heater coil (1 per stopped emitter; failure report names it) | C2, B2, B4 |
 | Weather low (replaces "polar winter" in holds; SME round 3: at equilibrium, nitrogen and O2 can't freeze out at the poles) | A passing low-pressure system | Pressure −1.5 kPa over 2 sols, then recovers (*invented*; about 2 % of 75 kPa) | Run processors harder; accept a small dip | B2, A1, A2 (boiling point dips a little: FI-2) |
 | Decay pulse | Old biomass dies back | CO2 +0.1 kPa/sol **and O2 −0.1 kPa/sol** (one for one, rule A) | Reseed; keep the biome young-to-mature mix | A5, B2 |
 
