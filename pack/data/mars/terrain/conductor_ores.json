@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "about": "Notes for the conductor ores and carbonate (BACKLOG #49; SME docs/science/mars-conductor-and-carbonate-ores.md). The amounts themselves live in worldgen/placed_feature/<name>.json (rarity_filter chance = one cluster per that many chunks; one 256 x 256 area is 256 chunks) and worldgen/configured_feature/<name>.json (size = largest cluster). All amounts and places are INVENTED game balance.",
+  "blocks": {
+    "mars:sulfide_vein": {
+      "status": "INVENTED",
+      "drops": "minecraft:raw_copper",
+      "where": "highland_mesa and rocky_flats, underground (y 20 to 75), so it shows in canyon walls and crater walls where the ground is cut",
+      "target_density": "1 to 2 clusters of 3 to 6 blocks per 256 x 256 area (SME)",
+      "tooltip_key": "block.mars.sulfide_vein.tooltip"
+    },
+    "mars:magnetic_ore": {
+      "status": "INVENTED",
+      "drops": "minecraft:redstone",
+      "where": "highland_mesa only (the old high ground), y 10 to 60, deeper than 8 blocks",
+      "target_density": "1 cluster of 3 to 5 blocks per 256 x 256 area (SME)",
+      "tooltip_key": "block.mars.magnetic_ore.tooltip"
+    },
+    "mars:carbonate_rock": {
+      "status": "REAL, game-sized",
+      "drops": "mars:carbonate",
+      "where": "dust_plain, rocky_flats and highland_mesa, underground (y 40 to 78), so craters expose it",
+      "target_density": "4 to 8 blocks per patch, about 3 patches per 256 x 256 area (SME, INVENTED)",
+      "tooltip_key": "block.mars.carbonate_rock.tooltip"
+    }
+  },
+  "seed_kit_carbonate": {
+    "item_tag": "mars:seed_kit_carbonate",
+    "item": "mars:carbonate",
+    "fallback_item": "mars:gypsum_vein",
+    "fallback_note": "If the owner prefers gypsum for the first kits (SME says it is acceptable, verified gypsum on Mars), add \"mars:gypsum_vein\" to data/mars/tags/item/seed_kit_carbonate.json. No code change. Carbonate teaches the CO2 link better, so it is the default."
+  },
+  "not_built": {
+    "mars:meteorite_iron": "REAL optional block (Opportunity found iron meteorites). Not trivial: needs a surface placement feature and a drop rule; left out.",
+    "bone_meal_from_compost": "No code. Vanilla composter already makes bone meal; the journal label is the Instructional Designer's."
+  }
+}

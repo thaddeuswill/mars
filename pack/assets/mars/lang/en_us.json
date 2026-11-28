@@ -112,5 +112,15 @@
   "block.mars.vesicular_basalt": "Vesicular Basalt",
   "block.mars.spherule_sand": "Spherule Sand",
   "block.mars.impact_breccia": "Impact Breccia",
-  "block.mars.gypsum_vein": "Gypsum Vein"
+  "block.mars.gypsum_vein": "Gypsum Vein",
+  "block.mars.sulfide_vein": "Sulfide Vein",
+  "block.mars.sulfide_vein.tooltip": "Game invention. Mars rocks may hold a little copper, but we do not know of copper veins. We add rare ones so you can build machines.",
+  "block.mars.magnetic_ore": "Magnetic Ore",
+  "block.mars.magnetic_ore.tooltip": "Game invention. Mars crust is strongly magnetic in places. No one has found ore to make electronics from. Redstone here stands for wiring and magnet material.",
+  "block.mars.carbonate_rock": "Carbonate Rock",
+  "block.mars.carbonate_rock.tooltip": "Real, but game-sized. Real Mars has carbonate rock in a few places, in craters like Jezero. We make small veins easy to find. Scrubbers making carbonate is a game idea.",
+  "block.mars.ripple_sand": "Ripple Sand",
+  "item.mars.carbonate": "Carbonate",
+  "item.mars.starter_chest": "Lander Supply Chest",
+  "grant.starter_chest": "The lander left you a supply chest with copper and redstone. Place it and open it."
 }

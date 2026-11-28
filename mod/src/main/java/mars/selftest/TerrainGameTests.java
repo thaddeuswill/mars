@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ProtoChunk;
@@ -350,7 +351,8 @@ public final class TerrainGameTests {
             "mars:impact_breccia",
             "mars:vesicular_basalt",
             "mars:spherule_sand",
-            "mars:duricrust");
+            "mars:duricrust",
+            "mars:ripple_sand");
     List<String> odd = new java.util.ArrayList<>();
     for (String k : tops.keySet()) {
       if (allowedPrefixes.stream().noneMatch(k::equals) && !k.endsWith("terracotta")) {
@@ -495,7 +497,11 @@ public final class TerrainGameTests {
             "vesicular_basalt",
             "spherule_sand",
             "impact_breccia",
-            "gypsum_vein");
+            "gypsum_vein",
+            "sulfide_vein",
+            "magnetic_ore",
+            "carbonate_rock",
+            "ripple_sand");
     StringBuilder missing = new StringBuilder();
     for (String b : blockIds) {
       ResourceLocation rl = ResourceLocation.fromNamespaceAndPath("mars", b);
@@ -518,7 +524,7 @@ public final class TerrainGameTests {
     ok &=
         SelfTest.check(
             "terrain.blocks",
-            "9 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
+            "13 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
             missing.length() == 0 ? "all present, recipe " + recipe : "missing " + missing,
             missing.length() == 0 && recipe);
 
@@ -700,5 +706,117 @@ public final class TerrainGameTests {
     } else {
       helper.fail("terrain feature checks failed; see MARS-SELFTEST lines");
     }
+  }
+
+  /**
+   * The conductor ores and carbonate: placed for real (rarity filter and biome filter left out, as
+   * in the other feature checks), mined for real (loot), and the starter chest data is present.
+   */
+  @GameTest(template = "empty", timeoutTicks = 400)
+  public static void conductorOres(GameTestHelper helper) {
+    ServerLevel level = helper.getLevel();
+    MinecraftServer server = level.getServer();
+    boolean ok = true;
+    int ox = 43000;
+    int oz = 43000;
+    for (int x = ox; x < ox + 64; x++) {
+      for (int z = oz; z < oz + 64; z++) {
+        for (int y = 30; y <= 90; y++) {
+          level.setBlock(new BlockPos(x, y, z), Blocks.STONE.defaultBlockState(), 2);
+        }
+      }
+    }
+    var gen = level.getChunkSource().getGenerator();
+    var placed = server.registryAccess().registryOrThrow(Registries.PLACED_FEATURE);
+    Map<String, Integer> counts = new HashMap<>();
+    int maxCluster = 0;
+    for (String name : List.of("sulfide_vein", "magnetic_ore", "carbonate_rock")) {
+      var real = placed.get(ResourceLocation.fromNamespaceAndPath("mars", name));
+      var pf =
+          new net.minecraft.world.level.levelgen.placement.PlacedFeature(
+              real.feature(),
+              real.placement().stream()
+                  .filter(
+                      m ->
+                          !(m instanceof net.minecraft.world.level.levelgen.placement.BiomeFilter)
+                              && !(m
+                                  instanceof
+                                  net.minecraft.world.level.levelgen.placement.RarityFilter))
+                  .toList());
+      var rand = net.minecraft.util.RandomSource.create(91);
+      for (int i = 0; i < 8; i++) {
+        int before = countBlocks(level, ox, oz, name);
+        pf.place(
+            level, gen, rand, new BlockPos(ox + 16 + (i % 2) * 24, 60, oz + 16 + (i / 2 % 2) * 24));
+        int added = countBlocks(level, ox, oz, name) - before;
+        maxCluster = Math.max(maxCluster, added);
+      }
+      counts.put(name, countBlocks(level, ox, oz, name));
+    }
+    ok &=
+        SelfTest.check(
+            "ores.placed",
+            "sulfide vein, magnetic ore and carbonate rock all place in stone; no cluster over 8 (vanilla ore size is approximate)",
+            counts + " largest cluster " + maxCluster,
+            counts.values().stream().allMatch(c -> c > 0) && maxCluster <= 8);
+
+    BlockPos at = new BlockPos(ox, 95, oz);
+    ItemStack pick = new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
+    String drops = "";
+    boolean dropsOk = true;
+    for (var e :
+        Map.of(
+                MarsTerrainBlocks.SULFIDE_VEIN.get(), "minecraft:raw_copper",
+                MarsTerrainBlocks.MAGNETIC_ORE.get(), "minecraft:redstone",
+                MarsTerrainBlocks.CARBONATE_ROCK.get(), "mars:carbonate")
+            .entrySet()) {
+      var list = Block.getDrops(e.getKey().defaultBlockState(), level, at, null, null, pick);
+      boolean has =
+          list.stream().anyMatch(st -> id(st.getItem()).equals(e.getValue()) && st.getCount() >= 1);
+      drops += id(e.getKey()) + "->" + list + " ";
+      dropsOk &= has;
+    }
+    ok &=
+        SelfTest.check(
+            "ores.loot",
+            "mining the three blocks with an iron pickaxe drops raw copper, redstone and carbonate",
+            drops,
+            dropsOk);
+
+    var chest =
+        server
+            .getResourceManager()
+            .getResource(
+                ResourceLocation.fromNamespaceAndPath("mars", "terrain/starter_chest.json"));
+    ok &=
+        SelfTest.check(
+            "ores.starter_chest_data",
+            "starter chest data found",
+            "" + chest.isPresent(),
+            chest.isPresent());
+    if (ok) {
+      helper.succeed();
+    } else {
+      helper.fail("conductor ore checks failed; see MARS-SELFTEST lines");
+    }
+  }
+
+  private static int countBlocks(ServerLevel level, int ox, int oz, String name) {
+    Block target = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath("mars", name));
+    int n = 0;
+    for (int x = ox; x < ox + 64; x++) {
+      for (int z = oz; z < oz + 64; z++) {
+        for (int y = 30; y <= 90; y++) {
+          if (level.getBlockState(new BlockPos(x, y, z)).is(target)) {
+            n++;
+          }
+        }
+      }
+    }
+    return n;
+  }
+
+  private static String id(net.minecraft.world.item.Item item) {
+    return BuiltInRegistries.ITEM.getKey(item).toString();
   }
 }

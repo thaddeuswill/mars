@@ -30,7 +30,11 @@ class TerrainContentTest {
           "vesicular_basalt",
           "spherule_sand",
           "impact_breccia",
-          "gypsum_vein");
+          "gypsum_vein",
+          "sulfide_vein",
+          "magnetic_ore",
+          "carbonate_rock",
+          "ripple_sand");
 
   /** Registry ids of the machines, the other mars blocks a terrain file could name. */
   private static final Set<String> OTHER_IDS = Set.of("mars", "planet");

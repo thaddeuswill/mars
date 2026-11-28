@@ -3,6 +3,7 @@
   "values": [
     "mars:basaltic_sand",
     "mars:dark_sand_ore",
-    "mars:spherule_sand"
+    "mars:spherule_sand",
+    "mars:ripple_sand"
   ]
 }

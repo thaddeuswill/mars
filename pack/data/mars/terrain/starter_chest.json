@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "about": "The starter chest: handed out once per world, to the first player on a planet, in the same grant as the two starting Ovens (mars.planets.GrantEvents). Conductor ores are rare, so machines are not blocked while the player looks for them (SME docs/science/mars-conductor-and-carbonate-ores.md section 3). The amounts (4 copper ingots, 8 redstone dust) are the SME's and Game Designer's suggestion and are INVENTED game balance. Labelled 'from the lander' in the chest name.",
+  "name_key": "item.mars.starter_chest",
+  "message_key": "grant.starter_chest",
+  "items": [
+    { "id": "minecraft:copper_ingot", "count": 4 },
+    { "id": "minecraft:redstone", "count": 8 }
+  ]
+}

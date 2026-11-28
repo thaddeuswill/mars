@@ -1,13 +1,22 @@
 package mars.planets;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import mars.index.IndexDefinitions;
+import mars.session.StarterChest;
 import mars.session.StartingGrant;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +71,36 @@ public final class GrantEvents {
                   id,
                   player.getName().getString());
             });
+    giveStarterChest(player);
     return true;
+  }
+
+  /** The lander's supply chest (copper and redstone), read from data/mars/terrain. */
+  static void giveStarterChest(ServerPlayer player) {
+    ResourceLocation file =
+        ResourceLocation.fromNamespaceAndPath("mars", "terrain/starter_chest.json");
+    var res = player.server.getResourceManager().getResource(file);
+    if (res.isEmpty()) {
+      LOG.warn("Starter chest data missing: {}", file);
+      return;
+    }
+    try (Reader r = new InputStreamReader(res.get().open(), StandardCharsets.UTF_8)) {
+      StarterChest chest = StarterChest.parse(r, file.toString());
+      List<ItemStack> contents = new ArrayList<>();
+      for (StarterChest.Entry e : chest.items()) {
+        contents.add(
+            new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(e.id())), e.count()));
+      }
+      ItemStack stack = new ItemStack(Items.CHEST);
+      stack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(contents));
+      stack.set(DataComponents.CUSTOM_NAME, Component.translatable(chest.nameKey()));
+      if (!player.getInventory().add(stack)) {
+        player.drop(stack, false);
+      }
+      player.sendSystemMessage(Component.translatable(chest.messageKey()));
+      LOG.info("Starter chest given to {} (once per world)", player.getName().getString());
+    } catch (Exception e) {
+      LOG.warn("Starter chest not given: {}", e.toString());
+    }
   }
 }

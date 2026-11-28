@@ -6,6 +6,9 @@
     "mars:duricrust",
     "mars:vesicular_basalt",
     "mars:impact_breccia",
-    "mars:gypsum_vein"
+    "mars:gypsum_vein",
+    "mars:sulfide_vein",
+    "mars:magnetic_ore",
+    "mars:carbonate_rock"
   ]
 }

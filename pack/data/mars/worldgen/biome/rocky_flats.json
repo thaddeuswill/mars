@@ -24,7 +24,9 @@
       "mars:ground_ice_lens",
       "mars:vesicular_patch",
       "mars:spherule_patch",
-      "mars:pebble_patch_rocky"
+      "mars:pebble_patch_rocky",
+      "mars:sulfide_vein",
+      "mars:carbonate_rock"
     ],
     [],
     [],

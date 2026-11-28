@@ -4,6 +4,8 @@
     "mars:hematite_ore",
     "mars:vesicular_basalt",
     "mars:impact_breccia",
-    "mars:gypsum_vein"
+    "mars:gypsum_vein",
+    "mars:sulfide_vein",
+    "mars:carbonate_rock"
   ]
 }

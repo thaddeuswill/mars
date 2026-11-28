@@ -906,6 +906,30 @@ public final class PlanetGameTests {
             "the first player on a planet gets exactly two Regolith Ovens",
             "granted=" + g1 + " ovens=" + count1,
             g1 && count1 == 2);
+    // The lander's supply chest comes with the Ovens: a chest holding 4 copper and 8 redstone.
+    int chests = first.getInventory().countItem(net.minecraft.world.item.Items.CHEST);
+    int copper = 0;
+    int redstone = 0;
+    for (net.minecraft.world.item.ItemStack st : first.getInventory().items) {
+      if (st.is(net.minecraft.world.item.Items.CHEST)) {
+        var contents = st.get(net.minecraft.core.component.DataComponents.CONTAINER);
+        if (contents != null) {
+          for (net.minecraft.world.item.ItemStack in : contents.nonEmptyItems()) {
+            if (in.is(net.minecraft.world.item.Items.COPPER_INGOT)) {
+              copper += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.REDSTONE)) {
+              redstone += in.getCount();
+            }
+          }
+        }
+      }
+    }
+    ok &=
+        SelfTest.check(
+            "grant.starter_chest",
+            "the first player also gets one chest holding 4 copper ingots and 8 redstone dust",
+            "chests=" + chests + " copper=" + copper + " redstone=" + redstone,
+            chests == 1 && copper == 4 && redstone == 8);
     boolean again = mars.planets.GrantEvents.maybeGrant(first);
     boolean g2 = mars.planets.GrantEvents.maybeGrant(second);
     ok &=
@@ -921,6 +945,7 @@ public final class PlanetGameTests {
             !again
                 && !g2
                 && second.getInventory().countItem(oven) == 0
+                && second.getInventory().countItem(net.minecraft.world.item.Items.CHEST) == 0
                 && first.getInventory().countItem(oven) == 2);
     // Dying: the player loses the items, the world flag stays set, nothing is handed out again.
     first.getInventory().clearContent();

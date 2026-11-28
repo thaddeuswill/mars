@@ -23,7 +23,10 @@
       "mars:hematite_vein_rich",
       "mars:dark_sand_vein",
       "mars:ground_ice_lens",
-      "mars:gypsum_vein"
+      "mars:gypsum_vein",
+      "mars:sulfide_vein",
+      "mars:magnetic_ore",
+      "mars:carbonate_rock"
     ],
     [],
     [],

@@ -1,11 +1,15 @@
 package mars.world;
 
 import java.util.List;
+import java.util.function.Supplier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -13,6 +17,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
@@ -117,6 +122,53 @@ public final class MarsTerrainBlocks {
               .requiresCorrectToolForDrops()
               .sound(SoundType.STONE));
 
+  // ---- Conductor ores and carbonate (docs/science/mars-conductor-and-carbonate-ores.md). The two
+  // ores are INVENTED (no source says Mars has minable copper or redstone material); the carbonate
+  // vein is REAL but game-sized. Each shows its one-line honest label as the item tooltip (lang key
+  // block.mars.<id>.tooltip). Hardness values copy vanilla copper and redstone ore.
+
+  /** Rare grey-brown rock with rust and dull gold flecks. Drops raw copper. INVENTED. */
+  public static final DeferredBlock<Block> SULFIDE_VEIN =
+      labelled(
+          "sulfide_vein",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_GRAY)
+              .strength(3.0f, 3.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
+  /** Rare dark rock with metallic speckle. Drops redstone dust. INVENTED. */
+  public static final DeferredBlock<Block> MAGNETIC_ORE =
+      labelled(
+          "magnetic_ore",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.DEEPSLATE)
+              .strength(3.0f, 3.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
+  /** Small veins of pale carbonate rock. REAL, game-sized. Drops the carbonate item. */
+  public static final DeferredBlock<Block> CARBONATE_ROCK =
+      labelled(
+          "carbonate_rock",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_WHITE)
+              .strength(1.5f, 3.0f)
+              .requiresCorrectToolForDrops()
+              .sound(SoundType.STONE));
+
+  /** Muted tan sand: the light stripe of a sand ripple on dune faces (planet data ripple_block). */
+  public static final DeferredBlock<Block> RIPPLE_SAND =
+      block(
+          "ripple_sand",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_ORANGE)
+              .strength(0.5f)
+              .sound(SoundType.SAND));
+
+  /** What a carbonate rock drops; the seed kit recipe uses it (tag mars:seed_kit_carbonate). */
+  public static final DeferredItem<Item> CARBONATE = ITEMS.registerSimpleItem("carbonate");
+
   /** Every terrain block, in creative-tab order. */
   public static final List<DeferredBlock<Block>> ALL =
       List.of(
@@ -128,7 +180,11 @@ public final class MarsTerrainBlocks {
           VESICULAR_BASALT,
           SPHERULE_SAND,
           IMPACT_BRECCIA,
-          GYPSUM_VEIN);
+          GYPSUM_VEIN,
+          SULFIDE_VEIN,
+          MAGNETIC_ORE,
+          CARBONATE_ROCK,
+          RIPPLE_SAND);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =
       TABS.register(
@@ -142,6 +198,7 @@ public final class MarsTerrainBlocks {
                         for (DeferredBlock<Block> b : ALL) {
                           output.accept(b.get());
                         }
+                        output.accept(CARBONATE.get());
                       })
                   .build());
 
@@ -150,6 +207,27 @@ public final class MarsTerrainBlocks {
   private static DeferredBlock<Block> block(String id, BlockBehaviour.Properties props) {
     DeferredBlock<Block> b = BLOCKS.registerSimpleBlock(id, props);
     ITEMS.registerSimpleBlockItem(id, b, new Item.Properties());
+    return b;
+  }
+
+  /** A block whose item shows its honest one-line label (lang key block.mars.id.tooltip). */
+  private static DeferredBlock<Block> labelled(String id, BlockBehaviour.Properties props) {
+    DeferredBlock<Block> b = BLOCKS.registerSimpleBlock(id, props);
+    Supplier<Item> item =
+        () ->
+            new BlockItem(b.get(), new Item.Properties()) {
+              @Override
+              public void appendHoverText(
+                  ItemStack stack,
+                  Item.TooltipContext context,
+                  List<Component> lines,
+                  TooltipFlag flag) {
+                lines.add(
+                    Component.translatable("block.mars." + id + ".tooltip")
+                        .withStyle(ChatFormatting.GRAY));
+              }
+            };
+    ITEMS.register(id, item);
     return b;
   }
 

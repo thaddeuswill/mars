@@ -63,7 +63,7 @@
       "variation_scale": 180,
       "ripple_period": 3,
       "ripple_width": 1,
-      "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). Wavelength varies by up to about 25 percent (wavelength_variation) through a smooth phase offset on a 180-block scale (variation_scale), so crests bend but are not sheared (a position-dependent wavelength was tried first and sheared them). Ripples: lighter stripe 1 block wide every 3 blocks across the wind (ripple_period, ripple_width), on dune columns, with the block named in surface.ripple_block (Curiosity ripples about 3 m apart, VERIFIED; the stripe block is duricrust, a muted tan; red sand stripes read as a zebra barcode and gravel stripes were too bright (both seen in screenshots)). windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
+      "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). Wavelength varies by up to about 25 percent (wavelength_variation) through a smooth phase offset on a 180-block scale (variation_scale), so crests bend but are not sheared (a position-dependent wavelength was tried first and sheared them). Ripples: lighter stripe 1 block wide every 3 blocks across the wind (ripple_period, ripple_width), on dune columns, with the block named in surface.ripple_block (Curiosity ripples about 3 m apart, VERIFIED; the stripe block is ripple_sand, a muted tan (first duricrust, which was the same colour idea); red sand stripes read as a zebra barcode and gravel stripes were too bright (both seen in screenshots)). windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
     },
     "surface": {
       "rim_block": "mars:impact_breccia",
@@ -71,7 +71,7 @@
       "ejecta_block": "mars:impact_breccia",
       "ejecta_block_chance": 0.25,
       "dune_sand": "mars:basaltic_sand",
-      "ripple_block": "mars:duricrust",
+      "ripple_block": "mars:ripple_sand",
       "note": "Top block overrides. Dust and plains patches come from the noise settings' surface rule. Rim and ejecta are impact breccia (W2, SME materials row 19, REAL: NTRS 20170006943); colours are a first guess for the Artist and SME: 'lighter or rockier material' (SME row 3). Dune sand is dark (Curiosity report, VERIFIED in the SME reference)."
     },
     "buttes": {
