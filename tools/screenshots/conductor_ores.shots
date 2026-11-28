@@ -1,0 +1,23 @@
+# Conductor ores (BACKLOG #49): STAGED close-up on the dome pad. Row 1: the three new blocks and ripple sand;
+# row 2: vanilla copper and redstone ore for comparison. Natural placement is checked by boot checks, not here.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock 4 81 8 mars:sulfide_vein
+cmd /setblock 5 81 8 mars:magnetic_ore
+cmd /setblock 6 81 8 mars:carbonate_rock
+cmd /setblock 7 81 8 mars:ripple_sand
+cmd /setblock 4 81 9 minecraft:copper_ore
+cmd /setblock 5 81 9 minecraft:redstone_ore
+cmd /setblock 6 81 9 mars:gypsum_vein
+cmd /setblock 7 81 9 mars:duricrust
+wait 100
+view 5.5 82.6 4.6 0 25
+wait 400
+shot ores_03_staged_row
+wait 20
+quit

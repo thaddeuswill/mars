@@ -772,6 +772,22 @@ Checked: unit tests with temp folders (`LegacyDetectTest`), boot checks (`terrai
 
 **Not built (W1 list; canyon, ripples and pebbles came in W2, above):** the polar cap, the lava plain biome, delta fans and flood channels, ground polygons, ground-ice behaviour (melt and collapse are W3), a "dune basin" biome (dunes use their own mask, so they are not tied to a biome), cluster rocks beyond the per-biome patches, and a survey scan to find the new blocks.
 
+### 2.23a Conductor ores, carbonate and the starter chest (BACKLOG #49; built 2026-11-28)
+
+Why: the recipe table needs copper and redstone and Mars has neither as far as the SME could verify (`docs/science/mars-conductor-and-carbonate-ores.md`, owner accepted). Vanilla-style recipes stay unchanged (`world-and-blocks.md` 0.2).
+
+| Piece | Where | Kind |
+|---|---|---|
+| Blocks `sulfide_vein` (raw copper, INVENTED), `magnetic_ore` (redstone, INVENTED), `carbonate_rock` (item `mars:carbonate`, REAL but game-sized), `ripple_sand` (dune ripple stripe) | `mars.world.MarsTerrainBlocks`; the first three are `labelled(...)` blocks whose item shows `block.mars.<id>.tooltip` (the SME's honest line) | Mod code plus lang |
+| Amounts and places | `worldgen/placed_feature/{sulfide_vein,magnetic_ore,carbonate_rock}.json` (`rarity_filter` chance = one cluster per N chunks, height range) and `configured_feature` (size); biome lists in `biome/{highland_mesa,rocky_flats,dust_plain}.json`; notes in `terrain/conductor_ores.json` | Data (INVENTED) |
+| Loot, mining tier | `loot_table/blocks/*.json` (silk touch keeps the block); tags `mineable/pickaxe`, `needs_stone_tool` (sulfide, carbonate), `needs_iron_tool` (magnetic, like vanilla redstone ore) | Data |
+| Seed kit carbonate | item tag `mars:seed_kit_carbonate` (recipes use the tag); gypsum fallback written in `terrain/conductor_ores.json` (add `mars:gypsum_vein` to the tag, no code) | Data |
+| Starter chest | `terrain/starter_chest.json` (4 copper ingots, 8 redstone dust, INVENTED amounts), parsed by pure `mars.session.StarterChest`, given by `GrantEvents.giveStarterChest` inside the same once-per-world claim as the two Ovens (a vanilla chest item with a `CONTAINER` component) | Data plus a few lines of code |
+| Ripple stripe block | `planets/planet_1.json` `terrain.surface.ripple_block` = `mars:ripple_sand` (was `mars:duricrust`). The legacy_flat path never reads it | Data |
+
+Placement is underground (ore features), so veins are seen where craters and the canyon cut the ground. The SME's "walls, not open plains" and "southern high ground" are met by biome choice only (magnetic ore: `highland_mesa` only; no map-half or 64-block-from-spawn filter exists, the dome pad is flat and the ores are underground). Real density was not measured: the per-biome rate times the biome's share of the map is below the targets. Cost: ore features run once per chunk at generation; the grant adds one JSON read per world.
+
+
 ## 3. Coding Practices
 
 | Area | Convention |
