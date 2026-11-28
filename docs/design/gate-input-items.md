@@ -1,6 +1,6 @@
 # Gate input items: one new thing per gate that the next machine needs
 
-**Owner:** Lead Game Designer · **Written:** 2026-11-28 · **Status:** PROPOSAL (nothing built; no recipe, item or gate file is changed) · **Steals:** inspiration survey 4 (new unseen input per gate), plus 1 (hold-to-explain cards), 6 (planet report page), 7 (log items).
+**Owner:** Lead Game Designer · **Written:** 2026-11-28 · **Status:** PROPOSAL, partly built (coil, cartridge, bearing are built). **Update 2026-11-28 (owner 5b, orbital resupply): see `recipe-inputs-ruling.md` v2. Gate items 4 to 7 (resin pack, sorbent bed, signal board, activation cell) are now drop-only: their craft recipes below are SUPERSEDED. Every gate cache also carries machine cores and fuel as listed in that file; machine recipes use `mars:machine_core` instead of hopper, furnace, bucket, redstone, copper. A craftable `mars:resupply_request` is the fallback.** · **Steals:** inspiration survey 4 (new unseen input per gate), plus 1 (hold-to-explain cards), 6 (planet report page), 7 (log items).
 **Reads:** `docs/design/inspiration-survey-mechanics.md`, `phase3-hydrosphere-and-drift.md`, `machine-priorities.md`, `seed-kit-recipes.md`, `world-and-blocks.md` (0.2, 3.6), `docs/science/mars-conductor-and-carbonate-ores.md`, `docs/science/machine-references.md`, `pack/data/mars/gates/`, `pack/data/mars/recipe/`.
 **Marks:** **INVENTED** = our number or item. **unverified** = not checked. Scope (owner): standard pace only; vanilla crafting stays; make-it-work rule (0.2) and the real-reference rule (5a) apply. Item ids are proposals.
 
@@ -10,7 +10,7 @@ At every gate the player gets **one item they have never seen** (a "gate cache" 
 
 How the player is never stuck (every row in section 2 follows this):
 1. **Cache:** a one-time delivery when the gate latches (same pattern as the two starting Ovens: once per world, into the inventory, with a Monitor line "Supply drop received"). Enough for the first machine plus one spare.
-2. **Craft path:** a plain vanilla crafting-table recipe from Mars-minable inputs. No new machine is needed to make the item (a "placed machine" crafting step is a later upgrade, not required). Recipes are open from the start; the machine they feed is still locked by the gate (placement lock), so nothing is skipped.
+2. **Craft path (gates 1 to 3 only; gates 4 to 7 are drop-only since 2026-11-28, refill by resupply request):** a plain vanilla crafting-table recipe from Mars-minable inputs. No new machine is needed to make the item (a "placed machine" crafting step is a later upgrade, not required). Recipes are open from the start; the machine they feed is still locked by the gate (placement lock), so nothing is skipped.
 3. **No dead inputs:** no recipe here uses coal, wood, gold, quartz or glowstone (not on Mars; machine-priorities R1, SME rulings). Copper and redstone only at the end, and the Breathable cache tops them up.
 
 ## 2. Gate-to-item table
@@ -59,6 +59,8 @@ All amounts **INVENTED**. "Cache" is the gate delivery. Tooltip text is grade 6 
 | No hard block | Only iron; the extractor itself is never gated by an ore |
 
 ### 3.4 Resin pack (Hydrosphere)
+> **Updated 2026-11-28: drop-only (sent from orbit, game design). The craft recipe in the 'Obtained' row is SUPERSEDED. Cache counts: see `recipe-inputs-ruling.md` section 5.**
+
 | Field | Spec |
 |---|---|
 | Obtained | Cache **4**. Craft: shapeless **2 sulfur powder + 1 dark sand + 1 water bucket (bucket returned) -> 2 packs**. Sulfur powder is the Phase 2 smelt of sulfate rock (3.6) |
@@ -68,6 +70,8 @@ All amounts **INVENTED**. "Cache" is the gate delivery. Tooltip text is grade 6 
 | No hard block | Sulfur and sand are Phase 2 items. Untreated water still runs the Index; it only harms planters (a consequence, not a lock) |
 
 ### 3.5 Sorbent bed (Phase 3 begins)
+> **Updated 2026-11-28: drop-only (sent from orbit, game design). The craft recipe in the 'Obtained' row is SUPERSEDED. Cache counts: see `recipe-inputs-ruling.md` section 5.**
+
 | Field | Spec |
 |---|---|
 | Obtained | Cache **2**. Craft: **2 regolith brick + 1 glass pane + 1 iron ingot -> 1 bed** (porous brick is an INVENTED stand-in for zeolite or amine pellets, SME; the journal must not say brick captures CO2) |
@@ -77,6 +81,8 @@ All amounts **INVENTED**. "Cache" is the gate delivery. Tooltip text is grade 6 
 | No hard block | The soil unit and kits, also unlocked here, do not need a bed, so the player can always progress biomass |
 
 ### 3.6 Signal board (Breathable)
+> **Updated 2026-11-28: drop-only (sent from orbit, game design). The craft recipe in the 'Obtained' row is SUPERSEDED. Cache counts: see `recipe-inputs-ruling.md` section 5.**
+
 | Field | Spec |
 |---|---|
 | Obtained | Cache **2 boards plus 4 copper ingots and 6 redstone** (tops up the rare ores, so the end is not decided by a vein search). Craft: **1 copper ingot + 2 redstone + 1 glass pane + 1 iron nugget -> 1 board** |
@@ -86,6 +92,8 @@ All amounts **INVENTED**. "Cache" is the gate delivery. Tooltip text is grade 6 
 | No hard block | Cache plus copper and redstone ore; the Breathable hold gives time to craft during the wait (sheet section 4) |
 
 ### 3.7 Activation cell (Equilibrium)
+> **Updated 2026-11-28: drop-only (sent from orbit, game design). The craft recipe in the 'Obtained' row is SUPERSEDED. Cache counts: see `recipe-inputs-ruling.md` section 5.**
+
 | Field | Spec |
 |---|---|
 | Obtained | Cache **1** (the gate's reward, the "last part from the lander"). Craft path if lost: **2 batteries + 1 signal board + 1 iron ingot -> 1 cell** |
