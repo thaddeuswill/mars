@@ -1,0 +1,48 @@
+# Technical Lead, BACKLOG #49 slice B (air we make): algae vats and a carbon scrubber placed and running, the Oxygen and Carbon dioxide rows, and the next-goal row for Breathable (mars:planet_1). Real generated pad (top block y 80).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+wait 200
+cmd /setblock 0 81 4 mars:planetary_monitor
+cmd /mars gate latch dome_stable
+cmd /mars gate latch phase_2_begins
+cmd /mars gate latch thaw
+cmd /mars gate latch hydrosphere
+cmd /mars gate latch phase_3_begins
+wait 30
+cmd /setblock 12 81 12 mars:solar_panel
+cmd /setblock 12 81 -12 mars:solar_panel
+cmd /setblock -12 81 12 mars:solar_panel
+cmd /setblock 6 81 4 mars:battery
+cmd /setblock 2 81 6 mars:algae_vat[facing=north]
+cmd /setblock 4 81 6 mars:algae_vat[facing=north]
+cmd /setblock 6 81 6 mars:algae_vat[facing=north]
+cmd /setblock 8 81 6 mars:carbon_scrubber[facing=north]
+cmd /mars index set pressure 55
+cmd /mars index set temperature 4
+cmd /mars index set hydrosphere 20
+cmd /mars index set co2_partial 8
+cmd /mars index set o2_fraction 8
+cmd /mars index advance 1.5
+cmd /mars storm end
+cmd /time set 6000
+wait 80
+view 5 83 -1 0 12
+wait 80
+shot vats_and_scrubber_running
+cmd /mars index advance 1
+cmd /mars monitor
+wait 80
+shot monitor_air_rows
+cmd /mars index set pressure 76
+cmd /mars index set o2_fraction 22
+cmd /mars index set co2_partial 3
+cmd /mars index advance 0.2
+cmd /mars monitor
+wait 80
+shot monitor_next_goal_breathable_co2
+quit
