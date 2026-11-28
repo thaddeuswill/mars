@@ -1,0 +1,47 @@
+# Technical Lead, BACKLOG #49 slice A (water): gate supply caches in the hotbar and chat, the Surface water row, the ice extractor placed and running (mars:planet_1). Real generated pad (top block y 80), as machine_state.shots.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+wait 200
+cmd /setblock 0 81 4 mars:planetary_monitor
+cmd /mars gate latch dome_stable
+wait 30
+shot cache_dome_stable
+cmd /mars gate latch phase_2_begins
+cmd /mars gate latch thaw
+wait 30
+shot cache_all_three
+cmd /setblock 12 81 12 mars:solar_panel
+cmd /setblock 12 81 -12 mars:solar_panel
+cmd /setblock 6 81 4 mars:battery
+cmd /setblock 2 81 6 mars:ice_extractor[facing=north]
+cmd /setblock 4 81 6 mars:ice_extractor[facing=north]
+cmd /mars index set temperature -12
+cmd /mars index advance 8
+cmd /mars storm end
+cmd /time set 6000
+wait 80
+view 3 83 -1 0 14
+wait 80
+shot extractors_running
+cmd /mars index set temperature -32
+cmd /mars index advance 0.5
+cmd /mars storm end
+cmd /time set 6000
+wait 80
+shot extractors_too_cold_idle
+cmd /mars index set temperature -12
+cmd /mars index advance 3
+cmd /mars monitor
+wait 80
+shot monitor_surface_water
+cmd /mars index set temperature -32
+cmd /mars index advance 0.5
+cmd /mars monitor
+wait 80
+shot monitor_too_cold
+quit
