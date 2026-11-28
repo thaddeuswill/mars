@@ -77,7 +77,7 @@ So losing one of two emitters changes nothing (net +0.01 C/sol). The old "-1 C/s
 ### 2.1 What it measures
 **Hydrosphere = how much of the planet's surface has liquid water, in percent (0 to 100).** On Mars today it is 0: there is ice, but no stable liquid. The simulation carries **one stored number** and moves it by machine rates and one loss term, exactly like temperature. **It is a machine tally, not a count of water blocks.** The world shows it through thresholds (first puddles, ponds in basins, lakes), but the Index never reads blocks. Why: counting blocks needs terrain and fluid work that does not exist (`world-and-blocks.md` section 4, open question), cannot be paused or frozen cleanly (invariant I-3), and would let a player skip a gate with a bucket (the doc already says hand water does not move the row). Trade-off: the tally can disagree with what the player sees; fix by tying visuals to the number, never the other way round.
 
-Why 30 %: it is the game target in DESIGN.md (**INVENTED**; Earth is about 71 % ocean, common knowledge). **SME must source** whether any real study gives a plausible Mars surface fraction (for example proposed northern-lowland ocean extent) so the journal can say "Mars once may have had...", and mark it **NOT VERIFIED** until opened.
+Why 30 %: it is the game target in DESIGN.md. **Label (SME, 2026-11-28): "Game design, based on real ice."** Mars holds about 34 m of near-surface water as ice (verified, second hand); 30 % of the surface at 50 to 100 m depth is 15 to 30 m, so the target would melt much of it (calc). A former ocean's surface fraction is **NOT VERIFIED**; the journal says "may have had" and never calls 30 % the real ocean size. Earth is about 71 % ocean (common knowledge). Source: `docs/science/hydrosphere-and-gate-items.md` 1.2.
 
 ### 2.2 Sources, loss, and the dependence on warmth
 | Piece | Rule (first version) | Tag |
@@ -85,8 +85,8 @@ Why 30 %: it is the game target in DESIGN.md (**INVENTED**; Earth is about 71 % 
 | Source: **ice extractor** | **+0.30 %/sol each** at full power, standard. Unlocked at the Thaw. Draw **2 units/sol** (low: a pump, not a heater) | **INVENTED** |
 | "Meltwater" | The extractor's product is meltwater; no second source. Melt-from-warming is already in play as ground collapse (B5) and polar release. A natural temperature-driven melt source is **not** in version 1 (it would carry Phase 3 with no player action; calc) | Design |
 | Needs warmth | The extractor only runs when temperature >= -20 C (the Thaw). Below that it does nothing; the gate that unlocks it is the same line. That ties water to warmth (the reinforcing loop B2) with no new code beyond one condition | Design |
-| Loss term | Same form as temperature: `loss: { form: "restore", baseline: 0, perSol: 0.01 }`: water is lost (freezing back, evaporation, sinking into the ground) at **1 % of what exists per sol** | **INVENTED** k; direction real, SME to source |
-| What it does not do | No dependence on pressure in version 1. **Upgrade (version 2):** loss k doubles while pressure is under 10 kPa (water boils away, A1) | Later |
+| Loss term | Same form as temperature: `loss: { form: "restore", baseline: 0, perSol: 0.01 }`: water is lost at **1 % of what exists per sol**. Note text: "freezing, vapor loss, soaking in; rate invented" | **INVENTED** k; direction real (SME verified, NTRS 20250010130 and Mars Facts) |
+| What it does not do | No dependence on pressure in version 1. **Upgrade (version 2):** the loss is larger when it is cold (freezing) and when pressure is low (under 10 kPa, water boils and turns to vapor, A1); rate stays INVENTED | Later |
 | Settling | One extractor settles at 30 % (0.30 / 0.01). Two give 60 %. So **one running extractor just meets Equilibrium; two give the margin**, like emitters | calc |
 
 Per-machine summary for the sheet: extractor **0.30 %/sol, 2 units/sol, 0.15 % per unit** (INVENTED).
@@ -106,7 +106,7 @@ So the **Hydrosphere gate (10 %) latches near sol 51**, the Phase 3 begins gate 
 - The wetland-margin seed kit needs hydrosphere >= 10 (recipe or placement check; proposal, Technical Lead).
 - Visual response (every change is visible), keyed on the stored value as the sky is keyed on pressure: 1 %: puddles that last, 5 %: ice-edge ponds, 10 %: pools in craters, 20 %: shallow lakes in basins, 30 %: rivers or wide lakes. **Art:** Lead Artist.
 
-### 2.5 What the SME must source (nothing here is verified)
+### 2.5 What the SME had to source (answered 2026-11-28 in `docs/science/hydrosphere-and-gate-items.md`; items 1 to 4 closed, wording applied in 2.1 and 2.2)
 1. Real surface and near-surface water ice inventory (polar caps, mid-latitude ground ice) and a plain-language scale for "how much of the surface it could cover".
 2. A defensible plain statement of why liquid water is lost: freezing, sublimation, evaporation, and boiling at low pressure; and whether 1 % of existing water per sol is in a sensible direction (rate is invented anyway).
 3. Whether to label the 30 % target as game design or tie it to a source.

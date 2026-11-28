@@ -199,8 +199,8 @@ Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tool
 | Super-greenhouse emitter | temperature +0.275 C/sol each (was 0.25 before the loss term) | 3 | **INVENTED** |
 | Temperature loss term (all temperature) | temperature falls 0.4 % of its distance above -60 C per sol (k = 0.004/sol); about -0.24 C/sol at 0 C | none | **INVENTED** k; direction real physics; SME `docs/science/temperature-loss-term.md` |
 
-| Ice extractor (proposal) | hydrosphere +0.30 %/sol each, only when temperature ≥ −20 °C | 2 | **INVENTED** rate and draw; 0.15 % per unit |
-| Hydrosphere loss term | hydrosphere falls 1 % of itself per sol (k = 0.01/sol, `form: restore`, baseline 0); one extractor settles at 30 % | none | **INVENTED** k; direction real (SME to source). See [phase3-hydrosphere-and-drift.md](phase3-hydrosphere-and-drift.md) |
+| Ice extractor (built, slice A) | hydrosphere +0.30 %/sol each, only when temperature ≥ −20 °C | 2 | **INVENTED** rate and draw; 0.15 % per unit. Label: game-sized version of a real idea |
+| Hydrosphere loss term | hydrosphere falls 1 % of itself per sol (k = 0.01/sol, `form: restore`, baseline 0); one extractor settles at 30 % | none | **INVENTED** k; direction real (SME verified: freezing, vapor loss, soaking in). Hydrosphere target label: "Game design, based on real ice". See [phase3-hydrosphere-and-drift.md](phase3-hydrosphere-and-drift.md) |
 
 Standard build (INVENTED): processors 1 / 2 / 3 at Phase 2 sols 0 / 14 / 34; emitters 2 / 3 / 4 / 5 / 6 at sols 0 / 6 / 14 / 24 / 34. Result (calc, scratch model, not run in game; with the loss term and 0.275 per emitter): 30 kPa at sol 44, Thaw at about sol 38, 0 C at about sol 52. Emitters set the Phase 2 clock. Power peaks at 45 units/sol (10 panels, 3 batteries) in Phase 2 and 54 (12 panels) in Phase 3 with 10 processors. Tune: processor and emitter rate first, then panel supply.
 

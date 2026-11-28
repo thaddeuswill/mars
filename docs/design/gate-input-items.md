@@ -20,8 +20,8 @@ How the player is never stuck (every row in section 2 follows this):
 | 1 | Dome stable (1) | **Heater coil** (`mars:heater_coil`) | Resistive heating wire; Phoenix TEGA ovens heat soil | Game-sized version of a real idea | Regolith Outgasser; later every emitter | Pressure; C2, A1 |
 | 2 | Phase 2 begins (2) | **Filter cartridge** (`mars:filter_cartridge`) | MOXIE and the ISS air systems filter dust from intake air | Game-sized version of a real idea | Atmospheric processor (intake) | Pressure; C1, C2, A1 |
 | 3 | Thaw (3) | **Pump bearing** (`mars:pump_bearing`) | Rotating parts in pumps wear out; hematite spherules are real Mars finds | Game-sized version of a real idea | Ice extractor (pump) | Hydrosphere; C2, A2 |
-| 4 | Hydrosphere (4) | **Resin pack** (`mars:resin_pack`) | Ion-exchange resin removes salts from water on Earth (perchlorate use **unverified**, SME) | Game invention, not real | Meltwater treatment, then planter water | Safe water; B5, C1 |
-| 5 | Phase 3 begins (5) | **Sorbent bed** (`mars:sorbent_bed`) | ISS CO2 scrubber (CDRA) uses beds that capture CO2 | Game-sized version of a real idea | Carbon scrubber | CO2 and O2; A5, B4 |
+| 4 | Hydrosphere (4) | **Resin pack** (`mars:resin_pack`) | Ion-exchange resin catches perchlorate in water on Earth (verified, SME); nobody has cleaned real Mars soil this way | Game-sized version of a real idea (SIMPLIFIED) | Meltwater treatment, then planter water | Safe water; B5, C1 |
+| 5 | Phase 3 begins (5) | **Sorbent bed** (`mars:sorbent_bed`) | ISS CO2 scrubber (CDRA) uses zeolite or amine beds that capture CO2 and are heated to let it go again (real, regenerable) | Game-sized version of a real idea (SIMPLIFIED: the game locks CO2 into rock) | Carbon scrubber | CO2 and O2; A5, B4 |
 | 6 | Breathable (6) | **Signal board** (`mars:signal_board`) | A radio transmitter needs a circuit board | Game invention, not real | Beacon bench, transmitter core | Beacon; B4 |
 | 7 | Equilibrium (7) | **Activation cell** (`mars:activation_cell`) | A transmitter needs a charged power source | Game invention, not real | Colonization beacon, final lighting | Ending; D2 |
 
@@ -63,17 +63,17 @@ All amounts **INVENTED**. "Cache" is the gate delivery. Tooltip text is grade 6 
 |---|---|
 | Obtained | Cache **4**. Craft: shapeless **2 sulfur powder + 1 dark sand + 1 water bucket (bucket returned) -> 2 packs**. Sulfur powder is the Phase 2 smelt of sulfate rock (3.6) |
 | Unlocks next | Meltwater treatment recipe (stubbed in slice A of the water plan) holds **1 pack**, and uses one every N sols (**INVENTED**, open). Planter beds need treated water from now on |
-| Tooltip | "Resin pack. Soaks salts out of water. Game invention, not real." |
-| Journal | "Melted ice is salty. On Mars the salt is perchlorate, and plants dislike it." (Real fact: perchlorate in Phoenix soil, SME verified; the resin is the invention) |
+| Tooltip | "Resin pack. Catches salts in water. Game-sized version of a real idea: on Earth, resin catches perchlorate. Nobody has cleaned real Mars soil this way yet." (SME wording; label changed from "Game invention")  |
+| Journal | "Melted ice is salty. On Mars the salt is perchlorate, and plants dislike it." (Real fact: perchlorate in Phoenix soil, NTRS 20190028297, verified. Resin on Earth: verified. The Mars-ready pack is SIMPLIFIED, not invented. Journal must say the salt comes from the soil, not from the ice itself.) |
 | No hard block | Sulfur and sand are Phase 2 items. Untreated water still runs the Index; it only harms planters (a consequence, not a lock) |
 
 ### 3.5 Sorbent bed (Phase 3 begins)
 | Field | Spec |
 |---|---|
-| Obtained | Cache **2**. Craft: **2 regolith brick + 1 glass pane + 1 iron ingot -> 1 bed** (porous brick as sorbent; the "porous brick" idea is **unverified**, SME) |
+| Obtained | Cache **2**. Craft: **2 regolith brick + 1 glass pane + 1 iron ingot -> 1 bed** (porous brick is an INVENTED stand-in for zeolite or amine pellets, SME; the journal must not say brick captures CO2) |
 | Unlocks next | Carbon scrubber recipe gains **2 beds** (twin beds, as in the CDRA). Beds fill and need swapping (later; the scrubber's carbonate output is the balance-sheet piece) |
-| Tooltip | "Sorbent bed. A porous block that holds on to CO2. It fills up." (Gas name is allowed here: the scrubber's whole job is CO2; forecast F8 concerns kits only) |
-| Journal | "Your air has a lot of CO2. A bed can catch it, the way real space stations do." |
+| Tooltip | "Sorbent bed. Porous pellets that hold CO2 until they fill. Real ones use zeolite or amine, and are heated to let the CO2 go." (Gas name is allowed here: the scrubber's whole job is CO2; forecast F8 concerns kits only) |
+| Journal | "Your air has a lot of CO2. A bed can catch it, the way real space stations do. On the station it is let out again. In the game, the scrubber locks it into rock." |
 | No hard block | The soil unit and kits, also unlocked here, do not need a bed, so the player can always progress biomass |
 
 ### 3.6 Signal board (Breathable)
@@ -172,7 +172,7 @@ Every number is a real stored value shown to the player; none is invented in the
 | Item | Owner |
 |---|---|
 | Hematite spherules as an item (3.3), regolith brick availability, sulfur powder in Phase 2 | Technical Lead |
-| "Porous brick" as a sorbent and "resin removes perchlorate" are **unverified**; SME to confirm or change the real idea | Subject Matter Expert |
+| ~~"Porous brick" and "resin removes perchlorate" unverified~~ Answered by SME 2026-11-28: resin real on Earth (SIMPLIFIED); brick is an INVENTED stand-in; wording applied above | closed |
 | Wear intervals for coil, cartridge, bearing, resin, bed (all open) | Designer with balance sheet |
 | Where the cache arrives (inventory versus lander crate) | Owner pick; recommendation inventory, like the Ovens |
 | Per-recipe amounts are all **INVENTED**; tune after a playtest | Owner playtest |
