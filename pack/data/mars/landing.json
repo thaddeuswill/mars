@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "hint_after_seconds": 180,
+  "suits_built": false,
+  "dust_off_built": false,
+  "source": "docs/design/landing-spec.md 3.3 and T6. hint_after_seconds 180 (3 minutes active) is INVENTED. suits_built and dust_off_built switch step 2, step 7 and the skip summary from the stand-in text (air tank read-out, out and back) to the real one when those blocks exist (decision L7); both are false today."
+}
