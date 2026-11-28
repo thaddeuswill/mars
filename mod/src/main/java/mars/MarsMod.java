@@ -26,6 +26,7 @@ public final class MarsMod {
     SelfTest.step("mod_constructed");
     mars.machines.MarsMachines.register(modBus);
     mars.hull.HullBlocks.register(modBus);
+    mars.habitat.HabitatBlocks.register(modBus);
     NeoForge.EVENT_BUS.addListener(TravelCommands::register);
     NeoForge.EVENT_BUS.addListener(mars.admin.IndexCommands::register);
     NeoForge.EVENT_BUS.addListener(mars.planets.PlanetEvents::addReloadListeners);

@@ -111,6 +111,8 @@ public final class MarsMachines {
                         for (DeferredBlock<? extends Block> b : mars.hull.HullBlocks.ALL) {
                           output.accept(b.get());
                         }
+                        output.accept(mars.habitat.HabitatBlocks.HABITAT_BUNK_ITEM.get());
+                        output.accept(mars.habitat.HabitatBlocks.STOWAGE_CRATE_ITEM.get());
                       })
                   .build());
 

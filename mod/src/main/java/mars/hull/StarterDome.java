@@ -174,12 +174,14 @@ public final class StarterDome {
       case RECLAIMER -> facing(MarsMachines.WATER_RECLAIMER.get(), f);
       case BATTERY -> facing(MarsMachines.BATTERY_BLOCK.get(), f);
       case BED_FOOT ->
-          Blocks.RED_BED
+          mars.habitat.HabitatBlocks.HABITAT_BUNK
+              .get()
               .defaultBlockState()
               .setValue(net.minecraft.world.level.block.BedBlock.FACING, f)
               .setValue(net.minecraft.world.level.block.BedBlock.PART, BedPart.FOOT);
       case BED_HEAD ->
-          Blocks.RED_BED
+          mars.habitat.HabitatBlocks.HABITAT_BUNK
+              .get()
               .defaultBlockState()
               .setValue(net.minecraft.world.level.block.BedBlock.FACING, f)
               .setValue(net.minecraft.world.level.block.BedBlock.PART, BedPart.HEAD);
@@ -188,7 +190,11 @@ public final class StarterDome {
               .defaultBlockState()
               .setValue(net.minecraft.world.level.block.LecternBlock.FACING, f);
       case BENCH -> Blocks.CRAFTING_TABLE.defaultBlockState();
-      case CRATE -> Blocks.BARREL.defaultBlockState();
+      case CRATE ->
+          mars.habitat.HabitatBlocks.STOWAGE_CRATE
+              .get()
+              .defaultBlockState()
+              .setValue(net.minecraft.world.level.block.BarrelBlock.FACING, f);
     };
   }
 
