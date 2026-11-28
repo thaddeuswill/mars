@@ -171,7 +171,8 @@ class LangKeysTest {
             "oxygen_maker",
             "atmospheric_processor",
             "super_greenhouse_emitter",
-            "water_reclaimer")) {
+            "water_reclaimer",
+            "ice_extractor")) {
       need(lang, missing, "block.mars." + id + ".tooltip");
     }
     report(missing);

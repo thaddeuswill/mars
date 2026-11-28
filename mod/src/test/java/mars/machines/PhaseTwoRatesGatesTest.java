@@ -183,7 +183,9 @@ class PhaseTwoRatesGatesTest {
     s.model().set(Ids.TEMPERATURE, 6.0);
     s.model().set(O2F, 21.5);
     s.model().set(CO2, 0.4);
-    s.model().set(HYDRO, 30.0);
+    // 31, not 30: the hydrosphere loss term (1 percent a sol) takes about 0.03 in each 0.1 sol
+    // slice, as a running extractor's +0.30 a sol would make up in play.
+    s.model().set(HYDRO, 31.0);
     s.model().set(BIOMASS, 1500.0);
   }
 
@@ -236,6 +238,11 @@ class PhaseTwoRatesGatesTest {
     assertEquals("monitor.gate.thaw.progress", g.detailKey());
     assertEquals(0.5, g.goal().fraction(), 1e-9);
     s.gates().latch("mars:thaw", GateTracker.Cause.ADMIN, 0);
+    g = goal(s);
+    assertEquals(
+        "gate.mars.hydrosphere", g.valueKey(), "the Hydrosphere gate (order 4) comes next");
+    assertTrue(g.side().endsWith("/ 10 %"), g.side());
+    s.gates().latch("mars:hydrosphere", GateTracker.Cause.ADMIN, 0);
     s.model().set(Ids.PRESSURE, 15.0);
     g = goal(s);
     assertEquals("gate.mars.phase_3_begins", g.valueKey());

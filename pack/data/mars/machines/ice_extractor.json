@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "mars:ice_extractor",
+  "contributions": [
+    {
+      "parameter": "mars:hydrosphere",
+      "ratePerSol": 0.3
+    }
+  ],
+  "requires": {
+    "parameter": "mars:temperature",
+    "op": ">=",
+    "value": -20.0
+  },
+  "source": "docs/design/phase3-hydrosphere-and-drift.md section 2.2 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): ice extractor +0.30 percent of the surface with liquid water per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. It also adds nothing while the temperature is below -20 C (the Thaw line): 'requires' is a gate-style condition on a parameter, a physical threshold, never scaled by pace or group size (invariant I-1). The 0.30 rate and the draw of 2 power units (kWh) per sol are INVENTED game balance (0.15 percent per unit; a pump, not a heater). One extractor settles at 30 percent against the hydrosphere loss term (parameters/hydrosphere.json). Real idea behind it: a heated drill that melts ice and pumps the water up, the Rodriguez Well (docs/science/machine-references.md; Rodwell, NTRS 20205011353); this machine is a game-sized version of a real idea. Unlocked by the Thaw gate (data/mars/gates/thaw.json). The ground-ice placement rule is deferred: v1 places it anywhere (flagged in the report).",
+  "power": {
+    "drawPerSol": 2.0
+  }
+}

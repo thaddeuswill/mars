@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IGI",
+    "IFI",
     "CHC",
     "IRI"
   ],
   "key": {
     "I": {
       "item": "minecraft:iron_ingot"
-    },
-    "G": {
-      "item": "minecraft:glass"
     },
     "C": {
       "item": "minecraft:copper_ingot"
@@ -21,6 +18,9 @@
     },
     "R": {
       "item": "minecraft:redstone"
+    },
+    "F": {
+      "item": "mars:filter_cartridge"
     }
   },
   "result": {

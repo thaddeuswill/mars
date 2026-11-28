@@ -61,8 +61,13 @@ class PhaseTwoMachinesTest {
       assertEquals("minecraft:crafting_shaped", r.get("type").getAsString());
       assertEquals("mars:" + n, r.getAsJsonObject("result").get("id").getAsString());
       for (var e : r.getAsJsonObject("key").entrySet()) {
+        String item = e.getValue().getAsJsonObject().get("item").getAsString();
+        // Vanilla ingredients, plus the gate input parts, which are themselves vanilla-only
+        // crafts (heater coil, filter cartridge, pump bearing; see PartsAndCachesTest).
         assertTrue(
-            e.getValue().getAsJsonObject().get("item").getAsString().startsWith("minecraft:"),
+            item.startsWith("minecraft:")
+                || item.equals("mars:heater_coil")
+                || item.equals("mars:filter_cartridge"),
             n + ": vanilla-first recipe");
       }
     }

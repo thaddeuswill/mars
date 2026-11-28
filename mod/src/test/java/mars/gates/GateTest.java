@@ -319,7 +319,7 @@ class GateTest {
             .findFirst()
             .orElseThrow();
     System.out.println("monitor after: " + next2);
-    assertEquals("1 / 6", next2.detailRight());
+    assertEquals("1 / 7", next2.detailRight());
     assertEquals("monitor.goals.count", next2.detailRightKey());
     assertTrue(
         after.rows().stream().noneMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));

@@ -26,7 +26,7 @@ public final class MachineStateSync {
   /** Bring every loaded machine block in line with the grid. Returns how many blocks changed. */
   public static int sync(ServerLevel level, PlanetSim sim) {
     var grid = sim.power();
-    MachineState state = MachineState.of(MachineLook.of(grid.state(sim.stepSols())));
+    MachineLook gridLook = MachineLook.of(grid.state(sim.stepSols()));
     int bars = MachineLook.batteryBars(grid.charge(), grid.capacity());
     int changed = 0;
     for (String type : sim.placedTypes()) {
@@ -34,6 +34,8 @@ public final class MachineStateSync {
       if (!battery && !sim.machineDrawsPower(type)) {
         continue; // solar panel: its look is the dust stage, not a power state
       }
+      MachineState state =
+          MachineState.of(MachineLook.withRequirement(gridLook, sim.machineRequirementMet(type)));
       for (long packed : sim.machinePositions(type)) {
         BlockPos pos = BlockPos.of(packed);
         if (!level.isLoaded(pos)) {

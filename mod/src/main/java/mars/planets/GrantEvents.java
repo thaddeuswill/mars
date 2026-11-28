@@ -35,12 +35,14 @@ public final class GrantEvents {
   public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent e) {
     if (e.getEntity() instanceof ServerPlayer p) {
       maybeGrant(p);
+      GateCaches.deliver(p);
     }
   }
 
   public static void onLoggedIn(PlayerEvent.PlayerLoggedInEvent e) {
     if (e.getEntity() instanceof ServerPlayer p) {
       maybeGrant(p);
+      GateCaches.deliver(p);
     }
   }
 

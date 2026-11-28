@@ -75,6 +75,13 @@ public final class MarsMachines {
           () ->
               new GatedLoadBlock(
                   machineProperties(), CELL, TALL_COLLISION, "mars:super_greenhouse_emitter"));
+  // Ice extractor (model 32 px): one cell, outline 16 px, fence-high collision 24 px; the sleeve
+  // and pump box overhang the cell above (visual only), like the emitter.
+  public static final DeferredBlock<GatedLoadBlock> ICE_EXTRACTOR =
+      BLOCKS.register(
+          "ice_extractor",
+          () ->
+              new GatedLoadBlock(machineProperties(), CELL, TALL_COLLISION, "mars:ice_extractor"));
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
@@ -106,10 +113,43 @@ public final class MarsMachines {
           WATER_RECLAIMER,
           ATMOSPHERIC_PROCESSOR,
           SUPER_GREENHOUSE_EMITTER,
+          ICE_EXTRACTOR,
           SOLAR_PANEL,
           BATTERY_BLOCK,
           OXYGEN_MAKER_BLOCK,
           PLANETARY_MONITOR);
+
+  /**
+   * The gate input items (docs/design/gate-input-items.md): parts the next machine's recipe needs.
+   * Plain items with a one-line tooltip; the gate that hands them out lists them in its {@code
+   * cache}. Ids are the contract. All amounts and recipes are INVENTED.
+   */
+  public static final List<String> PART_IDS =
+      List.of("heater_coil", "filter_cartridge", "pump_bearing");
+
+  public static final List<net.neoforged.neoforge.registries.DeferredItem<Item>> PARTS =
+      new java.util.ArrayList<>();
+
+  static {
+    for (String id : PART_IDS) {
+      PARTS.add(
+          ITEMS.<Item>register(
+              id,
+              () ->
+                  new Item(new Item.Properties()) {
+                    @Override
+                    public void appendHoverText(
+                        ItemStack stack,
+                        Item.TooltipContext context,
+                        List<Component> tooltip,
+                        net.minecraft.world.item.TooltipFlag flag) {
+                      tooltip.add(
+                          Component.translatable("item.mars." + id + ".tooltip")
+                              .withStyle(net.minecraft.ChatFormatting.GRAY));
+                    }
+                  }));
+    }
+  }
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =
       TABS.register(
@@ -123,6 +163,7 @@ public final class MarsMachines {
                         for (DeferredBlock<? extends Block> b : ALL) {
                           output.accept(b.get());
                         }
+                        PARTS.forEach(p -> output.accept(p.get()));
                       })
                   .build());
 
@@ -162,6 +203,7 @@ public final class MarsMachines {
     ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
     ITEMS.register("atmospheric_processor", () -> tipped(ATMOSPHERIC_PROCESSOR));
     ITEMS.register("super_greenhouse_emitter", () -> tipped(SUPER_GREENHOUSE_EMITTER));
+    ITEMS.register("ice_extractor", () -> tipped(ICE_EXTRACTOR));
     ITEMS.register(
         "water_reclaimer",
         () ->

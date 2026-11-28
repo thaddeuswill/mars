@@ -56,7 +56,8 @@ class PlanetaryIndexModelTest {
     h.remove();
     m.contribute(Ids.HYDROSPHERE, 2, "melt");
     m.advanceSols(1);
-    assertEquals(2.0, m.snapshot().get(Ids.HYDROSPHERE), 1e-6);
+    // +2 in one sol, minus the hydrosphere loss term (1 percent of the value a sol, about 0.01).
+    assertEquals(2.0, m.snapshot().get(Ids.HYDROSPHERE), 0.02);
   }
 
   @Test

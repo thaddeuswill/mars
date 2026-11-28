@@ -6,16 +6,28 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import mars.core.ParameterId;
+import mars.gates.Condition;
 
 /**
  * A machine type's effect on the planet, read from {@code data/mars/machines/<name>.json}: what it
- * contributes to which Index parameter, per sol, at standard pace (ARCHITECTURE.md 2.1, 2.16).
+ * contributes to which Index parameter, per sol, at standard pace (ARCHITECTURE.md 2.1, 2.16). The
+ * optional {@code requires} is a gate-style condition (a parameter comparison, for example {@code
+ * mars:temperature >= -20}): while it is false the machine's contributions are 0. It reads the same
+ * condition language as the gates, so a data file cannot scale a threshold (invariant I-1).
  */
 public record MachineDef(
-    String id, List<Contribution> contributions, Power power, int startingGrant) {
+    String id,
+    List<Contribution> contributions,
+    Power power,
+    int startingGrant,
+    Condition requires) {
+
+  public MachineDef(String id, List<Contribution> contributions, Power power, int startingGrant) {
+    this(id, contributions, power, startingGrant, null);
+  }
 
   public MachineDef(String id, List<Contribution> contributions, Power power) {
-    this(id, contributions, power, 0);
+    this(id, contributions, power, 0, null);
   }
 
   /**
@@ -72,7 +84,18 @@ public record MachineDef(
       }
       grant = g.getAsInt();
     }
-    return new MachineDef(id, List.copyOf(list), power, grant);
+    Condition requires = null;
+    JsonElement rq = o.get("requires");
+    if (rq != null) {
+      requires = Condition.parse(rq, file);
+      java.util.Set<String> states = new java.util.HashSet<>();
+      requires.machineStates(states);
+      if (!states.isEmpty()) {
+        throw new IllegalArgumentException(
+            file + ": 'requires' may only compare parameters, not machine states " + states);
+      }
+    }
+    return new MachineDef(id, List.copyOf(list), power, grant, requires);
   }
 
   private static double optNumber(JsonObject o, String field, String file) {

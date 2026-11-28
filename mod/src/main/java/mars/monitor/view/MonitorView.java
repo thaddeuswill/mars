@@ -464,6 +464,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           new Row(
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
+    hydrosphereRow(sim, snap.get(Ids.HYDROSPHERE)).ifPresent(rows::add);
     powerRow(sim).ifPresent(rows::add);
     // The alert is the first row on the panel: rare, one line, only while a machine that feeds
     // the Index is starved.
@@ -475,6 +476,38 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       rows.add(new Row("monitor.row.pace", "", null, null, null, List.of()));
     }
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));
+  }
+
+  /** The Thaw gate: the Surface water row appears from here on (and earlier if it is above 0). */
+  static final String THAW = "mars:thaw";
+
+  /**
+   * The Surface water row (the Hydrosphere: percent of the surface with liquid water). Shown once
+   * the Thaw has latched (the ice extractor unlocks there) or whenever the value is above 0 (an
+   * admin value or an older save is never hidden). Causes: one line per machine type and the loss
+   * line ("Water freezes or sinks back"). Cost: one pass over the cause list.
+   */
+  static java.util.Optional<Row> hydrosphereRow(PlanetSim sim, double h) {
+    if (Double.isNaN(h) || !(sim.gates().isLatched(THAW) || h > 0.0)) {
+      return java.util.Optional.empty();
+    }
+    double sources = sim.model().netRatePerSol(Ids.HYDROSPHERE);
+    double loss = sim.model().lossRatePerSol(Ids.HYDROSPHERE);
+    double net = sources + loss;
+    List<CauseLine> causes = machineCauses(sim, Ids.HYDROSPHERE, "%");
+    if (Math.round(Math.abs(loss) * 100) != 0) {
+      causes.add(
+          new CauseLine(
+              "monitor.cause.hydrosphere_loss", 0, Fmt.signed(loss, 2) + "\u00a0%", null, -1));
+    }
+    return java.util.Optional.of(
+        new Row(
+            "monitor.row.hydrosphere",
+            Fmt.withUnit(h, 1, "%"),
+            null,
+            trend(net),
+            rate(net, "%"),
+            causes));
   }
 
   /** True while a pressure goal (a gate that compares pressure) has not latched yet. */
@@ -648,6 +681,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     for (PlanetaryIndexModel.Cause c : sim.model().causes(parameter)) {
       boolean needsPower = sim.machineDrawsPower(c.source());
       String reason = !needsPower ? null : powerReason(powerState, null);
+      if (reason == null && !sim.machineRequirementMet(c.source())) {
+        reason = "monitor.cause.too_cold"; // the machine's own condition (the ice extractor)
+      }
       causes.add(
           new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
     }

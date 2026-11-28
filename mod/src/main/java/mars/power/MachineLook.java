@@ -26,6 +26,15 @@ public enum MachineLook {
   }
 
   /**
+   * The look of a machine that also has its own condition (the ice extractor needs warmth): when
+   * the condition fails it is doing nothing, so it is never shown running. A look that is already
+   * off or idle stays as it is.
+   */
+  public static MachineLook withRequirement(MachineLook look, boolean requirementMet) {
+    return !requirementMet && look == RUNNING ? IDLE : look;
+  }
+
+  /**
    * Battery bars 0 to 3: quarters of the stored energy, rounded down, so 3 means 75 percent or
    * more. No capacity (or a bad number) is 0.
    */

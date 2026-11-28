@@ -6,5 +6,10 @@
   "start": 0,
   "min": 0,
   "max": 100,
-  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+  "source": "Start values: docs/design/balance-sheet.md section 1. Meaning: percent of the planet's surface with liquid water, a machine tally and not a count of water blocks (docs/design/phase3-hydrosphere-and-drift.md 2.1). Limits are invented clamps (physical sanity), not thresholds. Loss term: each sol the value falls by 1 percent of itself (a restoring leak toward 0: liquid water freezes back, evaporates or sinks into the ground). perSol 0.01 is INVENTED game balance; the direction is real physics (docs/design/phase3-hydrosphere-and-drift.md 2.2; SME to source, NOT VERIFIED). It is a natural rate (scales with pace like the temperature leak); thresholds never scale. One ice extractor (+0.30 per sol, INVENTED) settles at 30 percent.",
+  "loss": {
+    "form": "restore",
+    "baseline": 0,
+    "perSol": 0.01
+  }
 }

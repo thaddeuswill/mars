@@ -13,7 +13,36 @@ import java.util.List;
  * unlocks} lists machine ids that may not be placed by survival players until the gate has latched.
  */
 public record GateDef(
-    String id, int order, Condition condition, Hold hold, List<String> unlocks, String nameKey) {
+    String id,
+    int order,
+    Condition condition,
+    Hold hold,
+    List<String> unlocks,
+    String nameKey,
+    List<CacheItem> cache) {
+
+  /** A gate without a supply cache. */
+  public GateDef(
+      String id, int order, Condition condition, Hold hold, List<String> unlocks, String nameKey) {
+    this(id, order, condition, hold, unlocks, nameKey, List.of());
+  }
+
+  /**
+   * One line of the gate's supply cache (docs/design/gate-input-items.md): {@code count} of {@code
+   * item}, delivered to each player once per planet when the gate has latched.
+   */
+  public record CacheItem(String item, int count) {
+    public CacheItem {
+      if (count < 1) {
+        throw new IllegalArgumentException("cache count must be 1 or more: " + item);
+      }
+    }
+  }
+
+  /** The chat line that comes with the cache: {@code gate.supply.<id without namespace>}. */
+  public String supplyNoteKey() {
+    return "gate.supply." + id.substring(id.indexOf(':') + 1);
+  }
 
   /**
    * Hold lengths in simulation sols (balance sheet 4) and the hold rule's grace: the counter pauses
@@ -64,13 +93,21 @@ public record GateDef(
         unlocks.add(e.getAsString());
       }
     }
+    List<CacheItem> cache = new ArrayList<>();
+    if (o.has("cache")) {
+      for (JsonElement e : (JsonArray) o.get("cache")) {
+        JsonObject c = e.getAsJsonObject();
+        cache.add(new CacheItem(text(c, "item", file), (int) num(c, "count", file)));
+      }
+    }
     return new GateDef(
         id,
         order,
         condition,
         hold,
         List.copyOf(unlocks),
-        o.has("name_key") ? o.get("name_key").getAsString() : "gate." + id.replace(':', '.'));
+        o.has("name_key") ? o.get("name_key").getAsString() : "gate." + id.replace(':', '.'),
+        List.copyOf(cache));
   }
 
   private static String text(JsonObject o, String f, String file) {

@@ -297,7 +297,7 @@ class MonitorLayoutTest {
   }
 
   private static final int CONTENT_W = MonitorStyle.PANEL_W - 2 * MonitorStyle.PAD;
-  private static final String COUNT = "Goals 3 / 6";
+  private static final String COUNT = "Goals 3 / 7";
 
   @Test
   void everyGateDetailTextFitsLeftOfThePercent() throws Exception {

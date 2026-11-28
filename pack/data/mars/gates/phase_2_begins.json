@@ -11,5 +11,11 @@
     "mars:atmospheric_processor",
     "mars:super_greenhouse_emitter"
   ],
-  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the atmospheric processor and the super-greenhouse emitter (machine-priorities rows 3 and 4; both are loads with no Index rate yet). Tubes do not exist yet."
+  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the atmospheric processor and the super-greenhouse emitter (machine-priorities rows 3 and 4; both are loads with no Index rate yet). Tubes do not exist yet. Supply cache (docs/design/gate-input-items.md 3.2): 3 filter cartridges, once per player per planet; the atmospheric processor recipe needs one. Amount INVENTED.",
+  "cache": [
+    {
+      "item": "mars:filter_cartridge",
+      "count": 3
+    }
+  ]
 }

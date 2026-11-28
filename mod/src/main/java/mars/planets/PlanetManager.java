@@ -183,6 +183,7 @@ public final class PlanetManager {
                       "block." + m.replace(':', '.'))));
         }
       }
+      GateCaches.onGateLatched(level, def);
       LearningService.onGateLatched(level, id);
       d.setDirty();
     }

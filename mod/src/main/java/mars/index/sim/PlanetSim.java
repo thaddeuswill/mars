@@ -351,15 +351,49 @@ public final class PlanetSim {
     for (Map.Entry<String, Map<Long, List<PlanetaryIndexModel.ContributionHandle>>> e :
         handles.entrySet()) {
       MachineDef def = defs.get(e.getKey());
-      if (def == null || def.power().drawPerSol() <= 0) {
+      if (def == null || (def.power().drawPerSol() <= 0 && def.requires() == null)) {
         continue;
       }
+      // A machine with a "requires" condition (the ice extractor: warm enough) contributes nothing
+      // while it is false, however much power it gets. Powered machines scale with their share.
+      double share = def.power().drawPerSol() > 0 ? satisfaction : 1.0;
+      double ok = requirementMet(def) ? 1.0 : 0.0;
       for (List<PlanetaryIndexModel.ContributionHandle> hs : e.getValue().values()) {
         for (int i = 0; i < hs.size(); i++) {
-          hs.get(i).setRate(def.contributions().get(i).ratePerSol() * satisfaction);
+          hs.get(i).setRate(def.contributions().get(i).ratePerSol() * share * ok);
         }
       }
     }
+  }
+
+  /** True when the machine type has no {@code requires} condition, or it holds right now. */
+  private boolean requirementMet(MachineDef def) {
+    if (def.requires() == null) {
+      return true;
+    }
+    return def.requires()
+        .eval(
+            new Condition.Context() {
+              @Override
+              public double value(ParameterId id) {
+                return model.current(id);
+              }
+
+              @Override
+              public boolean machineState(String name) {
+                return false;
+              }
+            });
+  }
+
+  /**
+   * Does this machine type's own condition hold now (the ice extractor needs temperature at or
+   * above -20 C)? True for types with no condition or no definition. The Monitor and the block look
+   * read this, so "running" is never shown for a machine that is doing nothing.
+   */
+  public boolean machineRequirementMet(String type) {
+    MachineDef def = defs.get(type);
+    return def == null || requirementMet(def);
   }
 
   public PlanetaryIndexModel model() {

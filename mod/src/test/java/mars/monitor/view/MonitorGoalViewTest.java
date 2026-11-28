@@ -53,7 +53,7 @@ class MonitorGoalViewTest {
     assertEquals(Math.log10(p / 0.6) / Math.log10(5 / 0.6), g.goal().fraction(), 1e-9);
     assertEquals("monitor.goal.eta", g.goal().etaKey());
     assertTrue(Long.parseLong(g.goal().etaArg()) > 1);
-    assertEquals("1 / 6", g.detailRight());
+    assertEquals("1 / 7", g.detailRight());
     assertEquals("monitor.gate.phase_2_begins.progress", g.detailKey());
   }
 

@@ -1281,10 +1281,10 @@ public final class PlanetGameTests {
     boolean ok =
         SelfTest.check(
             "gate.files_loaded",
-            "six gate files read by the reload listener: dome_stable, phase_2_begins, thaw, phase_3_begins,"
-                + " breathable and equilibrium",
+            "seven gate files read by the reload listener: dome_stable, phase_2_begins, thaw, hydrosphere,"
+                + " phase_3_begins, breathable and equilibrium",
             "gates=" + defs.stream().map(mars.gates.GateDef::id).toList(),
-            defs.size() == 6 && !sim.gates().isLatched("mars:dome_stable"));
+            defs.size() == 7 && !sim.gates().isLatched("mars:dome_stable"));
     FakePlayer player =
         FakePlayerFactory.get(
             level,
