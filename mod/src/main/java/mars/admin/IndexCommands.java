@@ -178,6 +178,7 @@ public final class IndexCommands {
     double sols = DoubleArgumentType.getDouble(ctx, "sols");
     d.sim().model().advanceSols(sols);
     d.setDirty();
+    mars.planets.MachineStateSync.sync(ctx.getSource().getLevel(), d.sim());
     LOG.info("ADMIN {} advanced the planet by {} sols", ctx.getSource().getTextName(), sols);
     ctx.getSource()
         .sendSuccess(

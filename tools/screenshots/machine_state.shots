@@ -1,0 +1,53 @@
+# Machine state (BACKLOG #49): processor, reclaimer and battery with no power (off, charge 0), then powered (running), then the battery at charge 2 and 3. Real generated pad (top block y 80). Stills cannot show the animation.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock -1 81 4 mars:atmospheric_processor[facing=north]
+cmd /setblock 2 81 4 mars:water_reclaimer[facing=north]
+cmd /setblock 5 81 4 mars:battery[facing=north]
+wait 60
+view 2 83 -3 0 12
+wait 80
+shot state_off_all
+wait 20
+view -1 82.5 0 0 10
+wait 40
+shot state_off_processor
+wait 20
+view 2 82.5 0 0 10
+wait 40
+shot state_off_reclaimer
+wait 20
+view 5.5 82.3 1.5 0 15
+wait 40
+shot state_battery_charge0
+wait 20
+cmd /setblock 12 81 12 mars:solar_panel
+wait 60
+view 2 83 -3 0 12
+wait 60
+shot state_running_all
+wait 20
+view -1 82.5 0 0 10
+wait 40
+shot state_running_processor
+wait 20
+view 2 82.5 0 0 10
+wait 40
+shot state_running_reclaimer
+wait 20
+cmd /mars index advance 12
+wait 60
+view 5.5 82.3 1.5 0 15
+wait 40
+shot state_battery_charge2
+wait 20
+cmd /mars index advance 20
+wait 60
+shot state_battery_charge3
+wait 20
+quit
