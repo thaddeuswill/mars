@@ -96,6 +96,10 @@ public final class MarsMachines {
           O2_TANK,
           PLANETARY_MONITOR);
 
+  /** Panel Brush (f1-storm-spec.md 2.7): cleans a solar panel back to dust stage 0. */
+  public static final net.neoforged.neoforge.registries.DeferredItem<PanelBrushItem> PANEL_BRUSH =
+      ITEMS.register("panel_brush", () -> new PanelBrushItem(new Item.Properties().stacksTo(1)));
+
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =
       TABS.register(
           "machines",
@@ -112,6 +116,7 @@ public final class MarsMachines {
                           output.accept(b.get());
                         }
                         output.accept(mars.hull.HullBlocks.SEAL_KIT.get());
+                        output.accept(PANEL_BRUSH.get());
                         output.accept(mars.habitat.HabitatBlocks.HABITAT_BUNK_ITEM.get());
                         output.accept(mars.habitat.HabitatBlocks.STOWAGE_CRATE_ITEM.get());
                       })

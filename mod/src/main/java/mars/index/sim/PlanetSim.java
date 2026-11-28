@@ -497,6 +497,12 @@ public final class PlanetSim {
     return hazards.storm().capIndex(gates::isLatched);
   }
 
+  /** True while a storm is warned and has not started: the forecast is open. */
+  public boolean stormWarned() {
+    return storm != null
+        && (storm.mode() == mars.hazards.storm.StormScheduler.Mode.WARNED);
+  }
+
   /** The storm strength cap of the phase the planet is in now (1.0, 0.8, 0.5, 0.25). */
   public double stormCap() {
     return hazards == null ? 1.0 : hazards.storm().caps().get(capIndex()).cap();
