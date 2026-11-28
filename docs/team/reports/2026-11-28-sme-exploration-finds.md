@@ -18,7 +18,7 @@ None beyond the task brief. All four areas (a to d) answered.
   - **E.** One summary table (safe, label, do not show). **F.** The ill-structured question framed with three options. **G.** Sources.
 - What opened: science.nasa.gov (Perseverance, Curiosity, MER, InSight, Pathfinder, Phoenix, Viking 1, Mars facts), the NASA 2018 terraforming release, and Wikipedia text for about 19 articles. **Not opened:** mars.nasa.gov (no connection), jpl.nasa.gov, the Nature paper and LASP copy, phys.org, svs.gsfc.nasa.gov. Wikipedia throttled (HTTP 429) for Sojourner, Mars 3, Zhurong, Curiosity, Viking 1, Perchlorate, MOXIE; those facts use NASA pages or search summaries and are tagged.
 - Verified this session (opened-NASA): Cheyava Falls "potential biosignatures ... require more data" (Nature, Sept 2025); Perseverance 45.22 km on 11 Oct 2026; Curiosity 899 kg; Viking 1 lander 978 kg, ended 11 Nov 1982; Spirit 7.7 km; Opportunity 28.06 mi, last contact 10 Jun 2018; Phoenix found ice and perchlorate; the terraforming numbers above.
-- Not committed or pushed yet by me; the coordinating session or the commit step below handles git.
+- Committed and pushed (only these two files).
 
 ## 2. Decisions needed
 
