@@ -137,6 +137,7 @@ public final class PlanetManager {
         }
       }
       d.setDirty();
+      net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new GateLatchedEvent(level, id));
     }
   }
 

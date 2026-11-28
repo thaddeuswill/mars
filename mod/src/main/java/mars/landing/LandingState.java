@@ -67,6 +67,19 @@ public final class LandingState {
     return l;
   }
 
+  /** Overwrite this state with a saved one (loading into a record that already exists). */
+  public void restore(Saved s) {
+    LandingState l = fromSaved(s);
+    phase = l.phase;
+    System.arraycopy(l.steps, 0, steps, 0, steps.length);
+    activeSinceTick = l.activeSinceTick;
+    briefingShown = l.briefingShown;
+    wentOut = l.wentOut;
+    outerDoorUsed = l.outerDoorUsed;
+    ovenPlaced = l.ovenPlaced;
+    patchedByMe = l.patchedByMe;
+  }
+
   public Phase phase() {
     return phase;
   }

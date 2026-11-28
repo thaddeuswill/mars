@@ -37,12 +37,15 @@ public final class MarsMod {
     NeoForge.EVENT_BUS.addListener(mars.planets.GrantEvents::onChangedDimension);
     NeoForge.EVENT_BUS.addListener(mars.planets.GrantEvents::onLoggedIn);
     modBus.addListener(mars.monitor.MonitorNetwork::register);
+    NeoForge.EVENT_BUS.register(mars.story.landing.LandingService.class);
+    NeoForge.EVENT_BUS.addListener(mars.story.landing.LandingCommands::register);
     NeoForge.EVENT_BUS.addListener(mars.sky.SkySync::onChangedDimension);
     NeoForge.EVENT_BUS.addListener(mars.sky.SkySync::onLoggedIn);
     NeoForge.EVENT_BUS.addListener(mars.sky.SkySync::onRespawn);
     // Client-only sky and fog (slice 6). The class is only touched on a client.
     if (FMLEnvironment.dist.isClient()) {
       mars.client.sky.SkyClient.init(modBus);
+      mars.client.LandingClient.init(modBus);
     }
     // Dev-only screenshot helper: client only, and only with -Dmars.devtools=true.
     if (FMLEnvironment.dist.isClient() && Boolean.getBoolean("mars.devtools")) {

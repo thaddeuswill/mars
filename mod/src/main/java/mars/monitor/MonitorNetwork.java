@@ -21,5 +21,23 @@ public final class MonitorNetwork {
         mars.sky.SkyPayload.TYPE,
         mars.sky.SkyPayload.CODEC,
         (payload, context) -> mars.client.ClientPayloadHandlers.onSky(payload, context));
+    // Landing panel, intro screen and the player's choice (slice 4). Same lambda rule.
+    registrar.playToClient(
+        mars.story.landing.LandingPayloads.Panel.TYPE,
+        mars.story.landing.LandingPayloads.Panel.CODEC,
+        (payload, context) -> mars.client.ClientPayloadHandlers.onLandingPanel(payload, context));
+    registrar.playToClient(
+        mars.story.landing.LandingPayloads.Intro.TYPE,
+        mars.story.landing.LandingPayloads.Intro.CODEC,
+        (payload, context) -> mars.client.ClientPayloadHandlers.onLandingIntro(payload, context));
+    registrar.playToServer(
+        mars.story.landing.LandingPayloads.Choice.TYPE,
+        mars.story.landing.LandingPayloads.Choice.CODEC,
+        (payload, context) ->
+            context.enqueueWork(
+                () ->
+                    mars.story.landing.LandingService.onChoice(
+                        (net.minecraft.server.level.ServerPlayer) context.player(),
+                        payload.start())));
   }
 }

@@ -33,6 +33,10 @@ public class HullDoorBlock extends DoorBlock {
       BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
     InteractionResult r = super.useWithoutItem(state, level, pos, player, hit);
     DomeEvents.changed(level, pos);
+    if (r.consumesAction() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+      net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+          new HullDoorUsedEvent(sp, pos, level.getBlockState(pos).getValue(DoorBlock.OPEN)));
+    }
     return r;
   }
 

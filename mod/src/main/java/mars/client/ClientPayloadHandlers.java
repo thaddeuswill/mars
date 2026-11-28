@@ -18,4 +18,14 @@ public final class ClientPayloadHandlers {
   public static void onSky(mars.sky.SkyPayload payload, IPayloadContext context) {
     mars.client.sky.SkyClient.setTarget(payload.pressureKpa());
   }
+
+  public static void onLandingPanel(
+      mars.story.landing.LandingPayloads.Panel payload, IPayloadContext context) {
+    LandingClient.setPanel(payload);
+  }
+
+  public static void onLandingIntro(
+      mars.story.landing.LandingPayloads.Intro payload, IPayloadContext context) {
+    Minecraft.getInstance().setScreen(new LandingIntroScreen());
+  }
 }

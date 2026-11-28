@@ -19,6 +19,11 @@ public final class StarterDomeData extends SavedData {
     return origin;
   }
 
+  /** Test seam: record where a test placed the dome (the real path records it in ensure). */
+  public void setOriginForTest(BlockPos origin) {
+    setOrigin(origin);
+  }
+
   void setOrigin(BlockPos origin) {
     this.origin = origin;
     setDirty();

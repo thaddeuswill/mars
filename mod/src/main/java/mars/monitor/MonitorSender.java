@@ -23,7 +23,11 @@ public final class MonitorSender {
       player.displayClientMessage(Component.translatable("monitor.no_planet"), true);
       return false;
     }
+    if (mars.story.landing.LandingService.wantsOutsideAir(player)) {
+      view = view.withPinnedOutsideAir();
+    }
     PacketDistributor.sendToPlayer(player, new MonitorPayload(view));
+    mars.story.landing.LandingService.onMonitorOpened(player);
     return true;
   }
 }

@@ -54,6 +54,13 @@ public final class JournalState {
     seen.addAll(unlocked);
   }
 
+  public void restore(List<String> unlockedIds, List<String> seenIds) {
+    unlocked.clear();
+    seen.clear();
+    unlocked.addAll(unlockedIds);
+    seen.addAll(seenIds);
+  }
+
   public void clear() {
     unlocked.clear();
     seen.clear();

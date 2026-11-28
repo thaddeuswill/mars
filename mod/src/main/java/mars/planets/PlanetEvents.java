@@ -11,6 +11,7 @@ public final class PlanetEvents {
 
   public static void addReloadListeners(AddReloadListenerEvent event) {
     event.addListener(new IndexDefinitions.Listener());
+    event.addListener(new mars.story.StoryDefinitions.Listener());
   }
 
   /**
