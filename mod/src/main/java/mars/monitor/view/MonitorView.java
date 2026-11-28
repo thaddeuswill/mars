@@ -407,14 +407,25 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     rows.add(levelling ? pressureRow.withNote("monitor.estimate.levelling_off") : pressureRow);
 
     double t = snap.get(Ids.TEMPERATURE);
+    double warmSources = model.netRatePerSol(Ids.TEMPERATURE);
+    double leak = model.lossRatePerSol(Ids.TEMPERATURE);
+    double tempNet = warmSources + leak;
+    List<CauseLine> tempCauses = machineCauses(sim, Ids.TEMPERATURE, "°C");
+    // "Warming fades without emitters": shown only when the leak is the larger effect (the planet
+    // is cooling) and its rate does not round to 0.00.
+    if (-leak > warmSources && Math.round(Math.abs(leak) * 100) != 0) {
+      tempCauses.add(
+          new CauseLine(
+              "monitor.cause.temperature_leak", 0, Fmt.signed(leak, 2) + "\u00a0°C", null, -1));
+    }
     rows.add(
         new Row(
             "monitor.row.temperature",
             Fmt.withUnit(t, 0, "°C"),
             null,
-            trend(model.netRatePerSol(Ids.TEMPERATURE)),
-            rate(model.netRatePerSol(Ids.TEMPERATURE), "°C"),
-            machineCauses(sim, Ids.TEMPERATURE, "°C")));
+            trend(tempNet),
+            rate(tempNet, "°C"),
+            tempCauses));
 
     double boil = snap.get(Ids.BOILING_POINT);
     if (Double.isNaN(boil)) {

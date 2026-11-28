@@ -4,10 +4,10 @@
   "contributions": [
     {
       "parameter": "mars:temperature",
-      "ratePerSol": 0.25
+      "ratePerSol": 0.275
     }
   ],
-  "source": "docs/design/phase2-machine-rates.md section 1 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): super-greenhouse emitter +0.25 C per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. The 0.25 C/sol rate is INVENTED game balance. Game invention, not real (no real machine; docs/design/machine-priorities.md row 4). Draw 3 power units (kWh) per sol is INVENTED. Open gap: there is NO cooling term yet (the 'emitter wear' event of balance-sheet section 4 needs one; the SME is sizing it, see docs/science/temperature-loss-term.md and phase2-machine-rates.md C-2), so temperature only rises. Unlocked by Phase 2 begins (Game Designer decision: the emitter serves the Thaw and Phase 3 begins gates, it is not unlocked by them).",
+  "source": "docs/design/phase2-machine-rates.md section 1 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): super-greenhouse emitter +0.275 C per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. The 0.275 C/sol rate is INVENTED game balance (retuned from 0.25 when the temperature loss term was added, docs/science/temperature-loss-term.md, so 0 C stays near sol 52). Game invention, not real (no real machine; docs/design/machine-priorities.md row 4). Draw 3 power units (kWh) per sol is INVENTED. The temperature loss term (parameters/temperature.json) now cools a warmed planet slowly. Open gap: the 'emitter wear' drift event of balance-sheet section 4 still has its old -1 C/sol size; the Game Designer rewrites it. Unlocked by Phase 2 begins (Game Designer decision: the emitter serves the Thaw and Phase 3 begins gates, it is not unlocked by them).",
   "power": {
     "drawPerSol": 3.0
   }

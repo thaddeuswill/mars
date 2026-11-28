@@ -837,14 +837,24 @@ public final class PlanetGameTests {
     ok &=
         SelfTest.check(
             "phase2.machines_contribute_powered",
-            "with power each adds its data rate: processor +0.15 kPa/sol, emitter +0.25 C/sol",
+            "with power each adds its data rate: processor +0.15 kPa/sol, emitter +0.275 C/sol",
             "kPa/sol="
                 + sim.model().netRatePerSol(Ids.PRESSURE)
                 + " C/sol="
                 + sim.model().netRatePerSol(Ids.TEMPERATURE),
             Math.abs(sim.model().netRatePerSol(Ids.PRESSURE) - 0.15) < TOL
-                && Math.abs(sim.model().netRatePerSol(Ids.TEMPERATURE) - 0.25) < TOL);
+                && Math.abs(sim.model().netRatePerSol(Ids.TEMPERATURE) - 0.275) < TOL);
     unpower(data, 2);
+    sim.model().set(Ids.TEMPERATURE, 5.0);
+    double leak = sim.model().lossRatePerSol(Ids.TEMPERATURE);
+    sim.model().set(Ids.TEMPERATURE, -60.0);
+    ok &=
+        SelfTest.check(
+            "phase2.temperature_loss_from_data",
+            "the loaded temperature file leaks 0.4 percent of the distance above -60 C per sol:"
+                + " -0.26 C/sol at 5 C",
+            "leak=" + leak,
+            Math.abs(leak + 0.26) < 1e-9);
     return ok;
   }
 

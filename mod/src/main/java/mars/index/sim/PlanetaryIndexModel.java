@@ -101,6 +101,16 @@ public final class PlanetaryIndexModel {
         values.merge(h.parameter, h.rate * machineScale, Double::sum);
       }
     }
+    double naturalLoss = pace.rateMultiplier() * dtSols;
+    for (ParameterDef d : defs.values()) {
+      if (d.loss() != null) {
+        double v = values.get(d.id());
+        double above = v - d.loss().baseline();
+        if (above > 0) {
+          values.put(d.id(), v - Math.min(above, d.loss().perSol() * naturalLoss * above));
+        }
+      }
+    }
     Coupling.Values view =
         new Coupling.Values() {
           @Override
@@ -163,6 +173,19 @@ public final class PlanetaryIndexModel {
     List<Cause> out = new ArrayList<>();
     bySource.forEach((src, acc) -> out.add(new Cause(src, (int) acc[0], acc[1])));
     return out;
+  }
+
+  /**
+   * The restoring loss of {@code parameter} right now, per sol, signed (0 or below), or 0 when it
+   * has none or sits at its baseline. Natural rate: scaled by {@code pace.rateMultiplier} only.
+   */
+  public double lossRatePerSol(ParameterId parameter) {
+    ParameterDef d = defs.get(parameter);
+    if (d == null || d.loss() == null) {
+      return 0;
+    }
+    double above = Math.max(0, values.get(parameter) - d.loss().baseline());
+    return -d.loss().perSol() * above * pace.rateMultiplier();
   }
 
   /** Sum of the cause rates for {@code parameter}, per sol. */

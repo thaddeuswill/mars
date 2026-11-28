@@ -6,5 +6,10 @@
   "start": -60,
   "min": -120,
   "max": 60,
-  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds."
+  "source": "Start values: docs/design/balance-sheet.md §1. Limits are invented clamps (physical sanity), not thresholds. Loss term (docs/science/temperature-loss-term.md, SME recommendation accepted by the owner 2026-11-28): each sol the temperature falls by 0.4 percent of its distance above -60 C (a restoring leak toward the starting temperature: heat always leaks to space). perSol 0.004 is INVENTED game balance; the direction is real physics, the real timescale is much longer and NOT VERIFIED. It is a natural rate (scales with pace like the polar frost); thresholds never scale.",
+  "loss": {
+    "form": "restore",
+    "baseline": -60,
+    "perSol": 0.004
+  }
 }

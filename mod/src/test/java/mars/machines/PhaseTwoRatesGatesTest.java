@@ -77,11 +77,13 @@ class PhaseTwoRatesGatesTest {
       s.addMachine(EMIT, 10L + i);
     }
     s.model().advanceSols(4);
-    assertEquals(-60.0 + 3 * 0.25 * 4, s.model().current(Ids.TEMPERATURE), 0.01);
+    double rate = TestSims.defs().get(EMIT).contributions().get(0).ratePerSol();
+    // The loss term takes back about 0.03 C of this in 4 sols.
+    assertEquals(-60.0 + 3 * rate * 4, s.model().current(Ids.TEMPERATURE), 0.06);
     PlanetSim one = sim(Pace.STANDARD, 3);
     one.addMachine(EMIT, 10L);
     one.model().advanceSols(4);
-    assertEquals(-60.0 + 0.25 * 4, one.model().current(Ids.TEMPERATURE), 0.01);
+    assertEquals(-60.0 + rate * 4, one.model().current(Ids.TEMPERATURE), 0.06);
   }
 
   @Test
@@ -102,7 +104,10 @@ class PhaseTwoRatesGatesTest {
     s.model().advanceTicks(100);
     double share = Math.min(1.0, s.power().supplyPerSol() / s.power().demandPerSol());
     assertTrue(share < 1.0);
-    assertEquals(0.75 * share, s.model().netRatePerSol(Ids.TEMPERATURE), 1e-9);
+    assertEquals(
+        3 * TestSims.defs().get(EMIT).contributions().get(0).ratePerSol() * share,
+        s.model().netRatePerSol(Ids.TEMPERATURE),
+        1e-9);
   }
 
   @Test
@@ -145,7 +150,7 @@ class PhaseTwoRatesGatesTest {
       s.model().set(Ids.TEMPERATURE, -20.01);
       s.model().advanceTicks(200);
       assertFalse(s.gates().isLatched("mars:thaw"), pace + " below the threshold");
-      s.model().set(Ids.TEMPERATURE, -20.0);
+      s.model().set(Ids.TEMPERATURE, -19.99); // the loss term takes a hair per step
       s.model().advanceTicks(200);
       assertTrue(s.gates().isLatched("mars:thaw"), pace + " at the threshold, no hold");
       s.model().set(Ids.TEMPERATURE, -60.0);
@@ -158,7 +163,7 @@ class PhaseTwoRatesGatesTest {
   void phaseThreeNeedsBothPressureAndWarmth() throws Exception {
     for (Pace pace : new Pace[] {Pace.STANDARD, Pace.classroom(4)}) {
       PlanetSim s = sim(pace, 0);
-      s.model().set(Ids.PRESSURE, 30.0);
+      s.model().set(Ids.PRESSURE, 30.05);
       s.model().set(Ids.TEMPERATURE, -0.01);
       s.model().advanceTicks(200);
       assertFalse(s.gates().isLatched("mars:phase_3_begins"));
@@ -166,8 +171,8 @@ class PhaseTwoRatesGatesTest {
       s.model().set(Ids.TEMPERATURE, 1.0);
       s.model().advanceTicks(200);
       assertFalse(s.gates().isLatched("mars:phase_3_begins"));
-      s.model().set(Ids.PRESSURE, 30.0);
-      s.model().set(Ids.TEMPERATURE, 0.0);
+      s.model().set(Ids.PRESSURE, 30.05);
+      s.model().set(Ids.TEMPERATURE, 0.05);
       s.model().advanceTicks(200);
       assertTrue(s.gates().isLatched("mars:phase_3_begins"));
     }
@@ -175,25 +180,33 @@ class PhaseTwoRatesGatesTest {
 
   private static void breathableAir(PlanetSim s) {
     s.model().set(Ids.PRESSURE, 75.0);
-    s.model().set(Ids.TEMPERATURE, 5.0);
+    s.model().set(Ids.TEMPERATURE, 6.0);
     s.model().set(O2F, 21.5);
     s.model().set(CO2, 0.4);
     s.model().set(HYDRO, 30.0);
     s.model().set(BIOMASS, 1500.0);
   }
 
+  /** Keep the air as set (an emitter would hold the warmth) while the clock runs. */
+  private static void holdAir(PlanetSim s, double sols) {
+    for (double done = 0; done < sols - 1e-9; done += 0.1) {
+      breathableAir(s);
+      s.model().advanceSols(Math.min(0.1, sols - done));
+    }
+  }
+
   @Test
   void breathableHoldsSevenSolsAndEquilibriumFourteen() throws Exception {
     PlanetSim s = sim(Pace.STANDARD, 0);
     breathableAir(s);
-    s.model().advanceSols(6.8);
+    holdAir(s, 6.8);
     assertFalse(s.gates().isLatched("mars:breathable"));
-    s.model().advanceSols(0.4);
+    holdAir(s, 0.4);
     assertTrue(s.gates().isLatched("mars:breathable"));
     assertFalse(s.gates().isLatched("mars:equilibrium"));
-    s.model().advanceSols(6.4);
+    holdAir(s, 6.4);
     assertFalse(s.gates().isLatched("mars:equilibrium"));
-    s.model().advanceSols(0.4);
+    holdAir(s, 0.4);
     assertTrue(s.gates().isLatched("mars:equilibrium"));
   }
 

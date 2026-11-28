@@ -60,12 +60,26 @@ public final class IndexData {
   }
 
   public static ParameterDef parameter(JsonObject o, String file) {
+    ParameterDef.Loss loss = null;
+    JsonElement l = o.get("loss");
+    if (l != null) {
+      if (!l.isJsonObject()) {
+        throw new IllegalArgumentException(file + ": 'loss' must be an object");
+      }
+      JsonObject lo = l.getAsJsonObject();
+      String form = str(lo, "form", file);
+      if (!form.equals("restore")) {
+        throw new IllegalArgumentException(file + ": unknown loss form '" + form + "'");
+      }
+      loss = new ParameterDef.Loss(num(lo, "baseline", file), num(lo, "perSol", file));
+    }
     return new ParameterDef(
         ParameterId.of(str(o, "id", file)),
         str(o, "unit", file),
         num(o, "start", file),
         num(o, "min", file),
-        num(o, "max", file));
+        num(o, "max", file),
+        loss);
   }
 
   public static BoilingPoint boilingPoint(JsonObject o, String file) {

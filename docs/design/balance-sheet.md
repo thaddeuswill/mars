@@ -196,9 +196,10 @@ Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tool
 | Machine | Effect at full power | Draw (units/sol) | Tag |
 |---|---|---|---|
 | Atmospheric processor | pressure +0.15 kPa/sol each | 3 | **INVENTED** rate; draw existing INVENTED. Twice the Outgasser's kPa per power unit |
-| Super-greenhouse emitter | temperature +0.25 C/sol each | 3 | **INVENTED** |
+| Super-greenhouse emitter | temperature +0.275 C/sol each (was 0.25 before the loss term) | 3 | **INVENTED** |
+| Temperature loss term (all temperature) | temperature falls 0.4 % of its distance above -60 C per sol (k = 0.004/sol); about -0.24 C/sol at 0 C | none | **INVENTED** k; direction real physics; SME `docs/science/temperature-loss-term.md` |
 
-Standard build (INVENTED): processors 1 / 2 / 3 at Phase 2 sols 0 / 14 / 34; emitters 2 / 3 / 4 / 5 / 6 at sols 0 / 6 / 14 / 24 / 34. Result (calc, scratch model, not run in game): 30 kPa at sol 44, Thaw at sol 40, 0 C at sol 52. Emitters set the Phase 2 clock. Power peaks at 45 units/sol (10 panels, 3 batteries) in Phase 2 and 54 (12 panels) in Phase 3 with 10 processors. Tune: processor and emitter rate first, then panel supply.
+Standard build (INVENTED): processors 1 / 2 / 3 at Phase 2 sols 0 / 14 / 34; emitters 2 / 3 / 4 / 5 / 6 at sols 0 / 6 / 14 / 24 / 34. Result (calc, scratch model, not run in game; with the loss term and 0.275 per emitter): 30 kPa at sol 44, Thaw at about sol 38, 0 C at about sol 52. Emitters set the Phase 2 clock. Power peaks at 45 units/sol (10 panels, 3 batteries) in Phase 2 and 54 (12 panels) in Phase 3 with 10 processors. Tune: processor and emitter rate first, then panel supply.
 
 ---
 
