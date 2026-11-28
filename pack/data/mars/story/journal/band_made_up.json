@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "mars:journal/band_made_up",
+  "order": 40,
+  "unlock": { "gate": "mars:dome_stable" },
+  "title_key": "journal.band.made_up.title",
+  "text_key": "journal.band.made_up",
+  "goal_ids": ["D2", "A1"],
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/messages/phase-1.md section 12 (journal.band.made_up; game design, no science claim). Trigger in the doc is the first banded block in the inventory; as built it unlocks at Dome stable (the only journal trigger in code). Title text is invented. Band spec: docs/art/made-up-band-spec.md"
+}

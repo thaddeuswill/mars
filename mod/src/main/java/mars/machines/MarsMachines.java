@@ -80,7 +80,7 @@ public final class MarsMachines {
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
       BLOCKS.register("battery", () -> new BatteryBlock(machineProperties(), BATTERY));
   public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
-      machine("oxygen_maker", OXYGEN_MAKER, MachineBlock::new);
+      BLOCKS.register("oxygen_maker", () -> new MachineBlock(machineProperties(), OXYGEN_MAKER));
   public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =
       machine("planetary_monitor", MONITOR, PlanetaryMonitorBlock::new);
 
@@ -157,6 +157,7 @@ public final class MarsMachines {
                 tooltip.add(Component.translatable("monitor.oven.tooltip"));
               }
             });
+    ITEMS.register("oxygen_maker", () -> tipped(OXYGEN_MAKER_BLOCK));
     ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
     ITEMS.register("atmospheric_processor", () -> tipped(ATMOSPHERIC_PROCESSOR));
     ITEMS.register("super_greenhouse_emitter", () -> tipped(SUPER_GREENHOUSE_EMITTER));

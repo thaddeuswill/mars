@@ -48,4 +48,43 @@ class LangWordingTest {
       assertTrue(words <= 20, k + " has " + words + " words (CR-T7c, invented budget)");
     }
   }
+
+  @Test
+  void noBannedTermsOrBlameWording() throws Exception {
+    java.util.regex.Pattern banned =
+        java.util.regex.Pattern.compile(
+            "\\b(learners?|lessons?|objectives?|quiz(zes)?|tests?)\\b",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
+    java.util.regex.Pattern blame =
+        java.util.regex.Pattern.compile(
+            "you failed|wrong!|you forgot", java.util.regex.Pattern.CASE_INSENSITIVE);
+    for (Map.Entry<String, com.google.gson.JsonElement> e : lang().entrySet()) {
+      String v = e.getValue().getAsString();
+      assertTrue(!banned.matcher(v).find(), e.getKey() + " uses a banned word (CR-T1)");
+      assertTrue(!blame.matcher(v).find(), e.getKey() + " blames the player (CR-T5)");
+    }
+  }
+
+  @Test
+  void gateNamesAndRowLabelsAreShort() throws Exception {
+    // The label column is 86 px; about 24 characters (CR-T7c, invented budget).
+    for (Map.Entry<String, com.google.gson.JsonElement> e : lang().entrySet()) {
+      String k = e.getKey();
+      if (k.startsWith("gate.mars.") || k.startsWith("monitor.row.")) {
+        int n = e.getValue().getAsString().length();
+        assertTrue(n <= 24, k + " is " + n + " characters (CR-T7c)");
+      }
+    }
+  }
+
+  @Test
+  void gateDetailLinesAreShort() throws Exception {
+    // They share a line with the goals count and the percent (MonitorLayout.fitDetail).
+    for (Map.Entry<String, com.google.gson.JsonElement> e : lang().entrySet()) {
+      if (e.getKey().startsWith("monitor.gate.")) {
+        int n = e.getValue().getAsString().length();
+        assertTrue(n <= 28, e.getKey() + " is " + n + " characters; it must fit beside the count");
+      }
+    }
+  }
 }

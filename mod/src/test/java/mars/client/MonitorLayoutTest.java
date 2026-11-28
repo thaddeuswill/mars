@@ -263,4 +263,112 @@ class MonitorLayoutTest {
       assertTrue(total <= H3 - 2 * MonitorStyle.MARGIN, e.getKey());
     }
   }
+
+  // ---- Text width (the goal row's detail line and the cause lines) ----
+
+  /**
+   * An estimate of Minecraft's default font width in GUI px (glyph plus one px gap): narrow letters
+   * and punctuation are listed, everything else is 6. The game uses the real font; this keeps the
+   * test pure. Slightly generous for '(' and ')'.
+   */
+  static int width(String s) {
+    int w = 0;
+    for (char c : s.toCharArray()) {
+      w +=
+          switch (c) {
+            case 'i', '.', ',', ':', ';', '!', '\'', '|', '\u00b7' -> 2;
+            case 'l' -> 3;
+            case 't', 'I', ' ', '[', ']' -> 4;
+            case 'f', 'k', '(', ')', '*', '"', '<', '>' -> 5;
+            case '\u00a0' -> 4;
+            case '\u2026' -> 6;
+            default -> 6;
+          };
+    }
+    return w;
+  }
+
+  private static com.google.gson.JsonObject lang() throws Exception {
+    return com.google.gson.JsonParser.parseString(
+            java.nio.file.Files.readString(
+                mars.TestData.pack().resolve("assets/mars/lang/en_us.json"),
+                java.nio.charset.StandardCharsets.UTF_8))
+        .getAsJsonObject();
+  }
+
+  private static final int CONTENT_W = MonitorStyle.PANEL_W - 2 * MonitorStyle.PAD;
+  private static final String COUNT = "Goals 3 / 6";
+
+  @Test
+  void everyGateDetailTextFitsLeftOfThePercent() throws Exception {
+    for (var e : lang().entrySet()) {
+      String k = e.getKey();
+      if (!k.startsWith("monitor.gate.")) {
+        continue;
+      }
+      String text = e.getValue().getAsString();
+      for (String pct : new String[] {"7%", "87%", "100%"}) {
+        String drawn =
+            MonitorLayout.fitDetail(text, COUNT, CONTENT_W, width(pct), MonitorLayoutTest::width);
+        assertTrue(
+            width(drawn) + MonitorLayout.DETAIL_GAP + width(pct) <= CONTENT_W,
+            k + " at " + pct + " draws '" + drawn + "' into the percent");
+      }
+    }
+  }
+
+  @Test
+  void theNewGateDetailTextsKeepTheGoalsCountVisible() throws Exception {
+    // The longest new text and the widest percent: nothing is dropped, so the layout holds.
+    for (String k :
+        new String[] {
+          "monitor.gate.thaw.progress",
+          "monitor.gate.phase_3_begins.progress",
+          "monitor.gate.breathable.progress",
+          "monitor.gate.breathable.waiting",
+          "monitor.gate.equilibrium.progress",
+          "monitor.gate.equilibrium.waiting"
+        }) {
+      String text = lang().get(k).getAsString();
+      String drawn =
+          MonitorLayout.fitDetail(text, COUNT, CONTENT_W, width("100%"), MonitorLayoutTest::width);
+      assertEquals(text + " \u00b7 " + COUNT, drawn, k + " lost the goals count");
+    }
+  }
+
+  @Test
+  void aTooLongDetailDropsTheCountThenIsCutWithAnEllipsis() {
+    String longText =
+        "A very long line that cannot possibly fit beside a percent on a narrow panel";
+    String drawn =
+        MonitorLayout.fitDetail(longText, COUNT, CONTENT_W, width("87%"), MonitorLayoutTest::width);
+    assertTrue(drawn.endsWith("\u2026"));
+    assertTrue(width(drawn) + MonitorLayout.DETAIL_GAP + width("87%") <= CONTENT_W);
+    assertEquals(
+        "Short",
+        MonitorLayout.fitDetail("Short", "", CONTENT_W, width("87%"), MonitorLayoutTest::width));
+  }
+
+  @Test
+  void theTemperatureLeakCauseLineFitsThePanel() throws Exception {
+    // Drawn at CAUSE_INDENT + 10 (the shape), full width to the right edge.
+    String text = lang().get("monitor.cause.temperature_leak").getAsString();
+    int start = MonitorStyle.CAUSE_INDENT + 10;
+    assertTrue(start + width(text) <= CONTENT_W, text + " is " + width(text) + " px wide");
+  }
+
+  @Test
+  void theLongestMachineCauseLineFitsWithItsReason() throws Exception {
+    // Left: name and count; right: the reason. They must not meet.
+    for (String block :
+        new String[] {"block.mars.atmospheric_processor", "block.mars.super_greenhouse_emitter"}) {
+      String name = lang().get(block).getAsString() + " \u00d72";
+      for (String reason : new String[] {"monitor.cause.needs_power", "monitor.cause.low_power"}) {
+        String why = lang().get(reason).getAsString();
+        assertTrue(
+            MonitorStyle.CAUSE_INDENT + width(name) + 8 + width(why) <= CONTENT_W,
+            name + " and '" + why + "' collide");
+      }
+    }
+  }
 }

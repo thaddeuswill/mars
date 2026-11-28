@@ -88,9 +88,9 @@ public final class LearningGameTests {
         SelfTest.check(
             "journal.latch_pointer_and_list",
             "one pointer line per online player for the gate (not per entry), and /mars journal"
-                + " lists 3 entries",
+                + " lists 4 entries",
             "players=" + players + " pointerLines=" + sent + " listed=" + listed,
-            sent == players && players >= 1 && listed == 3);
+            sent == players && players >= 1 && listed == 4);
 
     // A second player who arrives after the latch is told once, and not again.
     long before2 = LearningService.pointerLinesSent();
@@ -106,10 +106,10 @@ public final class LearningGameTests {
     ok &=
         SelfTest.check(
             "journal.late_joiner_once",
-            "a late joiner gets exactly one pointer line, none after opening an entry; 2 of 3 stay"
+            "a late joiner gets exactly one pointer line, none after opening an entry; 3 of 4 stay"
                 + " unread",
             "joinLines=" + joinLines + " unread=" + unread,
-            joinLines == 1 && LearningService.pointerLinesSent() - before2 == 1 && unread == 2);
+            joinLines == 1 && LearningService.pointerLinesSent() - before2 == 1 && unread == 3);
 
     // A rising pressure so the goal row has a time estimate.
     data.sim().addMachine("mars:solar_panel", 9_200_000_000_000L);

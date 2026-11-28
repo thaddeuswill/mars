@@ -352,11 +352,16 @@ public final class MonitorScreen extends Screen {
       int leftEnd = x0 + PAD;
       if (row.detailKey() != null) {
         Component d = Component.translatable(row.detailKey(), row.detailArgs().toArray());
-        if (row.goal() != null && row.detailRight() != null) {
+        if (row.goal() != null) {
+          Component count =
+              row.detailRight() == null
+                  ? Component.empty()
+                  : Component.translatable(row.detailRightKey(), row.detailRight());
+          int pctW = font.width(row.goal().percent());
           d =
-              d.copy()
-                  .append(Component.literal(" \u00b7 "))
-                  .append(Component.translatable(row.detailRightKey(), row.detailRight()));
+              Component.literal(
+                  MonitorLayout.fitDetail(
+                      d.getString(), count.getString(), right - (x0 + PAD), pctW, font::width));
         }
         g.drawString(font, d, x0 + PAD, y, LABEL, false);
         leftEnd = x0 + PAD + font.width(d);

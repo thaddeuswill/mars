@@ -57,6 +57,39 @@ final class MonitorLayout {
     return new MonitorView(view.sols(), List.copyOf(rows), view.history());
   }
 
+  /** Gap between the left detail text and the percent (and the estimate), GUI px. */
+  static final int DETAIL_GAP = 8;
+
+  /**
+   * The left text of a goal row's detail line. It is "detail · count" when that fits left of the
+   * percent; otherwise the goals count goes first (the lowest priority), and if the detail alone is
+   * still too wide it is cut with an ellipsis. So the text can never run under the percent.
+   *
+   * @param width text width in GUI px (the font in the game, an estimate in tests)
+   * @param available px between the left edge of the text and the right edge of the panel content
+   * @param percentWidth px of the percent text on the right
+   */
+  static String fitDetail(
+      String detail,
+      String count,
+      int available,
+      int percentWidth,
+      java.util.function.ToIntFunction<String> width) {
+    int budget = available - percentWidth - DETAIL_GAP;
+    String both = count == null || count.isEmpty() ? detail : detail + " \u00b7 " + count;
+    if (width.applyAsInt(both) <= budget) {
+      return both;
+    }
+    if (width.applyAsInt(detail) <= budget) {
+      return detail;
+    }
+    String cut = detail;
+    while (cut.length() > 1 && width.applyAsInt(cut + "\u2026") > budget) {
+      cut = cut.substring(0, cut.length() - 1).stripTrailing();
+    }
+    return cut + "\u2026";
+  }
+
   /** Height of everything except the plot block, in GUI px. */
   static int fixedHeight(MonitorView view) {
     int h = HEADER_H + 1;
