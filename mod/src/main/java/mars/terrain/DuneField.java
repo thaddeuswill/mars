@@ -38,6 +38,26 @@ final class DuneField {
     return Hash.smoothstep((n - p.thresholdLow()) / (p.thresholdHigh() - p.thresholdLow()));
   }
 
+  /** Slowly varying phase offset in wave cycles; its gradient is about variation / wavelength. */
+  private double phaseOffset(double x, double z) {
+    double s = p.variationScale();
+    double n = Hash.valueNoise(seed, 0xD013, x / s, z / s) * 2.0 - 1.0;
+    return n * p.wavelengthVariation() * s / p.wavelength() * 0.5;
+  }
+
+  /**
+   * True on the lighter stripe of a sand ripple (about 3 m apart on Mars; Curiosity, VERIFIED in
+   * docs/science/mars-surface-materials.md row 5). Stripes run across the wind, with a slow wobble.
+   */
+  boolean ripple(double x, double z) {
+    double u = x * windX + z * windZ;
+    double v = -x * windZ + z * windX;
+    double wobble = (Hash.valueNoise(seed, 0xD014, v / 23.0, 0.5) - 0.5) * 2.0 * p.ripplePeriod();
+    double t = (u + wobble) / p.ripplePeriod();
+    double frac = t - Math.floor(t);
+    return frac * p.ripplePeriod() < p.rippleWidth();
+  }
+
   /** Dune height in blocks at (x, z), at least 0. */
   double height(double x, double z) {
     double m = mask(x, z);
@@ -51,7 +71,10 @@ final class DuneField {
     // One wavelength for the whole planet: a position-dependent one shears the crests, because
     // the phase u / wavelength is large far from the origin.
     double wavelength = p.wavelength();
-    double phase = (u + warp) / wavelength;
+    // Local wavelength varies by up to about +-wavelengthVariation: add a smooth, slowly changing
+    // phase offset g(x, z). The crest lines stay continuous (they follow g), so they bend but do
+    // not shear; the gradient of g is bounded by the variation and variationScale.
+    double phase = (u + warp) / wavelength + phaseOffset(x, z);
     double band = Math.floor(phase);
     double frac = phase - band;
     double saw =

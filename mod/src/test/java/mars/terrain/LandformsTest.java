@@ -35,7 +35,8 @@ class LandformsTest {
         p.fixed(),
         p.dunes(),
         p.surface(),
-        p.rocks());
+        p.rocks(),
+        p.buttes());
   }
 
   @Test
@@ -292,5 +293,115 @@ class LandformsTest {
     double msPerChunk = (System.nanoTime() - t0) / 1e6 / 256.0;
     System.out.println("landforms cost: " + msPerChunk + " ms per chunk (sink " + sink + ")");
     assertTrue(msPerChunk < 20.0, "ms per chunk " + msPerChunk);
+  }
+
+  /** Positions (metres along the wind line) of slip-face drops on one line through a dune field. */
+  private static List<Double> slipFaces(Landforms f, double ox, double oz, double wx, double wz) {
+    List<Double> out = new ArrayList<>();
+    double prev = f.duneHeight(ox, oz);
+    boolean inFall = false;
+    for (int s = 1; s < 600; s++) {
+      double h = f.duneHeight(ox + wx * s * 0.5, oz + wz * s * 0.5);
+      boolean falling = prev > 1.0 && (h - prev) / 0.5 < -0.2;
+      if (falling && !inFall) {
+        out.add(s * 0.5);
+      }
+      inFall = falling;
+      prev = h;
+    }
+    return out;
+  }
+
+  @Test
+  void duneWavelengthVariesButCrestsAreNotSheared() {
+    TerrainParams p = load();
+    Landforms f = new Landforms(p, SEED);
+    double a = Math.toRadians(p.windTowardDeg());
+    double wx = Math.sin(a);
+    double wz = -Math.cos(a);
+    double lambda = p.dunes().wavelength();
+    double min = 1e9;
+    double max = 0;
+    int n = 0;
+    int[] at = findDuneField(f);
+    for (int line = 0; line < 60; line++) {
+      double ox = at[0] - wz * (line - 30) * 6 - wx * 150;
+      double oz = at[1] + wx * (line - 30) * 6 - wz * 150;
+      List<Double> faces = slipFaces(f, ox, oz, wx, wz);
+      for (int i = 1; i < faces.size(); i++) {
+        double d = faces.get(i) - faces.get(i - 1);
+        if (d > 0.5 * lambda && d < 1.5 * lambda) {
+          min = Math.min(min, d);
+          max = Math.max(max, d);
+          n++;
+        }
+      }
+    }
+    assertTrue(n > 50, "enough crest pairs: " + n);
+    assertTrue(max / min > 1.25, "wavelength varies: " + min + " to " + max);
+    assertTrue(min > 0.6 * lambda && max < 1.5 * lambda, "stays near the base: " + min + " " + max);
+    // Shear: a crest on one line and the nearest crest on the line 6 blocks to the side stay close.
+    double worst = 0;
+    for (int line = 0; line < 50; line++) {
+      double ox = at[0] - wz * (line - 25) * 6 - wx * 150;
+      double oz = at[1] + wx * (line - 25) * 6 - wz * 150;
+      List<Double> here = slipFaces(f, ox, oz, wx, wz);
+      List<Double> next = slipFaces(f, ox - wz * 6, oz + wx * 6, wx, wz);
+      for (double c : here) {
+        double best = 1e9;
+        for (double d : next) {
+          best = Math.min(best, Math.abs(d - c));
+        }
+        if (best < 1e8 && best < 0.5 * lambda) {
+          worst = Math.max(worst, best);
+        }
+      }
+    }
+    assertTrue(worst < 6.0, "crest moves less than 6 blocks over 6 blocks sideways: " + worst);
+  }
+
+  @Test
+  void ripplesAreThreeBlocksApartAcrossTheWind() {
+    TerrainParams p = load();
+    Landforms f = new Landforms(p, SEED);
+    double a = Math.toRadians(p.windTowardDeg());
+    double wx = Math.sin(a);
+    double wz = -Math.cos(a);
+    int stripes = 0;
+    int total = 0;
+    for (int s = 0; s < 3000; s++) {
+      boolean on = f.ripple(500 + wx * s * 0.25, 500 + wz * s * 0.25);
+      total++;
+      if (on) {
+        stripes++;
+      }
+    }
+    double share = stripes / (double) total;
+    assertTrue(Math.abs(share - 1.0 / 3.0) < 0.06, "light stripe share " + share);
+  }
+
+  @Test
+  void buttesAreCutAwayNearThePadAndLeftAloneFarOut() {
+    TerrainParams p = load();
+    Landforms f = new Landforms(p, SEED);
+    int padY = p.pad().heightY();
+    int butteY = padY + 30;
+    // 100 blocks out: the butte is cut to the cap.
+    Landforms.Column near = f.at(100, 0, butteY);
+    assertTrue(near.targetY() <= padY + p.buttes().capAbove() + 1, "near " + near.targetY());
+    assertEquals(Landforms.Kind.CUT, near.kind());
+    // 300 blocks out (past the outer radius): untouched, no CUT.
+    Landforms.Column far = f.at(300, 0, butteY);
+    assertEquals(butteY, far.targetY());
+    assertTrue(far.kind() != Landforms.Kind.CUT);
+    // Plains relief at or under the cap is never touched.
+    assertEquals(padY + 5, f.at(100, 0, padY + 5).targetY());
+    // The cut is smooth: moving outward never lowers the butte height.
+    int last = -1;
+    for (int r = 100; r <= 300; r += 5) {
+      int y = f.at(r, 0, butteY).targetY();
+      assertTrue(y >= last, "monotone at r=" + r);
+      last = y;
+    }
   }
 }

@@ -13,6 +13,8 @@ public final class Landforms {
     RIM,
     EJECTA,
     DUNE,
+    DUNE_RIPPLE,
+    CUT,
     PAD
   }
 
@@ -71,6 +73,28 @@ public final class Landforms {
     return sum;
   }
 
+  /** Butte keep-out weight: 1 inside the inner radius, 0 beyond the outer radius. */
+  public double buttesCutWeight(double x, double z) {
+    TerrainParams.Buttes b = params.buttes();
+    double r = Math.sqrt(x * x + z * z);
+    return 1.0 - Hash.smoothstep((r - b.innerRadius()) / (b.outerRadius() - b.innerRadius()));
+  }
+
+  /** Natural height after the butte keep-out (for tests): tall ground is cut toward the cap. */
+  public double cutNatural(double x, double z, int naturalY) {
+    double cap = params.pad().heightY() + params.buttes().capAbove();
+    double w = buttesCutWeight(x, z);
+    if (w <= 0 || naturalY <= cap) {
+      return naturalY;
+    }
+    return cap + (naturalY - cap) * (1.0 - w);
+  }
+
+  /** True on the light stripe of a sand ripple at (x, z). */
+  public boolean ripple(double x, double z) {
+    return dunes.ripple(x, z);
+  }
+
   /** Dune height at (x, z), in blocks (for tests and tools). */
   public double duneHeight(double x, double z) {
     return dunes.height(x, z);
@@ -82,8 +106,10 @@ public final class Landforms {
     if (w >= 1.0) {
       return new Column(params.pad().heightY(), Kind.PAD, 0.0, 0.0);
     }
+    int original = naturalY;
+    naturalY = (int) Math.round(cutNatural(x, z, naturalY));
     double crater = 0;
-    Kind kind = Kind.NONE;
+    Kind kind = original > naturalY ? Kind.CUT : Kind.NONE;
     double rock = 0;
     double ejecta = 0;
     for (Crater c : craters.near(x, z)) {
@@ -103,7 +129,7 @@ public final class Landforms {
         if (e > 0) {
           ejecta = Math.max(ejecta, e);
           rock = Math.max(rock, params.rocks().ejectaChance() * e);
-          if (kind == Kind.NONE) {
+          if (kind == Kind.NONE || kind == Kind.CUT) {
             kind = Kind.EJECTA;
           }
         }
@@ -114,8 +140,8 @@ public final class Landforms {
       double d = dunes.height(x, z);
       if (d > 0.5) {
         delta += d;
-        if (kind == Kind.NONE || kind == Kind.EJECTA) {
-          kind = Kind.DUNE;
+        if (kind == Kind.NONE || kind == Kind.EJECTA || kind == Kind.CUT) {
+          kind = dunes.ripple(x, z) ? Kind.DUNE_RIPPLE : Kind.DUNE;
           rock = 0;
           ejecta = 0;
         }

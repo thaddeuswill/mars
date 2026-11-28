@@ -184,7 +184,13 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
 
   /** Block states resolved from the planet data once per data load. */
   private record ShapeBlocks(
-      BlockState rim, BlockState ejecta, BlockState duneSand, List<BlockState> rocks) {}
+      BlockState rim,
+      BlockState ejecta,
+      BlockState duneSand,
+      BlockState ripple,
+      BlockState cutTop,
+      BlockState cutUnder,
+      List<BlockState> rocks) {}
 
   private record Shaper(TerrainParams params, long seed, Landforms landforms, ShapeBlocks blocks) {}
 
@@ -200,6 +206,9 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
                   block(params.surface().rimBlock()),
                   block(params.surface().ejectaBlock()),
                   block(params.surface().duneSand()),
+                  block(params.surface().rippleBlock()),
+                  block(params.buttes().cutTop()),
+                  block(params.buttes().cutUnder()),
                   params.rocks().blocks().stream().map(MarsChunkGenerator::block).toList()));
       shaper = s;
     }
@@ -226,7 +235,8 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
         Landforms.Column col = lf.at(x, z, topY);
         int target = Math.max(minY + 6, Math.min(maxY - 8, col.targetY()));
         BlockState top = chunk.getBlockState(pos.set(x, topY, z));
-        boolean dune = col.kind() == Landforms.Kind.DUNE;
+        boolean dune =
+            col.kind() == Landforms.Kind.DUNE || col.kind() == Landforms.Kind.DUNE_RIPPLE;
         if (target > topY) {
           BlockState fill = dune ? s.blocks.duneSand : top;
           for (int y = topY + 1; y <= target; y++) {
@@ -246,10 +256,18 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
               chunk.setBlockState(pos.set(x, target, z), s.blocks.ejecta, false);
             }
           }
-          case DUNE -> {
+          case DUNE, DUNE_RIPPLE -> {
             for (int y = target; y > target - 2; y--) {
               chunk.setBlockState(pos.set(x, y, z), s.blocks.duneSand, false);
             }
+            if (col.kind() == Landforms.Kind.DUNE_RIPPLE) {
+              chunk.setBlockState(pos.set(x, target, z), s.blocks.ripple, false);
+            }
+          }
+          case CUT -> {
+            // A butte cut away near the dome pad: leave plain dust over duricrust, as elsewhere.
+            chunk.setBlockState(pos.set(x, target, z), s.blocks.cutTop, false);
+            chunk.setBlockState(pos.set(x, target - 1, z), s.blocks.cutUnder, false);
           }
           default -> {}
         }

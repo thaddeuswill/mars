@@ -12,3 +12,17 @@ The four W1 terrain blocks ship with **placeholder** 16 x 16 textures, drawn fro
 | Ground Ice | `ground_ice.png` | pale blue-white with cracks | White to pale ice, dusty (water ice under regolith) |
 
 Block shapes are plain cubes (`cube_all`). Names are in `pack/assets/mars/lang/en_us.json`.
+
+## W2 Tier A placeholders (added with the W2 surface blocks)
+
+Five more blocks, same rules: 16 x 16, drawn by `tools/art-preview/gen_w2_placeholder_textures.py`, plain cubes, replace the PNG with the same file name. SME source: `docs/science/mars-surface-materials.md`.
+
+| Block | File | Placeholder look | Final art should show | Where it generates |
+|---|---|---|---|---|
+| Duricrust | `pack/assets/mars/textures/block/duricrust.png` | pale tan-brown crust | Pale tan-brown cemented crust that breaks into plates (NTRS 20050203800, VERIFIED) | Layer 2 blocks under the dust (surface rule `planet.json`); cut-away butte ground |
+| Vesicular Basalt | `vesicular_basalt.png` | dark grey with holes | Dark grey to brown, rounded gas holes, not red, not glowing (Spirit, Gusev, VERIFIED) | Rare patches on dust plains, patches on rocky flats, boulders |
+| Spherule Sand | `spherule_sand.png` | dark sand with grey dots | Dark sand with grey spheres; "blueberries" are grey (Opportunity, VERIFIED). Drops 1 to 3 iron nuggets (INVENTED yield) | Disk patches on dust plains and rocky flats |
+| Impact Breccia | `impact_breccia.png` | grey-brown angular chips | Angular fragments in a dark matrix (NTRS 20170006943, VERIFIED) | Crater rims and ejecta (data `rim_block`, `ejecta_block`) |
+| Gypsum Vein | `gypsum_vein.png` | white streaks in grey | Bright white veins in darker rock (Curiosity, VERIFIED) | Ore veins in terracotta layers of `highland_mesa` |
+
+Not a block: `co2_frost` is deferred (see `docs/team/reports/2026-11-27-technical-lead-w2-blocks-atmosphere.md`). Sand ripples use `minecraft:red_sand` stripes on `basaltic_sand`, pebble patches use `minecraft:gravel` (no new art).

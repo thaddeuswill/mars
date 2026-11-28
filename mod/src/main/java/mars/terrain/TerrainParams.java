@@ -19,7 +19,8 @@ public record TerrainParams(
     List<FixedCrater> fixed,
     Dunes dunes,
     Surface surface,
-    Rocks rocks) {
+    Rocks rocks,
+    Buttes buttes) {
 
   /** Flat starting pad. */
   public record Pad(int flatRadius, int rampRadius, int heightY) {}
@@ -62,7 +63,19 @@ public record TerrainParams(
       double heightMax,
       double windwardFraction,
       double crestWarp,
-      double crestLength) {}
+      double crestLength,
+      double wavelengthVariation,
+      double variationScale,
+      double ripplePeriod,
+      double rippleWidth) {}
+
+  /**
+   * Keep-out for tall landforms (buttes) around the dome pad: inside {@code innerRadius} ground
+   * above {@code padHeight + capAbove} is cut to the cap, fading to untouched at {@code
+   * outerRadius}.
+   */
+  public record Buttes(
+      double innerRadius, double outerRadius, double capAbove, String cutTop, String cutUnder) {}
 
   /** Top-block overrides (block ids as text). */
   public record Surface(
@@ -70,7 +83,8 @@ public record TerrainParams(
       double rimBlockMinDiameter,
       String ejectaBlock,
       double ejectaBlockChance,
-      String duneSand) {}
+      String duneSand,
+      String rippleBlock) {}
 
   /** One-block rocks on crater rims and ejecta. */
   public record Rocks(double rimChance, double ejectaChance, List<String> blocks) {}
@@ -86,6 +100,7 @@ public record TerrainParams(
     JsonObject dunes = obj(t, "dunes", source + " terrain");
     JsonObject surface = obj(t, "surface", source + " terrain");
     JsonObject rocks = obj(t, "rocks", source + " terrain");
+    JsonObject buttes = obj(t, "buttes", source + " terrain");
     String cs = source + " craters.shape";
     String cl = source + " craters.large";
     String sd = source + " dunes";
@@ -146,17 +161,28 @@ public record TerrainParams(
                 num(dunes, "height_max", sd),
                 num(dunes, "windward_fraction", sd),
                 num(dunes, "crest_warp", sd),
-                num(dunes, "crest_length", sd)),
+                num(dunes, "crest_length", sd),
+                num(dunes, "wavelength_variation", sd),
+                num(dunes, "variation_scale", sd),
+                num(dunes, "ripple_period", sd),
+                num(dunes, "ripple_width", sd)),
             new Surface(
                 str(surface, "rim_block", source + " surface"),
                 num(surface, "rim_block_min_diameter", source + " surface"),
                 str(surface, "ejecta_block", source + " surface"),
                 num(surface, "ejecta_block_chance", source + " surface"),
-                str(surface, "dune_sand", source + " surface")),
+                str(surface, "dune_sand", source + " surface"),
+                str(surface, "ripple_block", source + " surface")),
             new Rocks(
                 num(rocks, "rim_chance", source + " rocks"),
                 num(rocks, "ejecta_chance", source + " rocks"),
-                List.copyOf(rockBlocks)));
+                List.copyOf(rockBlocks)),
+            new Buttes(
+                num(buttes, "keep_out_inner", source + " buttes"),
+                num(buttes, "keep_out_outer", source + " buttes"),
+                num(buttes, "cap_above_pad", source + " buttes"),
+                str(buttes, "cut_top", source + " buttes"),
+                str(buttes, "cut_under", source + " buttes")));
     p.validate(source);
     return p;
   }
@@ -180,6 +206,15 @@ public record TerrainParams(
         dunes.windwardFraction > 0.5 && dunes.windwardFraction < 1, source, "windward_fraction");
     require(dunes.thresholdHigh > dunes.thresholdLow, source, "dune thresholds");
     require(!rocks.blocks.isEmpty(), source, "rock blocks");
+    require(
+        dunes.wavelengthVariation >= 0 && dunes.wavelengthVariation < 0.5,
+        source,
+        "wavelength_variation");
+    require(dunes.variationScale > 0, source, "variation_scale");
+    require(dunes.ripplePeriod >= 2 && dunes.rippleWidth > 0, source, "ripples");
+    require(
+        dunes.rippleWidth < dunes.ripplePeriod, source, "ripple_width must be below ripple_period");
+    require(buttes.outerRadius > buttes.innerRadius && buttes.innerRadius > 0, source, "buttes");
   }
 
   private static void require(boolean ok, String source, String what) {

@@ -138,6 +138,32 @@ public final class TerrainGameTests {
             checked + " columns checked, " + bad + " wrong",
             bad == 0 && checked > 3000);
 
+    // W2: buttes are kept away from the pad. Inside the keep-out radius no column stands higher
+    // than pad + cap + 12 (dunes and rims can add a few blocks; natural buttes are 14 to 27).
+    int keep = (int) rig.params.buttes().innerRadius() - 5;
+    int naturalTall = 0;
+    int builtTall = 0;
+    int limit = padY + (int) rig.params.buttes().capAbove() + 12;
+    for (int x = -keep; x <= keep; x++) {
+      for (int z = -keep; z <= keep; z++) {
+        if (x * x + z * z <= keep * keep) {
+          if (nat[x + R * 16][z + R * 16] > limit) {
+            naturalTall++;
+          }
+          if (fin[x + R * 16][z + R * 16] > limit) {
+            builtTall++;
+          }
+        }
+      }
+    }
+    SelfTest.info("terrain.butte_keepout", naturalTall + " natural tall columns inside " + keep);
+    ok &=
+        SelfTest.check(
+            "terrain.butte_keepout",
+            "no column above y " + limit + " within " + keep + " blocks of the pad",
+            builtTall + " tall columns built (" + naturalTall + " before the cut)",
+            builtTall == 0);
+
     // Plains relief: 64 x 64 windows with no mesa or ridge on the natural ground. The budget is
     // 3 to 6 blocks (owner decision 2026-11-27).
     int w = 64;
@@ -455,12 +481,26 @@ public final class TerrainGameTests {
     int size = 64;
     for (int x = ox; x < ox + size; x++) {
       for (int z = oz; z < oz + size; z++) {
+        // Clear whatever the test world had above the scratch ground (it varies by world).
+        for (int y = 78; y <= 130; y++) {
+          level.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
+        }
         for (int y = 30; y <= 77; y++) {
           Block b = y <= 72 ? Blocks.STONE : y <= 76 ? Blocks.RED_SANDSTONE : Blocks.RED_SAND;
           level.setBlock(new BlockPos(x, y, z), b.defaultBlockState(), 2);
         }
       }
     }
+    SelfTest.info(
+        "terrain.scratch_heights",
+        "live "
+            + level.getHeight(
+                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, ox + 16, oz + 16)
+            + " wg "
+            + level.getHeight(
+                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG,
+                ox + 16,
+                oz + 16));
     var gen = level.getChunkSource().getGenerator();
     var placed = server.registryAccess().registryOrThrow(Registries.PLACED_FEATURE);
     Map<String, Integer> counts = new HashMap<>();
@@ -475,7 +515,8 @@ public final class TerrainGameTests {
             "boulders_rocky",
             "vesicular_patch",
             "vesicular_patch_rare",
-            "spherule_patch")) {
+            "spherule_patch",
+            "pebble_patch")) {
       var real = placed.get(ResourceLocation.fromNamespaceAndPath("mars", name));
       // The biome filter would test the GameTest world's biome, not Mars: leave it out here.
       var pf =
@@ -484,6 +525,18 @@ public final class TerrainGameTests {
               real.placement().stream()
                   .filter(
                       m -> !(m instanceof net.minecraft.world.level.levelgen.placement.BiomeFilter))
+                  // The _WG heightmap of a live chunk is not updated by setBlock, so the result
+                  // depended on how the test chunk was first generated (flaky). Use the live one.
+                  .map(
+                      m ->
+                          m
+                                  instanceof
+                                  net.minecraft.world.level.levelgen.placement.HeightmapPlacement
+                              ? net.minecraft.world.level.levelgen.placement.HeightmapPlacement
+                                  .onHeightmap(
+                                      net.minecraft.world.level.levelgen.Heightmap.Types
+                                          .WORLD_SURFACE)
+                              : m)
                   .toList());
       var rand = net.minecraft.util.RandomSource.create(77);
       for (int i = 0; i < 120; i++) {
@@ -551,7 +604,7 @@ public final class TerrainGameTests {
               }
             }
           }
-          if (k.startsWith("mars:")) {
+          if (k.startsWith("mars:") || k.equals("minecraft:gravel")) {
             counts.merge(k, 1, Integer::sum);
           }
         }
@@ -583,11 +636,12 @@ public final class TerrainGameTests {
     ok &=
         SelfTest.check(
             "terrain.w2_surface_patches",
-            "vesicular basalt and spherule sand patches on the surface, gypsum veins in layered rock",
+            "vesicular basalt, spherule sand and gravel pebble patches on the surface, gypsum veins in layered rock",
             counts.toString(),
             counts.getOrDefault("mars:vesicular_basalt", 0) > 0
                 && counts.getOrDefault("mars:spherule_sand", 0) > 0
-                && counts.getOrDefault("gypsum_scratch", 0) > 0);
+                && counts.getOrDefault("gypsum_scratch", 0) > 0
+                && counts.getOrDefault("minecraft:gravel", 0) > 0);
     ok &=
         SelfTest.check(
             "terrain.boulders",
