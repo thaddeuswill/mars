@@ -48,7 +48,9 @@ public record LandingConfig(int hintAfterSeconds, boolean suitsBuilt, boolean du
   }
 
   private static int integer(JsonObject o, String key, String file) {
-    if (!o.has(key) || !o.get(key).isJsonPrimitive() || !o.get(key).getAsJsonPrimitive().isNumber()) {
+    if (!o.has(key)
+        || !o.get(key).isJsonPrimitive()
+        || !o.get(key).getAsJsonPrimitive().isNumber()) {
       throw new IllegalStateException(file + ": missing number \"" + key + "\"");
     }
     int v = o.get(key).getAsInt();
@@ -59,7 +61,9 @@ public record LandingConfig(int hintAfterSeconds, boolean suitsBuilt, boolean du
   }
 
   private static boolean bool(JsonObject o, String key, String file) {
-    if (!o.has(key) || !o.get(key).isJsonPrimitive() || !o.get(key).getAsJsonPrimitive().isBoolean()) {
+    if (!o.has(key)
+        || !o.get(key).isJsonPrimitive()
+        || !o.get(key).getAsJsonPrimitive().isBoolean()) {
       throw new IllegalStateException(file + ": missing true/false \"" + key + "\"");
     }
     return o.get(key).getAsBoolean();
