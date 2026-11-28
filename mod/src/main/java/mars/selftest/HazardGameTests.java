@@ -14,9 +14,11 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 /**
  * Slice 5 with real blocks: panel dust over time (step A), the brush (B), and the dust storm (D).
- * Each test starts from a fresh planet ({@code resetForSelfTest}) and uses simulation time directly
- * ({@code advanceSols}), so the checks do not wait for real minutes; the planet tick's own sync
- * ({@code syncPanels}) is called by hand where a test needs the block to follow at once.
+ * Each test is in its own batch (tests in one batch run at the same time and would reset each
+ * other's planet) and starts from a fresh planet ({@code resetForSelfTest}) and uses simulation
+ * time directly ({@code advanceSols}), so the checks do not wait for real minutes; the planet
+ * tick's own sync ({@code syncPanels}) is called by hand where a test needs the block to follow at
+ * once.
  */
 @GameTestHolder("mars")
 @PrefixGameTestTemplate(false)
@@ -33,12 +35,26 @@ public final class HazardGameTests {
     }
   }
 
+  static int countFillers(ServerLevel level, BlockPos abs) {
+    int fillers = 0;
+    for (int dx = -1; dx <= 1; dx++) {
+      for (int dz = -1; dz <= 1; dz++) {
+        if ((dx != 0 || dz != 0)
+            && level.getBlockState(abs.offset(dx, 0, dz)).getBlock()
+                instanceof mars.machines.SolarPanelCanopyBlock) {
+          fillers++;
+        }
+      }
+    }
+    return fillers;
+  }
+
   static int stage(ServerLevel level, BlockPos abs) {
     return level.getBlockState(abs).getValue(SolarPanelBlock.DUST_STAGE);
   }
 
   /** A real panel dusts by itself, the block follows, the grid sees it, the fillers stay. */
-  @GameTest(template = "empty", batch = "mars_hazard_a")
+  @GameTest(template = "empty", batch = "mars_hazard_a1")
   public static void panelDustsByItself(GameTestHelper h) {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.resetForSelfTest(level);
@@ -52,18 +68,10 @@ public final class HazardGameTests {
             "a new real panel is stage 0 and makes the full 5 units",
             "stage=" + stage(level, abs) + " supply=" + sim.power().supplyPerSol(),
             stage(level, abs) == 0 && Math.abs(sim.power().supplyPerSol() - 5.0) < TOL);
+    System.out.println("fillers before time: " + countFillers(level, abs));
     sim.model().advanceSols(6.1);
     PlanetManager.syncPanels(level, data);
-    int fillers = 0;
-    for (int dx = -1; dx <= 1; dx++) {
-      for (int dz = -1; dz <= 1; dz++) {
-        if ((dx != 0 || dz != 0)
-            && level.getBlockState(abs.offset(dx, 0, dz)).getBlock()
-                instanceof mars.machines.SolarPanelCanopyBlock) {
-          fillers++;
-        }
-      }
-    }
+    int fillers = countFillers(level, abs);
     ok &=
         SelfTest.check(
             "dust.block_follows_time",
@@ -112,7 +120,7 @@ public final class HazardGameTests {
   }
 
   /** A panel in an unloaded chunk keeps dusting; its block is brought up to date on load. */
-  @GameTest(template = "empty", batch = "mars_hazard_a", timeoutTicks = 800)
+  @GameTest(template = "empty", batch = "mars_hazard_a2", timeoutTicks = 800)
   public static void panelInUnloadedChunkDustsAndSyncsOnLoad(GameTestHelper h) {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.resetForSelfTest(level);
