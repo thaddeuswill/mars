@@ -68,7 +68,10 @@ class PhaseTwoMachinesTest {
         assertTrue(
             item.startsWith("minecraft:")
                 || item.equals("mars:heater_coil")
-                || item.equals("mars:filter_cartridge"),
+                || item.equals("mars:filter_cartridge")
+                || item.equals("mars:machine_core")
+                || item.equals("mars:pump_bearing")
+                || item.equals("mars:sorbent_bed"),
             n + ": vanilla-first recipe");
       }
     }

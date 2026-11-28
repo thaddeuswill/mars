@@ -2,25 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IHI",
+    "ICI",
     "IPI",
-    "UFI"
+    " I "
   ],
   "key": {
     "I": {
       "item": "minecraft:iron_ingot"
     },
-    "H": {
-      "item": "minecraft:hopper"
+    "C": {
+      "item": "mars:machine_core"
     },
     "P": {
       "item": "mars:pump_bearing"
-    },
-    "U": {
-      "item": "minecraft:bucket"
-    },
-    "F": {
-      "item": "minecraft:furnace"
     }
   },
   "result": {

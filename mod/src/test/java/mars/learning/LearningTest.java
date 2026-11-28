@@ -105,14 +105,15 @@ class LearningTest {
             "mars:journal/airmix",
             "mars:journal/on_earth",
             "mars:journal/sky_stylized",
-            "mars:journal/band_made_up"),
+            "mars:journal/band_made_up",
+            "mars:journal/sent_from_orbit"),
         ids);
     // Lock-in: nothing a later pressure drop does can un-latch it, so the list is unchanged.
     assertEquals(ids.size(), Journal.unlocked(defs, gates::isLatched).size());
     // Two players, and a player who joins later, get the same answer from the same latched set.
     assertEquals(
         Journal.unlocked(defs, gates::isLatched), Journal.unlocked(defs, gates::isLatched));
-    assertEquals(4, Journal.unlockedBy(defs, DOME).size());
+    assertEquals(5, Journal.unlockedBy(defs, DOME).size());
     assertTrue(Journal.unlockedBy(defs, "mars:phase_2_begins").isEmpty());
   }
 
@@ -121,13 +122,13 @@ class LearningTest {
     List<JournalEntryDef> defs = entries();
     PlayerSettings s = new PlayerSettings();
     UUID p = UUID.randomUUID();
-    assertEquals(4, s.unannounced(p, defs).size());
+    assertEquals(5, s.unannounced(p, defs).size());
     s.markNotified(p, s.unannounced(p, defs));
     assertTrue(s.unannounced(p, defs).isEmpty(), "second login: no second pointer");
-    assertEquals(4, s.unread(p, defs).size(), "still unread until opened");
+    assertEquals(5, s.unread(p, defs).size(), "still unread until opened");
     s.markSeen(p, defs.get(0).id());
-    assertEquals(3, s.unread(p, defs).size());
-    assertEquals(4, s.unannounced(UUID.randomUUID(), defs).size(), "another player is still told");
+    assertEquals(4, s.unread(p, defs).size());
+    assertEquals(5, s.unannounced(UUID.randomUUID(), defs).size(), "another player is still told");
   }
 
   // ---- 4. Journal content
@@ -152,7 +153,7 @@ class LearningTest {
         assertTrue(words <= 45, key + " has " + words + " words, budget is 45");
       }
     }
-    assertEquals(4, ids.size());
+    assertEquals(5, ids.size());
   }
 
   @Test

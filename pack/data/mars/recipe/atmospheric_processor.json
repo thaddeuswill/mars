@@ -3,24 +3,18 @@
   "category": "misc",
   "pattern": [
     "IFI",
-    "CHC",
-    "IRI"
+    " C ",
+    "I I"
   ],
   "key": {
     "I": {
       "item": "minecraft:iron_ingot"
     },
-    "C": {
-      "item": "minecraft:copper_ingot"
-    },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
     "F": {
       "item": "mars:filter_cartridge"
+    },
+    "C": {
+      "item": "mars:machine_core"
     }
   },
   "result": {

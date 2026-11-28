@@ -1,0 +1,22 @@
+# Technical Lead, BACKLOG #49 orbital resupply: the chat supply lines and the inventory after a drop, (mars:planet_1). Real generated pad (top block y 80, pad y 81).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+wait 200
+cmd /clear @s
+cmd /mars gate latch dome_stable
+cmd /mars gate latch phase_2_begins
+wait 40
+shot resupply_chat_phase2
+inventory
+wait 20
+shot resupply_inventory_phase2
+close
+cmd /mars gate latch thaw
+wait 30
+shot resupply_chat_thaw
+quit

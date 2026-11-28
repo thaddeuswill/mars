@@ -140,7 +140,27 @@ public final class MarsMachines {
    * cache}. Ids are the contract. All amounts and recipes are INVENTED.
    */
   public static final List<String> PART_IDS =
-      List.of("heater_coil", "filter_cartridge", "pump_bearing", "sorbent_bed");
+      List.of(
+          "heater_coil",
+          "filter_cartridge",
+          "pump_bearing",
+          "sorbent_bed",
+          "machine_core",
+          "resin_pack",
+          "signal_board",
+          "activation_cell");
+
+  /**
+   * Parts that only orbit sends (docs/design/recipe-inputs-ruling.md): no craft recipe, handed out
+   * by gate caches and resupply requests. Game design.
+   */
+  public static final List<String> DROP_ONLY_IDS =
+      List.of("sorbent_bed", "machine_core", "resin_pack", "signal_board", "activation_cell");
+
+  /** The craftable fallback: right-click calls the Relay Orbiter. */
+  public static final net.neoforged.neoforge.registries.DeferredItem<Item> RESUPPLY_REQUEST =
+      ITEMS.<Item>register(
+          "resupply_request", () -> new ResupplyRequestItem(new Item.Properties()));
 
   public static final List<net.neoforged.neoforge.registries.DeferredItem<Item>> PARTS =
       new java.util.ArrayList<>();
@@ -179,6 +199,7 @@ public final class MarsMachines {
                           output.accept(b.get());
                         }
                         PARTS.forEach(p -> output.accept(p.get()));
+                        output.accept(RESUPPLY_REQUEST.get());
                       })
                   .build());
 

@@ -3,7 +3,7 @@
   "category": "misc",
   "pattern": [
     "ISI",
-    "IHI",
+    "ICI",
     "ISI"
   ],
   "key": {
@@ -13,8 +13,8 @@
     "S": {
       "item": "mars:sorbent_bed"
     },
-    "H": {
-      "item": "minecraft:hopper"
+    "C": {
+      "item": "mars:machine_core"
     }
   },
   "result": {

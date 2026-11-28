@@ -57,7 +57,12 @@ public final class CacheData extends SavedData {
       }
       saved.put(gate, players);
     }
-    return new CacheData(new CacheLedger(saved));
+    Map<UUID, Double> requests = new java.util.LinkedHashMap<>();
+    CompoundTag req = tag.getCompound("requests");
+    for (String key : req.getAllKeys()) {
+      requests.put(UUID.fromString(key), req.getDouble(key));
+    }
+    return new CacheData(new CacheLedger(saved, requests));
   }
 
   @Override
@@ -72,6 +77,11 @@ public final class CacheData extends SavedData {
               gates.put(gate, list);
             });
     tag.put("claims", gates);
+    // Schema 2: the last resupply request time (planet sols) per player. Schema 1 saves have none.
+    CompoundTag req = new CompoundTag();
+    ledger.requestsToMap().forEach((u, sols) -> req.putDouble(u.toString(), sols));
+    tag.put("requests", req);
+    tag.putInt("schema", 2);
     return tag;
   }
 }

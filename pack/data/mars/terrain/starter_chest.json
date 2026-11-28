@@ -1,9 +1,25 @@
 {
   "schema": 1,
-  "about": "The starter chest: handed out once per world, to the first player on a planet, in the same grant as the two starting Ovens (mars.planets.GrantEvents). Conductor ores are rare, so machines are not blocked while the player looks for them (SME docs/science/mars-conductor-and-carbonate-ores.md section 3). Amounts are INVENTED game balance: 4 copper ingots and 10 redstone dust (Game Designer docs/design/seed-kit-recipes.md section 3: 10 covers the gate path and the greenhouse lamps), and a seed packet (6 wheat seeds, 2 sugar cane, 2 sweet berries, 2 potatoes) so the greenhouse and the seed kits can start with no grass on Mars. Labelled 'from the lander' in the chest name.",
+  "about": "The starter chest: handed out once per world, to the first player on a planet, in the same grant as the two starting Ovens (mars.planets.GrantEvents). Conductor ores are rare, so machines are not blocked while the player looks for them (SME docs/science/mars-conductor-and-carbonate-ores.md section 3). Amounts are INVENTED game balance: 4 copper ingots and 10 redstone dust (Game Designer docs/design/seed-kit-recipes.md section 3: 10 covers the gate path and the greenhouse lamps), and a seed packet (6 wheat seeds, 2 sugar cane, 2 sweet berries, 2 potatoes) so the greenhouse and the seed kits can start with no grass on Mars. Labelled 'from the lander' in the chest name. Orbital resupply (docs/design/recipe-inputs-ruling.md section 5 row 0, owner-accepted 2026-11-28): Lander stock adds 1 crafting table, 2 furnaces, 2 buckets and 16 coal (furnace fuel; Mars has no wood), so smelting and carrying water start at once. Counts INVENTED. Game design: the lander stock is a story device.",
   "name_key": "item.mars.starter_chest",
   "message_key": "grant.starter_chest",
   "items": [
+    {
+      "id": "minecraft:crafting_table",
+      "count": 1
+    },
+    {
+      "id": "minecraft:furnace",
+      "count": 2
+    },
+    {
+      "id": "minecraft:bucket",
+      "count": 2
+    },
+    {
+      "id": "minecraft:coal",
+      "count": 16
+    },
     {
       "id": "minecraft:copper_ingot",
       "count": 4

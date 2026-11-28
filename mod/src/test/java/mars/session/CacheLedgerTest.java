@@ -32,4 +32,24 @@ class CacheLedgerTest {
     assertEquals(
         1, l.toMap().get("mars:thaw").size(), "the saved copy is not changed by later claims");
   }
+
+  @Test
+  void aRequestPassesOnceEveryThreeSolsAndAnEarlyOneCostsNothing() {
+    CacheLedger l = new CacheLedger();
+    assertEquals(0.0, l.tryRequest(A, 10.0, 3.0), "first request: sent");
+    assertEquals(2.0, l.tryRequest(A, 11.0, 3.0), 1e-9, "1 sol later: 2 sols to wait");
+    assertEquals(0.5, l.tryRequest(A, 12.5, 3.0), 1e-9, "the early try did not restart the timer");
+    assertEquals(0.0, l.tryRequest(A, 13.0, 3.0), "3 sols after the first: sent again");
+    assertEquals(0.0, l.tryRequest(B, 13.0, 3.0), "the timer is per player");
+    assertEquals(0.0, l.tryRequest(A, 5.0, 3.0), "a clock that went back never blocks");
+  }
+
+  @Test
+  void requestTimesSurviveSavingAndLoading() {
+    CacheLedger l = new CacheLedger();
+    l.tryRequest(A, 4.0, 3.0);
+    CacheLedger back = new CacheLedger(l.toMap(), l.requestsToMap());
+    assertEquals(1.0, back.tryRequest(A, 6.0, 3.0), 1e-9);
+    assertEquals(0.0, new CacheLedger(l.toMap()).tryRequest(A, 4.5, 3.0), "schema 1 save: none");
+  }
 }

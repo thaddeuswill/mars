@@ -1040,6 +1040,7 @@ public final class PlanetGameTests {
     int copper = 0;
     int redstone = 0;
     int seeds = 0;
+    int[] lander = new int[4];
     for (net.minecraft.world.item.ItemStack st : first.getInventory().items) {
       if (st.is(net.minecraft.world.item.Items.CHEST)) {
         var contents = st.get(net.minecraft.core.component.DataComponents.CONTAINER);
@@ -1051,17 +1052,35 @@ public final class PlanetGameTests {
               redstone += in.getCount();
             } else if (in.is(net.minecraft.world.item.Items.WHEAT_SEEDS)) {
               seeds += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.CRAFTING_TABLE)) {
+              lander[0] += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.FURNACE)) {
+              lander[1] += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.BUCKET)) {
+              lander[2] += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.COAL)) {
+              lander[3] += in.getCount();
             }
           }
         }
       }
     }
+    String stock = lander[0] + "/" + lander[1] + "/" + lander[2] + "/" + lander[3];
     ok &=
         SelfTest.check(
             "grant.starter_chest",
-            "the first player also gets one chest holding 4 copper ingots, 10 redstone dust and the seed packet",
-            "chests=" + chests + " copper=" + copper + " redstone=" + redstone + " seeds=" + seeds,
-            chests == 1 && copper == 4 && redstone == 10 && seeds == 6);
+            "the first player also gets one chest holding 4 copper ingots, 10 redstone dust, the seed packet and the lander stock (1 table, 2 furnaces, 2 buckets, 16 coal)",
+            "chests="
+                + chests
+                + " copper="
+                + copper
+                + " redstone="
+                + redstone
+                + " seeds="
+                + seeds
+                + " stock="
+                + stock,
+            chests == 1 && copper == 4 && redstone == 10 && seeds == 6 && stock.equals("1/2/2/16"));
     boolean again = mars.planets.GrantEvents.maybeGrant(first);
     boolean g2 = mars.planets.GrantEvents.maybeGrant(second);
     ok &=

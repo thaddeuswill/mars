@@ -130,6 +130,11 @@ class ConductorOresContentTest {
     }
     assertEquals(
         List.of(
+            // Lander stock (docs/design/recipe-inputs-ruling.md section 5 row 0, INVENTED counts).
+            new StarterChest.Entry("minecraft:crafting_table", 1),
+            new StarterChest.Entry("minecraft:furnace", 2),
+            new StarterChest.Entry("minecraft:bucket", 2),
+            new StarterChest.Entry("minecraft:coal", 16),
             new StarterChest.Entry("minecraft:copper_ingot", 4),
             new StarterChest.Entry("minecraft:redstone", 10),
             // The seed packet (docs/design/seed-kit-recipes.md section 3, INVENTED amounts).

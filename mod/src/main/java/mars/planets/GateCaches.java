@@ -1,6 +1,14 @@
 package mars.planets;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import mars.gates.GateDef;
+import mars.session.Resupply;
+import mars.session.StarterChest;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -55,22 +63,103 @@ public final class GateCaches {
       return false;
     }
     data.setDirty();
+    List<StarterChest.Entry> drop = entries(def);
+    hand(player, drop, "grant.cache");
+    LOG.info("Gate cache {}: to {} (once per player per planet)", def.id(), name(player));
+    player.sendSystemMessage(Component.translatable(def.supplyNoteKey()));
+    return true;
+  }
+
+  /** A gate's drop as plain id and count lines. */
+  public static List<StarterChest.Entry> entries(GateDef def) {
+    List<StarterChest.Entry> out = new ArrayList<>();
     for (GateDef.CacheItem c : def.cache()) {
-      var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(c.item()));
+      out.add(new StarterChest.Entry(c.item(), c.count()));
+    }
+    return out;
+  }
+
+  /**
+   * The latest gate this planet has latched that has a drop (highest order), or null. This is the
+   * gate a resupply request re-sends half of.
+   */
+  public static GateDef latestDrop(mars.gates.GateTracker gates) {
+    GateDef best = null;
+    for (GateDef def : gates.defs()) {
+      if (!def.cache().isEmpty()
+          && gates.isLatched(def.id())
+          && (best == null || def.order() > best.order())) {
+        best = def;
+      }
+    }
+    return best;
+  }
+
+  /** What using a resupply request did. */
+  public enum RequestResult {
+    SENT,
+    WAIT,
+    NOTHING_YET
+  }
+
+  /**
+   * A resupply request (docs/design/recipe-inputs-ruling.md section 6): half of the latest gate's
+   * drop, rounded up, once per pass timer. Touches no Index parameter. On WAIT or NOTHING_YET the
+   * caller keeps the item. No cap, by design.
+   */
+  public static RequestResult request(ServerPlayer player) {
+    ServerLevel level = player.serverLevel();
+    if (!PlanetManager.isPlanet(level) || !mars.index.IndexDefinitions.isLoaded()) {
+      return RequestResult.NOTHING_YET;
+    }
+    var sim = PlanetManager.data(level).sim();
+    GateDef latest = latestDrop(sim.gates());
+    if (latest == null) {
+      player.sendSystemMessage(Component.translatable("grant.refill.none"));
+      return RequestResult.NOTHING_YET;
+    }
+    Resupply rule = rule(level);
+    CacheData data = CacheData.get(level);
+    double wait = data.ledger().tryRequest(player.getUUID(), sim.model().sols(), rule.passSols());
+    if (wait > 0.0) {
+      player.sendSystemMessage(
+          Component.translatable("grant.refill.wait", String.format(Locale.ROOT, "%.1f", wait)));
+      return RequestResult.WAIT;
+    }
+    data.setDirty();
+    hand(player, Resupply.refill(entries(latest)), "grant.refill");
+    player.sendSystemMessage(Component.translatable("grant.refill.note"));
+    LOG.info("Resupply request from {}: refill of {}", name(player), latest.id());
+    return RequestResult.SENT;
+  }
+
+  static Resupply rule(ServerLevel level) {
+    ResourceLocation file =
+        ResourceLocation.fromNamespaceAndPath("mars", "terrain/resupply_request.json");
+    var res = level.getServer().getResourceManager().getResource(file);
+    if (res.isPresent()) {
+      try (Reader r = new InputStreamReader(res.get().open(), StandardCharsets.UTF_8)) {
+        return Resupply.parse(r, file.toString());
+      } catch (Exception e) {
+        LOG.warn("Resupply rule unreadable, using 3 sols: {}", e.toString());
+      }
+    }
+    return new Resupply(3.0);
+  }
+
+  private static void hand(ServerPlayer player, List<StarterChest.Entry> items, String lineKey) {
+    for (StarterChest.Entry c : items) {
+      var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(c.id()));
       ItemStack stack = new ItemStack(item, c.count());
       Component name = stack.getHoverName();
       if (!player.getInventory().add(stack)) {
         player.drop(stack, false);
       }
-      player.sendSystemMessage(Component.translatable("grant.cache", c.count(), name));
-      LOG.info(
-          "Gate cache {}: {} x {} to {} (once per player per planet)",
-          def.id(),
-          c.count(),
-          c.item(),
-          player.getName().getString());
+      player.sendSystemMessage(Component.translatable(lineKey, c.count(), name));
     }
-    player.sendSystemMessage(Component.translatable(def.supplyNoteKey()));
-    return true;
+  }
+
+  private static String name(ServerPlayer p) {
+    return p.getName().getString();
   }
 }

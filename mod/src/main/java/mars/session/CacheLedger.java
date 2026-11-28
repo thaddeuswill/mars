@@ -15,11 +15,38 @@ import java.util.UUID;
  */
 public final class CacheLedger {
   private final Map<String, Set<UUID>> claimed = new LinkedHashMap<>();
+  private final Map<UUID, Double> lastRequest = new LinkedHashMap<>();
 
   public CacheLedger() {}
 
   public CacheLedger(Map<String, Set<UUID>> saved) {
     saved.forEach((gate, players) -> claimed.put(gate, new HashSet<>(players)));
+  }
+
+  public CacheLedger(Map<String, Set<UUID>> saved, Map<UUID, Double> requests) {
+    this(saved);
+    lastRequest.putAll(requests);
+  }
+
+  /**
+   * A resupply request (docs/design/recipe-inputs-ruling.md section 6): 0 and the time is recorded
+   * when this player may call the orbiter now, otherwise the sols still to wait (nothing recorded,
+   * so a request made in the cool-down costs nothing). {@code nowSols} is the planet's simulation
+   * clock, which a pause freezes. A recorded time in the future (a clock that went back) never
+   * blocks.
+   */
+  public double tryRequest(UUID player, double nowSols, double passSols) {
+    Double last = lastRequest.get(player);
+    if (last != null && last <= nowSols && nowSols - last < passSols) {
+      return last + passSols - nowSols;
+    }
+    lastRequest.put(player, nowSols);
+    return 0.0;
+  }
+
+  /** A copy of the last request times for saving. */
+  public Map<UUID, Double> requestsToMap() {
+    return new LinkedHashMap<>(lastRequest);
   }
 
   /**

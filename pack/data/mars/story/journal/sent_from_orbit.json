@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "mars:journal/sent_from_orbit",
+  "order": 41,
+  "unlock": { "gate": "mars:dome_stable" },
+  "title_key": "journal.sent_from_orbit.title",
+  "text_key": "journal.sent_from_orbit",
+  "goal_ids": ["A1", "B4"],
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/recipe-inputs-ruling.md section 8 (journal entry 'Sent from orbit'; game design, no science claim: the text says real spacecraft do not resupply Mars like this; trimmed from 47 to 43 words for the CR-T7 budget). Unlocks at Dome stable, the first drop. Goal IDs A1 and B4 as the ruling lists; Instructional Designer alignment check pending."
+}

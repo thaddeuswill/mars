@@ -11,11 +11,23 @@
     "mars:atmospheric_processor",
     "mars:super_greenhouse_emitter"
   ],
-  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the atmospheric processor and the super-greenhouse emitter (machine-priorities rows 3 and 4; both are loads with no Index rate yet). Tubes do not exist yet. Supply cache (docs/design/gate-input-items.md 3.2): 3 filter cartridges, once per player per planet; the atmospheric processor recipe needs one. Amount INVENTED.",
+  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the atmospheric processor and the super-greenhouse emitter (machine-priorities rows 3 and 4; both are loads with no Index rate yet). Tubes do not exist yet. Supply cache (docs/design/gate-input-items.md 3.2): 3 filter cartridges, once per player per planet; the atmospheric processor recipe needs one. Amount INVENTED. Orbital resupply (docs/design/recipe-inputs-ruling.md section 5, owner-accepted 2026-11-28): the drop below is sent by the Relay Orbiter (game design, labelled 'Sent from orbit'); all counts INVENTED; it carries parts, cores and fuel only, never anything that moves an Index row.",
   "cache": [
     {
       "item": "mars:filter_cartridge",
       "count": 3
+    },
+    {
+      "item": "mars:machine_core",
+      "count": 6
+    },
+    {
+      "item": "minecraft:bucket",
+      "count": 2
+    },
+    {
+      "item": "minecraft:coal",
+      "count": 16
     }
   ]
 }

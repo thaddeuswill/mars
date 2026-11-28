@@ -8,5 +8,15 @@
     "value": 10.0
   },
   "unlocks": [],
-  "source": "DESIGN.md gate table and docs/design/phase3-hydrosphere-and-drift.md sections 2 and 3: Hydrosphere (percent of the surface with liquid water) at 10 percent or more, no hold. A physical threshold: never scaled by pace or group size (invariant I-1). It should unlock mars:meltwater_treatment (a stub in the design's slice A); that block does not exist yet, so unlocks is empty. Mekanism and Create unlock here (Decision Log) but that is not a data unlock. The 10 percent value is the sheet's, an INVENTED game target."
+  "source": "DESIGN.md gate table and docs/design/phase3-hydrosphere-and-drift.md sections 2 and 3: Hydrosphere (percent of the surface with liquid water) at 10 percent or more, no hold. A physical threshold: never scaled by pace or group size (invariant I-1). It should unlock mars:meltwater_treatment (a stub in the design's slice A); that block does not exist yet, so unlocks is empty. Mekanism and Create unlock here (Decision Log) but that is not a data unlock. The 10 percent value is the sheet's, an INVENTED game target. Orbital resupply (docs/design/recipe-inputs-ruling.md section 5, owner-accepted 2026-11-28): the drop below is sent by the Relay Orbiter (game design, labelled 'Sent from orbit'); all counts INVENTED; it carries parts, cores and fuel only, never anything that moves an Index row.",
+  "cache": [
+    {
+      "item": "mars:resin_pack",
+      "count": 4
+    },
+    {
+      "item": "mars:machine_core",
+      "count": 2
+    }
+  ]
 }

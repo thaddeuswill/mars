@@ -1,0 +1,5 @@
+{
+  "schema": 1,
+  "about": "The resupply request (docs/design/recipe-inputs-ruling.md section 6; owner-accepted 2026-11-28). Using the item calls the Relay Orbiter for half of the latest gate's drop (rounded up, at least 1 of each line). One pack per player per pass. pass_sols is simulation sols (a sol is 20 simulation minutes; a pause freezes it). 3 is INVENTED, to be tuned after a playtest. There is no cap: the cost (4 iron + 1 heater coil) and the wait make it a delay, never an Index source. Game design: real spacecraft do not resupply Mars like this.",
+  "pass_sols": 3.0
+}

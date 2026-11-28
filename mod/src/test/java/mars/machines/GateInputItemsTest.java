@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.nio.charset.StandardCharsets;
@@ -24,22 +23,26 @@ import org.junit.jupiter.api.Test;
  * checked in the boot checks (GameTests).
  */
 class GateInputItemsTest {
-  private static final Map<String, String> CACHE_GATE =
+  /**
+   * The per-gate drop table of docs/design/recipe-inputs-ruling.md section 5 (all counts INVENTED),
+   * in file order.
+   */
+  private static final Map<String, List<String>> DROPS =
       Map.of(
-          "mars:dome_stable", "mars:heater_coil",
-          "mars:phase_2_begins", "mars:filter_cartridge",
-          "mars:thaw", "mars:pump_bearing",
-          "mars:phase_3_begins", "mars:sorbent_bed");
-  private static final Map<String, Integer> CACHE_COUNT =
-      Map.of(
-          "mars:heater_coil",
-          4,
-          "mars:filter_cartridge",
-          3,
-          "mars:pump_bearing",
-          2,
-          "mars:sorbent_bed",
-          2);
+          "mars:dome_stable",
+              List.of("mars:heater_coil=4", "minecraft:furnace=2", "minecraft:coal=16"),
+          "mars:phase_2_begins",
+              List.of(
+                  "mars:filter_cartridge=3",
+                  "mars:machine_core=6",
+                  "minecraft:bucket=2",
+                  "minecraft:coal=16"),
+          "mars:thaw", List.of("mars:pump_bearing=2", "mars:machine_core=4"),
+          "mars:hydrosphere", List.of("mars:resin_pack=4", "mars:machine_core=2"),
+          "mars:phase_3_begins",
+              List.of("mars:sorbent_bed=4", "mars:machine_core=4", "minecraft:glass=8"),
+          "mars:breathable", List.of("mars:signal_board=5", "mars:machine_core=2"),
+          "mars:equilibrium", List.of("mars:activation_cell=1"));
 
   private static JsonObject json(Path p) throws Exception {
     return JsonParser.parseString(Files.readString(p, StandardCharsets.UTF_8)).getAsJsonObject();
@@ -69,27 +72,51 @@ class GateInputItemsTest {
 
   @Test
   void cachesAreInTheGateFilesWithTheDesignAmounts() throws Exception {
+    int seen = 0;
     for (GateDef g : TestSims.gates()) {
-      String item = CACHE_GATE.get(g.id());
-      if (item == null) {
-        assertTrue(g.cache().isEmpty(), g.id() + " has no cache in this slice");
-        continue;
-      }
-      assertEquals(1, g.cache().size(), g.id());
-      assertEquals(item, g.cache().get(0).item());
-      assertEquals(CACHE_COUNT.get(item), g.cache().get(0).count(), g.id());
+      List<String> want = DROPS.get(g.id());
+      assertTrue(want != null, g.id() + " is not in the drop table");
+      List<String> have = g.cache().stream().map(c -> c.item() + "=" + c.count()).toList();
+      assertEquals(want, have, g.id());
       assertEquals("gate.supply." + g.id().substring(5), g.supplyNoteKey());
+      seen++;
+    }
+    assertEquals(DROPS.size(), seen, "every gate has a drop");
+  }
+
+  @Test
+  void everyDropItemIsARegisteredItemOrVanilla() throws Exception {
+    String src =
+        Files.readString(
+            Path.of("src/main/java/mars/machines/MarsMachines.java"), StandardCharsets.UTF_8);
+    for (GateDef g : TestSims.gates()) {
+      for (GateDef.CacheItem c : g.cache()) {
+        if (c.item().startsWith("mars:")) {
+          assertTrue(src.contains("\"" + c.item().substring(5) + "\""), c.item());
+        } else {
+          assertTrue(c.item().startsWith("minecraft:"), c.item());
+        }
+      }
     }
   }
 
   @Test
-  void everyPartHasARecipeWithOnlyVanillaIngredientsAndAnIconAndALang() throws Exception {
+  void craftablePartsAreVanillaOnlyAndDropOnlyPartsHaveNoRecipe() throws Exception {
     JsonObject l = lang();
     for (String part : MarsMachinesIds.PARTS) {
-      JsonObject r = recipe(part);
-      assertTrue(r.getAsJsonObject("result").get("id").getAsString().equals("mars:" + part));
-      for (String i : ingredients(r)) {
-        assertTrue(i.startsWith("minecraft:"), part + " is made from vanilla items only: " + i);
+      boolean dropOnly = MarsMachinesIds.DROP_ONLY.contains(part);
+      assertEquals(
+          !dropOnly, Files.exists(TestData.data("recipe/" + part + ".json")), part + " recipe");
+      if (!dropOnly) {
+        JsonObject r = recipe(part);
+        assertTrue(r.getAsJsonObject("result").get("id").getAsString().equals("mars:" + part));
+        for (String i : ingredients(r)) {
+          assertTrue(i.startsWith("minecraft:"), part + " is made from vanilla items only: " + i);
+        }
+      } else {
+        assertTrue(
+            l.get("item.mars." + part + ".tooltip").getAsString().contains("sent from orbit"),
+            part + " tooltip carries the honest label");
       }
       assertTrue(l.has("item.mars." + part) && l.has("item.mars." + part + ".tooltip"), part);
       assertTrue(
@@ -108,17 +135,82 @@ class GateInputItemsTest {
   }
 
   @Test
+  void theResupplyRequestIsFourIronAndACoil() throws Exception {
+    JsonObject r = recipe("resupply_request");
+    assertEquals("minecraft:crafting_shapeless", r.get("type").getAsString());
+    List<String> in = ingredients(r);
+    assertEquals(5, in.size());
+    assertEquals(4, in.stream().filter("minecraft:iron_ingot"::equals).count());
+    assertEquals(1, in.stream().filter("mars:heater_coil"::equals).count());
+    JsonObject l = lang();
+    assertTrue(l.get("item.mars.resupply_request.tooltip").getAsString().contains("3 sols"));
+    assertTrue(
+        Files.exists(TestData.pack().resolve("assets/mars/textures/item/resupply_request.png")));
+  }
+
+  /**
+   * Ruling section 7 rows 2 to 6: exact machine ingredients, and no vanilla hopper/furnace/bucket.
+   */
+  @Test
+  void machineRecipesAreIronACorePlusTheGatePart() throws Exception {
+    Map<String, Map<String, Long>> want =
+        Map.of(
+            "atmospheric_processor",
+            Map.of(
+                "minecraft:iron_ingot", 4L, "mars:machine_core", 1L, "mars:filter_cartridge", 1L),
+            "super_greenhouse_emitter",
+            Map.of("minecraft:iron_ingot", 4L, "mars:machine_core", 1L, "mars:heater_coil", 1L),
+            "ice_extractor",
+            Map.of("minecraft:iron_ingot", 5L, "mars:machine_core", 1L, "mars:pump_bearing", 1L),
+            "carbon_scrubber",
+            Map.of("minecraft:iron_ingot", 6L, "mars:machine_core", 1L, "mars:sorbent_bed", 2L),
+            "regolith_outgasser",
+            Map.of("minecraft:iron_ingot", 8L, "mars:heater_coil", 1L));
+    JsonObject only = new JsonObject();
+    assertEquals(0, only.size());
+    for (var e : want.entrySet()) {
+      JsonObject r = recipe(e.getKey());
+      Map<String, Long> have = new java.util.TreeMap<>();
+      if (r.has("pattern")) {
+        Map<Character, String> key = new java.util.HashMap<>();
+        for (var k : r.getAsJsonObject("key").entrySet()) {
+          key.put(k.getKey().charAt(0), k.getValue().getAsJsonObject().get("item").getAsString());
+        }
+        for (var row : r.getAsJsonArray("pattern")) {
+          for (char ch : row.getAsString().toCharArray()) {
+            if (ch != ' ') {
+              have.merge(key.get(ch), 1L, Long::sum);
+            }
+          }
+        }
+      }
+      assertEquals(new java.util.TreeMap<>(e.getValue()), have, e.getKey());
+      for (String banned :
+          List.of(
+              "minecraft:hopper",
+              "minecraft:furnace",
+              "minecraft:bucket",
+              "minecraft:redstone",
+              "minecraft:copper_ingot")) {
+        assertFalse(have.containsKey(banned), e.getKey() + " still needs " + banned);
+      }
+    }
+  }
+
+  @Test
   void machineRecipesUseTheNewParts() throws Exception {
     assertTrue(ingredients(recipe("regolith_outgasser")).contains("mars:heater_coil"));
     assertTrue(ingredients(recipe("super_greenhouse_emitter")).contains("mars:heater_coil"));
     assertTrue(ingredients(recipe("atmospheric_processor")).contains("mars:filter_cartridge"));
     assertTrue(ingredients(recipe("ice_extractor")).contains("mars:pump_bearing"));
+    assertTrue(ingredients(recipe("ice_extractor")).contains("mars:machine_core"));
   }
 
   @Test
   void noRecipeNeedsAnItemThatNothingCanMake() throws Exception {
     // Never hard-block: every mars: ingredient of every machine recipe is a part with its own
-    // open vanilla-only recipe, so the machines stay craftable from what can be mined.
+    // open vanilla-only recipe, or a drop-only part that a gate drop and the resupply request
+    // always supply (orbital resupply, recipe-inputs-ruling.md).
     for (String m :
         List.of(
             "regolith_outgasser",
@@ -128,7 +220,7 @@ class GateInputItemsTest {
             "algae_vat",
             "carbon_scrubber")) {
       for (String i : ingredients(recipe(m))) {
-        if (i.startsWith("mars:")) {
+        if (i.startsWith("mars:") && !MarsMachinesIds.DROP_ONLY.contains(i.substring(5))) {
           assertTrue(
               Files.exists(TestData.data("recipe/" + i.substring(5) + ".json")),
               m + " needs " + i + " which has no recipe");
@@ -161,17 +253,30 @@ class GateInputItemsTest {
         keys.add(g.supplyNoteKey());
       }
     }
-    assertEquals(5, keys.size());
+    keys.addAll(
+        List.of("grant.refill", "grant.refill.note", "grant.refill.wait", "grant.refill.none"));
+    assertEquals(DROPS.size() + 5, keys.size());
     // Forecast answers (pressure, temperature, gases, rates) never appear in these lines.
     java.util.regex.Pattern giveAway =
         java.util.regex.Pattern.compile(
             "pressure|kpa|temperature|warm|cool|oxygen|co2|carbon|rise|fall|sol\\b|sols\\b",
             java.util.regex.Pattern.CASE_INSENSITIVE);
+    java.util.regex.Pattern timerOk =
+        java.util.regex.Pattern.compile(
+            "pressure|kpa|temperature|warm|cool|oxygen|co2|carbon|rise|fall",
+            java.util.regex.Pattern.CASE_INSENSITIVE);
     for (String k : keys) {
       String v = l.get(k).getAsString();
       assertTrue(v.trim().split("\\s+").length <= 20, k + " is over 20 words (CR-T7c)");
       assertFalse(v.contains("~") || v.matches(".*<\\s*\\d.*"), k + " (CR-T7b)");
-      assertFalse(giveAway.matcher(v).find(), k + " gives an answer away: " + v);
+      // The request lines state the pass timer, so "sols" is allowed there (not a forecast).
+      boolean timer = k.startsWith("grant.refill");
+      assertFalse(
+          (timer ? timerOk : giveAway).matcher(v).find(), k + " gives an answer away: " + v);
+      if (k.startsWith("gate.supply.") || k.equals("grant.refill.note")) {
+        assertTrue(v.contains("Sent from orbit"), k + " names the sender label");
+        assertTrue(v.contains("Relay Orbiter"), k + " names the Relay Orbiter");
+      }
       assertFalse(v.toLowerCase().contains("colour") || v.toLowerCase().contains("armour"), k);
     }
     for (String part : MarsMachinesIds.PARTS) {
@@ -191,7 +296,17 @@ class GateInputItemsTest {
   /** The part ids, kept in sync with MarsMachines.PART_IDS by the next test. */
   static final class MarsMachinesIds {
     static final List<String> PARTS =
-        List.of("heater_coil", "filter_cartridge", "pump_bearing", "sorbent_bed");
+        List.of(
+            "heater_coil",
+            "filter_cartridge",
+            "pump_bearing",
+            "sorbent_bed",
+            "machine_core",
+            "resin_pack",
+            "signal_board",
+            "activation_cell");
+    static final List<String> DROP_ONLY =
+        List.of("sorbent_bed", "machine_core", "resin_pack", "signal_board", "activation_cell");
   }
 
   @Test
@@ -202,7 +317,9 @@ class GateInputItemsTest {
     for (String p : MarsMachinesIds.PARTS) {
       assertTrue(src.contains("\"" + p + "\""), p);
     }
-    JsonArray none = new JsonArray();
-    assertEquals(0, none.size());
+    for (String p : MarsMachinesIds.DROP_ONLY) {
+      assertTrue(src.contains("\"" + p + "\""), p);
+    }
+    assertTrue(src.contains("\"resupply_request\""));
   }
 }

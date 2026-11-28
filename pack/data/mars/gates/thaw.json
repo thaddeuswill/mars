@@ -10,11 +10,15 @@
   "unlocks": [
     "mars:ice_extractor"
   ],
-  "source": "DESIGN.md gate table and docs/design/phase2-machine-rates.md section 2: Thaw at temperature >= -20 C, no hold. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the ice extractor (docs/design/phase3-hydrosphere-and-drift.md section 3; the extractor itself also needs temperature >= -20 C to run). Supply cache (docs/design/gate-input-items.md 3.3): 2 pump bearings, once per player per planet; the extractor recipe needs one. Amount INVENTED.",
+  "source": "DESIGN.md gate table and docs/design/phase2-machine-rates.md section 2: Thaw at temperature >= -20 C, no hold. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the ice extractor (docs/design/phase3-hydrosphere-and-drift.md section 3; the extractor itself also needs temperature >= -20 C to run). Supply cache (docs/design/gate-input-items.md 3.3): 2 pump bearings, once per player per planet; the extractor recipe needs one. Amount INVENTED. Orbital resupply (docs/design/recipe-inputs-ruling.md section 5, owner-accepted 2026-11-28): the drop below is sent by the Relay Orbiter (game design, labelled 'Sent from orbit'); all counts INVENTED; it carries parts, cores and fuel only, never anything that moves an Index row.",
   "cache": [
     {
       "item": "mars:pump_bearing",
       "count": 2
+    },
+    {
+      "item": "mars:machine_core",
+      "count": 4
     }
   ]
 }

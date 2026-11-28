@@ -220,6 +220,9 @@ public final class DevTools {
       case "fps" ->
           log("fps=" + mc.getFps() + " (frames in the last second, as Minecraft counts them)");
       case "journal" -> mars.client.JournalClient.requestOpen();
+      case "inventory" ->
+          mc.setScreen(new net.minecraft.client.gui.screens.inventory.InventoryScreen(mc.player));
+      case "close" -> mc.setScreen(null);
       case "shot" -> shot(p[1]);
       case "quit" -> {
         log("quitting");

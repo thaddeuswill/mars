@@ -2,25 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "KH ",
-    "IBI",
-    "IRI"
+    "KC ",
+    "I I",
+    "I I"
   ],
   "key": {
     "I": {
       "item": "minecraft:iron_ingot"
     },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "B": {
-      "item": "minecraft:bucket"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
     "K": {
       "item": "mars:heater_coil"
+    },
+    "C": {
+      "item": "mars:machine_core"
     }
   },
   "result": {
