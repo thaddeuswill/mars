@@ -25,6 +25,8 @@ Shape carries the state, not hue alone: off = nothing lit, idle = a small or hol
 | Atmospheric processor | A lit segment (`#D9DEE2`) climbs the canister between its dark rings, bottom to top (the "canister pulse") | 4 x 8 (32) | `atmospheric_processor_canister_running` (animated) + `_front_running` (solid lamp, static) | off: `_front_off`; idle: existing front |
 | Super-greenhouse emitter | Glow line (`#F0E442`) climbs the 3 px flare lip, then one dark beat (vent glow) | 4 x 8 (32) | `super_greenhouse_emitter_flare_running` (animated) + `_front_running` | off: `_front_off`; idle: existing front |
 | Ice extractor | Two parts: a 2 px melt-glow ring (`#FFD27A` on `#B37400`) climbs the drill sleeve, bottom to top; a steam puff (`#E4E8EA`, `#C2CDD5`) rises from the tank vent on a 4 x 6 px cutout element | 4 x 10 (40), both strips | `ice_extractor_sleeve_running` + `ice_extractor_steam` (animated) + `_front_running` (solid lamp, static) | off: `_front_off`; idle: `ice_extractor_front`. Spec: `docs/art/ice-extractor.md` |
+| Algae vat | Bubbles rise in the amber culture window: three columns of pale dots (`#D8E4EA`), wrapping like a stream; the grow-lamp strip goes dark / dashed / solid with the state | 4 x 8 (32) | `algae_vat_glass_running` (animated) + `_front_running`, `_hood_running` (static) | off: `_front_off`, `_hood_off`; idle: `algae_vat_front` (hollow ring), `algae_vat_hood` (dashed strip). Spec: `docs/art/algae-vat.md` |
+| Carbon scrubber | The two beds take turns: one pale indicator window lights on the valve block (A, A + valve bar, B, B + valve bar) and the active bed's top ring lights pale blue; chute shows carbonate while running | 4 x 20 (80, slow, three strips in step) | `carbon_scrubber_front_running`, `_bed_a_running`, `_bed_b_running` (animated) + `_chute_running` (static) | off: `_front_off` (windows dark); idle: `carbon_scrubber_front` (both windows dim). Spec: `docs/art/carbon-scrubber.md` |
 | Battery | No motion. Charge shown by the count of lit bars: 0 to 3 (shape = count), bars fill from the bottom, status pixel dark at 0 | static, 4 levels | `battery_front_charge0..2` (level 3 = the existing `battery_front`) | n/a (no off/idle; level 0 is "empty") |
 
 The made-up band (rows 14 and 15) and plate are never changed in any frame (checked by test for the oxygen maker and reclaimer; the other animated textures do not contain them).
@@ -53,6 +55,8 @@ The made-up band (rows 14 and 15) and plate are never changed in any frame (chec
 | Atmospheric processor | `atmospheric_processor_off`, `_idle` (= old model), `_running` |
 | Super-greenhouse emitter | `super_greenhouse_emitter_off`, `_idle` (= old model), `_running` |
 | Ice extractor | `ice_extractor_off`, `_idle` (= `ice_extractor`), `_running` (new machine, made with these conventions) |
+| Algae vat | `algae_vat_off`, `_idle`, `_running` (made with these conventions; one cell, 24 px collision) |
+| Carbon scrubber | `carbon_scrubber_off`, `_idle`, `_running` (one cell, 24 px) |
 | Battery | `battery_charge0`, `_charge1`, `_charge2`, `_charge3` (= old model) |
 
 ## 5. Why nothing animates today without the property

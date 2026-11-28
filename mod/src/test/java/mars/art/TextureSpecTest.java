@@ -202,7 +202,11 @@ class TextureSpecTest {
           "atmospheric_processor_canister_running",
           "super_greenhouse_emitter_flare_running",
           "ice_extractor_sleeve_running",
-          "ice_extractor_steam");
+          "ice_extractor_steam",
+          "algae_vat_glass_running",
+          "carbon_scrubber_front_running",
+          "carbon_scrubber_bed_a_running",
+          "carbon_scrubber_bed_b_running");
 
   @Test
   void animatedTexturesHaveValidMcmetaAndFrameHeights() throws IOException {
@@ -329,6 +333,150 @@ class TextureSpecTest {
     assertTrue(
         Files.exists(TestData.pack().resolve("assets/mars/models/item/ice_extractor.json")),
         "item model");
+  }
+
+  private static final List<String> VAT_SCRUBBER =
+      List.of(
+          "algae_vat_base",
+          "algae_vat_front",
+          "algae_vat_front_off",
+          "algae_vat_front_running",
+          "algae_vat_glass",
+          "algae_vat_tank_side",
+          "algae_vat_hood",
+          "algae_vat_hood_off",
+          "algae_vat_hood_running",
+          "algae_vat_hood_side",
+          "algae_vat_top",
+          "algae_vat_pipe",
+          "carbon_scrubber_base",
+          "carbon_scrubber_front",
+          "carbon_scrubber_front_off",
+          "carbon_scrubber_bed",
+          "carbon_scrubber_cap",
+          "carbon_scrubber_pipe",
+          "carbon_scrubber_valve_side",
+          "carbon_scrubber_top",
+          "carbon_scrubber_chute",
+          "carbon_scrubber_chute_running");
+
+  private static boolean greenish(int argb) {
+    int r = (argb >> 16) & 255;
+    int g = (argb >> 8) & 255;
+    int b = argb & 255;
+    return g > r + 20 && g > b + 20;
+  }
+
+  @Test
+  void algaeVatAndCarbonScrubberAreOpaqueNoGreenAndWearTheBand() throws IOException {
+    int purple = 0xCC79A7;
+    for (String n : VAT_SCRUBBER) {
+      BufferedImage img = load(n);
+      assertEquals(16, img.getWidth(), n);
+      assertEquals(16, img.getHeight(), n);
+      for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 16; y++) {
+          assertEquals(255, img.getRGB(x, y) >>> 24, n + " opaque at " + x + "," + y);
+          assertTrue(!greenish(img.getRGB(x, y)), n + " has green at " + x + "," + y);
+        }
+      }
+    }
+    for (String pre : List.of("algae_vat_", "carbon_scrubber_")) {
+      BufferedImage b = load(pre + "base");
+      assertEquals(purple, b.getRGB(0, 14) & 0xFFFFFF, pre + " band dash on");
+      assertEquals(0x8E3F6C, b.getRGB(0, 15) & 0xFFFFFF, pre + " band edge");
+      assertTrue((b.getRGB(2, 14) & 0xFFFFFF) != purple, pre + " band dash off");
+    }
+    // plate (4 x 4, slash bottom-left to top-right) on every front variant
+    for (String s : List.of("", "_off", "_running")) {
+      BufferedImage v = load("algae_vat_front" + s);
+      assertEquals(purple, v.getRGB(10, 9) & 0xFFFFFF, "vat plate" + s);
+      assertEquals(0x2A2420, v.getRGB(10, 12) & 0xFFFFFF, "vat slash bl" + s);
+      assertEquals(0x2A2420, v.getRGB(13, 9) & 0xFFFFFF, "vat slash tr" + s);
+      assertEquals(purple, v.getRGB(0, 14) & 0xFFFFFF, "vat front band" + s);
+    }
+    for (String s : List.of("", "_off")) {
+      BufferedImage v = load("carbon_scrubber_front" + s);
+      assertEquals(purple, v.getRGB(10, 4) & 0xFFFFFF, "scrubber plate" + s);
+      assertEquals(0x2A2420, v.getRGB(9, 7) & 0xFFFFFF, "scrubber slash bl" + s);
+      assertEquals(0x2A2420, v.getRGB(12, 4) & 0xFFFFFF, "scrubber slash tr" + s);
+    }
+    BufferedImage run = load("carbon_scrubber_front_running");
+    for (int k = 0; k < 4; k++) {
+      assertEquals(purple, run.getRGB(10, 16 * k + 4) & 0xFFFFFF, "scrubber plate frame " + k);
+      assertEquals(
+          0x56B4E9, run.getRGB(5, 16 * k + 6) & 0xFFFFFF, "scrubber lamp solid frame " + k);
+    }
+  }
+
+  @Test
+  void vatAndScrubberLampShapesCarryTheState() throws IOException {
+    int lamp = 0x56B4E9;
+    int dark = 0x1E2328;
+    // vat lamp frame x3-7, y9-13; scrubber x3-7, y4-8
+    assertEquals(dark, load("algae_vat_front_off").getRGB(4, 10) & 0xFFFFFF);
+    assertEquals(lamp, load("algae_vat_front").getRGB(4, 10) & 0xFFFFFF);
+    assertTrue((load("algae_vat_front").getRGB(5, 11) & 0xFFFFFF) != lamp, "vat idle ring hollow");
+    assertEquals(lamp, load("algae_vat_front_running").getRGB(5, 11) & 0xFFFFFF);
+    assertEquals(dark, load("carbon_scrubber_front_off").getRGB(4, 5) & 0xFFFFFF);
+    assertEquals(lamp, load("carbon_scrubber_front").getRGB(4, 5) & 0xFFFFFF);
+    assertTrue(
+        (load("carbon_scrubber_front").getRGB(5, 6) & 0xFFFFFF) != lamp,
+        "scrubber idle ring hollow");
+    // grow lamp strip: off dark, idle dashed (some dark, some lit), running solid
+    int offA = load("algae_vat_hood_off").getRGB(2, 7) & 0xFFFFFF;
+    int offB = load("algae_vat_hood_off").getRGB(5, 7) & 0xFFFFFF;
+    assertEquals(dark, offA);
+    assertEquals(dark, offB);
+    int idleA = load("algae_vat_hood").getRGB(2, 7) & 0xFFFFFF;
+    int idleB = load("algae_vat_hood").getRGB(4, 7) & 0xFFFFFF;
+    assertTrue(idleA != idleB, "idle strip is dashed");
+    int runA = load("algae_vat_hood_running").getRGB(2, 7) & 0xFFFFFF;
+    int runB = load("algae_vat_hood_running").getRGB(4, 7) & 0xFFFFFF;
+    assertEquals(runA, runB, "running strip is solid");
+    // scrubber beds take turns: A lit in frames 0-1, B lit in frames 2-3 (pale ring on rows 2-3)
+    BufferedImage a = load("carbon_scrubber_bed_a_running");
+    BufferedImage b = load("carbon_scrubber_bed_b_running");
+    for (int k = 0; k < 4; k++) {
+      boolean aLit = (a.getRGB(8, 16 * k + 2) & 0xFFFFFF) != dark;
+      boolean bLit = (b.getRGB(8, 16 * k + 2) & 0xFFFFFF) != dark;
+      assertEquals(k < 2, aLit, "bed A lit in frame " + k);
+      assertEquals(k >= 2, bLit, "bed B lit in frame " + k);
+    }
+  }
+
+  @Test
+  void vatAndScrubberModelsKeepOneCellAndTheirHeights() throws IOException {
+    Path models = TestData.pack().resolve("assets/mars/models/block");
+    for (var entry : java.util.Map.of("algae_vat", 28.0, "carbon_scrubber", 24.0).entrySet()) {
+      for (String suf : List.of("", "_off", "_idle", "_running")) {
+        String n = entry.getKey() + suf;
+        com.google.gson.JsonObject m =
+            com.google.gson.JsonParser.parseString(Files.readString(models.resolve(n + ".json")))
+                .getAsJsonObject();
+        double maxY = 0;
+        for (var e : m.getAsJsonArray("elements")) {
+          var el = e.getAsJsonObject();
+          for (int c : new int[] {0, 2}) {
+            double lo = el.getAsJsonArray("from").get(c).getAsDouble();
+            double hi = el.getAsJsonArray("to").get(c).getAsDouble();
+            assertTrue(lo >= 0 && hi <= 16, n + " stays inside one cell on x and z");
+          }
+          maxY = Math.max(maxY, el.getAsJsonArray("to").get(1).getAsDouble());
+        }
+        assertEquals(entry.getValue(), maxY, n + " model height");
+      }
+      assertTrue(
+          Files.exists(
+              TestData.pack().resolve("assets/mars/models/item/" + entry.getKey() + ".json")),
+          entry.getKey() + " item model");
+    }
+    assertTrue(
+        Files.readString(models.resolve("algae_vat_running.json"))
+            .contains("algae_vat_glass_running"),
+        "vat running model uses the bubble strip");
+    String sr = Files.readString(models.resolve("carbon_scrubber_running.json"));
+    assertTrue(sr.contains("carbon_scrubber_bed_a_running") && sr.contains("bed_b_running"));
   }
 
   @Test

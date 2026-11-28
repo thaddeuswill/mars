@@ -97,3 +97,7 @@ Three new PLACEHOLDER block textures from `tools/art-preview/gen_ground_ladder_t
 ## Gate input item icons (Technical Lead, 2026-11-28)
 
 Three new PLACEHOLDER 16 x 16 item icons from `tools/art-preview/gen_gate_item_textures.py` (never overwrites an existing PNG or item model): `item/heater_coil.png` (orange wire wound on an alloy spindle), `item/filter_cartridge.png` (ribbed paper drum between alloy caps), `item/pump_bearing.png` (alloy ring with a hole). Transparent corners, ink outline, no green, no purple. The Lead Artist replaces them (same names). Real-client look: hotbar icons in `tools/screenshots/out/20261128-141443/cache_all_three.png`. The other four gate items of `docs/design/gate-input-items.md` (resin pack, sorbent bed, signal board, activation cell) have no icon yet.
+
+## Update 2026-11-28 (Lead Artist): algae vat and carbon scrubber
+
+Not placeholders: real pixel art from `tools/art-preview/gen_vat_scrubber.py`. 22 static textures, 4 animated strips (+ `.mcmeta`), 8 block models and 2 item models for `algae_vat` and `carbon_scrubber`; specs and registration lists `docs/art/algae-vat.md`, `docs/art/carbon-scrubber.md`. No blockstate or lang key written (Technical Lead).

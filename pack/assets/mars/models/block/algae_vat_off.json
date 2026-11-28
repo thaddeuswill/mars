@@ -1,0 +1,326 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/algae_vat_base",
+  "base": "mars:block/algae_vat_base",
+  "front": "mars:block/algae_vat_front_off",
+  "glass": "mars:block/algae_vat_glass",
+  "tank_side": "mars:block/algae_vat_tank_side",
+  "hood": "mars:block/algae_vat_hood_off",
+  "hood_side": "mars:block/algae_vat_hood_side",
+  "top": "mars:block/algae_vat_top",
+  "pipe": "mars:block/algae_vat_pipe"
+ },
+ "elements": [
+  {
+   "from": [
+    1,
+    0,
+    1
+   ],
+   "to": [
+    15,
+    8,
+    15
+   ],
+   "faces": {
+    "south": {
+     "texture": "#base",
+     "uv": [
+      1,
+      8,
+      15,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#base",
+     "uv": [
+      1,
+      8,
+      15,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#base",
+     "uv": [
+      1,
+      8,
+      15,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#front",
+     "uv": [
+      1,
+      8,
+      15,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      1,
+      1,
+      15,
+      15
+     ]
+    },
+    "down": {
+     "texture": "#top"
+    }
+   }
+  },
+  {
+   "from": [
+    2,
+    8,
+    3
+   ],
+   "to": [
+    14,
+    20,
+    13
+   ],
+   "faces": {
+    "north": {
+     "texture": "#glass",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    },
+    "south": {
+     "texture": "#tank_side",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    },
+    "east": {
+     "texture": "#tank_side",
+     "uv": [
+      3,
+      2,
+      13,
+      14
+     ]
+    },
+    "west": {
+     "texture": "#tank_side",
+     "uv": [
+      3,
+      2,
+      13,
+      14
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      2,
+      3,
+      14,
+      13
+     ]
+    },
+    "down": {
+     "texture": "#top"
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    20,
+    2
+   ],
+   "to": [
+    15,
+    24,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#hood",
+     "uv": [
+      1,
+      6,
+      15,
+      10
+     ]
+    },
+    "south": {
+     "texture": "#hood_side",
+     "uv": [
+      1,
+      6,
+      15,
+      10
+     ]
+    },
+    "east": {
+     "texture": "#hood_side",
+     "uv": [
+      2,
+      6,
+      14,
+      10
+     ]
+    },
+    "west": {
+     "texture": "#hood_side",
+     "uv": [
+      2,
+      6,
+      14,
+      10
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      1,
+      2,
+      15,
+      14
+     ]
+    },
+    "down": {
+     "texture": "#top"
+    }
+   }
+  },
+  {
+   "from": [
+    11,
+    24,
+    10
+   ],
+   "to": [
+    13,
+    26,
+    12
+   ],
+   "faces": {
+    "south": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ]
+    },
+    "east": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ]
+    },
+    "west": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ]
+    },
+    "north": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ]
+    },
+    "up": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "down": {
+     "texture": "#pipe"
+    }
+   }
+  },
+  {
+   "from": [
+    5,
+    26,
+    10
+   ],
+   "to": [
+    13,
+    28,
+    12
+   ],
+   "faces": {
+    "south": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      8,
+      2
+     ]
+    },
+    "east": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      8,
+      2
+     ]
+    },
+    "west": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      8,
+      2
+     ]
+    },
+    "north": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      8,
+      2
+     ]
+    },
+    "up": {
+     "texture": "#pipe",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "down": {
+     "texture": "#pipe"
+    }
+   }
+  }
+ ]
+}
