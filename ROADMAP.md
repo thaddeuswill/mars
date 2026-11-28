@@ -128,7 +128,7 @@ All goals A1–D2 were analyzed across the whole domain in Stage 1 (LEARNING.md 
 - 🟡 **Redistribution permissions** checked for each mod: licenses done from primary sources (all MIT, LGPL, or MPL; Create assets All Rights Reserved; ProbeJS never shipped). Modrinth and CurseForge distribution flags still to check. Blocks release if skipped. [TL]
 - 🟡 Companion-mod scope: modules defined (ARCHITECTURE.md §1.2); KubeJS limited to recipes and gating [TL]
 - ⬜ **Which machines are in-house:** list every machine needed to learn the science (ours, simple, one interface pattern) and which third-party machines stay optional and late (DESIGN.md, Learning Mechanisms) [GD, TL]
-- ⬜ Oxygen, sealing, and suits: name a standalone mod that can read the Planetary Index, or record "build our own" [TL]
+- ✅ Oxygen, sealing, and suits: no standalone mod fits (Technical Lead research 2026-11-28, `docs/tech/optional-mods-and-shaders.md`); **build our own**, owner accepted 2026-11-28 [TL]
 - ⬜ Companion mod skeleton: builds, loads, and registers an empty Mars dimension [TL]
 - ✅ Software architecture drafted and reviewed by the Technical Lead ([ARCHITECTURE.md](ARCHITECTURE.md)): modules, APIs, session control, data and privacy, story system, admin API, performance budget
 - ✅ Class hosting: one server, one Mars dimension per group; one server per group as fallback (user decision)

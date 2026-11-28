@@ -44,7 +44,7 @@ Modrinth's API (`api.modrinth.com/v2`) was reachable; CurseForge (`curseforge.co
 | Rhino | MPL-2.0 | 2101.2.7-build.85 release (2026-06-08); a 2101.2.8 beta (2026-07-19) | Licence file confirmed on `main` ([LICENSE](https://raw.githubusercontent.com/KubeJS-Mods/Rhino/main/LICENSE)); no 1.21.1 branch found by name. Use the Modrinth release KubeJS pins |
 | Registrate (inside Create) | — | Create pins `MC1.21-1.3.0+67` | **MPL-2.0 confirmed on the 1.21.1 branch** ([LICENSE, 1.21.1/dev](https://raw.githubusercontent.com/tterrag1098/Registrate/1.21.1/dev/LICENSE)) |
 | GeckoLib | MIT | 4.9.4 (2026-11-22) | Not adopted (ARCHITECTURE.md 2.13) |
-| Sodium | PolyForm Shield 1.0.0 | Only **beta** builds for NeoForge 1.21.1 (0.8.14-beta.2, 2026-11-25) | Not in the stack. Betas only → not for classrooms now |
+| Sodium | PolyForm Shield 1.0.0 | **Updated 2026-11-28:** 0.8.13 is a **release** (2026-08-28) for NeoForge 1.21.1; an earlier note here said betas only (0.8.14-beta.2 is the newer beta). Source: `docs/tech/optional-mods-and-shaders.md` (Modrinth, read 2026-11-28) | **Owner accepted 2026-11-28:** Iris plus Sodium as the default stack after the owner's look test; not a classroom pack. CurseForge flags still unchecked |
 | Better Advanced Tooltips | MIT | (pulled in by KubeJS) | New |
 
 **Build and test tools** (not shipped):
