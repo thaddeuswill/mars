@@ -153,9 +153,10 @@ def ground_ice():
 
 
 def duricrust():
-    """Cemented ochre crust: plates with lighter lifted edges and dark cracks (NTRS 20050203800)."""
-    ramp = [hx(s) for s in ("#8E6A44", "#A67C52", "#B98F5F")]
-    crack, lip = hx("#5E4228"), hx("#CBA672")
+    """Cemented tan crust: plates with lighter lifted edges and cracks (NTRS 20050203800). 2026-11-28: cooler and
+    lower contrast (was ochre #8E6A44..#B98F5F, read as wood)."""
+    ramp = [hx(s) for s in ("#8A7656", "#9A8664", "#A89473")]
+    crack, lip = hx("#6A5A42"), hx("#B5A383")
     ids, edge = voronoi(7, 61)
     r = random.Random(62)
     tone = {i: r.choice((0, 1, 1, 2)) for i in range(7)}
@@ -265,11 +266,96 @@ def gypsum_vein():
     return img
 
 
+def sulfide_vein():
+    """INVENTED conductor ore. Grey-brown rock first; rust-orange stains and a few dull gold flecks. Never green,
+    never bright copper (SME mars-conductor-and-carbonate-ores.md section 3)."""
+    rock = [hx(s) for s in ("#403A36", "#4E4743", "#5E5650")]
+    img = new(rock[1])
+    speckle(img, rock, 111, [3, 6, 3])
+    rust = [hx("#7C4A30"), hx("#94593A")]
+    gold = [hx("#9C8340"), hx("#B79B52")]
+    r = random.Random(112)
+    for _ in range(4):  # rust stains, 2-3 px diagonal runs
+        x, y = r.randint(0, 15), r.randint(0, 15)
+        for i in range(r.choice((2, 3))):
+            px(img, x + i, y + i // 2, rust[i % 2])
+    for _ in range(5):  # small dull gold flecks (1 px, one with a shade neighbour)
+        x, y = r.randint(0, 15), r.randint(0, 15)
+        px(img, x, y, gold[1])
+        if r.random() < .5:
+            px(img, x + 1, y, gold[0])
+    return img
+
+
+def magnetic_ore():
+    """INVENTED conductor ore. Dark metallic stone, red-brown mineral flecks (not bright red: not redstone),
+    a few cool-grey metallic glints."""
+    rock = [hx(s) for s in ("#2A2A2C", "#363638", "#444446")]
+    img = new(rock[1])
+    speckle(img, rock, 121, [3, 6, 3])
+    fleck = [hx("#6E3328"), hx("#8A4332")]
+    glint = [hx("#7A7D82"), hx("#9A9DA2")]
+    r = random.Random(122)
+    for _ in range(6):  # red-brown flecks, 1 to 2 px
+        x, y = r.randint(0, 15), r.randint(0, 15)
+        px(img, x, y, fleck[1])
+        if r.random() < .6:
+            px(img, x + 1, y, fleck[0])
+        if r.random() < .25:
+            px(img, x, y + 1, fleck[0])
+    for _ in range(7):  # metallic glints
+        px(img, r.randint(0, 15), r.randint(0, 15), r.choice(glint))
+    return img
+
+
+def carbonate_rock():
+    """REAL idea at game size (Jezero, Nili Fossae). Pale tan-grey rock, faint blocky veins."""
+    ramp = [hx(s) for s in ("#AFA898", "#BFB8A8", "#CFC9BA")]
+    img = new(ramp[1])
+    speckle(img, ramp, 131, [3, 6, 3])
+    vein, shade = hx("#E2DDD0"), hx("#948D7E")
+    r = random.Random(132)
+    for start in (4, 11):
+        y = start
+        for x in range(16):
+            px(img, x, y, vein if r.random() < .8 else ramp[2])
+            if r.random() < .15:
+                px(img, x, y + 1, shade)
+            if r.random() < .3:
+                y += r.choice((-1, 1))
+    for _ in range(5):
+        px(img, r.randint(0, 15), r.randint(0, 15), shade)
+    return img
+
+
+def carbonate_item():
+    """Item sprite: a small pale chunk on a transparent background (the only texture here with clear pixels)."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    rows = {  # y: (x0, x1)
+        5: (6, 9), 6: (5, 10), 7: (4, 11), 8: (4, 11), 9: (4, 11), 10: (5, 11), 11: (6, 10), 12: (7, 9)}
+    light, mid, dark, edge = hx("#DDD8CA"), hx("#C4BDAD"), hx("#A59E8E"), hx("#6E675A")
+    for y, (a, b) in rows.items():
+        for x in range(a, b + 1):
+            c = mid
+            if y <= 7 and x <= a + 2:
+                c = light
+            if y >= 10 or x >= b - 1:
+                c = dark
+            if x in (a, b) or y in (5, 12):
+                c = edge
+            px(img, x, y, c)
+    px(img, 7, 7, hx("#E8E4D8"))
+    px(img, 8, 8, dark)
+    px(img, 6, 9, dark)
+    return img
+
+
 TEXTURES = {
     "basaltic_sand": basaltic_sand, "ripple_sand": ripple_sand, "hematite_ore": hematite_ore,
     "dark_sand_ore": dark_sand_ore, "ground_ice": ground_ice, "duricrust": duricrust,
     "vesicular_basalt": vesicular_basalt, "spherule_sand": spherule_sand,
     "impact_breccia": impact_breccia, "gypsum_vein": gypsum_vein,
+    "sulfide_vein": sulfide_vein, "magnetic_ore": magnetic_ore, "carbonate_rock": carbonate_rock,
 }
 
 
@@ -304,6 +390,22 @@ def main():
         img.save(os.path.join(OUT, name + ".png"))
         print("%-18s %2d colours %s" % (name, n, "OK" if not errs else "FAIL " + "; ".join(sorted(set(errs)))))
         bad += bool(errs)
+    item = carbonate_item()
+    errs = []
+    solid = 0
+    for x in range(16):
+        for y in range(16):
+            r_, g, b, a = item.getpixel((x, y))
+            if a == 0:
+                continue
+            solid += 1
+            if a != 255 or g > max(r_, b) + 2 or b > r_ + 12 or max(r_, g, b) < 8 or min(r_, g, b) > 247:
+                errs.append("bad pixel %s" % ((r_, g, b, a),))
+    if not 40 <= solid <= 80:
+        errs.append("chunk size %d px" % solid)
+    item.save(os.path.join(OUT, "..", "item", "carbonate.png"))
+    print("%-18s %2d solid px %s" % ("item/carbonate", solid, "OK" if not errs else "FAIL " + "; ".join(sorted(set(errs)))))
+    bad += bool(errs)
     sys.exit(1 if bad else 0)
 
 

@@ -1,0 +1,27 @@
+# Ore textures pass (2026-11-28): sulfide, magnetic, carbonate, duricrust (new look) next to vanilla copper and redstone ore.
+# Pad at y 163 above the dome roof (lit). Top row: mars blocks. Bottom row: vanilla copper, redstone, hematite, gypsum for comparison.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 120
+cmd /fill -12 163 -12 12 163 12 mars:basaltic_sand
+cmd /fill -12 164 -12 12 172 12 minecraft:air
+wait 10
+cmd /setblock -3 166 4 mars:sulfide_vein
+cmd /setblock -1 166 4 mars:magnetic_ore
+cmd /setblock 1 166 4 mars:carbonate_rock
+cmd /setblock 3 166 4 mars:duricrust
+cmd /setblock -3 164 4 minecraft:copper_ore
+cmd /setblock -1 164 4 minecraft:redstone_ore
+cmd /setblock 1 164 4 mars:hematite_ore
+cmd /setblock 3 164 4 mars:gypsum_vein
+cmd /summon minecraft:item 0 168 3 {Item:{id:"mars:carbonate",count:1},NoGravity:1b,PickupDelay:32767}
+wait 60
+view 0.5 166.5 -3 0 12
+wait 300
+wait 60
+shot ores_01_wall
+quit

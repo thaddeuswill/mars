@@ -57,3 +57,17 @@ Drawn by `tools/art-preview/gen_conductor_placeholder_textures.py` (add-only: it
 | `gypsum_vein` | REAL | Dark grey rock with thin pale veins that wrap | rock `#4A4745 #585451 #67625D`; vein `#E8E4D8 #BDB8AC` |
 
 Seen in a real client: `tools/screenshots/out/20261128-004710/` (script `tools/screenshots/art_textures.shots`). Known weak points: duricrust is the warmest and highest-contrast block and can read as wood at close range; vesicular holes are hard to see beyond about 8 blocks. Both are noted in the report as owner looks.
+
+## Update 2026-11-28 (Lead Artist): conductor ores and carbonate item are REAL; duricrust cooled
+
+All from `tools/art-preview/gen_terrain_textures.py` (same guards: opaque, no green, no blue cast, no pure black or white, at most 16 colours; the item has clear corners and a 40 to 80 px chunk). `gen_conductor_placeholder_textures.py` is also obsolete now.
+
+| Texture | Status | What it is now | Palette (hex) |
+|---|---|---|---|
+| `sulfide_vein` (INVENTED) | REAL | Grey-brown rock, 4 rust-orange stains, 5 dull gold flecks. Not green, no bright copper (vanilla copper ore is green-teal: seen side by side) | rock `#403A36 #4E4743 #5E5650`; rust `#7C4A30 #94593A`; gold `#9C8340 #B79B52` |
+| `magnetic_ore` (INVENTED) | REAL | Dark metallic stone, red-brown flecks (not bright red, so not redstone), cool-grey glints | rock `#2A2A2C #363638 #444446`; fleck `#6E3328 #8A4332`; glint `#7A7D82 #9A9DA2` |
+| `carbonate_rock` (real idea, game-sized) | REAL | Pale tan-grey rock, two faint wavering veins | `#AFA898 #BFB8A8 #CFC9BA`; vein `#E2DDD0`; shade `#948D7E` |
+| `item/carbonate` | REAL | Small pale chunk, 49 px, lit top-left, dark outline | `#DDD8CA #C4BDAD #A59E8E`; edge `#6E675A` |
+| `duricrust` | REAL, retoned | Cooler tan plates, contrast lowered (was `#8E6A44..#B98F5F`, crack `#5E4228`) | `#8A7656 #9A8664 #A89473`; crack `#6A5A42`; lip `#B5A383` |
+
+Seen in a real client: `tools/screenshots/out/20261128-011135/ores_01_wall.png` (script `tools/screenshots/art_ores.shots`).
