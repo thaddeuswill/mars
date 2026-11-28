@@ -45,8 +45,8 @@ public final class ActionEventCsv {
   private ActionEventCsv() {}
 
   /**
-   * Exports completed session logs in caller-provided order. Writes a UTF-8 BOM and publishes the
-   * result only after all rows validate. Run off the server thread.
+   * Exports completed session logs named by their session number in caller-provided order. Writes a
+   * UTF-8 BOM and publishes the result only after all rows validate. Run off the server thread.
    */
   public static void write(String world, List<Path> logs, Path output) throws IOException {
     ActionEvent.requireWorld(world);
@@ -58,6 +58,10 @@ public final class ActionEventCsv {
         writer.write('\ufeff');
         writeRow(writer, HEADER);
         for (Path log : logs) {
+          int expectedSession = sessionNumber(log);
+          if (expectedSession < 0) {
+            throw new IOException("Invalid learning session filename: " + log.getFileName());
+          }
           try (var reader = Files.newBufferedReader(log)) {
             String line;
             int row = 0;
@@ -65,6 +69,10 @@ public final class ActionEventCsv {
               row++;
               try {
                 ActionEvent event = read(world, JsonParser.parseString(line).getAsJsonObject());
+                if (event.session() != expectedSession) {
+                  throw new IOException(
+                      "Session mismatch at line " + row + " of " + log.getFileName());
+                }
                 writeEvent(writer, event);
               } catch (RuntimeException e) {
                 throw new IOException(
