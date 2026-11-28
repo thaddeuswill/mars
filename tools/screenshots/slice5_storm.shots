@@ -1,0 +1,42 @@
+# Stage 3 slice 5 step D: the storm on the Monitor (warned, active, after) and in the chat (mars:planet_1), 1280x720.
+# No storm sky or HUD icon yet (step E). The starter array is at (24, 64, -3).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 160
+closescreen
+cmd /mars landing skip
+wait 20
+cmd /mars dust set 1
+cmd /mars storm schedule 0.5
+wait 160
+cmd /mars storm get
+hud on
+wait 20
+shot storm_1_warning_in_chat
+cmd /mars monitor
+wait 40
+shot storm_2_monitor_warned
+closescreen
+cmd /mars index advance 0.6
+cmd /mars storm get
+cmd /mars monitor
+wait 40
+shot storm_3_monitor_active_full_cut
+closescreen
+view 30.5 66.2 -3.5 90 22
+wait 20
+shot storm_4_panel_during_storm
+cmd /mars index advance 0.8
+wait 40
+cmd /mars monitor
+wait 40
+shot storm_5_monitor_after_panel_dust_up
+closescreen
+view 30.5 66.2 -3.5 90 22
+wait 20
+shot storm_6_panel_after_storm_stage3
+quit

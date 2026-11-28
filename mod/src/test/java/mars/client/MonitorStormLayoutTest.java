@@ -92,7 +92,7 @@ class MonitorStormLayoutTest {
             .findFirst()
             .orElseThrow();
     assertEquals(MonitorView.CauseLine.CLOUD, line.direction());
-    assertEquals("half a sol", line.rate());
+    assertEquals("about half a sol", line.rate());
     check("storm warned", s, false);
   }
 
@@ -155,11 +155,11 @@ class MonitorStormLayoutTest {
 
   @Test
   void etaWordsRoundToHalfSols() {
-    assertEquals("half a sol", MonitorView.etaWords(0.4));
-    assertEquals("1 sol", MonitorView.etaWords(1.0));
-    assertEquals("1.5 sols", MonitorView.etaWords(1.4));
-    assertEquals("2 sols", MonitorView.etaWords(2.1));
-    assertEquals("less than half a sol", MonitorView.etaWords(0.1));
+    assertEquals("about half a sol", MonitorView.etaWords(0.4));
+    assertEquals("about 1 sol", MonitorView.etaWords(1.0));
+    assertEquals("about 1.5 sols", MonitorView.etaWords(1.4));
+    assertEquals("about 2 sols", MonitorView.etaWords(2.1));
+    assertEquals("under half a sol", MonitorView.etaWords(0.1));
   }
 
   @Test

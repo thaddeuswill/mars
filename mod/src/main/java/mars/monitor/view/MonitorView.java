@@ -323,19 +323,24 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public static final String STORM_ACTIVE = "monitor.storm.active";
   public static final String STORM_CUT = "monitor.power.cause.storm";
 
-  /** Time left in plain words, to the nearest half sol: "half a sol", "1 sol", "1.5 sols", .... */
+  /**
+   * Time left in plain words, to the nearest half sol, with its "about": "about half a sol", "about
+   * 1 sol", "about 1.5 sols", "under half a sol".
+   */
   public static String etaWords(double sols) {
     double half = Math.round(sols * 2) / 2.0;
     if (half <= 0) {
-      return "less than half a sol";
+      return "under half a sol";
     }
     if (half == 0.5) {
-      return "half a sol";
+      return "about half a sol";
     }
     if (half == 1.0) {
-      return "1 sol";
+      return "about 1 sol";
     }
-    return (half == Math.rint(half) ? Long.toString((long) half) : Double.toString(half)) + " sols";
+    return "about "
+        + (half == Math.rint(half) ? Long.toString((long) half) : Double.toString(half))
+        + " sols";
   }
 
   /** The Power row's panel-dust cause line (f1-storm-spec.md 3.1). */

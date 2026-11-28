@@ -70,6 +70,8 @@ Enable cheats for the following commands in a singleplayer test world.
 | `/mars pause`, `/mars resume`, `/mars session` | Pause, resume, or inspect the session. |
 
 | `/mars machines` | List registered machines on this planet. |
+| `/mars dust get`, `/mars dust set <0-4> [partly]` | Show panels by dust stage and the power lost to dust; set every panel to one stage (0.4.1). |
+| `/mars storm get`, `/mars storm schedule <sols> [length]`, `/mars storm end` | Show the dust storm's state; decide a storm that many sols from now (warning goes out at once); start clearing an active storm (0.4.1). |
 | `/mars index export` | Write a planet report to the server’s `mars-data/exports` folder. |
 | `/mars checkpoint save <name>`, `/mars checkpoint list` | Create a planet simulation checkpoint and list available checkpoints. |
 | `/mars checkpoint restore <name>` | Restore a simulation checkpoint. The reserved name `start` restores starting values. |
@@ -118,3 +120,7 @@ All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.26
 `tools/screenshots/run-shots.sh [script]` starts the real client under a virtual display (Linux, Xvfb, software OpenGL), creates a fresh test world, goes to Mars, places a few blocks, and saves PNGs. `tools/screenshots/batch2.shots` places every machine and the panel at dust stages 0, 2, 4 and partly cleaned; `round.shots` checks the round array's footprint, outline, and lighting under the overhang. On your own computer you don't need Xvfb: run `./gradlew runShotsClient` from `mod/` and the same script runs in a normal window. Pass an absolute script path to the Linux harness and check the PNG timestamps. The latest results are in the [handoff](../../HANDOFF.md).
 
 **Starting Ovens and the polar frost (slice 5).** The first player to arrive on Mars (`/mars go`) gets **two Regolith Ovens** in the inventory, once per world (not per player; dying or logging in again does not repeat it). Place them and a Solar Panel: each Oven draws 1 power unit per sol and adds +0.01 kPa per sol. While Mars is cold the polar frost takes back 2 % of the pressure above 0.60 kPa each sol, so pressure levels off: two Ovens settle at 1.6 kPa; one Outgasser on a clean panel settles near 5.6 kPa. The Monitor shows "Polar frost" as a cause line once it passes about 0.85 kPa, and "Levelling off" when the frost balances your machines. Temperature does not change by itself yet; to see the other two branches use `/mars index set temperature -30` (mild, 1 %) or `-10` (warm: the frost gives the air back). Dome stable and Phase 2 begins are unchanged.
+
+## Panels, dust and the first storm (0.4.1-stage3-j)
+
+Panels now dust by themselves: one stage about every 3 sols (0.75 sol in classroom mode), four stages, down to 60 percent output. The Monitor's Power row shows "Panel dust -n %" once your Landing is over. Craft a **Panel Brush** (2 iron ingots and 1 copper ingot, shapeless) and **hold right-click on a panel for 2 seconds** to clean it (64 uses). The first dust storm warns one sol ahead, arrives on sol 14 (sol 4.5 in classroom mode), and lasts 0.75 sol (0.5 in classroom mode). There is no storm sky or HUD icon yet (step E). For a test: `/mars storm schedule 0.5`, then `/mars index advance 0.6`. Panel dust accrues in simulation time, so it stops with `/mars pause`.
