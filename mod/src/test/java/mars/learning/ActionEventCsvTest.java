@@ -122,6 +122,36 @@ class ActionEventCsvTest {
   }
 
   @Test
+  void rejectsAnActiveSessionRowStoredInACompletedSessionFile() throws Exception {
+    Path world = temp.resolve("w-3f9a2c");
+    Path log = world.resolve("actionlog/s-0007.jsonl");
+    try (var writer = new ActionLog(log)) {
+      writer.append(
+          new ActionEvent(
+              Instant.EPOCH,
+              "w-3f9a2c",
+              1,
+              8,
+              0,
+              100,
+              0.25,
+              null,
+              ActionEvent.Band.MS,
+              ActionEvent.Kind.SEAL_BREACHED,
+              ActionEvent.Cause.SIMULATION,
+              "mars:seal_breach"));
+    }
+    Path previousExport = Files.writeString(temp.resolve("events.csv"), "previous export");
+    assertThrows(IOException.class, () -> ActionEventCsv.exportCompleted(world, "w-3f9a2c", 8));
+    assertThrows(
+        IOException.class, () -> ActionEventCsv.write("w-3f9a2c", List.of(log), previousExport));
+    assertEquals("previous export", Files.readString(previousExport));
+    try (var exports = Files.list(world.resolve("exports"))) {
+      assertEquals(0, exports.count());
+    }
+  }
+
+  @Test
   void escapesSpreadsheetFormulasQuotesAndLineBreaks() {
     assertEquals("'=1+2", ActionEventCsv.escape("=1+2"));
     assertEquals("'+3", ActionEventCsv.escape("+3"));
