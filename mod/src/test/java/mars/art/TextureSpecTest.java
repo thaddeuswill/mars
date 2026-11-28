@@ -54,7 +54,20 @@ class TextureSpecTest {
           "super_greenhouse_emitter_front",
           "super_greenhouse_emitter_stack",
           "super_greenhouse_emitter_flare",
-          "super_greenhouse_emitter_top");
+          "super_greenhouse_emitter_top",
+          "ice_extractor_base",
+          "ice_extractor_side",
+          "ice_extractor_front",
+          "ice_extractor_front_off",
+          "ice_extractor_front_running",
+          "ice_extractor_leg",
+          "ice_extractor_heater",
+          "ice_extractor_sleeve",
+          "ice_extractor_top",
+          "ice_extractor_pump",
+          "ice_extractor_tank",
+          "ice_extractor_tank_top",
+          "ice_extractor_hose");
 
   private static BufferedImage load(String name) throws IOException {
     Path p = TestData.pack().resolve("assets/mars/textures/block/" + name + ".png");
@@ -187,7 +200,9 @@ class TextureSpecTest {
           "o2_generator_face_running",
           "water_reclaimer_front_running",
           "atmospheric_processor_canister_running",
-          "super_greenhouse_emitter_flare_running");
+          "super_greenhouse_emitter_flare_running",
+          "ice_extractor_sleeve_running",
+          "ice_extractor_steam");
 
   @Test
   void animatedTexturesHaveValidMcmetaAndFrameHeights() throws IOException {
@@ -248,6 +263,72 @@ class TextureSpecTest {
         }
       }
     }
+  }
+
+  @Test
+  void iceExtractorBakesBandPlateAndHasNoGreen() throws IOException {
+    int purple = 0xCC79A7;
+    BufferedImage b = load("ice_extractor_base");
+    assertEquals(purple, b.getRGB(0, 14) & 0xFFFFFF, "band dash on");
+    assertEquals(0x8E3F6C, b.getRGB(0, 15) & 0xFFFFFF, "band dash edge");
+    assertTrue((b.getRGB(2, 14) & 0xFFFFFF) != purple, "band dash off");
+    for (String n :
+        List.of("ice_extractor_front", "ice_extractor_front_off", "ice_extractor_front_running")) {
+      BufferedImage f = load(n);
+      assertEquals(purple, f.getRGB(10, 4) & 0xFFFFFF, n + " plate");
+      assertEquals(0x2A2420, f.getRGB(9, 6) & 0xFFFFFF, n + " plate slash bottom-left");
+      assertEquals(0x2A2420, f.getRGB(12, 3) & 0xFFFFFF, n + " plate slash top-right");
+    }
+    // lamp shape carries the state: off = nothing lit, idle = hollow ring, running = solid
+    int lamp = 0x56B4E9;
+    assertEquals(0x1E2328, load("ice_extractor_front_off").getRGB(5, 4) & 0xFFFFFF);
+    assertEquals(lamp, load("ice_extractor_front").getRGB(4, 3) & 0xFFFFFF);
+    assertTrue(
+        (load("ice_extractor_front").getRGB(5, 4) & 0xFFFFFF) != lamp, "idle ring is hollow");
+    assertEquals(lamp, load("ice_extractor_front_running").getRGB(5, 4) & 0xFFFFFF);
+    for (String n : OVERLAYS) {
+      if (!n.startsWith("ice_extractor_")) continue;
+      BufferedImage img = load(n);
+      for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 16; y++) {
+          int argb = img.getRGB(x, y);
+          int r = (argb >> 16) & 255;
+          int g = (argb >> 8) & 255;
+          int bl = argb & 255;
+          assertTrue(!(g > r + 20 && g > bl + 20), n + " has green at " + x + "," + y);
+        }
+      }
+    }
+  }
+
+  @Test
+  void iceExtractorModelsKeepOneCellAnd32PxHeight() throws IOException {
+    Path models = TestData.pack().resolve("assets/mars/models/block");
+    for (String n :
+        List.of(
+            "ice_extractor", "ice_extractor_off", "ice_extractor_idle", "ice_extractor_running")) {
+      com.google.gson.JsonObject m =
+          com.google.gson.JsonParser.parseString(Files.readString(models.resolve(n + ".json")))
+              .getAsJsonObject();
+      double maxY = 0;
+      for (var e : m.getAsJsonArray("elements")) {
+        var el = e.getAsJsonObject();
+        for (int c : new int[] {0, 2}) {
+          double lo = el.getAsJsonArray("from").get(c).getAsDouble();
+          double hi = el.getAsJsonArray("to").get(c).getAsDouble();
+          assertTrue(lo >= 0 && hi <= 16, n + " stays inside one cell on x and z");
+        }
+        maxY = Math.max(maxY, el.getAsJsonArray("to").get(1).getAsDouble());
+      }
+      assertEquals(32.0, maxY, n + " model is 32 px high");
+    }
+    assertTrue(
+        Files.readString(models.resolve("ice_extractor_running.json"))
+            .contains("ice_extractor_sleeve_running"),
+        "running model uses the animated sleeve");
+    assertTrue(
+        Files.exists(TestData.pack().resolve("assets/mars/models/item/ice_extractor.json")),
+        "item model");
   }
 
   @Test

@@ -24,6 +24,7 @@ Shape carries the state, not hue alone: off = nothing lit, idle = a small or hol
 | Water reclaimer | Water in the front window rises one row per frame (3, 4, 5, 6 rows) with a pale surface line (`#D5E0E8`), then the bucket "empties" and restarts | 4 x 20 (80, slow) | `water_reclaimer_front_running` (animated; lamp solid blue) | off: lamp dark; idle: the existing hollow ring |
 | Atmospheric processor | A lit segment (`#D9DEE2`) climbs the canister between its dark rings, bottom to top (the "canister pulse") | 4 x 8 (32) | `atmospheric_processor_canister_running` (animated) + `_front_running` (solid lamp, static) | off: `_front_off`; idle: existing front |
 | Super-greenhouse emitter | Glow line (`#F0E442`) climbs the 3 px flare lip, then one dark beat (vent glow) | 4 x 8 (32) | `super_greenhouse_emitter_flare_running` (animated) + `_front_running` | off: `_front_off`; idle: existing front |
+| Ice extractor | Two parts: a 2 px melt-glow ring (`#FFD27A` on `#B37400`) climbs the drill sleeve, bottom to top; a steam puff (`#E4E8EA`, `#C2CDD5`) rises from the tank vent on a 4 x 6 px cutout element | 4 x 10 (40), both strips | `ice_extractor_sleeve_running` + `ice_extractor_steam` (animated) + `_front_running` (solid lamp, static) | off: `_front_off`; idle: `ice_extractor_front`. Spec: `docs/art/ice-extractor.md` |
 | Battery | No motion. Charge shown by the count of lit bars: 0 to 3 (shape = count), bars fill from the bottom, status pixel dark at 0 | static, 4 levels | `battery_front_charge0..2` (level 3 = the existing `battery_front`) | n/a (no off/idle; level 0 is "empty") |
 
 The made-up band (rows 14 and 15) and plate are never changed in any frame (checked by test for the oxygen maker and reclaimer; the other animated textures do not contain them).
@@ -51,6 +52,7 @@ The made-up band (rows 14 and 15) and plate are never changed in any frame (chec
 | Water reclaimer | `water_reclaimer_off`, `_idle` (= old model), `_running` |
 | Atmospheric processor | `atmospheric_processor_off`, `_idle` (= old model), `_running` |
 | Super-greenhouse emitter | `super_greenhouse_emitter_off`, `_idle` (= old model), `_running` |
+| Ice extractor | `ice_extractor_off`, `_idle` (= `ice_extractor`), `_running` (new machine, made with these conventions) |
 | Battery | `battery_charge0`, `_charge1`, `_charge2`, `_charge3` (= old model) |
 
 ## 5. Why nothing animates today without the property

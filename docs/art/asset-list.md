@@ -131,7 +131,7 @@ Every machine: front face with status lamp (style guide §3.1) in states **off, 
 | M-15 | Shift Board block (0–6 slips) | 16×16 ×7 | 4 | Spec'd | Style guide §11.3 | SM → F-S |
 | M-16 | Atmospheric processor | Model | 4 | Needed | | SM → F-S |
 | M-17 | Super-greenhouse emitter | Model | 4 | Spec'd (look) | Shimmer and vent glow; no colored plume | SM → **F-E** |
-| M-18 | Ice extractor | Model | 4 | Needed | | SM → F-S |
+| M-18 | Ice extractor | Model | 4 | Made (first pass, 2026-11-28; not seen in a real client) | `docs/art/ice-extractor.md` | SM → F-S |
 | M-19 | Transit tubes (straight, corner, junction) | Models | 4 | Needed | | SM → F-S |
 | M-20 | Outpost shell blocks | 16×16 | 4 | Needed | | F-S |
 | M-21 | Meltwater treatment unit | Model | 4 | Needed | Perchlorate Phase 2 | SM → F-S |
