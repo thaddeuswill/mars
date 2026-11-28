@@ -242,10 +242,10 @@ All amounts, speeds and costs are *invented*. Plain journal label for each is in
 | Output | Recipe | Serves | Status |
 |---|---|---|---|
 | Washed regolith | Regolith + **water bucket** in a wash station (cauldron-style), brine drains to a salt item | Planter base (C1, A1) | *Game design* (washing NOT VERIFIED) |
-| Planter bed | Hoe on washed regolith, then **bone meal** or compost as organic matter | Food, biomass | SIMPLIFIED (needs treatment, NOT VERIFIED) |
-| Grow lamp | **Glowstone dust or redstone lamp** + **iron ingot** | Crops under dome | *Game design* |
+| Planter bed | Hoe on washed regolith (works with water alone). **Bone meal** or compost is optional and only raises yield (2026-11-28: the soil unit and seed kits need bone meal, so the first planter cannot) | Food, biomass | SIMPLIFIED (needs treatment, NOT VERIFIED) |
+| Grow lamp | **Glass** + **iron ingot** + 1 **redstone** (2026-11-28: no glowstone on Mars; *invented*) | Crops under dome | *Game design* |
 | Lettuce, tomato | **Seeds** from vanilla `wheat_seeds` plus planter; 3 growth stages | Dead-tomato lesson (C1) | INVENTED crops |
-| Biome seed kits | **Bone meal** + **wheat seeds** + carbonate rock + soil (per kit, *invented*) | Biomass, A5 | INVENTED; order real, speed fiction |
+| Biome seed kits | Four recipes, each 1 carbonate (`#mars:seed_kit_carbonate`) + 1 **bone meal** + plant stand-ins: see `seed-kit-recipes.md` (2026-11-28) | Biomass, A5 | INVENTED; order real, speed fiction |
 
 **Open for the Technical Lead:** exact shapes and KubeJS wiring. **Open for the SME:** source for the washing step, carbonate abundance, Phoenix latitude.
 
