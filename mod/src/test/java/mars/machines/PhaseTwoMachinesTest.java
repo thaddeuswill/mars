@@ -27,7 +27,8 @@ class PhaseTwoMachinesTest {
     for (String n : NAMES) {
       var def = TestSims.defs().get("mars:" + n);
       assertEquals(3.0, def.power().drawPerSol(), 1e-12, n);
-      assertEquals(1, def.contributions().size(), n);
+      // The processor also adds CO2 until Phase 3 begins (Slice B, rule A).
+      assertEquals(n.equals("atmospheric_processor") ? 2 : 1, def.contributions().size(), n);
       String source = json(TestData.data("machines/" + n + ".json")).get("source").getAsString();
       assertTrue(source.contains("INVENTED"), n);
       PlanetSim s = TestSims.sim(Pace.STANDARD);

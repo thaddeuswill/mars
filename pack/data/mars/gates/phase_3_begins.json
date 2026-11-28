@@ -4,10 +4,27 @@
   "order": 5,
   "condition": {
     "all": [
-      { "parameter": "mars:pressure", "op": ">=", "value": 30.0 },
-      { "parameter": "mars:temperature", "op": ">=", "value": 0.0 }
+      {
+        "parameter": "mars:pressure",
+        "op": ">=",
+        "value": 30.0
+      },
+      {
+        "parameter": "mars:temperature",
+        "op": ">=",
+        "value": 0.0
+      }
     ]
   },
-  "unlocks": [],
-  "source": "DESIGN.md gate table and docs/design/phase2-machine-rates.md section 2: Phase 3 begins at pressure >= 30 kPa and temperature >= 0 C, no hold. Physical thresholds: never scaled by pace or group size (invariant I-1). It should unlock mars:soil_treatment_unit (also the seed-kit crafting station) and mars:carbon_scrubber; neither is a block yet, so unlocks is empty. Order 5 leaves order 4 for the Hydrosphere gate, whose definition is still open."
+  "unlocks": [
+    "mars:carbon_scrubber",
+    "mars:algae_vat"
+  ],
+  "source": "DESIGN.md gate table and docs/design/phase2-machine-rates.md section 2: Phase 3 begins at pressure >= 30 kPa and temperature >= 0 C, no hold. Physical thresholds: never scaled by pace or group size (invariant I-1). It should unlock mars:soil_treatment_unit (also the seed-kit crafting station) and mars:carbon_scrubber; neither is a block yet, so unlocks is empty. Order 5 leaves order 4 for the Hydrosphere gate, whose definition is still open. Slice B: unlocks mars:carbon_scrubber and mars:algae_vat (the vat also needs hydrosphere >= 10 percent in its own machine file; DESIGN.md's gate table names the Hydrosphere gate for vats, the owner's slice order names this gate: flagged in the report). soil_treatment_unit is not a block yet. Supply cache (docs/design/gate-input-items.md 3.5): 2 sorbent beds, once per player per planet; the scrubber recipe takes 2. Amount INVENTED.",
+  "cache": [
+    {
+      "item": "mars:sorbent_bed",
+      "count": 2
+    }
+  ]
 }

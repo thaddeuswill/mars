@@ -35,6 +35,20 @@ public final class PlanetSim {
   private int pendingTicks;
   private final PowerGrid grid = new PowerGrid();
 
+  /** Share of full output (power share times the machine's own condition) of each converter. */
+  private final Map<String, Double> conversionScale = new LinkedHashMap<>();
+
+  /** Pressure and O2 fraction at the start of the step now running (gas bookkeeping). */
+  private double stepStartPressure = Double.NaN;
+
+  private double stepStartO2Fraction = Double.NaN;
+
+  /** CO2 locked into carbonate rock by scrubbers so far, kPa (a tally, not an Index value). */
+  private double carbonateKpa;
+
+  /** Key under which the tally rides in the saved values (not a parameter; stripped on load). */
+  public static final String CARBONATE_KEY = "mars:carbonate_locked_kpa";
+
   /** Output fraction (0 to 1) of a machine by position, when not 1 (solar dust). */
   private final Map<Long, Double> efficiency = new LinkedHashMap<>();
 
@@ -98,16 +112,24 @@ public final class PlanetSim {
       // The sink is a rate like any machine: it gets the pace multiplier (already in dt) and the
       // group scale, so the balance point does not move with the mode (SME review Q2).
       model.addCoupling(
-          (values, naturalDt) ->
-              values.add(
-                  Ids.PRESSURE,
-                  frost.step(
-                      values.get(Ids.PRESSURE),
-                      values.get(Ids.TEMPERATURE),
-                      naturalDt * pace.groupRateScale())));
+          (values, naturalDt) -> {
+            double d =
+                frost.step(
+                    values.get(Ids.PRESSURE),
+                    values.get(Ids.TEMPERATURE),
+                    naturalDt * pace.groupRateScale());
+            values.add(Ids.PRESSURE, d);
+            // The frost is CO2 ice: what it takes or gives back is CO2 (never below none).
+            if (values.has(Ids.CO2_PARTIAL)) {
+              values.add(Ids.CO2_PARTIAL, Math.max(d, -values.get(Ids.CO2_PARTIAL)));
+            }
+          });
     }
+    model.addCoupling((values, naturalDt) -> applyGas(values, naturalDt));
     model.setBeforeStep(
         dt -> {
+          stepStartPressure = model.current(Ids.PRESSURE);
+          stepStartO2Fraction = model.current(Ids.O2_FRACTION);
           stepStorm(dt);
           double sat = grid.step(dt);
           applyPower(sat);
@@ -117,6 +139,114 @@ public final class PlanetSim {
           evaluateGates(dt);
           history.record(model.sols(), model.current(Ids.PRESSURE));
         });
+  }
+
+  /**
+   * Gas bookkeeping for one step (rule A, ARCHITECTURE.md 2.23i). Oxygen is kept in kPa: whatever
+   * changes the total pressure (filler gas, outgassing, frost, a scrubber) dilutes or concentrates
+   * the O2 fraction but never creates or destroys O2. Converters then move CO2 to O2 one for one
+   * (total pressure unchanged) or lock it into carbonate (total pressure falls by the same kPa).
+   * Cost: one pass over the machine types per step; nothing when none converts.
+   */
+  private void applyGas(Coupling.Values values, double naturalDt) {
+    if (!values.has(Ids.O2_FRACTION)
+        || !values.has(Ids.CO2_PARTIAL)
+        || !values.has(Ids.BIOMASS)
+        || Double.isNaN(stepStartPressure)) {
+      return;
+    }
+    double scale = naturalDt * pace.groupRateScale();
+    double co2 = values.get(Ids.CO2_PARTIAL);
+    // What every converter asks for this step, in kPa of CO2.
+    double asked = 0;
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def == null || def.conversions().isEmpty() || e.getValue().isEmpty()) {
+        continue;
+      }
+      double sc = conversionScale.getOrDefault(e.getKey(), 0.0);
+      for (MachineDef.Conversion c : def.conversions()) {
+        asked += c.kpaPerSol() * sc * e.getValue().size() * scale;
+      }
+    }
+    double fill = asked > co2 ? (asked > 0 ? co2 / asked : 0) : 1.0; // never more than the air has
+    double toO2 = 0;
+    double toRock = 0;
+    double biomass = 0;
+    if (asked > 0) {
+      for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+        MachineDef def = defs.get(e.getKey());
+        if (def == null || def.conversions().isEmpty() || e.getValue().isEmpty()) {
+          continue;
+        }
+        double sc = conversionScale.getOrDefault(e.getKey(), 0.0);
+        for (MachineDef.Conversion c : def.conversions()) {
+          double x = c.kpaPerSol() * sc * e.getValue().size() * scale * fill;
+          if (c.toO2()) {
+            toO2 += x;
+          } else {
+            toRock += x;
+          }
+          biomass += x * c.biomassPerKpa();
+        }
+      }
+    }
+    double o2Kpa = values.get(Ids.O2_FRACTION) * stepStartPressure / 100.0 + toO2;
+    if (toO2 + toRock > 0) {
+      values.add(Ids.CO2_PARTIAL, -(toO2 + toRock));
+      values.add(Ids.PRESSURE, -toRock);
+      carbonateKpa += toRock;
+      if (biomass > 0) {
+        values.add(Ids.BIOMASS, biomass);
+      }
+    }
+    double p1 = values.get(Ids.PRESSURE);
+    if (p1 > 0) {
+      double target = 100.0 * o2Kpa / p1;
+      values.add(Ids.O2_FRACTION, target - values.get(Ids.O2_FRACTION));
+    }
+  }
+
+  /**
+   * Total CO2 the scrubbers have locked into carbonate rock, kPa (a tally; saved with the planet).
+   */
+  public double carbonateLockedKpa() {
+    return carbonateKpa;
+  }
+
+  /**
+   * What converters do to {@code parameter} now, per sol, signed, grouped by machine type (after
+   * pace and group scale): CO2 falls, O2 partial pressure rises. Empty when none is placed. For the
+   * Monitor's cause lines; shows 0 when the air has no CO2 left to move.
+   */
+  public List<PlanetaryIndexModel.Cause> conversionCauses(ParameterId parameter) {
+    List<PlanetaryIndexModel.Cause> out = new ArrayList<>();
+    double scale = pace.rateMultiplier() * pace.groupRateScale();
+    boolean hasInput = model.current(Ids.CO2_PARTIAL) > 1e-9;
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def == null || def.conversions().isEmpty() || e.getValue().isEmpty()) {
+        continue;
+      }
+      double sc = conversionScale.getOrDefault(e.getKey(), 0.0);
+      double rate = 0;
+      for (MachineDef.Conversion c : def.conversions()) {
+        double x = hasInput ? c.kpaPerSol() * sc * scale : 0;
+        if (parameter.equals(Ids.CO2_PARTIAL)) {
+          rate -= x;
+        } else if (parameter.equals(Ids.O2_PARTIAL) && c.toO2()) {
+          rate += x;
+        } else if (parameter.equals(Ids.BIOMASS)) {
+          rate += x * c.biomassPerKpa();
+        }
+      }
+      if (rate != 0 || parameter.equals(Ids.CO2_PARTIAL) || parameter.equals(Ids.O2_PARTIAL)) {
+        out.add(
+            new PlanetaryIndexModel.Cause(
+                e.getKey(), e.getValue().size(), rate * e.getValue().size()));
+      }
+    }
+    return out;
   }
 
   /**
@@ -351,7 +481,10 @@ public final class PlanetSim {
     for (Map.Entry<String, Map<Long, List<PlanetaryIndexModel.ContributionHandle>>> e :
         handles.entrySet()) {
       MachineDef def = defs.get(e.getKey());
-      if (def == null || (def.power().drawPerSol() <= 0 && def.requires() == null)) {
+      if (def == null
+          || (def.power().drawPerSol() <= 0
+              && def.requires() == null
+              && def.contributions().stream().noneMatch(c -> c.offAfterGate() != null))) {
         continue;
       }
       // A machine with a "requires" condition (the ice extractor: warm enough) contributes nothing
@@ -360,8 +493,16 @@ public final class PlanetSim {
       double ok = requirementMet(def) ? 1.0 : 0.0;
       for (List<PlanetaryIndexModel.ContributionHandle> hs : e.getValue().values()) {
         for (int i = 0; i < hs.size(); i++) {
-          hs.get(i).setRate(def.contributions().get(i).ratePerSol() * share * ok);
+          MachineDef.Contribution c = def.contributions().get(i);
+          double open = c.offAfterGate() != null && gates.isLatched(c.offAfterGate()) ? 0.0 : 1.0;
+          hs.get(i).setRate(c.ratePerSol() * share * ok * open);
         }
+      }
+    }
+    for (MachineDef def : defs.values()) {
+      if (!def.conversions().isEmpty()) {
+        double share = def.power().drawPerSol() > 0 ? satisfaction : 1.0;
+        conversionScale.put(def.id(), share * (requirementMet(def) ? 1.0 : 0.0));
       }
     }
   }
@@ -505,10 +646,64 @@ public final class PlanetSim {
     return def != null && def.power().drawPerSol() > 0;
   }
 
-  /** How many Index contributions one machine of this type makes (0 for a load only). */
+  /**
+   * How many Index changes one machine of this type makes: contributions plus gas conversions (0
+   * for a load only).
+   */
   public int contributionCount(String type) {
     MachineDef def = defs.get(type);
-    return def == null ? 0 : def.contributions().size();
+    return def == null ? 0 : def.contributions().size() + def.conversions().size();
+  }
+
+  /** True when at least one placed machine moves gas between values (a vat or a scrubber). */
+  public boolean convertsGas() {
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      MachineDef def = defs.get(e.getKey());
+      if (def != null && !def.conversions().isEmpty() && !e.getValue().isEmpty()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * The parameter whose comparison in the machine's own {@code requires} fails now (the vat's
+   * hydrosphere or temperature), or null when the machine has no condition or it holds. The Monitor
+   * names the reason with it ("needs water", "too cold").
+   */
+  public ParameterId machineRequirementShortfall(String type) {
+    MachineDef def = defs.get(type);
+    if (def == null || def.requires() == null || requirementMet(def)) {
+      return null;
+    }
+    Condition.Context ctx =
+        new Condition.Context() {
+          @Override
+          public double value(ParameterId id) {
+            return model.current(id);
+          }
+
+          @Override
+          public boolean machineState(String name) {
+            return false;
+          }
+        };
+    if (def.requires() instanceof Condition.All all) {
+      for (Condition part : all.parts()) {
+        if (part instanceof Condition.Compare c && !c.eval(ctx)) {
+          return c.parameter();
+        }
+      }
+    } else if (def.requires() instanceof Condition.Compare c) {
+      return c.parameter();
+    }
+    return null;
+  }
+
+  /** False for a converter when the air has no CO2 left for it to move (true for all others). */
+  public boolean machineHasInput(String type) {
+    MachineDef def = defs.get(type);
+    return def == null || def.conversions().isEmpty() || model.current(Ids.CO2_PARTIAL) > 1e-9;
   }
 
   public boolean hasMachineDef(String type) {
@@ -526,6 +721,9 @@ public final class PlanetSim {
   public PlanetState toState() {
     Map<String, Double> values = new LinkedHashMap<>();
     model.storedValues().forEach((id, v) -> values.put(id.id(), v));
+    if (carbonateKpa > 0) {
+      values.put(CARBONATE_KEY, carbonateKpa);
+    }
     Map<String, List<Long>> ms = new LinkedHashMap<>();
     // Types with no machines are left out, so a planet that had an Oven placed and removed has the
     // same state as one saved and loaded (the loader never sees an empty type).
@@ -589,7 +787,16 @@ public final class PlanetSim {
     }
     sim.gates.restore(state.gates());
     Map<ParameterId, Double> saved = new LinkedHashMap<>();
-    state.values().forEach((k, v) -> saved.put(ParameterId.of(k), v));
+    state
+        .values()
+        .forEach(
+            (k, v) -> {
+              if (k.equals(CARBONATE_KEY)) {
+                sim.carbonateKpa = v == null || v.isNaN() ? 0 : Math.max(0, v);
+              } else {
+                saved.put(ParameterId.of(k), v);
+              }
+            });
     PlanetaryIndexModel.RestoreReport report = sim.model.restore(saved, state.simTicks());
     sim.pendingTicks = Math.max(0, Math.min(state.pendingTicks(), pace.stepTicks() - 1));
     sim.efficiency.putAll(state.efficiency());

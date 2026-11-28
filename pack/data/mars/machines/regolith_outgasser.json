@@ -5,9 +5,13 @@
     {
       "parameter": "mars:pressure",
       "ratePerSol": 0.1
+    },
+    {
+      "parameter": "mars:co2_partial",
+      "ratePerSol": 0.1
     }
   ],
-  "source": "docs/design/balance-sheet.md §2 and §2b: Regolith Outgasser +0.10 kPa per sol each at standard pace, at full power; the effect scales with the share of power it gets. Draw 4 power units (kWh) per sol is invented (\"Medium\" in §2). Survival placement is unlocked by the Dome stable gate (data/mars/gates/dome_stable.json); creative players and /setblock are not gated.",
+  "source": "docs/design/balance-sheet.md §2 and §2b: Regolith Outgasser +0.10 kPa per sol each at standard pace, at full power; the effect scales with the share of power it gets. Draw 4 power units (kWh) per sol is invented (\"Medium\" in §2). Survival placement is unlocked by the Dome stable gate (data/mars/gates/dome_stable.json); creative players and /setblock are not gated. Gas it makes is CO2 (Slice B, rule A): +0.10 kPa/sol of CO2 each, the same kPa as its pressure rate, INVENTED (balance sheet 1 and 3a: CO2 is about all of the air up to 5 kPa).",
   "power": {
     "drawPerSol": 4.0
   }

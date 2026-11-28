@@ -5,9 +5,14 @@
     {
       "parameter": "mars:pressure",
       "ratePerSol": 0.15
+    },
+    {
+      "parameter": "mars:co2_partial",
+      "ratePerSol": 0.08,
+      "offAfterGate": "mars:phase_3_begins"
     }
   ],
-  "source": "docs/design/phase2-machine-rates.md section 1 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): atmospheric processor +0.15 kPa per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. The 0.15 kPa/sol rate is INVENTED game balance (twice the Outgasser's kPa per power unit). Draw 3 power units (kWh) per sol is INVENTED (between the reclaimer's 1.5 and the Outgasser's 4). Real ideas behind it: docs/science/machine-references.md (MOXIE and the Sabatier module); this machine is a game-sized, game-wired version. Open gap: it adds no CO2 partial-pressure term yet (phase2-machine-rates.md C-5). Unlocked by Phase 2 begins (data/mars/gates/phase_2_begins.json).",
+  "source": "docs/design/phase2-machine-rates.md section 1 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): atmospheric processor +0.15 kPa per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. The 0.15 kPa/sol rate is INVENTED game balance (twice the Outgasser's kPa per power unit). Draw 3 power units (kWh) per sol is INVENTED (between the reclaimer's 1.5 and the Outgasser's 4). Real ideas behind it: docs/science/machine-references.md (MOXIE and the Sabatier module); this machine is a game-sized, game-wired version. Open gap: it adds no CO2 partial-pressure term yet (phase2-machine-rates.md C-5). Unlocked by Phase 2 begins (data/mars/gates/phase_2_begins.json). Slice B (phase2-machine-rates.md C-5, rule A): while Phase 2 lasts 0.08 of its 0.15 kPa/sol is CO2 (52 percent, balance sheet 3a: 18 of 30 kPa); once Phase 3 begins has latched it adds filler gas only (the CO2 term is 0). 0.08 is INVENTED.",
   "power": {
     "drawPerSol": 3.0
   }

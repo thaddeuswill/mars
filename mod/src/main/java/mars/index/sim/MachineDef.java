@@ -20,14 +20,24 @@ public record MachineDef(
     List<Contribution> contributions,
     Power power,
     int startingGrant,
-    Condition requires) {
+    Condition requires,
+    List<Conversion> conversions) {
+
+  public MachineDef(
+      String id,
+      List<Contribution> contributions,
+      Power power,
+      int startingGrant,
+      Condition requires) {
+    this(id, contributions, power, startingGrant, requires, List.of());
+  }
 
   public MachineDef(String id, List<Contribution> contributions, Power power, int startingGrant) {
-    this(id, contributions, power, startingGrant, null);
+    this(id, contributions, power, startingGrant, null, List.of());
   }
 
   public MachineDef(String id, List<Contribution> contributions, Power power) {
-    this(id, contributions, power, 0, null);
+    this(id, contributions, power, 0, null, List.of());
   }
 
   /**
@@ -44,8 +54,28 @@ public record MachineDef(
     this(id, contributions, Power.NONE);
   }
 
-  /** One contribution: {@code ratePerSol} added to {@code parameter} (negative = a sink). */
-  public record Contribution(ParameterId parameter, double ratePerSol) {}
+  /**
+   * One contribution: {@code ratePerSol} added to {@code parameter} (negative = a sink). {@code
+   * offAfterGate}, when not null, is a gate id: once that gate has latched the contribution is 0
+   * (the atmospheric processor adds CO2 only until Phase 3 begins; after that it adds filler gas,
+   * rule A).
+   */
+  public record Contribution(ParameterId parameter, double ratePerSol, String offAfterGate) {
+    public Contribution(ParameterId parameter, double ratePerSol) {
+      this(parameter, ratePerSol, null);
+    }
+  }
+
+  /**
+   * A conversion moves gas between two Index values (rule A, ARCHITECTURE.md 2.23i). It takes up to
+   * {@code kpaPerSol} of {@code from} (a partial pressure in kPa) each sol at full power. Where the
+   * gas goes: {@code toO2} true: the same kPa of oxygen (one for one, at constant total pressure);
+   * false: it is locked into carbonate rock and counted in the planet's carbonate tally. {@code
+   * biomassPerKpa}: biomass units made per kPa moved (0 for none). A conversion never takes more
+   * than the air has, so it cannot make gas from nothing.
+   */
+  public record Conversion(
+      ParameterId from, boolean toO2, double kpaPerSol, double biomassPerKpa) {}
 
   public static MachineDef parse(JsonObject o, String file) {
     String id = string(o, "id", file);
@@ -61,7 +91,41 @@ public record MachineDef(
       if (rate == null || !rate.isJsonPrimitive() || !rate.getAsJsonPrimitive().isNumber()) {
         throw new IllegalArgumentException(file + ": contribution missing number 'ratePerSol'");
       }
-      list.add(new Contribution(ParameterId.of(string(c, "parameter", file)), rate.getAsDouble()));
+      String off = null;
+      JsonElement og = c.get("offAfterGate");
+      if (og != null) {
+        if (!og.isJsonPrimitive() || !og.getAsJsonPrimitive().isString()) {
+          throw new IllegalArgumentException(file + ": 'offAfterGate' must be a gate id string");
+        }
+        off = og.getAsString();
+      }
+      list.add(
+          new Contribution(ParameterId.of(string(c, "parameter", file)), rate.getAsDouble(), off));
+    }
+    List<Conversion> conversions = new ArrayList<>();
+    JsonElement cv = o.get("conversions");
+    if (cv != null) {
+      if (!cv.isJsonArray()) {
+        throw new IllegalArgumentException(file + ": 'conversions' must be an array");
+      }
+      for (JsonElement e : cv.getAsJsonArray()) {
+        JsonObject c = e.getAsJsonObject();
+        String to = c.has("to") ? string(c, "to", file) : "carbonate";
+        if (!to.equals("mars:o2_partial") && !to.equals("carbonate")) {
+          throw new IllegalArgumentException(
+              file + ": conversion 'to' must be mars:o2_partial or carbonate, not " + to);
+        }
+        double kpa = optNumber(c, "kpaPerSol", file);
+        if (kpa <= 0) {
+          throw new IllegalArgumentException(file + ": conversion needs 'kpaPerSol' above 0");
+        }
+        conversions.add(
+            new Conversion(
+                ParameterId.of(string(c, "from", file)),
+                to.equals("mars:o2_partial"),
+                kpa,
+                optNumber(c, "biomassPerKpa", file)));
+      }
     }
     Power power = Power.NONE;
     JsonElement p = o.get("power");
@@ -95,7 +159,7 @@ public record MachineDef(
             file + ": 'requires' may only compare parameters, not machine states " + states);
       }
     }
-    return new MachineDef(id, List.copyOf(list), power, grant, requires);
+    return new MachineDef(id, List.copyOf(list), power, grant, requires, List.copyOf(conversions));
   }
 
   private static double optNumber(JsonObject o, String field, String file) {

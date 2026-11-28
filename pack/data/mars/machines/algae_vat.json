@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "mars:algae_vat",
+  "contributions": [],
+  "conversions": [
+    {
+      "from": "mars:co2_partial",
+      "to": "mars:o2_partial",
+      "kpaPerSol": 0.1,
+      "biomassPerKpa": 100
+    }
+  ],
+  "requires": {
+    "all": [
+      {
+        "parameter": "mars:hydrosphere",
+        "op": ">=",
+        "value": 10.0
+      },
+      {
+        "parameter": "mars:temperature",
+        "op": ">=",
+        "value": 0.0
+      }
+    ]
+  },
+  "power": {
+    "drawPerSol": 2.0
+  },
+  "source": "docs/design/phase3-hydrosphere-and-drift.md section 3 and DESIGN.md rule A: an algae vat turns CO2 into O2 one for one (the air loses x kPa of CO2 and gains x kPa of O2; total pressure unchanged; it never takes more CO2 than the air has). Rate 0.10 kPa of CO2 per sol each at full power, draw 2 power units per sol, and 100 biomass units made per kPa converted are all INVENTED game balance (the design's '+20 BU per vat' would need 75 vats for the 1,500 BU target, which the design itself calls too many; biomass here follows the gas moved instead, about 1,500 BU per 15 kPa, balance sheet 3a). 'requires': hydrosphere >= 10 percent (design: vats become placeable at the Hydrosphere line; they need liquid water) and temperature >= 0 C (INVENTED: the culture must not freeze); physical thresholds, never scaled (invariant I-1). Real idea behind it: photobioreactors and the ISS Veggie plant growth hardware (docs/science/machine-references.md); this machine is a game-sized version of a real idea. Unlocked by Phase 3 begins (data/mars/gates/phase_3_begins.json)."
+}

@@ -14,5 +14,8 @@ public interface Coupling {
     double get(mars.core.ParameterId id);
 
     void add(mars.core.ParameterId id, double delta);
+
+    /** True when this planet has the parameter. */
+    boolean has(mars.core.ParameterId id);
   }
 }

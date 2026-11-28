@@ -403,4 +403,78 @@ class MonitorLayoutTest {
     ok.addMachine(TestSims.OUTGASSER, 1L);
     assertTrue(MonitorView.of(ok).rows().stream().noneMatch(MonitorView::isAlert));
   }
+
+  private static MonitorView airView(int panels) throws Exception {
+    PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), panels);
+    s.addMachine(TestSims.BATTERY, 5000L);
+    for (int i = 0; i < 6; i++) {
+      s.addMachine("mars:algae_vat", 100L + i);
+    }
+    s.addMachine("mars:carbon_scrubber", 200L);
+    s.addMachine("mars:atmospheric_processor", 300L);
+    for (String g :
+        new String[] {"mars:dome_stable", "mars:phase_2_begins", "mars:thaw", "mars:hydrosphere"}) {
+      s.gates().latch(g, mars.gates.GateTracker.Cause.ADMIN, 0);
+    }
+    s.model().set(mars.core.Ids.CO2_PARTIAL, 12.0);
+    s.model().set(mars.core.Ids.PRESSURE, 40.0);
+    s.model().set(mars.core.Ids.TEMPERATURE, 4.0);
+    s.model().set(mars.core.Ids.HYDROSPHERE, 5.0); // no water for the vats: a problem line each
+    s.model().advanceSols(1);
+    return MonitorView.of(s);
+  }
+
+  /**
+   * Phase 3 with the Oxygen and Carbon dioxide rows and vats that have no water (a problem line on
+   * both rows), power fine: the panel stays inside the target bound. Worst case below: the grid is
+   * short as well (alert row, a problem line under pressure, water, oxygen and CO2): rows only, no
+   * plot, and still on the screen.
+   */
+  @Test
+  void theAirRowsKeepThePanelInBound() throws Exception {
+    MonitorView raw = airView(6);
+    assertTrue(raw.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.oxygen")));
+    assertTrue(raw.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.co2")));
+    for (int screen : new int[] {H3, 360}) {
+      MonitorView v = MonitorLayout.fit(raw);
+      int total = MonitorLayout.panelHeight(v, screen);
+      System.out.println(
+          "air, screen "
+              + screen
+              + ": plot "
+              + MonitorLayout.plotHeight(v, screen)
+              + " panel "
+              + total);
+      assertTrue(
+          total
+              <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+          "panel " + total);
+      assertTrue(total <= screen - 2 * MonitorStyle.MARGIN);
+    }
+    MonitorView worst = MonitorLayout.fit(airView(1));
+    int total = MonitorLayout.panelHeight(worst, H3);
+    System.out.println("air, short grid, screen " + H3 + ": panel " + total);
+    assertEquals(0, MonitorLayout.plotHeight(worst, H3), "rows only");
+    assertTrue(total <= H3 - 2 * MonitorStyle.MARGIN, "still on a 240 px screen: " + total);
+  }
+
+  @Test
+  void theNewCauseLinesFitWithTheirReasons() throws Exception {
+    for (String block : new String[] {"block.mars.algae_vat", "block.mars.carbon_scrubber"}) {
+      String name = lang().get(block).getAsString() + " \u00d76";
+      for (String reason :
+          new String[] {
+            "monitor.cause.needs_power",
+            "monitor.cause.low_power",
+            "monitor.cause.needs_water",
+            "monitor.cause.too_cold",
+            "monitor.cause.no_input"
+          }) {
+        String why = lang().get(reason).getAsString();
+        assertTrue(
+            MonitorStyle.CAUSE_INDENT + width(name) + 8 + width(why) <= CONTENT_W,
+            name + " and '" + why + "' collide");
+      }
+    }
+  }
 }

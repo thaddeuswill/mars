@@ -4,12 +4,31 @@
   "order": 6,
   "condition": {
     "all": [
-      { "parameter": "mars:o2_partial", "op": ">=", "value": 16.0 },
-      { "parameter": "mars:pressure", "op": ">=", "value": 75.0 },
-      { "parameter": "mars:co2_partial", "op": "<=", "value": 0.5 }
+      {
+        "parameter": "mars:o2_partial",
+        "op": ">=",
+        "value": 16.0
+      },
+      {
+        "parameter": "mars:pressure",
+        "op": ">=",
+        "value": 75.0
+      },
+      {
+        "parameter": "mars:co2_partial",
+        "op": "<=",
+        "value": 0.5
+      }
     ]
   },
-  "hold": { "standard_sols": 7, "classroom_sols": 2, "reset_after_sols": { "standard": 1.0, "classroom": 0.5 } },
+  "hold": {
+    "standard_sols": 7,
+    "classroom_sols": 2,
+    "reset_after_sols": {
+      "standard": 1.0,
+      "classroom": 0.5
+    }
+  },
   "unlocks": [],
-  "source": "docs/design/phase2-machine-rates.md section 2 and balance-sheet.md section 4: Breathable needs O2 partial pressure >= 16 kPa, pressure >= 75 kPa and CO2 partial pressure <= 0.5 kPa, held 7 sols standard, reset after 1.0 sol. Thresholds are never scaled (I-1). classroom_sols (2) and the 0.5 sol classroom reset are the sheet values; classroom pace is switched off for now (owner: standard pace only). It should unlock mars:beacon_bench (not a block yet), so unlocks is empty. No machine raises O2 or lowers CO2 yet, so this gate cannot latch in play today."
+  "source": "docs/design/phase2-machine-rates.md section 2 and balance-sheet.md section 4: Breathable needs O2 partial pressure >= 16 kPa, pressure >= 75 kPa and CO2 partial pressure <= 0.5 kPa, held 7 sols standard, reset after 1.0 sol. Thresholds are never scaled (I-1). classroom_sols (2) and the 0.5 sol classroom reset are the sheet values; classroom pace is switched off for now (owner: standard pace only). It should unlock mars:beacon_bench (not a block yet), so unlocks is empty. Slice B: the algae vat (CO2 to O2 one for one) and the carbon scrubber (CO2 into rock) make it reachable; the scripted standard build in OxygenSliceTest latches it. The unlock is still empty: mars:beacon_bench is not a block yet."
 }

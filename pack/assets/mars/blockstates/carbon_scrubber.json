@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,machine_state=off": {
+      "model": "mars:block/carbon_scrubber_off"
+    },
+    "facing=north,machine_state=idle": {
+      "model": "mars:block/carbon_scrubber_idle"
+    },
+    "facing=north,machine_state=running": {
+      "model": "mars:block/carbon_scrubber_running"
+    },
+    "facing=east,machine_state=off": {
+      "model": "mars:block/carbon_scrubber_off",
+      "y": 90
+    },
+    "facing=east,machine_state=idle": {
+      "model": "mars:block/carbon_scrubber_idle",
+      "y": 90
+    },
+    "facing=east,machine_state=running": {
+      "model": "mars:block/carbon_scrubber_running",
+      "y": 90
+    },
+    "facing=south,machine_state=off": {
+      "model": "mars:block/carbon_scrubber_off",
+      "y": 180
+    },
+    "facing=south,machine_state=idle": {
+      "model": "mars:block/carbon_scrubber_idle",
+      "y": 180
+    },
+    "facing=south,machine_state=running": {
+      "model": "mars:block/carbon_scrubber_running",
+      "y": 180
+    },
+    "facing=west,machine_state=off": {
+      "model": "mars:block/carbon_scrubber_off",
+      "y": 270
+    },
+    "facing=west,machine_state=idle": {
+      "model": "mars:block/carbon_scrubber_idle",
+      "y": 270
+    },
+    "facing=west,machine_state=running": {
+      "model": "mars:block/carbon_scrubber_running",
+      "y": 270
+    }
+  }
+}

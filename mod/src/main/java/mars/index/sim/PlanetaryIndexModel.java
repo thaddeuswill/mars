@@ -69,10 +69,13 @@ public final class PlanetaryIndexModel {
     return d == null ? 0 : d.start();
   }
 
-  /** Unit text of a stored parameter ("kPa"), or "" if it has none or is derived. */
+  /**
+   * Unit text of a parameter ("kPa"), or "" if it has none. The derived O2 partial pressure is in
+   * kPa.
+   */
   public String unit(ParameterId id) {
     ParameterDef d = defs.get(id);
-    return d == null ? "" : d.unit();
+    return d == null ? (id.equals(Ids.O2_PARTIAL) ? "kPa" : "") : d.unit();
   }
 
   public void addCoupling(Coupling coupling) {
@@ -121,6 +124,11 @@ public final class PlanetaryIndexModel {
           @Override
           public void add(ParameterId id, double delta) {
             values.merge(id, delta, Double::sum);
+          }
+
+          @Override
+          public boolean has(ParameterId id) {
+            return values.containsKey(id);
           }
         };
     double naturalDt = pace.rateMultiplier() * dtSols;

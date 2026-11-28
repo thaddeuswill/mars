@@ -82,6 +82,19 @@ public final class MarsMachines {
           "ice_extractor",
           () ->
               new GatedLoadBlock(machineProperties(), CELL, TALL_COLLISION, "mars:ice_extractor"));
+  // Algae vat (model 28 px, hood top 24 px) and carbon scrubber (model 24 px): one cell each,
+  // outline and collision 24 px (the vat's air line overhangs to 28 px, visual only).
+  private static final VoxelShape TALL_CELL = Block.box(1, 0, 1, 15, 24, 15);
+  public static final DeferredBlock<GatedLoadBlock> ALGAE_VAT =
+      BLOCKS.register(
+          "algae_vat",
+          () -> new GatedLoadBlock(machineProperties(), TALL_CELL, TALL_CELL, "mars:algae_vat"));
+  public static final DeferredBlock<GatedLoadBlock> CARBON_SCRUBBER =
+      BLOCKS.register(
+          "carbon_scrubber",
+          () ->
+              new GatedLoadBlock(
+                  machineProperties(), TALL_CELL, TALL_CELL, "mars:carbon_scrubber"));
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
@@ -114,6 +127,8 @@ public final class MarsMachines {
           ATMOSPHERIC_PROCESSOR,
           SUPER_GREENHOUSE_EMITTER,
           ICE_EXTRACTOR,
+          ALGAE_VAT,
+          CARBON_SCRUBBER,
           SOLAR_PANEL,
           BATTERY_BLOCK,
           OXYGEN_MAKER_BLOCK,
@@ -125,7 +140,7 @@ public final class MarsMachines {
    * cache}. Ids are the contract. All amounts and recipes are INVENTED.
    */
   public static final List<String> PART_IDS =
-      List.of("heater_coil", "filter_cartridge", "pump_bearing");
+      List.of("heater_coil", "filter_cartridge", "pump_bearing", "sorbent_bed");
 
   public static final List<net.neoforged.neoforge.registries.DeferredItem<Item>> PARTS =
       new java.util.ArrayList<>();
@@ -204,6 +219,8 @@ public final class MarsMachines {
     ITEMS.register("atmospheric_processor", () -> tipped(ATMOSPHERIC_PROCESSOR));
     ITEMS.register("super_greenhouse_emitter", () -> tipped(SUPER_GREENHOUSE_EMITTER));
     ITEMS.register("ice_extractor", () -> tipped(ICE_EXTRACTOR));
+    ITEMS.register("algae_vat", () -> tipped(ALGAE_VAT));
+    ITEMS.register("carbon_scrubber", () -> tipped(CARBON_SCRUBBER));
     ITEMS.register(
         "water_reclaimer",
         () ->

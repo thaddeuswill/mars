@@ -28,9 +28,18 @@ class GateInputItemsTest {
       Map.of(
           "mars:dome_stable", "mars:heater_coil",
           "mars:phase_2_begins", "mars:filter_cartridge",
-          "mars:thaw", "mars:pump_bearing");
+          "mars:thaw", "mars:pump_bearing",
+          "mars:phase_3_begins", "mars:sorbent_bed");
   private static final Map<String, Integer> CACHE_COUNT =
-      Map.of("mars:heater_coil", 4, "mars:filter_cartridge", 3, "mars:pump_bearing", 2);
+      Map.of(
+          "mars:heater_coil",
+          4,
+          "mars:filter_cartridge",
+          3,
+          "mars:pump_bearing",
+          2,
+          "mars:sorbent_bed",
+          2);
 
   private static JsonObject json(Path p) throws Exception {
     return JsonParser.parseString(Files.readString(p, StandardCharsets.UTF_8)).getAsJsonObject();
@@ -115,7 +124,9 @@ class GateInputItemsTest {
             "regolith_outgasser",
             "super_greenhouse_emitter",
             "atmospheric_processor",
-            "ice_extractor")) {
+            "ice_extractor",
+            "algae_vat",
+            "carbon_scrubber")) {
       for (String i : ingredients(recipe(m))) {
         if (i.startsWith("mars:")) {
           assertTrue(
@@ -150,7 +161,7 @@ class GateInputItemsTest {
         keys.add(g.supplyNoteKey());
       }
     }
-    assertEquals(4, keys.size());
+    assertEquals(5, keys.size());
     // Forecast answers (pressure, temperature, gases, rates) never appear in these lines.
     java.util.regex.Pattern giveAway =
         java.util.regex.Pattern.compile(
@@ -164,6 +175,9 @@ class GateInputItemsTest {
       assertFalse(v.toLowerCase().contains("colour") || v.toLowerCase().contains("armour"), k);
     }
     for (String part : MarsMachinesIds.PARTS) {
+      if (part.equals("sorbent_bed")) {
+        continue; // design 3.5: the scrubber's whole job is CO2, so its bed may name the gas
+      }
       String tip = l.get("item.mars." + part + ".tooltip").getAsString();
       assertFalse(
           java.util.regex.Pattern.compile(
@@ -176,7 +190,8 @@ class GateInputItemsTest {
 
   /** The part ids, kept in sync with MarsMachines.PART_IDS by the next test. */
   static final class MarsMachinesIds {
-    static final List<String> PARTS = List.of("heater_coil", "filter_cartridge", "pump_bearing");
+    static final List<String> PARTS =
+        List.of("heater_coil", "filter_cartridge", "pump_bearing", "sorbent_bed");
   }
 
   @Test

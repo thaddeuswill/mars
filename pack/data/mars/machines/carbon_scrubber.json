@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "mars:carbon_scrubber",
+  "contributions": [],
+  "conversions": [
+    {
+      "from": "mars:co2_partial",
+      "to": "carbonate",
+      "kpaPerSol": 0.2
+    }
+  ],
+  "power": {
+    "drawPerSol": 2.5
+  },
+  "source": "docs/design/balance-sheet.md section 3a and DESIGN.md rule A: a carbon scrubber locks CO2 into carbonate rock and makes no O2, so CO2 plus O2 falls (about 1.1 kPa over Phase 3 in the sheet). It never takes more CO2 than the air has, and the air loses the same kPa of total pressure (the gas leaves it); the kPa locked so far is kept as the planet's carbonate tally. Rate 0.20 kPa of CO2 per sol each at full power and draw 2.5 power units per sol are INVENTED game balance. Real idea behind it: the ISS Carbon Dioxide Removal Assembly (adsorbent beds); the real machine vents the CO2 on or overboard, turning it into carbonate rock is the game's step (docs/science/machine-references.md, carbonate abundance NOT VERIFIED); this machine is a game-sized version of a real idea. Unlocked by Phase 3 begins."
+}

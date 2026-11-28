@@ -181,5 +181,16 @@
   "grant.cache": "Supply drop received: %s × %s.",
   "gate.supply.dome_stable": "Supply note: coils from the lander. Heat needs wire that resists power.",
   "gate.supply.phase_2_begins": "Supply note: filters from the lander. Dust must be caught before air enters a machine.",
-  "gate.supply.thaw": "Supply note: bearings from the lander. A pump that spins needs a bearing."
+  "gate.supply.thaw": "Supply note: bearings from the lander. A pump that spins needs a bearing.",
+  "block.mars.algae_vat": "Algae Vat",
+  "block.mars.algae_vat.tooltip": "Game-sized version of a real idea. Space station plant boxes grow crops under lights in a sealed chamber. Here an algae tank swaps CO2 for oxygen. Needs power, water and warmth.",
+  "block.mars.carbon_scrubber": "Carbon Scrubber",
+  "block.mars.carbon_scrubber.tooltip": "Game-sized version of a real idea. The space station has a machine that pulls CO2 from air. The real one lets the CO2 go. Here it is locked into rock. Needs power.",
+  "item.mars.sorbent_bed": "Sorbent Bed",
+  "item.mars.sorbent_bed.tooltip": "Porous pellets that hold CO2 until they fill. Real ones use zeolite or amine, and are heated to let the CO2 go.",
+  "gate.supply.phase_3_begins": "Supply note: beds from the lander. Pellets can hold on to what touches them.",
+  "monitor.row.oxygen": "Oxygen",
+  "monitor.row.co2": "Carbon dioxide",
+  "monitor.cause.needs_water": "needs water",
+  "monitor.cause.no_input": "nothing to use"
 }

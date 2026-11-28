@@ -465,6 +465,8 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     hydrosphereRow(sim, snap.get(Ids.HYDROSPHERE)).ifPresent(rows::add);
+    gasRow(sim, Ids.O2_PARTIAL, "monitor.row.oxygen").ifPresent(rows::add);
+    gasRow(sim, Ids.CO2_PARTIAL, "monitor.row.co2").ifPresent(rows::add);
     powerRow(sim).ifPresent(rows::add);
     // The alert is the first row on the panel: rare, one line, only while a machine that feeds
     // the Index is starved.
@@ -681,13 +683,75 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     for (PlanetaryIndexModel.Cause c : sim.model().causes(parameter)) {
       boolean needsPower = sim.machineDrawsPower(c.source());
       String reason = !needsPower ? null : powerReason(powerState, null);
-      if (reason == null && !sim.machineRequirementMet(c.source())) {
-        reason = "monitor.cause.too_cold"; // the machine's own condition (the ice extractor)
+      reason = reason != null ? reason : unmetReason(sim, c.source());
+      causes.add(
+          new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
+    }
+    // Vats and scrubbers move gas between two values: they are causes of the O2 and CO2 rows.
+    for (PlanetaryIndexModel.Cause c : sim.conversionCauses(parameter)) {
+      String reason = powerReason(powerState, null);
+      reason = sim.machineDrawsPower(c.source()) ? reason : null;
+      reason = reason != null ? reason : unmetReason(sim, c.source());
+      if (reason == null && !sim.machineHasInput(c.source())) {
+        reason = "monitor.cause.no_input";
       }
       causes.add(
           new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
     }
     return causes;
+  }
+
+  /**
+   * Why a machine with its own condition does nothing right now: "needs water" when the hydrosphere
+   * line fails, otherwise "too cold" (the ice extractor's and the vat's temperature line). Null
+   * when the condition holds or the machine has none.
+   */
+  private static String unmetReason(PlanetSim sim, String type) {
+    if (sim.machineRequirementMet(type)) {
+      return null;
+    }
+    ParameterId p = sim.machineRequirementShortfall(type);
+    return Ids.HYDROSPHERE.equals(p) ? "monitor.cause.needs_water" : "monitor.cause.too_cold";
+  }
+
+  /**
+   * The oxygen and carbon dioxide rows (partial pressures in kPa). Each shows once a vat or
+   * scrubber is placed, Phase 3 has begun, or the value has moved from its start (CO2 from the
+   * first Outgasser on). The net rate adds the machines that change the value directly and the gas
+   * converters; the polar frost counts for CO2 (it is CO2 ice). Cause lines show only a problem
+   * (needs power, needs water, too cold, nothing to use), like every machine line on the panel.
+   * Cost: one pass over the cause list per row.
+   */
+  static java.util.Optional<Row> gasRow(PlanetSim sim, ParameterId id, String labelKey) {
+    double now = sim.model().current(id);
+    if (Double.isNaN(now)) {
+      return java.util.Optional.empty();
+    }
+    // Not before Phase 2 begins: the first sols of Outgasser work already crowd the panel, and the
+    // CO2 of Phase 1 is read from the pressure row (all of the air is CO2 there).
+    boolean moved =
+        Math.abs(now - sim.model().start(id)) > 0.05
+            && sim.gates().isLatched("mars:phase_2_begins");
+    if (!(moved || sim.convertsGas() || sim.gates().isLatched("mars:phase_3_begins"))) {
+      return java.util.Optional.empty();
+    }
+    boolean co2 = id.equals(Ids.CO2_PARTIAL);
+    double net = sim.model().netRatePerSol(id);
+    for (PlanetaryIndexModel.Cause c : sim.conversionCauses(id)) {
+      net += c.ratePerSol();
+    }
+    if (co2 && now > 0) {
+      net += sim.frostRatePerSol();
+    }
+    List<CauseLine> causes = machineCauses(sim, id, "kPa");
+    return java.util.Optional.of(
+        new Row(
+            labelKey,
+            Fmt.withUnit(now, now < 10 ? 2 : 1, "kPa"),
+            null,
+            trend(net),
+            rate(net, "kPa"),
+            causes));
   }
 
   /**
@@ -813,7 +877,11 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       String detailKey = base + ".progress";
       Goal goal = null;
       var st = tracker.state(d.id());
-      if (d.hold() != null) {
+      // A hold gate whose counter has not started shows the first condition still unmet (what
+      // the player should work on); once it counts, or while it waits, the counter is the news.
+      mars.gates.Condition.Compare unmet =
+          d.hold() != null && st.heldSols() <= 0 ? unmetPart(d.condition(), sim) : null;
+      if (d.hold() != null && unmet == null) {
         double need = tracker.holdSols(d);
         side = Fmt.number(Math.min(st.heldSols(), need), 1) + " / " + Fmt.number(need, 0) + " sols";
         if (st.falseSols() > 0) {
@@ -821,13 +889,26 @@ public record MonitorView(double sols, List<Row> rows, History history) {
         }
         double held = Math.min(st.heldSols(), need);
         goal = new Goal(held / need, GoalProgress.percent(held / need, false), null, null);
-      } else if (focus(d.condition(), sim) instanceof mars.gates.Condition.Compare c) {
+      } else if ((unmet != null ? unmet : focus(d.condition(), sim))
+          instanceof mars.gates.Condition.Compare c) {
         String unit = sim.model().unit(c.parameter());
         double now = sim.model().current(c.parameter());
-        side = Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit;
+        boolean upper =
+            c.op() == mars.gates.Condition.Op.LE || c.op() == mars.gates.Condition.Op.LT;
+        int places = c.value() == Math.rint(c.value()) ? 0 : 1;
+        side =
+            Fmt.number(now, 2)
+                + " / "
+                + Fmt.number(c.value(), places)
+                + " "
+                + unit
+                + (upper ? " or less" : "");
         boolean isPressure = c.parameter().equals(Ids.PRESSURE);
         double f =
-            GoalProgress.fraction(now, sim.model().start(c.parameter()), c.value(), isPressure);
+            upper
+                ? (now <= c.value() ? 1.0 : Math.max(0, Math.min(1, c.value() / now)))
+                : GoalProgress.fraction(
+                    now, sim.model().start(c.parameter()), c.value(), isPressure);
         String etaKey = null;
         String etaArg = null;
         if (isPressure) {
@@ -865,6 +946,43 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     if (reached > 0) {
       rows.add(new Row("monitor.row.goals_reached", count, null, null, null, List.of()));
     }
+  }
+
+  /**
+   * The first part of a gate's condition that is not met now, for a hold gate whose counter has not
+   * started: the condition itself or the first unmet comparison of an {@code all} (any direction).
+   * Null when the condition holds, when it has no comparison to show (the Dome stable stand-in), or
+   * when it is not a plain comparison list.
+   */
+  private static mars.gates.Condition.Compare unmetPart(mars.gates.Condition c, PlanetSim sim) {
+    mars.gates.Condition.Context ctx =
+        new mars.gates.Condition.Context() {
+          @Override
+          public double value(ParameterId id) {
+            return sim.model().current(id);
+          }
+
+          @Override
+          public boolean machineState(String name) {
+            return false;
+          }
+        };
+    if (c instanceof mars.gates.Condition.Compare cmp) {
+      return cmp.eval(ctx) ? null : cmp;
+    }
+    if (c instanceof mars.gates.Condition.All all) {
+      for (mars.gates.Condition part : all.parts()) {
+        if (!(part instanceof mars.gates.Condition.Compare)) {
+          return null;
+        }
+      }
+      for (mars.gates.Condition part : all.parts()) {
+        if (!part.eval(ctx)) {
+          return (mars.gates.Condition.Compare) part;
+        }
+      }
+    }
+    return null;
   }
 
   /**

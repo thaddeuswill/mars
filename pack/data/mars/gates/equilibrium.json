@@ -4,16 +4,51 @@
   "order": 7,
   "condition": {
     "all": [
-      { "parameter": "mars:pressure", "op": ">=", "value": 75.0 },
-      { "parameter": "mars:temperature", "op": ">=", "value": 5.0 },
-      { "parameter": "mars:hydrosphere", "op": ">=", "value": 30.0 },
-      { "parameter": "mars:o2_fraction", "op": ">=", "value": 19.0 },
-      { "parameter": "mars:o2_fraction", "op": "<=", "value": 23.0 },
-      { "parameter": "mars:co2_partial", "op": "<=", "value": 0.5 },
-      { "parameter": "mars:biomass", "op": ">=", "value": 1500.0 }
+      {
+        "parameter": "mars:pressure",
+        "op": ">=",
+        "value": 75.0
+      },
+      {
+        "parameter": "mars:temperature",
+        "op": ">=",
+        "value": 5.0
+      },
+      {
+        "parameter": "mars:hydrosphere",
+        "op": ">=",
+        "value": 30.0
+      },
+      {
+        "parameter": "mars:o2_fraction",
+        "op": ">=",
+        "value": 19.0
+      },
+      {
+        "parameter": "mars:o2_fraction",
+        "op": "<=",
+        "value": 23.0
+      },
+      {
+        "parameter": "mars:co2_partial",
+        "op": "<=",
+        "value": 0.5
+      },
+      {
+        "parameter": "mars:biomass",
+        "op": ">=",
+        "value": 1500.0
+      }
     ]
   },
-  "hold": { "standard_sols": 14, "classroom_sols": 3, "reset_after_sols": { "standard": 1.0, "classroom": 0.5 } },
+  "hold": {
+    "standard_sols": 14,
+    "classroom_sols": 3,
+    "reset_after_sols": {
+      "standard": 1.0,
+      "classroom": 0.5
+    }
+  },
   "unlocks": [],
-  "source": "docs/design/phase2-machine-rates.md section 2 and balance-sheet.md section 4: Equilibrium needs pressure >= 75 kPa, temperature >= 5 C, hydrosphere >= 30 %, O2 19 to 23 %, CO2 partial pressure <= 0.5 kPa and biomass >= 1500, held 14 sols standard, reset after 1.0 sol. Thresholds are never scaled (I-1). classroom_sols (3) and the 0.5 sol classroom reset are the sheet values; classroom pace is switched off for now (owner: standard pace only). It should unlock mars:colonization_beacon (not a block yet), so unlocks is empty. The hydrosphere condition has no definition or machine yet, and nothing raises O2 or biomass yet, so this gate cannot latch in play today."
+  "source": "docs/design/phase2-machine-rates.md section 2 and balance-sheet.md section 4: Equilibrium needs pressure >= 75 kPa, temperature >= 5 C, hydrosphere >= 30 %, O2 19 to 23 %, CO2 partial pressure <= 0.5 kPa and biomass >= 1500, held 14 sols standard, reset after 1.0 sol. Thresholds are never scaled (I-1). classroom_sols (3) and the 0.5 sol classroom reset are the sheet values; classroom pace is switched off for now (owner: standard pace only). It should unlock mars:colonization_beacon (not a block yet), so unlocks is empty. Hydrosphere is the ice extractors' machine tally (slice A); O2 and biomass come from algae vats (slice B: 100 BU per kPa converted, INVENTED), and a scrubber or more pressure keeps O2 under 23 percent. The scripted standard build in OxygenSliceTest latches it. The unlock is still empty: mars:colonization_beacon is not a block yet."
 }

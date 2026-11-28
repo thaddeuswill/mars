@@ -86,6 +86,31 @@ def bearing():
     return im
 
 
+def sorbent_bed():
+    im = canvas()
+    p = im.putpixel
+    # a flat canister of porous pellets: alloy frame, pale pellet dots, two small ports on top
+    for x in range(2, 14):
+        p((x, 4), INK)
+        p((x, 13), INK)
+    for y in range(5, 13):
+        p((2, y), INK)
+        p((13, y), INK)
+    for x in range(3, 13):
+        for y in range(5, 13):
+            p((x, y), ALLOY_D)
+    for x in range(3, 13):
+        for y in range(5, 13):
+            if (x * 3 + y * 5) % 4 == 0:
+                p((x, y), PAPER)
+            elif (x + y) % 3 == 0:
+                p((x, y), PAPER_D)
+    for x in (4, 11):
+        p((x, 3), INK)
+        p((x, 2), ALLOY_L)
+    return im
+
+
 def save(name, im):
     png = os.path.join(ROOT, "textures", "item", name + ".png")
     if os.path.exists(png):
@@ -103,3 +128,4 @@ def save(name, im):
 save("heater_coil", coil())
 save("filter_cartridge", cartridge())
 save("pump_bearing", bearing())
+save("sorbent_bed", sorbent_bed())

@@ -34,6 +34,8 @@ class MachineAssetsTest {
           "oxygen_maker",
           "planetary_monitor");
 
+  // (the ice extractor, algae vat and carbon scrubber are checked in their own tests)
+
   private static Path assets() {
     return TestData.pack().resolve("assets/mars");
   }
@@ -173,7 +175,9 @@ class MachineAssetsTest {
           "oxygen_maker",
           "water_reclaimer",
           "atmospheric_processor",
-          "super_greenhouse_emitter");
+          "super_greenhouse_emitter",
+          "algae_vat",
+          "carbon_scrubber");
 
   @Test
   void machineStateVariantsCoverEveryFacingAndStateAndPointAtRealModels() throws Exception {
