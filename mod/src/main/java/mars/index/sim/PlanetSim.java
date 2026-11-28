@@ -35,6 +35,24 @@ public final class PlanetSim {
   /** Output fraction (0 to 1) of a machine by position, when not 1 (solar dust). */
   private final Map<Long, Double> efficiency = new LinkedHashMap<>();
 
+  /** Panel dust, the storm and the planet seed; null on a planet without hazards (bare tests). */
+  private mars.hazards.HazardParams hazards;
+
+  private mars.hazards.dust.PanelDustModel dust;
+  private mars.hazards.storm.StormScheduler storm;
+  private long planetSeed;
+
+  /** Hazard state read from a save, waiting for {@link #configureHazards}. */
+  private mars.hazards.HazardState pendingHazards = mars.hazards.HazardState.EMPTY;
+
+  /** Panel states whose block should be rewritten (stage changed); drained by the game layer. */
+  private final Map<Long, mars.hazards.dust.PanelDustModel.View> blockSync = new LinkedHashMap<>();
+
+  /** Solar supply as it would be at full output, and with dust (units per sol), from the last count. */
+  private double panelSupplyClean;
+
+  private double panelSupplyDusty;
+
   private final GateTracker gates;
   private final PressureHistory history = new PressureHistory();
   private final mars.dome.DomeSeals domes = new mars.dome.DomeSeals();
@@ -114,6 +132,7 @@ public final class PlanetSim {
     }
     model.setBeforeStep(
         dt -> {
+          hazardsStep(dt);
           grid.step(dt);
           applyPower(tierSat(false, dt));
           stepLife(dt);
@@ -270,6 +289,8 @@ public final class PlanetSim {
     double supply = 0;
     double[] demand = new double[PowerGrid.TIERS];
     double storage = 0;
+    double clean = 0;
+    double dusty = 0;
     for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
       MachineDef def = defs.get(e.getKey());
       if (def == null) {
@@ -277,14 +298,25 @@ public final class PlanetSim {
       }
       MachineDef.Power pw = def.power();
       for (long pos : e.getValue()) {
-        supply += pw.supplyPerSol() * efficiency.getOrDefault(pos, 1.0);
+        double eff = efficiency.getOrDefault(pos, 1.0);
+        supply += pw.supplyPerSol() * eff;
+        if (isPanelType(e.getKey())) {
+          clean += pw.supplyPerSol();
+          dusty += pw.supplyPerSol() * eff;
+        }
         demand[tierOf(def) - 1] += pw.drawPerSol();
         storage += pw.storage();
       }
     }
+    panelSupplyClean = clean;
+    panelSupplyDusty = dusty;
     grid.setTierTotals(supply, demand, storage);
     applyPower(tierSat(true, stepSols()));
     refreshLife();
+  }
+
+  private boolean isPanelType(String type) {
+    return hazards != null && hazards.storm().affectedMachineTypes().contains(type);
   }
 
   /** Share of each tier's demand met: the last step's, or a preview of the next one. */
@@ -463,6 +495,9 @@ public final class PlanetSim {
       return false;
     }
     attach(def, pos);
+    if (dust != null && isPanelType(type)) {
+      dust.put(pos, 0, false);
+    }
     refreshPower();
     return true;
   }
@@ -481,6 +516,10 @@ public final class PlanetSim {
       }
     }
     efficiency.remove(pos);
+    if (dust != null) {
+      dust.remove(pos);
+      blockSync.remove(pos);
+    }
     refreshPower();
     return true;
   }
@@ -547,7 +586,16 @@ public final class PlanetSim {
         history.toState(),
         frost == null ? FrostSink.State.EMPTY : frost.toState(),
         domes.toState(),
-        life == null ? null : life.toState());
+        life == null ? null : life.toState(),
+        hazardState());
+  }
+
+  private mars.hazards.HazardState hazardState() {
+    if (dust == null) {
+      return pendingHazards;
+    }
+    return new mars.hazards.HazardState(
+        planetSeed, dust.toSaved(), storm == null ? null : storm.toState());
   }
 
   /**
@@ -631,6 +679,7 @@ public final class PlanetSim {
       sim.life.restore(state.life());
     }
     sim.refreshLife();
+    sim.pendingHazards = state.hazards() == null ? mars.hazards.HazardState.EMPTY : state.hazards();
     return new Loaded(sim, report, unknownTypes);
   }
 
