@@ -48,18 +48,18 @@ So the real target is **O2 21.5–23 % at ≥ 75 kPa**. The window is narrow on 
 | **Regolith Outgasser** | **Dome stable** | +0.10 kPa each | Medium (solar or battery) | Nothing else: a pure terraforming machine, the player's first |
 | Polar frost (reversible reservoir) | Always | Takes −2 % of (pressure − 0.6) per sol below −40 °C; −1 % from −40 to −20 °C. Above −20 °C: returns what it took at +0.5 kPa/sol until empty, then up to **0.5 kPa** more from buried polar CO2 | — | *Invented* rates and thresholds; direction *sourced* (more CO2 raises the frost point; seasonal caps hold ~25–30 % of the air, SME round 2 [S3]); 0.5 kPa buried CO2 *calc* from [S4]. Balancing when cold, reinforcing when warm (B2) |
 
-Dust storms cut solar output by 60 % × storm cap (*invented* balance number; real storms vary, and the 2018 storm ended Opportunity's mission). Outgassers slow.
+Dust storms cut solar output by 60 % × storm cap (*invented* balance number; real storms vary, and the 2018 storm left Opportunity without enough power; NASA believes drained batteries ended the mission, **verified**, JPL 2022). Outgassers slow.
 
-**Storm caps scale gameplay and look (decided, answers the Technical Lead).** The storm cap (Phase 1: 1.0, Phase 2: 0.8, Phase 3: 0.5, Equilibrium: 0.25; Artist's values, ARCHITECTURE.md §2.5) multiplies the solar cut and the dust wear as well as the visuals, so "storms weaken as the air thickens" is true in the mechanics (B2). At cap 0.25 a storm cuts solar by 15 %. *Invented.* Revisit if late storms stop mattering as drift events (then raise the Phase 3 floor). Unmaintained Outgassers lose output (mechanical wear).
+**Storm caps scale gameplay and look (decided, answers the Technical Lead).** The storm cap (Phase 1: 1.0, Phase 2: 0.8, Phase 3: 0.5, Equilibrium: 0.25; Artist's values, ARCHITECTURE.md §2.5; real anchors, **calc** (storm-dust-review §3.5): cap 1.0 = −60 % ≈ optical depth (tau) 2.4, a strong regional storm; cap 0.5 = −30 % ≈ InSight's regional storm (−35 %); cap 0.8 and 0.25 have no direct analogue) multiplies the solar cut and the dust wear as well as the visuals, so "storms weaken as the air thickens" is true in the mechanics (B2). At cap 0.25 a storm cuts solar by 15 %. *Invented.* Revisit if late storms stop mattering as drift events (then raise the Phase 3 floor). Unmaintained Outgassers lose output (mechanical wear).
 
-**Standard solo curve** (assumed build order: first Outgasser at Dome stable on sol 9, then 2 by sol 11, 3 by sol 13, 4 by sol 16; one 2-sol storm on sols 14–15):
+**Standard solo curve** (assumed build order: first Outgasser at Dome stable on sol 9, then 2 by sol 11, 3 by sol 13, 4 by sol 16; one **0.75-sol** first storm at sol 14, per the owner-accepted [f1-storm-spec](f1-storm-spec.md) §2.3; the earlier 2-sol assumption is retired):
 
 | Sol | 1 | 5 | 9 | 10 | 12 | 14 | 16 | 18 | 20 | 22 | 24 | 25 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Pressure (kPa) | 0.61 | 0.67 | 0.74 | 0.86 | 1.18 | 1.70 | 1.93 | 2.71 | 3.46 | 4.18 | 4.87 | **5.20** |
 | Real hours | 0.3 | 1.7 | 3.0 | 3.3 | 4.0 | 4.7 | 5.3 | 6.0 | 6.7 | 7.3 | 8.0 | 8.3 |
 
-Phase 2 begins at about 8.3 h, on target (~8 h). The curve is flat before Dome stable (the Ovens show the player that cause and effect exist), bends up as Outgassers come online, dips in the storm, and slows slightly near 5 kPa because frost loss grows. Every bend has a cause the Monitor can name.
+Phase 2 begins at about 8.3 h, on target (~8 h). The curve is flat before Dome stable (the Ovens show the player that cause and effect exist), bends up as Outgassers come online, dips in the storm (about 0.14 kPa lost over 0.75 sol with 3 Outgassers at 40 % power, **calc**, under the curve's tolerance, so no number in the table changes), and slows slightly near 5 kPa because frost loss grows. Every bend has a cause the Monitor can name.
 
 **Stage 3 update (proposed):** §2d replaces the stand-in below with a real condition (sealed, air, water, power) and puts Dome stable at about sol 9.2 (3.07 h) solo, so this curve's timing holds again.
 
@@ -77,17 +77,17 @@ Tags: **sourced** (opened), **searched** (search summary, not opened), **calc** 
 
 | Item | Value | Tag and reasoning |
 |---|---|---|
-| Real accumulation (reference only) | About 0.2 % of output per sol; range 0.05–2 % | **Searched** (Lorenz et al. 2021 abstract). InSight 5,000 → 500 Wh/sol over ~1,230 sols ≈ 0.19 %/sol compounding: **sourced** (PIA25284) + **calc** |
+| Real accumulation (reference only) | About 0.2 % of output per sol; range 0.05–2 % | **Searched** (Lorenz et al. 2021 abstract). InSight 5,000 → 500 Wh/sol over ~1,230 sols ≈ 0.19 %/sol compounding: **sourced** (PIA25284) + **calc**; 1,211 sols to the spring 2022 selfie (**verified**, NASA 2022). Lorenz 2021 itself still not opened |
 | Stage interval, Phase 1 | 3 sols per stage | **Invented.** Game rate ≈ 3.3 % per sol (**calc**), **about 15 times faster than real**; the journal says so. At the real rate an uncleaned panel would lose only ~24 % over a 120-sol game (**calc**, SME), invisible in play |
 | Later phases (slower) | Interval ÷ storm cap: Phase 2 3.75 sols, Phase 3 6, Equilibrium 12 | **Invented**; ≈ 1.7 %/sol in Phase 3, 0.8 %/sol at Equilibrium (**calc**), easing toward real as storms weaken |
 | Classroom (×4) | Interval ÷ 4 (0.75 sol in Phase 1) | **Invented**; same proportions, about 65 times real (**calc**); at most one cleaning trip per class period |
-| Storm adds | +1 stage at storm end; +2 if storm cap ≥ 0.8 | **Invented.** Timing is a design choice for the F1 lock point; real fallout continues as storms fade (SME) |
+| Storm adds | +1 stage at storm end; +2 if storm cap ≥ 0.8 | **Invented.** Timing is a design choice for the F1 lock point. NASA: dust keeps falling out of the air for **weeks** after a storm (**verified**, NASA 2022) and can add to the panel layer (**verified**); the game adds it at storm end (storm-dust-review §3.3) |
 | Heavy machinery and exhaust | ×2 dust rate within 8 blocks of the player's digging, heavy machinery, or machine exhaust | **Invented**; plausible (landing plumes are the only real support, **searched**) |
 | Output by stage | 0: 100 % · 1: 92 % · 2: 82 % · 3: 70 % · 4: 60 % (floor) | **Invented.** Spirit stood near 60 % before its sol 420 event (**searched**); the floor is **optimistic** against InSight's fall to about 10 % (journal note) |
 | Partly cleaned (dust devil) | Recovers **half the lost output**: from stage 4 (60 %) to 80 %; from stage 3 (70 %) to 85 %; from stage 2 (82 %) to 91 % | **Invented** formula; inside real event sizes (+5–10 points Opportunity, ~+33 points Spirit sol 420: **sourced**/**searched**) |
-| Dust devil chance | **1 % per sol per panel group** (Phases 1–2); only panels at stage ≥ 2 change | **Invented**; real Spirit ≈ 0.15 %/sol (**calc** from 3 events in ~2,000 sols); about one event per standard game (**calc**) |
+| Dust devil chance | **1 % per sol per panel group** (Phases 1–2); only panels at stage ≥ 2 change | **Invented**; real Spirit ≈ 0.15 %/sol (**calc** from 3 events in ~2,000 sols); about one event per standard game (**calc**). Opportunity: at least 7 named cleaning events in 5,111 sols ≈ 0.14 %/sol (**calc**, lower bound; Wikipedia timeline citing NASA); 1 % is about 7 times real |
 | Phase 3 rain | Panels under open sky go to stage 1 or partly cleaned, whichever is cleaner (never stage 0) | **Invented**; direction from Earth (rain leaves fine dust, **searched**); no Mars analogue |
-| With a storm | Output = stage factor × (1 − 0.6 × storm cap) | **Invented.** Phase 1 worst case 24 %. Real storms: Opportunity −80 % (2007), −97 % (2018); InSight regional storm about −35 % (**searched**) |
+| With a storm | Output = stage factor × (1 − 0.6 × storm cap) | **Invented.** Phase 1 worst case 24 %. Real storms: Opportunity about −82 % (2007: 128 Wh against about 700) and −97 % (2018: 652 to 22 Wh); InSight regional storm −35 % (425 to 275 Wh/sol). **Verified (opened)** / **calc**, storm-dust-review §3. Cap 1.0 ≈ tau 2.4: milder than the real worst. Real storms last days to months; the game compresses them |
 | Panel brush | Back to stage 0; ~2 s per panel; 64 uses | **Invented**; fiction (no Mars mission flew a brush) |
 | Panel wiper (from Phase 2) | Keeps a row at ≤ stage 1; 1 power unit per sol per panel; one bearing every 10 sols | **Invented**; fiction |
 | Phase 1 curve assumption | Panels cleaned about every 6 sols (average output ≈ 91 %) | **Calc** from the stage table; §2 curve holds only if power stays above Outgasser demand; measure in the prototype |
@@ -241,7 +241,7 @@ Time check (calc, **invented** gather rate of 4 items per minute for an experien
 
 Reading it: a second panel comes before the Outgasser for everyone (§2 "power order"), and a group of 4 or 5 needs it before the fourth maker (tier 1 of 5 or 6 beats one panel's 4.6). While tier 1 is short, the makers run at the share they get, so O2 net falls: the Monitor names it ("Oxygen makers slowed: low power"). Ovens drop first, so the pressure line flattens before the air does, and the cause line says why.
 
-Storm check (calc; a storm cuts a panel by 60 %, §2): 2 panels at stage 1 give 2 x 5 x 0.92 x 0.4 = 3.7 units; a group of 5 needs 6 for tier 1: shortfall 2.3 per sol; a full battery (10) lasts 4.3 sols, so the §2 two-sol storm is survivable with a charged battery. Ovens and Outgassers get nothing meanwhile, which is the lesson (B1, C1).
+Storm check (calc; a storm cuts a panel by 60 %, §2): 2 panels at stage 1 give 2 x 5 x 0.92 x 0.4 = 3.7 units; a group of 5 needs 6 for tier 1: shortfall 2.3 per sol; a full battery (10) lasts 4.3 sols, so a storm of up to 2 sols (the first storm is 0.75 sol) is survivable with a charged battery. Ovens and Outgassers get nothing meanwhile, which is the lesson (B1, C1).
 
 ### 2d.5 Dome stable as a real condition (replaces `life_support_ok` stand-in)
 
@@ -386,11 +386,11 @@ Assumed build-up; *invented*. Real hours: Phase 2 starts at 8.3 h; 3 sols per ho
 
 **Hold rule (one rule for every hold, including Dome stable; see §2c decision 7).** The hold counter **pauses** when a value leaves the band. It **resets to zero** only if the value stays out for more than 1 continuous sol (classroom: 0.5 sol). A quick fix keeps your progress; neglect loses it.
 
-**Drift events (during any hold, and in Phase 3 from the first established flora patch).** One event every 1–1.5 sols (classroom: every 0.5–0.75 sol, so a 3-sol hold has 4–6). Storm events are announced at least 1 sol ahead. Each one pushes a value out of band in about 1 sol if nobody answers, and takes about 1–5 minutes of play to answer once diagnosed.
+**Drift events (during any hold, and in Phase 3 from the first established flora patch).** One event every 1–1.5 sols (classroom: every 0.5–0.75 sol, so a 3-sol hold has 4–6). Storm events are announced at least 1 sol ahead (real: about 1 sol for a lander reading its own sky, up to about 12 sols from an orbiter map in Oct 2022; **verified**, NASA, storm-dust-review §4; so 1 sol is an honest minimum). Each one pushes a value out of band in about 1 sol if nobody answers, and takes about 1–5 minutes of play to answer once diagnosed.
 
 | Event | What happens | Effect if ignored | Answer | Goals |
 |---|---|---|---|---|
-| Dust storm | Solar −60 % for 0.5–1 sol | Algae vats and scrubbers slow: CO2 +0.15 kPa/sol | Battery reserve, temporary vat shutdown plan | C1, B1 |
+| Dust storm | Solar −60 % for 0.5–1 sol (*invented*; real storms last about 3 days for a local one to months for a global one, so the game compresses them, journal note) | Algae vats and scrubbers slow: CO2 +0.15 kPa/sol | Battery reserve, temporary vat shutdown plan | C1, B1 |
 | Flora bloom | A biome grows fast | O2 +0.6 %/sol → fire band | Prune, add CO2 source, slow vats | A5, B4 |
 | Fauna grazing | Settled thawlings graze a patch | Biomass −5 %; O2 output dips | Move or widen the quiet zone, reseed | B2, D1 |
 | Emitter wear | One emitter fails | Temperature −1 °C/sol | Repair (failure report names it) | C2 |

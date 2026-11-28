@@ -100,7 +100,7 @@ Delivered at the next natural pause after onset + 0.25 sol, **first in the queue
 
 | Case | `text` |
 |---|---|
-| General (all) | The panels did not break, and nothing pushed them. The light itself got dimmer. On Mars, the air is so thin that wind pushes very little, so the dust is the problem. In the game, a Phase 1 storm can cut your sunlight by up to {max_cut} percent. Real storms can cut much more. |
+| General (all) | The panels did not break, and nothing pushed them. The light itself got dimmer. On Mars today, the air is so thin that wind pushes very little, so the dust is the problem. In the game, a Phase 1 storm can cut your sunlight by up to {max_cut} percent. Real storms can cut much more. |
 | Picked "It stays the same" (`m1`) | The Sun was just as bright above the dust. But the light has to pass through dusty air to reach your panels, and the dust blocks some of it. |
 | Picked "It rises" (`m2`) | A storm puts more dust into the air, so the light gets dimmer. Wind did not clean your panels. Dust only settles on them as the sky clears. |
 | HS "Why?" picked wind or "Sun gives off less" (`m3`, `m4`) | Wind: Mars's thin air cannot push a panel over. Sun: the Sun shines as usual; the dust between it and you is what changed. |
@@ -168,7 +168,7 @@ Why this item and not "what caused the drop during the storm": the F1 result alr
 | Later storms | 0.5 to 1.0 sol, seeded | *Invented* |
 | Classroom | Always **0.5 sol** (10 minutes), the low end of the same range; the warning text stays true | Chosen: a class period is short. *Invented* |
 | Ramp in / out | 0.05 sol (60 s) in; 0.075 sol (90 s) out | Art storyboard, ARCHITECTURE 2.5 |
-| Real storms | Days to months (SME round 2 [S12], searched); the game shortens them (timescale note) | |
+| Real storms | Local about 3 days, regional weeks, global about 6 weeks to months (**verified**, NASA; storm-dust-review §3.3); the game compresses them about 3 to 100 times (timescale note) | |
 
 `storm_strength = envelope(t) × intensity × cap` with intensity 1.0 for every slice 5 storm.
 
@@ -199,7 +199,7 @@ If the overlay loader is cut: ship **fog only** (fog end to 18 %) driven by the 
 
 **Power check (calc, not run).** Group of 5, start kit (1 panel at stage 1, battery charged 5, tier 1 = 4 units/sol before extra makers per balance §2d): in a 0.75-sol Phase 1 storm supply is 1.84, so the shortfall is 2.16 per sol and the battery spends about 1.6 of its 5. With the §2d.4 case (2 panels, tier 1 = 6, battery 10): shortfall 2.3 per sol, **battery lasts 4.3 sols**. So a player who does nothing keeps life support through the first storm but **Ovens and Outgassers stop** (tiers 2 and 3 get nothing): the lesson is lost progress, not death. A `power_shortfall` failure report fires only if tier 1 goes short (a bigger group with the start kit, or a drained battery), with Hana's tip the first time. Technical Lead: the acceptance scenario computes this from the data files, not from this paragraph.
 
-**Reconciliation flag:** balance sheet §2's standard curve assumes a **2-sol** storm on sols 14 to 15. Every other source (warning text, §6, art, this spec) says 0.5 to 1 sol. This spec uses 0.75. Effect on the curve (calc): 3 Outgassers at 40 % power for 0.75 sol lose about 0.14 kPa, under the curve's tolerance; the §2 note should be corrected to "0.75 sol".
+**Reconciliation (closed 2026-11-28):** balance sheet §2's note assumed a 2-sol storm; every other source says 0.5 to 1 sol. The owner accepted this spec's 0.75 sol and the balance sheet now says so. Effect on the curve (calc): 3 Outgassers at 40 % power for 0.75 sol lose about 0.14 kPa, under the curve's tolerance, so no curve number changed.
 
 ### 2.6 Storm-end dust (stage jump)
 
@@ -321,14 +321,14 @@ Unit (pure) unless marked GameTest or screenshot.
 
 | Fact | Where | Status |
 |---|---|---|
-| Dust storms cut surface sunlight and solar power (F1 key); 2018 Opportunity, −97 % | F1 result, `journal.f1.real_vs_game` | searched, not opened |
+| Dust storms cut surface sunlight and solar power (F1 key); 2018 Opportunity, about −97 % (652 to 22 Wh) | F1 result, `journal.f1.real_vs_game` | **verified (opened)** and calc, storm-dust-review §3 (SME 2026-11-28) |
 | "Dust in the air blocks sunlight": is "blocks" or "blocks and scatters" the better word for grades 6 to 12? | F1 result | open |
-| Mars's thin air: wind pushes very little | F1 depth 2, `m3` | already "[SME: verify wording]" |
-| A hazy sky as a real precursor of a storm (the pre-storm haze cue) | §2.4, DESIGN decision | **unverified**; if not real, the cue is a game convenience and the journal must not call it real |
+| Mars's thin air: wind pushes very little | F1 depth 2, `m3` | **true at today's pressure only** (storm-dust-review §5). The F1 storm is in Phase 1, so the line may stay, but say "On Mars today, the air is so thin..."; never reuse it in Phase 3 or equilibrium |
+| A hazy sky as a real precursor of a storm (the pre-storm haze cue) | §2.4, DESIGN decision | **unverified** (SME did find that a lander's own rising haze is a real warning, tau 1.0 to 2.1 in about 1 sol, but not a haze before the storm reaches it); if not real, the cue is a game convenience and the journal must not call it real |
 | Wind-cleaning of panels is rare and not a storm effect (`m2`) | F1 depth 2 | needs the dust-review §2 wording check |
 | Cold panels work slightly better (distractor in `explain.f1.after_storm`) | After-storm item | SME round 2 (exists) |
-| Storm dust keeps settling for days after the sky clears; can "days" ship without a number | `journal.dust.storm_timing` | pending |
-| Real storm cuts (−80 % 2007, −97 % 2018, about −35 % InSight regional) versus the game's 60 % maximum | `journal.f1.real_vs_game` | searched |
+| Storm dust keeps settling for **weeks** after the sky clears (NASA); "days" in `journal.dust.storm_timing` must become "weeks" | `journal.dust.storm_timing` | **verified**; ID to change the word |
+| Real storm cuts (about −82 % 2007, −97 % 2018, −35 % InSight regional) versus the game's 60 % maximum (cap 1.0 ≈ tau 2.4) | `journal.f1.real_vs_game` | **verified (opened)** / calc, storm-dust-review §3.5 |
 | Sun disc at about 30 % and sky `#9A6A48` under a storm | §2.4 | Artist's values; ask whether plausible, not authoritative |
 | One-sol warning lead on Mars | Warning text | game rule; the text claims nothing real |
 
