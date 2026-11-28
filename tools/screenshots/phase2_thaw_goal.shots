@@ -1,0 +1,32 @@
+# Technical Lead, BACKLOG #49: the Monitor showing the Thaw next-goal row and the emitter cause line (mars:planet_1), then the Phase 3 row. Test pad as monitor_history.shots.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /fill -24 63 -24 24 63 24 minecraft:red_sand
+cmd /fill -24 64 -24 24 72 24 minecraft:air
+wait 10
+cmd /setblock 0 64 4 mars:planetary_monitor
+cmd /mars gate latch dome_stable
+cmd /mars gate latch phase_2_begins
+cmd /setblock 12 64 12 mars:solar_panel
+cmd /setblock 12 64 -12 mars:solar_panel
+cmd /setblock 6 64 4 mars:battery
+cmd /setblock 2 64 4 mars:super_greenhouse_emitter
+cmd /setblock 4 64 4 mars:super_greenhouse_emitter
+cmd /mars index set temperature -40
+cmd /mars index advance 8
+cmd /mars monitor
+wait 40
+shot thaw_goal_row
+cmd /mars index set temperature -20
+cmd /mars index set pressure 31
+cmd /mars index advance 1
+cmd /mars index set temperature -8
+cmd /mars monitor
+wait 40
+shot phase3_goal_row_warmth
+quit
