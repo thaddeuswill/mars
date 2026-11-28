@@ -59,7 +59,7 @@ public final class HazardGameTests {
     ServerLevel level = h.getLevel();
     PlanetData data = PlanetManager.resetForSelfTest(level);
     var sim = data.sim();
-    BlockPos rel = new BlockPos(4, 1, 4);
+    BlockPos rel = new BlockPos(6, 1, 6);
     h.setBlock(rel, MarsMachines.SOLAR_PANEL.get());
     BlockPos abs = h.absolutePos(rel);
     boolean ok =
@@ -68,7 +68,6 @@ public final class HazardGameTests {
             "a new real panel is stage 0 and makes the full 5 units",
             "stage=" + stage(level, abs) + " supply=" + sim.power().supplyPerSol(),
             stage(level, abs) == 0 && Math.abs(sim.power().supplyPerSol() - 5.0) < TOL);
-    System.out.println("fillers before time: " + countFillers(level, abs));
     sim.model().advanceSols(6.1);
     PlanetManager.syncPanels(level, data);
     int fillers = countFillers(level, abs);
