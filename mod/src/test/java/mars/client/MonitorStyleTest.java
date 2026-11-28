@@ -61,6 +61,33 @@ class MonitorStyleTest {
     }
   }
 
+  /** The alarm colour: readable, and used for the starved-machine alert only (no other colour). */
+  @Test
+  void theAlarmColourIsReadableAndSharedWithNothingElse() {
+    for (int world : WORLDS) {
+      double r = ratio(MonitorStyle.ALARM & 0xFFFFFF, backingOver(world));
+      System.out.printf("alarm over world %06X: %.2f%n", world, r);
+      assertTrue(r >= 4.5, "alarm " + r);
+    }
+    int[] others = {
+      MonitorStyle.LABEL, MonitorStyle.VALUE, MonitorStyle.UP, MonitorStyle.DOWN,
+      MonitorStyle.STEADY, MonitorStyle.CAUSE, MonitorStyle.STATE_GOOD, MonitorStyle.STATE_SHORT,
+      MonitorStyle.STATE_NONE, MonitorStyle.PLOT_LINE, MonitorStyle.PLOT_AXIS, MonitorStyle.EDGE,
+      MonitorStyle.BAR_EMPTY
+    };
+    for (int c : others) {
+      assertTrue(c != MonitorStyle.ALARM, "ALARM is not reused");
+      // Different enough to tell apart: some channel differs by 60 or more.
+      int d =
+          Math.max(
+              Math.abs(((c >> 16) & 255) - ((MonitorStyle.ALARM >> 16) & 255)),
+              Math.max(
+                  Math.abs(((c >> 8) & 255) - ((MonitorStyle.ALARM >> 8) & 255)),
+                  Math.abs((c & 255) - (MonitorStyle.ALARM & 255))));
+      assertTrue(d >= 60, "alarm is close to " + Integer.toHexString(c));
+    }
+  }
+
   @Test
   void linesAndBarsAreAtLeast3To1() {
     for (int world : WORLDS) {

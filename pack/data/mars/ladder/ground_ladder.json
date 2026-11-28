@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "about": "The staged ground ladder: raw regolith, washed regolith, rich soil, biocrust. Each step is a block the player makes by one visible action. Every amount in the recipes is INVENTED game balance. Washing as a way to remove perchlorate is game design and NOT VERIFIED (Phoenix found perchlorate in Mars soil and it dissolves in water, docs/science/round2-review.md 1.5; no source says washing makes Mars soil farmable). Rich soil needs bone meal, and the first planter needs none (it works on washed regolith with water), so there is no loop: bone meal comes from crops, crops grow on washed regolith. The soil treatment unit and the seed kits also use bone meal (docs/design/seed-kit-recipes.md section 2). What placing a kit does is W3.",
+  "steps": [
+    {
+      "id": "minecraft:red_sand",
+      "name": "raw regolith",
+      "action": "found on the surface",
+      "recipe": null,
+      "honesty": "real"
+    },
+    {
+      "id": "mars:washed_regolith",
+      "name": "washed regolith",
+      "action": "4 red sand and a water bucket make 4 (bucket comes back)",
+      "recipe": "mars:washed_regolith",
+      "honesty": "game design, not verified"
+    },
+    {
+      "id": "mars:rich_soil",
+      "name": "rich soil",
+      "action": "4 washed regolith and 1 bone meal make 4",
+      "recipe": "mars:rich_soil",
+      "honesty": "made up for the game"
+    },
+    {
+      "id": "mars:biocrust",
+      "name": "biocrust",
+      "action": "a biocrust kit starts it on rich soil (placing is W3)",
+      "recipe": null,
+      "honesty": "made up for the game"
+    }
+  ]
+}

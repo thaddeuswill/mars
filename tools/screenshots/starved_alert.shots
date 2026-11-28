@@ -1,0 +1,30 @@
+# BACKLOG #49: the starved-machine alert on the Monitor (mars:planet_1, real generated pad, top block y 80), 1280x720.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock 0 81 4 mars:planetary_monitor
+cmd /setblock 2 81 4 mars:regolith_outgasser
+cmd /setblock 4 81 4 mars:regolith_outgasser
+cmd /mars index advance 5
+cmd /mars monitor
+wait 40
+shot alert_1_two_outgassers_no_power
+cmd /setblock 12 81 12 mars:solar_panel
+cmd /setblock 18 81 12 mars:solar_panel
+cmd /setblock 6 81 4 mars:battery
+cmd /mars index advance 5
+cmd /mars monitor
+wait 40
+shot alert_2_powered_no_alert
+cmd /setblock 8 81 4 mars:regolith_oven
+cmd /setblock 10 81 4 mars:regolith_oven
+cmd /setblock 12 81 12 mars:solar_panel[dust_stage=4]
+cmd /mars index advance 3
+cmd /mars monitor
+wait 40
+shot alert_3_mixed_short_dusty
+quit

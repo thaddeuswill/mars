@@ -371,4 +371,36 @@ class MonitorLayoutTest {
       }
     }
   }
+
+  /** The alert is one 12 px line; with the worst rows it keeps the panel inside the bound. */
+  @Test
+  void theAlertAddsOneLineAndTheBoundHolds() throws Exception {
+    PlanetSim s = TestSims.sim(Pace.STANDARD);
+    for (long i = 0; i < 12; i++) {
+      s.addMachine(i % 2 == 0 ? TestSims.OUTGASSER : TestSims.OVEN, i + 1);
+    }
+    MonitorView raw = MonitorView.of(s);
+    MonitorView.Row a = raw.rows().stream().filter(MonitorView::isAlert).findFirst().orElseThrow();
+    assertEquals(MonitorStyle.ALERT_ROW_H, MonitorLayout.rowHeight(a), "one line, 12 machines");
+    for (int screen : new int[] {H3, 360}) {
+      MonitorView v = MonitorLayout.fit(raw);
+      int total = MonitorLayout.panelHeight(v, screen);
+      System.out.println(
+          "alert, screen "
+              + screen
+              + ": plot "
+              + MonitorLayout.plotHeight(v, screen)
+              + " panel "
+              + total);
+      assertTrue(
+          total
+              <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+          "panel " + total);
+      assertTrue(total <= screen - 2 * MonitorStyle.MARGIN);
+    }
+    // The same planet with power: no alert row, so no extra height.
+    PlanetSim ok = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 40);
+    ok.addMachine(TestSims.OUTGASSER, 1L);
+    assertTrue(MonitorView.of(ok).rows().stream().noneMatch(MonitorView::isAlert));
+  }
 }

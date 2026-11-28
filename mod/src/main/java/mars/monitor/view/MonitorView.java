@@ -70,7 +70,35 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     NORMAL,
     GOOD,
     SHORT,
-    NONE
+    NONE,
+    /** The starved-machine alert only (its own colour and shape on the screen). */
+    ALERT
+  }
+
+  /** Label key of the starved-machine alert row (the only row with {@link Tone#ALERT}). */
+  public static final String ALERT_ROW = "monitor.row.alert";
+
+  /** True for the starved-machine alert row. */
+  public static boolean isAlert(Row row) {
+    return ALERT_ROW.equals(row.labelKey());
+  }
+
+  /**
+   * The alert's sentence key for the machine lines it carries: one type of one machine, one type of
+   * several, or several types ("3 machines starved", so the line never grows).
+   */
+  public static String alertKey(List<CauseLine> starved) {
+    if (starved.size() == 1) {
+      return starved.get(0).count() > 1
+          ? "monitor.alert.starved.many"
+          : "monitor.alert.starved.one";
+    }
+    return "monitor.alert.starved.mixed";
+  }
+
+  /** Total machines across the alert's lines. */
+  public static int alertTotal(List<CauseLine> starved) {
+    return starved.stream().mapToInt(CauseLine::count).sum();
   }
 
   /**
@@ -437,6 +465,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
               "monitor.row.water_boils", Fmt.withUnit(boil, 0, "°C"), null, null, null, List.of()));
     }
     powerRow(sim).ifPresent(rows::add);
+    // The alert is the first row on the panel: rare, one line, only while a machine that feeds
+    // the Index is starved.
+    alertRow(sim).ifPresent(a -> rows.add(0, a));
     stormRow(sim).ifPresent(rows::add);
     gateRows(sim, rows, net);
     // One short tag, only in a classroom world, so a standard world adds no height.
@@ -615,6 +646,49 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
     }
     return causes;
+  }
+
+  /**
+   * The starved-machine alert (BACKLOG #49; inspiration survey item 8): one row, shown only while
+   * the grid cannot meet demand AND a placed machine that changes an Index row draws power. Which
+   * machines are listed in its cause lines (type and count); the reason says "needs power" (no
+   * power at all) or "low power" (a share). Loads that change no Index row (the reclaimer) are not
+   * alerted: their state stays in the Power row. Cost: one pass over the placed machine types.
+   */
+  static java.util.Optional<Row> alertRow(PlanetSim sim) {
+    var state = sim.power().state(sim.stepSols());
+    if (state != PowerGrid.State.SHORT && state != PowerGrid.State.UNPOWERED) {
+      return java.util.Optional.empty();
+    }
+    List<CauseLine> starved = new ArrayList<>();
+    for (String type : sim.placedTypes()) {
+      if (sim.machineDrawsPower(type) && sim.contributionCount(type) > 0) {
+        String why =
+            state == PowerGrid.State.UNPOWERED
+                ? "monitor.cause.needs_power"
+                : "monitor.cause.low_power";
+        starved.add(new CauseLine(sourceKey(type), sim.machineCount(type), "", why));
+      }
+    }
+    if (starved.isEmpty()) {
+      return java.util.Optional.empty();
+    }
+    return java.util.Optional.of(
+        new Row(
+            ALERT_ROW,
+            "",
+            null,
+            null,
+            null,
+            starved,
+            Tone.ALERT,
+            false,
+            null,
+            null,
+            List.of(),
+            null,
+            null,
+            -1));
   }
 
   /**

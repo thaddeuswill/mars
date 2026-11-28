@@ -130,6 +130,9 @@ final class MonitorLayout {
   }
 
   static int rowHeight(MonitorView.Row row) {
+    if (MonitorView.isAlert(row)) {
+      return ALERT_ROW_H; // one line, whatever the number of machines
+    }
     int h = row.emphasis() ? ROW_H_EMPHASIS : ROW_H;
     if (row.goal() != null) {
       h += GOAL_BAR_LINE_H;

@@ -166,6 +166,38 @@ public final class MarsTerrainBlocks {
               .strength(0.5f)
               .sound(SoundType.SAND));
 
+  // ---- The staged ground ladder (docs/design/inspiration-survey-mechanics.md, Planet Crafter and
+  // Farmer's Delight): raw regolith (vanilla red sand) -> washed regolith -> rich soil ->
+  // biocrust. Plain cubes for now; spreading and planting are W3. Recipes and amounts are
+  // INVENTED and live in data (data/mars/recipe, data/mars/ladder/ground_ladder.json).
+
+  /** Regolith rinsed with water. That washing removes toxic salts is game design, NOT VERIFIED. */
+  public static final DeferredBlock<Block> WASHED_REGOLITH =
+      labelled(
+          "washed_regolith",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_ORANGE)
+              .strength(0.5f)
+              .sound(SoundType.SAND));
+
+  /** Washed regolith mixed with bone meal. Made up for the game. */
+  public static final DeferredBlock<Block> RICH_SOIL =
+      labelled(
+          "rich_soil",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_BROWN)
+              .strength(0.5f)
+              .sound(SoundType.GRAVEL));
+
+  /** The top step: a crust a seed kit starts. A stand-in for living crust; made up for the game. */
+  public static final DeferredBlock<Block> BIOCRUST =
+      labelled(
+          "biocrust",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_GRAY)
+              .strength(0.6f)
+              .sound(SoundType.GRAVEL));
+
   /** What a carbonate rock drops; the seed kit recipe uses it (tag mars:seed_kit_carbonate). */
   public static final DeferredItem<Item> CARBONATE = ITEMS.registerSimpleItem("carbonate");
 
@@ -216,7 +248,10 @@ public final class MarsTerrainBlocks {
           SULFIDE_VEIN,
           MAGNETIC_ORE,
           CARBONATE_ROCK,
-          RIPPLE_SAND);
+          RIPPLE_SAND,
+          WASHED_REGOLITH,
+          RICH_SOIL,
+          BIOCRUST);
 
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB =
       TABS.register(

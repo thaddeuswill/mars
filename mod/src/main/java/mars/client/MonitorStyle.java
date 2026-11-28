@@ -25,6 +25,14 @@ final class MonitorStyle {
 
   static final int STATE_SHORT = CAUSE;
   static final int STATE_NONE = DOWN;
+
+  /**
+   * The starved-machine alert, and nothing else: its own hue (not a state or trend colour) with a
+   * warning-triangle shape and a sentence, so it never relies on colour alone.
+   */
+  static final int ALARM = 0xFFFF6FD0;
+
+  static final int ALERT_ROW_H = 12;
   static final int BAR_EMPTY = 0xFF78685E;
 
   /** Pressure plot: the series, the axes, and the dashed event line (the event label is CAUSE). */

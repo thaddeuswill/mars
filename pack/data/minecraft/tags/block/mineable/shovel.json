@@ -4,6 +4,9 @@
     "mars:basaltic_sand",
     "mars:dark_sand_ore",
     "mars:spherule_sand",
-    "mars:ripple_sand"
+    "mars:ripple_sand",
+    "mars:washed_regolith",
+    "mars:rich_soil",
+    "mars:biocrust"
   ]
 }

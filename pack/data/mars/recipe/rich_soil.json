@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "mars:washed_regolith"
+    },
+    {
+      "tag": "mars:washed_regolith"
+    },
+    {
+      "tag": "mars:washed_regolith"
+    },
+    {
+      "tag": "mars:washed_regolith"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "result": {
+    "id": "mars:rich_soil",
+    "count": 4
+  }
+}

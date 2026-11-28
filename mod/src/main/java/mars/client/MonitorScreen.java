@@ -40,6 +40,7 @@ public final class MonitorScreen extends Screen {
       case GOOD -> STATE_GOOD;
       case SHORT -> STATE_SHORT;
       case NONE -> STATE_NONE;
+      case ALERT -> ALARM;
       case NORMAL -> VALUE;
     };
   }
@@ -72,6 +73,10 @@ public final class MonitorScreen extends Screen {
     int y = y0 + HEADER_H;
     boolean first = true;
     for (MonitorView.Row row : view.rows()) {
+      if (MonitorView.isAlert(row)) {
+        y = drawAlert(g, row, x0, right, y) + ROW_GAP;
+        continue; // the plot still follows the pressure row
+      }
       y = drawRow(g, row, x0, right, y);
       y += ROW_GAP;
       if (first && plotH > 0) {
@@ -278,6 +283,39 @@ public final class MonitorScreen extends Screen {
       int y = y1 + Math.round((y2 - y1) * i / (float) steps);
       g.fill(x, y, x + 1, y + 1, color);
     }
+  }
+
+  /**
+   * The starved-machine alert: a warning triangle (shape), then one sentence in the alarm colour,
+   * shrunk to fit. Returns the y below it.
+   */
+  private int drawAlert(GuiGraphics g, MonitorView.Row row, int x0, int right, int y) {
+    int ix = x0 + PAD;
+    for (int i = 0; i < 8; i++) {
+      g.fill(ix + 4 - (i + 1) / 2, y + 1 + i, ix + 5 + (i + 1) / 2, y + 2 + i, ALARM);
+    }
+    g.fill(ix + 4, y + 3, ix + 5, y + 6, BACKING);
+    g.fill(ix + 4, y + 7, ix + 5, y + 8, BACKING);
+    java.util.List<MonitorView.CauseLine> starved = row.causes();
+    String key = MonitorView.alertKey(starved);
+    Component text =
+        switch (key) {
+          case "monitor.alert.starved.mixed" ->
+              Component.translatable(key, MonitorView.alertTotal(starved));
+          case "monitor.alert.starved.many" ->
+              Component.translatable(
+                  key, Component.translatable(starved.get(0).sourceKey()), starved.get(0).count());
+          default ->
+              Component.translatable(key, Component.translatable(starved.get(0).sourceKey()));
+        };
+    int tx = ix + 12;
+    float fit = Math.min(1f, (right - tx) / (float) Math.max(1, font.width(text)));
+    g.pose().pushPose();
+    g.pose().translate(tx, y + (ALERT_ROW_H - 1 - 8 * fit) / 2f, 0);
+    g.pose().scale(fit, fit, 1f);
+    g.drawString(font, text, 0, 0, ALARM, false);
+    g.pose().popPose();
+    return y + ALERT_ROW_H;
   }
 
   private int drawRow(GuiGraphics g, MonitorView.Row row, int x0, int right, int y) {

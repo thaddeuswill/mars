@@ -501,7 +501,10 @@ public final class TerrainGameTests {
             "sulfide_vein",
             "magnetic_ore",
             "carbonate_rock",
-            "ripple_sand");
+            "ripple_sand",
+            "washed_regolith",
+            "rich_soil",
+            "biocrust");
     StringBuilder missing = new StringBuilder();
     for (String b : blockIds) {
       ResourceLocation rl = ResourceLocation.fromNamespaceAndPath("mars", b);
@@ -524,7 +527,7 @@ public final class TerrainGameTests {
     ok &=
         SelfTest.check(
             "terrain.blocks",
-            "13 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
+            "16 new blocks and items registered, with loot tables; dark sand ore smelts to glass",
             missing.length() == 0 ? "all present, recipe " + recipe : "missing " + missing,
             missing.length() == 0 && recipe);
 
@@ -810,11 +813,72 @@ public final class TerrainGameTests {
             "the four seed kit items are registered and their recipes loaded from the datapack",
             kitProblems.isEmpty() ? "all four" : kitProblems.toString(),
             kitProblems.isEmpty());
+    ok &= groundLadderChecks(level);
     if (ok) {
       helper.succeed();
     } else {
       helper.fail("conductor ore checks failed; see MARS-SELFTEST lines");
     }
+  }
+
+  /**
+   * The ground ladder with the real recipe manager: 4 red sand and a water bucket craft 4 washed
+   * regolith (the bucket comes back), 4 washed regolith and bone meal craft 4 rich soil, and the
+   * biocrust kit is craftable from carbonate, bone meal, 2 washed regolith and a water bucket.
+   */
+  private static boolean groundLadderChecks(ServerLevel level) {
+    boolean ok = true;
+    var recipes = level.getServer().getRecipeManager();
+    var reg = level.registryAccess();
+    java.util.function.Function<java.util.List<net.minecraft.world.item.ItemStack>, String> craft =
+        items -> {
+          var grid = new java.util.ArrayList<>(items);
+          while (grid.size() < 9) {
+            grid.add(net.minecraft.world.item.ItemStack.EMPTY);
+          }
+          var input = net.minecraft.world.item.crafting.CraftingInput.of(3, 3, grid);
+          var found =
+              recipes.getRecipeFor(
+                  net.minecraft.world.item.crafting.RecipeType.CRAFTING, input, level);
+          if (found.isEmpty()) {
+            return "no recipe";
+          }
+          var out = found.get().value().assemble(input, reg);
+          var left = found.get().value().getRemainingItems(input);
+          boolean bucketBack =
+              left.stream().anyMatch(st -> st.is(net.minecraft.world.item.Items.BUCKET));
+          return id(out.getItem()) + " x" + out.getCount() + (bucketBack ? " +bucket" : "");
+        };
+    var red = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.RED_SAND);
+    var water = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WATER_BUCKET);
+    var bone = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BONE_MEAL);
+    var washedItem =
+        new net.minecraft.world.item.ItemStack(MarsTerrainBlocks.WASHED_REGOLITH.get());
+    var carbonate = new net.minecraft.world.item.ItemStack(MarsTerrainBlocks.CARBONATE.get());
+    String washedOut = craft.apply(java.util.List.of(red, red, red, red, water));
+    String richOut =
+        craft.apply(java.util.List.of(washedItem, washedItem, washedItem, washedItem, bone));
+    String kitOut = craft.apply(java.util.List.of(carbonate, bone, washedItem, washedItem, water));
+    ok &=
+        SelfTest.check(
+            "ladder.washed_craftable",
+            "4 red sand and a water bucket craft 4 washed regolith and give the bucket back",
+            washedOut,
+            washedOut.equals("mars:washed_regolith x4 +bucket"));
+    ok &=
+        SelfTest.check(
+            "ladder.rich_soil_craftable",
+            "4 washed regolith and bone meal craft 4 rich soil",
+            richOut,
+            richOut.equals("mars:rich_soil x4"));
+    ok &=
+        SelfTest.check(
+            "kits.biocrust_craftable",
+            "the biocrust kit crafts from carbonate, bone meal, 2 washed regolith and a water bucket"
+                + " (the washed regolith tag resolves)",
+            kitOut,
+            kitOut.startsWith("mars:biocrust_kit x1"));
+    return ok;
   }
 
   private static int countBlocks(ServerLevel level, int ox, int oz, String name) {

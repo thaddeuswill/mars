@@ -85,3 +85,7 @@ Generators: `tools/art-preview/gen_phase1_batch1.py` (oxygen maker; band colours
 ## Update 2026-11-28 (Lead Artist): running-state art PREPARED (new files only)
 
 New textures, animated strips and model variants for off / idle / running, from `tools/art-preview/gen_running_states.py`; **no existing texture changed**, nothing referenced by a blockstate until the Technical Lead adds the property. Table and instructions: `docs/art/running-state-table.md`. Status: PLACEHOLDER-QUALITY first pass, frames viewed flat only, not seen in a real client. Animated: `regolith_oven_front_running`, `regolith_outgasser_puff`, `o2_generator_face_running`, `water_reclaimer_front_running`, `atmospheric_processor_canister_running`, `super_greenhouse_emitter_flare_running` (each with `.png.mcmeta`). Static: `*_front_off`, `*_front_idle`, `*_front_running`, `battery_front_charge0..2`.
+
+## Ground ladder placeholders (Technical Lead, 2026-11-28)
+
+Three new PLACEHOLDER block textures from `tools/art-preview/gen_ground_ladder_textures.py` (never overwrites an existing file): `washed_regolith.png` (paler, greyer red dust), `rich_soil.png` (dark red-brown with crumbs), `biocrust.png` (dark grey-brown crust, paler flakes, no green). The Lead Artist replaces them (same names).
