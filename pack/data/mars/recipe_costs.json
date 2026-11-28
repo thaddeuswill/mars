@@ -112,6 +112,22 @@
       },
       "gateTier": 0
     },
+    "mars:panel_brush": {
+      "standard": {
+        "Fe": 2,
+        "W": 1,
+        "G": 0,
+        "B": 0
+      },
+      "classroom": {
+        "Fe": 2,
+        "W": 1,
+        "G": 0,
+        "B": 0
+      },
+      "gateTier": 0,
+      "status": "invented (docs/design/f1-storm-spec.md 2.7: Fe 2, W 1, standard and classroom); stand-ins as in materials: Fe = iron ingot, W = copper ingot"
+    },
     "mars:hull_plate": {
       "standard": {
         "Fe": 2,
@@ -165,7 +181,8 @@
   "playableRecipes": [
     "mars:hull_plate",
     "mars:o2_tank",
-    "mars:hull_door"
+    "mars:hull_door",
+    "mars:panel_brush"
   ],
   "source": "docs/design/balance-sheet.md 2d.3 and docs/tech/life-support-spec.md 2.3. ALL COUNTS INVENTED. Materials are vanilla stand-ins until the Phase 1 resource list exists (open item G4). Only the items in playableRecipes have a crafting-table recipe in data/mars/recipe/: the 3 x 3 grid holds at most 9 items and the machines cost 10 to 24, so machine recipes need a design call (see the slice 2 report). Classroom costs are data only: a datapack recipe cannot switch on a config value."
 }
