@@ -197,6 +197,7 @@ public final class PlanetManager {
     }
     // Queue only: the blocks are written on the next planet tick, not inside the load event.
     d.sim().queueChunkSync(e.getChunk().getPos().toLong());
+    LOG.info("DEBUGSYNC chunk {} queued={}", e.getChunk().getPos(), d.sim().hasBlockSync());
   }
 
   /** Tell the planet a machine's output changed (a dusty solar panel). Fraction is 0 to 1. */
