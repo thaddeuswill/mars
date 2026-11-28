@@ -41,30 +41,38 @@ def load(n):
 def main():
     item = json.load(open(os.path.join(B.A, "models", "item", "habitat_bunk.json")))
     pair = {"textures": item["textures"], "elements": item["elements"]}
-    iso = render(pair, "bunk", "iso"); side = render(pair, "bunk", "side"); top = render(pair, "bunk", "top")
+    iso = render(pair, "bunk2", "iso"); side = render(pair, "bunk2", "side")
     shot = Image.open(SHOT).convert("RGB").crop((0, 250, 800, 560))
-    peake = B.crop("iss_wpa_rack_peake.jpg", (380, 330, 800, 520))
-    hatch = B.crop("quest_airlock_hatch_hurley.jpg", (700, 0, 1000, 400))
-    row = [("OLD in game: vanilla red bed (shot 20261127-233344)", shot),
-           ("REF: ISS white padded bag with strap (Peake, NASA); NOT a bunk", peake),
-           ("REF: Quest wall: webbing strap, mesh grille (NASA)", hatch),
-           ("NEW bunk pair, iso (head + foot)", iso), ("NEW side", side), ("NEW iso, DIM (measured light)", dim(iso)),
-           ("NEW at in-game size, DIM", game_like(dim(iso)))]
-    notes = ["Reproduced: off-white hull-paint shell with drawers and latches (rack-door language of the ISS photo), a padded bag with a strap and a white pillow, orange webbing as the 'touch this' accent, a blank name-tag slot on each end.",
-             "Not reproduced: a real crew-sleeping-quarter or sleeping-bag photo was NOT viewed (none in the repo), so the shape is a design choice; real ISS bags are tethered upright to a wall, not lying on a shelf; no privacy curtain, no reading light.",
-             "Size: 1 x 2 blocks, 0.56 m mattress top (9 px, same as the vanilla bed so the sleeping pose matches), boards 0.63 m, pillow 0.69 m. Blender iso, NOT Minecraft; not yet seen in game."]
-    B.board("14_habitat_bunk", "HABITAT BUNK (habitat_bunk, 2 blocks): old red bed | references | new renders", row, notes)
+    cq = B.crop("iss_cq_cristoforetti_sleeping_bag.jpg", (280, 280, 720, 1000))
+    nes = B.crop("iss_sleeping_bag_tethered_nespoli.jpg", (0, 0, 960, 640))
+    chap = B.crop("chapea_crew_quarters_rooms.jpg", (150, 360, 400, 640))
+    row = [("OLD v1 (blue bag, orange strap, drawers), in game shot", shot),
+           ("REF: ISS CQ light-green quilted bag, white zip + Velcro (NASA)", cq),
+           ("REF: Harmony olive bag, navy bands, white cords (NASA)", nes),
+           ("REF: CHAPEA low bed, dark frame, light quilt (NASA)", chap),
+           ("NEW v2 bunk pair, iso (head + foot)", iso), ("NEW v2 side", side), ("NEW v2 iso, DIM (measured light)", dim(iso)),
+           ("NEW v2 at in-game size, DIM", game_like(dim(iso)))]
+    notes = ["Reproduced: muted light-green quilted bag with white zip tape and a white Velcro patch (CQ photo), navy band with white stitches and silver buckle (Harmony bag), plain alloy frame, low 1 x 2 bed (CHAPEA), white pillow, Velcro squares and a yellow pouch on the head board (CQ wall).",
+             "Not reproduced: the enclosed quilted compartment and cloth door, white tether cords (microgravity cue, left out), olive variant, CHAPEA's dark-black frame (lifted to grey alloy for the dim lamp), the real bag's shape (ours is a flat slab); drawers removed: no photo shows them.",
+             "Hex values are by eye from photos (unverified). Blender iso, NOT Minecraft; not yet seen in game. Dim = factor (0.4375, 0.396, 0.3375) from board 12."]
+    B.board("14_habitat_bunk_v2", "HABITAT BUNK v2 (habitat_bunk, 2 blocks): old v1 | real references | new renders", row, notes)
 
     closed, opened = load("stowage_crate"), load("stowage_crate_open")
-    ci = render(closed, "crate_c", "iso"); cf = render(closed, "crate_c", "front"); oi = render(opened, "crate_o", "iso")
-    rack = B.crop("iss_wpa_rack_peake.jpg", (0, 380, 760, 666))
-    row = [("REF: closed rack doors, latches, cut-outs, labels (Peake, NASA)", rack),
-           ("NEW crate closed, iso", ci), ("NEW crate front", cf), ("NEW crate open (door 45 deg)", oi),
-           ("NEW closed, DIM", dim(ci)), ("NEW closed at in-game size, DIM", game_like(dim(ci)))]
-    notes = ["Reproduced: off-white panel door with bolts, a latch bar with an orange pull, a label card with a blue band and stylised text lines (the label cards and blue brackets of the ISS photos), a dark alloy skid with fork pockets, stacking corner fittings on the lid.",
-             "Not reproduced: rack clutter, real label text, the 'open rack' dark interior with studs (ref #9); the inside is a plain shelf with a white cargo bag. No red cross (that cue belongs to the Water Reclaimer).",
-             "Full-block footprint like the barrel it replaces (door at z 0..1). Open state swings the door outside the cell (needs noOcclusion). Blender iso, NOT Minecraft; not yet seen in game."]
-    B.board("15_stowage_crate", "STOWAGE CRATE (stowage_crate): ISS rack doors | new renders", row, notes)
+    ci = render(closed, "crate2_c", "iso"); cf = render(closed, "crate2_c", "front"); oi = render(opened, "crate2_o", "iso")
+    bag = render(load("stowage_bag"), "bag2", "iso")
+    mplm = B.crop("mplm_leonardo_stowage_racks.jpg", (140, 160, 420, 440))
+    mplm2 = B.crop("mplm_leonardo_stowage_racks.jpg", (520, 380, 900, 600))
+    ctb = B.crop("iss_cargo_transfer_bag_ohara.jpg", (240, 380, 820, 860))
+    row = [("REF: MPLM grey lockers, yellow/orange label tags, cut-outs (NASA)", mplm),
+           ("REF: MPLM white bags, tan straps, buckles (NASA)", mplm2),
+           ("REF: cargo transfer bag, yellow label card, Velcro tabs (NASA)", ctb),
+           ("NEW v2 crate closed, iso", ci), ("NEW front", cf), ("NEW open (door 45 deg)", oi),
+           ("NEW closed, DIM", dim(ci)), ("NEW closed in-game size, DIM", game_like(dim(ci))),
+           ("OPTIONAL soft bag stack (not registered)", bag), ("OPTIONAL soft bag, DIM", dim(bag))]
+    notes = ["Reproduced: off-white locker door with a yellow label card (text lines, no real text), three dark cut-out slots, two grey latches, bolts, stacking corner fittings; skid dropped (real racks have none), only a 1 px grey kick plate remains. Optional soft bags: pale cloth, two tan straps with grey buckles, yellow card.",
+             "Not reproduced: grey metal colour (ours is warm white hull paint), a 2 x 2 door grid, barcodes and printed serials, strap criss-cross, the cluttered look of real stowage. Label card colour yellow by eye (unverified hex).",
+             "Full-block footprint like the barrel. Open state swings the door outside the cell (needs noOcclusion). Blender iso, NOT Minecraft; not yet seen in game."]
+    B.board("15_stowage_crate_v2", "STOWAGE CRATE v2 (stowage_crate): real stowage | new renders", row, notes)
 
 
 main()
