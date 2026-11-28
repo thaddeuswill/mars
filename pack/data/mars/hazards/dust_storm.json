@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "about": "Dust storm schedule and strength caps (docs/design/f1-storm-spec.md section 2, owner-accepted 2026-11-28). Every number is an invented game-balance number unless its tag says otherwise. Times are simulation sols; a sol is 20 simulation minutes in both pace presets.",
+  "source": "docs/design/f1-storm-spec.md; docs/design/balance-sheet.md 2a, 2b",
+  "warning_lead_sols": {
+    "value": 1.0,
+    "tag": "learning rule (CR-F3: at least about 1 sol in both presets); never scaled by pace"
+  },
+  "reminder_lead_sols": {
+    "value": 0.5,
+    "tag": "invented"
+  },
+  "ramp_in_sols": {
+    "value": 0.05,
+    "tag": "art storyboard (ARCHITECTURE.md 2.5): 60 s"
+  },
+  "ramp_out_sols": {
+    "value": 0.075,
+    "tag": "art storyboard (ARCHITECTURE.md 2.5): 90 s"
+  },
+  "length_includes_ramps": true,
+  "first_storm": {
+    "onset_sol": { "standard": 14, "classroom": 4.5 },
+    "length_sols": { "standard": 0.75, "classroom": 0.5 },
+    "tag": "invented",
+    "note": "Standard 14: balance sheet 2 curve. Classroom 4.5 and 0.5 are chosen, not divided by 4 (owner answer 2026-11-28). Fixed for every world and every player: no rubber-banding."
+  },
+  "later_storms": {
+    "gap_after_end_sols": { "standard": [8, 14], "classroom": [2, 3.5] },
+    "length_sols": { "standard": [0.5, 1.0], "classroom": [0.5, 0.5] },
+    "tag": "invented",
+    "note": "Drawn from a generator seeded by (planet seed, storm index); the classroom gap is the standard gap divided by 4."
+  },
+  "guards": {
+    "retry_every_sols": 1.0,
+    "max_retries": 3,
+    "note": "At warning time at least one player must have finished or skipped the Landing and solar supply must be above 0. Otherwise the whole storm moves one sol later, up to 3 times; after that the storm goes ahead and the warning carries the void flag (the forecast resolves void)."
+  },
+  "caps": [
+    { "phase": 1, "gate": null, "cap": 1.0, "max_storms": 1 },
+    { "phase": 2, "gate": "mars:phase_2_begins", "cap": 0.8 },
+    { "phase": 3, "gate": "mars:phase_3_begins", "cap": 0.5 },
+    { "phase": 4, "gate": "mars:equilibrium", "cap": 0.25 }
+  ],
+  "caps_note": "Strength cap per phase (ARCHITECTURE.md 2.5), keyed on latched gates; the highest latched entry wins. Gates phase_3_begins and equilibrium do not exist yet, so those entries never apply. max_storms is the number of storms scheduled while that entry is the current one (null: no limit); Phase 1 has one storm because the spec says 'Phase 1 has one storm in the slice' (f1-storm-spec.md 2.1). Both are invented.",
+  "affects_machine_types": ["mars:solar_panel"]
+}

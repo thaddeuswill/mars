@@ -34,6 +34,30 @@ public record PanelDustTuning(
     return out;
   }
 
+  /** A stage and flag found by {@link #infer}. */
+  public record Inferred(int stage, boolean partlyCleaned) {}
+
+  /**
+   * The stage and flag whose output equals {@code efficiency} (tolerance 1e-9), or null. Used to
+   * move a saved world from before schema 8 (which saved only the output) to per-panel dust state.
+   */
+  public Inferred infer(double efficiency) {
+    for (int pass = 0; pass < 2; pass++) {
+      boolean partly = pass == 1;
+      for (int stage = 0; stage <= maxStage; stage++) {
+        if (Math.abs(outputFraction(stage, partly) - efficiency) < 1e-9) {
+          return new Inferred(stage, partly);
+        }
+      }
+    }
+    return null;
+  }
+
+  /** Storm-end stages for a storm cap: the heavy value at or above the cap threshold. */
+  public int stormEndStagesFor(double stormCap) {
+    return stormCap >= stormCapForExtra ? stormEndStagesHeavy : stormEndStages;
+  }
+
   /** Output with a storm on top: stage factor x (1 - cut x storm cap). */
   public double outputInStorm(int stage, boolean partlyCleaned, double stormCap) {
     return outputFraction(stage, partlyCleaned) * (1.0 - stormSunlightCutPerCap * stormCap);

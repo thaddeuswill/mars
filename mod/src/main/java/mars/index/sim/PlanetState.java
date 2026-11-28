@@ -22,18 +22,51 @@ public record PlanetState(
     PressureHistory.State history,
     FrostSink.State frost,
     mars.dome.DomeSeals.State domes,
-    mars.life.LifeSupport.State life) {
+    mars.life.LifeSupport.State life,
+    mars.hazards.HazardState hazards) {
 
   /**
    * 2 adds the battery charge and per-machine output (solar dust); 3 adds gate states (latched,
    * hold counters); 4 adds the pressure history for the Monitor plot; 5 adds the polar-frost
    * reservoir (kPa stored, buried kPa released); 6 adds the registered domes and their sealed
-   * state; 7 adds the life-support stores (oxygen and water). Older saves still load; their gates
+   * state; 7 adds the life-support stores (oxygen and water); 8 adds the hazards (planet seed, the dust
+   * on every panel, the storm schedule; a save before 8 gets its panel stages from the saved output
+   * and starts its storm schedule from the loaded time). Older saves still load; their gates
    * start unlatched, their history starts empty, their reservoir starts empty, they have no domes,
    * and a save without life support (schema 6 and older) keeps running on the legacy stand-in
    * ({@code life == null}; see PlanetSim.lifeSupportOk).
    */
-  public static final int CURRENT_SCHEMA = 7;
+  public static final int CURRENT_SCHEMA = 8;
+
+  /** Without hazards (schema 7 and older). */
+  public PlanetState(
+      int schema,
+      Map<String, Double> values,
+      long simTicks,
+      int pendingTicks,
+      Map<String, List<Long>> machines,
+      double batteryCharge,
+      Map<Long, Double> efficiency,
+      Map<String, mars.gates.GateTracker.State> gates,
+      PressureHistory.State history,
+      FrostSink.State frost,
+      mars.dome.DomeSeals.State domes,
+      mars.life.LifeSupport.State life) {
+    this(
+        schema,
+        values,
+        simTicks,
+        pendingTicks,
+        machines,
+        batteryCharge,
+        efficiency,
+        gates,
+        history,
+        frost,
+        domes,
+        life,
+        null);
+  }
 
   /** Without life support (schema 6 and older). */
   public PlanetState(
