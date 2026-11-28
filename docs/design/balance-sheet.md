@@ -191,6 +191,17 @@ Hydrosphere and dome water are not built. Name it, do not hide it: the Oven tool
 
 ---
 
+## 2d. Phase 2 machine rates (proposal 2026-11-28, solo standard; full arithmetic in [phase2-machine-rates.md](phase2-machine-rates.md))
+
+| Machine | Effect at full power | Draw (units/sol) | Tag |
+|---|---|---|---|
+| Atmospheric processor | pressure +0.15 kPa/sol each | 3 | **INVENTED** rate; draw existing INVENTED. Twice the Outgasser's kPa per power unit |
+| Super-greenhouse emitter | temperature +0.25 C/sol each | 3 | **INVENTED** |
+
+Standard build (INVENTED): processors 1 / 2 / 3 at Phase 2 sols 0 / 14 / 34; emitters 2 / 3 / 4 / 5 / 6 at sols 0 / 6 / 14 / 24 / 34. Result (calc, scratch model, not run in game): 30 kPa at sol 44, Thaw at sol 40, 0 C at sol 52. Emitters set the Phase 2 clock. Power peaks at 45 units/sol (10 panels, 3 batteries) in Phase 2 and 54 (12 panels) in Phase 3 with 10 processors. Tune: processor and emitter rate first, then panel supply.
+
+---
+
 ## 3. Required net rates per phase (standard, solo)
 
 These set the machine sizes. Each phase's machines must reach these averages with a realistic build-up.
