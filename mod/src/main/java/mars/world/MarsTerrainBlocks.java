@@ -169,6 +169,38 @@ public final class MarsTerrainBlocks {
   /** What a carbonate rock drops; the seed kit recipe uses it (tag mars:seed_kit_carbonate). */
   public static final DeferredItem<Item> CARBONATE = ITEMS.registerSimpleItem("carbonate");
 
+  /**
+   * The four seed kits (docs/design/seed-kit-recipes.md): plain items with a tooltip for now. Their
+   * recipes are data/mars/recipe/*_kit.json; what placing one does is a later slice (W3). Texture
+   * is a placeholder (the carbonate icon) until the Artist draws them. The tooltips must not name
+   * any gas (forecast F8 guard).
+   */
+  public static final List<String> SEED_KIT_IDS =
+      List.of("biocrust_kit", "meadow_kit", "wetland_kit", "forest_kit");
+
+  public static final List<DeferredItem<Item>> SEED_KITS = new java.util.ArrayList<>();
+
+  static {
+    for (String id : SEED_KIT_IDS) {
+      SEED_KITS.add(
+          ITEMS.<Item>register(
+              id,
+              () ->
+                  new Item(new Item.Properties()) {
+                    @Override
+                    public void appendHoverText(
+                        ItemStack stack,
+                        Item.TooltipContext context,
+                        List<Component> lines,
+                        TooltipFlag flag) {
+                      lines.add(
+                          Component.translatable("item.mars." + id + ".tooltip")
+                              .withStyle(ChatFormatting.GRAY));
+                    }
+                  }));
+    }
+  }
+
   /** Every terrain block, in creative-tab order. */
   public static final List<DeferredBlock<Block>> ALL =
       List.of(
@@ -199,6 +231,7 @@ public final class MarsTerrainBlocks {
                           output.accept(b.get());
                         }
                         output.accept(CARBONATE.get());
+                        SEED_KITS.forEach(k -> output.accept(k.get()));
                       })
                   .build());
 

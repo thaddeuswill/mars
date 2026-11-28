@@ -794,6 +794,22 @@ public final class TerrainGameTests {
             "starter chest data found",
             "" + chest.isPresent(),
             chest.isPresent());
+    java.util.List<String> kitProblems = new java.util.ArrayList<>();
+    for (String kit : MarsTerrainBlocks.SEED_KIT_IDS) {
+      var id = ResourceLocation.fromNamespaceAndPath("mars", kit);
+      if (server.getRecipeManager().byKey(id).isEmpty()) {
+        kitProblems.add("no recipe " + kit);
+      }
+      if (!net.minecraft.core.registries.BuiltInRegistries.ITEM.containsKey(id)) {
+        kitProblems.add("no item " + kit);
+      }
+    }
+    ok &=
+        SelfTest.check(
+            "kits.recipes_and_items",
+            "the four seed kit items are registered and their recipes loaded from the datapack",
+            kitProblems.isEmpty() ? "all four" : kitProblems.toString(),
+            kitProblems.isEmpty());
     if (ok) {
       helper.succeed();
     } else {

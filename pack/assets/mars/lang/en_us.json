@@ -130,7 +130,15 @@
   "block.mars.carbonate_rock": "Carbonate Rock",
   "block.mars.carbonate_rock.tooltip": "Real, but game-sized. Real Mars has carbonate rock in a few places, in craters like Jezero. We make small veins easy to find. Scrubbers making carbonate is a game idea.",
   "block.mars.ripple_sand": "Ripple Sand",
+  "item.mars.biocrust_kit": "Biocrust Kit",
+  "item.mars.biocrust_kit.tooltip": "Biocrust kit. Seeds a small patch of living crust. Needs treated soil. Game invention, not real.",
+  "item.mars.meadow_kit": "Tundra Meadow Kit",
+  "item.mars.meadow_kit.tooltip": "Tundra meadow kit. Seeds mosses and grasses. Needs soil that biocrust made. Game invention, not real.",
+  "item.mars.wetland_kit": "Wetland Margin Kit",
+  "item.mars.wetland_kit.tooltip": "Wetland margin kit. Seeds reeds beside water. Needs soil that biocrust made. Game invention, not real.",
+  "item.mars.forest_kit": "Cold Forest Kit",
+  "item.mars.forest_kit.tooltip": "Cold forest kit. Seeds small trees and shrubs. Needs meadow soil and warm enough air. Game invention, not real.",
   "item.mars.carbonate": "Carbonate",
   "item.mars.starter_chest": "Lander Supply Chest",
-  "grant.starter_chest": "The lander left you a supply chest with copper and redstone. Place it and open it."
+  "grant.starter_chest": "The lander left you a supply chest with copper, redstone and seeds. Place it and open it."
 }

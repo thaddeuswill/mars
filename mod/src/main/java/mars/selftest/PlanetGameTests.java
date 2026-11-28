@@ -1015,6 +1015,7 @@ public final class PlanetGameTests {
     int chests = first.getInventory().countItem(net.minecraft.world.item.Items.CHEST);
     int copper = 0;
     int redstone = 0;
+    int seeds = 0;
     for (net.minecraft.world.item.ItemStack st : first.getInventory().items) {
       if (st.is(net.minecraft.world.item.Items.CHEST)) {
         var contents = st.get(net.minecraft.core.component.DataComponents.CONTAINER);
@@ -1024,6 +1025,8 @@ public final class PlanetGameTests {
               copper += in.getCount();
             } else if (in.is(net.minecraft.world.item.Items.REDSTONE)) {
               redstone += in.getCount();
+            } else if (in.is(net.minecraft.world.item.Items.WHEAT_SEEDS)) {
+              seeds += in.getCount();
             }
           }
         }
@@ -1032,9 +1035,9 @@ public final class PlanetGameTests {
     ok &=
         SelfTest.check(
             "grant.starter_chest",
-            "the first player also gets one chest holding 4 copper ingots and 8 redstone dust",
-            "chests=" + chests + " copper=" + copper + " redstone=" + redstone,
-            chests == 1 && copper == 4 && redstone == 8);
+            "the first player also gets one chest holding 4 copper ingots, 10 redstone dust and the seed packet",
+            "chests=" + chests + " copper=" + copper + " redstone=" + redstone + " seeds=" + seeds,
+            chests == 1 && copper == 4 && redstone == 10 && seeds == 6);
     boolean again = mars.planets.GrantEvents.maybeGrant(first);
     boolean g2 = mars.planets.GrantEvents.maybeGrant(second);
     ok &=

@@ -121,7 +121,8 @@ class ConductorOresContentTest {
   }
 
   @Test
-  void starterChestIsFourCopperAndEightRedstoneWithLandingFriendlyText() throws IOException {
+  void starterChestIsFourCopperTenRedstoneAndASeedPacketWithLandingFriendlyText()
+      throws IOException {
     Path p = TestData.data("terrain/starter_chest.json");
     StarterChest chest;
     try (Reader r = Files.newBufferedReader(p)) {
@@ -130,7 +131,12 @@ class ConductorOresContentTest {
     assertEquals(
         List.of(
             new StarterChest.Entry("minecraft:copper_ingot", 4),
-            new StarterChest.Entry("minecraft:redstone", 8)),
+            new StarterChest.Entry("minecraft:redstone", 10),
+            // The seed packet (docs/design/seed-kit-recipes.md section 3, INVENTED amounts).
+            new StarterChest.Entry("minecraft:wheat_seeds", 6),
+            new StarterChest.Entry("minecraft:sugar_cane", 2),
+            new StarterChest.Entry("minecraft:sweet_berries", 2),
+            new StarterChest.Entry("minecraft:potato", 2)),
         chest.items());
     String msg = lang().get(chest.messageKey()).getAsString();
     int words = msg.trim().split("\\s+").length;

@@ -1,10 +1,32 @@
 {
   "schema": 1,
-  "about": "The starter chest: handed out once per world, to the first player on a planet, in the same grant as the two starting Ovens (mars.planets.GrantEvents). Conductor ores are rare, so machines are not blocked while the player looks for them (SME docs/science/mars-conductor-and-carbonate-ores.md section 3). The amounts (4 copper ingots, 8 redstone dust) are the SME's and Game Designer's suggestion and are INVENTED game balance. Labelled 'from the lander' in the chest name.",
+  "about": "The starter chest: handed out once per world, to the first player on a planet, in the same grant as the two starting Ovens (mars.planets.GrantEvents). Conductor ores are rare, so machines are not blocked while the player looks for them (SME docs/science/mars-conductor-and-carbonate-ores.md section 3). Amounts are INVENTED game balance: 4 copper ingots and 10 redstone dust (Game Designer docs/design/seed-kit-recipes.md section 3: 10 covers the gate path and the greenhouse lamps), and a seed packet (6 wheat seeds, 2 sugar cane, 2 sweet berries, 2 potatoes) so the greenhouse and the seed kits can start with no grass on Mars. Labelled 'from the lander' in the chest name.",
   "name_key": "item.mars.starter_chest",
   "message_key": "grant.starter_chest",
   "items": [
-    { "id": "minecraft:copper_ingot", "count": 4 },
-    { "id": "minecraft:redstone", "count": 8 }
+    {
+      "id": "minecraft:copper_ingot",
+      "count": 4
+    },
+    {
+      "id": "minecraft:redstone",
+      "count": 10
+    },
+    {
+      "id": "minecraft:wheat_seeds",
+      "count": 6
+    },
+    {
+      "id": "minecraft:sugar_cane",
+      "count": 2
+    },
+    {
+      "id": "minecraft:sweet_berries",
+      "count": 2
+    },
+    {
+      "id": "minecraft:potato",
+      "count": 2
+    }
   ]
 }
