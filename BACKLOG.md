@@ -135,7 +135,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 60 | "accept and cont with rec" | Accept the seal-breach hook and continue with event CSV | Codex owns the event CSV export and tests inside the learning lane. | ✅ Operator event export implemented. 257 unit tests and 114 boot checks passed. Summary CSVs and additional gameplay events remain open. |
 
-| 62 | "accept and cont with rec" | Accept event CSV and continue gameplay logging | Codex claims the Landing and gate adapters, CSV detail columns and tests inside the learning lane. | 🟡 Codex |
+| 62 | "accept and cont with rec" | Accept event CSV and continue gameplay logging | Codex claims the Landing and gate adapters, CSV detail columns and tests inside the learning lane. | ✅ Landing and gate events reach the log and event CSV. 295 unit tests and 135 boot checks passed. |
 
 ## Open questions for the owner
 

@@ -35,7 +35,12 @@ public record ActionEvent(
     MACHINE_REMOVED("machine.removed", "machine", true),
     MONITOR_VIEWED("monitor.viewed", "page", true),
     GATE_REACHED("gate.reached", "gate", false),
-    SEAL_BREACHED("failure.reported", "failure", false);
+    SEAL_BREACHED("failure.reported", "failure", false),
+    LANDING_STEP("landing.step", "landing", true),
+    LANDING_SKIPPED("landing.skipped", "landing", true),
+    LANDING_DONE("landing.done", "landing", true),
+    BRIEFING_OPENED("briefing.opened", "briefing", true),
+    JOURNAL_OPENED("journal.opened", "journal", true);
 
     final String type;
     final String subjectKey;
@@ -65,7 +70,7 @@ public record ActionEvent(
     if ((player != null) != kind.playerScoped) {
       throw new IllegalArgumentException("Actor does not match event scope");
     }
-    if (subject == null || !subject.matches("mars:[a-z0-9_]+")) {
+    if (subject == null || !subject.matches("mars:[a-z0-9_./-]+")) {
       throw new IllegalArgumentException("Expected a Mars content identifier");
     }
   }

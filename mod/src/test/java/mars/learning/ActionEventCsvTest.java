@@ -49,15 +49,30 @@ class ActionEventCsvTest {
               ActionEvent.Kind.SEAL_BREACHED,
               ActionEvent.Cause.SIMULATION,
               "mars:seal_breach"));
+      writer.append(
+          new ActionEvent(
+              Instant.EPOCH,
+              "w-3f9a2c",
+              2,
+              7,
+              0,
+              300,
+              0.75,
+              actor,
+              ActionEvent.Band.HS,
+              ActionEvent.Kind.LANDING_STEP,
+              ActionEvent.Cause.PLAYER,
+              "mars:landing_step_5_auto"));
     }
     Path csv = temp.resolve("exports/events.csv");
     ActionEventCsv.write("w-3f9a2c", List.of(log), csv);
     var lines = Files.readAllLines(csv);
-    assertEquals(3, lines.size());
+    assertEquals(4, lines.size());
     assertEquals('\ufeff', lines.getFirst().charAt(0));
     var columns = List.of(lines.getFirst().substring(1).split(","));
     var player = lines.get(1).split(",", -1);
     var planet = lines.get(2).split(",", -1);
+    var landing = lines.get(3).split(",", -1);
     assertEquals(columns.size(), player.length);
     assertEquals(columns.size(), planet.length);
     assertEquals("P-7K3QX", player[columns.indexOf("player_id")]);
@@ -66,6 +81,8 @@ class ActionEventCsvTest {
     assertEquals("", planet[columns.indexOf("player_id")]);
     assertEquals("planet", planet[columns.indexOf("scope")]);
     assertEquals("mars:seal_breach", planet[columns.indexOf("failure")]);
+    assertEquals("mars:landing_step_5_auto", landing[columns.indexOf("landing")]);
+    assertEquals("landing.step", landing[columns.indexOf("event_type")]);
     assertFalse(columns.contains("uuid"));
     assertFalse(columns.contains("username"));
 

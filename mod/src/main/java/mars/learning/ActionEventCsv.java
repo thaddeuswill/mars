@@ -37,7 +37,10 @@ public final class ActionEventCsv {
           "machine",
           "page",
           "gate",
-          "failure");
+          "failure",
+          "landing",
+          "briefing",
+          "journal");
 
   private ActionEventCsv() {}
 
@@ -141,7 +144,10 @@ public final class ActionEventCsv {
             detail(event, "machine"),
             detail(event, "page"),
             detail(event, "gate"),
-            detail(event, "failure")));
+            detail(event, "failure"),
+            detail(event, "landing"),
+            detail(event, "briefing"),
+            detail(event, "journal")));
   }
 
   private static String detail(ActionEvent event, String key) {
