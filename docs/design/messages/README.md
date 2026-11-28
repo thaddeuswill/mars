@@ -21,8 +21,8 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 |---|---|
 | `prompt` | The question. ≤ 25 words |
 | `choices` | Correct choice **first** here; the game shuffles them. ≤ 10 words each |
-| `why` (HS only) | The "why" follow-up and its choices. Counts toward the goal's Keeper's Record page, not toward B3 |
-| `result` | The explanation, shown right or wrong. ≤ 40 words |
+| `why` (HS only) | The "why" follow-up and its choices. **Shown on the result card only, never before the lock** (owner decision 2026-11-28; DESIGN.md "Forecast 'Why?' pattern"). Logged, unscored; counts toward the goal's Keeper's Record page, not toward B3 |
+| `result` | The explanation, shown for every outcome. ≤ 40 words. Depth 2 ("Read more") order: choice line, explanation, real-versus-game. No tally on the card: the anonymous tally shows only in the teacher view and the shared group screen after resolve |
 | `lock` | When the forecast stops taking answers. Always **before** the outcome or any hint that gives it away (UI spec §4). An unanswered forecast at lock is logged as expired, never as wrong |
 | `fiction_note` | Shown in **both** bands, never band-gated (prompts-and-reflections.md §5) |
 
@@ -35,7 +35,7 @@ These files hold the final player-facing wording for forecasts, Earth links, the
 | `forecast.issue` | Log your forecast. Your answer stays private until it's checked. |
 | `forecast.defer` | Later (closes {lock_hint}) |
 
-**"What caused it?"** is the final in-game name for the old "Explain it" check (a journal page). Header: *"What caused it?"* Sub-line (BELL): *"Pick the most likely cause. No penalty for a wrong pick."* The question bank is the Lead Instructional Designer's; wording follows the forecast rules above.
+**"What caused it?"** is the final in-game name for the old "Explain it" check (a journal page). Header: *"What caused it?"* Sub-line (BELL): *"Pick the most likely cause. No penalty for any pick."* ("wrong" appears nowhere else in the UI; spec AC-14 scans for it.) The question bank is the Lead Instructional Designer's; wording follows the forecast rules above.
 
 **Reading level.** Main text targets grade 6–7. Readability was screened with a Flesch–Kincaid grade formula (a screen, not proof; prompts-and-reflections.md §5). Results are in the word-count table below.
 
@@ -48,7 +48,7 @@ These fields go in every entry's datapack JSON (ARCHITECTURE.md §2.6.2). They a
 **Forecasts**
 | Forecast | `lock` (closes at the first of) | `reveals` (held until the lock) | `rests_on` (thresholds the correct answer depends on) | `resolve_source` (CR-F10) |
 |---|---|---|---|---|
-| F1 | Storm onset | `log.storm.onset`; solar output drop; Monitor cause line "Storm: less sunlight" (the panel-dust line is **not** held: it has its own cause and must show at its first appearance) | Storm solar cut > 0 (balance §2) | `storm.solar_cut` (the storm's own cause line, not net power) |
+| F1 | Storm onset | `log.storm.onset`; solar output drop; Monitor cause line "Storm: {n} percent less sunlight" (the panel-dust line is **not** held: it has its own cause and must show at its first appearance) | Storm solar cut > 0 (balance §2) | `storm.solar_cut` (the storm's own cause line, not net power) |
 | F2 | T−0.25 sol (`log.solar.shelter`) | `log.solar.shelter`; HUD dose meter; Monitor dose read-more | Shelter factor < open-ground factor (balance §6a) | — (net value: the player can't move it another way within the horizon) |
 | F3 | 1 sol after Start (Monitor open shows the card first) | Monitor pressure cause line "Outgasser"; `example.outgasser` step 5 result | Outgasser rate > 0 and ≪ Earth pressure | — (net value: the player can't move it another way within the horizon) |
 | F4a | Ice block changes state | Ice change itself; F4a journal page; `earth.f4a.sublimation` | Pressure < 5 kPa; boiling point at pressure; puddle drying < 0.25 sol | — (net value: the player can't move it another way within the horizon) |
@@ -63,7 +63,9 @@ These fields go in every entry's datapack JSON (ARCHITECTURE.md §2.6.2). They a
 | FI-1 (spec: prompts-and-reflections.md) | Storm onset | as F1 | Emitters on the shared solar grid (DESIGN.md) | `storm.solar_cut` → warming contribution of grid-powered emitters during the storm |
 | FI-4 (spec: prompts-and-reflections.md) | Storm onset | as F1 | Vats on solar; decay continues (rule A) | `storm.solar_cut` → vat CO2 uptake lost to the storm; **not net CO2** (cleaning panels mid-storm can move net CO2) |
 
-**Beats and messages that could give a forecast away:** `beat.04.storm_warning` (written so it doesn't: no mention of solar), `log.solar.*` (only `shelter` reveals F2/F7, and it is the lock), `example.outgasser` (never states the result), Shift Briefings (no forecast answers: checked).
+**Held with F1 (added 2026-11-28, CR-F11):** `journal.storm.first` and its two-path diagram, `journal.storm.wind`, `journal.dust.storm_timing`, `journal.f1.real_vs_game`, `explain.f1.after_storm`, the F1 "Why?" step, and the held variant of `failure.power_shortfall` hint 2. The dust page `journal.dust.panels` uses the one-path diagram.
+
+**Beats and messages that could give a forecast away:** `beat.04.storm_warning` (written so it doesn't: no mention of solar), `log.solar.*` (only `shelter` reveals F2/F7, and it is the lock), `example.outgasser` (never states the result), Shift Briefings (no forecast answers: checked), `failure.*` hints (scanned 2026-11-28, see failure-reports.md; `power_shortfall` hint 2, `fauna_damage` and `emitter_wear` hint 3 are held).
 
 **`names` (machines and values a line names; CR-H5: must exist and be unlocked when shown)**
 | Entry | `names` |
