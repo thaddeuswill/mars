@@ -235,7 +235,7 @@ class FrostSinkTest {
     s.model().advanceSols(30);
     PlanetState st = s.toState();
     assertEquals(PlanetState.CURRENT_SCHEMA, st.schema());
-    assertEquals(7, st.schema());
+    assertEquals(PlanetState.CURRENT_SCHEMA, st.schema());
     assertEquals(s.frostStoredKpa(), st.frost().storedKpa(), 0.0);
     PlanetSim back =
         PlanetSim.fromState(
@@ -283,12 +283,12 @@ class FrostSinkTest {
     assertEquals(0.0, s.frostStoredKpa(), 0.0);
     assertEquals(0.5, s.frostBuriedRemainingKpa(), 0.0);
     assertEquals(PlanetState.CURRENT_SCHEMA, s.toState().schema());
-    // A save from a newer build (schema 8) is still refused.
+    // A save from a newer build (schema 9) is still refused.
     assertThrows(
         IllegalStateException.class,
         () ->
             PlanetSim.fromState(
-                new PlanetState(8, Map.of(), 0, 0, Map.of()),
+                new PlanetState(PlanetState.CURRENT_SCHEMA + 1, Map.of(), 0, 0, Map.of()),
                 TestSims.index(),
                 TestSims.defs(),
                 TestSims.gates(),

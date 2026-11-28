@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.SplittableRandom;
 
 /**
- * The dust-storm scheduler (docs/design/f1-storm-spec.md section 2; ARCHITECTURE.md 2.5). Pure
- * Java and tick based: every time is a simulation tick, nothing reads a wall clock or an unseeded
+ * The dust-storm scheduler (docs/design/f1-storm-spec.md section 2; ARCHITECTURE.md 2.5). Pure Java
+ * and tick based: every time is a simulation tick, nothing reads a wall clock or an unseeded
  * random, so the schedule is a function of (planet seed, ticks stepped) and it freezes with the
  * pause (I-3) and survives a save and load.
  *

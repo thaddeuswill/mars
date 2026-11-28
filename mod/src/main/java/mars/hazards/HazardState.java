@@ -9,6 +9,8 @@ import mars.hazards.dust.PanelDustModel;
  * schema 8).
  */
 public record HazardState(
-    long seed, Map<Long, PanelDustModel.Saved> dust, mars.hazards.storm.StormScheduler.State storm) {
+    long seed,
+    Map<Long, PanelDustModel.Saved> dust,
+    mars.hazards.storm.StormScheduler.State storm) {
   public static final HazardState EMPTY = new HazardState(0, Map.of(), null);
 }

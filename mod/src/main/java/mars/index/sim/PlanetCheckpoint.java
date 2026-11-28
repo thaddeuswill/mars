@@ -11,6 +11,23 @@ package mars.index.sim;
 public final class PlanetCheckpoint {
   private PlanetCheckpoint() {}
 
+  /**
+   * Panel dust stays as the blocks show it now (like the output), the storm schedule rolls back
+   * with the clock, and the planet seed never changes once set.
+   */
+  private static mars.hazards.HazardState rolledBackHazards(
+      PlanetState snapshot, PlanetState current) {
+    var cur = current.hazards();
+    var snap = snapshot.hazards();
+    if (cur == null) {
+      return snap;
+    }
+    return new mars.hazards.HazardState(
+        cur.seed() != 0 ? cur.seed() : snap == null ? 0 : snap.seed(),
+        cur.dust(),
+        snap == null ? null : snap.storm());
+  }
+
   /** The snapshot's simulation state with the machines and outputs of {@code current}. */
   public static PlanetState restoreOver(PlanetState snapshot, PlanetState current) {
     return new PlanetState(
@@ -26,6 +43,10 @@ public final class PlanetCheckpoint {
         snapshot.frost() == null ? FrostSink.State.EMPTY : snapshot.frost(),
         // Domes are blocks in the world, which a rollback does not roll back: keep the current
         // ones.
-        current.domes() == null ? mars.dome.DomeSeals.State.EMPTY : current.domes());
+        current.domes() == null ? mars.dome.DomeSeals.State.EMPTY : current.domes(),
+        // Life-support stores are simulation state: they roll back (a snapshot without them, from
+        // before schema 7, keeps what the planet has now).
+        snapshot.life() != null ? snapshot.life() : current.life(),
+        rolledBackHazards(snapshot, current));
   }
 }

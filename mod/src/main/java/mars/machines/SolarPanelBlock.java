@@ -81,8 +81,14 @@ public class SolarPanelBlock extends MachineBlock {
       if (!oldState.is(this)) {
         mars.planets.PlanetManager.machinePlaced(server, TYPE, pos);
       }
-      // Dust lowers the panel's share of the grid's supply (balance sheet 2a, 2b).
-      mars.planets.PlanetManager.machineOutput(server, pos, outputFraction(state));
+      // Dust lowers the panel's share of the grid's supply (balance sheet 2a, 2b). The planet keeps
+      // the real stage; a block that disagrees (placement, /setblock) sets it.
+      mars.planets.PlanetManager.panelState(
+          server,
+          pos,
+          state.getValue(DUST_STAGE),
+          state.getValue(PARTLY_CLEANED),
+          outputFraction(state));
     }
     if (level.isClientSide() || oldState.is(this)) {
       return; // a dust-stage change, not a new panel

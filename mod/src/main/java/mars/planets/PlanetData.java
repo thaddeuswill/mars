@@ -43,14 +43,29 @@ public final class PlanetData extends SavedData {
 
   private static PlanetData createNew(String planetId) {
     IndexDefinitions.Defs d = IndexDefinitions.require();
-    return new PlanetData(
+    PlanetSim sim =
         new PlanetSim(
             d.index(),
             d.machines(),
             d.gates(),
             d.frost().forPlanet(planetId),
             d.life(),
-            mars.MarsServerConfig.pace()));
+            mars.MarsServerConfig.pace());
+    sim.configureHazards(d.hazards(), seedFor(planetId));
+    return new PlanetData(sim);
+  }
+
+  /**
+   * The planet's random seed for a new world: the world seed mixed with the dimension name, so two
+   * worlds have different dust devils and later storms and two planets in one world differ. Saved
+   * with the planet, so it never changes after the first save. 1 when no server is running.
+   */
+  static long seedFor(String planetId) {
+    var server = net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();
+    long world = server == null ? 0 : server.getWorldData().worldGenOptions().seed();
+    long h = world * 0x9E3779B97F4A7C15L + planetId.hashCode();
+    h ^= h >>> 31;
+    return h == 0 ? 1 : h;
   }
 
   /** Read a saved planet. A save from a newer build is refused with an exception, not read. */
@@ -85,6 +100,7 @@ public final class PlanetData extends SavedData {
           "Planet save has machines this build has no data for (kept, no effect): {}",
           loaded.unknownMachineTypes());
     }
+    loaded.sim().configureHazards(d.hazards(), seedFor(planetId));
     return new PlanetData(loaded.sim());
   }
 
@@ -171,6 +187,36 @@ public final class PlanetData extends SavedData {
       life.putDouble("water", s.life().water());
       out.put("life", life);
     }
+    if (s.hazards() != null) { // schema 8
+      var hz = s.hazards();
+      CompoundTag ht8 = new CompoundTag();
+      ht8.putLong("seed", hz.seed());
+      CompoundTag dust = new CompoundTag();
+      hz.dust()
+          .forEach(
+              (pos, sv) -> {
+                CompoundTag t = new CompoundTag();
+                t.putDouble("progress", sv.progress());
+                t.putBoolean("partly", sv.partlyCleaned());
+                dust.put(Long.toString(pos), t);
+              });
+      ht8.put("dust", dust);
+      if (hz.storm() != null) {
+        var st = hz.storm();
+        CompoundTag t = new CompoundTag();
+        t.putString("mode", st.mode().name());
+        t.putInt("index", st.index());
+        t.putLong("onset", st.onsetTick());
+        t.putLong("length", st.lengthTicks());
+        t.putLong("lastEnd", st.lastEndTick());
+        t.putInt("retries", st.retries());
+        t.putBoolean("reminded", st.reminded());
+        t.putBoolean("voided", st.voided());
+        t.putIntArray("byCap", st.stormsByCap().stream().mapToInt(i -> i).toArray());
+        ht8.put("storm", t);
+      }
+      out.put("hazards", ht8);
+    }
     return out;
   }
 
@@ -254,6 +300,43 @@ public final class PlanetData extends SavedData {
                 dt.getLong("seed"), mars.dome.DomeSeals.Status.UNKNOWN, dt.getInt("volume")));
       }
     }
+    mars.hazards.HazardState hazards = null;
+    if (tag.contains("hazards", Tag.TAG_COMPOUND)) {
+      CompoundTag h = tag.getCompound("hazards");
+      Map<Long, mars.hazards.dust.PanelDustModel.Saved> dust = new LinkedHashMap<>();
+      CompoundTag dt = h.getCompound("dust");
+      for (String k : dt.getAllKeys()) {
+        CompoundTag t = dt.getCompound(k);
+        dust.put(
+            Long.parseLong(k),
+            new mars.hazards.dust.PanelDustModel.Saved(
+                t.getDouble("progress"), t.getBoolean("partly")));
+      }
+      mars.hazards.storm.StormScheduler.State storm = null;
+      if (h.contains("storm", Tag.TAG_COMPOUND)) {
+        CompoundTag t = h.getCompound("storm");
+        try {
+          List<Integer> byCap = new ArrayList<>();
+          for (int i : t.getIntArray("byCap")) {
+            byCap.add(i);
+          }
+          storm =
+              new mars.hazards.storm.StormScheduler.State(
+                  mars.hazards.storm.StormScheduler.Mode.valueOf(t.getString("mode")),
+                  t.getInt("index"),
+                  t.getLong("onset"),
+                  t.getLong("length"),
+                  t.getLong("lastEnd"),
+                  t.getInt("retries"),
+                  t.getBoolean("reminded"),
+                  t.getBoolean("voided"),
+                  byCap);
+        } catch (IllegalArgumentException unknownMode) {
+          // A mode from a newer build: the schedule restarts from the loaded time.
+        }
+      }
+      hazards = new mars.hazards.HazardState(h.getLong("seed"), dust, storm);
+    }
     return new PlanetState(
         schema,
         vs,
@@ -272,7 +355,8 @@ public final class PlanetData extends SavedData {
         tag.contains("life", Tag.TAG_COMPOUND)
             ? new mars.life.LifeSupport.State(
                 tag.getCompound("life").getDouble("o2"), tag.getCompound("life").getDouble("water"))
-            : null);
+            : null,
+        hazards);
   }
 
   private static double[] readDoubles(CompoundTag t, String key) {

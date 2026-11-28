@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.SplittableRandom;
 
 /**
- * The dust on every solar panel of one planet, by block position (ARCHITECTURE.md 2.17, slice 5 plan
- * 1.2). Each panel keeps a fractional {@code progress} in stages (0 to {@code maxStage}); the whole
- * number is the stage the block shows and the grid uses. Time-based: the planet sim calls {@link
- * #advance} once per step with the step length in sols, so the model freezes with the pause (I-3)
- * and runs with a chunk unloaded. Pure Java: no Minecraft classes.
+ * The dust on every solar panel of one planet, by block position (ARCHITECTURE.md 2.17, slice 5
+ * plan 1.2). Each panel keeps a fractional {@code progress} in stages (0 to {@code maxStage}); the
+ * whole number is the stage the block shows and the grid uses. Time-based: the planet sim calls
+ * {@link #advance} once per step with the step length in sols, so the model freezes with the pause
+ * (I-3) and runs with a chunk unloaded. Pure Java: no Minecraft classes.
  *
  * <p>Cost: {@link #advance} is one add and one compare per panel per step (a step is 5 s); 300
  * panels is microseconds. The brush and the dust devil touch only the panels they hit.

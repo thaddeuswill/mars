@@ -141,6 +141,64 @@ public final class PlanetManager {
     }
   }
 
+  /**
+   * A solar panel block now shows this dust state (placed, {@code /setblock}, or the game's own
+   * sync write). The planet takes it when it disagrees with its own record.
+   */
+  public static void panelState(
+      ServerLevel level, BlockPos pos, int stage, boolean partlyCleaned, double fraction) {
+    PlanetData d = data(level);
+    d.sim().setPanelDust(pos.asLong(), stage, partlyCleaned, fraction);
+    d.setDirty();
+  }
+
+  /**
+   * Write the planet's dust stage into a panel's block when it differs (a stage change in a loaded
+   * chunk, or a chunk that has just loaded). Flag 2: tell clients, no neighbour updates.
+   */
+  static void syncPanelBlock(ServerLevel level, mars.hazards.dust.PanelDustModel.View v) {
+    BlockPos pos = BlockPos.of(v.pos());
+    if (!level.isLoaded(pos)) {
+      return; // the chunk gets it when it loads
+    }
+    var state = level.getBlockState(pos);
+    if (!(state.getBlock() instanceof mars.machines.SolarPanelBlock)) {
+      return;
+    }
+    if (state.getValue(mars.machines.SolarPanelBlock.DUST_STAGE) != v.stage()
+        || state.getValue(mars.machines.SolarPanelBlock.PARTLY_CLEANED) != v.partlyCleaned()) {
+      level.setBlock(
+          pos,
+          state
+              .setValue(mars.machines.SolarPanelBlock.DUST_STAGE, v.stage())
+              .setValue(mars.machines.SolarPanelBlock.PARTLY_CLEANED, v.partlyCleaned()),
+          2);
+    }
+  }
+
+  /** Write every pending panel stage change into the loaded blocks. One list copy per call. */
+  public static void syncPanels(ServerLevel level, PlanetData d) {
+    if (!d.sim().hasBlockSync()) {
+      return;
+    }
+    for (var v : d.sim().drainBlockSync()) {
+      syncPanelBlock(level, v);
+    }
+  }
+
+  /** A chunk just loaded: bring its panels to the stage the planet says (they may be older). */
+  public static void onChunkLoad(net.neoforged.neoforge.event.level.ChunkEvent.Load e) {
+    if (!(e.getLevel() instanceof ServerLevel level) || !isPlanet(level)) {
+      return;
+    }
+    PlanetData d = data(level);
+    if (!d.sim().hasHazards()) {
+      return;
+    }
+    // Queue only: the blocks are written on the next planet tick, not inside the load event.
+    d.sim().queueChunkSync(e.getChunk().getPos().toLong());
+  }
+
   /** Tell the planet a machine's output changed (a dusty solar panel). Fraction is 0 to 1. */
   public static void machineOutput(ServerLevel level, BlockPos pos, double fraction) {
     PlanetData d = data(level);

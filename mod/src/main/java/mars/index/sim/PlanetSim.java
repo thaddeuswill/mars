@@ -48,7 +48,9 @@ public final class PlanetSim {
   /** Panel states whose block should be rewritten (stage changed); drained by the game layer. */
   private final Map<Long, mars.hazards.dust.PanelDustModel.View> blockSync = new LinkedHashMap<>();
 
-  /** Solar supply as it would be at full output, and with dust (units per sol), from the last count. */
+  /**
+   * Solar supply as it would be at full output, and with dust (units per sol), from the last count.
+   */
   private double panelSupplyClean;
 
   private double panelSupplyDusty;
@@ -443,6 +445,221 @@ public final class PlanetSim {
     if (life != null) {
       life.step(0, lifeInputs());
     }
+  }
+
+  // ---- hazards: panel dust and storms (ARCHITECTURE.md 2.17, slice 5 plan) ----
+
+  /**
+   * Switch the planet's hazards on with their data. Call once, right after construction or {@link
+   * #fromState}: it takes the saved hazard state (schema 8) or, for an older save, infers each
+   * panel's stage from its saved output and starts the storm schedule from the loaded time. {@code
+   * newSeed} is used only when the save has no planet seed.
+   */
+  public void configureHazards(mars.hazards.HazardParams params, long newSeed) {
+    this.hazards = params;
+    mars.hazards.HazardState saved = pendingHazards;
+    this.planetSeed = saved.seed() != 0 ? saved.seed() : (newSeed == 0 ? 1 : newSeed);
+    this.dust = new mars.hazards.dust.PanelDustModel(params.dust().maxStage());
+    this.storm =
+        new mars.hazards.storm.StormScheduler(
+            params.storm(), pace.classroom(), pace.solTicks(), pace.stepTicks(), planetSeed);
+    if (saved.storm() != null) {
+      storm.restore(saved.storm());
+    }
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      if (!isPanelType(e.getKey())) {
+        continue;
+      }
+      for (long pos : e.getValue()) {
+        var sv = saved.dust().get(pos);
+        if (sv != null) {
+          dust.restore(pos, sv);
+        } else {
+          var inf = params.dust().infer(efficiency.getOrDefault(pos, 1.0));
+          dust.put(pos, inf == null ? 0 : inf.stage(), inf != null && inf.partlyCleaned());
+        }
+        syncEfficiency(pos);
+      }
+    }
+    refreshPower();
+  }
+
+  public boolean hasHazards() {
+    return dust != null;
+  }
+
+  /** The planet's random seed (saved); 0 before {@link #configureHazards}. */
+  public long planetSeed() {
+    return planetSeed;
+  }
+
+  private int capIndex() {
+    return hazards.storm().capIndex(gates::isLatched);
+  }
+
+  /** The storm strength cap of the phase the planet is in now (1.0, 0.8, 0.5, 0.25). */
+  public double stormCap() {
+    return hazards == null ? 1.0 : hazards.storm().caps().get(capIndex()).cap();
+  }
+
+  /** Phase number (1 to 4) of the current cap row. */
+  public int phase() {
+    return hazards == null ? 1 : hazards.storm().caps().get(capIndex()).phase();
+  }
+
+  /** Stage interval in sols now: 3 / cap / rate multiplier (balance sheet 2a). */
+  public double dustIntervalSols() {
+    return hazards.dust().intervalSols(stormCap(), pace.rateMultiplier());
+  }
+
+  private void syncEfficiency(long pos) {
+    var v = dust.view(pos);
+    double f = hazards.dust().outputFraction(v.stage(), v.partlyCleaned());
+    if (f >= 1.0) {
+      efficiency.remove(pos);
+    } else {
+      efficiency.put(pos, f);
+    }
+  }
+
+  private void applyDustChanges(java.util.Collection<Long> changed) {
+    for (long pos : changed) {
+      syncEfficiency(pos);
+      blockSync.put(pos, dust.view(pos));
+    }
+    refreshPower();
+  }
+
+  /** One sim step of dust (and, later in this method, the storm). Called before the grid steps. */
+  private void hazardsStep(double dtSols) {
+    if (dust == null) {
+      return;
+    }
+    List<Long> changed = new ArrayList<>(dust.advance(dtSols, dustIntervalSols()));
+    long before = model.simTicks();
+    long now = before + pace.stepTicks();
+    long solNow = now / pace.solTicks();
+    if (solNow != before / pace.solTicks() && phase() <= hazards.dust().dustDevilMaxPhase()) {
+      changed.addAll(
+          dust.devil(
+              planetSeed,
+              solNow,
+              hazards.dust().dustDevilChancePerSol(),
+              hazards.dust().dustDevilFromStage()));
+    }
+    if (!changed.isEmpty()) {
+      applyDustChanges(changed);
+    }
+  }
+
+  /**
+   * A block was placed or changed to this dust state in the world (placement, {@code /setblock}, a
+   * test). When the model disagrees the block wins (the model takes its stage with no progress);
+   * when they agree (the game's own sync write) nothing happens. {@code fraction} is used only on a
+   * planet without hazards.
+   */
+  public void setPanelDust(long pos, int stage, boolean partlyCleaned, double fraction) {
+    if (dust == null) {
+      setEfficiency(pos, fraction);
+      return;
+    }
+    var cur = dust.view(pos);
+    if (cur == null || (cur.stage() == stage && cur.partlyCleaned() == partlyCleaned)) {
+      return;
+    }
+    dust.put(pos, stage, partlyCleaned);
+    syncEfficiency(pos);
+    refreshPower();
+  }
+
+  /** The brush: panel back to stage 0. Returns the stage before, or -1 if there is no panel. */
+  public int cleanPanel(long pos) {
+    if (dust == null) {
+      return -1;
+    }
+    int before = dust.clean(pos);
+    if (before >= 0) {
+      applyDustChanges(List.of(pos));
+    }
+    return before;
+  }
+
+  /** Admin: put every panel at one stage. Returns how many panels changed. */
+  public int setAllPanels(int stage, boolean partlyCleaned) {
+    if (dust == null) {
+      return 0;
+    }
+    List<Long> changed = new ArrayList<>();
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      if (isPanelType(e.getKey())) {
+        for (long pos : e.getValue()) {
+          dust.put(pos, stage, partlyCleaned);
+          changed.add(pos);
+        }
+      }
+    }
+    applyDustChanges(changed);
+    return changed.size();
+  }
+
+  /** Panels at each stage 0 to max (for the admin command and tests). */
+  public int[] panelStageCounts() {
+    int[] counts = new int[hazards == null ? 5 : hazards.dust().maxStage() + 1];
+    if (dust != null) {
+      for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+        if (isPanelType(e.getKey())) {
+          for (long pos : e.getValue()) {
+            counts[dust.stage(pos)]++;
+          }
+        }
+      }
+    }
+    return counts;
+  }
+
+  public int panelStage(long pos) {
+    return dust == null ? 0 : dust.stage(pos);
+  }
+
+  public boolean panelPartlyCleaned(long pos) {
+    return dust != null && dust.partlyCleaned(pos);
+  }
+
+  /** Panel states whose blocks must be rewritten, then clears the list. */
+  public List<mars.hazards.dust.PanelDustModel.View> drainBlockSync() {
+    List<mars.hazards.dust.PanelDustModel.View> out = List.copyOf(blockSync.values());
+    blockSync.clear();
+    return out;
+  }
+
+  /** True when some panel block waits to be rewritten. */
+  public boolean hasBlockSync() {
+    return !blockSync.isEmpty();
+  }
+
+  /** A chunk loaded: queue its panels so their blocks are brought to the planet's stage. */
+  public void queueChunkSync(long chunkKey) {
+    for (var v : panelsInChunk(chunkKey)) {
+      blockSync.put(v.pos(), v);
+    }
+  }
+
+  /** The panels in one chunk, for the sync when that chunk loads. */
+  public List<mars.hazards.dust.PanelDustModel.View> panelsInChunk(long chunkKey) {
+    return dust == null ? List.of() : dust.inChunk(chunkKey);
+  }
+
+  /**
+   * Average share of clean solar output lost to panel dust, 0 to 1 (spec 3.1: the average over
+   * panels; every panel has the same clean supply). 0 with no panel.
+   */
+  public double panelDustLossFraction() {
+    return panelSupplyClean <= 0 ? 0 : Math.max(0, 1.0 - panelSupplyDusty / panelSupplyClean);
+  }
+
+  /** The same as a whole percent for the Monitor line. */
+  public int panelDustLossPercent() {
+    return (int) Math.round(panelDustLossFraction() * 100);
   }
 
   public PlanetaryIndexModel model() {

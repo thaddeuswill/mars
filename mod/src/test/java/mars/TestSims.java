@@ -74,6 +74,27 @@ public final class TestSims {
     return f.baselineKpa() + (start - f.baselineKpa()) * decay + sourcePerSol / k * (1 - decay);
   }
 
+  /** The real hazard data: panel dust and the storm schedule. */
+  public static mars.hazards.HazardParams hazards() throws Exception {
+    try (Reader d =
+            Files.newBufferedReader(
+                TestData.data("hazards/panel_dust.json"), StandardCharsets.UTF_8);
+        Reader st =
+            Files.newBufferedReader(
+                TestData.data("hazards/dust_storm.json"), StandardCharsets.UTF_8)) {
+      return new mars.hazards.HazardParams(
+          mars.hazards.dust.PanelDustTuning.parse(d, "panel_dust.json"),
+          mars.hazards.storm.StormTuning.parse(st, "dust_storm.json"));
+    }
+  }
+
+  /** A planet with the real hazards switched on and a fixed seed. */
+  public static PlanetSim hazardSim(Pace pace, long seed) throws Exception {
+    PlanetSim s = sim(pace);
+    s.configureHazards(hazards(), seed);
+    return s;
+  }
+
   public static final String OVEN = "mars:regolith_oven";
   public static final String PANEL = "mars:solar_panel";
   public static final String BATTERY = "mars:battery";

@@ -35,7 +35,9 @@ public record StormTuning(
       double lengthMinSols,
       double lengthMaxSols) {}
 
-  /** One row of the cap table. {@code gate} null: always applies. {@code maxStorms} -1: no limit. */
+  /**
+   * One row of the cap table. {@code gate} null: always applies. {@code maxStorms} -1: no limit.
+   */
   public record Cap(int phase, String gate, double cap, int maxStorms) {}
 
   public Preset preset(boolean classroomMode) {

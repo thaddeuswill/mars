@@ -20,6 +20,8 @@ public record PanelDustTuning(
     double stormCapForExtra,
     int stormEndStagesHeavy,
     double dustDevilChancePerSol,
+    int dustDevilFromStage,
+    int dustDevilMaxPhase,
     int rainTargetStage,
     double localRateMultiplier,
     int localRadiusBlocks,
@@ -96,10 +98,23 @@ public record PanelDustTuning(
         num(heavy, "storm_cap", file).getAsDouble(),
         num(heavy, "stages_added", file).getAsInt(),
         num(devil, "chance_per_sol", file).getAsDouble(),
+        num(devil, "applies_from_stage", file).getAsInt(),
+        maxOf(devil.getAsJsonArray("phases"), file),
         num(rain, "target_stage", file).getAsInt(),
         num(local, "rate_multiplier", file).getAsDouble(),
         num(local, "radius_blocks", file).getAsInt(),
         num(obj(o, "storm_output", file), "sunlight_cut_per_storm_cap", file).getAsDouble());
+  }
+
+  private static int maxOf(JsonArray a, String file) {
+    if (a == null || a.isEmpty()) {
+      throw new IllegalArgumentException(file + ": dust_devil.phases needs at least one phase");
+    }
+    int m = 0;
+    for (JsonElement e : a) {
+      m = Math.max(m, e.getAsInt());
+    }
+    return m;
   }
 
   private static JsonObject obj(JsonObject o, String field, String file) {
