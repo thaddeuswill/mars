@@ -38,7 +38,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `prompt.ms` | You start the greenhouse emitter. What will the surface temperature do over the next few sols? |
 | `prompt.hs` | Same as MS |
 | `choices` | Rise slowly · Drop · Stay the same |
-| `why.hs` | Why? — Its gases trap heat that would escape to space · It blocks sunlight · It burns fuel that heats the air directly |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why? — Its gases trap heat that would escape to space · It blocks sunlight · It burns fuel that heats the air directly |
 | `result.ms` | Temperature is rising slowly. The emitter makes factory-made greenhouse gases. Sunlight gets in, but they trap heat that would escape to space. They are not CO2. |
 | `result.hs` | Temperature is rising slowly. Greenhouse gases let sunlight in but trap heat the ground gives off. Mars's air is mostly CO2 but too thin to keep it warm, so real plans use factory-made gases that trap heat far better. |
 | `goal_ids` | A3, B3 |
@@ -80,7 +80,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `prompt.ms` | Last time, warmed ice vanished. Now the air is much thicker. What will warmed ice do? |
 | `prompt.hs` | Same as MS |
 | `choices` | Melt into water that stays while it's warm · Vanish into vapor again · Stay frozen |
-| `why.hs` | What changed? — Thicker air raised water's boiling point · The ice is a different kind · The machine is stronger |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | What changed? — Thicker air raised water's boiling point · The ice is a different kind · The machine is stronger |
 | `result.ms` | The water stays now. Thicker air raises water's boiling point, so it doesn't boil away. Water needs warmth and thick air together. At night it freezes again. |
 | `result.hs` | The water stays. At {pressure} kPa water boils near {boil_c} °C, well above freezing, so liquid water can last. Below 0 °C it still freezes. Warmth and pressure both had to change. |
 | `goal_ids` | A2, B3 |
@@ -122,7 +122,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `prompt.ms` | You're adding more machines. What will happen to thawling visits near your machines? |
 | `prompt.hs` | Same as MS |
 | `choices` | They go up · They go down · No change |
-| `why.hs` | What kind of loop is this? — Reinforcing: damage leads to more building, more thawlings · Balancing: thawlings keep machine numbers steady · Not a loop |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | What kind of loop is this? — Reinforcing: damage leads to more building, more thawlings · Balancing: thawlings keep machine numbers steady · Not a loop |
 | `result.ms` | More visits. Thawlings come to warm, wet, buzzing machines. Each machine adds to fauna pressure on the Monitor. If you answer damage by building more, the visits keep growing. What would lower the pull? |
 | `result.hs` | Fauna pressure went from {f_before} to {f_after}. This is a reinforcing loop when you answer damage by building more machines. Without your rebuilding, broken machines go quiet and the loop balances. Fighting doesn't lower the pull. |
 | `goal_ids` | B2, B5, B3 |
@@ -147,7 +147,7 @@ Order of first play: Shift Briefing 2 → first emitter (F5) → Thaw gate (F4b,
 | `prompt.ms` | The air is much thicker than at your first solar event. How much radiation will reach the ground this time? |
 | `prompt.hs` | Same as MS |
 | `choices` | Less than last time · More than last time · The same |
-| `why.hs` | Why? — More air means more matter to absorb it · Thicker air reflects the Sun · The thawlings block it |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why? — More air means more matter to absorb it · Thicker air reflects the Sun · The thawlings block it |
 | `result.ms` | Less reached the ground. Radiation has to pass through the air. More air means more matter in the way to soak it up. Shelter is still safest. |
 | `result.hs` | Surface dose was {dose_pct} % of the first event's. Thicker air absorbs more radiation on the way down. Mars still has no global magnetic field, so shelter stays the safe choice. |
 | `goal_ids` | A4, B3 |

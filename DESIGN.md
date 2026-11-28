@@ -639,7 +639,22 @@ Prototype the Index simulation before building content: first as a **paper or sp
 | First dust storm | Paper sheets: [docs/design/prototypes/first-dust-storm.md](docs/design/prototypes/first-dust-storm.md) (with the Artist's storyboard, keyframes §3.7a) | Warning → forecast → storm → recovery reads as one experience; no cue reveals F1 before it locks | C1, B3 |
 
 ### First experience to design in detail: the first dust storm
-Experience design works on one experience at a time so game, instruction, and art can agree on it. **First pick: the first dust storm in Phase 1** (story beat 4, F1, C1, B3). It touches every layer (world cue, warning, forecast, power loss, recovery, Hana's tip) at small scale, sits in the Stage 3 vertical slice, and is the first real test of "pressure, not grind". Detail spec to write next (handoff to the Lead Artist and Lead Instructional Designer for a joint pass).
+Experience design works on one experience at a time so game, instruction, and art can agree on it. **First pick: the first dust storm in Phase 1** (story beat 4, F1, C1, B3). It touches every layer (world cue, warning, forecast, power loss, recovery, Hana's tip) at small scale, sits in the Stage 3 vertical slice, and is the first real test of "pressure, not grind". Detail spec: [docs/design/f1-storm-spec.md](docs/design/f1-storm-spec.md) (Draft 2, 2026-11-28).
+
+#### Forecast "Why?" pattern (owner decision 2026-11-28; applies to F1 now, then F2 to F10 and FI-1 to FI-4 after the F1 playtest)
+
+| Rule | Statement | Goals | Pillar |
+|---|---|---|---|
+| Where | The high-school "Why?" choices appear **only on the result card**, as "Which reason fits what you saw?". Never before the lock, in no packet, no log line, no journal page | B3, B1 | The planet is the quest log; every change is visible |
+| Why | Before the lock they hand the mechanism to a player who is still waiting for the world to answer, and remove the surprise that makes the result teach (productive failure). On the card, the player has just seen the effect and picks the reason with evidence in hand | B3 | Pressure, not grind |
+| Scoring | Logged (`prediction.answered`, step `why`, typed data), **not scored**, not part of B3 accuracy; middle-school players see no Why? step | B3 | no points for forecasts |
+| Feedback | Tapping a choice shows its one-line answer and the key line; nothing says "wrong"; one extra tap at most | B1 | CR-T5 |
+| Tally | The anonymous group tally shows only in the teacher view and the shared group screen after resolve, never on the individual card | B3, D1 | belonging over exposure |
+| Order on "Read more" | Choice line first (answers what that player thought), then the explanation by band, then the real-versus-game line | B3, A1 | |
+| Data | Each forecast's `why` field (messages/README.md) stays; distractors still name a stored misconception (`distractor_misconception`) | B3 | |
+| Apply to later forecasts | F2 to F10 and FI-1 to FI-4 keep their `why.hs` rows (phase-1.md, phase-2.md, phase-3.md) but move them to the result card the same way; no wording change needed, only the placement. Leak check for each: its mechanism words must not appear in any lock-time cue (CR-F9, CR-F11) | B3 | |
+
+**Decision log entry (proposed, owner-accepted 2026-11-28):** Why? on the result card. Rationale: protects the prediction surprise and the self-explanation step stays. Alternatives: Why? before the lock (rejected: leaks the mechanism), drop the Why? step (rejected: loses the HS self-explanation habit). Trade-off: one more tap on the result card. Revisit if the F1 playtest shows nobody taps it or the "Why?" accuracy tells us nothing beyond F1 accuracy.
 
 ## Content Lists (for art and recipes)
 

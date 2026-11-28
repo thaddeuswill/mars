@@ -38,7 +38,7 @@ Order of first play: Shift Briefing 3 → first flora (F8, flora Earth link) →
 | `prompt.ms` | You seed a large field of plants. What will happen to O2 and CO2? |
 | `prompt.hs` | Same as MS |
 | `choices` | O2 rises, CO2 falls · Both rise · Both fall |
-| `why.hs` | Why? — Growing plants take in CO2 and give off O2 · Plants make CO2 only at night · The soil releases O2 |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why? — Growing plants take in CO2 and give off O2 · Plants make CO2 only at night · The soil releases O2 |
 | `result.ms` | O2 is rising and CO2 is falling. Growing plants take in CO2 and give off O2. That's photosynthesis. Watch it slow down as the field grows up. |
 | `result.hs` | O2 up, CO2 down. Plants also use some O2 and release CO2 all the time, day and night, but while they grow they take in more CO2 than they release. As the field matures, the two nearly balance. |
 | `goal_ids` | A5, B3 |
@@ -82,7 +82,7 @@ Fired early, when O2 first enters the Air window (ID's suggestion, LEARNING.md �
 | `prompt.ms` | O2 keeps rising. If it goes past the top of the Air window, what happens? |
 | `prompt.hs` | Same as MS |
 | `choices` | Fires start more easily · The air gets too thin · Plants stop growing |
-| `why.hs` | Why? — More O2 makes things burn more easily · O2 is poisonous at any level · More O2 smothers flames |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why? — More O2 makes things burn more easily · O2 is poisonous at any level · More O2 smothers flames |
 | `result.ms` | Above 23 % oxygen, fires start and spread more easily. That's why the Air window has a top and a bottom. Too little: you can't breathe. Too much: fire. |
 | `result.hs` | Above about 23 % O2, things catch fire and burn faster. The bottom edge depends on pressure: you need about 16 kPa of oxygen push. Raise pressure and that edge drops, so the window widens. |
 | `goal_ids` | A5, B4, B3 |
@@ -107,7 +107,7 @@ Fired early, when O2 first enters the Air window (ID's suggestion, LEARNING.md �
 | `prompt.ms` | Your emitters are running at less power. What will temperature do over the next few sols? |
 | `prompt.hs` | Same as MS |
 | `choices` | Fall slowly · Rise · Stay the same |
-| `why.hs` | What's the trade-off? — Less power used, but the planet cools · No trade-off · Fewer thawlings, nothing else |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | What's the trade-off? — Less power used, but the planet cools · No trade-off · Fewer thawlings, nothing else |
 | `result.ms` | Temperature is falling slowly. With less heat-trapping gas, more heat escapes to space. You saved power, but cold can freeze water and slow plants. Every choice here costs something. |
 | `result.hs` | Temperature is falling slowly. Real factory gases break down slowly in Mars's strong sunlight, so they must be made all the time. Power saved; water and plants at risk. Holding a band costs something every sol. |
 | `goal_ids` | B4, A3, B3 |

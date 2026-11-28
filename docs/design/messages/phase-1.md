@@ -181,7 +181,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `prompt.hs` | A solar event arrives in about 1 sol. Where will a Keeper get the smallest radiation dose? |
 | `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: the Space weather line on the Monitor. |
 | `choices` | Inside, under thick shielding · Out on open ground · On top of a hill · Next to a running machine |
-| `why.hs` | Why does Mars's surface get more radiation than Earth's? — Thin air and no global magnetic field · Mars is closer to the Sun · The red color soaks up radiation |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why does Mars's surface get more radiation than Earth's? — Thin air and no global magnetic field · Mars is closer to the Sun · The red color soaks up radiation |
 | `result.ms` | Thick shielding stops most of it. Mars has thin air and no planet-wide magnetic field. So more of the Sun's radiation reaches the ground than on Earth. |
 | `result.hs` | Shielding and depth block most of the dose. Thin air and no global magnetic field let more radiation reach Mars's surface. Mars is actually farther from the Sun than Earth; the difference is the shield, not the distance. |
 | `goal_ids` | A4, B3 |
@@ -207,7 +207,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `prompt.hs` | Same as MS |
 | `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: how far pressure moved since you landed. |
 | `choices` | Pressure rises slowly · Pressure jumps to Earth's level · Nothing changes |
-| `why.hs` | Why so slowly? — A planet's air is huge next to one machine · The machine is broken · Gas leaks to space at once |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why so slowly? — A planet's air is huge next to one machine · The machine is broken · Gas leaks to space at once |
 | `result.ms` | Pressure is rising, a little each sol. One machine adds a small amount of gas to a whole planet's air. What would two do? |
 | `result.hs` | Pressure is rising slowly: about {rate} kPa per sol from one Outgasser. Earth's air is about 101 kPa. One machine adds a tiny amount to a whole planet's air. What would two do? |
 | `goal_ids` | A1, B1, B3 |
@@ -235,7 +235,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `prompt.hs` | Same as MS |
 | `check.ms` (Phase 1 scaffold, both bands; hidden once the player's own accuracy is ≥ 1 in 3 after 3 forecasts, LEARNING.md §4.8) | Check: the Monitor's water line. Where does water boil here? |
 | `choices` | Disappear into vapor, leaving no water · Melt into a puddle that stays · Stay frozen |
-| `why.hs` | Why? — In thin air, water boils at a low temperature · The heater destroys the water · It's still too cold |
+| `why.hs` (result card only, logged unscored; DESIGN.md "Forecast 'Why?' pattern") | Why? — In thin air, water boils at a low temperature · The heater destroys the water · It's still too cold |
 | `result.ms` (local temp ≥ boiling point; the usual Phase 1 case) | The ice melted and boiled away at once. The air here is so thin that water boils just above freezing. Melted ice boils off before it can make a puddle. |
 | `result.ms` (pressure < 0.611 kPa) | The ice turned straight into vapor. No puddle. The air is so thin that water can't be liquid at all. This is called sublimation. |
 | `result.ms` (0 °C to boiling point, below 5 kPa) | The ice made a small puddle, then it dried up fast. In thin air, water boils near freezing and evaporates quickly. Warm is not enough. |
