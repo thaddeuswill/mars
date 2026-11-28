@@ -139,6 +139,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 63 | "commit those things and use ur subagents" | Record the NASA-informed Cairn supply and hand-made exploration route | Link the design proposal and review the survival, story, tooling, and cumulative resource chain. | ✅ [Design proposal](docs/design/cairn-resource-progression.md) documented. Map and mechanics pending. |
 
+| 64 | "continue working on the github find something to fix" | Fix completed-session CSV accepting rows from a different session | Codex owns export validation and its regression test in the learning lane. | 🟡 Codex |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
