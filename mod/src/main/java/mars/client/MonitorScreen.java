@@ -405,7 +405,10 @@ public final class MonitorScreen extends Screen {
       // The reason (or rate) is right-aligned so a long name can never push it off the panel.
       if (c.reasonKey() != null) {
         Component why = Component.translatable(c.reasonKey());
-        int color = "monitor.cause.needs_power".equals(c.reasonKey()) ? STATE_NONE : STATE_SHORT;
+        int color =
+            "monitor.cause.needs_power".equals(c.reasonKey())
+                ? STATE_NONE
+                : "monitor.cause.running".equals(c.reasonKey()) ? CAUSE : STATE_SHORT;
         g.drawString(font, why, right - font.width(why), y, color, false);
       } else if (!c.rate().isEmpty()) {
         g.drawString(font, c.rate(), right - font.width(c.rate()), y, CAUSE, false);

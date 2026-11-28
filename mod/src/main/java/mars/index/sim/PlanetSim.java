@@ -434,6 +434,17 @@ public final class PlanetSim {
     return true;
   }
 
+  /** Machine types that have at least one placed machine, in the order first placed. */
+  public java.util.List<String> placedTypes() {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
+      if (!e.getValue().isEmpty()) {
+        out.add(e.getKey());
+      }
+    }
+    return out;
+  }
+
   public int machineCount(String type) {
     Set<Long> set = machines.get(type);
     return set == null ? 0 : set.size();
@@ -458,6 +469,12 @@ public final class PlanetSim {
   public boolean machineDrawsPower(String type) {
     MachineDef def = defs.get(type);
     return def != null && def.power().drawPerSol() > 0;
+  }
+
+  /** How many Index contributions one machine of this type makes (0 for a load only). */
+  public int contributionCount(String type) {
+    MachineDef def = defs.get(type);
+    return def == null ? 0 : def.contributions().size();
   }
 
   public boolean hasMachineDef(String type) {

@@ -26,6 +26,7 @@ class MachineAssetsTest {
       List.of(
           "regolith_outgasser",
           "regolith_oven",
+          "water_reclaimer",
           "solar_panel",
           "battery",
           "oxygen_maker",

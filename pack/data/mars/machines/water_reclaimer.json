@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:water_reclaimer",
+  "contributions": [],
+  "source": "docs/design/machine-priorities.md row 1 and docs/science/machine-references.md (ISS Water Recovery System, NTRS 20170008948, VERIFIED as a real idea). A load only: the Index has no water or life-support parameter yet, so it changes no row. Draw 1.5 power units (kWh) per sol is INVENTED (between the Oven's 1 and the Outgasser's 4).",
+  "power": {
+    "drawPerSol": 1.5
+  }
+}

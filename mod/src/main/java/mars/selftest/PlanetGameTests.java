@@ -730,6 +730,60 @@ public final class PlanetGameTests {
   }
 
   /**
+   * The water reclaimer as a real block: it places, registers with the planet, adds its 1.5 unit
+   * draw from data, changes no Index row, and the Monitor's Power row lists it with the grid state.
+   */
+  @GameTest(template = "empty", batch = "mars_reclaimer", timeoutTicks = 100)
+  public static void waterReclaimerPlacesAndDrawsPower(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    var sim = data.sim();
+    h.setBlock(new BlockPos(0, 1, 0), MarsMachines.WATER_RECLAIMER.get());
+    boolean ok =
+        SelfTest.check(
+            "reclaimer.places_and_draws",
+            "a placed Water Reclaimer registers, draws 1.5 units from data, and adds 0 kPa/sol",
+            "count="
+                + sim.machineCount("mars:water_reclaimer")
+                + " demand="
+                + sim.power().demandPerSol()
+                + " rate="
+                + sim.model().netRatePerSol(Ids.PRESSURE),
+            sim.machineCount("mars:water_reclaimer") == 1
+                && Math.abs(sim.power().demandPerSol() - 1.5) < TOL
+                && Math.abs(sim.model().netRatePerSol(Ids.PRESSURE)) < TOL);
+    var view = MonitorSender.viewFor(level);
+    var power =
+        view.rows().stream()
+            .filter(r -> r.labelKey().equals("monitor.row.power"))
+            .findFirst()
+            .orElse(null);
+    String reason =
+        power == null || power.causes().isEmpty() ? "none" : power.causes().get(0).reasonKey();
+    ok &=
+        SelfTest.check(
+            "reclaimer.monitor_unpowered",
+            "with no panel the Monitor lists the reclaimer as needing power",
+            "reason=" + reason,
+            "monitor.cause.needs_power".equals(reason));
+    h.setBlock(new BlockPos(4, 1, 0), MarsMachines.SOLAR_PANEL.get());
+    var power2 =
+        MonitorSender.viewFor(level).rows().stream()
+            .filter(r -> r.labelKey().equals("monitor.row.power"))
+            .findFirst()
+            .orElse(null);
+    String reason2 =
+        power2 == null || power2.causes().isEmpty() ? "none" : power2.causes().get(0).reasonKey();
+    ok &=
+        SelfTest.check(
+            "reclaimer.monitor_powered",
+            "with a clean panel the Monitor lists the reclaimer as running",
+            "reason=" + reason2,
+            "monitor.cause.running".equals(reason2));
+    finish(h, ok, "waterReclaimerPlacesAndDrawsPower");
+  }
+
+  /**
    * Slice 5 with real blocks: two Regolith Ovens and a panel on the grid, the frost sink acting on
    * real ticks, the Monitor's frost line and "Levelling off" note surviving the wire, and the
    * reservoir surviving an NBT save and load.

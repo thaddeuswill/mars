@@ -43,6 +43,11 @@ public final class MarsMachines {
           Block.box(0, 15, 0, 16, 16, 16));
   // Wall-pack battery (batch 3): thin, so its box turns with facing. Centred, 12 x 16 x 6 px.
   private static final double[] BATTERY = {2, 0, 5, 14, 16, 11};
+  // Water reclaimer: the model is 30 px (1.9 blocks) tall. One block cell, with a fence-style
+  // collision 24 px high (vanilla fences do the same) and a 16 px outline; the top 6 px of the
+  // model overhang the cell above and are visual only.
+  private static final VoxelShape RECLAIMER = Block.box(1, 0, 1, 15, 16, 15);
+  private static final VoxelShape RECLAIMER_COLLISION = Block.box(1, 0, 1, 15, 24, 15);
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
 
@@ -50,6 +55,10 @@ public final class MarsMachines {
       machine("regolith_outgasser", OUTGASSER, RegolithOutgasserBlock::new);
   public static final DeferredBlock<RegolithOvenBlock> REGOLITH_OVEN =
       BLOCKS.register("regolith_oven", () -> new RegolithOvenBlock(machineProperties(), OVEN));
+  public static final DeferredBlock<WaterReclaimerBlock> WATER_RECLAIMER =
+      BLOCKS.register(
+          "water_reclaimer",
+          () -> new WaterReclaimerBlock(machineProperties(), RECLAIMER, RECLAIMER_COLLISION));
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
@@ -77,6 +86,7 @@ public final class MarsMachines {
       List.of(
           REGOLITH_OUTGASSER,
           REGOLITH_OVEN,
+          WATER_RECLAIMER,
           SOLAR_PANEL,
           BATTERY_BLOCK,
           OXYGEN_MAKER_BLOCK,
@@ -130,6 +140,19 @@ public final class MarsMachines {
               }
             });
     ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
+    ITEMS.register(
+        "water_reclaimer",
+        () ->
+            new net.minecraft.world.item.BlockItem(WATER_RECLAIMER.get(), new Item.Properties()) {
+              @Override
+              public void appendHoverText(
+                  ItemStack stack,
+                  Item.TooltipContext context,
+                  List<Component> tooltip,
+                  net.minecraft.world.item.TooltipFlag flag) {
+                tooltip.add(Component.translatable("block.mars.water_reclaimer.tooltip"));
+              }
+            });
   }
 
   public static void register(IEventBus modBus) {

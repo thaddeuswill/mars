@@ -1,6 +1,6 @@
 # Water reclaimer: model and texture spec (first pass)
 
-**Owner:** Lead Artist · **Date:** 2026-11-28 · **Status:** model and textures written, NOT registered, not seen in-game or rendered (Blender is not installed here; only the flat textures were viewed) · **Reference:** ISS Water Recovery System, NTRS 20170008948 (`docs/science/machine-references.md`). Size, look and every number are **invented** for the game. Carries the made-up band (`docs/art/made-up-band-spec.md`).
+**Owner:** Lead Artist · **Date:** 2026-11-28 · **Status:** REGISTERED 2026-11-28 by the Technical Lead (block, item, blockstate, loot, recipe, lang; one cell, 24 px collision, model overhangs; see `docs/team/reports/2026-11-28-technical-lead-water-reclaimer.md` for the in-game look). Earlier: model and textures written, not seen in-game or rendered (Blender is not installed here; only the flat textures were viewed) · **Reference:** ISS Water Recovery System, NTRS 20170008948 (`docs/science/machine-references.md`). Size, look and every number are **invented** for the game. Carries the made-up band (`docs/art/made-up-band-spec.md`).
 
 Silhouette cue: tall two-tier rack (tank low, canister high) with a clear tube on the east side and an orange bucket spout at the front.
 

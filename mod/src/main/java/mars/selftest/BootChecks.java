@@ -383,6 +383,7 @@ public final class BootChecks {
         java.util.List.of(
             "regolith_outgasser",
             "regolith_oven",
+            "water_reclaimer",
             "solar_panel",
             "battery",
             "oxygen_maker",
@@ -396,8 +397,8 @@ public final class BootChecks {
     ok &=
         SelfTest.check(
             "machines.registered",
-            "6 machine blocks and items",
-            missing.isEmpty() ? "all 6 present" : "missing " + missing,
+            "7 machine blocks and items",
+            missing.isEmpty() ? "all 7 present" : "missing " + missing,
             missing.isEmpty());
     BlockState panel =
         MarsMachines.SOLAR_PANEL

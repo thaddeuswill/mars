@@ -619,6 +619,18 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     if (dusty > 0) {
       lines.add(new CauseLine("block.mars.solar_panel", dusty, "", "monitor.cause.dusty"));
     }
+    // Powered machines that change no Index row (the water reclaimer): the only place they show.
+    for (String type : sim.placedTypes()) {
+      if (sim.machineDrawsPower(type) && sim.contributionCount(type) == 0) {
+        String why =
+            switch (grid.state(sim.stepSols())) {
+              case UNPOWERED -> "monitor.cause.needs_power";
+              case SHORT -> "monitor.cause.low_power";
+              default -> "monitor.cause.running";
+            };
+        lines.add(new CauseLine(sourceKey(type), sim.machineCount(type), "", why));
+      }
+    }
     boolean problem =
         grid.state(sim.stepSols()) != PowerGrid.State.IDLE
             && grid.state(sim.stepSols()) != PowerGrid.State.POWERED;

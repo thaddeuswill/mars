@@ -1,0 +1,24 @@
+# Water reclaimer (BACKLOG #49): front with an Oven beside it for scale, a side view for the tube, a close view. On the real generated pad (top block y 80).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock 0 81 4 mars:water_reclaimer[facing=north]
+cmd /setblock 3 81 4 mars:regolith_oven[facing=north]
+wait 60
+view 1.5 83 -4 0 12
+wait 80
+shot reclaimer_front
+wait 20
+view 5 83 4.5 90 12
+wait 60
+shot reclaimer_side_tube
+wait 20
+view 0.5 82.5 0 0 10
+wait 60
+shot reclaimer_close
+wait 20
+quit
