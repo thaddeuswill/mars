@@ -27,6 +27,27 @@ public final class LandingCommands {
                         .then(Commands.literal("skip").executes(c -> act(c, 1)))
                         .then(Commands.literal("skip_step").executes(c -> act(c, 2)))
                         .then(
+                            Commands.literal("step")
+                                .requires(s -> s.hasPermission(2))
+                                .then(
+                                    Commands.argument(
+                                            "n",
+                                            com.mojang.brigadier.arguments.IntegerArgumentType
+                                                .integer(1, 8))
+                                        .executes(
+                                            c -> {
+                                              ServerPlayer p = c.getSource().getPlayer();
+                                              if (p == null) {
+                                                return 0;
+                                              }
+                                              LandingService.markFor(
+                                                  p,
+                                                  mars.landing.Step.of(
+                                                      com.mojang.brigadier.arguments
+                                                          .IntegerArgumentType.getInteger(c, "n")));
+                                              return 1;
+                                            })))
+                        .then(
                             Commands.literal("reset")
                                 .requires(s -> s.hasPermission(2))
                                 .executes(c -> act(c, 3))))
@@ -46,7 +67,6 @@ public final class LandingCommands {
     }
     switch (what) {
       case 0 -> {
-        LandingService.arrive(p);
         LandingService.startLanding(p);
       }
       case 1 -> LandingService.skipAll(p);

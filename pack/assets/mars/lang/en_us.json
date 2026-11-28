@@ -30,7 +30,7 @@
   "life.blackout": "You blacked out. In the game you wake up in the shelter and lose nothing.",
   "monitor.water.low": "Water low: about %s sols left.",
   "monitor.water.none": "No water.",
-  "monitor.gate.dome_stable.waiting.landing": "Waiting: finish the Landing first.",
+  "monitor.gate.dome_stable.waiting.landing": "Waiting: the Landing grace is running.",
   "monitor.gate.dome_stable.waiting.sealed": "Waiting: the dome must hold air.",
   "monitor.gate.dome_stable.waiting.air_ok": "Waiting: air supply and reserve.",
   "monitor.gate.dome_stable.waiting.water_ok": "Waiting: the water must last.",
@@ -116,9 +116,9 @@
   "landing.hint.1": "W A S D to walk. Right-click the door.",
   "landing.hint.2": "The tanks stand along the shelter's south wall.",
   "landing.hint.3": "The Monitor is on the north wall of Ops.",
-  "landing.hint.4": "The locker is the barrel in Ops, south-west corner. Right-click it. No kit? Craft one: 1 iron ingot and 1 brick.",
+  "landing.hint.4": "The locker is the barrel in Ops, south-west corner.",
   "landing.hint.5": "Hold the kit. Right-click the cracked plate in Hab B's west wall.",
-  "landing.hint.6": "Set them in the machine bay in the east. The battery and panel power them.",
+  "landing.hint.6": "Set them in the east machine bay. Panel and battery power them.",
   "landing.hint.7": "The airlock is at the south end of the dome.",
   "landing.hint.8": "Press its number key, then right-click.",
   "landing.skip.1": "Air tanks line the shelter wall. Right-click one to read it.",
@@ -142,5 +142,6 @@
   "journal.item": "Keeper's Journal",
   "journal.item.new": "Keeper's Journal (%s new)",
   "journal.pointer": "New in your journal: %s.",
-  "briefing.title": "Shift Briefing"
+  "briefing.title": "Shift Briefing",
+  "landing.hint.4.empty": "Locker empty? Craft one: 1 iron ingot and 1 brick."
 }

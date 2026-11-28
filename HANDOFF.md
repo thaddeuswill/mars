@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0i. UPDATE 2026-11-28 (Technical Lead): slice 4 built (Landing, seal kit, journal, briefing)
+
+Jar `0.4.0-stage3-i` (sha256 `6114deec59f25f3ee111b90681434edf0f849618fe1aa9e19673bb52a36d20ce`). 295 unit tests, 134 boot checks `RESULT PASS`. Design in ARCHITECTURE.md 2.22; report `docs/team/reports/2026-11-28-technical-lead-stage3-slice4-landing.md`; screenshots `tools/screenshots/out/20261128-032623/` (script `slice4_landing.shots`, new dev steps `use x y z`, `useitem`, `slot n`, `closescreen`). Not built: `ActionEvent` kinds for the Landing (Codex: subscribe to `mars.story.landing.LandingEvent`), the band setting (journal is MS only), suits and dust-off station (flags in `landing.json`), real multiplayer and late-joiner client checks.
+
 ## 0h. UPDATE 2026-11-28 (Technical Lead): habitat bunk and stowage crate in the dome
 
 Jar `0.3.7-stage3-h` (sha256 `4a72c3d7ad554827eaabb7369a83f1f4780fb9b2ec6d05df410fe65cd4a8d6bc`). 260 unit tests, 120 boot checks `RESULT PASS`. `mars.habitat` (`HabitatBunkBlock` bed with no block entity, `StowageCrateBlock` barrel); the red bed and barrel are gone from the starter dome; sleeping, respawn, drops and "sleep does not move Mars time" checked in a GameTest (real night skip not run). Bunk bag reads dark slate (about half the wall luminance), crate face about 0.6 of the wall. Report `docs/team/reports/2026-11-28-technical-lead-habitat-furniture.md`; screenshots `tools/screenshots/out/20261128-002620/` (`fur_*`). Slice 4 build (landing-spec T1 to T7) can start.

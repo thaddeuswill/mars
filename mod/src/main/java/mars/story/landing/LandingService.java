@@ -215,6 +215,14 @@ public final class LandingService {
     }
   }
 
+  /** Operator test aid ({@code /mars landing step n}): tick one step as if the player did it. */
+  public static void markFor(ServerPlayer p, Step step) {
+    if (onPlanet(p)) {
+      var r = rec(p);
+      apply(p, r, r.landing.mark(step, Status.DONE, now(p.serverLevel())));
+    }
+  }
+
   public static void resetFor(ServerPlayer p) {
     var r = rec(p);
     r.landing.reset();

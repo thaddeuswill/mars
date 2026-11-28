@@ -144,3 +144,5 @@ Not for Codex: anything in `mod/src/main/java/mars/{hazards,learning,planets,mac
 - I did not verify the current unit-test and boot-check counts beyond what the reports state (174 and 82 at the last run).
 - Slice dependencies are my reading of ROADMAP and ARCHITECTURE. The Technical Lead may re-order (for example, storms before the learning plumbing) with a reason.
 - External reviewers and the owner's platform checks have no date. Both can move Stage 3 content after the fact.
+
+**Status update 2026-11-28 (Technical Lead):** slice 4 (Landing, seal kit, journal, Shift Briefing 1) is built and verified in part, see `docs/team/reports/2026-11-28-technical-lead-stage3-slice4-landing.md`. Not in it: "Useful now" lists, the Next goal row for an unmet temperature condition, learning-log event kinds (Codex).

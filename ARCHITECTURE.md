@@ -712,6 +712,20 @@ Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after 
 - **Sealing:** unchanged. The bunk is not a full cube (it leaked like the red bed did, the flood fill passes through it); the crate is. Sealing tests stay green (Hab B volume 108, shelter and Ops sealed).
 - Cost: nothing per tick; one block entity per crate (the vanilla barrel one).
 
+### 2.22 Landing, seal kit and journal (Stage 3 slice 4, built)
+
+Spec: `docs/design/landing-spec.md` (with the Instructional Designer's W1 to W7). Pure packages `mars.landing` (state machine, config, targets) and `mars.journal` (entries, unlocks, pagination) are in the ArchUnit pure list; Minecraft glue is `mars.story` (`StoryDefinitions` reload listener) and `mars.story.landing` (`LandingService`, `LandingData`, `JournalBook`, `LandingCommands`, `LandingPayloads`); client `mars.client.LandingClient` (HUD panel) and `LandingIntroScreen`.
+
+- **Seal kit:** `mars:seal_kit` (`SealKitItem`), tag `mars:patchable` (the cracked plate), recipe 1 iron ingot + 1 brick. Posts `SealKitPatchedEvent`. The Ops locker is a stowage crate named "Locker" holding group size + 1 kits (at most 6), placed by `StarterDome`.
+- **Tank read-out:** `O2TankBlock`, action bar "Tank: x of y" = the dome's O2 shared over the tanks that stand; posts `TankReadEvent`.
+- **Outside air line:** the pressure row's second line (`monitor.pressure.outside_air`, 9 GUI px), shown until Phase 2 begins. It gives way first on a full panel (`MonitorLayout.fit`) so the plot is kept; for a player whose Landing step 3 is open the server sends the `.pinned` key (never dropped, the plot gives way instead).
+- **State machine:** `LandingState` per player, eight steps, `PENDING/DONE/AUTO/SKIPPED`, any order; AUTO only for steps 5 and 6 when the step is active and the world is already there; skip all/skip step; briefing once; saved form `LandingState.Saved`. Data `data/mars/landing.json` (hint delay, `suits_built`, `dust_off_built`).
+- **Hooks (server only):** `HullDoorUsedEvent` (step 1; outer door for step 7), `TankReadEvent`, Monitor open (`MonitorSender`), `SealKitPatchedEvent` and a hand-placed plate at the crack (step 5), `EntityPlaceEvent` for Ovens (step 6 credit) and the Outgasser (planet-scope journal token), `GateLatchedEvent` (new, posted from `PlanetManager.announceGates`), `RightClickItem` on the journal, `RightClickBlock` on a lectern (re-issue). A once-a-second pass per player on a planet reads the kit in the inventory, the position (more than 2 blocks outside the dome box), and the two planet facts (one 108-cell flood fill only while step 5 is open).
+- **UI:** the intro is a client screen with two buttons (Escape makes no choice; chat buttons and commands do the same). The checklist panel is a client HUD layer on the left edge (scale 0.75, about 100 GUI px tall), fed by one small payload only when it changes. Step skip: `/mars landing skip_step` (a clickable chat button appears with the hint). Commands: `/mars landing status|start|skip|skip_step` (any player), `step n|reset` and `/mars journal give` (operators).
+- **Journal:** a vanilla written book built on the server per player from `data/mars/journal/*.json` (8 Phase 1 entries); page 1 is a contents page with page-jump links and "(New)" marks; rebuilt on every unlock and just before it opens. Planet-scope entries go to every player and are caught up on join. BELL lines and the briefing are chat lines (briefing: a gold title and the text, 3 seconds after the checklist ends).
+- **Events for the learning log:** `LandingEvent(player, type, subject)` posted on the NeoForge bus for `landing.step`, `landing.skipped`, `landing.done`, `briefing.opened`, `journal.opened`. These kinds do not exist in `ActionEvent` yet (Codex owns `mars/learning`); nothing is written to the log until Codex subscribes.
+- **Cost:** hooks do one map lookup. The player pass is once a second per player on a planet.
+
 ## 3. Coding Practices
 
 | Area | Convention |

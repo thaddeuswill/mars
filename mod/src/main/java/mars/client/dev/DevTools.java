@@ -175,6 +175,29 @@ public final class DevTools {
             Float.parseFloat(v[3]),
             Float.parseFloat(v[4]));
       }
+      case "slot" -> mc.player.getInventory().selected = Integer.parseInt(p[1]);
+      case "use" -> {
+        // Right-click a block like a player: "use x y z" (real MultiPlayerGameMode path).
+        String[] v = p[1].split(" ");
+        var pos =
+            new net.minecraft.core.BlockPos(
+                Integer.parseInt(v[0]), Integer.parseInt(v[1]), Integer.parseInt(v[2]));
+        var r =
+            mc.gameMode.useItemOn(
+                mc.player,
+                net.minecraft.world.InteractionHand.MAIN_HAND,
+                new net.minecraft.world.phys.BlockHitResult(
+                    net.minecraft.world.phys.Vec3.atCenterOf(pos),
+                    net.minecraft.core.Direction.EAST,
+                    pos,
+                    false));
+        log("use " + pos.toShortString() + " -> " + r);
+      }
+      case "useitem" ->
+          log(
+              "useitem -> "
+                  + mc.gameMode.useItem(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND));
+      case "closescreen" -> mc.setScreen(null);
       case "hud" -> mc.options.hideGui = !"on".equals(p[1]);
       case "fps" ->
           log("fps=" + mc.getFps() + " (frames in the last second, as Minecraft counts them)");

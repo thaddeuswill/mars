@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "journal.sol",
   "section": "Shift notes",
-  "title": "What is a sol?",
+  "title": "Sols",
   "trigger": [
     "step:JOURNAL"
   ],

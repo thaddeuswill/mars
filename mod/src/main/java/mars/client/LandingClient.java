@@ -16,7 +16,8 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
  * short text lines while the Landing runs; nothing otherwise.
  */
 public final class LandingClient {
-  private static final int PANEL_W = 150;
+  private static final int PANEL_W = 210;
+  private static final float SCALE = 0.75f;
   private static final int BACKING = 0xA0181210;
   private static final int EDGE = 0xFF9A6A4C;
   private static volatile LandingPayloads.Panel panel = LandingPayloads.Panel.hidden();
@@ -58,8 +59,10 @@ public final class LandingClient {
       return;
     }
     var font = mc.font;
+    g.pose().pushPose();
+    g.pose().scale(SCALE, SCALE, 1f);
     int x = 6;
-    int y = 24;
+    int y = 12;
     int h = 14;
     List<List<net.minecraft.util.FormattedCharSequence>> blocks = new java.util.ArrayList<>();
     for (int i = 0; i < p.textKeys().size(); i++) {
@@ -101,5 +104,6 @@ public final class LandingClient {
       yy += 2;
     }
     g.drawString(font, Component.translatable("landing.panel.footer"), x, yy, 0xFF9AA5B1, false);
+    g.pose().popPose();
   }
 }

@@ -1,0 +1,56 @@
+# Stage 3 slice 4: Landing intro, checklist panel, seal kit patch, journal, briefing (mars:planet_1), 1280x720.
+# Dome corner (-3, 63, -4): shelter x -2..3, Ops x 5..11, Hab B x -2..3 z 5..10; crack at (-3, 65, 8).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 160
+shot landing_1_intro_screen
+closescreen
+hud on
+wait 10
+cmd /mars landing start
+wait 40
+view 0.5 65.6 -2.4 0 10
+wait 20
+hud on
+shot landing_2_panel_all_pending
+cmd /mars landing step 1
+cmd /mars landing step 2
+wait 30
+cmd /mars monitor
+wait 30
+shot landing_3_monitor_outside_air_line
+closescreen
+cmd /mars landing step 3
+wait 30
+hud on
+shot landing_4_panel_three_done
+cmd /item replace entity @s hotbar.0 with mars:seal_kit 2
+wait 10
+view -8.5 66 8.5 270 5
+wait 20
+shot landing_5_cracked_plate_before
+slot 0
+use -3 65 8
+wait 30
+shot landing_6_after_seal_kit_patch
+cmd /mars landing step 4
+cmd /mars landing step 6
+cmd /mars landing step 7
+wait 10
+view 0.5 65.6 -2.4 0 10
+wait 10
+hud on
+shot landing_7_panel_only_journal_left
+slot 8
+useitem
+wait 40
+shot landing_8_journal_contents_page
+closescreen
+hud on
+wait 80
+hud on
+shot landing_9_briefing_card_in_chat
+quit
