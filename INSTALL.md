@@ -32,10 +32,10 @@ This downloads the game files that the next step needs.
 
 ## 4. Download the Mars Terraforming mod
 
-The mod is one file: **`mars-0.1.0-stage1.jar`** (version numbers change as we build).
+The mod is one file: **`mars-terraforming-0.1.0-stage1.jar`** (the file name and version number change as we build; any name ending in `.jar` works).
 Get it in one of two ways:
 
-- **Easiest:** download it from this repository's `downloads/` folder (once the owner has uploaded a build there) or from the repository's **Releases** page.
+- **Easiest:** download `downloads/mars-terraforming-0.1.0-stage1.jar` from this repository (open the file and click the **Download raw file** button), or use the repository's **Releases** page if one exists.
   Click the file, then click the **Download raw file** button.
 - **Build it yourself** from the source code: see [section 8](#8-build-the-mod-yourself).
 
