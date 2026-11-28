@@ -282,9 +282,10 @@ def processor():
     rect(can, 15, 0, 15, 15, A3)
     save(can, "atmospheric_processor_canister")
 
-    port = blank(A1)  # output ports: alloy
-    rect(port, 0, 0, 15, 0, A2)
-    rect(port, 0, 15, 15, 15, A0)
+    # output ports: lighter alloy (was A1; in the real-client close-up the A1 ports sank into the shaded gold east side)
+    port = blank(A2)
+    rect(port, 0, 0, 15, 0, A3)
+    rect(port, 0, 15, 15, 15, A1)
     rect(port, 0, 7, 15, 8, A0)
     save(port, "atmospheric_processor_port")
 

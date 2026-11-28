@@ -1,0 +1,48 @@
+# Oxygen maker with made-up band, processor east-face ports, emitter and reclaimer lamp states. Real generated pad (top block y 80).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock -3 81 4 mars:oxygen_maker[facing=north]
+cmd /setblock -1 81 4 mars:atmospheric_processor[facing=north]
+cmd /setblock 2 81 4 mars:super_greenhouse_emitter[facing=north]
+cmd /setblock 4 81 4 mars:water_reclaimer[facing=north]
+cmd /setblock -8 81 10 mars:atmospheric_processor[facing=north]
+cmd /setblock -8 81 14 mars:oxygen_maker[facing=north]
+wait 60
+view -2.5 82.0 1.6 0 22
+wait 80
+shot band_oxygen_front
+wait 20
+view -2.5 82.0 7 180 22
+wait 60
+shot band_oxygen_back
+wait 20
+view -5.5 82.0 4.5 270 22
+wait 60
+shot band_oxygen_side_west
+wait 20
+view -4.5 82.0 14.5 90 22
+wait 60
+shot band_oxygen_end_east
+wait 20
+view -4.5 82.0 10.5 90 22
+wait 60
+shot band_processor_east_ports
+wait 20
+view -0.5 82.0 1.6 0 22
+wait 60
+shot band_processor_front
+wait 20
+view 2.5 82.0 1.6 0 22
+wait 60
+shot band_emitter_front
+wait 20
+view 4.5 82.0 1.6 0 22
+wait 60
+shot band_reclaimer_front
+wait 20
+quit

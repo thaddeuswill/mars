@@ -26,6 +26,7 @@ P = {
     "D": "#B97C52", "E": "#D09A6E",                                  # bright dust 3, 4
     "i": "#C2CDD5",                                                  # water ice 2 (electrolyte window)
     "R": "#5E3424", "S": "#7A4530", "T": "#9A5B3C", "U": "#B8764F",  # regolith ramp
+    "P": "#CC79A7", "Q": "#8E3F6C", "N": "#2A2420",                  # made-up band, dark edge, plate slash (docs/art/made-up-band-spec.md)
     "m": "#FF00FF",                                                  # placeholder marker only
 }
 def rgb(h): return tuple(int(h.lstrip("#")[j:j + 2], 16) for j in (0, 2, 4))
@@ -151,6 +152,13 @@ models["battery"] = {
 
 # ---------- M-05 O2 generator, MOXIE-style (PIA24201, PIA24203): gold-plated box, pocket grid, X ribs on one end,
 # off-white tube loops, silver fittings. Process (MOXIE splits CO2; electrolysis splits water) is the Game Designer's.
+def band_bake(t, xa, xb):
+    """Made-up band (spec): rows 14 and 15, dashes 2 on / 2 off at global x 0-1, 4-5, 8-9, 12-13; limited to the used region xa..xb."""
+    for x in range(xa, xb + 1):
+        if (x // 2) % 2 == 0: t.dot(x, 14, "P"); t.dot(x, 15, "Q")
+def plate_bake(t, x0=10, y0=9):
+    t.rect(x0, y0, x0 + 3, y0 + 3, "P")
+    for i in range(4): t.dot(x0 + i, y0 + 3 - i, "N")
 def pockets(t, x0, y0, lamp):
     # Batch 3 (owner: "less like a waffle"): fewer, larger, SHALLOW panels in a clear rib frame. 2 columns x 3 rows of
     # light gold panels (I) with a 1 px mid-gold lip along the top only (H); thin light ribs and outer frame (J).
@@ -163,10 +171,11 @@ def pockets(t, x0, y0, lamp):
     for r in (4, 8): t.rect(x0 + 1, y0 + r, x0 + 10, y0 + r, "H")
     for (cx, cy) in ((1, 1), (7, 1), (1, 5), (7, 5), (1, 9)): t.dot(x0 + cx, y0 + cy, "J")   # a glint in each panel corner
     if lamp:  # status lamp in a dark ring, in the lower-right panel
-        t.rect(x0 + 7, y0 + 9, x0 + 10, y0 + 11, "1"); t.rect(x0 + 8, y0 + 10, x0 + 9, y0 + 10, "g")
-        t.rect(x0 + 7, y0 + 11, x0 + 10, y0 + 11, "1")
-fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); fa.save()
-fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); fb.save()
+        # band round: lamp moved from the lower-right panel to the upper-right panel (rows y0+1..y0+3) so the made-up band
+        # (rows 14-15) and the plate (x 10..13, y 9..12) fit below it
+        t.rect(x0 + 7, y0 + 1, x0 + 10, y0 + 3, "1"); t.rect(x0 + 8, y0 + 2, x0 + 9, y0 + 2, "g")
+fa = T("o2_generator_face"); far = fa.region(2, 4, 13, 15); pockets(fa, 2, 4, True); plate_bake(fa); band_bake(fa, 2, 13); fa.save()
+fb = T("o2_generator_back"); fbr = fb.region(2, 4, 13, 15); pockets(fb, 2, 4, False); band_bake(fb, 2, 13); fb.save()
 en = T("o2_generator_end"); enr = en.region(3, 4, 12, 15)
 en.rect(3, 4, 12, 15, "H"); en.box(3, 4, 12, 15, "J")
 # X ribs (round 2: one-pixel diagonals with shadows read as noise in the iso render; now 2 px wide, light on mid gold)
@@ -175,9 +184,10 @@ for k in range(0, 12):
     for xx in (xa, xa + 1, xb, xb - 1):
         if 3 <= xx <= 12: en.dot(xx, yy, "J")
     # round 3: light ribs on a darker field (light-on-light read as an hourglass)
+band_bake(en, 3, 12)
 en.save()
 sd_ = T("o2_generator_side"); sdr = sd_.region(3, 4, 12, 15)
-sd_.rect(3, 4, 12, 15, "H"); sd_.box(3, 4, 12, 15, "J"); sd_.rect(4, 8, 11, 8, "J"); sd_.rect(4, 12, 11, 12, "J"); sd_.rect(4, 9, 11, 9, "G"); sd_.rect(4, 13, 11, 13, "G"); sd_.save()
+sd_.rect(3, 4, 12, 15, "H"); sd_.box(3, 4, 12, 15, "J"); sd_.rect(4, 8, 11, 8, "J"); sd_.rect(4, 12, 11, 12, "J"); sd_.rect(4, 9, 11, 9, "G"); sd_.rect(4, 13, 11, 13, "G"); band_bake(sd_, 3, 12); sd_.save()
 tp_ = T("o2_generator_top"); tpr = tp_.region(2, 3, 13, 12)
 tp_.rect(2, 3, 13, 12, "I"); tp_.box(2, 3, 13, 12, "J")
 for x, y in ((3, 4), (12, 4), (3, 11), (12, 11), (7, 4), (8, 11)): tp_.dot(x, y, "G")
@@ -260,7 +270,7 @@ for name, m in models.items():  # per used face region: <= 6 colors besides the 
             im = Image.open(os.path.join(TEX, tex + ".png")).convert("RGB")
             u1, v1, u2, v2 = fd["uv"]; x0, x1 = sorted((u1, u2)); y0, y1 = sorted((v1, v2))
             region = im.crop((int(x0), int(y0), int(x1), int(y1)))
-            n = len({c for c in region.get_flattened_data() if c != rgb(P["m"])})
+            n = len({c for c in region.get_flattened_data() if c not in (rgb(P["m"]), rgb(P["P"]), rgb(P["Q"]), rgb(P["N"]))})   # band and plate colours are spec-mandated, not budgeted
             if n > 6: fails.append(f"{name}.{fname}: {n} colors (> 6)")
             if not os.path.exists(os.path.join(TEX, tex + ".png")): fails.append(f"missing texture {tex}")
 # meaning-bearing pairs must reach 3:1 (WCAG 1.4.11); shape-only pairs should reach 2:1 (target, reported)

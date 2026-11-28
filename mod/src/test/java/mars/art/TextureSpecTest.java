@@ -126,4 +126,56 @@ class TextureSpecTest {
       assertEquals(0, b.getRGB(x, 5) >>> 24, "band overlay must be clear above the band");
     }
   }
+
+  @Test
+  void oxygenMakerBakesBandOnFourSidesAndPlateOnFront() throws IOException {
+    int purple = 0xCC79A7;
+    int dark = 0x8E3F6C;
+    // used x ranges: front/back 2..13, end/side 3..12; dashes follow the global 2 on / 2 off
+    // pattern
+    for (String n :
+        List.of(
+            "o2_generator_face", "o2_generator_back", "o2_generator_end", "o2_generator_side")) {
+      BufferedImage b = load(n);
+      assertEquals(16, b.getWidth(), n);
+      assertEquals(purple, b.getRGB(4, 14) & 0xFFFFFF, n + " dash on, row 14");
+      assertEquals(dark, b.getRGB(4, 15) & 0xFFFFFF, n + " dash edge, row 15");
+      assertTrue((b.getRGB(6, 14) & 0xFFFFFF) != purple, n + " dash off");
+    }
+    BufferedImage f = load("o2_generator_face");
+    assertEquals(purple, f.getRGB(11, 9) & 0xFFFFFF, "plate");
+    assertEquals(0x2A2420, f.getRGB(10, 12) & 0xFFFFFF, "plate slash bottom-left");
+    assertEquals(0x2A2420, f.getRGB(13, 9) & 0xFFFFFF, "plate slash top-right");
+  }
+
+  @Test
+  void seedKitIconsAreDistinctNoGreenAndClearCornered() throws IOException {
+    List<String> kits = List.of("biocrust_kit", "meadow_kit", "wetland_kit", "forest_kit");
+    List<byte[]> seen = new java.util.ArrayList<>();
+    for (String n : kits) {
+      Path p = TestData.pack().resolve("assets/mars/textures/item/" + n + ".png");
+      assertTrue(Files.exists(p), n + ": missing icon");
+      BufferedImage img = ImageIO.read(p.toFile());
+      assertEquals(16, img.getWidth(), n);
+      assertEquals(16, img.getHeight(), n);
+      assertEquals(0, img.getRGB(0, 0) >>> 24, n + " corner is clear");
+      for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < 16; y++) {
+          int argb = img.getRGB(x, y);
+          int a = argb >>> 24;
+          assertTrue(a == 0 || a == 255, n + " alpha");
+          int r = (argb >> 16) & 255;
+          int g = (argb >> 8) & 255;
+          int b = argb & 255;
+          assertTrue(a == 0 || !(g > r + 20 && g > b + 20), n + " has green at " + x + "," + y);
+        }
+      }
+      byte[] bytes = Files.readAllBytes(p);
+      for (byte[] other : seen) assertTrue(!java.util.Arrays.equals(bytes, other), n + " distinct");
+      seen.add(bytes);
+      String model =
+          Files.readString(TestData.pack().resolve("assets/mars/models/item/" + n + ".json"));
+      assertTrue(model.contains("mars:item/" + n), n + " model points at its own icon");
+    }
+  }
 }

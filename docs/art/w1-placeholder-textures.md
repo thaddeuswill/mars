@@ -71,3 +71,13 @@ All from `tools/art-preview/gen_terrain_textures.py` (same guards: opaque, no gr
 | `duricrust` | REAL, retoned | Cooler tan plates, contrast lowered (was `#8E6A44..#B98F5F`, crack `#5E4228`) | `#8A7656 #9A8664 #A89473`; crack `#6A5A42`; lip `#B5A383` |
 
 Seen in a real client: `tools/screenshots/out/20261128-011135/ores_01_wall.png` (script `tools/screenshots/art_ores.shots`).
+
+## Update 2026-11-28 (Lead Artist): oxygen maker band, seed kit icons, processor ports
+
+| Texture | Status | What changed | Palette (hex) |
+|---|---|---|---|
+| `o2_generator_face`, `_back`, `_end`, `_side` | REAL (band baked) | Made-up band on rows 14-15 of the used region (global 2 on / 2 off dash), plate at x10..13 y9..12 on the face; status lamp moved from the lower-right to the upper-right panel to make room. Tube and top textures untouched. Wording on the block: "Game-sized version of a real idea" (Game Designer) | band `#CC79A7 #8E3F6C`, slash `#2A2420` |
+| `item/biocrust_kit`, `meadow_kit`, `wetland_kit`, `forest_kit` | REAL (hand-scripted pixel art) | Seed packet, ink outline, crimped top, 3-row colour band plus an ink symbol (crumbs, grass tufts, reed with head, two berries). No green, no purple. Replaces the reused carbonate texture | band `#D55E00`, `#F0E442`, `#56B4E9`, `#0072B2`; paper `#E7E2D6 #C9C2B2`; ink `#2A2420` |
+| `atmospheric_processor_port` | REAL (retoned) | Ports lightened (alloy `#7E8790` body, `#A8B0B7` top row) after a real-client close-up showed dark ports sinking into the shaded gold east side | `#7E8790 #A8B0B7 #59616A #3B4148` |
+
+Generators: `tools/art-preview/gen_phase1_batch1.py` (oxygen maker; band colours exempt from its 6-colour budget), `gen_seed_kit_icons.py` (new; also rewrites the four item models), `gen_invented_machines.py` (port). Seen in a real client: `tools/screenshots/out/20261128-oxygen-band/` (script `tools/screenshots/oxygen_band_closeups.shots`).
