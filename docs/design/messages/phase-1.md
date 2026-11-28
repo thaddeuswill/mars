@@ -31,7 +31,7 @@ Controls first, content second (DESIGN.md, Landing). No forecast fires until the
 | intro | Storm's over, Keeper. Damage logged. First-shift checklist is ready. **[Start checklist]** **[I know the drill]** | — |
 | 1 | Walk to the shelter door. | Player reaches the door |
 | 2 | Find your suit O2. Top it up at the wall tank. **Until suits exist (proposed): "Right-click the air tank by your bunk. Read the level."** | O2 refilled (until suits: tank right-clicked) |
-| 3 | Open the Planetary Monitor. Read today's pressure and air mix. | Monitor opened, pressure line and "Air mix" line shown (Air mix: about 95 % CO2, almost no oxygen; A1) |
+| 3 | ~~Open the Planetary Monitor. Read today's pressure and air mix.~~ **Proposed (landing-spec §12 W1):** Open the Planetary Monitor. Find the Outside air line. | Monitor opened, pressure line and "Air mix" line shown (Air mix: about 95 % CO2, almost no oxygen; A1) |
 | 4 | Take a seal kit from the locker. | Seal kit in inventory |
 | 5 | ~~Hab B is leaking. Patch the cracked panel.~~ **Proposed: "Patch the crack in Hab B with your seal kit."** (Hab B holds no tank air, so "leaking" is not true of the simulation, CR-H1) | Cracked plate replaced, Hab B reads sealed |
 | 6 | ~~Power is low. Switch on the backup battery.~~ **Proposed: "Place your two Ovens. Check Power on the Monitor."** The battery has no switch; it stays in the hint and the outline | Two Ovens placed and both powered |
@@ -58,13 +58,13 @@ Length: 8 steps, ≤ 12 words each. Expected time 15–25 minutes with exploring
 | `type` | Shift Briefing |
 | `trigger` | Landing checklist done or skipped |
 | `delivery` | BELL briefing card in the side panel (non-modal, ui-specs §0); copy kept in the journal under "Briefings" |
-| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch air, water, and power. Dust storms cut solar power, so store some. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why. (**proposed, 40 words**; the storm sentence ships with F1; see landing-spec §4) |
+| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch air, water, and power. ~~Dust storms cut solar power, so store some.~~ **Proposed 2026-11-28 (ID pass, landing-spec §12 W2):** Mars weather can change fast, so keep some power in reserve. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why. (**proposed, 38 words**; the storm sentence is removed because it is F1's answer and the journal copy stays readable while F1 is open) |
 | `text.hs` | Same as MS |
 | `goal_ids` | C1, A1 |
 | `instructional_purpose` | Advance organizer: names the job, the values to watch, the main threat, and the next goal before play starts |
 | `motivational_purpose` | Clear goal; a reason to want the relay (people) |
 | `hint_level` | — |
-| `science_claims` | "Dust storms cut solar power" (see F1) |
+| `science_claims` | None (the storm claim moved to the F1 result) |
 | `fiction_note` | None |
 | `status` | draft |
 
@@ -279,7 +279,7 @@ The note never states the result (it would give away F3). It shows where to look
 | `delivery` | Journal gate entry, "On Earth" line |
 | `text.ms` | ~~Mars's air pushes with less than 1 % of the force of Earth's air. Earth's thick air protects us for free.~~ **Proposed (SME to confirm the second sentence):** On Earth, air pushes on you with more than 100 times the force of the air outside this dome. You never notice, because your body pushes back. |
 | `journal.dome_stable.airmix` (gate entry, before the Earth line; both bands) | Outside air: about 95 % carbon dioxide, almost no oxygen, and very thin. You can't breathe it. |
-| `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. **Proposed:** Your hull holds back that difference. |
+| `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. **Proposed:** ~~Your hull holds back that difference.~~ **Further proposed 2026-11-28 (landing-spec §12 W4, SME to confirm):** Inside the dome, air pushes out on the hull harder than the thin air outside pushes in. The hull holds that difference. "More than 100 times the force" becomes "as hard as"; "95 %" becomes "95 percent" (§12 W5). |
 | `goal_ids` | A1, D2 |
 | `instructional_purpose` | Mars vs. Earth pressure as a ratio, anchored to the dome the player just stabilized |
 | `motivational_purpose` | Pride: "I'm holding back a planet's worth of vacuum" |

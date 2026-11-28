@@ -77,7 +77,7 @@ Each step has its own status: `PENDING` -> `DONE` (the player did it) | `AUTO` (
 | intro | First join on a planet, after the opening card | Player presses **Start checklist** or **I know the drill** | "Storm's over, Keeper. Damage logged. First-shift checklist is ready." | n/a | The two buttons are the last screen of the opening card (3.10). `/mars landing start` and `/mars landing skip` do the same |
 | 1 Move, open a door | OFFERED -> RUNNING | The player right-clicks a `mars:hull_door` and the door opens (`RightClickBlock` on `HullDoorBlock`, door state `OPEN` true after the click) | "Walk to the shelter door and open it." (8) | "W A S D to walk. Right-click the door." | Teaches walk, look and use. The shelter door is the one in the shelter's east wall (x7, z4) |
 | 2 Air supply | Any time | **Now:** right-click a `mars:o2_tank`. The action bar shows "Tank: 14 of 40" (new key `tank.level`, the player's own tank and its capacity). **Later (`suits_built`):** the suit's O2 is refilled at a wall tank | **Now:** "Right-click the air tank by your bunk. Read the level." (10). **Later:** "Find your suit O2. Top it up at the wall tank." (10) | "The tanks stand along the shelter's south wall." | Teaches that O2 is a stored supply (C1, A1) before the Monitor. No number the player must remember |
-| 3 Monitor | Any time | The server receives the Monitor-open request from this player and sends the view (`MonitorSender`). No reading check: opening is the completion (a quiz here would be a science question before the end of Landing) | "Open the Planetary Monitor. Read the outside air." (8) | "The Monitor is on the north wall of Ops." | The Monitor must show an **Outside air** line in Phase 1 (see 3.11, item T4). The journal entry on air pressure unlocks now (5.3) |
+| 3 Monitor | Any time | The server receives the Monitor-open request from this player and sends the view (`MonitorSender`). No reading check: opening is the completion (a quiz here would be a science question before the end of Landing) | ~~"Open the Planetary Monitor. Read the outside air."~~ **Proposed (ID pass, §12 W1):** "Open the Planetary Monitor. Find the Outside air line." (9) | "The Monitor is on the north wall of Ops." | The Monitor must show an **Outside air** line in Phase 1 (see 3.11, item T4). The journal entry on air pressure unlocks now (5.3) |
 | 4 Seal kit | Any time | The player's inventory holds at least one `mars:seal_kit` (checked once a second while the step is active, and on pickup) | "Take a seal kit from the locker in Ops." (9) | "The locker is the barrel in Ops, south-west corner. Right-click it." | Teaches containers. If the locker is empty (kits used or `/give` skipped), the step shows "Craft one: 1 iron ingot and 1 brick." in the hint only |
 | 5 Patch | Any time | The cracked plate is replaced by a hull plate **by this player's kit** (`DONE`), or the Hab B volume already reads SEALED when the step becomes active (`AUTO`). `SealChangedEvent` (not breach) for Hab B marks the world change; the kit's use handler remembers the player | "Patch the crack in Hab B with your seal kit." (10) | "Hold the kit. Right-click the cracked plate in Hab B's west wall." | BELL line (3.8). Does **not** emit `failure.fixed` (L8). The crack may be broken by hand and replaced with a plate instead: counts as `DONE` too |
 | 6 Ovens and power | Any time | The planet has at least two `mars:regolith_oven` machines and the power grid reports both **powered** (`PowerGrid.State.POWERED`). `DONE` if this player placed one of them (machine.built); `AUTO` if both were placed by others before | "Place your two Ovens. Check Power on the Monitor." (9) | "The battery and panel power them. The east bays are marked." | If an Oven shows short on power the hint becomes "Ovens need power. Is a panel running?" (no fix named beyond the cause line). BELL line (3.8) |
@@ -152,7 +152,7 @@ BELL is calm, exact, never guesses, never jokes or comforts (story bible §4.1, 
 | `landing.step.1` | Walk to the shelter door and open it. | 8 |
 | `landing.step.2` | Right-click the air tank by your bunk. Read the level. | 10 |
 | `landing.step.2.suit` | Find your suit O2. Top it up at the wall tank. | 10 |
-| `landing.step.3` | Open the Planetary Monitor. Read the outside air. | 8 |
+| `landing.step.3` | ~~Open the Planetary Monitor. Read the outside air.~~ **Proposed (§12 W1):** Open the Planetary Monitor. Find the Outside air line. | 9 |
 | `landing.step.4` | Take a seal kit from the locker in Ops. | 9 |
 | `landing.step.5` | Patch the crack in Hab B with your seal kit. | 10 |
 | `landing.step.6` | Place your two Ovens. Check Power on the Monitor. | 9 |
@@ -216,17 +216,17 @@ Elapsed time per step comes from the timestamps (session and sol are already in 
 | When it shows | 3 seconds after "Checklist done. Logging." (or straight after the skip summary), in the side panel as a card. Not a modal. It stays until the player closes it or opens the journal; it never blocks movement. A copy goes to the journal under **Briefings** |
 | Counts toward the pop-up cap | Yes (ui-specs §0), once. The first forecast cannot appear before it (DESIGN.md: no forecast before Landing is done) |
 | Goals | C1, A1 (advance organizer) |
-| `names` (CR-H5) | `air`, `water`, `power`, `life_support`, `relay` (the Dome stable unlock). The storm sentence is gated by `storms_built` (slice 5); until then it is not shown |
+| `names` (CR-H5) | `air`, `water`, `power`, `life_support`, `relay` (the Dome stable unlock). ~~The storm sentence is gated by `storms_built`~~ **Proposed: no gate; the storm sentence is removed (§12 W2)** |
 
 **Text, full (40 words, cap 45):**
 
-> **Shift Briefing.** This shift: keep the dome alive. Watch air, water, and power. Dust storms cut solar power, so store some. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why.
+> **Shift Briefing.** This shift: keep the dome alive. Watch air, water, and power. ~~Dust storms cut solar power, so store some.~~ **Proposed (ID pass, §12 W2):** Mars weather can change fast, so keep some power in reserve. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why.
 
-**Text until storms exist (32 words):** the same without "Dust storms cut solar power, so store some."
+**One text for all stages (proposed, 38 words by script):** the storm-free wording above ships from the start, so no `storms_built` switch is needed. The old storm sentence moves to the F1 result text (it already says "Dust in the air blocks sunlight", `messages/phase-1.md` §5).
 
 `{hold_sols}` is read from `dome_stable.json` (3 standard, 1 classroom), never typed. Changes from `messages/phase-1.md` §2: names air, water and power as the Monitor rows (the old "O2" is a letter-and-number the 12-year-old has not met); "run life support with no failures" becomes "keep it steady" (the gate tolerates short failures, balance sheet 2c decision 7); adds "store some" as the one planning cue; keeps "ask why" as the C2 habit.
 
-**Check:** the text claims nothing about the planet, so no `asserts` condition. It reveals no forecast answer (CR-F9: F1's answer is "solar power drops", and "storms cut solar power" would reveal it, **so the storm sentence ships only with F1** and F1 is not issued before the briefing). Flagged for the Instructional Designer: confirm the storm sentence does not make F1 trivial.
+**Check:** the text claims nothing about the planet, so no `asserts` condition. It reveals no forecast answer (CR-F9: F1's answer is "solar power drops", and "storms cut solar power" would reveal it, **so the storm sentence ships only with F1** and F1 is not issued before the briefing). **ID answer (§12 W2): it does make F1 trivial, and the "ships with F1" rule does not fix it, because the briefing copy stays in the journal while F1 is open. Sentence removed.**
 
 ---
 
@@ -256,14 +256,14 @@ Entries and their triggers. "Shown" = unlocked in the book. Every entry carries 
 
 | Id | Section | Trigger | Goals | Text depth |
 |---|---|---|---|---|
-| `journal.about` | Shift notes | Join (the book's first page) | C1 | MS only: the fiction line |
-| `journal.sol` | Shift notes | Step 8 (first journal open) | C1 | MS only |
+| `journal.about` | Shift notes | Join (the book's first page) | ~~C1~~ none, orientation (§12 W7) | MS only: the fiction line |
+| `journal.sol` | Shift notes | Step 8 (first journal open) | ~~C1~~ none, orientation (§12 W7) | MS only |
 | `journal.a1.pressure` | Shift notes | Step 3 (first Monitor open) | A1 | MS + HS read more |
 | `journal.power` | Shift notes | Step 6 `DONE` or `AUTO` | C1, B1 | MS only |
 | `journal.gamerules` | Game rules | Landing DONE or SKIPPED_ALL | C1, A1 | MS only |
-| `briefing.shift1` | Briefings | Briefing shown (section 4) | C1, A1 | MS only |
+| `briefing.shift1` | Briefings | Briefing shown (section 4) | C1 (~~A1~~ dropped, §12 W7) | MS only |
 | `journal.dome_stable` | Shift notes | Latch of `mars:dome_stable` | A1, D2 | MS + HS read more |
-| `journal.sky.stylized` | Shift notes | Latch of `mars:dome_stable` or first Outgasser placed (L4); text repeated at Phase 2 begins | A1 | MS only (SME verbatim) |
+| `journal.sky.stylized` | Shift notes | Latch of `mars:dome_stable` or first Outgasser placed (L4); text repeated at Phase 2 begins | ~~A1~~ B1 (cause and visible effect), A1 weak (§12 W7) | MS only (SME verbatim) |
 
 ### 5.3 Entry texts
 
@@ -280,9 +280,9 @@ Format for every gate entry (story bible 6.3): **what you saw, the real science,
 (24 words.) Time compression named at first use. BELL uses "sol" from the first line.
 
 **`journal.a1.pressure`** (trigger: step 3)
-> **Air pressure.** Air has weight, so it pushes on everything. How hard it pushes is air pressure. We measure it in kPa (kilopascals). On Earth at sea level, air pressure is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. That is very thin air.
+> **Air pressure.** Air has weight, so it pushes on everything. How hard it pushes is air pressure. We measure it in kPa (kilopascals). On Earth at sea level, air pressure is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. That is very thin air. **Proposed (§12 W6): add** Air always pushes from higher pressure toward lower pressure.
 
-(45 words.) *Read more (HS):* "1 kPa is 1,000 pascals. A pascal is one newton of push on each square meter. Pressure comes from gas molecules hitting a surface, so thin air hits less often and less hard." Sources: 0.6 kPa and 101 kPa, SME Part A (sourced, `docs/science/accuracy-review.md`). The molecule line is standard physics (**SME to confirm wording**). `reveals`: none (static values; no forecast asks the starting pressure).
+(45 words, 55 with the proposed sentence; cap 80.) *Read more (HS):* "1 kPa is 1,000 pascals. A pascal is one newton of push on each square meter. Pressure comes from gas molecules hitting a surface, so thin air hits less often and less hard." Sources: 0.6 kPa and 101 kPa, SME Part A (sourced, `docs/science/accuracy-review.md`). The molecule line is standard physics (**SME to confirm wording**). `reveals`: none (static values; no forecast asks the starting pressure).
 
 **`journal.power`** (trigger: step 6)
 > **Power.** Solar panels make power. A battery stores extra power for later. Machines use power every sol. **Game rule:** when power runs short, life support gets it first. Check the Power row on the Monitor to see what you make and what you use.
@@ -290,16 +290,16 @@ Format for every gate entry (story bible 6.3): **what you saw, the real science,
 (43 words.) "For later" avoids claiming a night cycle: there is no night on the grid yet. The game-rule label follows balance sheet 2d.9 (the words "Game rule" are in the text, not in small print). `names`: solar panel, battery, Power row (all exist).
 
 **`journal.gamerules`** (trigger: Landing DONE or SKIPPED_ALL; **the game-rule labels**, balance sheet 2d.9)
-> **Game rules.** Some rules make the game gentler than real life. Landing grace: nothing runs out while you do the checklist. Blackout: if your air runs out, you wake in the shelter and lose nothing. Real low oxygen is dangerous, and your body may not warn you.
+> **Game rules.** Some rules make the game gentler than real life. ~~Landing grace: nothing runs out while you do the checklist.~~ **Proposed (§12 W3):** Landing grace: for your first {grace_minutes} minutes, nothing runs out. Blackout: if your air runs out, you wake in the shelter and lose nothing. Real low oxygen is dangerous, and your body may not warn you.
 
 (45 words.) Covers the two game rules that exist now (Landing grace, Blackout). "Free suit refill" and "Dehydrated" get their line when suits and thirst exist (the entry grows; no new entry). Source for the last sentence: SME `life-support-review.md` §4 (sourced; no medical detail used). **Inconsistency to fix:** `en_us.json` `life.blackout` says "you wake up in your bunk"; the code wakes the player at the shelter spawn (slice 2 decision 13). This entry says "in the shelter" because that is true; the Technical Lead or Instructional Designer should align the Blackout line.
 
 **`briefing.shift1`** in the book: the card text of section 4, under Briefings.
 
 **`journal.dome_stable`** (trigger: gate latch; delivered to every player on the planet)
-> **Dome stable.** Air, water, and power held for {hold_sols} sols. *Outside air: about 95 % carbon dioxide, almost no oxygen, and very thin. You can't breathe it.* *On Earth, air pushes on you with more than 100 times the force of the air outside this dome. You never notice, because your body pushes back.*
+> **Dome stable.** Air, water, and power held for {hold_sols} sols. *Outside air: about ~~95 %~~ **95 percent (§12 W5)** carbon dioxide, almost no oxygen, and very thin. You can't breathe it.* *On Earth, air pushes on you ~~with more than 100 times the force of~~ **more than 100 times as hard as (§12 W4)** the air outside this dome. You never notice, because ~~your body pushes back~~ **the air inside your body pushes back just as hard (SME to confirm; fallback unchanged)**.*
 
-(Seen 10, air 17, Earth 27: 54 words.) The middle line is `journal.dome_stable.airmix` (SME Part A: CO2 95.1 %, O2 0.145 %). The Earth line replaces `earth.gate.dome_stable` (decision L5). *Read more (HS):* "Earth at sea level is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. Your hull holds back that difference." (The old "has to make up the difference" is replaced: the dome does not make pressure here, the hull holds it; Instructional Designer to confirm.) Rules: no Keeper's Record page fills (planet-scope, CR-R1); the wording does not depend on the stand-in state (CR-H5); a late joiner gets the entry on join. `reveals`: none.
+(Seen 10, air 17, Earth 27: 54 words.) The middle line is `journal.dome_stable.airmix` (SME Part A: CO2 95.1 %, O2 0.145 %). The Earth line replaces `earth.gate.dome_stable` (decision L5). *Read more (HS):* "Earth at sea level is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. ~~Your hull holds back that difference.~~ **Proposed (§12 W4, SME to confirm):** Inside the dome, air pushes out on the hull harder than the thin air outside pushes in. The hull holds that difference." (The old "has to make up the difference" is replaced: the dome does not make pressure here, the hull holds it; Instructional Designer to confirm.) Rules: no Keeper's Record page fills (planet-scope, CR-R1); the wording does not depend on the stand-in state (CR-H5); a late joiner gets the entry on join. `reveals`: none.
 
 **`journal.sky.stylized`** (trigger: L4; **SME-required wording, verbatim from `docs/science/round2-review.md` §2.1, both bands, do not edit**)
 > More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them.
@@ -326,9 +326,9 @@ Format for every gate entry (story bible 6.3): **what you saw, the real science,
 | CR-T1 banned words | None used ("checklist" and "briefing" are fine). Scan on the keys is still to run |
 | CR-T4 lengths | Steps 8 to 11 words (cap 12); log lines under 20; briefing 40 (cap 45); entries 24 to 54 (cap 80). Counted by a throwaway script on the strings above, not a build check |
 | CR-T5 positive wording | Pass: nothing says "you failed" or "wrong"; every state is done, auto or skipped |
-| CR-T6 grade 6 to 7 | **Not run.** The one risk word is "kilopascals" (defined on the spot) |
+| CR-T6 grade 6 to 7 | Rough pass run 2026-11-28 (§12): all keys under FK 5 except the step 3 name artifact. Not the CR-T6 check |
 | CR-T7 | US spelling ("color", "Leveling" untouched here); no "~" or "<" |
-| CR-F9 / CR-T8 | No forecast open during or before Landing. The storm sentence of the briefing waits for F1. The sky label and the A1 entry give no forecast answer (declared `reveals: none`) |
+| CR-F9 / CR-T8 | No forecast open during or before Landing. The briefing storm sentence is removed (§12 W2); the F9 check as written would not have caught it. The sky label and the A1 entry give no forecast answer (declared `reveals: none`) |
 | CR-H1 | Step 5 says "has a crack" only while the crack exists; BELL's line 5 and 6 fire only when the volume or the grid says so (L9) |
 | CR-H2 | Hints name the place and the control, not a fix to a learning problem: Landing is controls. No Hana tip names the fix |
 | CR-H5 | `names` fields declared for the briefing and entries; dust-off station and weather mast are not named until built |
@@ -363,7 +363,7 @@ Seal kit, locker, tank read-out, Outside air line, per-player Landing state mach
 | Dust-off station, airlock interlock | Step 7 is out and back (L7) |
 | Weather mast | Dropped from step 7 |
 | Machine recipes | Ovens come from the starting grant; the kit has its own two-item recipe |
-| Storms and F1 | The briefing storm sentence waits (section 4) |
+| Storms and F1 | ~~The briefing storm sentence waits~~ Sentence removed, nothing waits (§12 W2) |
 | Hana's relay message (beat 6) | Not in `messages/phase-1.md`; the briefing promises "the relay link comes back", so beat 6 needs at least a one-line BELL log ("Relay link restored.") at the latch. I list this as a small gap |
 
 ---
@@ -411,3 +411,20 @@ Seal kit, locker, tank read-out, Outside air line, per-player Landing state mach
 **Assumptions.** (1) A 12-year-old reads a 10-word step in under 10 seconds (*invented*). (2) Written-book page jumps work on NeoForge 21.1 (**unverified**). (3) The Monitor can fit one more static line or the pressure row's detail (**unverified**). (4) Hab B is never a required volume (true in the template today). (5) The band setting will exist (not built).
 
 **Risks.** The panel and the intro screen are the first new client UI of Stage 3 (cost not in my estimate). The Dome stable burst is now one pointer but still five things at once for Lens A (Outgasser unlock, journal, relay, sky, goal change): stagger by order of the pointer text if playtest shows overload. Step 7's degraded form may feel pointless to Lens B (skip is there). The vanilla book looks plain beside the Monitor palette (Artist: a resource-pack texture for the book item and a title).
+
+
+---
+
+## 12. Instructional Designer wording pass (2026-11-28, **proposed**)
+
+Full evidence and reasoning: `docs/team/reports/2026-11-28-instructional-designer-landing-text.md`. Readability numbers come from a rough Flesch-Kincaid script (vowel-group syllable guess), **not the CR-T6 check**; it over-reads short texts and under-reads rare words, so vocabulary was also checked by hand. Key ids do not change.
+
+| # | Key | Before | After (proposed) | Why |
+|---|---|---|---|---|
+| W1 | `landing.step.3` | Open the Planetary Monitor. Read the outside air. | Open the Planetary Monitor. Find the Outside air line. | The Monitor has an `Air` row (the tank) and an `Outside air` line (the planet). "The outside air" is ambiguous (CR-H1 spirit); name the line. FK 8.1 is the four-syllable in-game name "Planetary", exempt as a proper name |
+| W2 | `briefing.shift1` | ...Watch air, water, and power. Dust storms cut solar power, so store some. Keep... | ...Watch air, water, and power. Mars weather can change fast, so keep some power in reserve. Keep... | The old sentence is F1's answer. Retained C1 cue (reserve), no cause named |
+| W3 | `journal.gamerules` | Landing grace: nothing runs out while you do the checklist. | Landing grace: for your first {grace_minutes} minutes, nothing runs out. | L2 makes the grace a clock (sol 1.2), not "until the checklist is done"; the old line was untrue for a slow player. `{grace_minutes}` = `landingEndSol` x 20 from `life_support.json`, never typed |
+| W4 | `journal.dome_stable` Earth line and HS read more | ...with more than 100 times the force of the air outside... Your hull holds back that difference. | ...more than 100 times as hard as the air outside... Inside the dome, air pushes out on the hull harder than the thin air outside pushes in. The hull holds that difference. | "Force" is not pressure (grade 6 to 8 mix them up); "holds back" can be read as thin air pushing in. SME confirms the physical sentences |
+| W5 | `journal.dome_stable.airmix` | about 95 % carbon dioxide | about 95 percent carbon dioxide | CR-T7(b) in spirit and matches `journal.dust.floor` ("60 percent") |
+| W6 | `journal.a1.pressure` | (no direction of push) | adds: Air always pushes from higher pressure toward lower pressure. | Refutes "vacuum sucks" at the first pressure entry; about 10 words |
+| W7 | goal tags | about C1; sol C1; briefing C1, A1; sky A1 | about none; sol none; briefing C1; sky B1 (A1 weak) | A tag claims a measure; these entries teach no goal (alignment table honesty) |
