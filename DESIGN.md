@@ -670,6 +670,8 @@ Lists the Lead Artist asked for. Names follow the domain (real crop and instrume
 
 ## Story Approach (Chapter 4)
 
+The [Cairn Dome resource progression proposal](docs/design/cairn-resource-progression.md) maps the starter cargo, near-dome salvage, first Outgasser assembly, and Basu’s field sites to the existing story beats.
+
 Applies *Design and Development of Training Games*, Chapter 4. The story bible (`docs/design/story-bible.md`) carries the detail; this section records the approach.
 
 ### Objectives first

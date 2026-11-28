@@ -137,6 +137,8 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 62 | "accept and cont with rec" | Accept event CSV and continue gameplay logging | Codex claims the Landing and gate adapters, CSV detail columns and tests inside the learning lane. | ✅ Landing and gate events reach the log and event CSV. 295 unit tests and 135 boot checks passed. |
 
+| 63 | "commit those things and use ur subagents" | Record the NASA-informed Cairn supply and hand-made exploration route | Link the design proposal and review the survival, story, tooling, and cumulative resource chain. | ✅ [Design proposal](docs/design/cairn-resource-progression.md) documented. Map and mechanics pending. |
+
 ## Open questions for the owner
 
 | Question | Recommendation | Status |
