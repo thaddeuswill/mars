@@ -1,0 +1,79 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/regolith_oven_side",
+  "front": "mars:block/regolith_oven_front_running",
+  "side": "mars:block/regolith_oven_side",
+  "top": "mars:block/regolith_oven_top"
+ },
+ "elements": [
+  {
+   "from": [
+    2,
+    0,
+    2
+   ],
+   "to": [
+    14,
+    14,
+    14
+   ],
+   "faces": {
+    "north": {
+     "texture": "#front",
+     "uv": [
+      2,
+      2,
+      14,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      2,
+      2,
+      14,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    },
+    "down": {
+     "texture": "#top",
+     "uv": [
+      2,
+      2,
+      14,
+      14
+     ]
+    }
+   }
+  }
+ ]
+}

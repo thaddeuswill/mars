@@ -1,0 +1,139 @@
+{
+ "parent": "block/block",
+ "textures": {
+  "particle": "mars:block/battery_side",
+  "front": "mars:block/battery_front_charge2",
+  "side": "mars:block/battery_side",
+  "top": "mars:block/battery_top",
+  "back": "mars:block/battery_back"
+ },
+ "elements": [
+  {
+   "from": [
+    3,
+    0,
+    7
+   ],
+   "to": [
+    14,
+    16,
+    10
+   ],
+   "faces": {
+    "north": {
+     "texture": "#front",
+     "uv": [
+      2,
+      0,
+      13,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#back",
+     "uv": [
+      2,
+      0,
+      13,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      6,
+      0,
+      9,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      6,
+      0,
+      9,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      2,
+      6,
+      13,
+      9
+     ]
+    },
+    "down": {
+     "texture": "#top",
+     "uv": [
+      2,
+      6,
+      13,
+      9
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    4,
+    0,
+    10
+   ],
+   "to": [
+    13,
+    2,
+    13
+   ],
+   "faces": {
+    "north": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      3,
+      2
+     ]
+    },
+    "south": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      3,
+      2
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      3,
+      2
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      3,
+      2
+     ]
+    },
+    "up": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      3,
+      2
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -178,4 +178,94 @@ class TextureSpecTest {
       assertTrue(model.contains("mars:item/" + n), n + " model points at its own icon");
     }
   }
+
+  /** Animated machine textures (running states): strip of 16 x 16 frames plus a valid .mcmeta. */
+  private static final List<String> ANIMATED =
+      List.of(
+          "regolith_oven_front_running",
+          "regolith_outgasser_puff",
+          "o2_generator_face_running",
+          "water_reclaimer_front_running",
+          "atmospheric_processor_canister_running",
+          "super_greenhouse_emitter_flare_running");
+
+  @Test
+  void animatedTexturesHaveValidMcmetaAndFrameHeights() throws IOException {
+    for (String n : ANIMATED) {
+      BufferedImage img = load(n);
+      assertEquals(16, img.getWidth(), n + " frame width");
+      assertEquals(0, img.getHeight() % 16, n + " height is a whole number of frames");
+      int frames = img.getHeight() / 16;
+      assertTrue(frames >= 2 && frames <= 8, n + " cheap: 2 to 8 frames, got " + frames);
+      Path meta = TestData.pack().resolve("assets/mars/textures/block/" + n + ".png.mcmeta");
+      assertTrue(Files.exists(meta), n + ": missing .mcmeta");
+      com.google.gson.JsonObject anim =
+          com.google.gson.JsonParser.parseString(Files.readString(meta))
+              .getAsJsonObject()
+              .getAsJsonObject("animation");
+      int ft = anim.get("frametime").getAsInt();
+      assertTrue(ft >= 8 && ft <= 40, n + " frametime 8..40 ticks (no flicker): " + ft);
+      assertTrue(
+          !anim.has("interpolate") || !anim.get("interpolate").getAsBoolean(),
+          n + " no interpolation (pixel steps)");
+      if (anim.has("frames")) {
+        for (var f : anim.getAsJsonArray("frames")) {
+          int idx = f.isJsonObject() ? f.getAsJsonObject().get("index").getAsInt() : f.getAsInt();
+          assertTrue(idx >= 0 && idx < frames, n + " frame index " + idx);
+        }
+      }
+      // it must actually move: frame 0 differs from at least one other frame
+      boolean moves = false;
+      for (int k = 1; k < frames && !moves; k++) {
+        for (int x = 0; x < 16 && !moves; x++) {
+          for (int y = 0; y < 16 && !moves; y++) {
+            moves = img.getRGB(x, 16 * k + y) != img.getRGB(x, y);
+          }
+        }
+      }
+      assertTrue(moves, n + " frames are all identical");
+    }
+  }
+
+  @Test
+  void animatedFramesKeepTheMadeUpBandAndPlate() throws IOException {
+    for (String n : List.of("o2_generator_face_running", "water_reclaimer_front_running")) {
+      BufferedImage strip = load(n);
+      BufferedImage still =
+          load(
+              n.equals("o2_generator_face_running")
+                  ? "o2_generator_face"
+                  : "water_reclaimer_front");
+      for (int k = 0; k < strip.getHeight() / 16; k++) {
+        for (int x = 0; x < 16; x++) {
+          for (int y = 9; y < 16; y++) { // plate rows and band rows
+            if (x < 9 && n.startsWith("water")) continue; // water window region
+            assertEquals(
+                still.getRGB(x, y),
+                strip.getRGB(x, 16 * k + y),
+                n + " frame " + k + " " + x + "," + y);
+          }
+        }
+      }
+    }
+  }
+
+  @Test
+  void preparedStateModelsPointAtExistingTextures() throws IOException {
+    Path models = TestData.pack().resolve("assets/mars/models/block");
+    try (var files = Files.list(models)) {
+      for (Path f : (Iterable<Path>) files::iterator) {
+        String fn = f.getFileName().toString();
+        if (!fn.matches(".*_(off|idle|running|charge\\d)\\.json")) continue;
+        com.google.gson.JsonObject m =
+            com.google.gson.JsonParser.parseString(Files.readString(f)).getAsJsonObject();
+        for (var e : m.getAsJsonObject("textures").entrySet()) {
+          String ref = e.getValue().getAsString().replace("mars:block/", "");
+          assertTrue(
+              Files.exists(TestData.pack().resolve("assets/mars/textures/block/" + ref + ".png")),
+              fn + " -> missing " + ref);
+        }
+      }
+    }
+  }
 }

@@ -81,3 +81,7 @@ Seen in a real client: `tools/screenshots/out/20261128-011135/ores_01_wall.png` 
 | `atmospheric_processor_port` | REAL (retoned) | Ports lightened (alloy `#7E8790` body, `#A8B0B7` top row) after a real-client close-up showed dark ports sinking into the shaded gold east side | `#7E8790 #A8B0B7 #59616A #3B4148` |
 
 Generators: `tools/art-preview/gen_phase1_batch1.py` (oxygen maker; band colours exempt from its 6-colour budget), `gen_seed_kit_icons.py` (new; also rewrites the four item models), `gen_invented_machines.py` (port). Seen in a real client: `tools/screenshots/out/20261128-oxygen-band/` (script `tools/screenshots/oxygen_band_closeups.shots`).
+
+## Update 2026-11-28 (Lead Artist): running-state art PREPARED (new files only)
+
+New textures, animated strips and model variants for off / idle / running, from `tools/art-preview/gen_running_states.py`; **no existing texture changed**, nothing referenced by a blockstate until the Technical Lead adds the property. Table and instructions: `docs/art/running-state-table.md`. Status: PLACEHOLDER-QUALITY first pass, frames viewed flat only, not seen in a real client. Animated: `regolith_oven_front_running`, `regolith_outgasser_puff`, `o2_generator_face_running`, `water_reclaimer_front_running`, `atmospheric_processor_canister_running`, `super_greenhouse_emitter_flare_running` (each with `.png.mcmeta`). Static: `*_front_off`, `*_front_idle`, `*_front_running`, `battery_front_charge0..2`.
