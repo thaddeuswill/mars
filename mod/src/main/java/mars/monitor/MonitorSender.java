@@ -16,6 +16,29 @@ public final class MonitorSender {
     return PlanetManager.isPlanet(level) ? MonitorView.of(PlanetManager.data(level).sim()) : null;
   }
 
+  /**
+   * The view as this player may see it. The panel-dust line is held until the player's Landing is
+   * over (f1-storm-spec.md 3: the starting panel is dusty from the first tick, and the line would
+   * otherwise appear in the middle of Landing step 3). The first time the line is shown the player
+   * gets one "New on the Monitor" line and a {@link LineRevealedEvent}.
+   */
+  public static MonitorView forPlayer(ServerPlayer player, MonitorView view) {
+    if (!view.hasCause(MonitorView.DUST_LINE)) {
+      return view;
+    }
+    if (!mars.story.landing.LandingService.landingOver(player)) {
+      return view.withoutCause(MonitorView.DUST_LINE);
+    }
+    var rec = mars.story.landing.LandingService.rec(player);
+    if (rec.revealedLines.add(MonitorView.DUST_LINE)) {
+      player.sendSystemMessage(
+          mars.story.landing.LandingService.bell(Component.translatable("monitor.dust.revealed")));
+      net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+          new LineRevealedEvent(player, MonitorView.DUST_LINE));
+    }
+    return view;
+  }
+
   /** Open the Monitor for a player. In a level that is not a planet it says so instead. */
   public static boolean open(ServerPlayer player) {
     MonitorView view = viewFor(player.serverLevel());
@@ -26,6 +49,7 @@ public final class MonitorSender {
     if (mars.story.landing.LandingService.wantsOutsideAir(player)) {
       view = view.withPinnedOutsideAir();
     }
+    view = forPlayer(player, view);
     PacketDistributor.sendToPlayer(player, new MonitorPayload(view));
     mars.story.landing.LandingService.onMonitorOpened(player);
     return true;

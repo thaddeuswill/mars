@@ -105,7 +105,9 @@ class MonitorViewTest {
     assertEquals("monitor.power.summary", power.detailKey());
     assertEquals(2, power.detailArgs().size());
     assertEquals(1, power.causes().size());
-    assertEquals("monitor.cause.dusty", power.causes().get(0).reasonKey());
+    assertEquals(MonitorView.DUST_LINE, power.causes().get(0).sourceKey());
+    assertEquals("\u221240\u00a0%", power.causes().get(0).rate());
+    assertEquals(-1, power.causes().get(0).direction());
     assertEquals("0.0 / 10.0", power.detailRight());
     assertEquals(0.0, power.bar(), 1e-12);
   }

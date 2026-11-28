@@ -317,8 +317,12 @@ public final class PlanetSim {
     refreshLife();
   }
 
+  /** Solar panels, for planets without hazard data (bare tests): the same machine type. */
+  private static final Set<String> DEFAULT_PANEL_TYPES = Set.of("mars:solar_panel");
+
   private boolean isPanelType(String type) {
-    return hazards != null && hazards.storm().affectedMachineTypes().contains(type);
+    return (hazards == null ? DEFAULT_PANEL_TYPES : hazards.storm().affectedMachineTypes())
+        .contains(type);
   }
 
   /** Share of each tier's demand met: the last step's, or a preview of the next one. */

@@ -247,6 +247,11 @@ public final class LandingService {
         && r.landing.status(Step.MONITOR) == Status.PENDING;
   }
 
+  /** True once this player's Landing is over, finished or skipped. */
+  public static boolean landingOver(ServerPlayer p) {
+    return onPlanet(p) && rec(p).landing.phase().over();
+  }
+
   public static void onMonitorOpened(ServerPlayer p) {
     if (onPlanet(p)) {
       var r = rec(p);

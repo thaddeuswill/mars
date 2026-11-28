@@ -150,6 +150,8 @@ public final class DevTools {
             event.getScreen());
   }
 
+  private static boolean holdingUse;
+
   private static void onTick(ClientTickEvent.Post event) {
     Minecraft mc = Minecraft.getInstance();
     if (mc.player == null || mc.level == null || SCRIPT.isEmpty()) {
@@ -159,6 +161,10 @@ public final class DevTools {
       waitTicks--;
       return;
     }
+    if (holdingUse) {
+      holdingUse = false;
+      mc.options.keyUse.setDown(false);
+    }
     String line = SCRIPT.poll();
     log("step: " + line);
     String[] p = line.split(" ", 2);
@@ -166,6 +172,12 @@ public final class DevTools {
       case "cmd" ->
           mc.player.connection.sendCommand(p[1].startsWith("/") ? p[1].substring(1) : p[1]);
       case "wait" -> waitTicks = Integer.parseInt(p[1]);
+      case "hold" -> {
+        // Hold the use key for N ticks (a brush needs a held right-click): "hold 50".
+        mc.options.keyUse.setDown(true);
+        holdingUse = true;
+        waitTicks = Integer.parseInt(p[1]);
+      }
       case "view" -> {
         String[] v = p[1].split(" ");
         view(

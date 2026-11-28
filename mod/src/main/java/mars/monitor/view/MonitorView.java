@@ -236,6 +236,27 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           goal);
     }
 
+    /** The same row with another list of cause lines. */
+    public Row withCauses(List<CauseLine> newCauses) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          newCauses,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          detailArgs,
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
+          goal);
+    }
+
     /** The same row with a wrapped note under its lines (two lines on the panel). */
     public Row withNote(String noteKey) {
       return new Row(
@@ -292,6 +313,31 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public static final double PRESSURE_STEADY = 0.005;
 
   public static final double EPSILON = 1e-9;
+
+  /** The Power row's panel-dust cause line (f1-storm-spec.md 3.1). */
+  public static final String DUST_LINE = "monitor.power.cause.dust";
+
+  /** True when some row has a cause line with this source key. */
+  public boolean hasCause(String sourceKey) {
+    return rows.stream()
+        .anyMatch(r -> r.causes().stream().anyMatch(c -> c.sourceKey().equals(sourceKey)));
+  }
+
+  /**
+   * The view without one cause line (the server uses it to hold the dust line for a player whose
+   * Landing is not over yet, f1-storm-spec.md 3).
+   */
+  public MonitorView withoutCause(String sourceKey) {
+    List<Row> out = new ArrayList<>();
+    for (Row r : rows) {
+      out.add(
+          r.causes().stream().anyMatch(c -> c.sourceKey().equals(sourceKey))
+              ? r.withCauses(
+                  r.causes().stream().filter(c -> !c.sourceKey().equals(sourceKey)).toList())
+              : r);
+    }
+    return new MonitorView(sols, List.copyOf(out), history);
+  }
 
   /** The Outside air line that gives way first on a full panel. */
   public static final String OUTSIDE_AIR = "monitor.pressure.outside_air";
@@ -641,10 +687,11 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           case UNPOWERED -> "monitor.power.unpowered";
         };
     List<CauseLine> lines = new ArrayList<>();
-    int panels = sim.machineCount("mars:solar_panel");
-    int dusty = sim.reducedCount("mars:solar_panel");
-    if (dusty > 0) {
-      lines.add(new CauseLine("block.mars.solar_panel", dusty, "", "monitor.cause.dusty"));
+    // "Panel dust -n %": the average share of clean solar output the dust takes (one line, a loss:
+    // a shape and a sign, never colour alone). It replaces the old "dusty, makes less" count line.
+    int dustLoss = sim.panelDustLossPercent();
+    if (dustLoss > 0) {
+      lines.add(new CauseLine(DUST_LINE, 0, Fmt.MINUS + dustLoss + "\u00a0%", null, -1));
     }
     boolean problem =
         grid.state(sim.stepSols()) != PowerGrid.State.IDLE

@@ -32,6 +32,9 @@ public final class LandingData extends SavedData {
 
     /** The journal book has been handed to this player once. */
     public boolean granted;
+
+    /** Monitor lines this player has been told about (the first-time "New on the Monitor"). */
+    public final java.util.Set<String> revealedLines = new java.util.LinkedHashSet<>();
   }
 
   private final Map<UUID, Rec> players = new LinkedHashMap<>();
@@ -52,6 +55,11 @@ public final class LandingData extends SavedData {
   public void forgetForTest(UUID id) {
     players.remove(id);
     setDirty();
+  }
+
+  /** True when at least one player has finished or skipped the Landing (the storm guard). */
+  public boolean anyOver() {
+    return players.values().stream().anyMatch(r -> r.landing.phase().over());
   }
 
   public int count() {
@@ -108,6 +116,9 @@ public final class LandingData extends SavedData {
     }
     fresh.journal.restore(un, seen);
     fresh.granted = t.getBoolean("granted");
+    for (Tag s : t.getList("revealed", Tag.TAG_STRING)) {
+      fresh.revealedLines.add(s.getAsString());
+    }
     return fresh;
   }
 
@@ -143,6 +154,9 @@ public final class LandingData extends SavedData {
           r.journal.seen().forEach(x -> seen.add(StringTag.valueOf(x)));
           t.put("seen", seen);
           t.putBoolean("granted", r.granted);
+          ListTag rev = new ListTag();
+          r.revealedLines.forEach(x -> rev.add(StringTag.valueOf(x)));
+          t.put("revealed", rev);
           all.put(id.toString(), t);
         });
     tag.put("players", all);

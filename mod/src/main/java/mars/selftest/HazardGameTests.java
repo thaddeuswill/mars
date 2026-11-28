@@ -228,4 +228,46 @@ public final class HazardGameTests {
     h.destroyBlock(rel);
     finish(h, ok, "brushCleansAPanel");
   }
+
+  /**
+   * The Monitor's "Panel dust" line is held for a player whose Landing is not over, shown (with one
+   * "New on the Monitor" line and one reveal event) once it is, and not announced twice.
+   */
+  @GameTest(template = "empty", batch = "mars_hazard_c")
+  public static void dustLineWaitsForTheLanding(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    BlockPos rel = new BlockPos(6, 1, 6);
+    h.setBlock(rel, MarsMachines.SOLAR_PANEL.get());
+    BlockPos abs = h.absolutePos(rel);
+    level.setBlock(abs, level.getBlockState(abs).setValue(SolarPanelBlock.DUST_STAGE, 2), 3);
+    var player =
+        net.neoforged.neoforge.common.util.FakePlayerFactory.get(
+            level, new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "keeper"));
+    mars.story.landing.LandingData.get(level).forgetForTest(player.getUUID());
+    int[] events = {0};
+    java.util.function.Consumer<mars.monitor.LineRevealedEvent> listener = e -> events[0]++;
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(listener);
+    var raw = mars.monitor.MonitorSender.viewFor(level);
+    boolean rawHas = raw.hasCause(mars.monitor.view.MonitorView.DUST_LINE);
+    boolean heldDuring =
+        !mars.monitor.MonitorSender.forPlayer(player, raw)
+            .hasCause(mars.monitor.view.MonitorView.DUST_LINE);
+    mars.story.landing.LandingService.skipAll(player);
+    boolean shown =
+        mars.monitor.MonitorSender.forPlayer(player, raw)
+            .hasCause(mars.monitor.view.MonitorView.DUST_LINE);
+    mars.monitor.MonitorSender.forPlayer(player, raw);
+    boolean ok =
+        SelfTest.check(
+            "monitor.dust_line_waits_for_landing",
+            "line is in the server view; held while the Landing is not over; shown after skip; one"
+                + " reveal event only",
+            "raw=" + rawHas + " held=" + heldDuring + " shown=" + shown + " events=" + events[0],
+            rawHas && heldDuring && shown && events[0] == 1);
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(listener);
+    mars.story.landing.LandingData.get(level).forgetForTest(player.getUUID());
+    h.destroyBlock(rel);
+    finish(h, ok, "dustLineWaitsForTheLanding");
+  }
 }

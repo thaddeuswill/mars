@@ -1,0 +1,46 @@
+# Stage 3 slice 5 steps A to C: dust over time, the Monitor "Panel dust" line, the brush (mars:planet_1), 1280x720.
+# The starter array centre is at (24, 64, -3); the dome corner is (-3, 63, -4).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 160
+closescreen
+cmd /mars landing skip
+wait 20
+cmd /mars dust get
+cmd /mars dust set 1
+wait 20
+view 30.5 66.2 -3.5 90 22
+wait 30
+shot dust_1_stage1_starting_panel
+cmd /mars dust set 2
+wait 30
+shot dust_2_stage2
+cmd /mars dust set 3
+wait 30
+shot dust_3_stage3
+cmd /mars dust set 4
+wait 30
+shot dust_4_stage4
+cmd /mars monitor
+wait 40
+shot dust_5_monitor_panel_dust_line_stage4
+closescreen
+cmd /item replace entity @s hotbar.0 with mars:panel_brush
+slot 0
+wait 10
+view 28.5 66.0 -3.5 90 38
+wait 20
+shot dust_6_before_brush
+use 24 64 -3
+hold 55
+wait 20
+shot dust_7_after_brush_stage0
+cmd /mars dust get
+cmd /mars monitor
+wait 40
+shot dust_8_monitor_after_brush
+quit
