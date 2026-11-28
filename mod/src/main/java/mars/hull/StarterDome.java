@@ -103,11 +103,36 @@ public final class StarterDome {
       }
     }
     placeRoofFixtures(level, origin);
+    fillLocker(level, origin, groupSize);
     placeSolarPad(level, origin);
     // The storm drained the tanks: start fills (balance sheet 2d.2), once, after every tank exists.
     var planet = mars.planets.PlanetManager.data(level);
     planet.sim().startLifeSupport();
     planet.setDirty();
+  }
+
+  /** Seal Kits in the locker: group size + 1 (one Landing kit each, one spare), at most 6. */
+  public static int lockerKits(int groupSize) {
+    return Math.max(1, Math.min(6, groupSize + 1));
+  }
+
+  /** The Ops locker: a named crate holding the Landing's seal kits (landing-spec section 2). */
+  private static void fillLocker(ServerLevel level, BlockPos origin, int groupSize) {
+    BlockPos pos = origin.offset(DomeTemplate.LOCKER_X, 1, DomeTemplate.LOCKER_Z);
+    if (level.getBlockEntity(pos)
+        instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity be) {
+      be.applyComponents(
+          net.minecraft.core.component.DataComponentMap.EMPTY,
+          net.minecraft.core.component.DataComponentPatch.builder()
+              .set(
+                  net.minecraft.core.component.DataComponents.CUSTOM_NAME,
+                  net.minecraft.network.chat.Component.translatable("locker.name"))
+              .build());
+      be.setItem(
+          0,
+          new net.minecraft.world.item.ItemStack(HullBlocks.SEAL_KIT.get(), lockerKits(groupSize)));
+      be.setChanged();
+    }
   }
 
   /** One dish and one vent on the shelter roof (y 5, above the sealed roof; no sealing role). */
@@ -190,7 +215,7 @@ public final class StarterDome {
               .defaultBlockState()
               .setValue(net.minecraft.world.level.block.LecternBlock.FACING, f);
       case BENCH -> Blocks.CRAFTING_TABLE.defaultBlockState();
-      case CRATE ->
+      case CRATE, LOCKER ->
           mars.habitat.HabitatBlocks.STOWAGE_CRATE
               .get()
               .defaultBlockState()

@@ -12,6 +12,9 @@ import mars.monitor.view.MonitorView;
 final class MonitorLayout {
   private MonitorLayout() {}
 
+  /** The pressure row's static second line (landing-spec T4); the first line to give way. */
+  static final String OUTSIDE_AIR = MonitorView.OUTSIDE_AIR;
+
   /**
    * Cause lines shown on the panel: reasons (a stalled machine) and planet-side lines (the polar
    * frost); a machine's rate lives in the trend.
@@ -28,6 +31,15 @@ final class MonitorLayout {
    * Problem lines (a stalled machine, a dusty panel, a leaking dome) never drop.
    */
   static MonitorView fit(MonitorView view) {
+    if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
+      return view;
+    }
+    // Static information goes first: the Outside air line (it is also in the journal).
+    List<MonitorView.Row> lean = new java.util.ArrayList<>();
+    for (MonitorView.Row r : view.rows()) {
+      lean.add(OUTSIDE_AIR.equals(r.detailKey()) ? r.withDetail(null) : r);
+    }
+    view = new MonitorView(view.sols(), List.copyOf(lean), view.history());
     if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
       return view;
     }

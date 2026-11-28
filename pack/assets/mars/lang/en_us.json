@@ -92,5 +92,12 @@
   "grant.starting": "You have %s × %s in your inventory. Place them, then check Power on the Monitor.",
   "gate.reached": "Goal reached: %s",
   "gate.unlocked": "You can now build: %s",
-  "gate.locked.placement": "Not yet. Reach \"%s\" first."
+  "gate.locked.placement": "Not yet. Reach \"%s\" first.",
+  "item.mars.seal_kit": "Seal Kit",
+  "locker.name": "Locker",
+  "seal_kit.patched": "Patched.",
+  "seal_kit.no_target": "A seal kit patches a cracked hull plate.",
+  "tank.level": "Tank: %s of %s",
+  "monitor.pressure.outside_air": "Outside air: about 95 percent CO2, almost no O2",
+  "monitor.pressure.outside_air.pinned": "Outside air: about 95 percent CO2, almost no O2"
 }

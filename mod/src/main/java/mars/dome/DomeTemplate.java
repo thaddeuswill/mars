@@ -40,6 +40,11 @@ public final class DomeTemplate {
   public static final int VENT_X = 3;
   public static final int VENT_Z = 6;
 
+  /** The Ops locker ('L' in the plan), Landing step 4. */
+  public static final int LOCKER_X = 8;
+
+  public static final int LOCKER_Z = 7;
+
   /** What a cell holds. */
   public enum Kind {
     AIR,
@@ -68,7 +73,9 @@ public final class DomeTemplate {
     BED_HEAD,
     LECTERN,
     BENCH,
-    CRATE
+    CRATE,
+    /** The Ops locker: a crate that StarterDome fills with Seal Kits (landing-spec section 2). */
+    LOCKER
   }
 
   /** Which way a block faces (the direction its front looks). */
@@ -245,7 +252,8 @@ public final class DomeTemplate {
           }
           case 'J' -> out.add(new Cell(x, 1, z, Kind.LECTERN, Face.SOUTH));
           case 'C' -> out.add(new Cell(x, 1, z, Kind.BENCH, Face.SOUTH));
-          case 'L', 'c' -> out.add(new Cell(x, 1, z, Kind.CRATE, Face.NORTH));
+          case 'L' -> out.add(new Cell(x, 1, z, Kind.LOCKER, Face.NORTH));
+          case 'c' -> out.add(new Cell(x, 1, z, Kind.CRATE, Face.NORTH));
           default -> {
             // '.', bays, racks, refill points, greenhouse beds and the dust-off station are
             // floor markers in this slice: nothing is built there yet.

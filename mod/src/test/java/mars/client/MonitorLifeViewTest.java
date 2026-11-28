@@ -84,6 +84,29 @@ class MonitorLifeViewTest {
   }
 
   @Test
+  void theOutsideAirLineGivesWayFirstOnAFullPanelUnlessItIsPinnedForTheLanding() throws Exception {
+    PlanetSim s = dome(1, 1, false);
+    s.model().advanceSols(0.5);
+    MonitorView v = MonitorView.of(s);
+    assertEquals(MonitorView.OUTSIDE_AIR, row(v, "monitor.row.pressure").detailKey());
+    // Normal Phase 1 panel: the plot is worth more than a static line, so the line gives way.
+    assertEquals(null, row(MonitorLayout.fit(v), "monitor.row.pressure").detailKey());
+    assertTrue(MonitorLayout.plotHeight(MonitorLayout.fit(v), 270) > 0);
+    // Pinned (the player's Landing step 3 is open): the line stays, the plot gives way instead.
+    var pinned = MonitorLayout.fit(v.withPinnedOutsideAir());
+    assertEquals(MonitorView.OUTSIDE_AIR_PINNED, row(pinned, "monitor.row.pressure").detailKey());
+    assertTrue(
+        MonitorLayout.panelHeight(pinned, 270)
+            <= MonitorStyle.TARGET_H + MonitorStyle.PLOT_OVERFLOW + MonitorStyle.GOAL_BAR_LINE_H,
+        "pinned panel height " + MonitorLayout.panelHeight(pinned, 270));
+    // The pinned line is never dropped even in the busiest state.
+    PlanetSim busy = dome(0, 1, true);
+    busy.model().advanceSols(3.0);
+    var worst = MonitorLayout.fit(MonitorView.of(busy).withPinnedOutsideAir());
+    assertEquals(MonitorView.OUTSIDE_AIR_PINNED, row(worst, "monitor.row.pressure").detailKey());
+  }
+
+  @Test
   void fallingAirNamesTheSolsLeftAndEmptyTanksAddTheGameRuleLine() throws Exception {
     PlanetSim s = dome(0, 1, false); // no makers: 14 units at 8 a sol = 1.75 sols
     s.model().advanceSols(1.2 + 0.5);

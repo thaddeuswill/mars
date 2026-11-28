@@ -66,8 +66,8 @@ public final class MarsMachines {
           "water_reclaimer",
           RECLAIMER,
           (p, s) -> new RegisteredMachineBlock(p, s, "mars:water_reclaimer"));
-  public static final DeferredBlock<RegisteredMachineBlock> O2_TANK =
-      machine("o2_tank", TANK, (p, s) -> new RegisteredMachineBlock(p, s, "mars:o2_tank"));
+  public static final DeferredBlock<O2TankBlock> O2_TANK =
+      machine("o2_tank", TANK, O2TankBlock::new);
   public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =
       machine("planetary_monitor", MONITOR, PlanetaryMonitorBlock::new);
 
@@ -111,6 +111,7 @@ public final class MarsMachines {
                         for (DeferredBlock<? extends Block> b : mars.hull.HullBlocks.ALL) {
                           output.accept(b.get());
                         }
+                        output.accept(mars.hull.HullBlocks.SEAL_KIT.get());
                         output.accept(mars.habitat.HabitatBlocks.HABITAT_BUNK_ITEM.get());
                         output.accept(mars.habitat.HabitatBlocks.STOWAGE_CRATE_ITEM.get());
                       })

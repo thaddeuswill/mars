@@ -111,6 +111,10 @@ public final class HullBlocks {
   public static final DeferredBlock<HullPlateBlock> HULL_LIGHT =
       plate("hull_light", BlockBehaviour.Properties.of().lightLevel(s -> LIGHT_LEVEL));
 
+  /** Seal Kit (landing-spec section 2): patches a cracked hull plate in place. */
+  public static final net.neoforged.neoforge.registries.DeferredItem<SealKitItem> SEAL_KIT =
+      ITEMS.register("seal_kit", () -> new SealKitItem(new Item.Properties().stacksTo(16)));
+
   private static DeferredBlock<HullPlateBlock> plate(String id) {
     return plate(id, BlockBehaviour.Properties.of());
   }

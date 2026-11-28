@@ -15,6 +15,9 @@ public final class HullTags {
    */
   public static final TagKey<Block> NOT_AIRTIGHT = tag("not_airtight");
 
+  /** Blocks a Seal Kit can patch (today only the cracked hull plate). */
+  public static final TagKey<Block> PATCHABLE = tag("patchable");
+
   private HullTags() {}
 
   private static TagKey<Block> tag(String path) {

@@ -215,6 +215,27 @@ public record MonitorView(double sols, List<Row> rows, History history) {
           goal);
     }
 
+    /** The same row with one detail line under its main line (no arguments). */
+    public Row withDetail(String detailKey) {
+      return new Row(
+          labelKey,
+          value,
+          valueKey,
+          trend,
+          trendRate,
+          causes,
+          tone,
+          emphasis,
+          side,
+          detailKey,
+          List.of(),
+          detailRightKey,
+          detailRight,
+          bar,
+          noteKey,
+          goal);
+    }
+
     /** The same row with a wrapped note under its lines (two lines on the panel). */
     public Row withNote(String noteKey) {
       return new Row(
@@ -272,6 +293,24 @@ public record MonitorView(double sols, List<Row> rows, History history) {
 
   public static final double EPSILON = 1e-9;
 
+  /** The Outside air line that gives way first on a full panel. */
+  public static final String OUTSIDE_AIR = "monitor.pressure.outside_air";
+
+  /** The same text, kept when the panel is full (the plot gives way instead): Landing step 3. */
+  public static final String OUTSIDE_AIR_PINNED = "monitor.pressure.outside_air.pinned";
+
+  /**
+   * The view with the Outside air line pinned: shown even when the plot has to go. The server uses
+   * it for a player whose Landing step 3 ("Find the Outside air line") is still open.
+   */
+  public MonitorView withPinnedOutsideAir() {
+    List<Row> out = new ArrayList<>();
+    for (Row r : rows) {
+      out.add(OUTSIDE_AIR.equals(r.detailKey()) ? r.withDetail(OUTSIDE_AIR_PINNED) : r);
+    }
+    return new MonitorView(sols, List.copyOf(out), history);
+  }
+
   public static MonitorView of(PlanetSim sim) {
     PlanetaryIndexModel model = sim.model();
     var snap = model.snapshot();
@@ -322,7 +361,13 @@ public record MonitorView(double sols, List<Row> rows, History history) {
                 causes)
             .with(Tone.NORMAL, true);
     // "Levelling off": the sink balances the sources and the pressure goal is still ahead.
-    rows.add(levelling ? pressureRow.withNote("monitor.estimate.levelling_off") : pressureRow);
+    pressureRow = levelling ? pressureRow.withNote("monitor.estimate.levelling_off") : pressureRow;
+    // Outside air (landing-spec T4): what the planet's air is made of, static in Phase 1. It is
+    // the pressure row's own second line (9 GUI px), so no row is added to a busy panel.
+    if (!sim.gates().isLatched("mars:phase_2_begins")) {
+      pressureRow = pressureRow.withDetail(OUTSIDE_AIR);
+    }
+    rows.add(pressureRow);
 
     double t = snap.get(Ids.TEMPERATURE);
     rows.add(
