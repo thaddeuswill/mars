@@ -780,7 +780,58 @@ public final class PlanetGameTests {
             "with a clean panel the Monitor lists the reclaimer as running",
             "reason=" + reason2,
             "monitor.cause.running".equals(reason2));
+    ok &= phaseTwoMachinesAreGatedLoads(h);
     finish(h, ok, "waterReclaimerPlacesAndDrawsPower");
+  }
+
+  /**
+   * (Run from the reclaimer test, which owns the shared-planet slot: tests that reset the planet
+   * must not overlap.) The atmospheric processor and the super-greenhouse emitter: locked for a
+   * survival player until "Phase 2 begins" latches, then placeable; once placed each registers,
+   * draws 3 units from data and adds 0 kPa/sol (no balance-sheet rate exists).
+   */
+  private static boolean phaseTwoMachinesAreGatedLoads(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    var sim = data.sim();
+    FakePlayer player =
+        FakePlayerFactory.get(
+            level,
+            new GameProfile(UUID.fromString("6d617273-0000-4000-8000-00000000000a"), "[Phase2]"));
+    player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+    boolean lockedBefore =
+        !PlanetManager.placementAllowed(level, player, "mars:atmospheric_processor")
+            && !PlanetManager.placementAllowed(level, player, "mars:super_greenhouse_emitter");
+    sim.gates().latch("mars:phase_2_begins", mars.gates.GateTracker.Cause.ADMIN, 0);
+    boolean openAfter =
+        PlanetManager.placementAllowed(level, player, "mars:atmospheric_processor")
+            && PlanetManager.placementAllowed(level, player, "mars:super_greenhouse_emitter");
+    boolean ok =
+        SelfTest.check(
+            "phase2.machines_gated",
+            "processor and emitter are refused to survival players before Phase 2 begins and"
+                + " allowed after",
+            "lockedBefore=" + lockedBefore + " openAfter=" + openAfter,
+            lockedBefore && openAfter);
+    h.setBlock(new BlockPos(0, 1, 0), MarsMachines.ATMOSPHERIC_PROCESSOR.get());
+    h.setBlock(new BlockPos(2, 1, 0), MarsMachines.SUPER_GREENHOUSE_EMITTER.get());
+    ok &=
+        SelfTest.check(
+            "phase2.machines_place_and_draw",
+            "both register, draw 3 units each from data, and add 0 kPa/sol",
+            "p="
+                + sim.machineCount("mars:atmospheric_processor")
+                + " e="
+                + sim.machineCount("mars:super_greenhouse_emitter")
+                + " demand="
+                + sim.power().demandPerSol()
+                + " rate="
+                + sim.model().netRatePerSol(Ids.PRESSURE),
+            sim.machineCount("mars:atmospheric_processor") == 1
+                && sim.machineCount("mars:super_greenhouse_emitter") == 1
+                && Math.abs(sim.power().demandPerSol() - 6.0) < TOL
+                && Math.abs(sim.model().netRatePerSol(Ids.PRESSURE)) < TOL);
+    return ok;
   }
 
   /**

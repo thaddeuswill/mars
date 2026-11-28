@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:super_greenhouse_emitter",
+  "contributions": [],
+  "source": "docs/design/machine-priorities.md row 4. Game invention, not real (no real machine). A load only: the balance sheet has NO rate row for the emitter (machine-priorities R5), so it changes no Index row yet. Draw 3 power units (kWh) per sol is INVENTED. Unlocked by Phase 2 begins here (the art spec names Phase 3 begins; the task order says Phase 2 begins; owner or Game Designer may move it).",
+  "power": {
+    "drawPerSol": 3.0
+  }
+}

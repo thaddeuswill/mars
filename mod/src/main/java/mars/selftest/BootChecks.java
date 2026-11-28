@@ -384,6 +384,8 @@ public final class BootChecks {
             "regolith_outgasser",
             "regolith_oven",
             "water_reclaimer",
+            "atmospheric_processor",
+            "super_greenhouse_emitter",
             "solar_panel",
             "battery",
             "oxygen_maker",
@@ -397,8 +399,8 @@ public final class BootChecks {
     ok &=
         SelfTest.check(
             "machines.registered",
-            "7 machine blocks and items",
-            missing.isEmpty() ? "all 7 present" : "missing " + missing,
+            "9 machine blocks and items",
+            missing.isEmpty() ? "all 9 present" : "missing " + missing,
             missing.isEmpty());
     BlockState panel =
         MarsMachines.SOLAR_PANEL

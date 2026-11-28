@@ -48,6 +48,10 @@ public final class MarsMachines {
   // model overhang the cell above and are visual only.
   private static final VoxelShape RECLAIMER = Block.box(1, 0, 1, 15, 16, 15);
   private static final VoxelShape RECLAIMER_COLLISION = Block.box(1, 0, 1, 15, 24, 15);
+  // Atmospheric processor (model 24 px) and emitter (model 32 px): one cell each, outline 16 px,
+  // fence-high collision 24 px; the rest of the model overhangs the cell above (visual only).
+  private static final VoxelShape CELL = Block.box(1, 0, 1, 15, 16, 15);
+  private static final VoxelShape TALL_COLLISION = Block.box(1, 0, 1, 15, 24, 15);
   private static final VoxelShape OXYGEN_MAKER = Block.box(1, 0, 1, 15, 15, 15);
   private static final VoxelShape MONITOR = Block.box(1, 0, 1, 15, 16, 15);
 
@@ -59,6 +63,18 @@ public final class MarsMachines {
       BLOCKS.register(
           "water_reclaimer",
           () -> new WaterReclaimerBlock(machineProperties(), RECLAIMER, RECLAIMER_COLLISION));
+  public static final DeferredBlock<GatedLoadBlock> ATMOSPHERIC_PROCESSOR =
+      BLOCKS.register(
+          "atmospheric_processor",
+          () ->
+              new GatedLoadBlock(
+                  machineProperties(), CELL, TALL_COLLISION, "mars:atmospheric_processor"));
+  public static final DeferredBlock<GatedLoadBlock> SUPER_GREENHOUSE_EMITTER =
+      BLOCKS.register(
+          "super_greenhouse_emitter",
+          () ->
+              new GatedLoadBlock(
+                  machineProperties(), CELL, TALL_COLLISION, "mars:super_greenhouse_emitter"));
   public static final DeferredBlock<SolarPanelBlock> SOLAR_PANEL =
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
@@ -87,6 +103,8 @@ public final class MarsMachines {
           REGOLITH_OUTGASSER,
           REGOLITH_OVEN,
           WATER_RECLAIMER,
+          ATMOSPHERIC_PROCESSOR,
+          SUPER_GREENHOUSE_EMITTER,
           SOLAR_PANEL,
           BATTERY_BLOCK,
           OXYGEN_MAKER_BLOCK,
@@ -140,6 +158,8 @@ public final class MarsMachines {
               }
             });
     ITEMS.registerSimpleBlockItem("battery", BATTERY_BLOCK, new Item.Properties());
+    ITEMS.register("atmospheric_processor", () -> tipped(ATMOSPHERIC_PROCESSOR));
+    ITEMS.register("super_greenhouse_emitter", () -> tipped(SUPER_GREENHOUSE_EMITTER));
     ITEMS.register(
         "water_reclaimer",
         () ->
@@ -153,6 +173,20 @@ public final class MarsMachines {
                 tooltip.add(Component.translatable("block.mars.water_reclaimer.tooltip"));
               }
             });
+  }
+
+  /** A block item whose tooltip is the block's {@code .tooltip} lang key. */
+  private static Item tipped(DeferredBlock<? extends Block> block) {
+    return new net.minecraft.world.item.BlockItem(block.get(), new Item.Properties()) {
+      @Override
+      public void appendHoverText(
+          ItemStack stack,
+          Item.TooltipContext context,
+          List<Component> tooltip,
+          net.minecraft.world.item.TooltipFlag flag) {
+        tooltip.add(Component.translatable(block.get().getDescriptionId() + ".tooltip"));
+      }
+    };
   }
 
   public static void register(IEventBus modBus) {

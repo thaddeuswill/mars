@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "mars:atmospheric_processor",
+  "contributions": [],
+  "source": "docs/design/machine-priorities.md row 3 and docs/science/machine-references.md (MOXIE and the Sabatier module, real ideas; this is a game-sized, game-wired version). A load only: the balance sheet has NO rate row for the processor (machine-priorities R5), so it changes no Index row yet. Draw 3 power units (kWh) per sol is INVENTED (between the reclaimer's 1.5 and the Outgasser's 4). Unlocked by Phase 2 begins (data/mars/gates/phase_2_begins.json).",
+  "power": {
+    "drawPerSol": 3.0
+  }
+}

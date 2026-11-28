@@ -27,6 +27,8 @@ class MachineAssetsTest {
           "regolith_outgasser",
           "regolith_oven",
           "water_reclaimer",
+          "atmospheric_processor",
+          "super_greenhouse_emitter",
           "solar_panel",
           "battery",
           "oxygen_maker",

@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/atmospheric_processor"
+  },
+  "facing=east": {
+   "model": "mars:block/atmospheric_processor",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/atmospheric_processor",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/atmospheric_processor",
+   "y": 270
+  }
+ }
+}

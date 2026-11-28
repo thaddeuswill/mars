@@ -1,0 +1,28 @@
+# Atmospheric processor and super-greenhouse emitter (BACKLOG #49): front, east side (ports), close. On the real generated pad (top block y 80).
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+cmd /setblock -1 81 4 mars:atmospheric_processor[facing=north]
+cmd /setblock 2 81 4 mars:super_greenhouse_emitter[facing=north]
+wait 60
+view 0.5 83 -4 0 12
+wait 80
+shot phase2_front
+wait 20
+view 6 83 4.5 90 12
+wait 60
+shot phase2_side_east
+wait 20
+view -1 82.5 0.5 0 10
+wait 60
+shot phase2_close_processor
+wait 20
+view 2 83 0.5 0 5
+wait 60
+shot phase2_close_emitter
+wait 20
+quit

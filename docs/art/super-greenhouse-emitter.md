@@ -1,6 +1,6 @@
 # Super-greenhouse gas emitter: model and texture spec (first pass)
 
-**Owner:** Lead Artist · **Date:** 2026-11-28 · **Status:** written and script-checked; NOT registered; not rendered in 3D · **Reference:** **none.** There is no real machine (SME `docs/science/machine-references.md`, NOT VERIFIED as anything planned or tested). It is plainly fictional: a generic chemical-plant vent stack. Carries the made-up band; the tooltip must say "Game invention, not real". Every size and colour is invented.
+**Owner:** Lead Artist · **Date:** 2026-11-28 · **Status:** written and script-checked; REGISTERED 2026-11-28 by the Technical Lead (one cell, 24 px collision, seen in a real client, `tools/screenshots/out/20261128-013010/phase2_*.png`); not rendered in 3D · **Reference:** **none.** There is no real machine (SME `docs/science/machine-references.md`, NOT VERIFIED as anything planned or tested). It is plainly fictional: a generic chemical-plant vent stack. Carries the made-up band; the tooltip must say "Game invention, not real". Every size and colour is invented.
 
 Silhouette cue: stack with a flared top rising from two stacked tanks; orange hazard stripe at the stack base.
 

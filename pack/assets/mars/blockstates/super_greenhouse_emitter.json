@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=north": {
+   "model": "mars:block/super_greenhouse_emitter"
+  },
+  "facing=east": {
+   "model": "mars:block/super_greenhouse_emitter",
+   "y": 90
+  },
+  "facing=south": {
+   "model": "mars:block/super_greenhouse_emitter",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "mars:block/super_greenhouse_emitter",
+   "y": 270
+  }
+ }
+}

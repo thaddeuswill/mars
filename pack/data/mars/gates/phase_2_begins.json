@@ -2,7 +2,14 @@
   "schema": 1,
   "id": "mars:phase_2_begins",
   "order": 2,
-  "condition": { "parameter": "mars:pressure", "op": ">=", "value": 5.0 },
-  "unlocks": [],
-  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). What it unlocks (atmospheric processor, emitter, tubes) does not exist yet."
+  "condition": {
+    "parameter": "mars:pressure",
+    "op": ">=",
+    "value": 5.0
+  },
+  "unlocks": [
+    "mars:atmospheric_processor",
+    "mars:super_greenhouse_emitter"
+  ],
+  "source": "DESIGN.md gate table: Phase 2 begins at pressure >= 5 kPa. A physical threshold: never scaled by pace or group size (invariant I-1). It unlocks the atmospheric processor and the super-greenhouse emitter (machine-priorities rows 3 and 4; both are loads with no Index rate yet). Tubes do not exist yet."
 }
