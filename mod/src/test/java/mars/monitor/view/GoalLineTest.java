@@ -37,7 +37,7 @@ class GoalLineTest {
   @Test
   void afterTheLastPressureGateTheLineStaysOnIt() throws Exception {
     GoalLine g = GoalLine.next(TestSims.gates(), id -> true);
-    assertEquals(5.0, g.value(), 0);
+    assertEquals(75.0, g.value(), 0, "Equilibrium is the last gate with a pressure condition");
   }
 
   @Test

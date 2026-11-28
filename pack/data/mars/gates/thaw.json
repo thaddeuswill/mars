@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "mars:thaw",
+  "order": 3,
+  "condition": {
+    "parameter": "mars:temperature",
+    "op": ">=",
+    "value": -20.0
+  },
+  "unlocks": [],
+  "source": "DESIGN.md gate table and docs/design/phase2-machine-rates.md section 2: Thaw at temperature >= -20 C, no hold. A physical threshold: never scaled by pace or group size (invariant I-1). The ice extractor it should unlock (mars:ice_extractor) is not a block yet, so unlocks is empty; add it when the block exists."
+}

@@ -23,18 +23,16 @@ class PhaseTwoMachinesTest {
   }
 
   @Test
-  void drawComesFromDataAndInventsNoIndexRate() throws Exception {
+  void drawAndRateComeFromDataAndAreMarkedInvented() throws Exception {
     for (String n : NAMES) {
       var def = TestSims.defs().get("mars:" + n);
       assertEquals(3.0, def.power().drawPerSol(), 1e-12, n);
-      assertTrue(def.contributions().isEmpty(), n + ": no balance-sheet rate exists");
+      assertEquals(1, def.contributions().size(), n);
       String source = json(TestData.data("machines/" + n + ".json")).get("source").getAsString();
       assertTrue(source.contains("INVENTED"), n);
-      assertTrue(source.contains("NO rate row"), n + " names the missing rate");
       PlanetSim s = TestSims.sim(Pace.STANDARD);
       s.addMachine("mars:" + n, 1L);
       assertEquals(3.0, s.power().demandPerSol(), 1e-12, n);
-      assertEquals(0.0, s.model().netRatePerSol(mars.core.Ids.PRESSURE), 1e-12, n);
     }
   }
 

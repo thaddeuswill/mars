@@ -53,7 +53,7 @@ class MonitorGoalViewTest {
     assertEquals(Math.log10(p / 0.6) / Math.log10(5 / 0.6), g.goal().fraction(), 1e-9);
     assertEquals("monitor.goal.eta", g.goal().etaKey());
     assertTrue(Long.parseLong(g.goal().etaArg()) > 1);
-    assertEquals("1 / 2", g.detailRight());
+    assertEquals("1 / 6", g.detailRight());
     assertEquals("monitor.gate.phase_2_begins.progress", g.detailKey());
   }
 
@@ -70,7 +70,9 @@ class MonitorGoalViewTest {
   void whenEveryGateIsReachedThereIsNoBarOnTheGoalsReachedRow() throws Exception {
     PlanetSim s = TestSims.withPanels(TestSims.sim(Pace.STANDARD), 1);
     s.gates().latch("mars:dome_stable", GateTracker.Cause.ADMIN, 0);
-    s.gates().latch("mars:phase_2_begins", GateTracker.Cause.ADMIN, 0);
+    for (var d : s.gates().defs()) {
+      s.gates().latch(d.id(), GateTracker.Cause.ADMIN, 0);
+    }
     MonitorView v = MonitorView.of(s);
     assertTrue(v.rows().stream().anyMatch(r -> r.labelKey().equals("monitor.row.goals_reached")));
     assertTrue(v.rows().stream().noneMatch(r -> r.goal() != null));

@@ -378,21 +378,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     double sources = model.netRatePerSol(pressure);
     double frostRate = sim.frostRatePerSol();
     double net = sources + frostRate;
-    List<CauseLine> causes = new ArrayList<>();
-    var powerState = sim.power().state(sim.stepSols());
-    for (PlanetaryIndexModel.Cause c : model.causes(pressure)) {
-      boolean needsPower = sim.machineDrawsPower(c.source());
-      String reason =
-          !needsPower
-              ? null
-              : switch (powerState) {
-                case UNPOWERED -> "monitor.cause.needs_power";
-                case SHORT -> "monitor.cause.low_power";
-                default -> null;
-              };
-      causes.add(
-          new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), "kPa"), reason));
-    }
+    List<CauseLine> causes = machineCauses(sim, pressure, "kPa");
     // The polar frost is a cause line like any machine, but it is the planet pushing back: a sign
     // and a shape, no warning colour. Hidden while its rate rounds to 0.00 (at the baseline, and
     // until about 0.85 kPa).
@@ -428,7 +414,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
             null,
             trend(model.netRatePerSol(Ids.TEMPERATURE)),
             rate(model.netRatePerSol(Ids.TEMPERATURE), "°C"),
-            List.of()));
+            machineCauses(sim, Ids.TEMPERATURE, "°C")));
 
     double boil = snap.get(Ids.BOILING_POINT);
     if (Double.isNaN(boil)) {
@@ -598,6 +584,29 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   }
 
   /**
+   * One cause line per machine type that contributes to {@code parameter}; a powered machine says
+   * why it is slow when the grid is short or empty.
+   */
+  private static List<CauseLine> machineCauses(PlanetSim sim, ParameterId parameter, String unit) {
+    List<CauseLine> causes = new ArrayList<>();
+    var powerState = sim.power().state(sim.stepSols());
+    for (PlanetaryIndexModel.Cause c : sim.model().causes(parameter)) {
+      boolean needsPower = sim.machineDrawsPower(c.source());
+      String reason =
+          !needsPower
+              ? null
+              : switch (powerState) {
+                case UNPOWERED -> "monitor.cause.needs_power";
+                case SHORT -> "monitor.cause.low_power";
+                default -> null;
+              };
+      causes.add(
+          new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
+    }
+    return causes;
+  }
+
+  /**
    * The Power row: shows only when the planet has any power machine. The state word is the answer
    * to "why is my Outgasser slow?"; the cause lines give supply, demand and battery in power units
    * (1 unit = 1 kWh, balance sheet 2b).
@@ -693,7 +702,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
         }
         double held = Math.min(st.heldSols(), need);
         goal = new Goal(held / need, GoalProgress.percent(held / need, false), null, null);
-      } else if (d.condition() instanceof mars.gates.Condition.Compare c) {
+      } else if (focus(d.condition(), sim) instanceof mars.gates.Condition.Compare c) {
         String unit = sim.model().unit(c.parameter());
         double now = sim.model().current(c.parameter());
         side = Fmt.number(now, 2) + " / " + Fmt.number(c.value(), 0) + " " + unit;
@@ -737,6 +746,39 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     if (reached > 0) {
       rows.add(new Row("monitor.row.goals_reached", count, null, null, null, List.of()));
     }
+  }
+
+  /**
+   * The comparison the next-goal row shows for a gate without a hold: the condition itself, or for
+   * an {@code all} the first "at least" part that is not met yet (pressure is listed first, so
+   * pressure leads and warmth follows). Null when there is none to show.
+   */
+  private static mars.gates.Condition focus(mars.gates.Condition c, PlanetSim sim) {
+    if (c instanceof mars.gates.Condition.Compare) {
+      return c;
+    }
+    if (c instanceof mars.gates.Condition.All all) {
+      mars.gates.Condition.Context ctx =
+          new mars.gates.Condition.Context() {
+            @Override
+            public double value(ParameterId id) {
+              return sim.model().current(id);
+            }
+
+            @Override
+            public boolean machineState(String name) {
+              return false;
+            }
+          };
+      for (mars.gates.Condition part : all.parts()) {
+        if (part instanceof mars.gates.Condition.Compare cmp
+            && (cmp.op() == mars.gates.Condition.Op.GE || cmp.op() == mars.gates.Condition.Op.GT)
+            && !cmp.eval(ctx)) {
+          return part;
+        }
+      }
+    }
+    return null;
   }
 
   /**

@@ -788,7 +788,7 @@ public final class PlanetGameTests {
    * (Run from the reclaimer test, which owns the shared-planet slot: tests that reset the planet
    * must not overlap.) The atmospheric processor and the super-greenhouse emitter: locked for a
    * survival player until "Phase 2 begins" latches, then placeable; once placed each registers,
-   * draws 3 units from data and adds 0 kPa/sol (no balance-sheet rate exists).
+   * draws 3 units from data and adds its balance-sheet rate only while powered.
    */
   private static boolean phaseTwoMachinesAreGatedLoads(GameTestHelper h) {
     ServerLevel level = h.getLevel();
@@ -818,7 +818,7 @@ public final class PlanetGameTests {
     ok &=
         SelfTest.check(
             "phase2.machines_place_and_draw",
-            "both register, draw 3 units each from data, and add 0 kPa/sol",
+            "both register, draw 3 units each from data, and add nothing while there is no power",
             "p="
                 + sim.machineCount("mars:atmospheric_processor")
                 + " e="
@@ -830,7 +830,21 @@ public final class PlanetGameTests {
             sim.machineCount("mars:atmospheric_processor") == 1
                 && sim.machineCount("mars:super_greenhouse_emitter") == 1
                 && Math.abs(sim.power().demandPerSol() - 6.0) < TOL
-                && Math.abs(sim.model().netRatePerSol(Ids.PRESSURE)) < TOL);
+                && Math.abs(sim.model().netRatePerSol(Ids.PRESSURE)) < TOL
+                && Math.abs(sim.model().netRatePerSol(Ids.TEMPERATURE)) < TOL);
+    power(data, 2);
+    sim.model().advanceTicks(100); // one step so the grid share reaches the machines
+    ok &=
+        SelfTest.check(
+            "phase2.machines_contribute_powered",
+            "with power each adds its data rate: processor +0.15 kPa/sol, emitter +0.25 C/sol",
+            "kPa/sol="
+                + sim.model().netRatePerSol(Ids.PRESSURE)
+                + " C/sol="
+                + sim.model().netRatePerSol(Ids.TEMPERATURE),
+            Math.abs(sim.model().netRatePerSol(Ids.PRESSURE) - 0.15) < TOL
+                && Math.abs(sim.model().netRatePerSol(Ids.TEMPERATURE) - 0.25) < TOL);
+    unpower(data, 2);
     return ok;
   }
 
@@ -1257,9 +1271,10 @@ public final class PlanetGameTests {
     boolean ok =
         SelfTest.check(
             "gate.files_loaded",
-            "two gate files read by the reload listener: dome_stable and phase_2_begins",
+            "six gate files read by the reload listener: dome_stable, phase_2_begins, thaw, phase_3_begins,"
+                + " breathable and equilibrium",
             "gates=" + defs.stream().map(mars.gates.GateDef::id).toList(),
-            defs.size() == 2 && !sim.gates().isLatched("mars:dome_stable"));
+            defs.size() == 6 && !sim.gates().isLatched("mars:dome_stable"));
     FakePlayer player =
         FakePlayerFactory.get(
             level,

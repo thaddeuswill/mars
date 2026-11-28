@@ -1,8 +1,13 @@
 {
   "schema": 1,
   "id": "mars:super_greenhouse_emitter",
-  "contributions": [],
-  "source": "docs/design/machine-priorities.md row 4. Game invention, not real (no real machine). A load only: the balance sheet has NO rate row for the emitter (machine-priorities R5), so it changes no Index row yet. Draw 3 power units (kWh) per sol is INVENTED. Unlocked by Phase 2 begins here (the art spec names Phase 3 begins; the task order says Phase 2 begins; owner or Game Designer may move it).",
+  "contributions": [
+    {
+      "parameter": "mars:temperature",
+      "ratePerSol": 0.25
+    }
+  ],
+  "source": "docs/design/phase2-machine-rates.md section 1 and docs/design/balance-sheet.md section 2d (Game Designer proposal, unplayed): super-greenhouse emitter +0.25 C per sol each at standard pace, at full power; the effect scales with the share of power it gets, so it adds nothing while unpowered. The 0.25 C/sol rate is INVENTED game balance. Game invention, not real (no real machine; docs/design/machine-priorities.md row 4). Draw 3 power units (kWh) per sol is INVENTED. Open gap: there is NO cooling term yet (the 'emitter wear' event of balance-sheet section 4 needs one; the SME is sizing it, see docs/science/temperature-loss-term.md and phase2-machine-rates.md C-2), so temperature only rises. Unlocked by Phase 2 begins (Game Designer decision: the emitter serves the Thaw and Phase 3 begins gates, it is not unlocked by them).",
   "power": {
     "drawPerSol": 3.0
   }
