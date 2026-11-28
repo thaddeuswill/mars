@@ -59,7 +59,21 @@ public final class LearningGameTests {
             "only the breach writes a single planet-scoped event with no actor",
             "addedLines=" + (lines.size() - before) + " fieldsMatch=" + correct,
             exactlyOne && correct);
-    helper.assertTrue(ok, "seal breach should write one planet event without a player");
+    var source = server.createCommandSourceStack();
+    var mars = server.getCommands().getDispatcher().getRoot().getChild("mars");
+    var learning = mars == null ? null : mars.getChild("learning");
+    boolean guarded =
+        learning != null
+            && learning.getChild("export") != null
+            && learning.canUse(source.withPermission(2))
+            && !learning.canUse(source.withPermission(0));
+    ok &=
+        SelfTest.check(
+            "learning.export_permission",
+            "the registered learning export requires operator permission",
+            "registeredAndGuarded=" + guarded,
+            guarded);
+    helper.assertTrue(ok, "seal breach or learning export permission check failed");
     helper.succeed();
   }
 }

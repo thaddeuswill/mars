@@ -133,7 +133,7 @@ Follow-up: the Technical Lead’s compact renderer (`326d034`) replaced the earl
 
 | 59 | "there’s some other handoffs for you" | Pick up the Technical Lead’s seal-breach handoff | Codex owns the learning subscriber, world log lifecycle, and event test in `mars/learning/**`. | ✅ Breach subscriber verified. 248 unit tests and 108 boot checks passed. CX-C balance tests passed on shipped files and rejected a scratch change from 8 to 9 O₂ per player per sol. |
 
-| 60 | "accept and cont with rec" | Accept the seal-breach hook and continue with event CSV | Codex owns the event CSV export and tests inside the learning lane. | 🟡 Codex |
+| 60 | "accept and cont with rec" | Accept the seal-breach hook and continue with event CSV | Codex owns the event CSV export and tests inside the learning lane. | ✅ Operator event export implemented. 257 unit tests and 114 boot checks passed. Summary CSVs and additional gameplay events remain open. |
 
 ## Open questions for the owner
 

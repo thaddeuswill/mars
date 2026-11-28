@@ -68,6 +68,13 @@ public final class LearningEvents {
     }
   }
 
+  static void finishEarlierSession(MinecraftServer server, int currentSession) throws IOException {
+    SessionActionLogs logs = LOGS.get(server);
+    if (logs != null) {
+      logs.begin(currentSession);
+    }
+  }
+
   static void closeFor(MinecraftServer server) throws IOException {
     SessionActionLogs logs = LOGS.remove(server);
     if (logs != null) {

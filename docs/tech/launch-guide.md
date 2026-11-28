@@ -93,6 +93,10 @@ All need operator rights (cheats on in singleplayer) and are written to the log.
 
 A restore puts back the planet's numbers, goals, history and battery only. **Blocks, items, inventories and other mods' machines stay as they are.** For those, use the world backup script (`tools/world-backup.sh`, see `school-deployment.md`).
 
+### Learning event export
+
+Run `/mars learning export` with operator permission after moving on to a new session. It writes an `events.csv` file under the current world’s `mars-data/<world>/exports/` directory and prints the path. This prototype exports completed sessions only. Player events use pseudonyms, and planet events have an empty player column. Player and planet summary CSVs are still planned.
+
 ## 2. Developer commands (from `mod/`)
 
 All of these use the Gradle wrapper; it downloads Gradle 9.2.1, NeoForge 21.1.267, and Minecraft 1.21.1 on first use. Java 21 must be installed.
