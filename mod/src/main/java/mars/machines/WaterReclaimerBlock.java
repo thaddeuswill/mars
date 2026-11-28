@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * data/mars/machines/water_reclaimer.json}. The model is 1.9 blocks tall; the shape is one cell
  * with a taller collision (see {@link MarsMachines}).
  */
-public class WaterReclaimerBlock extends MachineBlock {
+public class WaterReclaimerBlock extends PoweredMachineBlock {
   public static final String TYPE = "mars:water_reclaimer";
   private final VoxelShape collision;
 

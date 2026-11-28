@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * the planet's own step does the rest. Rate and power draw live in {@code
  * data/mars/machines/regolith_oven.json}. Not gated: it is the player's starting machine.
  */
-public class RegolithOvenBlock extends MachineBlock {
+public class RegolithOvenBlock extends PoweredMachineBlock {
   public static final String TYPE = "mars:regolith_oven";
 
   public RegolithOvenBlock(Properties properties, VoxelShape shape) {

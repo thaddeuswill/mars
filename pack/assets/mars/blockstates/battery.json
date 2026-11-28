@@ -1,18 +1,63 @@
 {
  "variants": {
-  "facing=north": {
-   "model": "mars:block/battery"
+  "charge=0,facing=north": {
+   "model": "mars:block/battery_charge0"
   },
-  "facing=east": {
-   "model": "mars:block/battery",
+  "charge=1,facing=north": {
+   "model": "mars:block/battery_charge1"
+  },
+  "charge=2,facing=north": {
+   "model": "mars:block/battery_charge2"
+  },
+  "charge=3,facing=north": {
+   "model": "mars:block/battery_charge3"
+  },
+  "charge=0,facing=east": {
+   "model": "mars:block/battery_charge0",
    "y": 90
   },
-  "facing=south": {
-   "model": "mars:block/battery",
+  "charge=1,facing=east": {
+   "model": "mars:block/battery_charge1",
+   "y": 90
+  },
+  "charge=2,facing=east": {
+   "model": "mars:block/battery_charge2",
+   "y": 90
+  },
+  "charge=3,facing=east": {
+   "model": "mars:block/battery_charge3",
+   "y": 90
+  },
+  "charge=0,facing=south": {
+   "model": "mars:block/battery_charge0",
    "y": 180
   },
-  "facing=west": {
-   "model": "mars:block/battery",
+  "charge=1,facing=south": {
+   "model": "mars:block/battery_charge1",
+   "y": 180
+  },
+  "charge=2,facing=south": {
+   "model": "mars:block/battery_charge2",
+   "y": 180
+  },
+  "charge=3,facing=south": {
+   "model": "mars:block/battery_charge3",
+   "y": 180
+  },
+  "charge=0,facing=west": {
+   "model": "mars:block/battery_charge0",
+   "y": 270
+  },
+  "charge=1,facing=west": {
+   "model": "mars:block/battery_charge1",
+   "y": 270
+  },
+  "charge=2,facing=west": {
+   "model": "mars:block/battery_charge2",
+   "y": 270
+  },
+  "charge=3,facing=west": {
+   "model": "mars:block/battery_charge3",
    "y": 270
   }
  }

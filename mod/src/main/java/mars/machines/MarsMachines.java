@@ -79,8 +79,9 @@ public final class MarsMachines {
       machine("solar_panel", PANEL, SolarPanelBlock::new);
   public static final DeferredBlock<BatteryBlock> BATTERY_BLOCK =
       BLOCKS.register("battery", () -> new BatteryBlock(machineProperties(), BATTERY));
-  public static final DeferredBlock<MachineBlock> OXYGEN_MAKER_BLOCK =
-      BLOCKS.register("oxygen_maker", () -> new MachineBlock(machineProperties(), OXYGEN_MAKER));
+  public static final DeferredBlock<PoweredMachineBlock> OXYGEN_MAKER_BLOCK =
+      BLOCKS.register(
+          "oxygen_maker", () -> new PoweredMachineBlock(machineProperties(), OXYGEN_MAKER));
   public static final DeferredBlock<PlanetaryMonitorBlock> PLANETARY_MONITOR =
       machine("planetary_monitor", MONITOR, PlanetaryMonitorBlock::new);
 

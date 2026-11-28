@@ -161,4 +161,80 @@ class MachineAssetsTest {
           "retired batch 1 asset still present: " + retired);
     }
   }
+
+  /** Machines that show a power state: blockstate variants for every facing and state. */
+  /** Must match mars.machines.MachineState (a boot check compares the real property values). */
+  private static final List<String> STATES = List.of("off", "idle", "running");
+
+  private static final List<String> STATE_MACHINES =
+      List.of(
+          "regolith_oven",
+          "regolith_outgasser",
+          "oxygen_maker",
+          "water_reclaimer",
+          "atmospheric_processor",
+          "super_greenhouse_emitter");
+
+  @Test
+  void machineStateVariantsCoverEveryFacingAndStateAndPointAtRealModels() throws Exception {
+    List<String> problems = new ArrayList<>();
+    String[] facings = {"north", "east", "south", "west"};
+    int[] yaw = {0, 90, 180, 270};
+    for (String id : STATE_MACHINES) {
+      JsonObject v =
+          read(assets().resolve("blockstates/" + id + ".json")).getAsJsonObject("variants");
+      int expected = facings.length * STATES.size();
+      if (v.size() != expected) {
+        problems.add(id + ": " + v.size() + " variants, want " + expected);
+      }
+      for (int f = 0; f < facings.length; f++) {
+        for (String st : STATES) {
+          String key = "facing=" + facings[f] + ",machine_state=" + st;
+          if (!v.has(key)) {
+            problems.add(id + ": missing " + key);
+            continue;
+          }
+          JsonObject e = v.getAsJsonObject(key);
+          String model = e.get("model").getAsString();
+          if (!model.endsWith("_" + st)) {
+            problems.add(id + " " + key + " uses " + model);
+          }
+          int y = e.has("y") ? e.get("y").getAsInt() : 0;
+          if (y != yaw[f]) {
+            problems.add(id + " " + key + " has y " + y + ", want " + yaw[f]);
+          }
+          problems.addAll(checkModel(model));
+        }
+      }
+    }
+    assertTrue(problems.isEmpty(), problems.toString());
+  }
+
+  @Test
+  void batteryChargeVariantsCoverEveryFacingAndLevel() throws Exception {
+    List<String> problems = new ArrayList<>();
+    JsonObject v = read(assets().resolve("blockstates/battery.json")).getAsJsonObject("variants");
+    String[] facings = {"north", "east", "south", "west"};
+    int[] yaw = {0, 90, 180, 270};
+    assertEquals(16, v.size());
+    for (int c = 0; c < 4; c++) {
+      for (int f = 0; f < 4; f++) {
+        String key = "charge=" + c + ",facing=" + facings[f];
+        if (!v.has(key)) {
+          problems.add("missing " + key);
+          continue;
+        }
+        JsonObject e = v.getAsJsonObject(key);
+        String model = e.get("model").getAsString();
+        if (!model.equals("mars:block/battery_charge" + c)) {
+          problems.add(key + " uses " + model);
+        }
+        if ((e.has("y") ? e.get("y").getAsInt() : 0) != yaw[f]) {
+          problems.add(key + " wrong y");
+        }
+        problems.addAll(checkModel(model));
+      }
+    }
+    assertTrue(problems.isEmpty(), problems.toString());
+  }
 }

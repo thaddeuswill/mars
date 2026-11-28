@@ -1,18 +1,48 @@
 {
  "variants": {
-  "facing=north": {
-   "model": "mars:block/atmospheric_processor"
+  "facing=north,machine_state=off": {
+   "model": "mars:block/atmospheric_processor_off"
   },
-  "facing=east": {
-   "model": "mars:block/atmospheric_processor",
+  "facing=north,machine_state=idle": {
+   "model": "mars:block/atmospheric_processor_idle"
+  },
+  "facing=north,machine_state=running": {
+   "model": "mars:block/atmospheric_processor_running"
+  },
+  "facing=east,machine_state=off": {
+   "model": "mars:block/atmospheric_processor_off",
    "y": 90
   },
-  "facing=south": {
-   "model": "mars:block/atmospheric_processor",
+  "facing=east,machine_state=idle": {
+   "model": "mars:block/atmospheric_processor_idle",
+   "y": 90
+  },
+  "facing=east,machine_state=running": {
+   "model": "mars:block/atmospheric_processor_running",
+   "y": 90
+  },
+  "facing=south,machine_state=off": {
+   "model": "mars:block/atmospheric_processor_off",
    "y": 180
   },
-  "facing=west": {
-   "model": "mars:block/atmospheric_processor",
+  "facing=south,machine_state=idle": {
+   "model": "mars:block/atmospheric_processor_idle",
+   "y": 180
+  },
+  "facing=south,machine_state=running": {
+   "model": "mars:block/atmospheric_processor_running",
+   "y": 180
+  },
+  "facing=west,machine_state=off": {
+   "model": "mars:block/atmospheric_processor_off",
+   "y": 270
+  },
+  "facing=west,machine_state=idle": {
+   "model": "mars:block/atmospheric_processor_idle",
+   "y": 270
+  },
+  "facing=west,machine_state=running": {
+   "model": "mars:block/atmospheric_processor_running",
    "y": 270
   }
  }

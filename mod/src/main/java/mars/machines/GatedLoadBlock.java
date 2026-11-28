@@ -18,7 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * model may be taller than one cell: the outline is one cell and the collision is fence-high (the
  * overhang is visual only), like the water reclaimer.
  */
-public class GatedLoadBlock extends MachineBlock {
+public class GatedLoadBlock extends PoweredMachineBlock {
   private final String type;
   private final VoxelShape collision;
 

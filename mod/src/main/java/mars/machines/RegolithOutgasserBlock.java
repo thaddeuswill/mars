@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * it registers its position with the planet, removing it unregisters, and the planet's own step
  * does the rest. Its rate lives in {@code data/mars/machines/regolith_outgasser.json}.
  */
-public class RegolithOutgasserBlock extends MachineBlock {
+public class RegolithOutgasserBlock extends PoweredMachineBlock {
   public static final String TYPE = "mars:regolith_outgasser";
 
   public RegolithOutgasserBlock(Properties properties, VoxelShape shape) {

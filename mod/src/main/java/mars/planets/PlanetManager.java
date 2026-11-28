@@ -99,6 +99,7 @@ public final class PlanetManager {
     PlanetData d = data(level);
     if (d.sim().addMachine(type, pos.asLong())) {
       d.setDirty();
+      MachineStateSync.sync(level, d.sim());
       LOG.info(
           "{} placed at {} in {}: {} on this planet",
           type,
@@ -112,6 +113,7 @@ public final class PlanetManager {
     PlanetData d = data(level);
     if (d.sim().removeMachine(type, pos.asLong())) {
       d.setDirty();
+      MachineStateSync.sync(level, d.sim());
       LOG.info(
           "{} removed at {} in {}: {} left",
           type,

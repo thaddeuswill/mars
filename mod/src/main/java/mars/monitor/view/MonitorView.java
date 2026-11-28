@@ -626,6 +626,19 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   }
 
   /**
+   * The Monitor's word for a powered machine, from the same {@link mars.power.MachineLook} that
+   * sets the block's {@code machine_state}: off is "needs power", idle is "low power", running is
+   * {@code whenRunning}.
+   */
+  static String powerReason(PowerGrid.State grid, String whenRunning) {
+    return switch (mars.power.MachineLook.of(grid)) {
+      case OFF -> "monitor.cause.needs_power";
+      case IDLE -> "monitor.cause.low_power";
+      case RUNNING -> whenRunning;
+    };
+  }
+
+  /**
    * One cause line per machine type that contributes to {@code parameter}; a powered machine says
    * why it is slow when the grid is short or empty.
    */
@@ -634,14 +647,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     var powerState = sim.power().state(sim.stepSols());
     for (PlanetaryIndexModel.Cause c : sim.model().causes(parameter)) {
       boolean needsPower = sim.machineDrawsPower(c.source());
-      String reason =
-          !needsPower
-              ? null
-              : switch (powerState) {
-                case UNPOWERED -> "monitor.cause.needs_power";
-                case SHORT -> "monitor.cause.low_power";
-                default -> null;
-              };
+      String reason = !needsPower ? null : powerReason(powerState, null);
       causes.add(
           new CauseLine(sourceKey(c.source()), c.count(), rate(c.ratePerSol(), unit), reason));
     }
@@ -663,10 +669,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     List<CauseLine> starved = new ArrayList<>();
     for (String type : sim.placedTypes()) {
       if (sim.machineDrawsPower(type) && sim.contributionCount(type) > 0) {
-        String why =
-            state == PowerGrid.State.UNPOWERED
-                ? "monitor.cause.needs_power"
-                : "monitor.cause.low_power";
+        String why = powerReason(state, null);
         starved.add(new CauseLine(sourceKey(type), sim.machineCount(type), "", why));
       }
     }
@@ -716,12 +719,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     // Powered machines that change no Index row (the water reclaimer): the only place they show.
     for (String type : sim.placedTypes()) {
       if (sim.machineDrawsPower(type) && sim.contributionCount(type) == 0) {
-        String why =
-            switch (grid.state(sim.stepSols())) {
-              case UNPOWERED -> "monitor.cause.needs_power";
-              case SHORT -> "monitor.cause.low_power";
-              default -> "monitor.cause.running";
-            };
+        String why = powerReason(grid.state(sim.stepSols()), "monitor.cause.running");
         lines.add(new CauseLine(sourceKey(type), sim.machineCount(type), "", why));
       }
     }
