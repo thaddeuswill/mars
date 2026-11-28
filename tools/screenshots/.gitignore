@@ -1,2 +1,4 @@
 # Run logs are large and machine-specific; keep PNGs only.
 out/*/client.log
+# Screenshot runs copy every earlier shot into each new folder. Commit only the shots a report cites, with `git add -f` (owner decision 2026-11-28).
+tools/screenshots/out/*
