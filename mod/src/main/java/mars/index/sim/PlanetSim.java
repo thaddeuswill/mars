@@ -499,8 +499,7 @@ public final class PlanetSim {
 
   /** True while a storm is warned and has not started: the forecast is open. */
   public boolean stormWarned() {
-    return storm != null
-        && (storm.mode() == mars.hazards.storm.StormScheduler.Mode.WARNED);
+    return storm != null && (storm.mode() == mars.hazards.storm.StormScheduler.Mode.WARNED);
   }
 
   /** The storm strength cap of the phase the planet is in now (1.0, 0.8, 0.5, 0.25). */

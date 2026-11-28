@@ -162,4 +162,70 @@ public final class HazardGameTests {
               });
         });
   }
+
+  /** The brush: any cell of the array cleans the panel, uses one of 64, posts the event. */
+  @GameTest(template = "empty", batch = "mars_hazard_b")
+  public static void brushCleansAPanel(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    var sim = data.sim();
+    BlockPos rel = new BlockPos(6, 1, 6);
+    h.setBlock(rel, MarsMachines.SOLAR_PANEL.get());
+    BlockPos abs = h.absolutePos(rel);
+    level.setBlock(abs, level.getBlockState(abs).setValue(SolarPanelBlock.DUST_STAGE, 4), 3);
+    var player =
+        net.neoforged.neoforge.common.util.FakePlayerFactory.get(
+            level, new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "brusher"));
+    net.minecraft.world.item.ItemStack brush =
+        new net.minecraft.world.item.ItemStack(MarsMachines.PANEL_BRUSH.get());
+    int[] events = {0, -1};
+    java.util.function.Consumer<mars.machines.PanelCleanedEvent> listener =
+        e -> {
+          events[0]++;
+          events[1] = e.stageBefore();
+        };
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(listener);
+    boolean ok =
+        SelfTest.check(
+            "brush.item_has_64_uses",
+            "the panel brush wears out after 64 uses",
+            "maxDamage=" + brush.getMaxDamage(),
+            brush.getMaxDamage() == 64);
+    int before =
+        mars.machines.PanelBrushItem.brush(player, level, abs.offset(1, 0, -1), brush); // a filler
+    PlanetManager.syncPanels(level, data);
+    ok &=
+        SelfTest.check(
+            "brush.cleans_through_a_filler",
+            "brushing a canopy cell cleans the centre: stage 4 -> 0, block follows, supply 5.0, one"
+                + " use, one event with stage 4",
+            "before="
+                + before
+                + " block="
+                + stage(level, abs)
+                + " supply="
+                + sim.power().supplyPerSol()
+                + " damage="
+                + brush.getDamageValue()
+                + " events="
+                + events[0]
+                + "/"
+                + events[1],
+            before == 4
+                && stage(level, abs) == 0
+                && Math.abs(sim.power().supplyPerSol() - 5.0) < TOL
+                && brush.getDamageValue() == 1
+                && events[0] == 1
+                && events[1] == 4);
+    int again = mars.machines.PanelBrushItem.brush(player, level, abs, brush);
+    ok &=
+        SelfTest.check(
+            "brush.clean_panel_costs_nothing",
+            "brushing a clean panel does nothing and uses no durability",
+            "result=" + again + " damage=" + brush.getDamageValue() + " events=" + events[0],
+            again == -1 && brush.getDamageValue() == 1 && events[0] == 1);
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(listener);
+    h.destroyBlock(rel);
+    finish(h, ok, "brushCleansAPanel");
+  }
 }

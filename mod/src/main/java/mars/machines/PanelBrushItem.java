@@ -100,6 +100,15 @@ public class PanelBrushItem extends Item {
   }
 
   @Override
+  public void appendHoverText(
+      ItemStack stack,
+      Item.TooltipContext context,
+      java.util.List<Component> tooltip,
+      net.minecraft.world.item.TooltipFlag flag) {
+    tooltip.add(Component.translatable("item.mars.panel_brush.tooltip"));
+  }
+
+  @Override
   public UseAnim getUseAnimation(ItemStack stack) {
     return UseAnim.BRUSH;
   }

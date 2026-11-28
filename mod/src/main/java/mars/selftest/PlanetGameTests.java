@@ -113,7 +113,9 @@ public final class PlanetGameTests {
   @GameTest(template = "empty", batch = "mars_pressure", timeoutTicks = 600)
   public static void outgasserRaisesPressureThroughRealTicks(GameTestHelper h) {
     ServerLevel level = h.getLevel();
-    PlanetData data = PlanetManager.data(level);
+    // A fresh planet: the order batches run in changes when a batch is added, and other tests
+    // leave machines behind (this test assumes it starts with none).
+    PlanetData data = PlanetManager.resetForSelfTest(level);
     double p0 = data.sim().model().snapshot().get(Ids.PRESSURE);
     long t0 = data.sim().model().simTicks();
     int before = data.sim().machineCount(RegolithOutgasserBlock.TYPE);
