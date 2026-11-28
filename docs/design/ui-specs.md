@@ -320,7 +320,7 @@ Source: `docs/team/reports/2026-11-27-instructional-designer-monitor-wording.md`
 | `monitor.oven.tooltip` | "Bakes soil and releases a little gas. Water comes later." | Keep. "Water comes later" is a promise; delete it if Oven water is cut |
 | `monitor.event.placed.regolith_oven` | "Oven placed" | Keep |
 | `grant.starting` | "You have %s × %s in your inventory. Place them, then check Power on the Monitor." | "pack" is also the modpack (confusing); "inventory" is the Minecraft word; "×" as in the solar-array key; "Power row" shortened |
-| Landing step 6 (`landing.checklist`, `docs/design/messages/phase-1.md` §1) | "Place your two Ovens. Switch on the battery to power them." | Owner approved "battery and Ovens"; this order shows cause and effect (power first, then the effect). 11 words, within the 12-word limit. Detection: both Ovens placed and battery on. Game Designer owns the file |
+| Landing step 6 (`landing.checklist`, `docs/design/messages/phase-1.md` §1) | **Superseded (proposed, `docs/design/landing-spec.md` L3):** "Place your two Ovens. Check Power on the Monitor." (the battery has no switch). Was: "Place your two Ovens. Switch on the battery to power them." | Owner approved "battery and Ovens"; this order shows cause and effect (power first, then the effect). 11 words, within the 12-word limit. Detection: both Ovens placed and battery on. Game Designer owns the file |
 
 **Time-to-goal estimate and forecasts (CR-T8).** An "about N sols" line hands a player the answer to "when will the pressure reach 5 kPa?", which is what B3 asks them to work out from the slope and the goal line. It is shown under `guidance` gentle and standard, hidden under expert, and hidden for the value of any forecast that is open.
 

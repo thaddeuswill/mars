@@ -2,6 +2,8 @@
 
 **Owner:** Lead Game Designer · **Status of every entry:** draft: SME check and ID review pending · Conventions: [README.md](README.md)
 
+**2026-11-27 update (proposed):** Landing (§1), Shift Briefing 1 (§2), `journal.sky.stylized` (§12) and `earth.gate.dome_stable` (§9) are superseded in detail by [../landing-spec.md](../landing-spec.md), which is the build-ready spec (per-step triggers, detection, keys, events). Where the two differ, the spec wins; the changed lines are marked below.
+
 Order of first play: opening card → Landing checklist → Shift Briefing 1 → first storm (F1) → first solar event (warnings, F2) → ice near a heater (F4a, any time) → Dome stable → Hana's worked example → first Outgasser (F3) → Phase 2 begins (Keeper's Report 1, Mensah's reply).
 
 ---
@@ -28,12 +30,12 @@ Controls first, content second (DESIGN.md, Landing). No forecast fires until the
 |---|---|---|
 | intro | Storm's over, Keeper. Damage logged. First-shift checklist is ready. **[Start checklist]** **[I know the drill]** | — |
 | 1 | Walk to the shelter door. | Player reaches the door |
-| 2 | Find your suit O2 (bubble icon). Top it up at the wall tank. | O2 refilled |
+| 2 | Find your suit O2. Top it up at the wall tank. **Until suits exist (proposed): "Right-click the air tank by your bunk. Read the level."** | O2 refilled (until suits: tank right-clicked) |
 | 3 | Open the Planetary Monitor. Read today's pressure and air mix. | Monitor opened, pressure line and "Air mix" line shown (Air mix: about 95 % CO2, almost no oxygen; A1) |
 | 4 | Take a seal kit from the locker. | Seal kit in inventory |
-| 5 | Hab B is leaking. Patch the cracked panel. | Breach sealed |
-| 6 | Power is low. Switch on the backup battery. | Battery on |
-| 7 | Step out through the airlock. Use the dust-off station coming back. | Airlock cycled out and in, dust-off used |
+| 5 | ~~Hab B is leaking. Patch the cracked panel.~~ **Proposed: "Patch the crack in Hab B with your seal kit."** (Hab B holds no tank air, so "leaking" is not true of the simulation, CR-H1) | Cracked plate replaced, Hab B reads sealed |
+| 6 | ~~Power is low. Switch on the backup battery.~~ **Proposed: "Place your two Ovens. Check Power on the Monitor."** The battery has no switch; it stays in the hint and the outline | Two Ovens placed and both powered |
+| 7 | Step out through the airlock. Use the dust-off station coming back. **Until the station exists (proposed): "Go out through the airlock and come back in."** | Out and back in through the airlock (dust-off used, when built) |
 | 8 | Open your journal. Your shift notes live here. | Journal opened |
 | done | Checklist done. Logging. | — |
 
@@ -56,7 +58,7 @@ Length: 8 steps, ≤ 12 words each. Expected time 15–25 minutes with exploring
 | `type` | Shift Briefing |
 | `trigger` | Landing checklist done or skipped |
 | `delivery` | BELL briefing card in the side panel (non-modal, ui-specs §0); copy kept in the journal under "Briefings" |
-| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch O2, water, and power. Dust storms cut solar power. Run life support {hold_sols} sols with no failures, and the relay link comes back. Notice what almost fails, and why. |
+| `text.ms` | **Shift Briefing.** This shift: keep the dome alive. Watch air, water, and power. Dust storms cut solar power, so store some. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why. (**proposed, 40 words**; the storm sentence ships with F1; see landing-spec §4) |
 | `text.hs` | Same as MS |
 | `goal_ids` | C1, A1 |
 | `instructional_purpose` | Advance organizer: names the job, the values to watch, the main threat, and the next goal before play starts |
@@ -275,9 +277,9 @@ The note never states the result (it would give away F3). It shows where to look
 | `type` | Earth link (gate journal entry, last line) |
 | `trigger` | Dome stable gate |
 | `delivery` | Journal gate entry, "On Earth" line |
-| `text.ms` | Mars's air pushes with less than 1 % of the force of Earth's air. Earth's thick air protects us for free. |
+| `text.ms` | ~~Mars's air pushes with less than 1 % of the force of Earth's air. Earth's thick air protects us for free.~~ **Proposed (SME to confirm the second sentence):** On Earth, air pushes on you with more than 100 times the force of the air outside this dome. You never notice, because your body pushes back. |
 | `journal.dome_stable.airmix` (gate entry, before the Earth line; both bands) | Outside air: about 95 % carbon dioxide, almost no oxygen, and very thin. You can't breathe it. |
-| `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. Your dome has to make up the difference. |
+| `text.hs` | Same as MS. Read more: Earth at sea level is about 101 kPa. Outside Cairn Dome it's about 0.6 kPa. **Proposed:** Your hull holds back that difference. |
 | `goal_ids` | A1, D2 |
 | `instructional_purpose` | Mars vs. Earth pressure as a ratio, anchored to the dome the player just stabilized |
 | `motivational_purpose` | Pride: "I'm holding back a planet's worth of vacuum" |
@@ -332,7 +334,7 @@ Mensah's first message. Voice: kind teacher, curious about the data, never quizz
 | `journal.outgasser.puff` | First Outgasser running | The white puff is water vapor freezing into tiny ice crystals, like your breath on a cold day. The CO2 coming out is invisible. | §2.5, accurate |
 | `journal.sound.thin_air` | First trip outside after Landing | Thin air carries sound poorly. Sounds are quiet, and high pitches fade fast. As the air thickens, sound gets louder and fuller. | §4, accurate |
 | `journal.mast.balloon` | First look at the weather mast (or Landing step 7) | The lift balloon floats higher as the air gets thicker, because thicker air pushes up on it harder. | §2.7, acceptable simplification |
-| `journal.sky.stylized` | Phase 2 begins (first rose sky) | Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them. | §6 note 8 |
+| `journal.sky.stylized` | **Proposed:** latch of `mars:dome_stable` or first Outgasser placed (before any sky change); repeated at Phase 2 begins | More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them. (SME-required wording, verbatim: `docs/science/round2-review.md` §2.1) | §6 note 8 |
 
 ## 13. Shift log (optional end-of-session mini-review, classroom)
 
