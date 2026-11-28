@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "journal.dome.stable",
+  "section": "Shift notes",
+  "title": "Dome stable",
+  "trigger": [
+    "gate:mars:dome_stable"
+  ],
+  "scope": "planet",
+  "goal_ids": [
+    "A1",
+    "D2"
+  ],
+  "text": {
+    "ms": "Air, water, and power held for {hold_sols} sols. Outside air: about 95 percent carbon dioxide, almost no oxygen, and very thin. You can't breathe it.",
+    "hs_more": "Earth at sea level is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. Inside the dome, air pushes out on the hull harder than the thin air outside pushes in. The hull holds that difference."
+  },
+  "earth_line": "On Earth, air pushes on you more than 100 times as hard as the air outside this dome. You never notice, because the air inside your body pushes back just as hard.",
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

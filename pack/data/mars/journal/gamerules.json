@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "journal.gamerules",
+  "section": "Game rules",
+  "title": "Game rules",
+  "trigger": [
+    "landing_over"
+  ],
+  "scope": "player",
+  "goal_ids": [
+    "C1",
+    "A1"
+  ],
+  "text": {
+    "ms": "Some rules make the game gentler than real life. Landing grace: for your first {grace_minutes} minutes, nothing runs out. Blackout: if your air runs out, you wake in the shelter and lose nothing. Real low oxygen is dangerous, and your body may not warn you."
+  },
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

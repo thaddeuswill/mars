@@ -10,12 +10,11 @@ import java.util.List;
  * One journal entry, read from {@code data/mars/journal/<name>.json} (landing-spec 5.1). The same
  * files feed the Stage 4 journal screen. Pure.
  *
- * <p>{@code triggers} are tokens (any one unlocks the entry): {@code join}, {@code
- * step:<STEP>}, {@code landing_over}, {@code briefing_shown}, {@code gate:<id>}, {@code
- * placed:<machine id>}. {@code scope} is "player" (unlocked by that player's own action) or
- * "planet" (every player on the planet gets it, and a player who was offline gets it on join).
- * {@code reveals} names the forecasts whose answer the text could give away (CR-F9); empty when
- * none.
+ * <p>{@code triggers} are tokens (any one unlocks the entry): {@code join}, {@code step:<STEP>},
+ * {@code landing_over}, {@code briefing_shown}, {@code gate:<id>}, {@code placed:<machine id>}.
+ * {@code scope} is "player" (unlocked by that player's own action) or "planet" (every player on the
+ * planet gets it, and a player who was offline gets it on join). {@code reveals} names the
+ * forecasts whose answer the text could give away (CR-F9); empty when none.
  */
 public record JournalEntry(
     String id,

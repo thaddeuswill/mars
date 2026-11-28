@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "journal.a1.pressure",
+  "section": "Shift notes",
+  "title": "Air pressure",
+  "trigger": [
+    "step:MONITOR"
+  ],
+  "scope": "player",
+  "goal_ids": [
+    "A1"
+  ],
+  "text": {
+    "ms": "Air has weight, so it pushes on everything. How hard it pushes is air pressure. We measure it in kPa (kilopascals). On Earth at sea level, air pressure is about 101 kPa. Outside Cairn Dome it is about 0.6 kPa. That is very thin air. Air always pushes from higher pressure toward lower pressure.",
+    "hs_more": "1 kPa is 1,000 pascals. A pascal is one newton of push on each square meter. Pressure comes from gas molecules hitting a surface, so thin air hits less often and less hard."
+  },
+  "reveals": [],
+  "names": [
+    "kPa"
+  ],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

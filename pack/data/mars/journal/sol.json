@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "journal.sol",
+  "section": "Shift notes",
+  "title": "What is a sol?",
+  "trigger": [
+    "step:JOURNAL"
+  ],
+  "scope": "player",
+  "goal_ids": [],
+  "text": {
+    "ms": "A sol is one Mars day. It lasts about 24 hours and 40 minutes. In this game, a sol is 20 minutes of play."
+  },
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

@@ -72,11 +72,15 @@ public final class Journal {
 
   /**
    * Build the book for a player. Page 1 is the contents: unlocked entries by section, the unread
-   * ones marked "New", each a jump to its first page. Then each unlocked entry, in unlock order,
-   * on as many pages as it needs. {@code hs} adds the high-school "Read more" page.
+   * ones marked "New", each a jump to its first page. Then each unlocked entry, in unlock order, on
+   * as many pages as it needs. {@code hs} adds the high-school "Read more" page.
    */
   public Book build(
-      JournalState state, boolean hs, Map<String, String> params, String bookTitle, String newWord) {
+      JournalState state,
+      boolean hs,
+      Map<String, String> params,
+      String bookTitle,
+      String newWord) {
     List<JournalEntry> shown = new ArrayList<>();
     for (String id : state.unlocked()) {
       JournalEntry e = get(id);

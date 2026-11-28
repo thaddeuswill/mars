@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "journal.sky.stylized",
+  "section": "Shift notes",
+  "title": "The sky",
+  "trigger": [
+    "gate:mars:dome_stable",
+    "placed:mars:regolith_outgasser"
+  ],
+  "scope": "planet",
+  "goal_ids": [
+    "B1"
+  ],
+  "text": {
+    "ms": "More air scatters more blue light, so the sky slowly loses its dusty tan. Nobody has seen a thickened Mars sky. These in-between colors are our best guess, made stronger so you can see them."
+  },
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

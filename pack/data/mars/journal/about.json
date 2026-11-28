@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "journal.about",
+  "section": "Shift notes",
+  "title": "About this story",
+  "trigger": [
+    "join"
+  ],
+  "scope": "player",
+  "goal_ids": [],
+  "text": {
+    "ms": "This story is fiction. The science is as real as we could make it. Where the game bends real life, the journal says so."
+  },
+  "reveals": [],
+  "names": [],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

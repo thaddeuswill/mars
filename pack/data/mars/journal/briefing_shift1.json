@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "briefing.shift1",
+  "section": "Briefings",
+  "title": "Shift Briefing",
+  "trigger": [
+    "briefing_shown"
+  ],
+  "scope": "player",
+  "goal_ids": [
+    "C1"
+  ],
+  "text": {
+    "ms": "This shift: keep the dome alive. Watch air, water, and power. Mars weather can change fast, so keep some power in reserve. Keep life support steady for {hold_sols} sols and the relay link comes back. If something nearly fails, ask why."
+  },
+  "reveals": [],
+  "names": [
+    "air",
+    "water",
+    "power",
+    "life_support",
+    "relay"
+  ],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}

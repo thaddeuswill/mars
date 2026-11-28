@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "journal.power",
+  "section": "Shift notes",
+  "title": "Power",
+  "trigger": [
+    "step:OVENS"
+  ],
+  "scope": "player",
+  "goal_ids": [
+    "C1",
+    "B1"
+  ],
+  "text": {
+    "ms": "Solar panels make power. A battery stores extra power for later. Machines use power every sol. Game rule: when power runs short, life support gets it first. Check the Power row on the Monitor to see what you make and what you use."
+  },
+  "reveals": [],
+  "names": [
+    "solar panel",
+    "battery",
+    "Power row"
+  ],
+  "source": "docs/design/landing-spec.md section 5.3 with the Instructional Designer changes W1 to W7 (section 12). 24 h 40 min in journal.sol, the Earth line and its HS sentence in journal.dome.stable are pending SME confirmation (unverified)."
+}
