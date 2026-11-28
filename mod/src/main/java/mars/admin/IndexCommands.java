@@ -66,7 +66,7 @@ public final class IndexCommands {
                         .requires(s -> s.hasPermission(2))
                         .executes(ctx -> paceShow(ctx))
                         .then(paceMode("standard"))
-                        .then(paceMode("classroom")))
+                        .then(paceMode("classroom").requires(s -> classroomOffered())))
                 .then(
                     Commands.literal("monitor")
                         .requires(s -> s.hasPermission(2))
@@ -75,6 +75,15 @@ public final class IndexCommands {
                               MonitorSender.open(ctx.getSource().getPlayerOrException());
                               return 1;
                             })));
+  }
+
+  /** False while pace.json has classroom_enabled off: the word is not offered in tab completion. */
+  private static boolean classroomOffered() {
+    try {
+      return mars.index.IndexDefinitions.require().pace().classroomOffered();
+    } catch (RuntimeException notLoaded) {
+      return false;
+    }
   }
 
   private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> paceMode(
@@ -118,6 +127,14 @@ public final class IndexCommands {
   private static int paceSet(CommandContext<CommandSourceStack> ctx, String mode, Integer group)
       throws CommandSyntaxException {
     var server = ctx.getSource().getServer();
+    String refused =
+        mars.index.IndexDefinitions.require()
+            .pace()
+            .refusal(mars.index.sim.PaceConfig.Mode.parse(mode));
+    if (refused != null) {
+      // Nothing happens: no checkpoint, no change.
+      throw new SimpleCommandExceptionType(Component.literal(refused)).create();
+    }
     try {
       PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.parse(mode), group);
     } catch (IllegalArgumentException e) {

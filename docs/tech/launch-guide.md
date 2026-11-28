@@ -45,7 +45,7 @@ To see the solar panel's dust stages (needs cheats on): `/setblock ~ ~ ~3 mars:s
 
 ### 1b. Goals (slice 4)
 
-On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time in standard pace** (in classroom pace the bypass is off; see `/mars pace`); operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
+On Mars the **Regolith Outgasser is locked** for survival players until the goal **Dome stable** is reached: place a Solar Panel (power covers use) and wait 3 sols (1 hour at standard pace; `/mars index advance 3.2` skips ahead with cheats). The Planetary Monitor shows "Next goal" with the count, then "Goals reached". **Creative players can place the Outgasser at any time;** operators can use `/mars gate list` and `/mars gate latch dome_stable`. A reached goal never reverts. "Phase 2 begins" fires at 5 kPa and unlocks nothing yet. Placing with `/setblock` is never blocked.
 
 ### 1c. Operator controls
 
@@ -57,8 +57,8 @@ Enable cheats for the following commands in a singleplayer test world.
 | `/mars index get` | Inspect the current planet's simulation values. |
 | `/mars index advance 3.2` | Advance the planet by 3.2 sols for a test. |
 | `/mars pause`, `/mars resume`, `/mars session` | Pause, resume, or inspect the session. |
-| `/mars pace` | Show the world's pace: standard or classroom, rate multiplier, group size, creative bypass. |
-| `/mars pace standard [1-5]`, `/mars pace classroom [3-5]` | Choose the pace for this world (saved with the world; default standard). Classroom: rates x4, group size 4 unless you give one (3 to 5 only; 1 or 2 is refused with a message and nothing changes, no checkpoint), holds shorter (Dome stable 1 sol instead of 3), the creative gate bypass is switched off, and the teacher-only guidance rules apply. Thresholds (5 kPa and the rest) are the same in both. The planet keeps its numbers and goals when you switch. Numbers live in `pack/data/mars/pace.json`. Before the change the game saves a checkpoint of every planet called `before_pace_<time>` (undo with `/mars checkpoint restore <name>`; old ones are dropped when the list is full). In a classroom world the Monitor shows a "Classroom pace" line at the bottom; standard worlds show nothing. |
+| `/mars pace` | Show the world's pace (standard: rate multiplier, group size, creative bypass). |
+| `/mars pace standard [1-5]` | Choose the standard pace and a group size 1 to 5 (saved with the world; the game first saves a `before_pace_<time>` checkpoint; undo with `/mars checkpoint restore <name>`). Numbers live in `pack/data/mars/pace.json`. Classroom pace is hidden: `classroom_enabled` is false, so `/mars pace classroom` is not offered and answers "Classroom pace is turned off." (owner decision 2026-11-28; set the flag true to restore it, see `docs/learning/educator-guide.md` 2.4). |
 
 Slice 8 operator commands (permission level 2, all logged; they work only inside a Mars dimension):
 
@@ -75,7 +75,7 @@ Learning commands (journal and guidance; `/mars guidance` and `/mars journal` ne
 | Command | Use |
 |---|---|
 | `/mars guidance` | Show your guidance level (gentle, standard or expert) and what it hides. |
-| `/mars guidance <level>` | Set your own level in standard play. Expert hides the time-to-goal estimate on the Monitor. In classroom mode only the teacher can set it, and expert is refused. |
+| `/mars guidance <level>` | Set your own level in standard play. Expert hides the time-to-goal estimate on the Monitor. |
 | `/mars guidance <level> <player>` | Operator: set another player's level. |
 | **J key** (rebindable in Controls, category Mars) | Open the Keeper's Journal screen: titles on the left (unread ones show a dot and "new"), the text on the right. Esc or J closes. |
 | `/mars journal` | List the journal entries unlocked on this planet ("(new)" marks unread). Entries unlock when their goal is reached (Dome stable gives three). A chat line "New journal entries: N" tells you once. |
@@ -90,7 +90,7 @@ Dust storm (Stage 3 slice S3-1; permission level 2, logged, Mars dimension only)
 | `/mars storm start [hold]` | Start a storm now: solar supply falls by 60 % x the storm cap (Phase 1 cap 1.0 = 60 %), the Monitor shows a storm row and the cause line "Storm: less sunlight". `hold` starts the shorter 1-sol drift-event storm. |
 | `/mars storm end` | End the storm now. The panels still gain their dust (+2 stages at cap 1.0) and the next scheduled storm is drawn again. |
 
-Without commands: the first storm is warned at sol 13 (classroom 3.75), starts at sol 14 (classroom 4), lasts 2 sols (classroom 0.5), and the next comes 12 to 20 sols later (classroom 3 to 5). All of these are invented balance numbers in `pack/data/mars/storms/dust_storm.json`. A chat line warns, one marks onset, one marks the end. The sky does not change during a storm yet. Panels are cleaned only by replacing them (the brush and dust-off station are not built), so each storm leaves them dustier.
+Without commands: the first storm is warned at sol 13, starts at sol 14, lasts 2 sols, and the next comes 12 to 20 sols later. All of these are invented balance numbers in `pack/data/mars/storms/dust_storm.json`. A chat line warns, one marks onset, one marks the end. The sky does not change during a storm yet. Panels are cleaned only by replacing them (the brush and dust-off station are not built), so each storm leaves them dustier.
 
 For a full rollback of the world (blocks and inventories too), copy the world folder before a class; the checkpoint command only rewinds the planet's simulation.
 

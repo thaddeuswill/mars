@@ -93,7 +93,16 @@ class PaceConfigTest {
     assertEquals(2, c.pace(PaceConfig.Mode.STANDARD, 2).groupSize());
     assertThrows(IllegalArgumentException.class, () -> c.pace(PaceConfig.Mode.STANDARD, 0));
     // The hand-built presets used by older tests agree with the file.
-    assertEquals(Pace.classroom(4), room);
+    // (classroomShown is the new visibility flag, off with the shipped file; compare the numbers)
+    assertEquals(
+        Pace.classroom(4),
+        new Pace(
+            room.rateMultiplier(),
+            room.groupSize(),
+            room.solTicks(),
+            room.stepTicks(),
+            room.classroom(),
+            room.creativeGateBypass()));
     assertEquals(Pace.STANDARD, std);
   }
 
@@ -198,5 +207,49 @@ class PaceConfigTest {
         assertFalse(key.contains("threshold") || key.contains("kpa"), mode + "." + key);
       }
     }
+  }
+
+  /** Owner decision 2026-11-28: classroom pace is off by default and the flag restores it. */
+  @Test
+  void classroomPaceIsOffByDefaultAndTheFlagRestoresIt() throws Exception {
+    PaceConfig shipped = config();
+    assertFalse(shipped.classroomOffered(), "pace.json ships with classroom_enabled false");
+    assertEquals("Classroom pace is turned off.", shipped.refusal(PaceConfig.Mode.CLASSROOM));
+    assertEquals(null, shipped.refusal(PaceConfig.Mode.STANDARD), "standard is never refused");
+    // A missing flag also means off.
+    JsonObject o =
+        JsonParser.parseString(Files.readString(TestData.data("pace.json"))).getAsJsonObject();
+    o.remove("classroom_enabled");
+    assertFalse(PaceConfig.parse(o, "x.json").classroomOffered());
+    // Flag on: the old behaviour is back.
+    o.addProperty("classroom_enabled", true);
+    PaceConfig on = PaceConfig.parse(o, "x.json");
+    assertTrue(on.classroomOffered());
+    assertEquals(null, on.refusal(PaceConfig.Mode.CLASSROOM));
+    Pace room = on.pace(PaceConfig.Mode.CLASSROOM, 3);
+    assertTrue(room.classroom());
+    assertTrue(room.classroomShown());
+    assertEquals(4.0, room.rateMultiplier());
+  }
+
+  /** Standard pace and its numbers are the same with the flag off or on; the tag is hidden off. */
+  @Test
+  void standardPaceIsUnchangedByTheFlagAndTheTagHidesWhileOff() throws Exception {
+    JsonObject o =
+        JsonParser.parseString(Files.readString(TestData.data("pace.json"))).getAsJsonObject();
+    Pace off = config().pace(PaceConfig.Mode.STANDARD, null);
+    o.addProperty("classroom_enabled", true);
+    Pace on = PaceConfig.parse(o, "x.json").pace(PaceConfig.Mode.STANDARD, null);
+    assertEquals(1.0, off.rateMultiplier());
+    assertEquals(on.rateMultiplier(), off.rateMultiplier());
+    assertEquals(on.groupSize(), off.groupSize());
+    assertEquals(on.creativeGateBypass(), off.creativeGateBypass());
+    assertFalse(off.classroom());
+    // A world saved in classroom mode shows no "Classroom pace" tag while the flag is off.
+    Pace savedRoomOff = config().pace(PaceConfig.Mode.CLASSROOM, 4);
+    assertFalse(savedRoomOff.classroomShown());
+    assertTrue(
+        mars.monitor.view.MonitorView.of(TestSims.sim(savedRoomOff)).rows().stream()
+            .noneMatch(r -> r.labelKey().equals("monitor.row.pace")));
   }
 }

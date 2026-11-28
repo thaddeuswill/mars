@@ -86,6 +86,8 @@ Teacher tools (all are buttons in the class overview; no typing needed): pause a
 
 ### 2.4 Choosing the pace (classroom mode)
 
+> **Not in use: hidden by owner decision 2026-11-28 (this is not a classroom pack).** `classroom_enabled` in `pack/data/mars/pace.json` is false, so `/mars pace classroom` is refused and not offered in tab completion. Set it to true to restore this section's behaviour.
+
 **Status: the command is built and passed automated server tests. It has not been typed in a real client or on a dedicated server, so its chat text is untested.** The class overview buttons in §2.2 are planned; until they exist, you set the pace with a command. You need operator rights (permission level 2).
 
 **Switch the world to classroom pace** (once, before the first class):

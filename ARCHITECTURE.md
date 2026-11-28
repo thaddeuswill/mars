@@ -702,6 +702,10 @@ Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after 
 - **Cost.** Per planet step (every 100 ticks): a few comparisons and no allocation unless an event happens. At a storm's end: one block-state change per panel on the planet (one chunk-section re-mesh each), about once per 12 sols or more.
 - **Not built.** Sky dimming during a storm (it needs a new payload field, a `SkyState` input and Artist tint values; left for the Lead Artist and the next slice); HUD storm icon and countdown (`hud.storm.*`); forecast F1 and its `resolve_source` (S3-2); `monitor.storm.warn.tip`; storms in Phase 2 on (only the cap for Phase 1 is data; hold storms start by command); automatic dust build-up, panel brush and dust-off; the estimate hidden under expert guidance (the storm countdown is not hidden, see the report).
 
+### 2.19c Classroom pace switch (2026-11-28, owner: "hide the classroom stuff")
+
+`data/mars/pace.json` has `classroom_enabled` (default false when missing). `PaceConfig.refusal(mode)` returns "Classroom pace is turned off." for classroom while off; `/mars pace classroom` uses it before any checkpoint or change, and the literal has `.requires(classroomOffered)` so tab completion hides it. `Pace.classroomShown` hides the Monitor "Classroom pace" tag in a world saved in classroom mode. `PlanetManager.setPace` itself is not gated (boot tests and a future flag-on use it). Standard numbers are untouched. Flip the flag to restore everything.
+
 ### 2.20 Journal, guidance and Monitor line hiding (BACKLOG #49; built in two commits: no-screen part first, then the J-key screen)
 
 Design: `docs/design/journal-and-guidance-minimum.md` (owner accepted its recommendations). Cost: nothing per tick. Everything below runs on a gate latch, a login, a command or a Monitor open.

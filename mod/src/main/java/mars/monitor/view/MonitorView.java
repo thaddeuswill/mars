@@ -443,7 +443,7 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     stormRow(sim).ifPresent(rows::add);
     gateRows(sim, rows, net);
     // One short tag, only in a classroom world, so a standard world adds no height.
-    if (sim.pace().classroom()) {
+    if (sim.pace().classroom() && sim.pace().classroomShown()) {
       rows.add(new Row("monitor.row.pace", "", null, null, null, List.of()));
     }
     return new MonitorView(model.sols(), List.copyOf(rows), historyOf(sim));

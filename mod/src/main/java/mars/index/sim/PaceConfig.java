@@ -7,7 +7,8 @@ import com.google.gson.JsonObject;
  * The file holds rates, group size and the creative-bypass switch only: it has no threshold, so no
  * mode can scale one (invariant I-1). Hold lengths stay in the gate files.
  */
-public record PaceConfig(int solTicks, int stepTicks, Preset standard, Preset classroom) {
+public record PaceConfig(
+    int solTicks, int stepTicks, Preset standard, Preset classroom, boolean classroomEnabled) {
 
   /** One mode's numbers, including the group sizes that mode allows. */
   public record Preset(
@@ -41,7 +42,8 @@ public record PaceConfig(int solTicks, int stepTicks, Preset standard, Preset cl
             o.get("sol_ticks").getAsInt(),
             o.get("step_ticks").getAsInt(),
             preset(obj(o, "standard", file), file),
-            preset(obj(o, "classroom", file), file));
+            preset(obj(o, "classroom", file), file),
+            o.has("classroom_enabled") && o.get("classroom_enabled").getAsBoolean());
     if (c.solTicks <= 0 || c.stepTicks <= 0) {
       throw new IllegalArgumentException(file + ": invalid ticks");
     }
@@ -84,6 +86,21 @@ public record PaceConfig(int solTicks, int stepTicks, Preset standard, Preset cl
         p.get("creative_gate_bypass").getAsBoolean());
   }
 
+  /**
+   * Is classroom pace offered? Default false (owner decision 2026-11-28: this is not a classroom
+   * pack). The code stays; set {@code classroom_enabled} in pace.json to restore it.
+   */
+  public boolean classroomOffered() {
+    return classroomEnabled;
+  }
+
+  /** The plain refusal for a mode that is switched off, or null when the mode is offered. */
+  public String refusal(Mode mode) {
+    return mode == Mode.CLASSROOM && !classroomEnabled ? CLASSROOM_OFF : null;
+  }
+
+  public static final String CLASSROOM_OFF = "Classroom pace is turned off.";
+
   /** The pace for a mode; {@code groupSize} null means the preset's own. */
   public Pace pace(Mode mode, Integer groupSize) {
     Preset p = mode == Mode.CLASSROOM ? classroom : standard;
@@ -101,6 +118,12 @@ public record PaceConfig(int solTicks, int stepTicks, Preset standard, Preset cl
               + "). Nothing was changed.");
     }
     return new Pace(
-        p.rateMultiplier(), n, solTicks, stepTicks, mode == Mode.CLASSROOM, p.creativeGateBypass());
+        p.rateMultiplier(),
+        n,
+        solTicks,
+        stepTicks,
+        mode == Mode.CLASSROOM,
+        p.creativeGateBypass(),
+        mode != Mode.CLASSROOM || classroomEnabled);
   }
 }

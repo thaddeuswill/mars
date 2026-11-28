@@ -1056,7 +1056,29 @@ public final class PlanetGameTests {
       data.sim().model().advanceSols(1.5);
       var valuesBefore = data.sim().toState().values();
       var source = server.createCommandSourceStack().withLevel(level);
+      // Classroom pace is switched off by default (owner decision 2026-11-28): the command refuses,
+      // takes no checkpoint and changes nothing. The rest of this test uses setPace directly, which
+      // is the code that comes back when classroom_enabled is set to true.
+      int cpOff =
+          mars.planets.CheckpointData.get(server)
+              .of(level.dimension().location().toString())
+              .list()
+              .size();
       server.getCommands().performPrefixedCommand(source, "mars pace classroom 3");
+      ok &=
+          SelfTest.check(
+              "pace.classroom_off",
+              "/mars pace classroom is refused while classroom_enabled is false: still standard, no"
+                  + " checkpoint",
+              "cfgEnabled=" + cfg.classroomOffered() + " pace=" + PlanetManager.pace(level),
+              !cfg.classroomOffered()
+                  && !PlanetManager.pace(level).classroom()
+                  && mars.planets.CheckpointData.get(server)
+                          .of(level.dimension().location().toString())
+                          .list()
+                          .size()
+                      == cpOff);
+      PlanetManager.setPace(server, mars.index.sim.PaceConfig.Mode.CLASSROOM, 3);
       var room = PlanetManager.pace(level);
       var saved =
           mars.planets.CheckpointData.get(server).of(level.dimension().location().toString());
