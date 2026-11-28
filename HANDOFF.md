@@ -2,6 +2,10 @@
 
 Written by Claude because its usage limit is near and the owner asked for a complete handoff. Read `AGENTS.md` first (rules, commands, read order), then this file (state and what to do next). When you finish something, update this file.
 
+## 0h. UPDATE 2026-11-28 (Technical Lead): habitat bunk and stowage crate in the dome
+
+Jar `0.3.7-stage3-h` (sha256 `4a72c3d7ad554827eaabb7369a83f1f4780fb9b2ec6d05df410fe65cd4a8d6bc`). 260 unit tests, 120 boot checks `RESULT PASS`. `mars.habitat` (`HabitatBunkBlock` bed with no block entity, `StowageCrateBlock` barrel); the red bed and barrel are gone from the starter dome; sleeping, respawn, drops and "sleep does not move Mars time" checked in a GameTest (real night skip not run). Bunk bag reads dark slate (about half the wall luminance), crate face about 0.6 of the wall. Report `docs/team/reports/2026-11-28-technical-lead-habitat-furniture.md`; screenshots `tools/screenshots/out/20261128-002620/` (`fur_*`). Slice 4 build (landing-spec T1 to T7) can start.
+
 ## 0g. UPDATE 2026-11-27 (Technical Lead): maker and reclaimer v3 checked in game, lamp level 14
 
 Jar `0.3.6-stage3-g` (sha256 `533a4140867be64730725ded210f382a12fe2536d6737c0bb032f40f415114e3`). Build and tests green, 113 boot checks `RESULT PASS`. v3 loads. Maker face 87 of 255 vs wall 87 to 117 (v2 was 30): reads as a gold box now; reclaimer label faces the room (no Java fix needed). Remaining gap to references: maker is a cross pattern not a 4x4 plate grid, short tubes; reclaimer has no rack clutter. Report `docs/team/reports/2026-11-27-technical-lead-maker-reclaimer-v3-check.md`; screenshots `tools/screenshots/out/20261127-234533/` (`mk_*`).

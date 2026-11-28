@@ -702,6 +702,16 @@ Boot-test gap closed in the same slice: Minecraft's server `Main` exits 0 after 
 - **Monitor:** Air row (stored / capacity, net a sol, one "Air falling" or "Tanks empty" line), Water row only when it will not last 10 sols, "Waiting: ..." on the Dome stable goal naming the first failing state; the Waiting line outranks the history plot in `MonitorLayout.fit`. Normal state about 149 GUI px with the plot, busiest about 156 without it (target 130; fits a 270 px screen).
 - **Cost:** `LifeSupport.step` is a few multiplications per 5 s step; `lifeInputs` loops over machine types; Blackout is one loop over the planet's players once a second.
 
+### 2.21 Habitat furniture: bunk and crate (built)
+
+`mars.habitat` registers `mars:habitat_bunk` and `mars:stowage_crate` (item, loot, name; machines creative tab). `StarterDome.stateFor` uses them for the template's bunk and crate cells; the Work Bench stays a vanilla crafting table until machine recipes exist (`habitat_bench` art is delivered, no block registered).
+
+- **Bunk:** `HabitatBunkBlock extends BedBlock`, `getRenderShape` MODEL, `newBlockEntity` null (no renderer, no block entity; the Artist's route A). Verified in a GameTest: model render, `isBed`, no block entity on either part, collision top 9 px, `startSleepInBed` OK at night, respawn point set to the bunk, `mars:mars` dimension type `bed_works` true. Loot drops from the **head** part only (the vanilla bed pattern: breaking the foot makes the head destroy itself and drop); GameTest: exactly one bunk drops. The item is a `BedItem`.
+- **Sleeping and Mars time:** the planet clock and simulation run on server game ticks (`SessionClock`, `PlanetSim.onServerTick`), not on the level day time that a vanilla night skip moves. GameTest moves the level day time by 24,000 and sim ticks and every Index value stay equal. The real skip (all players asleep 100 ticks) was not run: fake players are not in `level.players()`.
+- **Crate:** `StowageCrateBlock extends BarrelBlock`, added to `BlockEntityType.BARREL` through `BlockEntityTypeAddBlocksEvent` (without it the barrel block entity refuses the block). Full-cube collision, so sealing treats it exactly like the barrel it replaces; `FACING` NORTH shows the door, set from the template face. GameTest: block entity exists, holds items, drops itself plus contents.
+- **Sealing:** unchanged. The bunk is not a full cube (it leaked like the red bed did, the flood fill passes through it); the crate is. Sealing tests stay green (Hab B volume 108, shelter and Ops sealed).
+- Cost: nothing per tick; one block entity per crate (the vanilla barrel one).
+
 ## 3. Coding Practices
 
 | Area | Convention |
