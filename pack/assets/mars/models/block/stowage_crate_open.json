@@ -1,0 +1,240 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "particle": "mars:block/stowage_crate_side",
+  "side": "mars:block/stowage_crate_side",
+  "top": "mars:block/stowage_crate_top",
+  "front": "mars:block/stowage_crate_front",
+  "skid": "mars:block/stowage_crate_skid",
+  "inside": "mars:block/stowage_crate_inside"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    2,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      14,
+      16,
+      16
+     ]
+    },
+    "down": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#skid",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    2,
+    1
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      16,
+      14
+     ]
+    },
+    "south": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      16,
+      14
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      16,
+      14
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      16,
+      14
+     ]
+    },
+    "up": {
+     "texture": "#top",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    3,
+    0.9
+   ],
+   "to": [
+    15,
+    15,
+    1
+   ],
+   "faces": {
+    "north": {
+     "texture": "#inside",
+     "uv": [
+      1,
+      2,
+      15,
+      14
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    1,
+    3,
+    0
+   ],
+   "to": [
+    15,
+    15,
+    1
+   ],
+   "faces": {
+    "north": {
+     "texture": "#front",
+     "uv": [
+      1,
+      2,
+      15,
+      14
+     ]
+    },
+    "east": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      14,
+      1
+     ]
+    },
+    "west": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      14,
+      1
+     ]
+    },
+    "up": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      14,
+      1
+     ]
+    },
+    "down": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      14,
+      1
+     ]
+    },
+    "south": {
+     "texture": "#side",
+     "uv": [
+      0,
+      0,
+      14,
+      1
+     ]
+    }
+   },
+   "rotation": {
+    "origin": [
+     1,
+     9,
+     0.5
+    ],
+    "axis": "y",
+    "angle": 45
+   }
+  }
+ ]
+}

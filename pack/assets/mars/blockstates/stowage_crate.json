@@ -1,0 +1,50 @@
+{
+ "variants": {
+  "facing=north,open=false": {
+   "model": "mars:block/stowage_crate"
+  },
+  "facing=north,open=true": {
+   "model": "mars:block/stowage_crate_open"
+  },
+  "facing=east,open=false": {
+   "model": "mars:block/stowage_crate",
+   "y": 90
+  },
+  "facing=east,open=true": {
+   "model": "mars:block/stowage_crate_open",
+   "y": 90
+  },
+  "facing=south,open=false": {
+   "model": "mars:block/stowage_crate",
+   "y": 180
+  },
+  "facing=south,open=true": {
+   "model": "mars:block/stowage_crate_open",
+   "y": 180
+  },
+  "facing=west,open=false": {
+   "model": "mars:block/stowage_crate",
+   "y": 270
+  },
+  "facing=west,open=true": {
+   "model": "mars:block/stowage_crate_open",
+   "y": 270
+  },
+  "facing=up,open=false": {
+   "model": "mars:block/stowage_crate",
+   "x": 270
+  },
+  "facing=up,open=true": {
+   "model": "mars:block/stowage_crate_open",
+   "x": 270
+  },
+  "facing=down,open=false": {
+   "model": "mars:block/stowage_crate",
+   "x": 90
+  },
+  "facing=down,open=true": {
+   "model": "mars:block/stowage_crate_open",
+   "x": 90
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "parent": "minecraft:block/cube",
+ "textures": {
+  "particle": "mars:block/habitat_bench_side",
+  "down": "mars:block/habitat_bench_side",
+  "up": "mars:block/habitat_bench_top",
+  "north": "mars:block/habitat_bench_front",
+  "south": "mars:block/habitat_bench_front",
+  "east": "mars:block/habitat_bench_side",
+  "west": "mars:block/habitat_bench_side"
+ }
+}
