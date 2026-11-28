@@ -190,6 +190,7 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
       BlockState ripple,
       BlockState cutTop,
       BlockState cutUnder,
+      List<BlockState> wallBands,
       List<BlockState> rocks) {}
 
   private record Shaper(TerrainParams params, long seed, Landforms landforms, ShapeBlocks blocks) {}
@@ -209,6 +210,7 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
                   block(params.surface().rippleBlock()),
                   block(params.buttes().cutTop()),
                   block(params.buttes().cutUnder()),
+                  params.canyon().wallBands().stream().map(MarsChunkGenerator::block).toList(),
                   params.rocks().blocks().stream().map(MarsChunkGenerator::block).toList()));
       shaper = s;
     }
@@ -262,6 +264,15 @@ public final class MarsChunkGenerator extends NoiseBasedChunkGenerator {
             }
             if (col.kind() == Landforms.Kind.DUNE_RIPPLE) {
               chunk.setBlockState(pos.set(x, target, z), s.blocks.ripple, false);
+            }
+          }
+          case CANYON -> {
+            // Layered wall: bands of rock colour under the top, so each bench shows its layers.
+            List<BlockState> bands = s.blocks.wallBands;
+            int rows = (int) params.canyon().benchHeight();
+            for (int y = target - 2; y > target - 2 - rows && y > minY + 4; y--) {
+              chunk.setBlockState(
+                  pos.set(x, y, z), bands.get(Math.floorMod(y / 2, bands.size())), false);
             }
           }
           case CUT -> {

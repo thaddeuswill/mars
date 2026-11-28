@@ -32,7 +32,8 @@ You need **Minecraft: Java Edition** (not Bedrock, not Minecraft Education) and 
 - **New blocks (creative tab "Mars Terrain").** Basaltic Sand (dark surface patches and dune sand), Hematite Ore (drops raw iron; found in veins in rock and richly in the butte country), Dark Sand Ore (smelts to glass), Ground Ice (lenses 3 to 12 blocks under the surface; plain blocks for now, melting is later). Their textures are **placeholders**. All ore amounts and places are invented numbers in `pack/data/mars/worldgen/`.
 - **Stylised.** Large craters are shrunk about 25 times and the buttes are much smaller than real ones; the journal will say so.
 - **Cost.** About 8 ms per chunk to generate on the build machine, no per-tick cost. If chunk loading feels slow on a weak computer, lower the render distance first.
-- **Not in yet.** The canyon, the polar cap, ripples and pebbles, river-channel boulder fields, and anything that melts the ice.
+- **W2 additions (new worlds only).** Five more blocks in the "Mars Terrain" tab: Duricrust (thin crust under the dust), Vesicular Basalt, Spherule Sand (drops iron nuggets), Impact Breccia (crater rims), Gypsum Vein (in the layered buttes). Buttes no longer stand within about 130 blocks of the pad. Dunes vary in spacing and show ripples (tan stripes every 3 blocks). Grey gravel patches are pebbles. **The stylised canyon** runs east-west about 780 blocks south of the pad (`/tp @s 0 120 560` then look south; it is 60 blocks deep and about 1000 long, shrunk to fit the game).
+- **Not in yet.** CO2 frost (needs the polar biome), the polar cap, river-channel boulder fields, and anything that melts the ice.
 
 ### 1a. Try a powered pressure setup
 

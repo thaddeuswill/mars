@@ -15,6 +15,7 @@ public final class Landforms {
     DUNE,
     DUNE_RIPPLE,
     CUT,
+    CANYON,
     PAD
   }
 
@@ -27,6 +28,7 @@ public final class Landforms {
   private final TerrainParams params;
   private final CraterField craters;
   private final DuneField dunes;
+  private final Canyon canyon;
   private final long seed;
 
   public Landforms(TerrainParams params, long seed) {
@@ -34,6 +36,7 @@ public final class Landforms {
     this.seed = seed;
     this.craters = new CraterField(params, seed);
     this.dunes = new DuneField(params.dunes(), params.windTowardDeg(), seed);
+    this.canyon = new Canyon(params.canyon(), seed);
   }
 
   /** A repeatable random number in [0, 1) for a column and a purpose number (rocks, tint). */
@@ -95,6 +98,11 @@ public final class Landforms {
     return dunes.ripple(x, z);
   }
 
+  /** Canyon depth at (x, z) in blocks, 0 outside (for tests and tools). */
+  public double canyonDepth(double x, double z) {
+    return canyon.depthAt(x, z);
+  }
+
   /** Dune height at (x, z), in blocks (for tests and tools). */
   public double duneHeight(double x, double z) {
     return dunes.height(x, z);
@@ -136,7 +144,16 @@ public final class Landforms {
       }
     }
     double delta = crater;
-    if (Math.abs(crater) < 0.5) {
+    double trench = canyon.depthAt(x, z);
+    if (trench > 0.5) {
+      delta -= trench;
+      if (kind == Kind.NONE || kind == Kind.EJECTA || kind == Kind.CUT || kind == Kind.BOWL) {
+        kind = Kind.CANYON;
+        rock = 0;
+        ejecta = 0;
+      }
+    }
+    if (Math.abs(crater) < 0.5 && trench <= 0.5) {
       double d = dunes.height(x, z);
       if (d > 0.5) {
         delta += d;

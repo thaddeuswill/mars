@@ -20,7 +20,8 @@ public record TerrainParams(
     Dunes dunes,
     Surface surface,
     Rocks rocks,
-    Buttes buttes) {
+    Buttes buttes,
+    CanyonShape canyon) {
 
   /** Flat starting pad. */
   public record Pad(int flatRadius, int rampRadius, int heightY) {}
@@ -77,6 +78,21 @@ public record TerrainParams(
   public record Buttes(
       double innerRadius, double outerRadius, double capAbove, String cutTop, String cutUnder) {}
 
+  /** The stylised canyon (see {@link Canyon}); depth 0 turns it off. */
+  public record CanyonShape(
+      double centerX,
+      double centerZ,
+      double bearingDeg,
+      double length,
+      double widthMin,
+      double widthMax,
+      double depth,
+      double floorFraction,
+      double benchHeight,
+      double endTaper,
+      double wander,
+      List<String> wallBands) {}
+
   /** Top-block overrides (block ids as text). */
   public record Surface(
       String rimBlock,
@@ -101,6 +117,12 @@ public record TerrainParams(
     JsonObject surface = obj(t, "surface", source + " terrain");
     JsonObject rocks = obj(t, "rocks", source + " terrain");
     JsonObject buttes = obj(t, "buttes", source + " terrain");
+    JsonObject canyon = obj(t, "canyon", source + " terrain");
+    String cy = source + " canyon";
+    List<String> bands = new ArrayList<>();
+    for (JsonElement e : arr(canyon, "wall_bands", cy)) {
+      bands.add(e.getAsString());
+    }
     String cs = source + " craters.shape";
     String cl = source + " craters.large";
     String sd = source + " dunes";
@@ -182,7 +204,20 @@ public record TerrainParams(
                 num(buttes, "keep_out_outer", source + " buttes"),
                 num(buttes, "cap_above_pad", source + " buttes"),
                 str(buttes, "cut_top", source + " buttes"),
-                str(buttes, "cut_under", source + " buttes")));
+                str(buttes, "cut_under", source + " buttes")),
+            new CanyonShape(
+                num(canyon, "center_x", cy),
+                num(canyon, "center_z", cy),
+                num(canyon, "bearing_deg", cy),
+                num(canyon, "length", cy),
+                num(canyon, "width_min", cy),
+                num(canyon, "width_max", cy),
+                num(canyon, "depth", cy),
+                num(canyon, "floor_fraction", cy),
+                num(canyon, "bench_height", cy),
+                num(canyon, "end_taper", cy),
+                num(canyon, "wander", cy),
+                List.copyOf(bands)));
     p.validate(source);
     return p;
   }
@@ -214,6 +249,21 @@ public record TerrainParams(
     require(dunes.ripplePeriod >= 2 && dunes.rippleWidth > 0, source, "ripples");
     require(
         dunes.rippleWidth < dunes.ripplePeriod, source, "ripple_width must be below ripple_period");
+    require(
+        canyon.length > 0
+            && canyon.widthMin > 0
+            && canyon.widthMax >= canyon.widthMin
+            && canyon.depth >= 0
+            && canyon.depth <= 70
+            && canyon.floorFraction >= 0
+            && canyon.floorFraction < 1
+            && canyon.benchHeight >= 1
+            && canyon.endTaper > 0
+            && canyon.endTaper <= 0.5
+            && canyon.wander >= 0
+            && !canyon.wallBands.isEmpty(),
+        source,
+        "canyon (depth is at most 70: the ground is at y 80 and the world floor is y 0)");
     require(buttes.outerRadius > buttes.innerRadius && buttes.innerRadius > 0, source, "buttes");
   }
 

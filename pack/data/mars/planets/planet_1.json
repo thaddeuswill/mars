@@ -63,7 +63,7 @@
       "variation_scale": 180,
       "ripple_period": 3,
       "ripple_width": 1,
-      "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). Wavelength varies by up to about 25 percent (wavelength_variation) through a smooth phase offset on a 180-block scale (variation_scale), so crests bend but are not sheared (a position-dependent wavelength was tried first and sheared them). Ripples: lighter stripe 1 block wide every 3 blocks across the wind (ripple_period, ripple_width), on dune columns, with the block named in surface.ripple_block (Curiosity ripples about 3 m apart, VERIFIED; the stripe colour is a game choice). windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
+      "note": "Transverse dunes in fields 100 to 300 blocks wide (SME rows 6, 7: heights 3 to 15, length 20 to 100; NOT VERIFIED). Wavelength varies by up to about 25 percent (wavelength_variation) through a smooth phase offset on a 180-block scale (variation_scale), so crests bend but are not sheared (a position-dependent wavelength was tried first and sheared them). Ripples: lighter stripe 1 block wide every 3 blocks across the wind (ripple_period, ripple_width), on dune columns, with the block named in surface.ripple_block (Curiosity ripples about 3 m apart, VERIFIED; the stripe block is duricrust, a muted tan; red sand stripes read as a zebra barcode and gravel stripes were too bright (both seen in screenshots)). windward_fraction 0.78: the gentle side takes 78 percent of a wavelength, the slip face 22 percent, so with 6 blocks of height the gentle side is about 12 degrees and the slip face about 36 degrees (SME 10 and 30 degrees; angle of repose on Mars NOT VERIFIED). Height max kept at 8 (SME range to 15) to respect the 3 to 6 relief budget of the plains. All INVENTED."
     },
     "surface": {
       "rim_block": "mars:impact_breccia",
@@ -71,7 +71,7 @@
       "ejecta_block": "mars:impact_breccia",
       "ejecta_block_chance": 0.25,
       "dune_sand": "mars:basaltic_sand",
-      "ripple_block": "minecraft:red_sand",
+      "ripple_block": "mars:duricrust",
       "note": "Top block overrides. Dust and plains patches come from the noise settings' surface rule. Rim and ejecta are impact breccia (W2, SME materials row 19, REAL: NTRS 20170006943); colours are a first guess for the Artist and SME: 'lighter or rockier material' (SME row 3). Dune sand is dark (Curiosity report, VERIFIED in the SME reference)."
     },
     "buttes": {
@@ -81,6 +81,21 @@
       "cut_top": "minecraft:red_sand",
       "cut_under": "mars:duricrust",
       "note": "W2: no buttes near the dome pad. Inside keep_out_inner ground above pad height + cap_above_pad is cut down to the cap (plains relief stays); the cut fades to nothing by keep_out_outer. Cut columns get dust over duricrust. INVENTED distances: the pad is 32 flat / 60 ramp, so the first butte starts 130 to 220 blocks away (about two minutes of walking)."
+    },
+    "canyon": {
+      "center_x": 0,
+      "center_z": 780,
+      "bearing_deg": 82,
+      "length": 1000,
+      "width_min": 200,
+      "width_max": 400,
+      "depth": 60,
+      "floor_fraction": 0.3,
+      "bench_height": 6,
+      "end_taper": 0.15,
+      "wander": 60,
+      "wall_bands": ["minecraft:red_terracotta", "minecraft:orange_terracotta", "minecraft:brown_terracotta", "minecraft:terracotta", "minecraft:light_gray_terracotta"],
+      "note": "W2 STYLISED canyon, the one canyon of the planet, label it 'stylised, shrunk to fit the game' (SME note 5.4). Real Valles Marineris is about 4000 km long and 7 km deep (not re-verified here); the owner asked for about 1000 long, 60 to 100 deep and 200 to 400 wide. Depth is 60 (the low end): the dimension floor is y 0 and the ground is y 80, so 100 would not fit without a new dimension type (that would break existing saves). Straight trench with a wandering centre line, flat floor (floor_fraction of the half width), terraced walls (bench_height blocks per step) with terracotta colour bands, tapered ends. About 600 blocks from the pad, outside the butte keep-out. INVENTED placement and shape."
     },
     "rocks": {
       "rim_chance": 0.08,

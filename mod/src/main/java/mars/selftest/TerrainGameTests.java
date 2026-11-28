@@ -164,6 +164,53 @@ public final class TerrainGameTests {
             builtTall + " tall columns built (" + naturalTall + " before the cut)",
             builtTall == 0);
 
+    // W2 canyon: a strip of chunks across the stylised canyon (x 0..15, z 448..1055).
+    {
+      int deepest = 999;
+      int rim = -1;
+      int low = 0;
+      int banded = 0;
+      int cols = 0;
+      for (int cz = 28; cz < 66; cz++) {
+        ProtoChunk c = rig.natural(0, cz);
+        rig.generator.shape(c, rig.params, SEED);
+        BlockPos.MutableBlockPos q = new BlockPos.MutableBlockPos();
+        for (int x = 0; x < 16; x++) {
+          for (int z = 0; z < 16; z++) {
+            int ty = TerrainRig.topY(c, x, z);
+            cols++;
+            deepest = Math.min(deepest, ty);
+            rim = Math.max(rim, ty);
+            if (ty < padY - 30) {
+              low++;
+              for (int y = ty - 2; y > ty - 8; y--) {
+                if (c.getBlockState(q.set(x, y, z)).is(net.minecraft.tags.BlockTags.TERRACOTTA)) {
+                  banded++;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+      ok &=
+          SelfTest.check(
+              "terrain.canyon",
+              "the stylised canyon is 40 to 70 blocks deep, floors above the world floor, with banded walls",
+              "lowest top y "
+                  + deepest
+                  + ", highest "
+                  + rim
+                  + ", "
+                  + low
+                  + " of "
+                  + cols
+                  + " columns more than 30 below the pad, "
+                  + banded
+                  + " with bands",
+              deepest >= 10 && deepest <= padY - 40 && low > 1000 && banded >= low / 2);
+    }
+
     // Plains relief: 64 x 64 windows with no mesa or ridge on the natural ground. The budget is
     // 3 to 6 blocks (owner decision 2026-11-27).
     int w = 64;

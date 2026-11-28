@@ -757,7 +757,20 @@ Checked: unit tests with temp folders (`LegacyDetectTest`), boot checks (`terrai
 
 **Tests and what they cannot show.** Pure: `mars.terrain` unit tests and `TerrainContentTest` (every `mars:` reference in worldgen JSON resolves, amounts are data, ice depth, wind in planet data). Boot (headless GameTest server): `TerrainGameTests` run the real generator on bare chunks (`TerrainRig`: biomes, noise fill, surface rule, landforms) and the real placed features in a scratch corner of the test world. They cannot show a real world-gen region, lighting, the chunk system's neighbour rules, or how it looks. Those are the real-client screenshots. The GameTest server has no Mars level, so the full dimension is only exercised by the real client (and, later, `runSelftestServer`, which needs the EULA).
 
-**Not built in W1:** the canyon, the polar cap, the lava plain biome, delta fans and flood channels, ripples and pebbles, ground polygons, ground-ice behaviour (melt and collapse are W3), a "dune basin" biome (dunes use their own mask, so they are not tied to a biome), cluster rocks beyond the per-biome patches, and a survey scan to find the new blocks.
+**W2 additions (Technical Lead, 2026-11-28).** All in pure `mars.terrain` plus planet data, no new Minecraft code beyond the shaper switch:
+
+| Piece | Where | Cost per column |
+|---|---|---|
+| Tier A blocks (`duricrust`, `vesicular_basalt`, `spherule_sand`, `impact_breccia`, `gypsum_vein`): blocks, loot, lang, tags, placeholder textures (`docs/art/w1-placeholder-textures.md`). Wiring: duricrust is the layer 2 blocks under the dust in the surface rule; breccia is the rim and ejecta block (`planets/planet_1.json`); vesicular patches, spherule patches and gypsum veins are datapack features in the biomes; vesicular basalt is also a boulder. | `MarsTerrainBlocks`, `pack/data/mars/worldgen` | none (worldgen only) |
+| Butte keep-out: ground above `pad.height_y + cap_above_pad` is cut to the cap inside `keep_out_inner` (130), fading to untouched at `keep_out_outer` (220). Cut columns get dust over duricrust (`Kind.CUT`). | `Landforms.cutNatural`, `terrain.buttes` | one hypot |
+| Dune wavelength variation: a smooth phase offset (scale 180) bends the crests and varies spacing by about 25 percent without shear. A position-dependent wavelength was rejected in W1 because it shears crests. | `DuneField.phaseOffset` | one noise sample |
+| Sand ripples: a stripe 1 block wide every 3 blocks across the wind on dune columns (`Kind.DUNE_RIPPLE`, block `surface.ripple_block`). Ripples are about 3 m apart (Curiosity, verified in the SME materials doc). | `DuneField.ripple` | one noise sample, only on dunes |
+| Pebbles: small `minecraft:gravel` disk patches on dust and duricrust (`pebble_patch`, 4 per chunk on plains, 9 on rocky flats). No new block. | datapack | none |
+| Stylised canyon: one trench, 1000 long, 200 to 400 wide, 60 deep, flat floor, 6-block benches, terracotta wall bands (`Kind.CANYON`), about 780 blocks from the pad. Depth is capped at 70 by the dimension: `min_y` is 0 and the ground is at y 80; a 100-deep canyon needs a new dimension type, which would break existing saves. | `Canyon`, `terrain.canyon` | two noise samples inside its bounds only |
+
+`co2_frost` is **not built**: it needs a polar biome and a sublimation rule (a block that reacts to the Index or the season), which is more than a block. It waits for the W2 polar biome. Tests: `LandformsTest` (butte keep-out, wavelength spread and crest shear bound, ripple share, canyon size and distance from pad), boot checks `terrain.butte_keepout`, `terrain.canyon`, `terrain.w2_surface_patches`. The ore, ice and patch boot checks now clear the scratch ground and use the live heightmap: before, they read the stale `_WG` heightmap of a chunk with natural terrain left above the scratch layers and failed on this machine.
+
+**Not built (W1 list; canyon, ripples and pebbles came in W2, above):** the polar cap, the lava plain biome, delta fans and flood channels, ground polygons, ground-ice behaviour (melt and collapse are W3), a "dune basin" biome (dunes use their own mask, so they are not tied to a biome), cluster rocks beyond the per-biome patches, and a survey scan to find the new blocks.
 
 ## 3. Coding Practices
 

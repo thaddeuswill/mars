@@ -36,7 +36,8 @@ class LandformsTest {
         p.dunes(),
         p.surface(),
         p.rocks(),
-        p.buttes());
+        p.buttes(),
+        p.canyon());
   }
 
   @Test
@@ -403,5 +404,52 @@ class LandformsTest {
       assertTrue(y >= last, "monotone at r=" + r);
       last = y;
     }
+  }
+
+  @Test
+  void canyonHasTheStatedSizeAndStaysAwayFromThePad() {
+    TerrainParams p = load();
+    Landforms f = new Landforms(p, SEED);
+    TerrainParams.CanyonShape c = p.canyon();
+    double a = Math.toRadians(c.bearingDeg());
+    double ax = Math.sin(a);
+    double az = -Math.cos(a);
+    double max = 0;
+    double minAlong = 1e9;
+    double maxAlong = -1e9;
+    for (int s = -700; s <= 700; s += 10) {
+      for (int t = -300; t <= 300; t += 10) {
+        double x = c.centerX() + ax * s + az * -t;
+        double z = c.centerZ() + az * s + ax * t;
+        double d = f.canyonDepth(x, z);
+        assertTrue(d >= 0 && d <= c.depth() + 1e-9, "depth in range: " + d);
+        if (d > 0.5) {
+          max = Math.max(max, d);
+          minAlong = Math.min(minAlong, s);
+          maxAlong = Math.max(maxAlong, s);
+        }
+      }
+    }
+    assertTrue(max > c.depth() - 1, "reaches the stated depth: " + max);
+    assertTrue(maxAlong - minAlong > 0.8 * c.length(), "length " + (maxAlong - minAlong));
+    assertTrue(maxAlong - minAlong <= c.length() + 20, "not longer than stated");
+    // Width across the middle is within the stated range (plus the centre-line wander).
+    int wide = 0;
+    for (int t = -400; t <= 400; t++) {
+      double x = c.centerX() + az * -t;
+      double z = c.centerZ() + ax * t;
+      if (f.canyonDepth(x, z) > 0.5) {
+        wide++;
+      }
+    }
+    assertTrue(wide >= 0.8 * c.widthMin() && wide <= c.widthMax() + 10, "width " + wide);
+    // Nothing near the dome pad and its butte keep-out.
+    for (int x = -250; x <= 250; x += 5) {
+      for (int z = -250; z <= 250; z += 5) {
+        assertEquals(0.0, f.canyonDepth(x, z), "canyon near the pad at " + x + "," + z);
+      }
+    }
+    assertEquals(Landforms.Kind.CANYON, f.at((int) c.centerX(), (int) c.centerZ(), 81).kind());
+    assertTrue(f.at((int) c.centerX(), (int) c.centerZ(), 81).targetY() < 81 - 40);
   }
 }

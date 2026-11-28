@@ -1,0 +1,40 @@
+# W2 polish on the real Mars level: butte keep-out, varied dune wavelength, ripples, pebbles, Tier A blocks.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 300
+view 0.5 81 0.5 250 2
+wait 200
+shot w2_01_ground_pad_east
+view 0 190 0 180 70
+wait 300
+shot w2_02_aerial_pad_buttes_away
+view 80 170 230 180 55
+wait 300
+shot w2_03_dunes_aerial
+view 40 100 90 321 25
+wait 300
+shot w2_04_dunes_ground
+view 60 96 120 300 45
+wait 300
+shot w2_05_ripples_close
+view 120 120 -110 225 22
+wait 300
+shot w2_06_large_crater_approach
+view -520 110 150 115 5
+wait 400
+shot w2_07_mesa_far
+view 0 125 540 0 32
+wait 600
+shot w2_08_canyon_from_rim
+view 0 170 470 0 48
+wait 600
+shot w2_09_canyon_aerial
+view 0 48 770 0 6
+wait 600
+shot w2_10_canyon_floor
+wait 20
+quit
