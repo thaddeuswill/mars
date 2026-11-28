@@ -1,0 +1,32 @@
+# Texture pass (BACKLOG #49): the nine W1/W2 terrain blocks in a 3x3 wall on a flat pad, plus a flat row on the ground.
+wait 100
+cmd /gamerule doDaylightCycle false
+cmd /gamerule doWeatherCycle false
+cmd /weather clear
+cmd /time set 6000
+cmd /mars go
+wait 80
+cmd /fill -12 163 -12 12 163 12 mars:regolith
+cmd /fill -12 164 -12 12 172 12 minecraft:air
+wait 10
+# pad at y 163 (above the dome roof so it is lit by sky); wall facing the camera at z=4 (camera looks north from z=-3? yaw 0 faces south: wall seen from the north side)
+cmd /setblock -4 166 4 mars:basaltic_sand
+cmd /setblock -2 166 4 mars:hematite_ore
+cmd /setblock 0 166 4 mars:dark_sand_ore
+cmd /setblock 2 166 4 mars:ground_ice
+cmd /setblock 4 166 4 mars:duricrust
+cmd /setblock -3 164 4 mars:vesicular_basalt
+cmd /setblock -1 164 4 mars:spherule_sand
+cmd /setblock 1 164 4 mars:impact_breccia
+cmd /setblock 3 164 4 mars:gypsum_vein
+cmd /setblock -4 164 4 mars:regolith
+cmd /setblock 4 164 4 mars:regolith
+wait 60
+view 0.5 166.5 -3 0 12
+wait 300
+wait 60
+shot tex_01_wall
+view 0.5 168 1 0 55
+wait 40
+shot tex_02_top
+quit
