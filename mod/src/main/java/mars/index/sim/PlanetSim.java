@@ -19,7 +19,7 @@ import mars.session.SessionClock;
  * contribute to it (ARCHITECTURE.md 2.1, 2.16). Pure Java. Cost: {@link #onServerTick} is one
  * increment and one compare per tick; a step is one add per contribution.
  */
-public final class PlanetSim {
+public final class PlanetSim implements mars.core.AttributedSources {
   private final PlanetaryIndexModel model;
   private final Pace pace;
   private final Map<String, MachineDef> defs;
@@ -44,6 +44,27 @@ public final class PlanetSim {
 
   /** Hazard state read from a save, waiting for {@link #configureHazards}. */
   private mars.hazards.HazardState pendingHazards = mars.hazards.HazardState.EMPTY;
+
+  /** Storm strength now (envelope x cap), 0 to 1; the solar cut is 0.6 x this (spec 2.5). */
+  private double stormStrength;
+
+  /** Signed supply the storm removes, and the dust removes, from clean output (units per sol). */
+  private double stormCutUnits;
+
+  private double dustLossUnits;
+
+  /** False until the game layer says a player has finished or skipped the Landing (storm guard). */
+  private boolean landingDone = true;
+
+  private boolean inRealTick;
+
+  /** A storm event, with whether it came from a fast-forward (admin advance) and not real time. */
+  public record StormNote(mars.hazards.storm.StormScheduler.Event event, boolean fastForward) {}
+
+  private final List<StormNote> stormNotes = new ArrayList<>();
+
+  /** Per-step samples (tick, storm cut, dust loss) kept while a storm is not idle, for peaks. */
+  private final java.util.ArrayDeque<double[]> samples = new java.util.ArrayDeque<>();
 
   /** Panel states whose block should be rewritten (stage changed); drained by the game layer. */
   private final Map<Long, mars.hazards.dust.PanelDustModel.View> blockSync = new LinkedHashMap<>();
@@ -293,6 +314,8 @@ public final class PlanetSim {
     double storage = 0;
     double clean = 0;
     double dusty = 0;
+    double stormFactor = stormFactor();
+    double cutUnits = 0;
     for (Map.Entry<String, Set<Long>> e : machines.entrySet()) {
       MachineDef def = defs.get(e.getKey());
       if (def == null) {
@@ -301,10 +324,13 @@ public final class PlanetSim {
       MachineDef.Power pw = def.power();
       for (long pos : e.getValue()) {
         double eff = efficiency.getOrDefault(pos, 1.0);
-        supply += pw.supplyPerSol() * eff;
         if (isPanelType(e.getKey())) {
           clean += pw.supplyPerSol();
           dusty += pw.supplyPerSol() * eff;
+          supply += pw.supplyPerSol() * eff * stormFactor;
+          cutUnits += pw.supplyPerSol() * eff * (1.0 - stormFactor);
+        } else {
+          supply += pw.supplyPerSol() * eff;
         }
         demand[tierOf(def) - 1] += pw.drawPerSol();
         storage += pw.storage();
@@ -312,6 +338,8 @@ public final class PlanetSim {
     }
     panelSupplyClean = clean;
     panelSupplyDusty = dusty;
+    stormCutUnits = -cutUnits;
+    dustLossUnits = -(clean - dusty);
     grid.setTierTotals(supply, demand, storage);
     applyPower(tierSat(true, stepSols()));
     refreshLife();
@@ -539,14 +567,44 @@ public final class PlanetSim {
     refreshPower();
   }
 
-  /** One sim step of dust (and, later in this method, the storm). Called before the grid steps. */
+  /** Share of panel output the storm leaves: 1 - cut x strength (spec 2.5). */
+  private double stormFactor() {
+    return hazards == null ? 1.0 : 1.0 - hazards.dust().stormSunlightCutPerCap() * stormStrength;
+  }
+
+  /**
+   * One sim step of the storm and of dust, called before the grid steps. Order matters (the
+   * lock-point rule): the storm's events for this step come first and are queued for the game layer
+   * to post before anything reads the new strength; then storm-end dust; then the slow dust; then
+   * one recount of supply if anything changed.
+   */
   private void hazardsStep(double dtSols) {
     if (dust == null) {
       return;
     }
-    List<Long> changed = new ArrayList<>(dust.advance(dtSols, dustIntervalSols()));
     long before = model.simTicks();
     long now = before + pace.stepTicks();
+    boolean recount = false;
+    List<Long> changed = new ArrayList<>();
+    var step =
+        storm.step(
+            now,
+            new mars.hazards.storm.StormScheduler.Inputs(
+                capIndex(), landingDone, panelSupplyClean > 0));
+    for (var ev : step.events()) {
+      stormNotes.add(new StormNote(ev, !inRealTick));
+      int total = hazards.dust().stormEndStagesFor(stormCap());
+      switch (ev.kind()) {
+        case CLEARING -> changed.addAll(dust.deposit(Math.min(1, total)));
+        case ENDED -> changed.addAll(dust.deposit(Math.max(0, total - 1)));
+        default -> {}
+      }
+    }
+    if (Math.abs(step.strength() - stormStrength) > 1e-12) {
+      stormStrength = step.strength();
+      recount = true;
+    }
+    changed.addAll(dust.advance(dtSols, dustIntervalSols()));
     long solNow = now / pace.solTicks();
     if (solNow != before / pace.solTicks() && phase() <= hazards.dust().dustDevilMaxPhase()) {
       changed.addAll(
@@ -557,8 +615,106 @@ public final class PlanetSim {
               hazards.dust().dustDevilFromStage()));
     }
     if (!changed.isEmpty()) {
-      applyDustChanges(changed);
+      applyDustChanges(changed); // recounts supply, with the storm factor
+    } else if (recount) {
+      refreshPower();
     }
+    if (storm.mode() != mars.hazards.storm.StormScheduler.Mode.NONE) {
+      samples.addLast(new double[] {now, stormCutUnits, dustLossUnits});
+      while (samples.size() > 2 * pace.solTicks() / pace.stepTicks()) {
+        samples.removeFirst();
+      }
+    }
+  }
+
+  // ---- the storm, for the game layer, the Monitor and the learning code ----
+
+  /** The storm's strength now, 0 to 1 (envelope x phase cap). */
+  public double stormStrength() {
+    return stormStrength;
+  }
+
+  public mars.hazards.storm.StormScheduler.Mode stormMode() {
+    return storm == null ? mars.hazards.storm.StormScheduler.Mode.NONE : storm.mode();
+  }
+
+  /** Tick the next or current storm starts (-1 when none is decided). */
+  public long stormOnsetTick() {
+    return storm == null ? -1 : storm.onsetTick();
+  }
+
+  public long stormEndTick() {
+    return storm == null || storm.onsetTick() < 0 ? -1 : storm.endTick();
+  }
+
+  /** Sols until onset (WARNED) or until the storm ends (ACTIVE, ENDING); 0 otherwise. */
+  public double stormEtaSols() {
+    if (storm == null) {
+      return 0;
+    }
+    long target =
+        switch (storm.mode()) {
+          case SCHEDULED, WARNED -> storm.onsetTick();
+          case ACTIVE, ENDING -> storm.endTick();
+          default -> -1;
+        };
+    return target < 0 ? 0 : Math.max(0, (double) (target - model.simTicks()) / pace.solTicks());
+  }
+
+  /** Storm cut as a share of panel output now (0 to 0.6): the number on the Monitor line. */
+  public double stormCutFraction() {
+    return 1.0 - stormFactor();
+  }
+
+  /** The game layer tells the sim whether a player has finished or skipped the Landing. */
+  public void setLandingDone(boolean done) {
+    this.landingDone = done;
+  }
+
+  /** Storm events since the last call, in order, then clears. */
+  public List<StormNote> drainStormEvents() {
+    List<StormNote> out = List.copyOf(stormNotes);
+    stormNotes.clear();
+    return out;
+  }
+
+  /** Operator: schedule a storm {@code inSols} from now. False when one is already under way. */
+  public boolean scheduleStorm(double inSols, double lengthSols) {
+    return storm != null && storm.scheduleIn(model.simTicks(), inSols, lengthSols);
+  }
+
+  /** Operator: start clearing an active storm now. */
+  public boolean endStorm() {
+    return storm != null && storm.endNow(model.simTicks() + pace.stepTicks());
+  }
+
+  @Override
+  public double current(String sourceId) {
+    return switch (sourceId) {
+      case STORM_SOLAR_CUT -> stormCutUnits;
+      case PANEL_DUST_LOSS -> dustLossUnits;
+      default -> 0;
+    };
+  }
+
+  @Override
+  public double peakSince(String sourceId, long tick) {
+    int idx =
+        switch (sourceId) {
+          case STORM_SOLAR_CUT -> 1;
+          case PANEL_DUST_LOSS -> 2;
+          default -> -1;
+        };
+    if (idx < 0) {
+      return 0;
+    }
+    double peak = current(sourceId);
+    for (double[] s : samples) {
+      if (s[0] >= tick) {
+        peak = Math.min(peak, s[idx]);
+      }
+    }
+    return peak;
   }
 
   /**
@@ -692,7 +848,12 @@ public final class PlanetSim {
     pendingTicks++;
     if (pendingTicks >= pace.stepTicks()) {
       pendingTicks = 0;
-      model.step();
+      inRealTick = true;
+      try {
+        model.step();
+      } finally {
+        inRealTick = false;
+      }
       return true;
     }
     return false;

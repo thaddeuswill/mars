@@ -300,6 +300,9 @@ public record MonitorView(double sols, List<Row> rows, History history) {
       this(sourceKey, count, rate, null, 0);
     }
 
+    /** {@link #direction} value for the storm line: drawn with a cloud shape. */
+    public static final int CLOUD = 2;
+
     /**
      * A planet-side line (the polar frost): {@code sourceKey} is a sentence with the rate in it,
      * drawn with a shape (down for a loss, up for a gain) and a sign, never colour alone.
@@ -313,6 +316,27 @@ public record MonitorView(double sols, List<Row> rows, History history) {
   public static final double PRESSURE_STEADY = 0.005;
 
   public static final double EPSILON = 1e-9;
+
+  /** The storm lines (f1-storm-spec.md 3.1): the expected-storm line, the active line, the cut. */
+  public static final String STORM_EXPECTED = "monitor.storm.expected";
+
+  public static final String STORM_ACTIVE = "monitor.storm.active";
+  public static final String STORM_CUT = "monitor.power.cause.storm";
+
+  /** Time left in plain words, to the nearest half sol: "half a sol", "1 sol", "1.5 sols", .... */
+  public static String etaWords(double sols) {
+    double half = Math.round(sols * 2) / 2.0;
+    if (half <= 0) {
+      return "less than half a sol";
+    }
+    if (half == 0.5) {
+      return "half a sol";
+    }
+    if (half == 1.0) {
+      return "1 sol";
+    }
+    return (half == Math.rint(half) ? Long.toString((long) half) : Double.toString(half)) + " sols";
+  }
 
   /** The Power row's panel-dust cause line (f1-storm-spec.md 3.1). */
   public static final String DUST_LINE = "monitor.power.cause.dust";
@@ -692,6 +716,23 @@ public record MonitorView(double sols, List<Row> rows, History history) {
     int dustLoss = sim.panelDustLossPercent();
     if (dustLoss > 0) {
       lines.add(new CauseLine(DUST_LINE, 0, Fmt.MINUS + dustLoss + "\u00a0%", null, -1));
+    }
+    // The storm: one forecast line while it is coming (a cloud), then the active line and its cut
+    // (the cut is the storm's own share, never the net). No power or light word before it locks.
+    switch (sim.stormMode()) {
+      case WARNED ->
+          lines.add(
+              new CauseLine(
+                  STORM_EXPECTED, 0, etaWords(sim.stormEtaSols()), null, CauseLine.CLOUD));
+      case ACTIVE, ENDING -> {
+        lines.add(
+            new CauseLine(STORM_ACTIVE, 0, etaWords(sim.stormEtaSols()), null, CauseLine.CLOUD));
+        int cut = (int) Math.round(sim.stormCutFraction() * 100);
+        if (cut > 0) {
+          lines.add(new CauseLine(STORM_CUT, 0, Fmt.MINUS + cut + "\u00a0%", null, -1));
+        }
+      }
+      default -> {}
     }
     boolean problem =
         grid.state(sim.stepSols()) != PowerGrid.State.IDLE

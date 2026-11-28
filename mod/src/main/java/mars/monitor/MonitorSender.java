@@ -23,18 +23,22 @@ public final class MonitorSender {
    * gets one "New on the Monitor" line and a {@link LineRevealedEvent}.
    */
   public static MonitorView forPlayer(ServerPlayer player, MonitorView view) {
-    if (!view.hasCause(MonitorView.DUST_LINE)) {
-      return view;
-    }
     if (!mars.story.landing.LandingService.landingOver(player)) {
-      return view.withoutCause(MonitorView.DUST_LINE);
+      // No storm or dust line for a player still in the Landing (spec: no forecast before it).
+      return view.withoutCause(MonitorView.DUST_LINE)
+          .withoutCause(MonitorView.STORM_EXPECTED)
+          .withoutCause(MonitorView.STORM_ACTIVE)
+          .withoutCause(MonitorView.STORM_CUT);
     }
-    var rec = mars.story.landing.LandingService.rec(player);
-    if (rec.revealedLines.add(MonitorView.DUST_LINE)) {
-      player.sendSystemMessage(
-          mars.story.landing.LandingService.bell(Component.translatable("monitor.dust.revealed")));
-      net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
-          new LineRevealedEvent(player, MonitorView.DUST_LINE));
+    if (view.hasCause(MonitorView.DUST_LINE)) {
+      var rec = mars.story.landing.LandingService.rec(player);
+      if (rec.revealedLines.add(MonitorView.DUST_LINE)) {
+        player.sendSystemMessage(
+            mars.story.landing.LandingService.bell(
+                Component.translatable("monitor.dust.revealed")));
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+            new LineRevealedEvent(player, MonitorView.DUST_LINE));
+      }
     }
     return view;
   }

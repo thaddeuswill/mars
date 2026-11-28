@@ -199,6 +199,55 @@ public final class PlanetManager {
     d.sim().queueChunkSync(e.getChunk().getPos().toLong());
   }
 
+  /**
+   * Hand the sim the one fact it cannot know: has any player finished or skipped the Landing (the
+   * storm guard). Cheap: one saved-data lookup; call about once a second.
+   */
+  public static void updateLandingGuard(ServerLevel level, PlanetData d) {
+    d.sim().setLandingDone(mars.story.landing.LandingData.get(level).anyOver());
+  }
+
+  /**
+   * Tell the players about the storm's steps since the last call and post them on the bus. Chat
+   * goes only to players whose Landing is over (no warning for a player still in the checklist);
+   * the warning, reminder, onset and end lines are in the language file (draft text, spec 2.2 and
+   * 2.6). Fast-forwarded events are posted but make no chat noise.
+   */
+  public static void announceStorm(ServerLevel level, PlanetData d) {
+    for (var note : d.sim().drainStormEvents()) {
+      var ev = note.event();
+      String key =
+          switch (ev.kind()) {
+            case WARNED -> "log.storm.warn";
+            case REMINDER -> "log.storm.remind";
+            case ONSET -> "log.storm.onset";
+            case ENDED -> "log.storm.end";
+            default -> null;
+          };
+      LOG.info(
+          "storm {} at tick {} (onset {}) on {}{}{}",
+          ev.kind(),
+          ev.tick(),
+          ev.onsetTick(),
+          level.dimension().location(),
+          ev.voided() ? " VOID" : "",
+          note.fastForward() ? " FAST-FORWARD" : "");
+      if (key != null && !note.fastForward()) {
+        for (var player : level.players()) {
+          if (mars.story.landing.LandingService.landingOver(player)) {
+            player.sendSystemMessage(
+                mars.story.landing.LandingService.bell(
+                    net.minecraft.network.chat.Component.translatable(key)));
+          }
+        }
+      }
+      net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+          new StormEvent(
+              level, ev.kind(), ev.tick(), ev.onsetTick(), ev.voided(), note.fastForward()));
+      d.setDirty();
+    }
+  }
+
   /** Tell the planet a machine's output changed (a dusty solar panel). Fraction is 0 to 1. */
   public static void machineOutput(ServerLevel level, BlockPos pos, double fraction) {
     PlanetData d = data(level);

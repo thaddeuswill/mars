@@ -28,7 +28,8 @@ final class MonitorLayout {
    * MonitorStyle#PLOT_MIN_H} inside {@link MonitorStyle#TARGET_H}, the lowest-priority line goes
    * first: the goal's detail line (what it needs, the percent, the time estimate and the goals
    * count; the bar stays), then, when the plot is gone anyway, the good-news "Dome Sealed" row.
-   * Problem lines (a stalled machine, a dusty panel, a leaking dome) never drop.
+   * Problem lines (a stalled machine, a dusty panel, an active storm, a leaking dome) never drop;
+   * the storm forecast line is the last information line to go.
    */
   static MonitorView fit(MonitorView view) {
     if (fixedHeight(view) + PLOT_MIN_H + PLOT_LABEL_H + 2 <= TARGET_H) {
@@ -83,7 +84,13 @@ final class MonitorLayout {
         kept.add(r);
       }
     }
-    return new MonitorView(trimmed.sols(), List.copyOf(kept), trimmed.history());
+    MonitorView noDome = new MonitorView(trimmed.sols(), List.copyOf(kept), trimmed.history());
+    if (fixedHeight(noDome) <= TARGET_H + PLOT_OVERFLOW) {
+      return noDome;
+    }
+    // Last of all the storm FORECAST line goes: it is information, not a problem. An active storm
+    // line, the dust line, a stalled machine, "Waiting" and a leaking dome never drop.
+    return noDome.withoutCause(MonitorView.STORM_EXPECTED);
   }
 
   /** Height of everything except the plot block, in GUI px. */

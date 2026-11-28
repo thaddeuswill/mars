@@ -1,5 +1,6 @@
 package mars.admin;
 
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -43,7 +44,30 @@ public final class HazardCommands {
                                         .executes(ctx -> set(ctx, false))
                                         .then(
                                             Commands.literal("partly")
-                                                .executes(ctx -> set(ctx, true)))))));
+                                                .executes(ctx -> set(ctx, true))))))
+                .then(
+                    Commands.literal("storm")
+                        .requires(s -> s.hasPermission(2))
+                        .then(
+                            Commands.literal("get")
+                                .executes(ctx -> reply(ctx, stormText(level(ctx)))))
+                        .then(
+                            Commands.literal("schedule")
+                                .then(
+                                    Commands.argument(
+                                            "in_sols", DoubleArgumentType.doubleArg(0.01, 100))
+                                        .executes(ctx -> schedule(ctx, 0.75))
+                                        .then(
+                                            Commands.argument(
+                                                    "length_sols",
+                                                    DoubleArgumentType.doubleArg(0.125, 5))
+                                                .executes(
+                                                    ctx ->
+                                                        schedule(
+                                                            ctx,
+                                                            DoubleArgumentType.getDouble(
+                                                                ctx, "length_sols"))))))
+                        .then(Commands.literal("end").executes(HazardCommands::end))));
   }
 
   private static ServerLevel level(CommandContext<CommandSourceStack> ctx)
@@ -100,5 +124,51 @@ public final class HazardCommands {
         partly);
     return reply(
         ctx, n + " panel(s) set to dust stage " + stage + (partly ? ", partly cleaned" : "") + ".");
+  }
+
+  /** Plain text: the storm's state, strength, time left and the next onset. */
+  public static String stormText(ServerLevel level) {
+    var sim = PlanetManager.data(level).sim();
+    return String.format(
+        java.util.Locale.ROOT,
+        "Storm %s, strength %.2f (cap %.2f), %.2f sols to %s; onset tick %d, end tick %d, now tick %d.",
+        sim.stormMode(),
+        sim.stormStrength(),
+        sim.stormCap(),
+        sim.stormEtaSols(),
+        sim.stormMode().name().startsWith("ACTIVE") || sim.stormMode().name().startsWith("END")
+            ? "the end"
+            : "onset",
+        sim.stormOnsetTick(),
+        sim.stormEndTick(),
+        sim.model().simTicks());
+  }
+
+  private static int schedule(CommandContext<CommandSourceStack> ctx, double length)
+      throws CommandSyntaxException {
+    ServerLevel l = level(ctx);
+    double in = DoubleArgumentType.getDouble(ctx, "in_sols");
+    PlanetData d = PlanetManager.data(l);
+    if (!d.sim().scheduleStorm(in, length)) {
+      throw new SimpleCommandExceptionType(
+              Component.literal(
+                  "A storm is already scheduled or under way. /mars storm end first."))
+          .create();
+    }
+    d.setDirty();
+    LOG.info(
+        "{} scheduled a storm in {} sols, {} sols long", ctx.getSource().getTextName(), in, length);
+    return reply(ctx, "Storm scheduled in " + in + " sol(s), " + length + " sol(s) long.");
+  }
+
+  private static int end(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    ServerLevel l = level(ctx);
+    PlanetData d = PlanetManager.data(l);
+    if (!d.sim().endStorm()) {
+      throw new SimpleCommandExceptionType(Component.literal("No storm is active.")).create();
+    }
+    d.setDirty();
+    LOG.info("{} ended the storm", ctx.getSource().getTextName());
+    return reply(ctx, "The storm is clearing.");
   }
 }

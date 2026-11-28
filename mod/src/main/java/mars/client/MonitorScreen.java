@@ -406,12 +406,16 @@ public final class MonitorScreen extends Screen {
     for (MonitorView.CauseLine c : MonitorLayout.shownCauses(row)) {
       if (c.isPlanetSide()) {
         // The planet pushing back (or giving back): a shape, a sign in the number, one sentence.
-        drawTrendShape(
-            g,
-            c.direction() < 0 ? MonitorView.Trend.FALLING : MonitorView.Trend.RISING,
-            x0 + CAUSE_INDENT - 2,
-            y + 4,
-            c.direction() < 0 ? DOWN : UP);
+        if (c.direction() == MonitorView.CauseLine.CLOUD) {
+          drawCloud(g, x0 + CAUSE_INDENT - 2, y + 4, CAUSE);
+        } else {
+          drawTrendShape(
+              g,
+              c.direction() < 0 ? MonitorView.Trend.FALLING : MonitorView.Trend.RISING,
+              x0 + CAUSE_INDENT - 2,
+              y + 4,
+              c.direction() < 0 ? DOWN : UP);
+        }
         Component line = Component.translatable(c.sourceKey(), c.rate());
         g.drawString(font, line, x0 + CAUSE_INDENT + 10, y, CAUSE, false);
         y += LINE_H;
@@ -457,6 +461,13 @@ public final class MonitorScreen extends Screen {
     g.fill(bx, by, bx + bw, by + GOAL_BAR_H, GOAL_BAR_EMPTY);
     g.fill(bx, by, bx + Math.min(bw, filled), by + GOAL_BAR_H, GOAL_BAR_FILL);
     return y + GOAL_BAR_LINE_H;
+  }
+
+  /** A small cloud (the storm line's shape, never colour alone): a flat base with two bumps. */
+  private static void drawCloud(GuiGraphics g, int x, int cy, int color) {
+    g.fill(x, cy, x + 8, cy + 2, color); // base
+    g.fill(x + 1, cy - 1, x + 4, cy, color); // left bump
+    g.fill(x + 3, cy - 2, x + 7, cy, color); // right bump
   }
 
   /** Up triangle, flat bar or down triangle, so the trend is never colour alone. */

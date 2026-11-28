@@ -270,4 +270,100 @@ public final class HazardGameTests {
     h.destroyBlock(rel);
     finish(h, ok, "dustLineWaitsForTheLanding");
   }
+
+  /**
+   * The storm with a real panel: warning, onset and a cut in supply, the brush mid-storm, the
+   * storm-end stages in the real block, the events on the bus in order, and a save and load in the
+   * middle of the storm.
+   */
+  @GameTest(template = "empty", batch = "mars_hazard_d")
+  public static void stormCutsSupplyThenDustsThePanel(GameTestHelper h) {
+    ServerLevel level = h.getLevel();
+    PlanetData data = PlanetManager.resetForSelfTest(level);
+    var sim = data.sim();
+    sim.setLandingDone(true);
+    BlockPos rel = new BlockPos(6, 1, 6);
+    h.setBlock(rel, MarsMachines.SOLAR_PANEL.get());
+    BlockPos abs = h.absolutePos(rel);
+    level.setBlock(abs, level.getBlockState(abs).setValue(SolarPanelBlock.DUST_STAGE, 1), 3);
+    var player =
+        net.neoforged.neoforge.common.util.FakePlayerFactory.get(
+            level, new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "storm"));
+    java.util.List<String> seen = new java.util.ArrayList<>();
+    java.util.function.Consumer<mars.planets.StormEvent> listener =
+        e -> seen.add(e.kind().name() + (e.fastForward() ? "(ff)" : ""));
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(listener);
+    double clean = sim.power().supplyPerSol();
+    boolean ok = sim.scheduleStorm(0.2, 0.75);
+    sim.model().advanceSols(0.01);
+    PlanetManager.announceStorm(level, data);
+    boolean warned = sim.stormWarned();
+    double beforeOnset = sim.power().supplyPerSol();
+    sim.model().advanceSols(0.3); // onset at 0.2 sol, ramp in 0.05
+    PlanetManager.announceStorm(level, data);
+    double inStorm = sim.power().supplyPerSol();
+    ok &=
+        SelfTest.check(
+            "storm.warned_then_cuts_supply",
+            "warned with supply unchanged (4.6), then at full strength the panel makes 1.84",
+            "warned="
+                + warned
+                + " before="
+                + beforeOnset
+                + " clean="
+                + clean
+                + " inStorm="
+                + inStorm
+                + " strength="
+                + sim.stormStrength(),
+            warned
+                && Math.abs(beforeOnset - 4.6) < 1e-6
+                && Math.abs(inStorm - 5.0 * 0.92 * 0.4) < 1e-6
+                && sim.stormStrength() == 1.0);
+    // Brush mid-storm: the panel goes to 0, and still gets the storm-end stages afterwards.
+    net.minecraft.world.item.ItemStack brush =
+        new net.minecraft.world.item.ItemStack(MarsMachines.PANEL_BRUSH.get());
+    mars.machines.PanelBrushItem.brush(player, level, abs, brush);
+    boolean stageDuring = sim.panelStage(abs.asLong()) == 0;
+    // A save and load in the middle of the storm.
+    CompoundTag tag = data.save(new CompoundTag(), level.registryAccess());
+    PlanetData back =
+        PlanetData.load(level.dimension().location().toString(), tag, level.registryAccess());
+    boolean mid =
+        back.sim().stormMode() == mars.hazards.storm.StormScheduler.Mode.ACTIVE
+            && back.sim().toState().equals(sim.toState());
+    sim.model().advanceSols(0.7); // past the end (0.2 + 0.75 = 0.95 sol)
+    PlanetManager.announceStorm(level, data);
+    PlanetManager.syncPanels(level, data);
+    ok &=
+        SelfTest.check(
+            "storm.brush_midstorm_save_and_end_dust",
+            "brushed to 0 mid-storm, save/load keeps the ACTIVE storm, after the end the block"
+                + " shows stage 2 and strength is 0",
+            "brushedTo0="
+                + stageDuring
+                + " savedActive="
+                + mid
+                + " block="
+                + stage(level, abs)
+                + " strength="
+                + sim.stormStrength()
+                + " events="
+                + seen,
+            stageDuring
+                && mid
+                && stage(level, abs) == 2
+                && sim.stormStrength() == 0.0
+                && seen.equals(
+                    java.util.List.of(
+                        "WARNED(ff)",
+                        "REMINDER(ff)",
+                        "ONSET(ff)",
+                        "CLEARING(ff)",
+                        "ENDED(ff)",
+                        "SCHEDULED(ff)")));
+    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(listener);
+    h.destroyBlock(rel);
+    finish(h, ok, "stormCutsSupplyThenDustsThePanel");
+  }
 }

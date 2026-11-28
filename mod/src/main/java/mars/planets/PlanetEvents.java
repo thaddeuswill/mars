@@ -32,9 +32,13 @@ public final class PlanetEvents {
       return;
     }
     PlanetData data = PlanetManager.data(level);
+    if (level.getGameTime() % 20 == 0) {
+      PlanetManager.updateLandingGuard(level, data);
+    }
     if (data.sim().onServerTick(SessionData.get(level.getServer()).clock())) {
       data.setDirty();
       PlanetManager.announceGates(level, data);
+      PlanetManager.announceStorm(level, data);
     }
     PlanetManager.syncPanels(level, data);
     mars.hull.DomeEvents.onPlanetTick(level, data);

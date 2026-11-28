@@ -167,7 +167,9 @@ public final class StormScheduler {
         reminded = true;
         events.add(new Event(Kind.REMINDER, nowTick, onsetTick, voided));
       }
-      if (nowTick >= onsetTick) {
+      // Strictly after the onset tick: the envelope is 0 at the onset tick itself, and the onset
+      // event must come in the first step where the strength is above 0 (the lock point).
+      if (nowTick > onsetTick) {
         mode = Mode.ACTIVE;
         events.add(new Event(Kind.ONSET, nowTick, onsetTick, voided));
       }
@@ -216,6 +218,34 @@ public final class StormScheduler {
     stormsByCap.set(capIndex, stormsByCap.get(capIndex) + 1);
     mode = Mode.SCHEDULED;
     events.add(new Event(Kind.SCHEDULED, nowTick, onsetTick, false));
+  }
+
+  /**
+   * Operator: decide a storm now, onset {@code inSols} from {@code nowTick} (the guards still run
+   * at warning time; a lead shorter than the warning lead warns at once). Replaces a storm that is
+   * only scheduled or warned; returns false while one is active or clearing.
+   */
+  public boolean scheduleIn(long nowTick, double inSols, double lengthSols) {
+    if (mode == Mode.ACTIVE || mode == Mode.ENDING) {
+      return false;
+    }
+    onsetTick = nowTick + Math.max(stepTicks, sols(inSols));
+    lengthTicks = Math.max(sols(tuning.rampInSols() + tuning.rampOutSols()), sols(lengthSols));
+    index++;
+    retries = 0;
+    reminded = false;
+    voided = false;
+    mode = Mode.SCHEDULED;
+    return true;
+  }
+
+  /** Operator: start the ramp-out now (an active storm). False when no storm is active. */
+  public boolean endNow(long nowTick) {
+    if (mode != Mode.ACTIVE) {
+      return false;
+    }
+    lengthTicks = (nowTick - onsetTick) + sols(tuning.rampOutSols());
+    return true;
   }
 
   public State toState() {
